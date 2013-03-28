@@ -1,0 +1,2 @@
+if (option[libc-new]) -lmnew
+if (!option[libc-new]) -lmold

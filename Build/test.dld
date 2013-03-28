@@ -1,0 +1,180 @@
+/*#include "Locater_Macros.lcf"*/
+
+MEMORY
+{
+   /* FLASH Allocation */
+   pml_mfg:         org = 0x00000000, len = 0x00004000   /* 16K  */
+   user_boot:       org = 0x00004000, len = 0x0000C000   /* 48K  */
+   reserved:        org = 0x00010000, len = 0x00008000   /* 32K  */
+   eeprom:          org = 0x00018000, len = 0x00008000   /* 32K  */
+   cal:             org = 0x00020000, len = 0x00020000   /* 128K */
+   app_code:        org = 0x00040000, len = 0x0013C400   /* 1M + 256K - 15K */
+   tsw_code:        org = 0x0017C400, len = 0x00003C00   /* 15K */
+
+   /* RAM Allocation */
+   nvram:            org = 0x40000000, len = 0x00002000  /*  8K  */
+   unclear_ram:      org = 0x40002000, len = 0x00000010  /*  16 bytes  */
+   app_ram:          org = 0x40002010, len = 0x0000CFF0  /*  52K - 16 bytes */
+   stack:            org = 0x4000f000, len = 0x00001000  /*  4K  */
+}
+
+SECTIONS
+{
+
+  .calibration :
+  {
+      start_of_calrom = .;
+      STORE(0xAAAA,2)
+      /* #include "CAL_ROM.lcf"*/
+      end_of_calrom = .;
+  } > cal
+
+  .testability:
+  {
+      start_of_testability = .;
+      /*#include "Testability_ROM.lcf"*/
+      end_of_testability = .;
+  } > tsw_code
+  
+  .ucram:
+  {
+      /*PLACE_RAM(hal_ucram)*/
+  } > unclear_ram
+
+  GROUP :
+  {
+     start_of_vector_table = .;
+     .vector_table:
+     {
+        EXCEPTION_TABLE_ADDRESS = .;
+        dd_intc_Exception_Not_Available.o (.text_vle)
+        dd_intc_Exception_Machine_Check.o (.text_vle)
+        dd_intc_Exception_Data_Storage.o (.text_vle)
+        dd_intc_Exception_Instruction_Storage.o (.text_vle)
+        dd_intc_expection_external.o (.text_vle)
+        dd_intc_Exception_Alignment.o (.text_vle)
+        dd_intc_Exception_Program.o (.text_vle)
+        dd_intc_Exception_Fp_Unavailable.o (.text_vle)
+        dd_intc_Exception_System_Call.o (.text_vle)
+        dd_intc_Exception_Aux_Proc_Unavailable.o (.text_vle)
+        dd_intc_Exception_Decrementer.o (.text_vle)
+        dd_intc_Exception_Fixed_Interval_Timer.o (.text_vle)
+        dd_intc_Exception_Watchdog.o (.text_vle)
+        dd_intc_Exception_Data_Tlb.o (.text_vle)
+        dd_intc_Exception_Instruction_Tlb.o (.text_vle)
+        dd_intc_Exception_Debug.o (.text_vle)
+        dd_intc_Exception_Spe_Apu_Unavail.o (.text_vle)
+        dd_intc_Exception_Spe_Fp_Data.o (.text_vle)
+        dd_intc_Exception_Spe_Fp_Round.o (.text_vle)
+        dd_intc_Exception_Unused_Exception.o (.text_vle)
+      
+     }
+     end_of_vector_table = .;
+     . = start_of_vector_table + 0x1400; /* 5K for vector table */
+
+     start_of_approm = .;
+     .app_sec:
+     {
+         main.o (.text_vle)
+         /* locate main function at 0x00041400 exactly, it's for the jumping from boot block */
+         *(.text_vle)
+     }
+     end_of_approm = .;
+     
+     __DATA_ROM = .;
+  } > app_code
+
+  GROUP :
+  {
+     /* It's the start of NVRAM */
+     start_of_nvram = .;
+
+     /* offset 0x0C from start of NVRAM - contains check pattern and seq no. */
+     . += 0x0C;
+     start_of_mfgram = .;
+     .mfg :
+     {
+
+     }
+     end_of_mfgram = .;
+
+     /* offset 264 bytes from start of NVRAM. */
+     . = start_of_nvram + 264;
+     start_of_crit_nvram = .; 
+     .c_nvram :
+     {
+         /*#include "NVM_CRIT.lcf"*/
+     } 
+     end_of_crit_nvram = .;
+
+     /* offset 256 bytes from start of critical NVRAM. */
+     . = start_of_crit_nvram + 256;
+     start_of_noncrit_nvram = .;
+     .nc_nvram :
+     {
+        /* #include "NVM_NONCRIT.lcf"*/
+     }
+     end_of_noncrit_nvram = .;
+
+     end_of_nvram = start_of_nvram + SIZEOF( nvram );
+  } > nvram
+
+  GROUP :
+  {
+     /* Load memory at the specified address with the contents of the */
+     /* .data sections specified in this file.                        */
+      start_of_appram = .;
+      __DATA_RAM = . ;
+
+     .data (DATA) LOAD(__DATA_ROM): {} 
+     .sdata (DATA) LOAD(ADDR(.sdata) - ADDR(.data) + __DATA_ROM) : { }
+      
+      __DATA_END	= .;
+      
+      __BSS_START = . ;
+ 
+      .sbss (BSS) : { }
+      .bss (BSS) : { }
+
+      __BSS_END = . ;
+      end_of_appram = .;
+
+  } > app_ram
+}
+
+
+_SDA_BASE_            = ADDR( app_ram );
+
+HWIO_DATA_ROM_START   = __DATA_ROM;
+HWIO_DATA_RAM_START   = __DATA_RAM;
+HWIO_DATA_SIZE        = __DATA_END - __DATA_RAM;
+
+__SP_INIT             = ADDR(stack)+SIZEOF(stack); 
+__SP_SIZE             = SIZEOF(stack);             
+__SP_END              = ADDR(stack);               
+
+start_of_stack        = ADDR(stack);
+end_of_stack          = ADDR(stack)+SIZEOF(stack); 
+
+HWIO_NVRAM_START      = ADDR( nvram );
+HWIO_NVRAM_SIZE       = SIZEOF( nvram );
+
+HWIO_BSS_START        = __BSS_START;
+HWIO_BSS_SIZE         = __BSS_END - __BSS_START;
+
+SIZE_OF_ALLOC_APPROM  = SIZEOF( app_code );
+SIZE_OF_ALLOC_CALROM  = SIZEOF( cal );
+SIZE_OF_ALLOC_APPRAM  = SIZEOF( app_ram );
+SIZE_OF_ALLOC_TSWROM  = SIZEOF( tsw_code );
+
+SIZE_OF_USED_APPROM  = end_of_approm - start_of_vector_table + __DATA_END - __DATA_RAM;
+SIZE_OF_USED_CALROM  = end_of_calrom - start_of_calrom;
+SIZE_OF_USED_APPRAM  = __BSS_END - __DATA_RAM;
+SIZE_OF_USED_TSWROM  = end_of_testability - start_of_testability; 
+
+SIZE_OF_FREE_APPROM  = SIZE_OF_ALLOC_APPROM - SIZE_OF_USED_APPROM;
+SIZE_OF_FREE_CALROM  = SIZE_OF_ALLOC_CALROM - SIZE_OF_USED_CALROM;
+SIZE_OF_FREE_APPRAM  = SIZE_OF_ALLOC_APPRAM - SIZE_OF_USED_APPRAM;
+SIZE_OF_FREE_TSWROM  = SIZE_OF_ALLOC_TSWROM - SIZE_OF_USED_TSWROM;
+
+

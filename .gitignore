@@ -1,0 +1,10 @@
+sourceinsight/
+tools/delphilib/outputlib/
+objs/
+Listing/
+bin/
+Build/build.log
+*.txt
+*.mak
+*.err
+HLS/obj_list.txt

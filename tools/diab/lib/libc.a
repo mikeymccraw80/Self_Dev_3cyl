@@ -1,0 +1,5 @@
+if (option[libc-new]) -li -lcfp
+if (!option[libc-new]) -liold -lcfpold
+-limpl
+-limpfp
+-lg

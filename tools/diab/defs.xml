@@ -1,0 +1,711 @@
+<?xml version="1.0"?>
+<!-- Definitions for all architectures -->
+
+<AttributeDefinitions>
+
+    <atable name="LLOPT" prefix="LLOPT_" cgen="define">
+        <adef name="VERSION"      ivalue="5"	comment="Low level optimizer version" />
+        <adef name="OPTIM_ORDER"  svalue="pRDVERpCDpADVRCFD6ig5s4XVRDpCFDpD3i"	comment="Default optimization order" />
+        <adef name="EARLYSCHED"   ivalue="6"	comment="Scheduling before register allocation" />
+        <adef name="POSTCOLOR"    ivalue="5"	comment="Scheduling before register allocation" />
+        <adef name="POSTEXPAND"   ivalue="4"	comment="Pass after expand" />
+        <adef name="POSTSCHED"	  ivalue="3"	comment="Pass after scheduling" />
+    </atable>
+
+    <!- Bit descritptions for kill flags that enable/disable different optimizations ->
+    <itable name="ReorderDoOptim" alias="DO" cgen="define" prefix="DO_">
+        <idef name="REORDER"      ivalue="0"  comment="basic reordering" />
+        <idef name="TST"          ivalue="1"  comment="don't remove tests" />
+        <idef name="BRBR"         ivalue="2"  comment="branch to small code" />
+        <idef name="PEEPHOLE"     ivalue="3"  comment="do peepholes" />
+        <idef name="INC"          ivalue="4"  comment="don't find auto-incs" />
+        <idef name="REACH"        ivalue="5"  comment="do reach" />
+        <idef name="MRGMOV"       ivalue="6"  comment="2 mov.b's to 1 mov.w" />
+        <idef name="PUSHADDS"     ivalue="7"  comment="to coalesce mem offsets" />
+        <idef name="MAKECOND"     ivalue="8"  comment="make conditional insts" />
+        <idef name="SPACE"        ivalue="9"  comment="do space optimization" />
+        <idef name="LOOP_PEEP"    ivalue="10" comment="do loop peepholes" />
+        <idef name="RLWINM"       ivalue="11" comment="do rlwinm peepholes for ppc" />
+        <idef name="DELAY_SLOT"   ivalue="12" comment="fill delay slots" />
+        <idef name="LEAF"         ivalue="13" comment="do leaf peephole for sparc" />
+        <idef name="FLOAT_MOVE"   ivalue="14" comment="float move peephole" />
+        <idef name="VEC_MOVE"     ivalue="15" comment="vector move peephole" />
+        <idef name="LDMSTM"       ivalue="16" comment="change two ld/st to ldm/stm" />
+        <idef name="LVALNUM"      ivalue="17" comment="CSE local value numbering" />
+        <idef name="EVALNUM"      ivalue="18" comment="CSE extended value numbering" />
+        <idef name="TAIL_SPACE"   ivalue="19" comment="Tail block space optim" />
+        <idef name="CONST_FOLLOW" ivalue="20" comment="Constant following" />
+        <idef name="TAIL_CALL"	  ivalue="21" comment="Tail call elimination" />
+        <idef name="EXTEND"	  ivalue="22" comment="zero/sign extend & fp round removal" />
+        <idef name="COPYPROP"	  ivalue="23" comment="Copy propagation" />
+        <idef name="REVCOPYPROP"  ivalue="24" comment="Reverse copy propagation" />
+        <idef name="ADDRPROP"	  ivalue="25" comment="Address propagation" />
+        <idef name="DEAD"	  ivalue="26" comment="Dead code elimination" />
+        <idef name="REMAT"	  ivalue="27" comment="Rematerialization" />
+        <idef name="COALESCE"	  ivalue="28" comment="Copy coalescing" />
+        <idef name="INTERPROC"	  ivalue="29" comment="Interprocedural optimizations" />
+        <idef name="MAX"          ivalue="30" />
+    </itable>
+
+    <itable name="LloptKillFlags" alias="KO" prefix="KO_" cgen="define" >
+        <idef name="REORDER"      ivalue="1<<DO.REORDER"      comment="basic reordering" />
+        <idef name="TST"          ivalue="1<<DO.TST"          comment="don't remove tests" />
+        <idef name="BRBR"         ivalue="1<<DO.BRBR"         comment="branch to small code" />
+        <idef name="PEEPHOLE"     ivalue="1<<DO.PEEPHOLE"     comment="do peepholes" />
+        <idef name="INC"          ivalue="1<<DO.INC"          comment="don't find auto-incs" />
+        <idef name="REACH"        ivalue="1<<DO.REACH"        comment="do reach" />
+        <idef name="MRGMOV"       ivalue="1<<DO.MRGMOV"       comment="2 mov.b's to 1 mov.w" />
+        <idef name="PUSHADDS"     ivalue="1<<DO.PUSHADDS"     comment="to coalesce mem offsets" />
+        <idef name="MAKECOND"     ivalue="1<<DO.MAKECOND"     comment="make conditional insts" />
+        <idef name="SPACE"        ivalue="1<<DO.SPACE"        comment="do space optimization" />
+        <idef name="LOOP_PEEP"    ivalue="1<<DO.LOOP_PEEP"    comment="do loop peepholes" />
+        <idef name="RLWINM"       ivalue="1<<DO.RLWINM"       comment="do rlwinm peepholes for ppc" />
+        <idef name="DELAY_SLOT"   ivalue="1<<DO.DELAY_SLOT"   comment="fill delay slots" />
+        <idef name="LEAF"         ivalue="1<<DO.LEAF"         comment="do leaf peephole for sparc" />
+        <idef name="FLOAT_MOVE"   ivalue="1<<DO.FLOAT_MOVE"   comment="float move peephole" />
+        <idef name="VEC_MOVE"     ivalue="1<<DO.VEC_MOVE"     comment="vector move peephole" />
+        <idef name="LDMSTM"       ivalue="1<<DO.LDMSTM"       comment="change two ld/st to ldm/stm" />
+        <idef name="LVALNUM"      ivalue="1<<DO.LVALNUM"      comment="CSE local value numbering" />
+        <idef name="EVALNUM"      ivalue="1<<DO.EVALNUM"      comment="CSE extended value numbering" />
+        <idef name="TAIL_SPACE"   ivalue="1<<DO.TAIL_SPACE"   comment="Tail block space optim" />
+        <idef name="CONST_FOLLOW" ivalue="1<<DO.CONST_FOLLOW" comment="Constant following" />
+        <idef name="TAIL_CALL"	  ivalue="1<<DO.TAIL_CALL"    comment="Tail call elimination" />
+        <idef name="EXTEND"	  ivalue="1<<DO.EXTEND"	      comment="zero/sign extend & fp round removal" />
+        <idef name="COPYPROP"	  ivalue="1<<DO.COPYPROP"     comment="Copy propagation" />
+        <idef name="REVCOPYPROP"  ivalue="1<<DO.REVCOPYPROP"  comment="Reverse copy propagation" />
+        <idef name="ADDRPROP"	  ivalue="1<<DO.ADDRPROP"     comment="Address propagation" />
+        <idef name="DEAD"	  ivalue="1<<DO.DEAD"	      comment="Dead code elimination" />
+        <idef name="REMAT"	  ivalue="1<<DO.REMAT"	      comment="Rematerialization" />
+        <idef name="COALESCE"	  ivalue="1<<DO.COALESCE"     comment="Copy coalescing" />
+        <idef name="INTERPROC"	  ivalue="1<<DO.INTERPROC"    comment="Interprocedural optimizations" />
+    </itable>
+
+    <itable name="LloptValueFollowingFlags" alias="KVF" prefix="KVF_" cgen="define" >
+	<idef name="INHIBIT_NOTHING"			ivalue="0" />
+	<idef name="INHIBIT_CONSTANT_PROPAGATION"	ivalue="0x01000000" />
+	<idef name="INHIBIT_CONSTANT_FOLDING"		ivalue="0x02000000" />
+	<idef name="INHIBIT_STRENGTH_REDUCTION"		ivalue="0x04000000" />
+	<idef name="INHIBIT_DEFUSE_PEEPHOLE"		ivalue="0x08000000" />
+    </itable>
+
+    <itable name="LloptPatchCallout" prefix="LLPATCH_" cgen="macroenum" >
+	<idef name="AFTER_PARSING"		ivalue="1" />
+	<idef name="BEFORE_OPTIONAL_OPTIMS"	ivalue="2" />
+	<idef name="AFTER_OPTIONAL_OPTIMS"	ivalue="3" />
+	<idef name="BEFORE_EMIT"		ivalue="4" />
+    </itable>
+
+    <itable name="LloptOperandXformFlags" prefix="OXF_" cgen="macroenum" >
+	<idef name="NONE"	ivalue="0x0000" />
+	<idef name="HI"		ivalue="0x0001" />
+	<idef name="HILO"	ivalue="0x0002" />
+	<idef name="LOHI"	ivalue="0x0004" />
+	<idef name="LO"		ivalue="0x0008" />
+	<idef name="LABEL"	ivalue="0x0010" />
+	<idef name="EA"		ivalue="0x0020" />
+	<idef name="REG"	ivalue="0x0040" />
+    </itable>
+
+    <atable name="OperandKind" alias="OPDK" cgen="macroenum" >
+        <adef name="NONE"       ivalue="0" />
+        <adef name="UNKNOWN"    ivalue="1" />
+        <adef name="REG"        ivalue="2" />
+        <adef name="REGMASK"    ivalue="3" />
+        <adef name="ICONST"     ivalue="4" />
+        <adef name="LABEL"      ivalue="5" />
+        <adef name="EA"         ivalue="6" />
+        <adef name="LABELDIFF"  ivalue="7" />
+    </atable>
+
+    <itable name="RegisterKind" alias="REGK" prefix="REGK_" cgen="define">
+        <idef name="GPR"		ivalue="0" />	<!- General purpose - integer calculations double wide ->
+        <idef name="GPRS"		ivalue="1" />	<!- General purpose - integer calculations single wide ->
+        <idef name="THUMB"		ivalue="2" />	<!- General purpose - integer calculations - Thumb encoding subset ->
+        <idef name="ADR"		ivalue="3" />	<!- Address - pointer register	(68000) ->
+        <idef name="FPR"		ivalue="4" />	<!- Floating point register - double ->
+        <idef name="FPRS"		ivalue="5" />	<!- Floating point register - single ->
+        <idef name="CPR"		ivalue="6" />	<!- Coprocessor register	(MIPS) ->
+        <idef name="SPR"		ivalue="7" />	<!- Special purpose register	(PowerPC) ->
+        <idef name="VPR"		ivalue="8" />	<!- Vector register ->
+        <idef name="ACC"		ivalue="9" />	<!- Accumulator ->
+        <idef name="CRF"		ivalue="10" />	<!- Condition register field 	(PowerPC) ->
+	<idef name="PMR"                ivalue="11" />	<!- Performance Monitor register (PowerPC E500) ->
+	<idef name="LAST"               ivalue="12" />
+    </itable>
+
+    <itable name="RegisterClass" alias="REGC" cgen="macroenum">
+        <idef name="UNCLASSIFIED"	ivalue="0" />
+        <idef name="GPR"		ivalue="1<<REGK.GPR" />		<!- General purpose - integer calculations double wide ->
+        <idef name="GPRS"		ivalue="1<<REGK.GPRS" />	<!- General purpose - integer calculations single wide ->
+        <idef name="THUMB"		ivalue="1<<REGK.THUMB" />	<!- General purpose - integer calculations - Thumb encoding subset ->
+        <idef name="ADR"		ivalue="1<<REGK.ADR" />		<!- Address - pointer register	(68000) ->
+        <idef name="FPR"		ivalue="1<<REGK.FPR" />		<!- Floating point register - double ->
+        <idef name="FPRS"		ivalue="1<<REGK.FPRS" />	<!- Floating point register - single ->
+        <idef name="CPR"		ivalue="1<<REGK.CPR" />		<!- Coprocessor register	(MIPS) ->
+        <idef name="SPR"		ivalue="1<<REGK.SPR" />		<!- Special purpose register	(PowerPC) ->
+        <idef name="VPR"		ivalue="1<<REGK.VPR" />		<!- Vector register ->
+        <idef name="ACC"		ivalue="1<<REGK.ACC" />		<!- Accumulator ->
+        <idef name="CRF"		ivalue="1<<REGK.CRF" />		<!- Condition register field 	(PowerPC) ->
+	<idef name="PMR"                ivalue="1<<REGK.PMR" />		<!- Performance Monitor register (PowerPC E500) ->
+    </itable>
+
+    <itable name="ConditionKind" alias="CK" cgen="macroenum">
+        <idef name="NONE"       	ivalue="0x00" />
+        <idef name="UNKONWN"       	ivalue="0x01" />
+	<idef name="EQ" 		ivalue="0x02" />
+	<idef name="NE" 		ivalue="0x03" />
+	<idef name="LT" 		ivalue="0x04" />
+	<idef name="LE" 		ivalue="0x05" />
+	<idef name="GT" 		ivalue="0x06" />
+	<idef name="GE" 		ivalue="0x07" />
+	<idef name="SO" 		ivalue="0x08" />	<!- Summary overflow ->
+	<idef name="NS" 		ivalue="0x09" />	<!- Not summary overflow ->
+	<idef name="UN" 		ivalue="0x0a" />	<!- Unordered ->
+	<idef name="NU" 		ivalue="0x0b" />	<!- Not unordered ->
+    </itable>
+
+	<!- Pseudo opcode examples:							->
+	<!-		JUMP		LabelOperand					->
+	<!-		CJUMP		RegOperand, IconstOperand(CK.EQ), LabelOperand	->
+	<!-		COMPLEMENT	RegOperand, RegOperand				->
+	<!-		LOADCONST	RegOperand, IconstOperand			->
+	<!-		ADD		RegOperand, RegOperand, IconstOperand		->
+
+    <itable name="LloptPseudoOpcodes" alias="POP" cgen="macroenum">
+        <idef name="INVALID"    ivalue="0" />
+        <idef name="NOP"        ivalue="1" />
+        <idef name="JUMP"       ivalue="2"	comment="Unconditional jump" />
+        <idef name="CJUMP"      ivalue="3"	comment="Conditional jump" />
+
+	<!- Stack frame opcodes ->
+        <idef name="FRAMEALLOC"		ivalue="POP.CJUMP+1" />		<!-- frameallocreq	64,r1,r1 ->
+        <idef name="FRAMEDEALLOC"	ivalue="POP.FRAMEALLOC+1" />	<!-- framedealloc		->
+        <idef name="REGSAVE"		ivalue="POP.FRAMEDEALLOC+1" />	<!-- regsave		60,r1	->
+        <idef name="REGSAVE2"		ivalue="POP.REGSAVE+1" />	<!-- regsave2		r1	->
+        <idef name="REGRESTORE"		ivalue="POP.REGSAVE2+1" />	<!-- regrestore			->
+	<idef name="FRAMEOFFSET"	ivalue="POP.REGRESTORE+1" />	<!-- frameoffset	r0,fp,512	->
+	<idef name="FRAMEINFO"		ivalue="POP.FRAMEOFFSET+1" />	<!-- frameinfo		X,label	->
+        <idef name="SPILL"		ivalue="POP.FRAMEINFO+1" />	<!-- nyi			->
+        <idef name="SPILLRELOAD"	ivalue="POP.SPILL+1" />		<!-- nyi			->
+
+        <!- Unary - One destination operand and one source operand ->
+        <idef name="REGCOPY"    ivalue="POP.SPILLRELOAD+1" />
+        <idef name="EXTSB"      ivalue="POP.REGCOPY+1" 	comment="Sign extend byte" />
+        <idef name="EXTSH"      ivalue="POP.REGCOPY+2" 	comment="Sign extend half" />
+        <idef name="EXTZB"      ivalue="POP.REGCOPY+3" 	comment="Zero extend byte" />
+        <idef name="EXTZH"      ivalue="POP.REGCOPY+4" 	comment="Zero extend half" />
+
+        <idef name="COMPLEMENT"	ivalue="POP.REGCOPY+5"	comment="Ones complement" />
+        <idef name="NEGATE"     ivalue="POP.REGCOPY+6"	comment="Unary minus" />
+
+        <idef name="TINYLOADCONST" ivalue="POP.REGCOPY+7" comment="Load a constant value in one small instruction" />
+        <idef name="LOADCONST"  ivalue="POP.REGCOPY+8"  comment="Load a constant value" />
+        <idef name="LOADADDR"   ivalue="POP.REGCOPY+9"  comment="Load an address" />
+
+        <idef name="LOADB"      ivalue="POP.REGCOPY+10" 	comment="Load  8-bit integer byte" />
+        <idef name="LOADH"      ivalue="POP.REGCOPY+11"	comment="Load 16-bit integer half word" />
+        <idef name="LOADW"      ivalue="POP.REGCOPY+12"	comment="Load 32-bit integer word" />
+        <idef name="LOADD"      ivalue="POP.REGCOPY+13"	comment="Load 64-bit integer double word (long long)" />
+        <idef name="LOADFS"     ivalue="POP.REGCOPY+14"	comment="Load 32-bit floating point single precision" />
+        <idef name="LOADFD"     ivalue="POP.REGCOPY+15"	comment="Load 64-bit floating point double precision" />
+
+        <idef name="STOREB"     ivalue="POP.REGCOPY+16" comment="Store  8-bit integer byte" />
+        <idef name="STOREH"     ivalue="POP.REGCOPY+17" comment="Store 16-bit integer half word" />
+        <idef name="STOREW"     ivalue="POP.REGCOPY+18" comment="Store 32-bit integer word" />
+        <idef name="STORED"     ivalue="POP.REGCOPY+19" comment="Store 64-bit integer double word (long long)" />
+        <idef name="STOREFS"    ivalue="POP.REGCOPY+20"	comment="Store 32-bit floating point single precision" />
+        <idef name="STOREFD"    ivalue="POP.REGCOPY+21"	comment="Store 64-bit floating point double precision" />
+
+        <idef name="FRSP"	ivalue="POP.REGCOPY+22"	comment="Floating point round to single precision" />
+
+		<!- NOTE: It is currently assumed that FABS and FNEGATE will not	->
+		<!-  	  change the precision of the float.  That is, a single will	->
+		<!-  	  remain a single and not be promoted to a double.		->
+
+        <idef name="FABS"	ivalue="POP.REGCOPY+23"	comment="Floating point absolute value" />
+        <idef name="FNEGATE"	ivalue="POP.REGCOPY+24"	comment="Floating point negation" />
+
+        <idef name="ENDUNARY"   ivalue="POP.REGCOPY+25" />
+
+        <!- Binary - One destination operand and two source operand ->
+        <idef name="ADD"        ivalue="POP.ENDUNARY+1" />
+        <idef name="SUB"        ivalue="POP.ADD+1" />
+        <idef name="MUL"        ivalue="POP.ADD+2" />
+        <idef name="DIVS"       ivalue="POP.ADD+3" />
+        <idef name="DIVU"       ivalue="POP.ADD+4" />
+        <idef name="REMS"       ivalue="POP.ADD+5" />
+        <idef name="REMU"       ivalue="POP.ADD+6" />
+        <idef name="AND"        ivalue="POP.ADD+7" />
+        <idef name="OR"         ivalue="POP.ADD+8" />
+        <idef name="XOR"        ivalue="POP.ADD+9" />
+        <idef name="NAND"       ivalue="POP.ADD+10" 	comment="Not AND ~(l&r)" />
+        <idef name="NOR"        ivalue="POP.ADD+11" 	comment="Not OR  ~(l|r)" />
+        <idef name="NXOR"       ivalue="POP.ADD+12" 	comment="Not XOR ~(l^r)" />
+        <idef name="ANDC"       ivalue="POP.ADD+13" 	comment="AND with complement l&~r" />
+        <idef name="ORC"	ivalue="POP.ADD+14" 	comment="OR  with complement l|~r" />
+        <idef name="XORC"	ivalue="POP.ADD+15" 	comment="XOR with complement l^~r" />
+        <idef name="SHL"        ivalue="POP.ADD+16" 	comment="Shift left" />
+        <idef name="SHRL"       ivalue="POP.ADD+17" 	comment="Shift right logical" />
+        <idef name="SHRA"       ivalue="POP.ADD+18" 	comment="Shift right arithmetic" />
+        <idef name="CMPB"     	ivalue="POP.ADD+19"	comment="Compare  8-bit integer byte" />
+        <idef name="CMPH"     	ivalue="POP.ADD+20"	comment="Compare 16-bit integer half word" />
+        <idef name="CMPW"     	ivalue="POP.ADD+21"	comment="Compare 32-bit integer word" />
+        <idef name="CMPD"     	ivalue="POP.ADD+22"	comment="Compare 64-bit integer double word (long long)" />
+        <idef name="CMPFS"     	ivalue="POP.ADD+23"	comment="Compare 32-bit floating point single precision" />
+        <idef name="CMPFD"     	ivalue="POP.ADD+24"	comment="Compare 64-bit floating point double precision" />
+
+        <idef name="ENDBINARY"  ivalue="POP.ADD+25" />
+
+	<!- END OF TABLE />
+        <idef name="MAXPOP"  	ivalue="POP.ENDBINARY+1" />
+
+    </itable>
+
+    <itable name="LloptInstructionFlags" alias="F" prefix="F_" cgen="define">
+        <idef name="NOPASS"        ivalue="0x1"              comment="don't search pass this point" />
+        <idef name="BRANCH"        ivalue="0x2"              comment="branch node (wo .n)" />
+        <idef name="BCND"          ivalue="0x4"              comment="cond branch node" />
+        <idef name="BSR"           ivalue="0x8"              comment="func call" />
+        <idef name="INSTR"         ivalue="0x10"             comment="instruction, can be moved" />
+        <idef name="NOTIMP"        ivalue="0x20"             comment="no instruction or label" />
+        <idef name="FETCH"         ivalue="0x40"             comment="instruction is fetched" />
+        <idef name="EXEC"          ivalue="0x80"             comment="already executed" />
+        <idef name="PARALLEL"      ivalue="0x80"             comment="used by m32r reorder (after EXEC done)" />
+        <idef name="SPADJ"         ivalue="0x100"            comment="stack adjustment, be careful" />
+        <idef name="MOVE"          ivalue="0x200"            comment="instruction is a reg move" />
+        <idef name="NOCOPY"        ivalue="0x400"            comment="do not copy this line" />
+        <idef name="MOV"           ivalue="0x800"            comment="move instruction" />
+        <idef name="RETURN"        ivalue="0x1000"           comment="return instruction" />
+        <idef name="UBR"           ivalue="0x2000"           comment="unconditional branch" />
+        <idef name="BOBI"          ivalue="0x4000"           comment="ppc - Uses B0,BI" />
+        <idef name="MFC"           ivalue="0x4000"           comment="mips - mfc" />
+        <idef name="NOP"           ivalue="0x8000"           comment="mips - noop" />
+        <idef name="UPDATE"        ivalue="0x10000"          comment="ppc - update instruction" />
+        <idef name="DOTPOS"        ivalue="0x20000"          comment="ppc - can be made into a dot inst" />
+        <idef name="NOPFILL"       ivalue="0x20000"          comment="mips,sh - instr needs noop" />
+        <idef name="SZ_ONE"        ivalue="0x40000"          comment="one byte of memory" />
+        <idef name="SZ_TWO"        ivalue="0x80000"          comment="two bytes of memory" />
+        <idef name="SZ_FOUR"       ivalue="0x100000"         comment="four bytes of memory" />
+        <idef name="SZ_EIGHT"      ivalue="0x200000"         comment="eight bytes of memory" />
+        <idef name="R0IS0"         ivalue="0x400000"         comment="ppc - r0 reference is to zero" />
+        <idef name="UNSIGNED"      ivalue="0"         	     comment="unsigned load" />
+        <idef name="SIGNED"        ivalue="0x800000"         comment="signed load" />
+        <idef name="SINGLE"        ivalue="F.SIGNED"         comment="Single precision FP" />
+        <idef name="LD"            ivalue="0x1000000"        comment="load instruction" />
+        <idef name="ST"            ivalue="0x2000000"        comment="store instruction" />
+        <idef name="MACRO"         ivalue="0x4000000"        comment="macro instruction" />
+        <idef name="LM"            ivalue="0x8000000"        comment="load multiple instruction" />
+        <idef name="SM"            ivalue="0x10000000"       comment="store multiple instruction" />
+        <idef name="LIKELY"        ivalue="0x20000000"       comment="mips - can be likely" />
+        <idef name="SUB"           ivalue="0x20000000"       comment="rce subtract" />
+        <idef name="BYTEREV"       ivalue="0x20000000"       comment="ppc byte reversed inst" />
+        <idef name="COMMUTE"       ivalue="0x40000000"       comment="Two operand commutative inst" />
+        <idef name="LOW5"          ivalue="0x80000000"       comment="Only low five bits of reg use" />
+    </itable>
+
+    <itable name="LloptInstructionKinds" alias="K" prefix="K_" cgen="define">
+        <idef name="ADDI"          ivalue="0x1"               comment="add immediate instruction" />
+        <idef name="ADD"           ivalue="0x2"               comment="add instruction" />
+        <idef name="ZEXT"          ivalue="0x4"               comment="zero extend instruction" />
+        <idef name="MOVI"          ivalue="0x8"               comment="move immedidate" />
+        <idef name="SEXT"          ivalue="0x10"              comment="sign extend instruction" />
+        <idef name="SUBI"          ivalue="0x20"              comment="subtract immediate" />
+        <idef name="MEM_REF"       ivalue="0x40"              comment="references memory other than load" />
+        <idef name="JBF"           ivalue="0x80"              comment="RCE jbf     ARM bne" />
+        <idef name="JBT"           ivalue="0x100"             comment="RCE jbt     ARM beq" />
+        <idef name="JBR"           ivalue="0x200"             comment="RCE jbr" />
+        <idef name="SUB"           ivalue="0x400"             comment="subtract" />
+        <idef name="LRW"           ivalue="0x800"             comment="RCE lrw" />
+        <idef name="MUL"           ivalue="0x1000"            comment="ARM mul" />
+        <idef name="FILL_NO_NOP"   ivalue="0x1000"            comment="SH delay slot but no nop" />
+        <idef name="MIPSMUL"       ivalue="0x1000"            comment="MIPS mul" />
+        <idef name="BTSTI"         ivalue="0x1000"            comment="MCORE btsti" />
+        <idef name="VOLATILE"      ivalue="0x2000"            comment="volatile load or store" />
+        <idef name="BSETI"         ivalue="0x4000"            comment="MCORE bseti" />
+        <idef name="SMALL_SET"     ivalue="0x8000"            comment="MCORE onlys bits not affected by extend will be defined" />
+        <idef name="SMALL_CONT"    ivalue="0x10000"           comment="Won't corrupt something already known to be small" />
+        <idef name="MEM_KILL"      ivalue="0x20000"           comment="Kill all memory" />
+        <idef name="ONE_BIT"       ivalue="0x40000"           comment="MCORE instructions genning zero or one" />
+        <idef name="MIPSLO"        ivalue="0x40000"           comment="MIPS mtlo, mflo" />
+        <idef name="BCLRI"         ivalue="0x80000"           comment="MCORE bclri" />
+        <idef name="ADD3I"         ivalue="0x100000"          comment="M32R add3" />
+        <idef name="HIDDEN_R1"     ivalue="0x200000"          comment="MCORE fm" />
+        <idef name="LSRI"          ivalue="0x400000"          comment="MCORE lsri" />
+        <idef name="CLR"           ivalue="0x1800000"         comment="MCORE clrt or clrf" />
+        <idef name="CLRF"          ivalue="0x800000"          comment="MCORE clrf" />
+        <idef name="OPIPE"         ivalue="0x800000"          comment="M32R o pipeline instruction" />
+        <idef name="CLRT"          ivalue="0x1000000"         comment="MCORE clrt" />
+        <idef name="SPIPE"         ivalue="0x1000000"         comment="M32R s pipeline instruction" />
+        <idef name="INST32"        ivalue="0x1000000"         comment="SH potentially a 32-bit instruction" />
+        <idef name="DIV"           ivalue="0x2000000"         comment="div" />
+        <idef name="CMP_SAME"      ivalue="0x4000000"         comment="MCORE cmpne, cmplt" />
+        <idef name="AND3I"         ivalue="0x8000000"         comment="M32R,PPC 3operand and immed" />
+        <idef name="OR3I"          ivalue="0x10000000"        comment="M32R,PPC 3operand or immed" />
+        <idef name="SMALL_MAYBE"   ivalue="0x20000000"        comment="small is possible if const is small enough" />
+        <idef name="SHFT_IMM"      ivalue="0x40000000"        comment="ARM shift by immediate" />
+        <idef name="SRAI"          ivalue="0x40000000"        comment="M32R arith sh right" />
+        <idef name="ASRI"          ivalue="0x40000000"        comment="MCORE asri" />
+        <idef name="BEQNEZ"        ivalue="0x80000000"        comment="M32R compare eq or ne zero" />
+
+        <idef name="CMP_ZERO"      ivalue="0x10000000 << 4"   comment="ARM Compare with zero" />
+        <idef name="ARM_DATAPR"    ivalue="0x20000000 << 4"   comment="ARM Data processing" />
+        <idef name="BR_EQ"         ivalue="0x40000000 << 4"   comment="ARM beq" />
+        <idef name="BR_NE"         ivalue="0x80000000 << 4"   comment="ARM bne" />
+        <idef name="BR_CS"         ivalue="0x10000000 << 8"   comment="ARM brcs" />
+        <idef name="BR_HS"         ivalue="0x10000000 << 8"   comment="ARM brhs" />
+        <idef name="BR_CC"         ivalue="0x20000000 << 8"   comment="ARM brcc" />
+        <idef name="BR_LO"         ivalue="0x20000000 << 8"   comment="ARM brlo" />
+        <idef name="BR_MI"         ivalue="0x40000000 << 8"   comment="ARM brmi" />
+        <idef name="BR_PL"         ivalue="0x80000000 << 8"   comment="ARM brpl" />
+        <idef name="BR_VS"         ivalue="0x10000000 << 12"  comment="ARM brvs" />
+        <idef name="BR_VC"         ivalue="0x20000000 << 12"  comment="ARM brvc" />
+        <idef name="BR_HI"         ivalue="0x40000000 << 12"  comment="ARM brhi" />
+        <idef name="BR_LS"         ivalue="0x80000000 << 12"  comment="ARM brls" />
+        <idef name="BR_GE"         ivalue="0x10000000 << 16"  comment="ARM brge" />
+        <idef name="BR_LE"         ivalue="0x20000000 << 16"  comment="ARM brle" />
+        <idef name="BR_GT"         ivalue="0x40000000 << 16"  comment="ARM brgt" />
+        <idef name="BR_LT"         ivalue="0x80000000 << 16"  comment="ARM brlt" />
+        <idef name="ARM_BR"        ivalue="K.BR_EQ|K.BR_NE|K.BR_CS|K.BR_HS|K.BR_CC|K.BR_LO|K.BR_MI|K.BR_PL|K.BR_VS|K.BR_VC|K.BR_HI|K.BR_LS|K.BR_GE|K.BR_LE|K.BR_GT|K.BR_LT" />
+
+        <idef name="THM_PUSH_POP"  ivalue="0x10000000 << 20"  comment="THUMB push & pop" />
+        <idef name="THM_ADD_SUB"   ivalue="0x20000000 << 20"  comment="THUMB add, sub" />
+        <idef name="THM_MOV"       ivalue="0x40000000 << 20"  comment="THUMB mov" />
+        <idef name="ARM_MULL"      ivalue="0x10000000 << 24"  comment="arm long long multiply" />
+        <idef name="ARM_MLAL"      ivalue="0x20000000 << 24"  comment="arm long long multiply acc" />
+        <idef name="ARM_BLX"       ivalue="0x40000000 << 24"  comment="BLX instruction" />
+        <idef name="NO_CSE"        ivalue="0x80000000 << 24"  comment="Instruction cannot be CSE" />
+
+
+<!- TriCore kind values used to propagate constants into instructions ->
+
+        <idef name="K4S"           ivalue="0x10000000 << 28"  comment="4-bit signed extended possible" />
+        <idef name="K4Z"           ivalue="0x10000000 << 32"  comment="4-bit zero   extended possible" />
+        <idef name="K9S"           ivalue="0x20000000 << 28"  comment="9-bit signed extended possible" />
+        <idef name="K8Z"           ivalue="0x40000000 << 28"  comment="8-bit zero   extended possible" />
+        <idef name="K9Z"           ivalue="0x80000000 << 28"  comment="9-bit zero   extended possible" />
+
+<!- TriCore kind values used to propagate 10-bit lea values ->
+
+        <idef name="K10OP1"        ivalue="0x20000000 << 32"  comment="10-bit instruction form (BO)" />
+        <idef name="K10OP2"        ivalue="0x40000000 << 32"  comment="10-bit instruction form (BO)" />
+        <idef name="NO_COPY"       ivalue="0x80000000 << 32"  comment="Instruction cannot be Copy Propagated" />
+    </itable>
+
+    <itable name="InstructionKeyValues" alias="KEY" prefix="KEY_" cgen="define">
+        <idef name="FSADD"         ivalue="1"                 comment="MCORE fsadd" />
+        <idef name="FSSUB"         ivalue="2"                 comment="MCORE fssub" />
+        <idef name="FSMUL"         ivalue="3"                 comment="MCORE fsmul" />
+        <idef name="FSMULR1"       ivalue="4"                 comment="MCORE fsmulr1" />
+        <idef name="SETC"          ivalue="5"                 comment="MCORE setc" />
+        <idef name="RLWINM"        ivalue="6"                 comment="PPC  rlwinm" />
+        <idef name="LSLI"          ivalue="7"                 comment="M32R shift left" />
+        <idef name="SAVE"          ivalue="8"                 comment="SPARC save" />
+        <idef name="RESTORE"       ivalue="9"                 comment="SPARC restore" />
+        <idef name="ANDI"          ivalue="10"                comment="MCORE andi" />
+        <idef name="VSLDOI"        ivalue="11"                comment="Altivec vsldoi" />
+        <idef name="VEC_MOVE"      ivalue="12"                comment="Vector move" />
+        <idef name="FLOAT_MOVE"    ivalue="13"                comment="Float move" />
+        <idef name="CMPNEI"        ivalue="14"                comment="Mcore cmpnei" />
+        <idef name="ARM_CMP"       ivalue="15"                comment="ARM CMP instruction" />
+        <idef name="SH_FLT"        ivalue="16"                comment="SH Float operation" />
+        <idef name="68K_OVRF"      ivalue="17"                comment="68K uses the OverFlow flag" />
+        <idef name="ARM_DPR_RRR"   ivalue="18"                comment="ARM Data Processing instruction with 3 registers" />
+        <idef name="SH_FLTUSE"     ivalue="19"                comment="SH Float instr uses both regs" />
+        <idef name="MIPS4_NONOP"   ivalue="20"                comment="MIPS ISA 4 upwards does not need a NOP" />
+        <idef name="X86_MREF"      ivalue="21"                comment="X86 - references memory" />
+        <idef name="X86_SHFT"      ivalue="22"                comment="X86 - left / right shift" />
+        <idef name="X86_LEA"       ivalue="23"                comment="X86 - LEA insn" />
+        <idef name="X86_SETC"      ivalue="24"                comment="X86 - set cond from flag" />
+        <idef name="X86_PUSH"      ivalue="25"                comment="X86 - push (%ebx|%esi|%edi)" />
+        <idef name="X86_POP"       ivalue="26"                comment="X86 - pop (%ebx|%esi|%edi)" />
+        <idef name="PPCEV_ISEL"    ivalue="27"                comment="PPC E500 isel instruction" />
+        <idef name="PPCEV_MRGHL"   ivalue="28"                comment="PPC E500 evmergehilo instruction" />
+        <idef name="PPCEV_LOAD"    ivalue="29"                comment="PPC E500 positive disp only" />
+        <idef name="PPCEV_STORE"   ivalue="30"                comment="PPC E500 positive disp only" />
+        <idef name="ARM_MLA"       ivalue="31"                comment="ARM mla instruction" />
+        <idef name="ARM_MOV"       ivalue="32"                comment="ARM mov instruction" />
+        <idef name="MIPS_MUL"      ivalue="33"                comment="MIPS multiply instruction" />
+        <idef name="TC_CMOV"       ivalue="34"                comment="TC  - conditional move" />
+        <idef name="VLE_NO_CR0"    ivalue="35"                comment="CR0 update form not allowed" />
+        <idef name="LEA"           ivalue="36"                comment="TC  lea w/constant" />
+        <idef name="ADDIH"         ivalue="37"                comment="TC  addih w/constant" />
+        <idef name="JNE"           ivalue="38"                comment="TC  jne dde form" />
+        <idef name="ADDI"          ivalue="39"                comment="TC  add dde form" />
+        <idef name="TC_MULTI"      ivalue="40"                comment="TC  multi-cycle integer" />
+        <idef name="VLE_BTSTI"     ivalue="41"                comment="PPC VLE se_btsti optimization allowed" />
+	<idef name="MIPS64_NONOP"  ivalue="42"                comment="MIPS64 ISA does not need a NOP" />
+	<idef name="VLE_RESTRICT"  ivalue="43"		      comment="Has VLE register restrictions" />
+    </itable>
+
+    <itable name="ST" prefix="ST_" cgen="define">
+        <idef name="NONE"	ivalue="0"	comment="unknown" />
+        <idef name="BF"		ivalue="2"	comment="begin function" />
+        <idef name="EF"		ivalue="3"	comment="end function" />
+        <idef name="EE"		ivalue="4"	comment="end entry code" />
+        <idef name="BE"		ivalue="5"	comment="begin exit code" />
+        <idef name="BR"		ivalue="6"	comment="begin register store/restore" />
+        <idef name="ER"		ivalue="7"	comment="end register store/restore" />
+        <idef name="FN"		ivalue="8"	comment="function info" />
+        <idef name="VOL"	ivalue="9"	comment="volatile flag" />
+        <idef name="SW"		ivalue="10"	comment="switch statement" />
+        <idef name="NP"		ivalue="11"	comment="nopass flag" />
+        <idef name="LL"		ivalue="12"	comment="lock label flag" />
+        <idef name="IMP_GOTO"	ivalue="13"	comment="implicit goto (java exc handling" />
+        <idef name="PARANOID"	ivalue="14"	comment="implicit goto (java exc handling" />
+        <idef name="JMPISJSR"	ivalue="15"	comment="next jmp is really jsr" />
+        <idef name="BBD"	ivalue="16"	comment="begin double precision FP switch    " />
+        <idef name="BD"		ivalue="17"	comment="enter double precision FP mode" />
+        <idef name="BBS"	ivalue="18"	comment="begin single precision FP switch    " />
+        <idef name="BS"		ivalue="19"	comment="enter single precision FP mode    " />
+        <idef name="BTSTI" 	ivalue="20"	comment="Next cmpi can be optimized on PPC VLE" />
+        <idef name="FS"		ivalue="21"	comment="Frame size directive" />
+        <idef name="TL"		ivalue="22"	comment="Temporary registers live (parameter/return registers)" />
+        <idef name="ASSERT"	ivalue="23"	comment="Assertion" />
+        <idef name="RT"		ivalue="24"	comment="Request tail call optimization" />
+        <idef name="DELETE" 	ivalue="254"	comment="Mark to be deleted" />
+        <idef name="DELETED" 	ivalue="255"	comment="Mark has been deleted" />
+    </itable>
+
+    <itable name="OF" prefix="OF_" cgen="define">
+        <idef name="MODIFIED"	 ivalue="0x00000001" comment="Operand is modified as a side effect of the instruction" />
+        <idef name="PAIR"	 ivalue="0x00000002" comment="Register pair" />
+        <idef name="HIDE"	 ivalue="0x00000004" comment="Hide operand from default Instruction::emitOperands()" />
+        <idef name="LOCK"	 ivalue="0x00000008" comment="Register(s) should not be changed - NYI" />
+        <idef name="DEAD"	 ivalue="0x00000010" comment="Register(s) are dead after this point" />
+        <idef name="ARCH_RSVD1"	 ivalue="0x00100000" comment="Reserved architecture specific operand flag" />
+        <idef name="ARCH_RSVD2"	 ivalue="0x00200000" comment="Reserved architecture specific operand flag" />
+        <idef name="ARCH_RSVD3"	 ivalue="0x00400000" comment="Reserved architecture specific operand flag" />
+        <idef name="ARCH_RSVD4"	 ivalue="0x00800000" comment="Reserved architecture specific operand flag" />
+        <idef name="ARCH_RSVD5"	 ivalue="0x01000000" comment="Reserved architecture specific operand flag" />
+        <idef name="ARCH_RSVD6"	 ivalue="0x02000000" comment="Reserved architecture specific operand flag" />
+        <idef name="ARCH_RSVD7"	 ivalue="0x04000000" comment="Reserved architecture specific operand flag" />
+        <idef name="ARCH_RSVD8"	 ivalue="0x08000000" comment="Reserved architecture specific operand flag" />
+        <idef name="ARCH_RSVD9"	 ivalue="0x10000000" comment="Reserved architecture specific operand flag" />
+        <idef name="ARCH_RSVD10" ivalue="0x20000000" comment="Reserved architecture specific operand flag" />
+        <idef name="ARCH_RSVD11" ivalue="0x40000000" comment="Reserved architecture specific operand flag" />
+        <idef name="ARCH_RSVD12" ivalue="0x80000000" comment="Reserved architecture specific operand flag" />
+    </itable>
+
+    <!-- TODO was InstructionCharacteristics rename CH to OT -->
+    <itable name="OpcodeTraits" alias="CH" prefix="CH_" cgen="define">
+	<!-- Currently 8 bits XmlOpcode.ch -->
+	<idef name="FLOAT"	 ivalue="0x00000001" comment="Operand is modified as a side effect of the instruction" />
+	<idef name="FSROUND"	 ivalue="0x00000002" comment="Source operands are rounded to single precision" />
+	<idef name="PURE"	 ivalue="0x00000004" comment="Pure intrinsic_function" />
+	<idef name="PCLEAR"	 ivalue="0x00000008" comment="Scheduler should clear the pipeline" />
+	<idef name="PFIXED"	 ivalue="0x00000010" comment="Scheduler cannot move" />
+    </itable>
+
+    <itable name="LineType" alias="LT" cgen="define">
+	<idef name="T_HEAD"		ivalue="0"	comment="head of list" />
+	<idef name="T_COM"		ivalue="1"	comment="comment" />
+	<idef name="T_LABEL"		ivalue="2"	comment="label" />
+	<idef name="T_NOPE"		ivalue="3"	comment="unknown" />
+	<idef name="T_DATA"		ivalue="4"	comment=".data" />
+	<idef name="T_CTRL"		ivalue="5"	comment="$$ info" />
+	<idef name="T_PSEUDO"		ivalue="6"	comment="pseudo opcode" />
+	<idef name="T_ATTACH"		ivalue="7"	comment="attach to previous instr" />
+	<idef name="T_ATTACH_NEXT"	ivalue="8" 	comment="attach to next inst" />
+	<idef name="T_DIR"		ivalue="9"	comment="all directives below here" />
+
+	<idef name="T_BCND0"		ivalue="10"	comment="bb0 bb1 bcnd bcc jcc" />
+	<idef name="T_BCND1"		ivalue="11"	comment="bb0 bb1 bcnd bcc jcc" />
+	<idef name="T_BCND2"		ivalue="12"	comment="bb0 bb1 bcnd bcc jcc" />
+	<idef name="T_BR"		ivalue="13"	comment="br jmp" />
+	<idef name="T_BSR"		ivalue="14"	comment="bsr jsr" />
+	<idef name="T_RTS"		ivalue="15"	comment="rts" />
+	<idef name="T_FD_RU"		ivalue="16"	comment="float defined, r used" />
+	<idef name="T_FU_RU"		ivalue="17"	comment="float used, r used" />
+	<idef name="T_MOV"		ivalue="18"	comment="mov" />
+	<idef name="T_DU_ONE"		ivalue="19"	comment="one register operand def/use" /> 
+	<idef name="T_DU_TWO"		ivalue="20"	comment="two reg operands 1st is du" />
+	<idef name="T_DU_IMM"		ivalue="21"	comment="one du reg operand, one imm" />
+	<idef name="T_U_TWO"		ivalue="22"	comment="use two registers" />
+	<idef name="T_U_IMM"		ivalue="23" 	comment="use register and immediate" />
+	<idef name="T_ZERO"		ivalue="24"	comment="no operands" />
+	<idef name="T_JSR"		ivalue="25"	comment="jsr instruction" />
+	<idef name="T_D_IMM"		ivalue="26" />
+	<idef name="T_CMOV"		ivalue="27" />
+	<idef name="T_STM"		ivalue="28" />
+	<idef name="T_LDM"		ivalue="29" />
+	<idef name="T_D_ONE"		ivalue="30" />
+	<idef name="T_2OP"		ivalue="31" />
+	<idef name="T_U_ONE"		ivalue="32" />
+	<idef name="T_LOOPT"		ivalue="33" />
+	<idef name="T_LATER"		ivalue="34" />
+	<idef name="T_F2OP"		ivalue="35" />
+	<idef name="T_F3OP"		ivalue="36" />
+	<idef name="T_3OP"		ivalue="37" />
+	<idef name="T_RD_FU"		ivalue="38" />
+	<idef name="T_RU_FD"		ivalue="39" />
+	<idef name="T_D1_TWO"		ivalue="40" />
+	<idef name="T_MOVD"		ivalue="41" />
+	<idef name="T_F4OP"		ivalue="42" />
+	<idef name="T_FD_R2U"		ivalue="43" />
+	<idef name="T_FU_R2U"		ivalue="44" />
+	<idef name="TPP_CMP"		ivalue="45" />
+	<idef name="TPP_CMPI"		ivalue="46" />
+	<idef name="TPP_FCMP"		ivalue="47" />
+	<idef name="TPP_CR2"		ivalue="48" />
+	<idef name="TPP_FSPR"		ivalue="49" />
+	<idef name="TPP_TSPR"		ivalue="50" />
+	<idef name="T_U_THREE"		ivalue="51" />
+	<idef name="TPP_CR3"		ivalue="52" />
+	<idef name="T_F2USE"		ivalue="53" />
+	<idef name="T_DU_TWO_ULOCK"	ivalue="54" />
+	<idef name="T68_ADD"		ivalue="55" />
+	<idef name="T68_SUB"		ivalue="56" />
+	<idef name="T68_BIN"		ivalue="57" />
+	<idef name="T68_MUL"		ivalue="58" />
+	<idef name="T68_DIV"		ivalue="59" />
+	<idef name="T68_SHFT"		ivalue="60" />
+	<idef name="T68_BMOD"		ivalue="61" />
+	<idef name="T68_BEXT"		ivalue="62" />
+	<idef name="T68_BINS"		ivalue="63" />
+	<idef name="T68_BTST"		ivalue="64" />
+	<idef name="T68_CMP"		ivalue="65" />
+	<idef name="T68_SWAP"		ivalue="66" />
+	<idef name="T68_LINK"		ivalue="67" />
+	<idef name="T68_UNLK"		ivalue="68" />
+	<idef name="T68_MOVM"		ivalue="69" />
+	<idef name="T68_LEA"		ivalue="70" />
+	<idef name="T68_PEA"		ivalue="71" />
+	<idef name="T68_UN"		ivalue="72" />
+	<idef name="T68_SCC"		ivalue="73" />
+	<idef name="T68_TST"		ivalue="74" />
+	<idef name="T68_CLR"		ivalue="75" />
+	<idef name="T68_FADD"		ivalue="76" />
+	<idef name="T68_FMUL"		ivalue="77" />
+	<idef name="T68_FDIV"		ivalue="78" />
+	<idef name="T68_FMOV"		ivalue="79" />
+	<idef name="T68_FSCC"		ivalue="80" />
+	<idef name="T68_FCMP"		ivalue="81" />
+	<idef name="T68_FNEG"		ivalue="82" />
+	<idef name="T68_FTST"		ivalue="83" />
+	<idef name="T68_FMOVM"		ivalue="84" />
+	<idef name="T68_BCND"		ivalue="85" />
+	<idef name="T68_BR"		ivalue="86" />
+	<idef name="T68_BSR"		ivalue="87" />
+	<idef name="T68_RTS"		ivalue="88" />
+	<idef name="T68_MOV"		ivalue="89" />
+	<idef name="T_FD_CRU"		ivalue="90" />
+	<idef name="T_FU_CRU"		ivalue="91" />
+	<idef name="T_2OPC"		ivalue="92" />
+	<idef name="T_U_TWO_C"		ivalue="93" />
+	<idef name="T_2OPC_UP"		ivalue="94" />
+	<idef name="T_3OP_UP"		ivalue="95" />
+	<idef name="T_FD_R2U_UP"	ivalue="96" />
+	<idef name="T_FU_R2U_UP"	ivalue="97" />
+	<idef name="T_FD_CRU_UP"	ivalue="98" />
+	<idef name="T_FU_CRU_UP"	ivalue="99" />
+	<idef name="T_U_TWO_C_UP"	ivalue="100" />
+	<idef name="T_U_THREE_UP"	ivalue="101" />
+	<idef name="T_2OP_CONST"	ivalue="102" />
+	<idef name="T_M16_ADD"		ivalue="103" />
+	<idef name="T_M16_DADD"		ivalue="104" />
+	<idef name="T_BCND1D"		ivalue="105" />
+	<idef name="T_BR_TEMP"		ivalue="106" />
+	<idef name="T_BSR_TEMP"		ivalue="107" />
+	<idef name="T_CON_U_D"		ivalue="108" />
+	<idef name="T_CU_UD"		ivalue="109" />
+	<idef name="T_C_U_D"		ivalue="110" />
+	<idef name="T_C_CU_PD_PD"	ivalue="111" />
+	<idef name="T_CU_PD_PD"		ivalue="112" />
+	<idef name="T_CU_U"		ivalue="113" />
+	<idef name="T_CU_U_D"		ivalue="114" />
+	<idef name="T_CU_UD_D"		ivalue="115" />
+	<idef name="T_C_UD"		ivalue="116" />
+	<idef name="T_C_D"		ivalue="117" />
+	<idef name="T_U_D"		ivalue="118" />
+	<idef name="T_CU_D"		ivalue="119" />
+	<idef name="T_U_UD"		ivalue="120" />
+	<idef name="T_CU_UCL"		ivalue="121" />
+	<idef name="T_CU_UDCL"		ivalue="122" />
+	<idef name="T_U_SPD"		ivalue="123" />
+	<idef name="T_DU_SPD"		ivalue="124" />
+	<idef name="T_SPU_D"		ivalue="125" />
+	<idef name="T_SPU_DU"		ivalue="126" />
+	<idef name="T_SH_MEM"		ivalue="127" />
+	<idef name="T_UD_C_U"		ivalue="128" />
+	<idef name="T_D_U_CU"		ivalue="129" />
+	<idef name="T_SPARC_LD"		ivalue="130" />
+	<idef name="T_SPARC_FLD"	ivalue="131" />
+	<idef name="T_SPARC_ST"		ivalue="132" />
+	<idef name="T_SPARC_FST"	ivalue="133" />
+	<idef name="T_U_CU_D"		ivalue="134" />
+	<idef name="T_FU_FD"		ivalue="135" />
+	<idef name="T_FU_FU_FD"		ivalue="136" />
+	<idef name="T_U_CU_SPD"		ivalue="137" />
+	<idef name="T_U_CU"		ivalue="138" />
+	<idef name="T_FDU_FDD"		ivalue="139" />
+	<idef name="T_FQU_FQD"		ivalue="140" />
+	<idef name="T_FDU_FQD"		ivalue="141" />
+	<idef name="T_FDU_FD"		ivalue="142" />
+	<idef name="T_FQU_FD"		ivalue="143" />
+	<idef name="T_FU_FU"		ivalue="144" />
+	<idef name="T_FDU_FDU"		ivalue="145" />
+	<idef name="T_FQU_FQU"		ivalue="146" />
+	<idef name="T_FDU_FDU_FDD"	ivalue="147" />
+	<idef name="T_FQU_FQU_FQD"	ivalue="148" />
+	<idef name="T_FU_FDD"		ivalue="149" />
+	<idef name="T_FU_FQD"		ivalue="150" />
+	<idef name="T_FQU_FDD"		ivalue="151" />
+	<idef name="T_FU_FU_FDD"	ivalue="152" />
+	<idef name="T_FDU_FDU_FQD"	ivalue="153" />
+	<idef name="T_DU_U_U"		ivalue="154" />
+	<idef name="T_VD_U_U"		ivalue="155" />
+	<idef name="T_VD"		ivalue="156" />
+	<idef name="T_VU"		ivalue="157" />
+	<idef name="T_VU_U_U"		ivalue="158" />
+	<idef name="T_VD_VU_VU"		ivalue="159" />
+	<idef name="T_VD_VU_VU_VU"	ivalue="160" />
+	<idef name="T_VD_VU_C"		ivalue="161" />
+	<idef name="T_VD_C"		ivalue="162" />
+	<idef name="T_VD_VU"		ivalue="163" />
+	<idef name="T_VD_VU_VU_C"	ivalue="164" />
+	<idef name="T_SU_SD"		ivalue="165"     comment="use DSPr, define DSPr" />
+	<idef name="T_SU_SU_SD"		ivalue="166"     comment="use 2 DSPrs, define one DSPr" />
+	<idef name="T_SD"		ivalue="167"     comment="define DSPr" />
+	<idef name="T_SU_SU"		ivalue="168"     comment="use 2 DSPr" />
+	<idef name="T_NEW_PARSE"	ivalue="169" />
+	<idef name="T_D_U_U_CU"		ivalue="170" />
+	<idef name="T_D_CU"		ivalue="171" />
+	<idef name="T_D_CU_CUO"		ivalue="172" />
+	<idef name="T_U_U_CU"		ivalue="173" />
+	<idef name="T_DRLIST"		ivalue="174" />
+	<idef name="T_URLIST"		ivalue="175" />
+	<idef name="T_SH_FP"		ivalue="176" />
+	<idef name="T_SH_FLT"		ivalue="177" />
+	<idef name="T_DL_CL"		ivalue="178" />
+	<idef name="T_2OP_OPT"		ivalue="179" />
+	<idef name="T_EV_VD_VU_VU"	ivalue="180" />
+	<idef name="T_3OP_CR"		ivalue="181" />
+	<idef name="T_3OP_EV"		ivalue="182" />
+	<idef name="T_BCND3"		ivalue="183"	comment="bb0 bb1 bcnd bcc jcc" />
+	<idef name="T_3OP_EVACC"	ivalue="184" />
+	<idef name="T_2OP_EVACC"	ivalue="185" />
+	<idef name="T_D_U_C_C_C"	ivalue="186" />
+	<idef name="T_D_U_C_U_C"	ivalue="187" />
+	<idef name="T_D_U_U_U_C"	ivalue="188" />
+	<idef name="T_BR_C_C"		ivalue="189" />
+	<idef name="T_3OP_EVHI"		ivalue="190" />
+	<idef name="T_3OP_EVLO"		ivalue="191" />
+	<idef name="T_3OP_EVHILO"	ivalue="192" />
+	<idef name="T_3OP_EVLOHI"	ivalue="193" />
+	<idef name="T_D_U_C_C"		ivalue="194"	comment="e.g. MIPS ext rt,rs,pos,size" />
+	<idef name="T_DU_U_C_C"		ivalue="195"	comment="e.g. MIPS ins rt,rs,pos,size" />
+	<idef name="T_JR"		ivalue="196"	comment=".diab.br" />
+	<idef name="T_RET"		ivalue="197"	comment=".diab.ret" />
+	<idef name="T_CR_U_U"		ivalue="198" />
+	<idef name="T_D_C"		ivalue="199" />
+	<idef name="T_D_U_U_C"		ivalue="200" />
+	<idef name="T_C_U_U"		ivalue="201" />
+	<idef name="T_UL_UD"		ivalue="202" />
+	<idef name="T_L_C"		ivalue="203" />
+	<idef name="T_U_C_PD"		ivalue="204" />
+	<idef name="T_2OPCEV"		ivalue="205" />
+	<idef name="T_LAST"		ivalue="206" />
+    </itable>
+
+
+</AttributeDefinitions>
