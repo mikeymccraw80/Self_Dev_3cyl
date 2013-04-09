@@ -47,37 +47,37 @@ static SPI_SCHEDULER_DATA_T SPI_SCHEDULER_Data = { 0, 0 };
    const SPI_SCHEDULER_Message_T   *in_messages, 
    uint32_t                         in_number_of_messages )
 {
-   SPI_SCHEDULER_Data.Number_Of_Periodical_Messages     = 0;
-   SPI_SCHEDULER_Data.Running                           = false;
+	SPI_SCHEDULER_Data.Number_Of_Periodical_Messages     = 0;
+	SPI_SCHEDULER_Data.Running                           = false;
 
-   return VSEP_SPI_SCHEDULER_Schedule_Messages( in_messages, in_number_of_messages );
+	return VSEP_SPI_SCHEDULER_Schedule_Messages( in_messages, in_number_of_messages );
 }
 //=============================================================================
 // SPI_SCHEDULER_Initialize
 //=============================================================================
 FAR_COS void VSEP_SPI_SCHEDULER_Initialize( void )
 {
-    VSEP_SPI_SCHEDULER_Buffer_Initialize( SPI_SCHEDULER_Message, SPI_SCHEDULER_Message_Numberof );
-   VSEP_SPI_SCHEDULER_Set_Enable( true );
+	VSEP_SPI_SCHEDULER_Buffer_Initialize( SPI_SCHEDULER_Message, SPI_SCHEDULER_Message_Numberof );
+	VSEP_SPI_SCHEDULER_Set_Enable( true );
 }
 //=============================================================================
 // SPI_SCHEDULER_Clear
 //=============================================================================
 void VSEP_SPI_SCHEDULER_Clear( void )
 {
-   interrupt_state_t context;
-   uint32_t i;
+	interrupt_state_t context;
+	uint32_t i;
 
- context = Enter_Critical_Section();
-   for( i = 0; i < SPI_SCHEDULER_Data.Number_Of_Periodical_Messages; i++ )
-   {
-      SPI_SCHEDULER_Priority_Queue[ SPI_SCHEDULER_Data.Number_Of_Periodical_Messages - 1 ] = 0;
-   }
+	context = Enter_Critical_Section();
+	for( i = 0; i < SPI_SCHEDULER_Data.Number_Of_Periodical_Messages; i++ )
+	{
+		SPI_SCHEDULER_Priority_Queue[ SPI_SCHEDULER_Data.Number_Of_Periodical_Messages - 1 ] = 0;
+	}
 
-   SPI_SCHEDULER_Data.Number_Of_Periodical_Messages     = 0;
-   SPI_SCHEDULER_Data.Running                           = false;
-   
-   Leave_Critical_Section( context );
+	SPI_SCHEDULER_Data.Number_Of_Periodical_Messages     = 0;
+	SPI_SCHEDULER_Data.Running                           = false;
+
+	Leave_Critical_Section( context );
 }
 
 //=============================================================================
@@ -85,11 +85,11 @@ void VSEP_SPI_SCHEDULER_Clear( void )
 //=============================================================================
  bool VSEP_SPI_SCHEDULER_Set_Enable( bool in_enable)
 {
-   bool previous_status = (bool)(SPI_SCHEDULER_Data.Running);
+	bool previous_status = (bool)(SPI_SCHEDULER_Data.Running);
 
-   SPI_SCHEDULER_Data.Running = in_enable;
+	SPI_SCHEDULER_Data.Running = in_enable;
 
-   return previous_status;
+	return previous_status;
 }
 
 //=============================================================================
@@ -97,7 +97,7 @@ void VSEP_SPI_SCHEDULER_Clear( void )
 //=============================================================================
 bool VSEP_SPI_SCHEDULER_Get_Status( void )
 {
-   return (bool)(SPI_SCHEDULER_Data.Running);
+	return (bool)(SPI_SCHEDULER_Data.Running);
 }
 
 //=============================================================================
@@ -107,20 +107,20 @@ SPI_Scheduler_Status_T  VSEP_SPI_SCHEDULER_Schedule_Messages(
    const SPI_SCHEDULER_Message_T   *in_messages, 
    uint32_t                         in_number_of_messages )
 {
-   uint32_t i;
-   SPI_Scheduler_Status_T status = SPI_SCHEDULER_STATUS_OK;
-   interrupt_state_t context;
+	uint32_t i;
+	SPI_Scheduler_Status_T status = SPI_SCHEDULER_STATUS_OK;
+	interrupt_state_t context;
 
-   context = Enter_Critical_Section();
-   
-   for( i = 0; ( i < in_number_of_messages ) && ( status == SPI_SCHEDULER_STATUS_OK ); i++ )
-   {
-      status = VSEP_SPI_SCHEDULER_Schedule_Message( in_messages[i].message, in_messages[i].interval, in_messages[i].offset + SPI_SCHEDULER_START_DELAY );
-   }
+	context = Enter_Critical_Section();
 
-   Leave_Critical_Section( context );
+	for( i = 0; ( i < in_number_of_messages ) && ( status == SPI_SCHEDULER_STATUS_OK ); i++ )
+	{
+		status = VSEP_SPI_SCHEDULER_Schedule_Message( in_messages[i].message, in_messages[i].interval, in_messages[i].offset + SPI_SCHEDULER_START_DELAY );
+	}
 
-   return status;
+	Leave_Critical_Section( context );
+
+	return status;
 }
 
 //=============================================================================
@@ -130,25 +130,25 @@ uint32_t  VSEP_SPI_SCHEDULER_Clear_Messages(
    const SPI_SCHEDULER_Message_T   *in_messages, 
    uint32_t                         in_number_of_messages )
 {
-   uint32_t i;
-   uint32_t message_removed = 0xffffffffU;
+	uint32_t i;
+	uint32_t message_removed = 0xffffffffU;
 
-   interrupt_state_t context;
+	interrupt_state_t context;
 
-   context = Enter_Critical_Section();
-   
-   for( i = 0; ( i < in_number_of_messages ) && ( message_removed == 0xffffffffU ); i++ )
-   {
-      if( in_messages[i].interval > 0 )
-      {
-         if( VSEP_SPI_SCHEDULER_Clear_Message( in_messages[i].message ) == false )
-         {
-            message_removed = i;
-         }
-      }
-   }
+	context = Enter_Critical_Section();
 
-   Leave_Critical_Section( context );
+	for( i = 0; ( i < in_number_of_messages ) && ( message_removed == 0xffffffffU ); i++ )
+	{
+		if( in_messages[i].interval > 0 )
+		{
+			if( VSEP_SPI_SCHEDULER_Clear_Message( in_messages[i].message ) == false )
+			{
+				message_removed = i;
+			}
+		}
+	}
+
+	Leave_Critical_Section( context );
 
    return message_removed;
 }
@@ -161,82 +161,75 @@ SPI_Scheduler_Status_T  VSEP_SPI_SCHEDULER_Schedule_Message(
    SPI_Scheduler_Time_T in_interval,
    SPI_Scheduler_Time_T in_start_time )
 {
-   SPI_Scheduler_Status_T status = SPI_SCHEDULER_STATUS_QUEUE_FULL;
+	SPI_Scheduler_Status_T status = SPI_SCHEDULER_STATUS_QUEUE_FULL;
 
-   interrupt_state_t context;
+	interrupt_state_t context;
 
-   context = Enter_Critical_Section();
-   
-   if( SPI_SCHEDULER_Data.Number_Of_Periodical_Messages <  SPI_SCHEDULER_QUEUE_SIZE_MAX )
-   {
-      if( in_interval > 0 )
-      {
-         SPI_SCHEDULER_Priority_Queue[ SPI_SCHEDULER_Data.Number_Of_Periodical_Messages ]               = in_message;
-         SPI_SCHEDULER_Priority_Queue[ SPI_SCHEDULER_Data.Number_Of_Periodical_Messages ]->cb->interval = in_interval;
-         SPI_SCHEDULER_Priority_Queue[ SPI_SCHEDULER_Data.Number_Of_Periodical_Messages ]->cb->time     = in_start_time;
-         SPI_SCHEDULER_Priority_Queue[ SPI_SCHEDULER_Data.Number_Of_Periodical_Messages ]->cb->status   = SPI_MESSAGE_STATUS_IDLE;
-         SPI_SCHEDULER_Data.Number_Of_Periodical_Messages++;
-      }
+	context = Enter_Critical_Section();
 
-      status = SPI_SCHEDULER_STATUS_OK;
-   }
+	if( SPI_SCHEDULER_Data.Number_Of_Periodical_Messages <  SPI_SCHEDULER_QUEUE_SIZE_MAX )
+	{
+		if( in_interval > 0 )
+		{
+			SPI_SCHEDULER_Priority_Queue[ SPI_SCHEDULER_Data.Number_Of_Periodical_Messages ]               = in_message;
+			SPI_SCHEDULER_Priority_Queue[ SPI_SCHEDULER_Data.Number_Of_Periodical_Messages ]->cb->interval = in_interval;
+			SPI_SCHEDULER_Priority_Queue[ SPI_SCHEDULER_Data.Number_Of_Periodical_Messages ]->cb->time     = in_start_time;
+			SPI_SCHEDULER_Priority_Queue[ SPI_SCHEDULER_Data.Number_Of_Periodical_Messages ]->cb->status   = SPI_MESSAGE_STATUS_IDLE;
+			SPI_SCHEDULER_Data.Number_Of_Periodical_Messages++;
+		}
 
-   Leave_Critical_Section( context );
+		status = SPI_SCHEDULER_STATUS_OK;
+	}
 
-   return status;
+	Leave_Critical_Section( context );
+
+	return status;
 }
 
 //=============================================================================
 // SPI_SCHEDULER_Clear_Message
 //=============================================================================
-bool VSEP_SPI_SCHEDULER_Clear_Message(
-   const SPI_Message_T *in_message )
+bool VSEP_SPI_SCHEDULER_Clear_Message(const SPI_Message_T *in_message )
 {
-   bool message_removed = false;
-   interrupt_state_t context ;   
-   uint32_t i;
-   
-   context = Enter_Critical_Section();
-   for( i = 0; i < SPI_SCHEDULER_Data.Number_Of_Periodical_Messages; i++ )
-   {
-      if( SPI_SCHEDULER_Priority_Queue[ i ] == in_message )
-      {
-         SPI_SCHEDULER_Priority_Queue[ i ] = SPI_SCHEDULER_Priority_Queue[ SPI_SCHEDULER_Data.Number_Of_Periodical_Messages - 1 ];
-         SPI_SCHEDULER_Priority_Queue[ SPI_SCHEDULER_Data.Number_Of_Periodical_Messages - 1 ] = 0;
+	bool message_removed = false;
+	interrupt_state_t context ;   
+	uint32_t i;
 
-         SPI_SCHEDULER_Data.Number_Of_Periodical_Messages--;
+	context = Enter_Critical_Section();
+	for( i = 0; i < SPI_SCHEDULER_Data.Number_Of_Periodical_Messages; i++ )
+	{
+		if( SPI_SCHEDULER_Priority_Queue[ i ] == in_message )
+		{
+			SPI_SCHEDULER_Priority_Queue[ i ] = SPI_SCHEDULER_Priority_Queue[ SPI_SCHEDULER_Data.Number_Of_Periodical_Messages - 1 ];
+			SPI_SCHEDULER_Priority_Queue[ SPI_SCHEDULER_Data.Number_Of_Periodical_Messages - 1 ] = 0;
+			SPI_SCHEDULER_Data.Number_Of_Periodical_Messages--;
+			message_removed = true;
+		}
+	}
 
-         message_removed = true;
-      }
-   }
+	Leave_Critical_Section( context );
 
-   Leave_Critical_Section( context );
-
-   return message_removed;
+	return message_removed;
 }
 
 //=============================================================================
 // SPI_SCHEDULER_Service_Scheduler
 //=============================================================================
-
-void VSEP_SPI_SCHEDULER_Service_Scheduler( 
-   SPI_Scheduler_Time_T in_time )
+void VSEP_SPI_SCHEDULER_Service_Scheduler(SPI_Scheduler_Time_T in_time)
 {
-   uint8_t i;
+	uint8_t i;
 
-  for( i = 0; i < SPI_SCHEDULER_Data.Number_Of_Periodical_Messages; i++ )
-   {
-      if( in_time >= SPI_SCHEDULER_Priority_Queue[i]->cb->time )
-      {      
-         SPI_SCHEDULER_Priority_Queue[i]->cb->time += SPI_SCHEDULER_Priority_Queue[i]->cb->interval;
-
-         if( SPI_SCHEDULER_Data.Running )
-         {
-        VSEP_SPI_Port_Transfer( SPI_SCHEDULER_Priority_Queue[i]->def);
-         
-         }
-      }
-   }
+	for (i = 0; i < SPI_SCHEDULER_Data.Number_Of_Periodical_Messages; i++ )
+	{
+		if ( in_time >= SPI_SCHEDULER_Priority_Queue[i]->cb->time ) 
+		{
+			SPI_SCHEDULER_Priority_Queue[i]->cb->time += SPI_SCHEDULER_Priority_Queue[i]->cb->interval;
+			if ( SPI_SCHEDULER_Data.Running ) 
+			{
+				VSEP_SPI_Port_Transfer( SPI_SCHEDULER_Priority_Queue[i]->def);
+			}
+		}
+	}
 }
 /*===========================================================================*\
  * Revision Log                                                              *

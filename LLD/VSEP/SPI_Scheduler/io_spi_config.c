@@ -28,11 +28,8 @@
 #include "io_spi_config.h"
 #include "io_spi_timing.h"
 #include "io_spi_scheduler.h"
-
 #include "dd_vsep.h"
 #include "dd_vsep_pwm.h"
-
-
 
 extern const SPI_Message_T VSEP_MESSAGE[ NUMBER_OF_VSEP ][VSEP_MESSAGE_MAX];
 extern const SPI_Message_T VSEP_HWTEST_INIT_MESSAGE;
@@ -47,10 +44,6 @@ extern const SPI_Message_T HFPS_COP_MESSAGE;
 //************************************************************************
 const SPI_SCHEDULER_Message_T SPI_SCHEDULER_Message[] =
 {
-
-#ifndef HW_SOH_DISABLE
- //  {     &VSEP_MESSAGE[0][VSEP_MESSAGE_SOH],         VSEP_SOH_OFFSET,          VSEP_SOH_INTERVAL    },
-#endif
    {     &VSEP_MESSAGE[0][VSEP_MESSAGE_SOH_STATUS],  VSEP_SOH_STATUS_OFFSET,   VSEP_SOH_STATUS_INTERVAL    },
    {     &VSEP_MESSAGE[0][VSEP_MESSAGE_PWM+0],       VSEP_PWM_OFFSET(1),       VSEP_PWM_INTERVAL    },
    {     &VSEP_MESSAGE[0][VSEP_MESSAGE_PWM+1],       VSEP_PWM_OFFSET(2),       VSEP_PWM_INTERVAL    },
@@ -61,12 +54,10 @@ const SPI_SCHEDULER_Message_T SPI_SCHEDULER_Message[] =
    {     &VSEP_MESSAGE[0][VSEP_MESSAGE_PWM+6],       VSEP_PWM_OFFSET(7),       VSEP_PWM_INTERVAL    },
    {     &VSEP_MESSAGE[0][VSEP_MESSAGE_PWM+7],       VSEP_PWM_OFFSET(8),       VSEP_PWM_INTERVAL    },
    {     &VSEP_MESSAGE[0][VSEP_MESSAGE_PCH_MPIO],    VSEP_PCH_OFFSET,          VSEP_PCH_INTERVAL    },
-  {     &VSEP_MESSAGE[0][VSEP_MESSAGE_FAULT],       VSEP_FAULT_OFFSET,        VSEP_FAULT_INTERVAL  }
-//  {     &VSEP_MESSAGE[0][VSEP_MESSAGE_INIT],    VSEP_FAULT_OFFSET,          VSEP_FAULT_INTERVAL    }
-
+   {     &VSEP_MESSAGE[0][VSEP_MESSAGE_FAULT],       VSEP_FAULT_OFFSET,        VSEP_FAULT_INTERVAL  }
 }; 
 
-const uint32_t SPI_SCHEDULER_Message_Numberof = sizeof( SPI_SCHEDULER_Message )/sizeof( SPI_SCHEDULER_Message_T ) ;
+const uint32_t SPI_SCHEDULER_Message_Numberof = sizeof( SPI_SCHEDULER_Message )/sizeof( SPI_SCHEDULER_Message_T);
 
 static SPI_Scheduler_Time_T SPI_SCHEDULER_Timer = 0;
 uint32_t ADConversion_Time;
@@ -81,12 +72,11 @@ bool ADConversion_Error;
 //
 // @end
 //=============================================================================
- FAR_COS void VSEP_SPI_Scheduler_Manage_Periodic( void )//excute per 7.8ms 
+void VSEP_SPI_Scheduler_Manage_Periodic( void )//excute per 7.8ms/10ms
 {
-	
-	
-     VSEP_SPI_SCHEDULER_Service_Scheduler( SPI_SCHEDULER_Timer++ );
+	VSEP_SPI_SCHEDULER_Service_Scheduler( SPI_SCHEDULER_Timer++ );
 }
+
 /*===========================================================================*\
  * Revision Log                                                              *
  *===========================================================================*
