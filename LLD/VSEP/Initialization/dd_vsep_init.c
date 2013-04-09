@@ -43,18 +43,16 @@
 
 
 #ifdef  VSEP_CALIBRATION_ENABLE
-
-uint16_t VSEP_INIT_TXD_INITIAL[NUMBER_OF_VSEP][VSEP_INIT_TXD_MESSAGE_MAX] ;
+uint16_t VSEP_INIT_TXD_INITIAL[NUMBER_OF_VSEP][VSEP_INIT_TXD_MESSAGE_MAX];
 #else
 const uint16_t VSEP_INIT_TXD_INITIAL[NUMBER_OF_VSEP][VSEP_INIT_TXD_MESSAGE_MAX] =
 {
-#if ( NUMBER_OF_VSEP > VSEP_DEVICES_0 )
    {
       {
           VSEP_Msg_Set_FLTCLR( 0, true                   ) |
          VSEP_Msg_Set_CRTOCLR( 0, true                   ) |
             VSEP_Msg_Set_SDOA( 0, VSEP_RXD_SDOA_NOT_USED ) | 
-            VSEP_Msg_Set_SDIA( 0, VSEP_TXD_SDIA_VR1_CTRL )   
+            ( 0, VSEP_TXD_SDIA_VR1_CTRL )   
       },
       { 
           VSEP_Msg_VR_Set_Delay( 0, VSEP_VR_Get_Initial_Delay( VSEP_0_VR_1_INIT )      ) |        
@@ -123,83 +121,7 @@ const uint16_t VSEP_INIT_TXD_INITIAL[NUMBER_OF_VSEP][VSEP_INIT_TXD_MESSAGE_MAX] 
                 VSEP_Msg_EST_Set_IGBTCFG( 0,     VSEP_EST_Select_Get_Drive_Mode( VSEP_0_EST_SELECT_SETUP_INIT )                         ) |
 		VSEP_Msg_SOH_Set_CRDISARM( 0,     VSEP_SOH_Get_ENABLE_STATE( VSEP_0_SOH_ENABLE_INIT )        )
 	}
-   }  
-#endif
-#if ( NUMBER_OF_VSEP > VSEP_DEVICES_1 )
-   ,{
-      {
-          VSEP_Msg_Set_FLTCLR( 0, true                   ) |
-         VSEP_Msg_Set_CRTOCLR( 0, true                   ) |
-            VSEP_Msg_Set_SDOA( 0, VSEP_RXD_SDOA_NOT_USED ) | 
-            VSEP_Msg_Set_SDIA( 0, VSEP_TXD_SDIA_VR1_CTRL )   
-      },
-      { 
-          VSEP_Msg_VR_Set_Delay( 0, VSEP_VR_Get_Initial_Delay( VSEP_1_VR_1_INIT )      ) |        
-             VSEP_Msg_VR_Set_AT( 0, VSEP_VR_Get_Adaptive_Threshold( VSEP_1_VR_1_INIT ) ) |
-             VSEP_Msg_VR_Set_MT( 0, VSEP_VR_Get_Min_Threshold( VSEP_1_VR_1_INIT ) ) 
-      },
-      { 
-          VSEP_Msg_VR_Set_Delay( 0, VSEP_VR_Get_Initial_Delay( VSEP_1_VR_2_INIT )      ) |        
-             VSEP_Msg_VR_Set_AT( 0, VSEP_VR_Get_Adaptive_Threshold( VSEP_1_VR_2_INIT ) ) |
-             VSEP_Msg_VR_Set_MT( 0, VSEP_VR_Get_Min_Threshold( VSEP_1_VR_2_INIT ) ) 
-      },
-      {     
-          VSEP_Msg_DEPS_Set_Delay( 0, VSEP_DEPS_Get_Initial_Delay( VSEP_1_DEPS_INIT ) ) 
-      },
-      { 
-          VSEP_Msg_SLEW_Set_Group_1( 0, VSEP_Get_Slew_Group_1( VSEP_1_SLEW_INIT )     ) |
-          VSEP_Msg_SLEW_Set_Group_2( 0, VSEP_Get_Slew_Group_2( VSEP_1_SLEW_INIT )     ) |
-          VSEP_Msg_SLEW_Set_Group_3( 0, VSEP_Get_Slew_Group_3( VSEP_1_SLEW_INIT )     ) |
-          VSEP_Msg_SLEW_Set_Group_4( 0, VSEP_Get_Slew_Group_4( VSEP_1_SLEW_INIT )     ) |
-          VSEP_Msg_SLEW_Set_Group_5( 0, VSEP_Get_Slew_Group_5( VSEP_1_SLEW_INIT )     ) |
-        VSEP_Msg_SLEW_Set_Group_CAN( 0, VSEP_Get_Slew_Group_CAN( VSEP_1_SLEW_INIT )   )
-      },
-      {
-         VSEP_Msg_FAULT_Set_Level_1( 0, VSEP_Get_Fault_Level_1( VSEP_1_FAULT_INIT ) ) |
-         VSEP_Msg_FAULT_Set_Level_2( 0, VSEP_Get_Fault_Level_2( VSEP_1_FAULT_INIT ) ) |
-         VSEP_Msg_FAULT_Set_Level_3( 0, VSEP_Get_Fault_Level_3( VSEP_1_FAULT_INIT ) ) |
-         VSEP_Msg_FAULT_Set_Level_4( 0, VSEP_Get_Fault_Level_4( VSEP_1_FAULT_INIT ) ) 
-        
-      },
-      {
-         VSEP_Msg_FAULT_Set_Level_5( 0, VSEP_Get_Fault_Level_5( VSEP_1_FAULT_INIT ) ) |
-         VSEP_Msg_FAULT_Set_Level_6( 0, VSEP_Get_Fault_Level_6( VSEP_1_FAULT_INIT ) ) |
-         VSEP_Msg_FAULT_Set_Level_7( 0, VSEP_Get_Fault_Level_7( VSEP_1_FAULT_INIT ) ) 
-      },
-      {
-          ( VSEP_Msg_FAULT_Filter_Set_Non_Spark_Channels_1_To_8( 0, VSEP_FAULT_FILTER_Get_1TO8NSP_Time( VSEP_1_FAULT_FILTER_INIT ) ) |
-                VSEP_Msg_FAULT_Filter_Set_Spark_Channels_1_To_8( 0,  VSEP_FAULT_FILTER_Get_1TO8SP_Time( VSEP_1_FAULT_FILTER_INIT ) ) |
-                     VSEP_Msg_FAULT_Filter_Set_Channels_9_To_12( 0,   VSEP_FAULT_FILTER_Get_9TO12_Time( VSEP_1_FAULT_FILTER_INIT ) ) |
-                    VSEP_Msg_FAULT_Filter_Set_Channels_13_To_16( 0,  VSEP_FAULT_FILTER_Get_13TO16_Time( VSEP_1_FAULT_FILTER_INIT ) ) |
-                    VSEP_Msg_FAULT_Filter_Set_Channels_17_To_18( 0,  VSEP_FAULT_FILTER_Get_17TO18_Time( VSEP_1_FAULT_FILTER_INIT ) ) |
-                    VSEP_Msg_FAULT_Filter_Set_Channels_19_To_20( 0,  VSEP_FAULT_FILTER_Get_19TO20_Time( VSEP_1_FAULT_FILTER_INIT ) ) |
-                    VSEP_Msg_FAULT_Filter_Set_Channels_21_To_24( 0,  VSEP_FAULT_FILTER_Get_21TO24_Time( VSEP_1_FAULT_FILTER_INIT ) ) |
-                    VSEP_Msg_FAULT_Filter_Set_Channels_25_To_30( 0,  VSEP_FAULT_FILTER_Get_25TO30_Time( VSEP_1_FAULT_FILTER_INIT ) ) )
-      },
-      {
-          ( VSEP_Msg_LEDMODE_Set_Channel_25( 0, VSEP_LEDMODE_Get_Enable( VSEP_1_LEDMODE_25_INIT ) ) |
-            VSEP_Msg_LEDMODE_Set_Channel_26( 0, VSEP_LEDMODE_Get_Enable( VSEP_1_LEDMODE_26_INIT ) ) |
-            VSEP_Msg_LEDMODE_Set_Channel_30( 0, VSEP_LEDMODE_Get_Enable( VSEP_1_LEDMODE_30_INIT ) ) )
-      },
-      { 
-          VSEP_Msg_IGBT_Set_GRADFILT( 0,  VSEP_Gradient_Check_Get_Threshold(VSEP_1_GRADIENT_CHECK_INIT ) ) |
-         VSEP_Msg_IGBT_Set_GRADTHR( 0,  VSEP_Gradient_Check_Get_Filter_Time(VSEP_1_GRADIENT_CHECK_INIT ) ) 
-      },
-      { 
-            VSEP_Msg_EST_Set_EDGE( 0,     VSEP_EST_Select_Get_Index_Pin_Select( VSEP_1_EST_SELECT_SETUP_INIT ) ) |
-           VSEP_Msg_EST_Set_INDEX( 0, VSEP_EST_Select_Get_Increment_Index_Mode( VSEP_1_EST_SELECT_SETUP_INIT ) ) |
-          VSEP_Msg_EST_Set_PFMODE( 0,     VSEP_EST_Select_Get_Paired_Fire_Mode( VSEP_1_EST_SELECT_SETUP_INIT ) ) 
-      },
-      {
-         VSEP_Msg_MPIO_Set_Mx_OHILOB_OEN( 0, (VSEP_CHANNEL_MPIO_1-VSEP_CHANNEL_MPIO_1), VSEP_MPIO_Get_Input_Mode( VSEP_1_MPIO_M1_INIT ) ) |
-         VSEP_Msg_MPIO_Set_Mx_OHILOB_OEN( 0, (VSEP_CHANNEL_MPIO_2-VSEP_CHANNEL_MPIO_1), VSEP_MPIO_Get_Input_Mode( VSEP_1_MPIO_M2_INIT ) ) |
-         VSEP_Msg_MPIO_Set_Mx_OHILOB_OEN( 0, (VSEP_CHANNEL_MPIO_3-VSEP_CHANNEL_MPIO_1), VSEP_MPIO_Get_Input_Mode( VSEP_1_MPIO_M3_INIT ) ) |
-                 VSEP_Msg_EST_Set_CYLCNT( 0, VSEP_EST_Select_Get_Cylinder_Count( VSEP_1_EST_SELECT_SETUP_INIT )                         ) |
-              VSEP_Msg_EST_Set_DEC_DISCB( 0,    VSEP_EST_Select_Get_Select_Mode( VSEP_1_EST_SELECT_SETUP_INIT )                         ) |
-                VSEP_Msg_EST_Set_IGBTCFG( 0,     VSEP_EST_Select_Get_Drive_Mode( VSEP_1_EST_SELECT_SETUP_INIT )                         ) 
-      }
-   }  
-#endif
+   }
 };
 #endif
 
@@ -744,25 +666,22 @@ uint16_t VSEP_Fault_Rxd[NUMBER_OF_VSEP][VSEP_FAULT_RXD_MESSAGE_MAX];
 Fault_Log_T VSEP_Fault_Log[NUMBER_OF_VSEP][VSEP_CHANNEL_MAX];
 
 #ifdef  VSEP_CALIBRATION_ENABLE
-FAR_COS void  VSEP_INIT_TXD_Buffer_Initialize(void)
+void  VSEP_INIT_TXD_Buffer_Initialize(void)
 {
-uint8_t channel;
-   VSEP_FAULT_FILTER_T   filter_type = VSEP_FAULT_FILTER_MAX;
-   uint32_t              filter_time;
+	uint8_t               channel;
+	VSEP_FAULT_FILTER_T   filter_type = VSEP_FAULT_FILTER_MAX;
+	uint32_t              filter_time;
 
- 	VSEP_INIT_TXD_INITIAL[0][0] =
-      
-          VSEP_Msg_Set_FLTCLR( 0, true                   ) |
-         VSEP_Msg_Set_CRTOCLR( 0, true                   ) |
-            VSEP_Msg_Set_SDOA( 0, VSEP_RXD_SDOA_NOT_USED ) | 
-            VSEP_Msg_Set_SDIA( 0, VSEP_TXD_SDIA_VR1_CTRL )   
-      ;
- 	VSEP_INIT_TXD_INITIAL[0][1] =     
-     		
-         VSEP_Msg_VR_Set_Delay( 0, (uint16_t)KsVSEP_VR1_Setting_Initial.KeVSEP_VR1_DLY) |        
-             VSEP_Msg_VR_Set_AT( 0, (uint16_t)KsVSEP_VR1_Setting_Initial.KbVSEP_VR1_PERC50) |
-             VSEP_Msg_VR_Set_MT( 0, (uint16_t)KsVSEP_VR1_Setting_Initial.KeVSEP_VR1_MT) 
-      ;
+	VSEP_INIT_TXD_INITIAL[0][0] = VSEP_Msg_Set_FLTCLR( 0, true                   ) |
+								VSEP_Msg_Set_CRTOCLR( 0, true                   ) |
+								VSEP_Msg_Set_SDOA( 0, VSEP_RXD_SDOA_NOT_USED ) | 
+								VSEP_Msg_Set_SDIA( 0, VSEP_TXD_SDIA_VR1_CTRL );
+
+	VSEP_INIT_TXD_INITIAL[0][1] = 
+							VSEP_Msg_VR_Set_Delay( 0, (uint16_t)KsVSEP_VR1_Setting_Initial.KeVSEP_VR1_DLY) |        
+							VSEP_Msg_VR_Set_AT( 0, (uint16_t)KsVSEP_VR1_Setting_Initial.KbVSEP_VR1_PERC50) |
+							VSEP_Msg_VR_Set_MT( 0, (uint16_t)KsVSEP_VR1_Setting_Initial.KeVSEP_VR1_MT);
+
 	VSEP_INIT_TXD_INITIAL[0][2] =     
           VSEP_Msg_VR_Set_Delay( 0, (uint16_t)KsVSEP_VR2_Setting_Initial.KeVSEP_VR2_DLY) |        
              VSEP_Msg_VR_Set_AT( 0, (uint16_t)KsVSEP_VR2_Setting_Initial.KbVSEP_VR2_PERC50) |
@@ -949,8 +868,6 @@ const uint16_t VSEP_MPIO_MODE_TXD_INITIAL[NUMBER_OF_VSEP][VSEP_MPIO_MODE_TXD_MES
 uint16_t VSEP_MPIO_MODE_Txd[NUMBER_OF_VSEP][VSEP_MPIO_MODE_TXD_MESSAGE_MAX];
 
 
-
-	
 /*===========================================================================*\
  * Revision Log                                                              *
  *===========================================================================*

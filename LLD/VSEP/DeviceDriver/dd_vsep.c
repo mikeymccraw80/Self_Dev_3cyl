@@ -117,7 +117,7 @@ FAR_COS void VSEP_LEDMODE_Set_Channel(
 //=============================================================================
 // VSEP_LEDMODE_Get_Channel
 //=============================================================================
-FAR_COS uint32_t VSEP_LEDMODE_Get_Channel( 
+uint32_t VSEP_LEDMODE_Get_Channel( 
    IO_Configuration_T in_configuration,
    VSEP_LEDMODE_Channel_T in_group )
 {
@@ -144,10 +144,10 @@ FAR_COS uint32_t VSEP_LEDMODE_Get_Channel(
    return ledmode;
 }
 
-/* FUNCTION: SPI_Port_Transfer_Vsep                                              */
+/* FUNCTION: SPI_Port_Transfer_Vsep                                          */
 /*===========================================================================*/
 /* RETURN VALUE:                                                             */
-/*   void                                    */
+/*   void                                                                    */
 /*                                                                           */
 /* INPUT PARAMETERS:                                                         */
 /*   SPI_Message_Definition_T        Indicates the SPI message  to be transmitted.                    */
@@ -170,258 +170,110 @@ transmit the corresponding message, input VSEP_MESSAGE
 
 void  VSEP_SPI_Port_Transfer(SPI_Message_Definition_T  const *def)
 {
+	uint8_t   index, transmint_length;
+	uint16_t  transmit_size;
+	uint8_t   index_transmint,idex_receive;
+	bool      end;
 
-   interrupt_state_t     irq_state;
-   uint8_t               index, transmint_length;
-   uint16_t  transmit_size;
-      uint8_t               index_transmint,idex_receive;
-       bool end;
-   
- //  irq_state = Get_Interrupt_State();
-  // Disable_Interrupts(); 
-
-
-
-
-  for ( index_transmint = 0,idex_receive =0; index_transmint < def->length_of_transmit_message; index_transmint++,idex_receive++)
-  {
-        //for word transfer algorithem
-
-
-        //for word transfer algorithem
-        if((idex_receive<def->length_of_receive_message)&&(((((uint16_t*)def->transmit_data)[0])&0xF00)!=0x0F00))
-	{
-	     if(index_transmint == def->length_of_transmit_message-1)
-	     	{
-	     	  end = 1;
-	     	}
-		else
-		{
-		 end = 0;
-		} 
-		 
-             ((uint16_t*)def->receive_data)[idex_receive] = DSPI_B_Exchange_Data1(
-                 VSEP_CHIP_SELECT,
-                 VSEP_CTAR_SELECT,
-                 DSPI_CTAR_FMSZ_16,
-                  ((uint16_t*)def->transmit_data)[index_transmint],
-                  end);
-        }
-        else
-        {
-
-	  if(index_transmint == def->length_of_transmit_message-1)
-	     	{
-	     	  end = 1;
-	     	}
-		else
-		{
-		 end = 0;
-		} 
-         DSPI_B_Exchange_Data1(
-                 VSEP_CHIP_SELECT,
-                 VSEP_CTAR_SELECT,
-              DSPI_CTAR_FMSZ_16,
-              ((uint16_t*)def->transmit_data)[index_transmint],
-              end);
-
-        }
-  }
-
-
-#if 0
-   DSPI_B_Exchange_Mesage(
-                 VSEP_CHIP_SELECT,
-                 VSEP_CTAR_SELECT,
-                 (uint16_t*)def->transmit_data,
-                 (uint16_t*)def->receive_data,
-                 def->length_of_transmit_message,
-                 def->length_of_receive_message     );
-
-
-   
-
-   if(def->length_of_receive_message>0)
-   {
-     transmint_length = def->length_of_receive_message;
-     index = 0;
-
-
-     DSPI_B_Initialize_Message_16bits(VSEP_CHIP_SELECT, VSEP_CTAR_SELECT,
-                                                    &( ((uint16_t*)def->transmit_data)[index]),transmint_length);
-	
-    DMA_Set_Channel_Transfer_Count( DMA_CHANNEL_DSPI_B_SR_TFFF,transmint_length);
-    DMA_Set_Channel_Source_Address( DMA_CHANNEL_DSPI_B_SR_TFFF, DMA_DSPIB_SR_TFFF_Source_Address);
-
-    DMA_Set_Channel_Transfer_Count( DMA_CHANNEL_DSPI_B_SR_RFDF,transmint_length);
-    DMA_Set_Channel_Destination_Address( DMA_CHANNEL_DSPI_B_SR_RFDF, DMA_DSPIB_SR_RFDF_Dest_Address);
-    //Clean up the DSPI module to be ready for next transfer
-    DSPI_B_Clear_FIFO();
-    //This flag will trigger the DMA channel for transmit
-    DSPI_B_Clear_TCF();
-
-    DMA_Enable_Request(DMA_CHANNEL_DSPI_B_SR_RFDF);	   
-    DSPI_B_Enable_Transfer(true);
-    DMA_Enable_Request(DMA_CHANNEL_DSPI_B_SR_TFFF);
-
-
-
-     while((DSPI_B.SR.F.EOQF== false)||(DMA_Get_Channel_Running_Status(DMA_CHANNEL_DSPI_B_SR_RFDF)==true))
-   // while(DSPI_B.SR.F.EOQF== false)
-	 {
-
-     	}
-	 
-     //This flag will start the SPI device transfer
-     //Very important to clear the EOQF flag after DMA has been disabled.
-     DSPI_B_Clear_EOQF();
-     DSPI_B_Copy_Receive_Data_16bits(& (((uint16_t*)def->receive_data)[index]),transmint_length);
-
-	 
-   }
-
-
-
-  if(def->length_of_transmit_message >def->length_of_receive_message)
-  {
-     transmint_length = def->length_of_transmit_message - def->length_of_receive_message;
-     index = def->length_of_receive_message;
-	
-
-    // while((DMA_Get_Channel_Running_Status(DMA_CHANNEL_DSPI_B_SR_RFDF)==true)||
-  	// 	(DMA_Get_Channel_Running_Status(DMA_CHANNEL_DSPI_B_SR_TFFF)==true))
-    //	{
-       //do nothing
-     //	}
-	 
-     DMA_Clear_Request(DMA_CHANNEL_DSPI_B_SR_TFFF);
-     DMA_Clear_Request(DMA_CHANNEL_DSPI_B_SR_RFDF);
-     DSPI_B_Initialize_Message_16bits(VSEP_CHIP_SELECT, VSEP_CTAR_SELECT,
-                                                     & (((uint16_t*)def->transmit_data)[index]),transmint_length);
-	 
-    DMA_Set_Channel_Transfer_Count( DMA_CHANNEL_DSPI_B_SR_TFFF,transmint_length);
-    DMA_Set_Channel_Source_Address( DMA_CHANNEL_DSPI_B_SR_TFFF, DMA_DSPIB_SR_TFFF_Source_Address);
-
-    DMA_Set_Channel_Transfer_Count( DMA_CHANNEL_DSPI_B_SR_RFDF,transmint_length);
-    DMA_Set_Channel_Destination_Address( DMA_CHANNEL_DSPI_B_SR_RFDF, DMA_DSPIB_SR_RFDF_Dest_Address);
-
-    //Clean up the DSPI module to be ready for next transfer
-    DSPI_B_Clear_FIFO();
-    //This flag will trigger the DMA channel for transmit
-    DSPI_B_Clear_TCF();
-
-    DMA_Enable_Request(DMA_CHANNEL_DSPI_B_SR_RFDF);
-    DMA_Enable_Request(DMA_CHANNEL_DSPI_B_SR_TFFF);
-   
-//    DSPI_B_Enable_Transfer(true);
-
-	
-     //while(DMA_Get_Channel_Running_Status(DMA_CHANNEL_DSPI_B_SR_TFFF)==true)
-     while(DSPI_B.SR.F.EOQF== false)
-     	{
-       //do nothing
-         DSPI_B_Clear_TCF();
-     	}
-
-	 
-     //This flag will start the SPI device transfer
-     //Very important to clear the EOQF flag after DMA has been disabled.
-     DSPI_B_Clear_EOQF();
-  //   DSPI_B_Copy_Receive_Data_16bits(& (((uint16_t*)def->receive_data)[index]),transmint_length);
-
-   }	 
-#endif
-   //Set_Interrupt_State(irq_state) ;
+	for (index_transmint = 0,idex_receive =0; index_transmint < def->length_of_transmit_message; index_transmint++,idex_receive++) {
+		//for word transfer algorithem
+		if ((idex_receive<def->length_of_receive_message)&&(((((uint16_t*)def->transmit_data)[0])&0xF00)!=0x0F00)) {
+			if(index_transmint == def->length_of_transmit_message-1) {
+				end = 1;
+			} else {
+				end = 0;
+			}
+			((uint16_t*)def->receive_data)[idex_receive] = DSPI_B_Exchange_Data1(
+					 VSEP_CHIP_SELECT,
+					 VSEP_CTAR_SELECT,
+					 DSPI_CTAR_FMSZ_16,
+					 ((uint16_t*)def->transmit_data)[index_transmint],
+					 end);
+		} else {
+			if(index_transmint == def->length_of_transmit_message-1) {
+				end = 1;
+			} else {
+				end = 0;
+			}
+			DSPI_B_Exchange_Data1(
+					VSEP_CHIP_SELECT,
+					VSEP_CTAR_SELECT,
+					DSPI_CTAR_FMSZ_16,
+					((uint16_t*)def->transmit_data)[index_transmint],
+					end);
+		}
+	}
 }
 
 
 //=============================================================================
 // VSEP_SPI_Immediate_Transfer
 //=============================================================================
-void VSEP_SPI_Immediate_Transfer(
-   IO_Configuration_T   in_configuration,
-   VSEP_Message_T       in_message )
+void VSEP_SPI_Immediate_Transfer(IO_Configuration_T in_configuration, VSEP_Message_T in_message)
 {
-   
-   VSEP_PWM_Channel_T pwm_channel;
+	VSEP_PWM_Channel_T pwm_channel;
 
-   switch( in_message    )
-   {
-      case VSEP_MESSAGE_INIT:
-
-     case VSEP_MESSAGE_VR:
-      case VSEP_MESSAGE_FAULT:
-      case VSEP_MESSAGE_MPIO_MODE:
-      case VSEP_MESSAGE_LEDMODE:
-     case VSEP_MESSAGE_DEPS:
-      case VSEP_MESSAGE_PCH_MPIO:
-      case VSEP_MESSAGE_EST_SELECT:
-      case VSEP_MESSAGE_EST_FAULT:
-      case VSEP_MESSAGE_SOH:
-      case VSEP_MESSAGE_SOH_STATUS:
-      {
-		 	VSEP_SPI_Port_Transfer(VSEP_MESSAGE[ VSEP_Get_Device_Index( in_configuration ) ][in_message].def);
+	switch (in_message) {
+	case VSEP_MESSAGE_INIT:
+	case VSEP_MESSAGE_VR:
+	case VSEP_MESSAGE_FAULT:
+	case VSEP_MESSAGE_MPIO_MODE:
+	case VSEP_MESSAGE_LEDMODE:
+	case VSEP_MESSAGE_DEPS:
+	case VSEP_MESSAGE_PCH_MPIO:
+	case VSEP_MESSAGE_EST_SELECT:
+	case VSEP_MESSAGE_EST_FAULT:
+	case VSEP_MESSAGE_SOH:
+	case VSEP_MESSAGE_SOH_STATUS:
+		VSEP_SPI_Port_Transfer(VSEP_MESSAGE[VSEP_Get_Device_Index(in_configuration)][in_message].def);
 		break;
-      }
-
-      case VSEP_MESSAGE_PWM:
-      {
-         pwm_channel = VSEP_PWM_Get_Channel( in_configuration);
-
-         if( pwm_channel != VSEP_PWM_CHANNEL_MAX )
-         {
-				VSEP_SPI_Port_Transfer(VSEP_MESSAGE[ VSEP_Get_Device_Index( in_configuration ) ][VSEP_MESSAGE_PWM + pwm_channel ].def);
-			
-				
-         }
-         break;
-      }
-      default:
-      {
-         break;
-      }
-   }
+	case VSEP_MESSAGE_PWM:
+		pwm_channel = VSEP_PWM_Get_Channel( in_configuration);
+		if(pwm_channel != VSEP_PWM_CHANNEL_MAX)
+			VSEP_SPI_Port_Transfer(VSEP_MESSAGE[ VSEP_Get_Device_Index( in_configuration ) ][VSEP_MESSAGE_PWM + pwm_channel ].def);
+		break;
+	default:
+		break;
+	}
 }
 
 
- FAR_COS void VSEP_Initialize_Device(void)
+void VSEP_Initialize_Device(void)
 {
-uint16_t index=0;
-   VSEP_Channel_Enabled = 0xFFFFFFFF;   
+	uint16_t index=0;
+	VSEP_Channel_Enabled = 0xFFFFFFFF;   
 
-   
-   #ifdef  VSEP_CALIBRATION_ENABLE
-   
-   VSEP_INIT_TXD_Buffer_Initialize();
-   #endif
-   VSEP_EST_Select_Initialize_Device(   MTSA_CONFIG_VSEP_DEVICE_0 );
-   VSEP_Fault_Initialize();
-   VSEP_MPIO_MODE_Initialize_Device( MTSA_CONFIG_VSEP_DEVICE_0);
-   VSEP_PWM_Device_Initialize( VSEP_Set_Device_Index( 0, VSEP_INDEX_0 ) );
-   VSEP_DISCRETE_Device_Initialize( VSEP_Set_Device_Index( 0, VSEP_INDEX_0 ) );
-   VSEP_FAULT_EST_Initialize_Device( MTSA_CONFIG_GRADIENT_COUNT );
-   VSEP_SPI_SCHEDULER_Initialize();   
-   VSEP_LEDMODE_Initialize_Device( MTSA_CONFIG_VSEP_DEVICE_0);
-   VSEP_PULSE_VR_Initialize_Device(MTSA_CONFIG_VSEP_DEVICE_0);
-
-    // Hardware Test uses its own method to initialize the VSEP
-   // Send the Init message to the VSEP. This will setup all the faults/slews/est select information/
-   // along with all the locked bit information.
-   VSEP_SPI_Immediate_Transfer( VSEP_Set_Device_Index( 0, VSEP_INDEX_0 ), VSEP_MESSAGE_INIT );
-   // Need to check why redundant operation is needed, without it, no spark injection
-  VSEP_SPI_Immediate_Transfer( VSEP_Set_Device_Index( 0, VSEP_INDEX_0 ), VSEP_MESSAGE_INIT );
-//#ifdef HW_SOH_DISABLE
-   VSEP_Disable_SOH();
-//#endif
-
-#if COIL == COIL_AT_PLUG
- //  VSEP_EST_Select_Set_Mode(VSEP_INDEX_0,EST_MODE_SEQUENTIAL_SINGLE_ENABLE);
-#elif COIL == DUAL_COIL_PACK
-  //VSEP_EST_Select_Set_Mode(VSEP_INDEX_0,EST_MODE_SIMULTANEOUS_SINGLE_ENABLE);
+#ifdef  VSEP_CALIBRATION_ENABLE
+	VSEP_INIT_TXD_Buffer_Initialize();
 #endif
-   VSEP_EST_Select_Set_Mode(VSEP_INDEX_0,EST_MODE_SIMULTANEOUS_SINGLE_ENABLE); 
-   VSEP_EST_Select_Set_Channel(VSEP_INDEX_0,EST_SELECT_CYLINDER_A);
 
+	VSEP_EST_Select_Initialize_Device(MTSA_CONFIG_VSEP_DEVICE_0);
+	VSEP_Fault_Initialize();
+	VSEP_MPIO_MODE_Initialize_Device(MTSA_CONFIG_VSEP_DEVICE_0);
+	VSEP_PWM_Device_Initialize( VSEP_Set_Device_Index( 0, VSEP_INDEX_0 ) );
+	VSEP_DISCRETE_Device_Initialize( VSEP_Set_Device_Index( 0, VSEP_INDEX_0 ) );
+	VSEP_FAULT_EST_Initialize_Device( MTSA_CONFIG_GRADIENT_COUNT );
+	VSEP_SPI_SCHEDULER_Initialize();   
+	VSEP_LEDMODE_Initialize_Device( MTSA_CONFIG_VSEP_DEVICE_0);
+	VSEP_PULSE_VR_Initialize_Device(MTSA_CONFIG_VSEP_DEVICE_0);
+
+	// Hardware Test uses its own method to initialize the VSEP
+	// Send the Init message to the VSEP. This will setup all the faults/slews/est select information/
+	// along with all the locked bit information.
+	VSEP_SPI_Immediate_Transfer( VSEP_Set_Device_Index( 0, VSEP_INDEX_0 ), VSEP_MESSAGE_INIT );
+	// Need to check why redundant operation is needed, without it, no spark injection
+	VSEP_SPI_Immediate_Transfer( VSEP_Set_Device_Index( 0, VSEP_INDEX_0 ), VSEP_MESSAGE_INIT );
+	//#ifdef HW_SOH_DISABLE
+	VSEP_Disable_SOH();
+	//#endif
+
+	#if COIL == COIL_AT_PLUG
+	//  VSEP_EST_Select_Set_Mode(VSEP_INDEX_0,EST_MODE_SEQUENTIAL_SINGLE_ENABLE);
+	#elif COIL == DUAL_COIL_PACK
+	//VSEP_EST_Select_Set_Mode(VSEP_INDEX_0,EST_MODE_SIMULTANEOUS_SINGLE_ENABLE);
+	#endif
+	VSEP_EST_Select_Set_Mode(VSEP_INDEX_0,EST_MODE_SIMULTANEOUS_SINGLE_ENABLE); 
+	VSEP_EST_Select_Set_Channel(VSEP_INDEX_0,EST_SELECT_CYLINDER_A);
 }
 
 
