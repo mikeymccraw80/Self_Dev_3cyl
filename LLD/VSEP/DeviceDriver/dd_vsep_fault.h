@@ -591,7 +591,7 @@ void VSEP_FAULT_EST_Set_Threshold_Immediate(
 //
 // @end
 //=============================================================================
-FAR_COS bool VSEP_Diagnostic_Get_Channel_Fault(IO_Configuration_T in_configuration,FAULT_T fault_type);
+bool VSEP_Diagnostic_Get_Channel_Fault(IO_Configuration_T in_configuration,FAULT_T fault_type);
 
 /*
 //=============================================================================
