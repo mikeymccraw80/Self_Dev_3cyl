@@ -148,6 +148,26 @@ typedef enum
 
 #endif
 
+/*===========================================================================*/
+/* DD_FAULT_RESULT_T    Type of fault to request                             */
+/*===========================================================================*/
+typedef enum EMS_DIAGNOSTIC_Tag
+{
+   OUTPUT_OPEN_CKT_FAULT,      /* Request open circuit fault    */
+   OUTPUT_OPEN_CKT_TESTED,
+   OUTPUT_SHORT_CKT_FAULT,     /* Request short circuit fault   */
+   OUTPUT_SHORT_CKT_TESTED,
+   OUTPUT_GEN_FLT_PRESENT,
+   OUTPUT_GEN_FLT_TESTED,
+   OUTPUT_OVERTEMP_FAULT,      /* Request over voltage fault    */
+   OUTPUT_VOLTAGE_FAULT,       /* Request Voltage fault         */
+   OUTPUT_UNDERVOLT_FAULT,     /* Request under voltage fault   */
+   OUTPUT_CLOCK_FAULT,         /* Request Clock fault status    */
+   OUTPUT_CONTROL_ALLOWED      /* Request to allow control      */
+}  EMS_DIAGNOSTIC_T;
+
+#define EMS_Diagnostic_T   EMS_DIAGNOSTIC_T
+
 
 //=============================================================================
 //                         Edge Information
