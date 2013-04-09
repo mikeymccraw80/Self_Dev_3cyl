@@ -962,3 +962,31 @@ const   uint16_t KsVSEP_Diagnostic_Counter_Thd = 16;
 *|   }
 */
 const uint8_t KSOHCRTH = 10;
+
+/*
+*|    K_Can_Meter_MIL_Disable {
+*|       :is_calconst;
+*|       :units = "BOOLEAN";
+*|       :description = "Disable MIL output on ECM pin";
+*|    }
+*/
+const bool    K_Can_Meter_MIL_Disable = false ;
+
+/*
+*|    K_Can_Meter_TACH_Disable {
+*|       :is_calconst;
+*|       :units = "BOOLEAN";
+*|       :description = "Disable tachometer output on ECM pin";
+*|    }
+*/
+const bool    K_Can_Meter_TACH_Disable = false ;
+
+/*
+*|    K_Can_Meter_Fuel_Consum_Disable {
+*|       :is_calconst;
+*|       :units = "BOOLEAN";
+*|       :description = "Disable Fuel_Consum output on ECM pin";
+*|    }
+*/
+
+const bool    K_Can_Meter_Fuel_Consum_Disable = false ;
