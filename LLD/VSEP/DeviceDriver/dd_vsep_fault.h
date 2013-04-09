@@ -445,8 +445,8 @@ void VSEP_Fault_GRADCOUNT_Diagnose_EST_Channel(
    uint8_t            in_channel,
    uint32_t           in_time	);
 
-extern FAR_COS void VSEP_EST_Fault_SYNC_Interface(VSEP_Index_T vsep_index, EST_Select_Cylinder_T curent_spark_cylinder);
-extern FAR_COS void VSEP_Fault_Initialize(void);
+void VSEP_EST_Fault_SYNC_Interface(VSEP_Index_T vsep_index, EST_Select_Cylinder_T curent_spark_cylinder);
+void VSEP_Fault_Initialize(void);
 //=============================================================================
 // VSEP_FAULT_EST_Initialize_Device
 //
@@ -460,7 +460,7 @@ extern FAR_COS void VSEP_Fault_Initialize(void);
 //
 // @end
 //=============================================================================
-FAR_COS void VSEP_FAULT_EST_Initialize_Device(
+void VSEP_FAULT_EST_Initialize_Device(
    IO_Configuration_T in_configuration );
 
 //=============================================================================

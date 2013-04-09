@@ -27,7 +27,6 @@
 //
 //=============================================================================
 #include "io_type.h"
-//#include "dd_port.h"
 #include "dd_vsep.h"
 #include "dd_vsep_fault.h"
 #include "dd_vsep_soh.h"
@@ -36,13 +35,6 @@
 #include "dd_vsep_init.h"
 #include "dd_vsep_discrete_interface.h"
 #include "dd_vsep_pwm_interface.h"
-//#include "fault.h"
-//#include "dd_spi.h"
-//#include "dd_config.h"
-//#include "cfg_app.h"
-//#include "hal.h"
-//#include "dd_pwm.h"
-
 #include "io_config_crank.h"
 #include "io_config_dspi.h"
 #include "io_config_dma.h"
@@ -54,14 +46,14 @@
 //new added function
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-extern const VSEP_Fault_Channel_Data_T VSEP_Fault_Logging[NUMBER_OF_VSEP][VSEP_CHANNEL_PCH_30_FLT_LVL_7+1];
+extern const 	VSEP_Fault_Channel_Data_T VSEP_Fault_Logging[NUMBER_OF_VSEP][VSEP_CHANNEL_PCH_30_FLT_LVL_7+1];
 uint16_t 		VSEP_Fault_Counter[NUMBER_OF_VSEP][VSEP_CHANNEL_PCH_30_FLT_LVL_7+1];
 uint16_t 		VSEP_Fault_Counter_Decrement_Counter;
 uint32_t 		VSEP_PWM_ontime_us[30];
 uint32_t 		VSEP_PWM_period_us[30];
 
-uint32_t          VSEP_DIS_ON_OFF_state = 0x00000000;
-bool        EST_Diagnostic_7p8ms[4];
+uint32_t        VSEP_DIS_ON_OFF_state = 0x00000000;
+bool            EST_Diagnostic_7p8ms[4];
 
 //****************************************************************//
 //this const is created to derive the diagnostic infromation from VSEP_Fault_Rxd,
@@ -84,7 +76,7 @@ const	uint8_t	diagnostic_bit_position[30]={  0,2,4,6, 			//ignored,   the diagno
 #ifdef  VSEP_CALIBRATION_ENABLE
 uint8_t	Filter_Time_Array[30];
 #else
-const	uint8_t	Filter_Time_Array[30]={		VSEP_FAULT_FILTER_TIME_15US,VSEP_FAULT_FILTER_TIME_15US,
+const	uint8_t Filter_Time_Array[30]={		VSEP_FAULT_FILTER_TIME_15US,VSEP_FAULT_FILTER_TIME_15US,
 											VSEP_FAULT_FILTER_TIME_15US,VSEP_FAULT_FILTER_TIME_15US,
 											VSEP_FAULT_FILTER_TIME_15US,VSEP_FAULT_FILTER_TIME_15US,
 											VSEP_FAULT_FILTER_TIME_15US,VSEP_FAULT_FILTER_TIME_15US,
@@ -150,16 +142,15 @@ uint32_t Channel_Protect_Enable;
 void VSEP_Fault_Diagnose_Get_channel_state(void)
  {
 	uint32_t           period;
-   	uint32_t           on_time;
+	uint32_t           on_time;
 
-	
-//for the discrete controled by Microp
+	//for the discrete controled by Microp
 	VSEP_DIS_ON_OFF_state&=~((Mask32(VSEP_Get_Channel(MTSA_CONFIG_VSEP_PCH_13),1)));
 	if(DD_GetDiscrete(DISCRETE_OUT_TRIP_COMPUTER)){
 		 VSEP_DIS_ON_OFF_state|=((Mask32(VSEP_Get_Channel(MTSA_CONFIG_VSEP_PCH_13),1)));
 	}
 	
-//for the PWM controled by Microp
+	//for the PWM controled by Microp
 	period 	= DD_GetPWMPeriod_US(PULSE_OUT_VCPS_B1_INTK);
 	on_time	=DD_GetPWMDuty_US(PULSE_OUT_VCPS_B1_INTK);
 	VSEP_PWM_period_us[16]=period;
@@ -175,67 +166,65 @@ void VSEP_Fault_Diagnose_Get_channel_state(void)
 //=============================================================
 // VSEP_Diagnostic_Set_Discrete_Channel_State	new add
 //=============================================================
-
- void  VSEP_Diagnostic_Set_Discrete_Channel_State(EMS_Discrete_Signals_T in_channel, bool in_state)
-{	
-
+void  VSEP_Diagnostic_Set_Discrete_Channel_State(EMS_Discrete_Signals_T in_channel, bool in_state)
+{
 	switch(in_channel)
 	{
-		case DISCRETE_OUT_MAINRLY:  				
+		case DISCRETE_OUT_MAINRLY:
 			//	DD_SetDiscrete(DISCRETE_OUT_MAINRLY,in_state);	
 			VSEP_DiscreteSet(MTSA_CONFIG_VSEP_PCH_05,in_state );
 	  		break;
-		case DISCRETE_OUT_FUEL_PUMP:  				
+		case DISCRETE_OUT_FUEL_PUMP:
 			//	DD_SetDiscrete(DISCRETE_OUT_FUEL_PUMP,in_state);
 			VSEP_DiscreteSet(MTSA_CONFIG_VSEP_PCH_06,in_state );
 	  		break;
-		case DISCRETE_OUT_AC_CLUTCH:  				
-			//	DD_SetDiscrete(DISCRETE_OUT_AC_CLUTCH,in_state);	
+		case DISCRETE_OUT_AC_CLUTCH:
+			//	DD_SetDiscrete(DISCRETE_OUT_AC_CLUTCH,in_state);
 			VSEP_DiscreteSet(MTSA_CONFIG_VSEP_PCH_07,in_state );
 	  		break;
-		case DISCRETE_OUT_FAN_2:  				
-			//	DD_SetDiscrete(DISCRETE_OUT_FAN_2,in_state);	
+		case DISCRETE_OUT_FAN_2:
+			//	DD_SetDiscrete(DISCRETE_OUT_FAN_2,in_state);
 			VSEP_DiscreteSet(MTSA_CONFIG_VSEP_PCH_08,in_state );
 	  		break;
-		case DISCRETE_OUT_TRIP_COMPUTER:  				
-			//	DD_SetDiscrete(DISCRETE_OUT_TRIP_COMPUTER,in_state);	
+		case DISCRETE_OUT_TRIP_COMPUTER:
+			//	DD_SetDiscrete(DISCRETE_OUT_TRIP_COMPUTER,in_state);
 			VSEP_DiscreteSet(MTSA_CONFIG_VSEP_PCH_13,in_state );
 	  		break;
-		case DISCRETE_OUT_AIR_VALVE:  				
-			//	DD_SetDiscrete(DISCRETE_OUT_AIR_VALVE,in_state);				
+		case DISCRETE_OUT_AIR_VALVE:
+			//	DD_SetDiscrete(DISCRETE_OUT_AIR_VALVE,in_state);
 	  		break;
-		case DISCRETE_OUT_FAN_1:  				
-			//	DD_SetDiscrete(DISCRETE_OUT_FAN_1,in_state);				
+		case DISCRETE_OUT_FAN_1:
+			//	DD_SetDiscrete(DISCRETE_OUT_FAN_1,in_state);
 	  		break;
-		case DISCRETE_OUT_VIS_OUTPUT1:  				
-			//	DD_SetDiscrete(DISCRETE_OUT_VIS_OUTPUT1,in_state);				
+		case DISCRETE_OUT_VIS_OUTPUT1:
+			//	DD_SetDiscrete(DISCRETE_OUT_VIS_OUTPUT1,in_state);
 	  		break;
-	       case DISCRETE_OUT_VIS_OUTPUT2:  				
-			//	DD_SetDiscrete(DISCRETE_OUT_VIS_OUTPUT2,in_state);				
+	       case DISCRETE_OUT_VIS_OUTPUT2:
+			//	DD_SetDiscrete(DISCRETE_OUT_VIS_OUTPUT2,in_state);
 	  		break;
-		case DISCRETE_OUT_TURBO_COMPR_RECIRC_VALVE:  				
-			//	DD_SetDiscrete(DISCRETE_OUT_TURBO_COMPR_RECIRC_VALVE,in_state);				
+		case DISCRETE_OUT_TURBO_COMPR_RECIRC_VALVE:
+			//	DD_SetDiscrete(DISCRETE_OUT_TURBO_COMPR_RECIRC_VALVE,in_state);
 	  		break;
-		case DISCRETE_OUT_SS_STATUS_LAMP:				
-			//	DD_SetDiscrete(DISCRETE_OUT_SS_STATUS_LAMP,in_state);			
+		case DISCRETE_OUT_SS_STATUS_LAMP:
+			//	DD_SetDiscrete(DISCRETE_OUT_SS_STATUS_LAMP,in_state);
 			break;
-		case DISCRETE_OUT_OBD2_LAMP:  				
-			//	DD_SetDiscrete(DISCRETE_OUT_OBD2_LAMP,in_state);				
-	  		break;
-		case DISCRETE_OUT_SES_LAMP:  				
-			//	DD_SetDiscrete(DISCRETE_OUT_SES_LAMP,in_state);				
-	  		break;			
-		case DISCRETE_OUT_SS_CLUSTER_TT_DISABLE:				
-			//	DD_SetDiscrete(DISCRETE_OUT_SS_CLUSTER_TT_DISABLE,in_state);			
+		case DISCRETE_OUT_OBD2_LAMP:
+			//	DD_SetDiscrete(DISCRETE_OUT_OBD2_LAMP,in_state);
 			break;
-		case DISCRETE_OUT_CRUISE_ACTIVE_LAMP:  				
-			//	DD_SetDiscrete(DISCRETE_OUT_CRUISE_ACTIVE_LAMP,in_state);				
+		case DISCRETE_OUT_SES_LAMP:
+			//	DD_SetDiscrete(DISCRETE_OUT_SES_LAMP,in_state);
 	  		break;
-		case DISCRETE_OUT_SS_WARNING_LAMP:					
-			//	DD_SetDiscrete(DISCRETE_OUT_SS_WARNING_LAMP,in_state);				
-			break;			
-		case DISCRETE_OUT_IMMOREQ:  				
-			//	DD_SetDiscrete(DISCRETE_OUT_IMMOREQ,in_state);				
+		case DISCRETE_OUT_SS_CLUSTER_TT_DISABLE:
+			//	DD_SetDiscrete(DISCRETE_OUT_SS_CLUSTER_TT_DISABLE,in_state);
+			break;
+		case DISCRETE_OUT_CRUISE_ACTIVE_LAMP:
+			//	DD_SetDiscrete(DISCRETE_OUT_CRUISE_ACTIVE_LAMP,in_state);
+	  		break;
+		case DISCRETE_OUT_SS_WARNING_LAMP:
+			//	DD_SetDiscrete(DISCRETE_OUT_SS_WARNING_LAMP,in_state);
+			break;
+		case DISCRETE_OUT_IMMOREQ:
+			//	DD_SetDiscrete(DISCRETE_OUT_IMMOREQ,in_state);
 	  		break;
 	//add discrete channel here
 		default:
@@ -249,58 +238,58 @@ void VSEP_Fault_Diagnose_Get_channel_state(void)
 {
 	switch(in_channel)
 	{
-		case DISCRETE_OUT_MAINRLY:  				
-			//	DD_ToggleDiscreteImmidiate(DISCRETE_OUT_MAINRLY);				
+		case DISCRETE_OUT_MAINRLY:
+			//	DD_ToggleDiscreteImmidiate(DISCRETE_OUT_MAINRLY);
 	  		break;
-		case DISCRETE_OUT_FUEL_PUMP:  				
-			//	DD_ToggleDiscreteImmidiate(DISCRETE_OUT_FUEL_PUMP);				
+		case DISCRETE_OUT_FUEL_PUMP:
+			//	DD_ToggleDiscreteImmidiate(DISCRETE_OUT_FUEL_PUMP);
 	  		break;
-		case DISCRETE_OUT_AC_CLUTCH:  				
-			//	DD_ToggleDiscreteImmidiate(DISCRETE_OUT_AC_CLUTCH);				
+		case DISCRETE_OUT_AC_CLUTCH:
+			//	DD_ToggleDiscreteImmidiate(DISCRETE_OUT_AC_CLUTCH);
 	  		break;
-		case DISCRETE_OUT_FAN_2:  				
+		case DISCRETE_OUT_FAN_2:
 			//	DD_ToggleDiscreteImmidiate(DISCRETE_OUT_FAN_2);	
 	  		break;
-		case DISCRETE_OUT_TRIP_COMPUTER:  				
-			//	DD_ToggleDiscreteImmidiate(DISCRETE_OUT_TRIP_COMPUTER);				
+		case DISCRETE_OUT_TRIP_COMPUTER:
+			//	DD_ToggleDiscreteImmidiate(DISCRETE_OUT_TRIP_COMPUTER);
 	  		break;
-		case DISCRETE_OUT_AIR_VALVE:  				
-			//	DD_ToggleDiscreteImmidiate(DISCRETE_OUT_AIR_VALVE);				
+		case DISCRETE_OUT_AIR_VALVE:
+			//	DD_ToggleDiscreteImmidiate(DISCRETE_OUT_AIR_VALVE);
 	  		break;
-		case DISCRETE_OUT_FAN_1:  				
-			//	DD_ToggleDiscreteImmidiate(DISCRETE_OUT_FAN_1);	
+		case DISCRETE_OUT_FAN_1:
+			//	DD_ToggleDiscreteImmidiate(DISCRETE_OUT_FAN_1);
 	  		break;
-		case DISCRETE_OUT_VIS_OUTPUT1:  				
-			//	DD_ToggleDiscreteImmidiate(DISCRETE_OUT_VIS_OUTPUT1);				
+		case DISCRETE_OUT_VIS_OUTPUT1:
+			//	DD_ToggleDiscreteImmidiate(DISCRETE_OUT_VIS_OUTPUT1);
 	  		break;
-		case DISCRETE_OUT_VIS_OUTPUT2:  				
-			//	DD_ToggleDiscreteImmidiate(DISCRETE_OUT_VIS_OUTPUT2);				
+		case DISCRETE_OUT_VIS_OUTPUT2:
+			//	DD_ToggleDiscreteImmidiate(DISCRETE_OUT_VIS_OUTPUT2);
 	  		break;
-		case DISCRETE_OUT_TURBO_COMPR_RECIRC_VALVE:  				
-			//	DD_ToggleDiscreteImmidiate(DISCRETE_OUT_TURBO_COMPR_RECIRC_VALVE);				
+		case DISCRETE_OUT_TURBO_COMPR_RECIRC_VALVE:
+			//	DD_ToggleDiscreteImmidiate(DISCRETE_OUT_TURBO_COMPR_RECIRC_VALVE);
 	  		break;
 		case DISCRETE_OUT_SS_STATUS_LAMP:
-			//	DD_ToggleDiscreteImmidiate(DISCRETE_OUT_SS_STATUS_LAMP);	
+			//	DD_ToggleDiscreteImmidiate(DISCRETE_OUT_SS_STATUS_LAMP);
 			break;
-		case DISCRETE_OUT_OBD2_LAMP:  				
-			//	DD_ToggleDiscreteImmidiate(DISCRETE_OUT_OBD2_LAMP);				
+		case DISCRETE_OUT_OBD2_LAMP:
+			//	DD_ToggleDiscreteImmidiate(DISCRETE_OUT_OBD2_LAMP);
 	  		break;
-		case DISCRETE_OUT_SES_LAMP:  				
-			//	DD_ToggleDiscreteImmidiate(DISCRETE_OUT_SES_LAMP);				
+		case DISCRETE_OUT_SES_LAMP:
+			//	DD_ToggleDiscreteImmidiate(DISCRETE_OUT_SES_LAMP);
 	  		break;
 		case DISCRETE_OUT_SS_CLUSTER_TT_DISABLE:
-			//	DD_ToggleDiscreteImmidiate(DISCRETE_OUT_SS_CLUSTER_TT_DISABLE); 			
-			break;			
-		case DISCRETE_OUT_CRUISE_ACTIVE_LAMP:  				
-			//	DD_ToggleDiscreteImmidiate(DISCRETE_OUT_CRUISE_ACTIVE_LAMP);				
-	  		break;		
-		case DISCRETE_OUT_SS_WARNING_LAMP:
-			//	DD_ToggleDiscreteImmidiate(DISCRETE_OUT_SS_WARNING_LAMP);				
-	  		break;	
-		case DISCRETE_OUT_IMMOREQ:  				
-			//	DD_ToggleDiscreteImmidiate(DISCRETE_OUT_IMMOREQ);	
+			//	DD_ToggleDiscreteImmidiate(DISCRETE_OUT_SS_CLUSTER_TT_DISABLE);
+			break;
+		case DISCRETE_OUT_CRUISE_ACTIVE_LAMP:
+			//	DD_ToggleDiscreteImmidiate(DISCRETE_OUT_CRUISE_ACTIVE_LAMP);
 	  		break;
-	//added the discrete related io here
+		case DISCRETE_OUT_SS_WARNING_LAMP:
+			//	DD_ToggleDiscreteImmidiate(DISCRETE_OUT_SS_WARNING_LAMP);
+	  		break;
+		case DISCRETE_OUT_IMMOREQ:
+			//	DD_ToggleDiscreteImmidiate(DISCRETE_OUT_IMMOREQ);
+			break;
+		//added the discrete related io here
 		default:
 			break;
 	}
@@ -448,288 +437,238 @@ void VSEP_Diagnostic_Toggle_PWM_Channel_Immediate(EMS_PWM_Output_T in_channel)
 //=============================================================================
 // VSEP_FAULT_Get_Device_Fault
 //=============================================================================
-bool VSEP_FAULT_Get_Device_Fault(
-   IO_Configuration_T in_configuration )
+bool VSEP_FAULT_Get_Device_Fault(IO_Configuration_T in_configuration )
 {
-   Parameter_Not_Used( in_configuration );
+	Parameter_Not_Used( in_configuration );
 
-   return false;
+	return false;
 }
 
 //=============================================================================
 // VSEP_FAULT_Clear_Device_Fault
 //=============================================================================
-void VSEP_FAULT_Clear_Device_Fault(
-   IO_Configuration_T in_configuration )
+void VSEP_FAULT_Clear_Device_Fault(IO_Configuration_T in_configuration )
 {
-   Parameter_Not_Used( in_configuration );
+	Parameter_Not_Used( in_configuration );
 }
 
 
 //=============================================================================
 // VSEP_FAULT_Is_Message_Valid
 //=============================================================================
-bool VSEP_FAULT_Is_Message_Valid(
-   IO_Configuration_T in_configuration,
-   VSEP_Message_T     in_message )
+bool VSEP_FAULT_Is_Message_Valid(IO_Configuration_T in_configuration, VSEP_Message_T     in_message )
 {
-   bool spi_msg_fault;
-   uint16_t fault_data;
-   VSEP_Index_T device = VSEP_Get_Device_Index( in_configuration );
+	bool spi_msg_fault;
+	uint16_t fault_data;
+	VSEP_Index_T device = VSEP_Get_Device_Index( in_configuration );
+
+	switch ( in_message ) {
+	case VSEP_MESSAGE_SOH_STATUS:
+		 fault_data = (uint16_t) ( VSEP_SOH_Status_Rxd[ device ][VSEP_SOH_STATUS_RXD_MESSAGE_FLT] );
+		 break;
+	case VSEP_MESSAGE_SOH:
+	default:
+		fault_data = (uint16_t) ( VSEP_SOH_Rxd[ device ][VSEP_SOH_RXD_MESSAGE_FLT] );
+		break;
+	}
 
 
-   switch( in_message )
-   {
-      case VSEP_MESSAGE_SOH_STATUS:
-         fault_data = (uint16_t) ( VSEP_SOH_Status_Rxd[ device ][VSEP_SOH_STATUS_RXD_MESSAGE_FLT] );
-         break;
-      case VSEP_MESSAGE_SOH:
-      default:
-         fault_data = (uint16_t) ( VSEP_SOH_Rxd[ device ][VSEP_SOH_RXD_MESSAGE_FLT] );
-         break;
-   }
+	if((VSEP_Msg_CMD_Get_Test_Bit_Low( fault_data ) == 0) &&
+	  (VSEP_Msg_CMD_Get_Test_Bit_High( fault_data ) == 1))
+	{
+		spi_msg_fault = true;
+	}
+	else
+	{
+		spi_msg_fault = false;
+	}
 
-   
-   if((VSEP_Msg_CMD_Get_Test_Bit_Low( fault_data ) == 0) &&
-      (VSEP_Msg_CMD_Get_Test_Bit_High( fault_data ) == 1))
-   {
-      spi_msg_fault = true;
-   }
-   else
-   {
-      spi_msg_fault = false;
-   }
-
-
-   return spi_msg_fault;
+	return spi_msg_fault;
 }
 
 //=============================================================================
-// VSEP_Fault_Diagnose_Channels, only for PCH?
+// VSEP_Fault_Diagnose_Channels, only for PCH
 //=============================================================================
-
 void VSEP_Fault_Diagnose_Channels(void* in_pointer )
 {
-   uint8_t            x,fault_index,fault_position;
-   VSEP_Channel_T     fault_channel;
-   VSEP_Index_T       device_index = 0;
-   IO_Configuration_T configuration;
-   uint32_t           period;
-   uint32_t           on_time;
-   uint32_t           off_time;
-   uint32_t                      period_in_counts;
-   uint32_t                      counts_per_time;
-   uint32_t                      percent_in_counts;
-   VSEP_Fault_PCH_T  	 vsep_pch_fault;
+	uint8_t            x,fault_index,fault_position;
+	VSEP_Channel_T     fault_channel;
+	VSEP_Index_T       device_index = 0;
+	IO_Configuration_T configuration;
+	uint32_t           period;
+	uint32_t           on_time;
+	uint32_t           off_time;
+	uint32_t           period_in_counts;
+	uint32_t           counts_per_time;
+	uint32_t           percent_in_counts;
+	VSEP_Fault_PCH_T   vsep_pch_fault;
 
-   VSEP_Fault_Channel_Data_T *vsep_fault_channel_data = (VSEP_Fault_Channel_Data_T*)in_pointer;
+	VSEP_Fault_Channel_Data_T *vsep_fault_channel_data = (VSEP_Fault_Channel_Data_T*)in_pointer;
 
-   if( vsep_fault_channel_data != NULL )
-   {
-      // diagnose fault, and also provide delay between IO_DISCRETE_Set_Immediate_State commands
-	//VSEP_Fault_Diagnose_Get_channel_state();
-	for( x = 0; x <= VSEP_CHANNEL_PCH_30_FLT_LVL_7; x++ )
-      {
-         configuration =vsep_fault_channel_data[x].fault_configuration;
-         fault_channel = VSEP_Get_Channel( configuration );
-         device_index  = 0; //  device_index = VSEP_Get_Device_Index( configuration );
+	if (vsep_fault_channel_data != NULL) {
+		// diagnose fault, and also provide delay between IO_DISCRETE_Set_Immediate_State commands
+		//VSEP_Fault_Diagnose_Get_channel_state();
+		for( x = 0; x <= VSEP_CHANNEL_PCH_30_FLT_LVL_7; x++ )
+		{
+			configuration =vsep_fault_channel_data[x].fault_configuration;
+			fault_channel = VSEP_Get_Channel( configuration );
+			device_index  = 0; //  device_index = VSEP_Get_Device_Index( configuration );
 
-	if(x > Number_of_EST_Channel)//the EST channel diagnostic was done in function--VSEP_EST_Fault_SYNC_Interface
-	{		
-    		vsep_pch_fault = (VSEP_Fault_PCH_T)Extract_Bits( VSEP_Fault_Rxd[ device_index ][ diagnostic_index[x]  ],
+			if(x > Number_of_EST_Channel)//the EST channel diagnostic was done in function--VSEP_EST_Fault_SYNC_Interface
+			{
+				vsep_pch_fault = (VSEP_Fault_PCH_T)Extract_Bits( VSEP_Fault_Rxd[ device_index ][ diagnostic_index[x]  ],
                                     diagnostic_bit_position[x], BIT_2 );
     
-         // check for discrete signals
-         switch( vsep_fault_channel_data[x].kind)
-         {
-            case VSEP_FAULT_IO_KIND_DISCRETE:
-            {
-               //Only toggle pin if io interface is defined
-         //      if( ((void const *)vsep_fault_channel_data[x].io_configuration)!= NULL )
-          //     { // cause all the channel were adopted, compile off for reducing throughput
-                              	
-                  if((VSEP_DIS_ON_OFF_state)&(vsep_fault_channel_data[x].io_mask))
-                  {
-                     VSEP_Fault_Log[ device_index ][ fault_channel ] |= FAULT_TESTED_SHORT_TO_BATTERY_SET;
-                      // if discrete signal report short to battery fault
-                     if (vsep_pch_fault == VSEP_FAULT_PCH_SHORT_TO_BATTERY_FAULT )
-                     {
-                     	VSEP_Fault_Log[ device_index ][ fault_channel ] |= FAULT_OCCURED_SHORT_TO_BATTERY_SET;
-		if (VSEP_Fault_Counter[device_index][x] < (KsVSEP_Diagnostic_Counter_Thd))
-       		 	{
-           			// increment channel fault counter
-           				VSEP_Fault_Counter[device_index][x] = VSEP_Fault_Counter[device_index][x] + VSEP_CHANNEL_FAULT_COUNTER_INCREMENT_STEP;
-        			}
-                        // toggle discrete signal to re-enable signal again
-                        VSEP_DiscreteToggleImmediate(vsep_fault_channel_data[x].io_configuration);
-			   VSEP_DiscreteToggleImmediate(vsep_fault_channel_data[x].io_configuration);
-                       //VSEP_Diagnostic_Toggle_Discrete_Channel_Immidiate( vsep_fault_channel_data[x].io_configuration);
-			 //  VSEP_Diagnostic_Toggle_Discrete_Channel_Immidiate( vsep_fault_channel_data[x].io_configuration);             	
-                     }
+				// check for discrete signals
+				switch (vsep_fault_channel_data[x].kind) {
+				case VSEP_FAULT_IO_KIND_DISCRETE:
+				{
+					//Only toggle pin if io interface is defined
+					//if( ((void const *)vsep_fault_channel_data[x].io_configuration)!= NULL )
+					//{ // cause all the channel were adopted, compile off for reducing throughput
+					if ((VSEP_DIS_ON_OFF_state)&(vsep_fault_channel_data[x].io_mask)) {
+						VSEP_Fault_Log[ device_index ][ fault_channel ] |= FAULT_TESTED_SHORT_TO_BATTERY_SET;
+						// if discrete signal report short to battery fault
+						if (vsep_pch_fault == VSEP_FAULT_PCH_SHORT_TO_BATTERY_FAULT ) {
+							VSEP_Fault_Log[ device_index ][ fault_channel ] |= FAULT_OCCURED_SHORT_TO_BATTERY_SET;
+							if (VSEP_Fault_Counter[device_index][x] < (KsVSEP_Diagnostic_Counter_Thd)) {
+								// increment channel fault counter
+								VSEP_Fault_Counter[device_index][x] = VSEP_Fault_Counter[device_index][x] + VSEP_CHANNEL_FAULT_COUNTER_INCREMENT_STEP;
+							}
+							// toggle discrete signal to re-enable signal again
+							VSEP_DiscreteToggleImmediate(vsep_fault_channel_data[x].io_configuration);
+							VSEP_DiscreteToggleImmediate(vsep_fault_channel_data[x].io_configuration);
+							//VSEP_Diagnostic_Toggle_Discrete_Channel_Immidiate( vsep_fault_channel_data[x].io_configuration);
+							//VSEP_Diagnostic_Toggle_Discrete_Channel_Immidiate( vsep_fault_channel_data[x].io_configuration);
+						}
+					} else {
+						VSEP_Fault_Log[ device_index ][ fault_channel ] |=FAULT_TESTED_OPEN_CIRCUIT_SET;
+						VSEP_Fault_Log[ device_index ][ fault_channel ] |= FAULT_TESTED_SHORT_TO_GROUND_SET;
+						if(vsep_pch_fault == VSEP_FAULT_PCH_OPEN_FAULT ){
+							VSEP_Fault_Log[ device_index ][ fault_channel ] |= FAULT_OCCURED_OPEN_CIRCUIT_SET;
+						} else if (vsep_pch_fault == VSEP_FAULT_PCH_SHORT_TO_GROUND_FAULT ){ 
+							VSEP_Fault_Log[ device_index ][ fault_channel ] |= FAULT_OCCURED_SHORT_TO_GROUND_SET;
+						}
+					}
+					break;
+				}
+				case VSEP_FAULT_IO_KIND_PULSE_WIDTH_MODULATION: // signal is not discrete
+				{
+					//        if( ((void const *)vsep_fault_channel_data[x].io_configuration)!= NULL )
+					//        {// cause all the channel were adopted, compile off for reducing throughput
+					on_time = VSEP_PWM_ontime_us[fault_channel];//HZ
+					period = VSEP_PWM_period_us[fault_channel];
+					off_time = period - on_time;
+					if((off_time == 0) || (on_time > ( Filter_Time_Array[fault_channel]+ 1)))
+					{
+						VSEP_Fault_Log[ device_index ][ fault_channel ] |= FAULT_TESTED_SHORT_TO_BATTERY_SET;
+						// check if shorted to battery and if pwm is on 100%, toggle to reset output
+						if (vsep_pch_fault == VSEP_FAULT_PCH_SHORT_TO_BATTERY_FAULT )
+						{
+							VSEP_Fault_Log[ device_index ][ fault_channel ] |= FAULT_OCCURED_SHORT_TO_BATTERY_SET;
+							if (VSEP_Fault_Counter[device_index][x] < (KsVSEP_Diagnostic_Counter_Thd))
+							{
+								// increment channel fault counter
+								VSEP_Fault_Counter[device_index][x] = VSEP_Fault_Counter[device_index][x] + VSEP_CHANNEL_FAULT_COUNTER_INCREMENT_STEP;
+							}
+							if(on_time == period)
+							{
+								//when PWM is at 100% duty cycle, pin must be toggled to reset pin fault
 
-                  }
-                  else
-                  {
-                      VSEP_Fault_Log[ device_index ][ fault_channel ] |=FAULT_TESTED_OPEN_CIRCUIT_SET;
-                      VSEP_Fault_Log[ device_index ][ fault_channel ] |= FAULT_TESTED_SHORT_TO_GROUND_SET;
-			if(vsep_pch_fault == VSEP_FAULT_PCH_OPEN_FAULT ){   
-                     	VSEP_Fault_Log[ device_index ][ fault_channel ] |= FAULT_OCCURED_OPEN_CIRCUIT_SET;
-              	  }else if(vsep_pch_fault == VSEP_FAULT_PCH_SHORT_TO_GROUND_FAULT ){ 
-        		 	VSEP_Fault_Log[ device_index ][ fault_channel ] |= FAULT_OCCURED_SHORT_TO_GROUND_SET;
-              	}
-                  }
-         //      }
-               break;
-            }
-
-            case VSEP_FAULT_IO_KIND_PULSE_WIDTH_MODULATION: // signal is not discrete
-            {
-       //        if( ((void const *)vsep_fault_channel_data[x].io_configuration)!= NULL )
-       //        {// cause all the channel were adopted, compile off for reducing throughput
-               	on_time = VSEP_PWM_ontime_us[fault_channel];//HZ
-   			period = VSEP_PWM_period_us[fault_channel];
-             		
-                     off_time = period - on_time;
-					 
-                  if((off_time == 0) || (on_time > ( Filter_Time_Array[fault_channel]+ 1)))
-                  {
-                    VSEP_Fault_Log[ device_index ][ fault_channel ] |= FAULT_TESTED_SHORT_TO_BATTERY_SET;
-                     // check if shorted to battery and if pwm is on 100%, toggle to reset output
-                     if (vsep_pch_fault == VSEP_FAULT_PCH_SHORT_TO_BATTERY_FAULT )
-                     {
-                     	VSEP_Fault_Log[ device_index ][ fault_channel ] |= FAULT_OCCURED_SHORT_TO_BATTERY_SET;
-				if (VSEP_Fault_Counter[device_index][x] < (KsVSEP_Diagnostic_Counter_Thd))
-       		 	{
-           			// increment channel fault counter
-           				VSEP_Fault_Counter[device_index][x] = VSEP_Fault_Counter[device_index][x] + VSEP_CHANNEL_FAULT_COUNTER_INCREMENT_STEP;
-        			}
-					
-                        if(on_time == period)
-                        {
-                           //when PWM is at 100% duty cycle, pin must be toggled to reset pin fault
-                          
-						//need put something here, need a function to toggle the pin
-			     VSEP_PWM_DISCRETE_Toggle_Immediate_State(vsep_fault_channel_data[x].io_configuration);
-			      VSEP_PWM_DISCRETE_Toggle_Immediate_State(vsep_fault_channel_data[x].io_configuration);
-			//	VSEP_Diagnostic_Toggle_PWM_Channel_Immediate(vsep_fault_channel_data[x].io_configuration);
-						//need consider the vsep toggle immeidately
-                        }
-                     }
-                  }
-                  if((on_time == 0) || (off_time > VSEP_MIN_OFF_TIME_FOR_TEST))
-                  {
-                     VSEP_Fault_Log[ device_index ][ fault_channel ] |= FAULT_TESTED_OPEN_CIRCUIT_SET;
-                     VSEP_Fault_Log[ device_index ][ fault_channel ] |= FAULT_TESTED_SHORT_TO_GROUND_SET;
-			if(vsep_pch_fault == VSEP_FAULT_PCH_OPEN_FAULT ){   
-                     	VSEP_Fault_Log[ device_index ][ fault_channel ] |= FAULT_OCCURED_OPEN_CIRCUIT_SET;
-              	  }else if(vsep_pch_fault == VSEP_FAULT_PCH_SHORT_TO_GROUND_FAULT ){ 
-        		 	VSEP_Fault_Log[ device_index ][ fault_channel ] |= FAULT_OCCURED_SHORT_TO_GROUND_SET;
-              	}
-                  }
-        //       }
-               break;
-            }
-			case VSEP_FAULT_IO_DUMMY_PIN:
-			   /*dummy pin*/
-			   break;
-            case VSEP_FAULT_IO_KIND_OUTPUT_COMPARE:
-            case VSEP_FAULT_IO_KIND_IGNORE_PIN_STATE:
-            default:
-            {
-                 VSEP_Fault_Log[ device_index ][ fault_channel ] |= FAULT_TESTED_SHORT_TO_BATTERY_SET;             
-                  // if IGBT - only diagnose short to battery, we should change the logic
-                 VSEP_Fault_Log[ device_index ][ fault_channel ] |= FAULT_TESTED_OPEN_CIRCUIT_SET;
-                 VSEP_Fault_Log[ device_index ][ fault_channel ] |= FAULT_TESTED_SHORT_TO_GROUND_SET;
-		 if(vsep_pch_fault == VSEP_FAULT_PCH_SHORT_TO_BATTERY_FAULT ){		  	
-			  VSEP_Fault_Log[ device_index ][ fault_channel ] |= FAULT_OCCURED_SHORT_TO_BATTERY_SET;
-			if (VSEP_Fault_Counter[device_index][x] < (KsVSEP_Diagnostic_Counter_Thd))
-       		 {
-           			// increment channel fault counter
-           			VSEP_Fault_Counter[device_index][x] = VSEP_Fault_Counter[device_index][x] + VSEP_CHANNEL_FAULT_COUNTER_INCREMENT_STEP;
-        		}
-		  }else if(vsep_pch_fault == VSEP_FAULT_PCH_OPEN_FAULT ){    
-                     VSEP_Fault_Log[ device_index ][ fault_channel ] |= FAULT_OCCURED_OPEN_CIRCUIT_SET;
-                }else if(vsep_pch_fault == VSEP_FAULT_PCH_SHORT_TO_GROUND_FAULT ){           
-        		 VSEP_Fault_Log[ device_index ][ fault_channel ] |= FAULT_OCCURED_SHORT_TO_GROUND_SET;   	
-                }              
-            }
-         }
-	}else{
-		EST_Diagnostic_7p8ms[x] = true;
-	}
-
-	   //application can not set the channel to high again
-	 	if( (VSEP_Fault_Counter[device_index][x] >= (KsVSEP_Diagnostic_Counter_Thd))&&(VSEP_Channel_Enabled & (vsep_fault_channel_data[x].io_mask))
-			&& (Channel_Protect_Enable & (vsep_fault_channel_data[x].io_mask)))
-
-	{
-     // channel is discrete, disable channel by setting to FALSE
-	 if (VSEP_FAULT_IO_KIND_DISCRETE == vsep_fault_channel_data[x].kind)
-	 {
-		//VSEP_Diagnostic_Set_Discrete_Channel_State( vsep_fault_channel_data[x].io_configuration,false);
-		VSEP_DiscreteSet( vsep_fault_channel_data[x].fault_configuration,false);
-               VSEP_Channel_Enabled	&=(~((vsep_fault_channel_data[x].io_mask)));
-	 }
-
-	 // channel is PWM, disable channel by setting duty cycle to 0%
-	 else if (VSEP_FAULT_IO_KIND_PULSE_WIDTH_MODULATION == vsep_fault_channel_data[x].kind)
-	 {
-	 	
-           //VSEP_Diagnostic_PWM_Set_Duty_Cycle_Immediate(vsep_fault_channel_data[x].io_configuration, 0 );
-            VSEP_PWM_DISCRETE_Toggle_Immediate_State(vsep_fault_channel_data[x].io_configuration);
-	    VSEP_PWM_DISCRETE_Toggle_Immediate_State(vsep_fault_channel_data[x].io_configuration);
-	    VSEP_Channel_Enabled	&=(~((vsep_fault_channel_data[x].io_mask)));
-	 }
-
-	 else if (VSEP_FAULT_IO_DUMMY_PIN == vsep_fault_channel_data[x].kind)
-	 {
-		/*dummy pin*/
-	 }
-
-	 // channel is EST, disable channel	 
-     else if ((x >= 0) && (x <= 3))
-	 {
-	    // do not perform turnoff ESTC and ESTD in waste spark mode
-	    if (VSEP_EST_Select_Get_Mode_PF() == VSEP_EST_SELECT_PAIRED_FIRE_MODE_DISABLED)
-	    {
-	       VSEP_Channel_Enabled	&=(~((vsep_fault_channel_data[x].io_mask)));
-	    }
-	    else if (VSEP_EST_Select_Get_Mode_PF() == VSEP_EST_SELECT_PAIRED_FIRE_MODE_ENABLED)
-	    {
-			if  ((x >= 0) && (x <= 1))
-			{   
-		  		VSEP_Channel_Enabled	&=(~((vsep_fault_channel_data[x].io_mask)));
-		  		VSEP_Channel_Enabled	&=(~((vsep_fault_channel_data[x+2].io_mask)));
+								//need put something here, need a function to toggle the pin
+								VSEP_PWM_DISCRETE_Toggle_Immediate_State(vsep_fault_channel_data[x].io_configuration);
+								VSEP_PWM_DISCRETE_Toggle_Immediate_State(vsep_fault_channel_data[x].io_configuration);
+								//VSEP_Diagnostic_Toggle_PWM_Channel_Immediate(vsep_fault_channel_data[x].io_configuration);
+								//need consider the vsep toggle immeidately
+							}
+						}
+					}
+					if((on_time == 0) || (off_time > VSEP_MIN_OFF_TIME_FOR_TEST))
+					{
+						VSEP_Fault_Log[ device_index ][ fault_channel ] |= FAULT_TESTED_OPEN_CIRCUIT_SET;
+						VSEP_Fault_Log[ device_index ][ fault_channel ] |= FAULT_TESTED_SHORT_TO_GROUND_SET;
+						if(vsep_pch_fault == VSEP_FAULT_PCH_OPEN_FAULT ){   
+							VSEP_Fault_Log[ device_index ][ fault_channel ] |= FAULT_OCCURED_OPEN_CIRCUIT_SET;
+						}else if(vsep_pch_fault == VSEP_FAULT_PCH_SHORT_TO_GROUND_FAULT ){ 
+							VSEP_Fault_Log[ device_index ][ fault_channel ] |= FAULT_OCCURED_SHORT_TO_GROUND_SET;
+						}
+					}
+					break;
+				}
+				case VSEP_FAULT_IO_DUMMY_PIN:
+					/*dummy pin*/
+					break;
+				case VSEP_FAULT_IO_KIND_OUTPUT_COMPARE:
+				case VSEP_FAULT_IO_KIND_IGNORE_PIN_STATE:
+				default:
+				{
+					VSEP_Fault_Log[ device_index ][ fault_channel ] |= FAULT_TESTED_SHORT_TO_BATTERY_SET;             
+					// if IGBT - only diagnose short to battery, we should change the logic
+					VSEP_Fault_Log[ device_index ][ fault_channel ] |= FAULT_TESTED_OPEN_CIRCUIT_SET;
+					VSEP_Fault_Log[ device_index ][ fault_channel ] |= FAULT_TESTED_SHORT_TO_GROUND_SET;
+					if (vsep_pch_fault == VSEP_FAULT_PCH_SHORT_TO_BATTERY_FAULT ) {
+						VSEP_Fault_Log[ device_index ][ fault_channel ] |= FAULT_OCCURED_SHORT_TO_BATTERY_SET;
+						if (VSEP_Fault_Counter[device_index][x] < (KsVSEP_Diagnostic_Counter_Thd)) {
+							// increment channel fault counter
+							VSEP_Fault_Counter[device_index][x] = VSEP_Fault_Counter[device_index][x] + VSEP_CHANNEL_FAULT_COUNTER_INCREMENT_STEP;
+						}
+					} else if (vsep_pch_fault == VSEP_FAULT_PCH_OPEN_FAULT ) {
+							VSEP_Fault_Log[ device_index ][ fault_channel ] |= FAULT_OCCURED_OPEN_CIRCUIT_SET;
+					} else if (vsep_pch_fault == VSEP_FAULT_PCH_SHORT_TO_GROUND_FAULT ){
+							VSEP_Fault_Log[ device_index ][ fault_channel ] |= FAULT_OCCURED_SHORT_TO_GROUND_SET;
+					}
+				}
+				}
+			} else {
+				EST_Diagnostic_7p8ms[x] = true;
 			}
-        }
-     }
-	 else
-	 {//here is for the INJ set the VSEP_Channel_Enabled
-        VSEP_Channel_Enabled	&=(~((vsep_fault_channel_data[x].io_mask)));
-     }
+
+			//application can not set the channel to high again
+			if( (VSEP_Fault_Counter[device_index][x] >= (KsVSEP_Diagnostic_Counter_Thd))&&(VSEP_Channel_Enabled & (vsep_fault_channel_data[x].io_mask))
+				&& (Channel_Protect_Enable & (vsep_fault_channel_data[x].io_mask)))
+			{
+				// channel is discrete, disable channel by setting to FALSE
+				if (VSEP_FAULT_IO_KIND_DISCRETE == vsep_fault_channel_data[x].kind) {
+					//VSEP_Diagnostic_Set_Discrete_Channel_State( vsep_fault_channel_data[x].io_configuration,false);
+					VSEP_DiscreteSet( vsep_fault_channel_data[x].fault_configuration,false);
+					VSEP_Channel_Enabled	&=(~((vsep_fault_channel_data[x].io_mask)));
+				} else if (VSEP_FAULT_IO_KIND_PULSE_WIDTH_MODULATION == vsep_fault_channel_data[x].kind) {
+				// channel is PWM, disable channel by setting duty cycle to 0%
+					//VSEP_Diagnostic_PWM_Set_Duty_Cycle_Immediate(vsep_fault_channel_data[x].io_configuration, 0 );
+					VSEP_PWM_DISCRETE_Toggle_Immediate_State(vsep_fault_channel_data[x].io_configuration);
+					VSEP_PWM_DISCRETE_Toggle_Immediate_State(vsep_fault_channel_data[x].io_configuration);
+					VSEP_Channel_Enabled	&=(~((vsep_fault_channel_data[x].io_mask)));
+				} else if (VSEP_FAULT_IO_DUMMY_PIN == vsep_fault_channel_data[x].kind) {
+					/*dummy pin*/
+				} else if ((x >= 0) && (x <= 3)) {
+				// channel is EST, disable channel
+					// do not perform turnoff ESTC and ESTD in waste spark mode
+					if (VSEP_EST_Select_Get_Mode_PF() == VSEP_EST_SELECT_PAIRED_FIRE_MODE_DISABLED) {
+						VSEP_Channel_Enabled &=(~((vsep_fault_channel_data[x].io_mask)));
+					} else if (VSEP_EST_Select_Get_Mode_PF() == VSEP_EST_SELECT_PAIRED_FIRE_MODE_ENABLED) {
+						if  ((x >= 0) && (x <= 1)) {   
+							VSEP_Channel_Enabled	&=(~((vsep_fault_channel_data[x].io_mask)));
+							VSEP_Channel_Enabled	&=(~((vsep_fault_channel_data[x+2].io_mask)));
+						}
+					}
+				} else {//here is for the INJ set the VSEP_Channel_Enabled
+					VSEP_Channel_Enabled	&=(~((vsep_fault_channel_data[x].io_mask)));
+				}
+			}
+		}
+
+		//decreace the counter
+		if (VSEP_Fault_Counter_Decrement_Counter < VSEP_FAULT_COUNTER_DECREMENT_TIME_COUNT) {
+			VSEP_Fault_Counter_Decrement_Counter++;
+		} else {
+			for( x = 0; x <= VSEP_CHANNEL_PCH_30_FLT_LVL_7; x++ ) {
+				if ((VSEP_Fault_Counter[device_index][x] < (KsVSEP_Diagnostic_Counter_Thd)) && (VSEP_Fault_Counter[device_index][x] > 0)) {
+					VSEP_Fault_Counter[device_index][x] = VSEP_Fault_Counter[device_index][x] - VSEP_CHANNEL_FAULT_COUNTER_DECREMENT_STEP;
+				}
+			}
+			VSEP_Fault_Counter_Decrement_Counter = 0;
+		}
 	}
-
-   }
-//decreace the counter
-
-   if (VSEP_Fault_Counter_Decrement_Counter < VSEP_FAULT_COUNTER_DECREMENT_TIME_COUNT)//20s
-   {
-      VSEP_Fault_Counter_Decrement_Counter++;
-   }
-   else
-   {
-      for( x = 0; x <= VSEP_CHANNEL_PCH_30_FLT_LVL_7; x++ )
-      {
-        if ((VSEP_Fault_Counter[device_index][x] < (KsVSEP_Diagnostic_Counter_Thd)) && (VSEP_Fault_Counter[device_index][x] > 0))
-         {
-            VSEP_Fault_Counter[device_index][x] = VSEP_Fault_Counter[device_index][x] - VSEP_CHANNEL_FAULT_COUNTER_DECREMENT_STEP;
-         }
-      }
-      VSEP_Fault_Counter_Decrement_Counter = 0;
-   }
-
-  
-  }
 }
 //=============================================================================
 // VSEP_Fault_GRADCOUNT_Diagnose_EST_Channel
@@ -773,24 +712,17 @@ void VSEP_Fault_GRADCOUNT_Diagnose_EST_Channel(//need consider calfuly
 //===================================================================
 // VSEP_FAULT_EST_Initialize_Device
 //===================================================================
-FAR_COS void VSEP_FAULT_EST_Initialize_Device(
-   IO_Configuration_T in_configuration )
+void VSEP_FAULT_EST_Initialize_Device(IO_Configuration_T in_configuration)
 {
-   VSEP_Index_T index = VSEP_Get_Device_Index( in_configuration );
+	VSEP_Index_T index = VSEP_Get_Device_Index( in_configuration );
 
 #ifdef VSEP_FAULT_EST_STATIC_INITIALIZATION
-
-   
-   VSEP_EST_Fault_Txd[ index ][ VSEP_EST_FAULT_TXD_MESSAGE_CTRL ]     = VSEP_EST_FAULT_GRAD_INITIAL[ index ][ VSEP_EST_FAULT_TXD_MESSAGE_CTRL ];
-   VSEP_EST_Fault_Txd[ index ][ VSEP_EST_FAULT_TXD_MESSAGE_GRADCHECK ] = VSEP_EST_FAULT_GRAD_INITIAL[ index ][ VSEP_EST_FAULT_TXD_MESSAGE_GRADCHECK ];
+	VSEP_EST_Fault_Txd[ index ][ VSEP_EST_FAULT_TXD_MESSAGE_CTRL ]     = VSEP_EST_FAULT_GRAD_INITIAL[ index ][ VSEP_EST_FAULT_TXD_MESSAGE_CTRL ];
+	VSEP_EST_Fault_Txd[ index ][ VSEP_EST_FAULT_TXD_MESSAGE_GRADCHECK ] = VSEP_EST_FAULT_GRAD_INITIAL[ index ][ VSEP_EST_FAULT_TXD_MESSAGE_GRADCHECK ];
 #else
-   VSEP_EST_Fault_SYNC_Txd[ index ][ VSEP_EST_FAULT_SYNC_TXD_MESSAGE_CTRL_BYTE0 ] = VSEP_EST_FAULT_SYNC_MESSAGE_BYTE_INITIAL[index][VSEP_EST_FAULT_SYNC_TXD_MESSAGE_CTRL_BYTE0];
-   VSEP_EST_Fault_SYNC_Txd[ index ][ VSEP_EST_FAULT_SYNC_TXD_MESSAGE_CTRL_BYTE1 ] = VSEP_EST_FAULT_SYNC_MESSAGE_BYTE_INITIAL[index][VSEP_EST_FAULT_SYNC_TXD_MESSAGE_CTRL_BYTE1];
-   VSEP_EST_Fault_SYNC_Txd[ index ][ VSEP_EST_FAULT_SYNC_TXD_MESSAGE_SYNC_BYTE2 ] = VSEP_EST_FAULT_SYNC_MESSAGE_BYTE_INITIAL[index][VSEP_EST_FAULT_SYNC_TXD_MESSAGE_SYNC_BYTE2];
-
-  // VSEP_EST_Fault_Txd[ index ][ VSEP_EST_FAULT_TXD_MESSAGE_CTRL ] = VSEP_Msg_Set_SDIA ( VSEP_EST_Fault_Txd[ index ][ VSEP_EST_FAULT_TXD_MESSAGE_CTRL ], VSEP_TXD_SDIA_GRAD_CTRL ); 
-  // VSEP_EST_Fault_Txd[ index ][ VSEP_EST_FAULT_TXD_MESSAGE_CTRL ] = VSEP_Msg_Set_SDOA ( VSEP_EST_Fault_Txd[ index ][ VSEP_EST_FAULT_TXD_MESSAGE_CTRL ], VSEP_RXD_SDOA_GRADCOUNT ); 
-
+	VSEP_EST_Fault_SYNC_Txd[ index ][ VSEP_EST_FAULT_SYNC_TXD_MESSAGE_CTRL_BYTE0 ] = VSEP_EST_FAULT_SYNC_MESSAGE_BYTE_INITIAL[index][VSEP_EST_FAULT_SYNC_TXD_MESSAGE_CTRL_BYTE0];
+	VSEP_EST_Fault_SYNC_Txd[ index ][ VSEP_EST_FAULT_SYNC_TXD_MESSAGE_CTRL_BYTE1 ] = VSEP_EST_FAULT_SYNC_MESSAGE_BYTE_INITIAL[index][VSEP_EST_FAULT_SYNC_TXD_MESSAGE_CTRL_BYTE1];
+	VSEP_EST_Fault_SYNC_Txd[ index ][ VSEP_EST_FAULT_SYNC_TXD_MESSAGE_SYNC_BYTE2 ] = VSEP_EST_FAULT_SYNC_MESSAGE_BYTE_INITIAL[index][VSEP_EST_FAULT_SYNC_TXD_MESSAGE_SYNC_BYTE2];
 #endif
 }
 
@@ -798,40 +730,35 @@ FAR_COS void VSEP_FAULT_EST_Initialize_Device(
 //=============================================================
 // VSEP_FAULT_EST_Set_Filter_Time
 //=============================================================
-void VSEP_FAULT_EST_Set_Filter_Time(
-   IO_Configuration_T in_configuration,
-   VSEP_Gradient_Check_Filter_Time_T in_time)
+void VSEP_FAULT_EST_Set_Filter_Time(IO_Configuration_T in_configuration, VSEP_Gradient_Check_Filter_Time_T in_time)
 {
-   VSEP_Index_T index = VSEP_Get_Device_Index( in_configuration );
-   uint16_t* 	    txd_time = &VSEP_EST_Fault_Txd[ index ][ VSEP_EST_FAULT_TXD_MESSAGE_GRADCHECK ];
+	VSEP_Index_T index = VSEP_Get_Device_Index( in_configuration );
+	uint16_t* txd_time = &VSEP_EST_Fault_Txd[ index ][ VSEP_EST_FAULT_TXD_MESSAGE_GRADCHECK ];
 
-   *txd_time = VSEP_Msg_IGBT_Set_GRADFILT( *txd_time, in_time );
+	*txd_time = VSEP_Msg_IGBT_Set_GRADFILT( *txd_time, in_time );
 }
 
 //=============================================================
 // VSEP_FAULT_EST_Set_Filter_Time_Immediate
 //=============================================================
-void VSEP_FAULT_EST_Set_Filter_Time_Immediate(
-   IO_Configuration_T in_configuration,
-   VSEP_Gradient_Check_Filter_Time_T in_time)
+void VSEP_FAULT_EST_Set_Filter_Time_Immediate(IO_Configuration_T in_configuration, VSEP_Gradient_Check_Filter_Time_T in_time)
 {
-   VSEP_FAULT_EST_Set_Filter_Time( in_configuration, in_time );
-   VSEP_SPI_Immediate_Transfer( in_configuration, VSEP_MESSAGE_EST_FAULT );
+	VSEP_FAULT_EST_Set_Filter_Time( in_configuration, in_time );
+	VSEP_SPI_Immediate_Transfer( in_configuration, VSEP_MESSAGE_EST_FAULT );
 }
 
 //=============================================================
 // VSEP_FAULT_EST_Get_Filter_Time
 //=============================================================
-VSEP_Gradient_Check_Filter_Time_T VSEP_FAULT_EST_Get_Filter_Time(
-   IO_Configuration_T in_configuration)
+VSEP_Gradient_Check_Filter_Time_T VSEP_FAULT_EST_Get_Filter_Time(IO_Configuration_T in_configuration)
 {
-   VSEP_Index_T index = VSEP_Get_Device_Index( in_configuration );
-   uint16_t* txd_time = &VSEP_EST_Fault_Txd[ index ][ VSEP_EST_FAULT_TXD_MESSAGE_GRADCHECK ];
-   VSEP_Gradient_Check_Filter_Time_T time;
+	VSEP_Index_T index = VSEP_Get_Device_Index( in_configuration );
+	uint16_t* txd_time = &VSEP_EST_Fault_Txd[ index ][ VSEP_EST_FAULT_TXD_MESSAGE_GRADCHECK ];
+	VSEP_Gradient_Check_Filter_Time_T time;
 
-   time = (VSEP_Gradient_Check_Filter_Time_T)VSEP_Msg_IGBT_Get_GRADFILT( *txd_time );
+	time = (VSEP_Gradient_Check_Filter_Time_T)VSEP_Msg_IGBT_Get_GRADFILT( *txd_time );
 
-   return ( time );
+	return ( time );
 }
 
 //=============================================================================
@@ -850,182 +777,127 @@ void VSEP_FAULT_EST_Set_Threshold(
 //=============================================================================
 // VSEP_FAULT_EST_Set_Threshold_Immediate
 //=============================================================================
-void VSEP_FAULT_EST_Set_Threshold_Immediate(
-   IO_Configuration_T in_configuration,
+void VSEP_FAULT_EST_Set_Threshold_Immediate(IO_Configuration_T in_configuration,
    VSEP_Gradient_Check_Threshold_T in_threshold)
 {
-   VSEP_FAULT_EST_Set_Threshold( in_configuration, in_threshold );
-    VSEP_SPI_Immediate_Transfer( in_configuration, VSEP_MESSAGE_EST_FAULT);
+	VSEP_FAULT_EST_Set_Threshold( in_configuration, in_threshold );
+	VSEP_SPI_Immediate_Transfer( in_configuration, VSEP_MESSAGE_EST_FAULT);
 }
 
 //=============================================================
 // VSEP_FAULT_EST_Get_Threshold
 //=============================================================
-VSEP_Gradient_Check_Threshold_T VSEP_FAULT_EST_Get_Threshold(
-   IO_Configuration_T in_configuration)
+VSEP_Gradient_Check_Threshold_T VSEP_FAULT_EST_Get_Threshold(IO_Configuration_T in_configuration)
 {
-   VSEP_Index_T index = VSEP_Get_Device_Index( in_configuration );
-   uint16_t* txd_threshold = &VSEP_EST_Fault_Txd[ index ][ VSEP_EST_FAULT_TXD_MESSAGE_GRADCHECK ];
-   VSEP_Gradient_Check_Threshold_T threshold;
+	VSEP_Index_T index = VSEP_Get_Device_Index( in_configuration );
+	uint16_t* txd_threshold = &VSEP_EST_Fault_Txd[ index ][ VSEP_EST_FAULT_TXD_MESSAGE_GRADCHECK ];
+	VSEP_Gradient_Check_Threshold_T threshold;
 
-   threshold = (VSEP_Gradient_Check_Threshold_T)VSEP_Msg_IGBT_Get_GRADTHR( *txd_threshold );
+	threshold = (VSEP_Gradient_Check_Threshold_T)VSEP_Msg_IGBT_Get_GRADTHR( *txd_threshold );
 
-   return ( threshold );
+	return ( threshold );
 }
 
 //=============================================================
 // VSEP_EST_SYNC_Interface
 //=============================================================
-FAR_COS void VSEP_EST_Fault_SYNC_Interface(VSEP_Index_T vsep_index, EST_Select_Cylinder_T curent_spark_cylinder)
+void VSEP_EST_Fault_SYNC_Interface(VSEP_Index_T vsep_index, EST_Select_Cylinder_T curent_spark_cylinder)
 {
-	
-//****************************************
-   interrupt_state_t     irq_state;
-    uint8_t               index, transmint_length;
-   uint8_t               index_transmint,idex_receive,x;
-   VSEP_Fault_PCH_T 	 vsep_pch_fault;
-   static uint8_t               CurrentEstLine;
-   static uint8_t               PreviousEstLine;
-   static uint8_t		Cylinder_numbers;
+	//****************************************
+	interrupt_state_t     irq_state;
+	uint8_t               index, transmint_length;
+	uint8_t               index_transmint,idex_receive,x;
+	VSEP_Fault_PCH_T      vsep_pch_fault;
+	static uint8_t        CurrentEstLine;
+	static uint8_t        PreviousEstLine;
+	static uint8_t        Cylinder_numbers;
 
-//here determine which channel should be tested for which type fault
-//for the first time, how to determine the PreviousEstCylinder?
-   PreviousEstLine = CurrentEstLine;
+	//here determine which channel should be tested for which type fault
+	//for the first time, how to determine the PreviousEstCylinder?
+	PreviousEstLine = CurrentEstLine;
 
-if( CeWasteEST == GetSPRK_SparkDeliveryMode() ){
-	Cylinder_numbers = CRANK_CONFIG_NUMBER_OF_CYLINDERS/2;
-  if ( curent_spark_cylinder == EST_SELECT_CYLINDER_A ||
-       curent_spark_cylinder == EST_SELECT_CYLINDER_C )
-  {
-     CurrentEstLine= 1;
-  }
-  else
-  {	
-     CurrentEstLine =0;
-   }	
-}else{
-	CurrentEstLine = curent_spark_cylinder;
-	Cylinder_numbers = CRANK_CONFIG_NUMBER_OF_CYLINDERS;
-}
+	if( CeWasteEST == GetSPRK_SparkDeliveryMode() ){
+		Cylinder_numbers = CRANK_CONFIG_NUMBER_OF_CYLINDERS/2;
+		if (curent_spark_cylinder == EST_SELECT_CYLINDER_A || curent_spark_cylinder == EST_SELECT_CYLINDER_C) {
+			CurrentEstLine= 1;
+		} else {
+			CurrentEstLine =0;
+		}
+	} else {
+		CurrentEstLine = curent_spark_cylinder;
+		Cylinder_numbers = CRANK_CONFIG_NUMBER_OF_CYLINDERS;
+	}
 
-
-	VSEP_EST_Fault_SYNC_Txd[vsep_index][VSEP_EST_FAULT_SYNC_TXD_MESSAGE_SYNC_BYTE2] =VSEP_Msg_EST_Set_EST1CEN_BYTE_FORMAT(VSEP_EST_Fault_SYNC_Txd[0][VSEP_EST_FAULT_SYNC_TXD_MESSAGE_SYNC_BYTE2],true);
+	VSEP_EST_Fault_SYNC_Txd[vsep_index][VSEP_EST_FAULT_SYNC_TXD_MESSAGE_SYNC_BYTE2] = VSEP_Msg_EST_Set_EST1CEN_BYTE_FORMAT(VSEP_EST_Fault_SYNC_Txd[0][VSEP_EST_FAULT_SYNC_TXD_MESSAGE_SYNC_BYTE2],true);
 	VSEP_EST_Fault_SYNC_Txd[vsep_index][VSEP_EST_FAULT_SYNC_TXD_MESSAGE_SYNC_BYTE2] = VSEP_Msg_EST_Set_EST1C_BYTE_FORMAT(VSEP_EST_Fault_SYNC_Txd[0][VSEP_EST_FAULT_SYNC_TXD_MESSAGE_SYNC_BYTE2],curent_spark_cylinder);
+
+
+	//**************************************************
+	irq_state = Get_Interrupt_State();
+	Disable_Interrupts();
+
+	/*SPI Clock Phase Bit ¡ª This bit is used to select the SPI clock format. In master mode, a change of this bit will
+	abort a transmission in progress and force the SPI system into idle state.
+	0 Sampling of data occurs at odd edges (1,3,5,...) of the SCK clock.
+	1 Sampling of data occurs at even edges (2,4,6,...) of the SCK clock.*/
+	// DD_SetDiscrete( DISCRETE_OUT_VSEP_CSS, false );//need revise for all chip, so far only support vsep
+
+	for ( index_transmint = 0,idex_receive =0; index_transmint <VSEP_EST_FAULT_SYNC_TXD_MESSAGE_MAX_BYTE; index_transmint++,idex_receive++)
+	{
+		//for byte transfer algorithem       
+		//	VSEP_EST_Fault_SYNC_Rxd[vsep_index][idex_receive] = 
+
+		//        DSPI_B_Exchange_Data(VSEP_CHIP_SELECT,
+		//                              VSEP_CTAR_SELECT,
+		//                              DSPI_CTAR_FMSZ_8,
+		//                              (uint16_t)VSEP_EST_Fault_SYNC_Txd[vsep_index][index_transmint]);
+	}
+
+
+	transmint_length = VSEP_EST_FAULT_SYNC_TXD_MESSAGE_MAX_BYTE;
+	index = 0;
+
+	DMA_Clear_Request(DMA_CHANNEL_DSPI_B_SR_TFFF);
+	DMA_Clear_Request(DMA_CHANNEL_DSPI_B_SR_RFDF);
+
+	 DSPI_B_Initialize_Message_8bits(VSEP_CHIP_SELECT, VSEP_CTAR_SELECT,
+													&(VSEP_EST_Fault_SYNC_Txd[vsep_index][index_transmint]),transmint_length);
 	
+	DMA_Set_Channel_Transfer_Count( DMA_CHANNEL_DSPI_B_SR_TFFF,transmint_length);
+	DMA_Set_Channel_Source_Address( DMA_CHANNEL_DSPI_B_SR_TFFF, DMA_DSPIB_SR_TFFF_Source_Address);
 
-   //**************************************************
-   irq_state = Get_Interrupt_State();
-   Disable_Interrupts();
-	
-/*SPI Clock Phase Bit ¡ª This bit is used to select the SPI clock format. In master mode, a change of this bit will
-abort a transmission in progress and force the SPI system into idle state.
-0 Sampling of data occurs at odd edges (1,3,5,...) of the SCK clock.
-1 Sampling of data occurs at even edges (2,4,6,...) of the SCK clock.*/
- // DD_SetDiscrete( DISCRETE_OUT_VSEP_CSS, false );//need revise for all chip, so far only support vsep
+	DMA_Set_Channel_Transfer_Count( DMA_CHANNEL_DSPI_B_SR_RFDF,transmint_length);
+	DMA_Set_Channel_Destination_Address( DMA_CHANNEL_DSPI_B_SR_RFDF, DMA_DSPIB_SR_RFDF_Dest_Address);
+	//Clean up the DSPI module to be ready for next transfer
+	DSPI_B_Clear_FIFO();
+	//This flag will trigger the DMA channel for transmit
+	DSPI_B_Clear_TCF();
 
-  for ( index_transmint = 0,idex_receive =0; index_transmint <VSEP_EST_FAULT_SYNC_TXD_MESSAGE_MAX_BYTE; index_transmint++,idex_receive++)
-   {
-        //for byte transfer algorithem       
-//	VSEP_EST_Fault_SYNC_Rxd[vsep_index][idex_receive] = 
-	
-		//	        DSPI_B_Exchange_Data(VSEP_CHIP_SELECT,
-			 //	                                         VSEP_CTAR_SELECT,
-			// 	                                         DSPI_CTAR_FMSZ_8,
-                       //                                               (uint16_t)VSEP_EST_Fault_SYNC_Txd[vsep_index][index_transmint]);
- }
-
-
-       transmint_length = VSEP_EST_FAULT_SYNC_TXD_MESSAGE_MAX_BYTE;
-       index = 0;
-
-     DMA_Clear_Request(DMA_CHANNEL_DSPI_B_SR_TFFF);
-     DMA_Clear_Request(DMA_CHANNEL_DSPI_B_SR_RFDF);
-
-     DSPI_B_Initialize_Message_8bits(VSEP_CHIP_SELECT, VSEP_CTAR_SELECT,
-                                                    &(VSEP_EST_Fault_SYNC_Txd[vsep_index][index_transmint]),transmint_length);
-	 
-    DMA_Set_Channel_Transfer_Count( DMA_CHANNEL_DSPI_B_SR_TFFF,transmint_length);
-    DMA_Set_Channel_Source_Address( DMA_CHANNEL_DSPI_B_SR_TFFF, DMA_DSPIB_SR_TFFF_Source_Address);
-
-    DMA_Set_Channel_Transfer_Count( DMA_CHANNEL_DSPI_B_SR_RFDF,transmint_length);
-    DMA_Set_Channel_Destination_Address( DMA_CHANNEL_DSPI_B_SR_RFDF, DMA_DSPIB_SR_RFDF_Dest_Address);
-    //Clean up the DSPI module to be ready for next transfer
-    DSPI_B_Clear_FIFO();
-    //This flag will trigger the DMA channel for transmit
-    DSPI_B_Clear_TCF();
-
-    DMA_Enable_Request(DMA_CHANNEL_DSPI_B_SR_RFDF);
-    DMA_Enable_Request(DMA_CHANNEL_DSPI_B_SR_TFFF);
+	DMA_Enable_Request(DMA_CHANNEL_DSPI_B_SR_RFDF);
+	DMA_Enable_Request(DMA_CHANNEL_DSPI_B_SR_TFFF);
    
-    DSPI_B_Enable_Transfer(true);
+	DSPI_B_Enable_Transfer(true);
 
 
-     while(DSPI_B.SR.F.EOQF== false)
-     	{
-       //do nothing
-     	}
+	while(DSPI_B.SR.F.EOQF== false)
+	{
+	//do nothing
+	}
 
-     DMA_Clear_Request(DMA_CHANNEL_DSPI_B_SR_TFFF);
-     DMA_Clear_Request(DMA_CHANNEL_DSPI_B_SR_RFDF);
-	 
-     //This flag will start the SPI device transfer
-     //Very important to clear the EOQF flag after DMA has been disabled.
-     DSPI_B_Clear_EOQF();
-     DSPI_B_Copy_Receive_Data_8bits(& (VSEP_EST_Fault_SYNC_Rxd[vsep_index][idex_receive] ),transmint_length);
+	DMA_Clear_Request(DMA_CHANNEL_DSPI_B_SR_TFFF);
+	DMA_Clear_Request(DMA_CHANNEL_DSPI_B_SR_RFDF);
 
+	//This flag will start the SPI device transfer
+	//Very important to clear the EOQF flag after DMA has been disabled.
+	DSPI_B_Clear_EOQF();
+	DSPI_B_Copy_Receive_Data_8bits(& (VSEP_EST_Fault_SYNC_Rxd[vsep_index][idex_receive] ),transmint_length);
 
-#if 0
-     transmint_length = VSEP_EST_FAULT_SYNC_TXD_MESSAGE_MAX_BYTE;
-     index = 0;
+	Set_Interrupt_State(irq_state) ;
+	//****************************************
 
-     while((DMA_Get_Channel_Running_Status(DMA_CHANNEL_DSPI_B_SR_RFDF)==true)||
-	 	(DMA_Get_Channel_Running_Status(DMA_CHANNEL_DSPI_B_SR_TFFF)==true))
-     	{
-       //do nothing
-     	}
-     DMA_Clear_Request(DMA_CHANNEL_DSPI_B_SR_TFFF);
-     DMA_Clear_Request(DMA_CHANNEL_DSPI_B_SR_RFDF);
-     DSPI_B_SET_CTAR_FMSZ(VSEP_CTAR_SELECT , DSPI_CTAR_FMSZ_8);
-
-     DSPI_B_Initialize_Message_8bits(VSEP_CHIP_SELECT, VSEP_CTAR_SELECT,
-                                                    &(VSEP_EST_Fault_SYNC_Txd[vsep_index][0]),transmint_length);
-	 
-    DMA_Set_Channel_Transfer_Count( DMA_CHANNEL_DSPI_B_SR_TFFF,transmint_length);
-    DMA_Set_Channel_Source_Address( DMA_CHANNEL_DSPI_B_SR_TFFF, DMA_DSPIB_SR_TFFF_Source_Address);
-    //Clean up the DSPI module to be ready for next transfer
-    DSPI_B_Clear_FIFO();
-    //This flag will trigger the DMA channel for transmit
-    DSPI_B_Clear_TCF();
-	
-    DMA_Enable_Request(DMA_CHANNEL_DSPI_B_SR_TFFF);
-    DMA_Enable_Request(DMA_CHANNEL_DSPI_B_SR_RFDF);
-
-     //This flag will start the SPI device transfer
-     //Very important to clear the EOQF flag after DMA has been disabled.
-     DSPI_B_Clear_EOQF();
-
-     while(DMA_Get_Channel_Running_Status(DMA_CHANNEL_DSPI_B_SR_RFDF)==true)
-     	{
-       //do nothing
-     	}
-     DSPI_B_SET_CTAR_FMSZ(VSEP_CTAR_SELECT , DSPI_CTAR_FMSZ_16);
-	 	
-     DMA_Clear_Request(DMA_CHANNEL_DSPI_B_SR_TFFF);
-     DMA_Clear_Request(DMA_CHANNEL_DSPI_B_SR_RFDF);
-
-     DSPI_B_Copy_Receive_Data_8bits(&(VSEP_EST_Fault_SYNC_Rxd[vsep_index][0]),transmint_length);
-	
-     
-// DD_SetDiscrete( DISCRETE_OUT_VSEP_CSS, true );//need revise for all chip, so far only support vsep
-#endif
- Set_Interrupt_State(irq_state) ;
-//****************************************
-
-
-  for(x=0;x<Cylinder_numbers;x++)
-  {
- 	vsep_pch_fault = (VSEP_Fault_PCH_T)Extract_Bits( VSEP_EST_Fault_SYNC_Rxd[ vsep_index ][VSEP_EST_FAULT_SYNC_RXD_MESSAGE_FLT_BYTE2],
-                                    x*2, BIT_2 );
+	for (x=0;x<Cylinder_numbers;x++) {
+		vsep_pch_fault = (VSEP_Fault_PCH_T)Extract_Bits( VSEP_EST_Fault_SYNC_Rxd[ vsep_index ][VSEP_EST_FAULT_SYNC_RXD_MESSAGE_FLT_BYTE2],
+									x*2, BIT_2 );
 
 	#ifdef  VSEP_CALIBRATION_ENABLE
 		 if((x != PreviousEstLine  )||(!KsVSEP_Spark_Mode_Initialization.KbVSEP_Spark_IGBTCFG))
@@ -1033,77 +905,70 @@ abort a transmission in progress and force the SPI system into idle state.
 		 if((x != PreviousEstLine  )||(!VSEP_EST_Select_Get_Drive_Mode( VSEP_0_EST_SELECT_SETUP_INIT )))
 	#endif
 		{
+			/* test open fault */
 			VSEP_Fault_Log[ vsep_index ][ x ] |= FAULT_TESTED_OPEN_CIRCUIT_SET; 
-			if(VSEP_FAULT_PCH_OPEN_FAULT == vsep_pch_fault){
-				VSEP_Fault_Log[ vsep_index ][ x ] |= FAULT_OCCURED_OPEN_CIRCUIT_SET; 				
+			if (VSEP_FAULT_PCH_OPEN_FAULT == vsep_pch_fault) {
+				VSEP_Fault_Log[ vsep_index ][ x ] |= FAULT_OCCURED_OPEN_CIRCUIT_SET;
 			}
-	    
-		 	VSEP_Fault_Log[ vsep_index ][ x ] |= FAULT_TESTED_SHORT_TO_GROUND_SET; 
+			/* test short to gound fault */
+			VSEP_Fault_Log[ vsep_index ][ x ] |= FAULT_TESTED_SHORT_TO_GROUND_SET; 
 			if(VSEP_FAULT_PCH_SHORT_TO_GROUND_FAULT == vsep_pch_fault){
-               		VSEP_Fault_Log[ vsep_index ][ x ] |= FAULT_OCCURED_SHORT_TO_GROUND_SET; 
+				VSEP_Fault_Log[ vsep_index ][ x ] |= FAULT_OCCURED_SHORT_TO_GROUND_SET; 
 			}
-           	 }
-
-	  
-		 	VSEP_Fault_Log[ vsep_index ][ x ]  |= FAULT_TESTED_SHORT_TO_BATTERY_SET; 
-		 	if(VSEP_FAULT_PCH_SHORT_TO_BATTERY_FAULT == vsep_pch_fault){
-               		VSEP_Fault_Log[ vsep_index ][ x ] |= FAULT_OCCURED_SHORT_TO_BATTERY_SET; 
-				if ((VSEP_Fault_Counter[vsep_index][x] < (KsVSEP_Diagnostic_Counter_Thd))&&(EST_Diagnostic_7p8ms[x]))
-       		 	{
-           				// increment channel fault counter per 7.8ms
-           				EST_Diagnostic_7p8ms[x] = false;
-           				VSEP_Fault_Counter[vsep_index][x] = VSEP_Fault_Counter[vsep_index][x] + VSEP_CHANNEL_FAULT_COUNTER_INCREMENT_STEP;
-        			}
+		}
+		/* test short to battery fault */
+		VSEP_Fault_Log[ vsep_index ][ x ]  |= FAULT_TESTED_SHORT_TO_BATTERY_SET; 
+		if(VSEP_FAULT_PCH_SHORT_TO_BATTERY_FAULT == vsep_pch_fault){
+			VSEP_Fault_Log[ vsep_index ][ x ] |= FAULT_OCCURED_SHORT_TO_BATTERY_SET; 
+			if ((VSEP_Fault_Counter[vsep_index][x] < (KsVSEP_Diagnostic_Counter_Thd))&&(EST_Diagnostic_7p8ms[x])) {
+				// increment channel fault counter per 7.8ms
+				EST_Diagnostic_7p8ms[x] = false;
+				VSEP_Fault_Counter[vsep_index][x] = VSEP_Fault_Counter[vsep_index][x] + VSEP_CHANNEL_FAULT_COUNTER_INCREMENT_STEP;
 			}
-
-      } 	
+		}
+	}
 }
 
 //=============================================================
 // VSEP_Fault_Initialize
 // initializing the channel controled by spi
 //=============================================================
-FAR_COS void VSEP_Fault_Initialize(void)
- {
- 	uint8_t channel; 
-	VSEP_PWM_Channel_T	pwm_channel;
+void VSEP_Fault_Initialize(void)
+{
+	uint8_t channel; 
+	VSEP_PWM_Channel_T pwm_channel;
 	uint32_t base_frequency_hz,in_on_time_count,in_period_count;
-	
+
 	VSEP_DIS_ON_OFF_state = 0x00000000;
 	//Channel_Protect_Enable.Protect_Enable_Struct =  KsVSEP_HW_Protect_Setting;protect all
-	Channel_Protect_Enable = 0x7FFFFFFF; 
+	Channel_Protect_Enable = 0x7FFFFFFF;
 
  	for(channel = VSEP_CHANNEL_PCH_01_FLT_LVL_1 ; channel <= VSEP_CHANNEL_PCH_30_FLT_LVL_7;channel++){
 		//initialize the FaultLog,
-      		VSEP_Fault_Log[ VSEP_INDEX_0 ][ channel ] = FAULT_Set_Supported_Open_Circuit( VSEP_Fault_Log[ VSEP_INDEX_0 ][ channel ], true );
-      		VSEP_Fault_Log[ VSEP_INDEX_0 ][ channel ] = FAULT_Set_Supported_Short_To_Battery( VSEP_Fault_Log[ VSEP_INDEX_0 ][ channel ], true );
-      		VSEP_Fault_Log[ VSEP_INDEX_0 ][ channel ] = FAULT_Set_Supported_Short_To_Ground( VSEP_Fault_Log[ VSEP_INDEX_0 ][ channel ], true );
+		VSEP_Fault_Log[ VSEP_INDEX_0 ][ channel ] = FAULT_Set_Supported_Open_Circuit( VSEP_Fault_Log[ VSEP_INDEX_0 ][ channel ], true );
+		VSEP_Fault_Log[ VSEP_INDEX_0 ][ channel ] = FAULT_Set_Supported_Short_To_Battery( VSEP_Fault_Log[ VSEP_INDEX_0 ][ channel ], true );
+		VSEP_Fault_Log[ VSEP_INDEX_0 ][ channel ] = FAULT_Set_Supported_Short_To_Ground( VSEP_Fault_Log[ VSEP_INDEX_0 ][ channel ], true );
 		//initialize the vsep Spi Discrete(include the VSEP PWM SPI discrete channel), 
 		//we did not care about the non-vsep-spi discrete channel
 		if(VSEP_PCH_Get_Initial_State(VSEP_Fault_Logging[VSEP_INDEX_0][channel].fault_configuration)){
 			VSEP_DIS_ON_OFF_state |=  ((Mask32(VSEP_Get_Channel(VSEP_Fault_Logging[VSEP_INDEX_0][channel].fault_configuration),1)));
-	     	}
+		}
 		//initialize the vsep spi PWM
 		//we did not care about the non-vsep-spi discrete channel and VSEP PWM SPI discrete channel 
-		pwm_channel =  ( channel < VSEP_CHANNEL_MPIO_1 ) ? VSEP_PWM_PCH_CHANNEL_MAP[ channel ] : VSEP_PWM_CHANNEL_MAX;
-								   
-		if(pwm_channel!=VSEP_PWM_CHANNEL_MAX){
-			
+		pwm_channel = ( channel < VSEP_CHANNEL_MPIO_1 ) ? VSEP_PWM_PCH_CHANNEL_MAP[ channel ] : VSEP_PWM_CHANNEL_MAX;
+		if(pwm_channel != VSEP_PWM_CHANNEL_MAX){
 			base_frequency_hz = VSEP_PWM_Timer_Get_Base_Frequency_HZ(VSEP_Fault_Logging[VSEP_INDEX_0][channel].fault_configuration);
 			in_on_time_count 	= VSEP_Msg_PWM_Get_OnTime(VSEP_PWM_TXD_INITIAL[ VSEP_INDEX_0 ][ pwm_channel ][ VSEP_PWM_TXD_MESSAGE_ONTIME ]); 
 			in_period_count 	= VSEP_Msg_PWM_Get_Period(VSEP_PWM_TXD_INITIAL[ VSEP_INDEX_0 ][ pwm_channel ][ VSEP_PWM_TXD_MESSAGE_PERIOD ]); 
-
  			VSEP_PWM_period_us[channel] = VSEP_ConvertPeriodCountToMicrosecond( in_period_count,base_frequency_hz);
 
-			
-			if(in_on_time_count == in_period_count){
+			if (in_on_time_count == in_period_count){
 				VSEP_PWM_ontime_us[channel] = VSEP_PWM_period_us [channel];
-			}else{
+			} else {
 				VSEP_PWM_ontime_us[channel] =  VSEP_ConvertDutyCountToMicrosecond(in_on_time_count, base_frequency_hz);
 			}
 		}
 	}
-
 }
 
 
