@@ -417,12 +417,12 @@ const SPI_Message_T VSEP_MESSAGE[ NUMBER_OF_VSEP ][VSEP_MESSAGE_MAX+7] =
       { &VSEP_INIT_MESSAGE_DEFINITION[ VSEP_INDEX_0 ]                   , &VSEP_INIT_CB[ VSEP_INDEX_0 ]                    },  //VSEP_MESSAGE_INIT
       { &VSEP_VR_MESSAGE_DEFINITION[ VSEP_INDEX_0 ]                     , &VSEP_VR_CB[ VSEP_INDEX_0 ]                      },  //VSEP_MESSAGE_VR
       { &VSEP_DEPS_MESSAGE_DEFINITION[ VSEP_INDEX_0 ]                   , &VSEP_DEPS_CB[ VSEP_INDEX_0 ]                    },  //VSEP_MESSAGE_DEPS
-      { &VSEP_LEDMODE_MESSAGE_DEFINITION[ VSEP_INDEX_0 ]                   , &VSEP_LEDMODE_CB[ VSEP_INDEX_0 ]                    },  //VSEP_MESSAGE_LEMODE
+      { &VSEP_LEDMODE_MESSAGE_DEFINITION[ VSEP_INDEX_0 ]                , &VSEP_LEDMODE_CB[ VSEP_INDEX_0 ]                 },  //VSEP_MESSAGE_LEMODE
       { &VSEP_PCH_MESSAGE_DEFINITION[ VSEP_INDEX_0 ]                    , &VSEP_PCH_CB[ VSEP_INDEX_0 ]                     },  //VSEP_MESSAGE_PCH_MPIO
       { &VSEP_EST_SELECT_MESSAGE_DEFINITION[ VSEP_INDEX_0 ]             , &VSEP_EST_SELECT_CB[ VSEP_INDEX_0 ]              },  //VSEP_MESSAGE_EST_SELECT
       { &VSEP_EST_FAULT_MESSAGE_DEFINITION[ VSEP_INDEX_0 ]              , &VSEP_EST_FAULT_CB[VSEP_INDEX_0 ]                },  //VSEP_MESSAGE_EST_FAULT
       { &VSEP_SOH_MESSAGE_DEFINITION[ VSEP_INDEX_0 ]                    , &VSEP_SOH_CB[ VSEP_INDEX_0 ]                     },  //VSEP_MESSAGE_SOH
-      { &VSEP_SOH_STATUS_MESSAGE_DEFINITION[ VSEP_INDEX_0 ]             , &VSEP_SOH_STATUS_CB[ VSEP_INDEX_0 ]             },  //VSEP_MESSAGE_SOH_STATUS
+      { &VSEP_SOH_STATUS_MESSAGE_DEFINITION[ VSEP_INDEX_0 ]             , &VSEP_SOH_STATUS_CB[ VSEP_INDEX_0 ]              },  //VSEP_MESSAGE_SOH_STATUS
       { &VSEP_FAULT_MESSAGE_DEFINITION[ VSEP_INDEX_0 ]                  , &VSEP_FAULT_CB[VSEP_INDEX_0 ]                    },  //VSEP_MESSAGE_FAULT
       { &VSEP_MPIO_MODE_MESSAGE_DEFINITION[ VSEP_INDEX_0 ]              , &VSEP_MPIO_MODE_CB[ VSEP_INDEX_0 ]               },   //VSEP_MESSAGE_MPIO_MODE
       { &VSEP_PWM_MESSAGE_DEFINITION[ VSEP_INDEX_0 ][VSEP_PWM_CHANNEL_1], &VSEP_PWM_CB[ VSEP_INDEX_0 ][VSEP_PWM_CHANNEL_1] },  //VSEP_MESSAGE_PWM_1
@@ -506,15 +506,15 @@ void VSEP_Calculate_Response( SPI_HClient_T in_hclient )
 }
 
 
-FAR_COS void VSEP_Fault_Task_7_8ms( void )
+void VSEP_Fault_Task_7_8ms( void )
 {
-    VSEP_Fault_Diagnose_Channels( (void*)VSEP_Fault_Logging );
+	VSEP_Fault_Diagnose_Channels((void*)VSEP_Fault_Logging);
 }
 
 /* return true if channel fault counter reach threshold */
-FAR_COS bool VSEP_Is_Channel_Fault_Threshold_Reach(VSEP_Channel_T channel)
+bool VSEP_Is_Channel_Fault_Threshold_Reach(VSEP_Channel_T channel)
 {
-   return ((VSEP_Fault_Counter[VSEP_INDEX_0][channel] >= (KsVSEP_Diagnostic_Counter_Thd)) ? (true) : (false));
+	return ((VSEP_Fault_Counter[VSEP_INDEX_0][channel] >= (KsVSEP_Diagnostic_Counter_Thd)) ? (true) : (false));
 }
 
 static void VSEP_IGBT_Set_GRADTHR_According_To_RPM(VSEP_Index_T in_index)
