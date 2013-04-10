@@ -134,7 +134,6 @@ SUBDIRS += LLD/DeviceDriver/CAN
 SUBDIRS += LLD/DeviceDriver/TPU
 SUBDIRS += LLD/VSEP
 SUBDIRS += LLD/VSEP/DeviceDriver
-SUBDIRS += LLD/VSEP/VSEP_Config
 SUBDIRS += LLD/VSEP/SPI_Scheduler
 SUBDIRS += LLD/VSEP/Interface
 SUBDIRS += LLD/VSEP/Configuration
