@@ -227,8 +227,8 @@ typedef enum
 
 extern uint16_t VSEP_VR_Txd[NUMBER_OF_VSEP][VSEP_VR_TXD_MESSAGE_MAX];
 extern uint16_t VSEP_VR_Rxd[NUMBER_OF_VSEP][VSEP_VR_RXD_MESSAGE_MAX];
-extern const uint32_t VSEP_TIMER_VR_Base_Frequency;
-extern const uint16_t VSEP_VR_TXD_INITIAL[NUMBER_OF_VSEP][VSEP_VR_TXD_MESSAGE_MAX];
+// extern const uint32_t VSEP_TIMER_VR_Base_Frequency;
+// extern const uint16_t VSEP_VR_TXD_INITIAL[NUMBER_OF_VSEP][VSEP_VR_TXD_MESSAGE_MAX];
 
 //=============================================================================
 // VSEP_PULSE_Initialize_Device

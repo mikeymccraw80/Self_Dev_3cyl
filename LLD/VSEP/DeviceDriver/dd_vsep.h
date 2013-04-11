@@ -33,9 +33,10 @@
 // Defines all the drivers that are available.
 // Include before the ifdef.
 //=============================================================================
-#include "dd_vsep_config.h"
 #include "dd_vsep_txd.h"
 #include "dd_vsep_rxd.h"
+//#include "dd_vsep_init_config.h"
+#include "dd_vsep_config.h"
 
 extern uint32_t            VSEP_Channel_Enabled;
 

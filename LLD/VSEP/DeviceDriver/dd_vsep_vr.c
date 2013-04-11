@@ -26,10 +26,21 @@
 // none
 //
 //=============================================================================
-
+#include "reuse.h"
+#include "dd_vsep.h"
 #include "dd_vsep_vr.h"
 #include "dd_vsep_txd.h"
-#include "dd_vsep.h"
+#include "dd_vsep_fault.h"
+#include "dd_vsep_discrete.h"
+#include "dd_vsep_est_select.h"
+#include "dd_vsep_pwm.h"
+#include "dd_vsep_soh.h"
+#include "dd_vsep_vr.h"
+#include "dd_vsep_config.h"
+#include "dd_vsep_init_config.h"
+
+uint16_t VSEP_VR_Txd[NUMBER_OF_VSEP][VSEP_VR_TXD_MESSAGE_MAX];
+uint16_t VSEP_VR_Rxd[NUMBER_OF_VSEP][VSEP_VR_RXD_MESSAGE_MAX];
 
 //=============================================================================
 // VSEP_VR_Get_Channel

@@ -28,7 +28,6 @@
 // none
 //
 //=============================================================================
-
 #define VSEP_DEVICES_0 (0)
 #define VSEP_DEVICES_1 (1)
 
@@ -533,6 +532,10 @@ extern const uint16_t VSEP_EST_FAULT_GRAD_INITIAL[NUMBER_OF_VSEP][VSEP_EST_FAULT
 extern const uint8_t  VSEP_EST_FAULT_SYNC_MESSAGE_BYTE_INITIAL[NUMBER_OF_VSEP][VSEP_EST_FAULT_SYNC_TXD_MESSAGE_MAX_BYTE];
 extern const uint16_t VSEP_FAULT_TXD[NUMBER_OF_VSEP][VSEP_FAULT_RXD_MESSAGE_MAX];
 extern const uint16_t VSEP_PWM_TXD_INITIAL[NUMBER_OF_VSEP][VSEP_PWM_CHANNEL_MAX][VSEP_PWM_TXD_MESSAGE_MAX];
+
+extern const uint32_t VSEP_TIMER_VR_Base_Frequency;
+extern const uint16_t VSEP_VR_TXD_INITIAL[NUMBER_OF_VSEP][VSEP_VR_TXD_MESSAGE_MAX];
+
 
 #endif // DD_VSEP_INIT_CONFIG_H
 /*===========================================================================*\
