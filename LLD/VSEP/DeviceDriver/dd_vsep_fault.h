@@ -356,33 +356,23 @@ typedef struct
    
 }VSEP_Fault_Channel_Data_T;
 
-
-
- //typedef union 
- //{
-//	KsVSEP_HW_Protect_Enable  Protect_Enable_Struct;
-//	uint32_t  Protect_Enable_u32; 
-// } Uprotect_Enable;
-
-
 #define Number_of_EST_Channel  VSEP_EST_Select_Get_Cylinder_Count( VSEP_INIT_TXD_INITIAL[ 0 ][ VSEP_INIT_TXD_MESSAGE_EST_SELECT_INIT ])
 
 extern uint16_t VSEP_EST_Fault_Txd[NUMBER_OF_VSEP][VSEP_EST_FAULT_RXD_MESSAGE_MAX];
 extern uint16_t VSEP_EST_Fault_Rxd[NUMBER_OF_VSEP][VSEP_EST_FAULT_RXD_MESSAGE_MAX];
-extern uint8_t VSEP_EST_Fault_SYNC_Txd[NUMBER_OF_VSEP][VSEP_EST_FAULT_SYNC_TXD_MESSAGE_MAX_BYTE];
-extern uint8_t VSEP_EST_Fault_SYNC_Rxd[NUMBER_OF_VSEP][VSEP_EST_FAULT_SYNC_RXD_MESSAGE_MAX_BYTE];
+extern uint8_t  VSEP_EST_Fault_SYNC_Txd[NUMBER_OF_VSEP][VSEP_EST_FAULT_SYNC_TXD_MESSAGE_MAX_BYTE];
+extern uint8_t  VSEP_EST_Fault_SYNC_Rxd[NUMBER_OF_VSEP][VSEP_EST_FAULT_SYNC_RXD_MESSAGE_MAX_BYTE];
 extern uint16_t VSEP_Fault_Rxd[NUMBER_OF_VSEP][VSEP_FAULT_RXD_MESSAGE_MAX];
 extern Fault_Log_T VSEP_Fault_Log[NUMBER_OF_VSEP][VSEP_CHANNEL_MAX];
 
-extern uint16_t 	VSEP_Fault_Counter[NUMBER_OF_VSEP][VSEP_CHANNEL_PCH_30_FLT_LVL_7+1];
-extern uint16_t 	VSEP_Fault_Counter_Decrement_Counter;
-extern uint32_t            VSEP_DIS_ON_OFF_state ;
+extern uint16_t VSEP_Fault_Counter[NUMBER_OF_VSEP][VSEP_CHANNEL_PCH_30_FLT_LVL_7+1];
+extern uint16_t VSEP_Fault_Counter_Decrement_Counter;
+extern uint32_t VSEP_DIS_ON_OFF_state ;
 
-extern uint32_t 		VSEP_PWM_period_us[30];
-extern uint32_t 		VSEP_PWM_ontime_us[30];
-//extern Uprotect_Enable  Channel_Protect_Enable;
+extern uint32_t VSEP_PWM_period_us[30];
+extern uint32_t VSEP_PWM_ontime_us[30];
 extern uint32_t Channel_Protect_Enable;
-extern uint8_t			Filter_Time_Array[30];
+extern uint8_t  Filter_Time_Array[30];
 
 //=============================================================================
 // VSEP_FAULT_Get_Device_Fault

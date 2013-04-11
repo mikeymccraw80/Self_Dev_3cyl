@@ -39,21 +39,22 @@
 #include "io_config_dspi.h"
 #include "io_config_dma.h"
 
-// est fault
+/* import global external variables */
+extern const 	VSEP_Fault_Channel_Data_T VSEP_Fault_Logging[NUMBER_OF_VSEP][VSEP_CHANNEL_PCH_30_FLT_LVL_7+1];
+
+/* Fault messge buffer difinition */
 uint16_t VSEP_EST_Fault_Txd[NUMBER_OF_VSEP][VSEP_EST_FAULT_TXD_MESSAGE_MAX];
 uint16_t VSEP_EST_Fault_Rxd[NUMBER_OF_VSEP][VSEP_EST_FAULT_RXD_MESSAGE_MAX];
+uint8_t  VSEP_EST_Fault_SYNC_Txd[NUMBER_OF_VSEP][VSEP_EST_FAULT_SYNC_TXD_MESSAGE_MAX_BYTE];
+uint8_t  VSEP_EST_Fault_SYNC_Rxd[NUMBER_OF_VSEP][VSEP_EST_FAULT_SYNC_RXD_MESSAGE_MAX_BYTE];
 
-uint8_t VSEP_EST_Fault_SYNC_Txd[NUMBER_OF_VSEP][VSEP_EST_FAULT_SYNC_TXD_MESSAGE_MAX_BYTE];
-uint8_t VSEP_EST_Fault_SYNC_Rxd[NUMBER_OF_VSEP][VSEP_EST_FAULT_SYNC_RXD_MESSAGE_MAX_BYTE];
+uint16_t VSEP_Fault_Counter[NUMBER_OF_VSEP][VSEP_CHANNEL_PCH_30_FLT_LVL_7+1];
+uint16_t VSEP_Fault_Counter_Decrement_Counter;
+uint32_t VSEP_PWM_ontime_us[30];
+uint32_t VSEP_PWM_period_us[30];
 
-extern const 	VSEP_Fault_Channel_Data_T VSEP_Fault_Logging[NUMBER_OF_VSEP][VSEP_CHANNEL_PCH_30_FLT_LVL_7+1];
-uint16_t 		VSEP_Fault_Counter[NUMBER_OF_VSEP][VSEP_CHANNEL_PCH_30_FLT_LVL_7+1];
-uint16_t 		VSEP_Fault_Counter_Decrement_Counter;
-uint32_t 		VSEP_PWM_ontime_us[30];
-uint32_t 		VSEP_PWM_period_us[30];
-
-uint32_t        VSEP_DIS_ON_OFF_state = 0x00000000;
-bool            EST_Diagnostic_7p8ms[4];
+uint32_t VSEP_DIS_ON_OFF_state = 0x00000000;
+bool     EST_Diagnostic_7p8ms[4];
 
 //****************************************************************//
 //this const is created to derive the diagnostic infromation from VSEP_Fault_Rxd,
