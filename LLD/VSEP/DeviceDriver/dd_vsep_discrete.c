@@ -29,15 +29,20 @@
 
 #include "dd_vsep.h"
 #include "dd_vsep_discrete.h"
-#include "dd_vsep_init_config.h"
 #include "dd_vsep_txd.h"
 #include "dd_vsep_rxd.h"
 #include "dd_vsep_soh.h"
 #include "dd_vsep_fault.h"
+#include "dd_vsep_est_select.h"
+#include "dd_vsep_pwm.h"
+#include "dd_vsep_vr.h"
+#include "dd_vsep_config.h"
+#include "dd_vsep_init_config.h"
 
 /* PCH spi tx and rx message buffer definiton */
 uint16_t VSEP_PCH_Txd[NUMBER_OF_VSEP][VSEP_PCH_TXD_MESSAGE_MAX];
 uint16_t VSEP_PCH_Rxd[NUMBER_OF_VSEP][VSEP_PCH_RXD_MESSAGE_MAX];
+uint16_t VSEP_MPIO_MODE_Txd[NUMBER_OF_VSEP][VSEP_MPIO_MODE_TXD_MESSAGE_MAX];
 
 static const uint8_t VSEP_DISCRETE_PCH_CHANNEL_MAP[VSEP_CHANNEL_MAX] =
 {
