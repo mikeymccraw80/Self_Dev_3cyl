@@ -135,9 +135,113 @@
 #define GetVIOS_O2_12_Htr_PSVIFaultShortLow()\
    ( DD_GetDiscreteDiagStatus(PULSE_OUT_O2_HEATER_12,OUTPUT_OPEN_CKT_FAULT) )
 
-/*===========================================================================*\
- * Extern function declarition
-\*===========================================================================*/
+/******************************************************************************
+ * IO Diagnostic Clear
+ ******************************************************************************/
+#define Clear_IO_Pulse_Diag_EST_A( diagnostic ) \
+				DD_ClearDiscreteDiagStatus(PULSE_OUT_EST_A,diagnostic)
 
+#define Clear_IO_Pulse_Diag_EST_B( diagnostic ) \
+				DD_ClearDiscreteDiagStatus(PULSE_OUT_EST_B,diagnostic)
+
+#define Clear_IO_Pulse_Diag_EST_C( diagnostic ) \
+				DD_ClearDiscreteDiagStatus(PULSE_OUT_EST_C,diagnostic)
+
+#define Clear_IO_Pulse_Diag_EST_D( diagnostic ) \
+				DD_ClearDiscreteDiagStatus(PULSE_OUT_EST_D,diagnostic)
+
+#define Clear_IO_Pulse_Diag_INJ_CYL_A( diagnostic ) \
+				DD_ClearDiscreteDiagStatus(PULSE_OUT_INJ_CYL_A,diagnostic)
+
+#define Clear_IO_Pulse_Diag_INJ_CYL_B( diagnostic ) \
+				DD_ClearDiscreteDiagStatus(PULSE_OUT_INJ_CYL_B,diagnostic)
+
+#define Clear_IO_Pulse_Diag_INJ_CYL_C( diagnostic ) \
+				DD_ClearDiscreteDiagStatus(PULSE_OUT_INJ_CYL_C,diagnostic)
+
+#define Clear_IO_Pulse_Diag_INJ_CYL_D( diagnostic ) \
+				DD_ClearDiscreteDiagStatus(PULSE_OUT_INJ_CYL_D,diagnostic)
+
+#define Clear_IO_PWM_Diag_Turbo_BPR( diagnostic ) \
+				DD_ClearDiscreteDiagStatus(PULSE_OUT_TURBBPR,diagnostic)
+
+#define Clear_IO_PWM_Diag_Turbo_VGT( diagnostic ) \
+				DD_ClearDiscreteDiagStatus(PULSE_OUT_TURBVGT,diagnostic)
+
+#define Clear_IO_PWM_Diag_AIR_PUMP_SPEED( diagnostic ) \
+				DD_ClearDiscreteDiagStatus(PULSE_OUT_AIR_PUMP_SPEED,diagnostic)
+
+#define Clear_IO_PWM_Diag_SS_ALTERNATOR_OUTPUT_PWM( diagnostic ) \
+					DD_ClearDiscreteDiagStatus(PULSE_OUT_SS_ALTERNATOR_OUTPUT_PWM,diagnostic)
+
+#define Clear_IO_PWM_Diag_CANISTER_PURGE( diagnostic ) \
+				DD_ClearDiscreteDiagStatus(PULSE_OUT_CANISTER_PURGE,diagnostic)
+
+#define Clear_IO_PWM_Diag_COOL_TEMP_PWM( diagnostic ) \
+				DD_ClearDiscreteDiagStatus(PULSE_OUT_COOL_TEMP_PWM,diagnostic)
+
+#define Clear_IO_PWM_Diag_FAN_PWM( diagnostic ) \
+				DD_ClearDiscreteDiagStatus(PULSE_OUT_FAN_PWM,diagnostic)
+
+#define Clear_IO_PWM_Diag_LINEAR_EGR( diagnostic ) \
+				DD_ClearDiscreteDiagStatus(PULSE_OUT_LINEAR_EGR,diagnostic) //Added by czh2h9 on Jun 09 2009
+
+#define Clear_IO_PWM_Diag_O2_HEATER_11( diagnostic ) \
+				DD_ClearDiscreteDiagStatus(PULSE_OUT_O2_HEATER_11,diagnostic)
+
+#define Clear_IO_PWM_Diag_O2_HEATER_12( diagnostic ) \
+				DD_ClearDiscreteDiagStatus(PULSE_OUT_O2_HEATER_12,diagnostic)
+
+#define Clear_IO_PWM_Diag_VCPS_B1_EXH( diagnostic ) \
+				DD_ClearDiscreteDiagStatus(PULSE_OUT_VCPS_B1_EXH,diagnostic)
+
+#define Clear_IO_PWM_Diag_VCPS_B1_INTK( diagnostic ) \
+				DD_ClearDiscreteDiagStatus(PULSE_OUT_VCPS_B1_INTK,diagnostic)
+
+#define Clear_IO_PWM_Diag_WG_PWM( diagnostic ) \
+				DD_ClearDiscreteDiagStatus(PULSE_OUT_TURBO_WG_PWM,diagnostic)
+
+#define Clear_IO_Discrete_Diag_AC_CLUTCH( diagnostic ) \
+				DD_ClearDiscreteDiagStatus(DISCRETE_OUT_AC_CLUTCH,diagnostic)
+
+#define Clear_IO_Discrete_Diag_CRUISE_ACTIVE_LAMP( diagnostic ) \
+				DD_ClearDiscreteDiagStatus(DISCRETE_OUT_CRUISE_ACTIVE_LAMP,diagnostic)
+	
+#define Clear_IO_Discrete_Diag_SS_WARNING_LAMP( diagnostic ) \
+					DD_ClearDiscreteDiagStatus(DISCRETE_OUT_SS_WARNING_LAMP,diagnostic)
+
+#define Clear_IO_Discrete_Diag_AIR_VALVE( diagnostic ) \
+				DD_ClearDiscreteDiagStatus(DISCRETE_OUT_AIR_VALVE,diagnostic)
+
+#define Clear_IO_Discrete_Diag_FAN_1( diagnostic ) \
+				DD_ClearDiscreteDiagStatus(DISCRETE_OUT_FAN_1,diagnostic)
+
+#define Clear_IO_Discrete_Diag_VIS_OUTPUT1( diagnostic ) \
+				DD_ClearDiscreteDiagStatus(DISCRETE_OUT_VIS_OUTPUT1,diagnostic)
+
+#define Clear_IO_Discrete_Diag_VIS_OUTPUT2( diagnostic ) \
+				DD_ClearDiscreteDiagStatus(DISCRETE_OUT_VIS_OUTPUT2,diagnostic)
+
+#define Clear_IO_Discrete_Diag_StarerRelay( diagnostic ) \
+				DD_ClearDiscreteDiagStatus(DISCRETE_OUT_SS_STARTER_RELAY,diagnostic)
+
+#define Clear_IO_Discrete_Diag_FAN_2( diagnostic ) \
+				DD_ClearDiscreteDiagStatus(DISCRETE_OUT_FAN_2,diagnostic)
+
+#define Clear_IO_Discrete_Diag_FUEL_PUMP( diagnostic ) \
+				DD_ClearDiscreteDiagStatus(DISCRETE_OUT_FUEL_PUMP,diagnostic)
+
+#define Clear_IO_Discrete_Diag_MAINRLY( diagnostic ) \
+				DD_ClearDiscreteDiagStatus(DISCRETE_OUT_MAINRLY,diagnostic)
+
+#define Clear_IO_Discrete_Diag_OBD2_LAMP( diagnostic ) \
+				DD_ClearDiscreteDiagStatus(DISCRETE_OUT_OBD2_LAMP,diagnostic)
+
+#define Clear_IO_Discrete_Diag_SES_LAMP( diagnostic ) \
+				DD_ClearDiscreteDiagStatus(DISCRETE_OUT_SES_LAMP,diagnostic)
+
+#define Clear_IO_Discrete_Diag_SS_Cluster_TT_Disable( diagnostic ) \
+				DD_ClearDiscreteDiagStatus(DISCRETE_OUT_SS_CLUSTER_TT_DISABLE,diagnostic)
+ 
 
 #endif
