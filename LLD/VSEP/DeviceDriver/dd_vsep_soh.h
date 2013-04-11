@@ -29,6 +29,7 @@
 //
 //=============================================================================
 
+
 #include "dd_vsep.h"
 
 typedef enum
@@ -84,7 +85,6 @@ typedef enum
 extern uint16_t VSEP_SOH_Txd[NUMBER_OF_VSEP][VSEP_SOH_TXD_MESSAGE_MAX];
 extern uint16_t VSEP_SOH_Rxd[NUMBER_OF_VSEP][VSEP_SOH_RXD_MESSAGE_MAX];
 extern uint16_t VSEP_SOH_Status_Rxd[ NUMBER_OF_VSEP ][VSEP_SOH_STATUS_RXD_MESSAGE_MAX];
-extern const uint16_t VSEP_SOH_STATUS_TXD[ NUMBER_OF_VSEP ][VSEP_SOH_STATUS_TXD_MESSAGE_MAX];
 
 
 typedef enum

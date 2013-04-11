@@ -535,7 +535,7 @@ extern const uint16_t VSEP_PWM_TXD_INITIAL[NUMBER_OF_VSEP][VSEP_PWM_CHANNEL_MAX]
 
 extern const uint32_t VSEP_TIMER_VR_Base_Frequency;
 extern const uint16_t VSEP_VR_TXD_INITIAL[NUMBER_OF_VSEP][VSEP_VR_TXD_MESSAGE_MAX];
-
+extern const uint16_t VSEP_SOH_STATUS_TXD[ NUMBER_OF_VSEP ][VSEP_SOH_STATUS_TXD_MESSAGE_MAX];
 
 #endif // DD_VSEP_INIT_CONFIG_H
 /*===========================================================================*\
