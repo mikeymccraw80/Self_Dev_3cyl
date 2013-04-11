@@ -28,17 +28,8 @@
 //=============================================================================
 
 //=============================================================================
-// Include the Type file for the device driver and io layers
-//=============================================================================
-//#include "io_type.h"// this file is the same with the one in MT80
-
-//=============================================================================
 // Include interface for the device driver
 //=============================================================================
-
-//#include "dd_port.h"
-//#include "dd_spi.h"
-//#include "dd_config.h"
 #include "dd_vsep_fault.h"
 #include "io_spi_config.h"
 #include "io_config_spi.h"
@@ -48,15 +39,13 @@
 #include "io_config_vsep.h"
 #include "dd_vsep_est_select.h"
 #include "dd_vsep_config.h"
-#include "dd_vsep_init_config.h"
 #include "dd_vsep_vr.h"
-
-//#include "dd_dma_interface.h"
 #include "dd_dspi_interface.h"
 #include "io_config_dma.h"
 #include "io_config_dspi.h"
+#include "dd_vsep_init_config.h"
 
-uint32_t            VSEP_Channel_Enabled;
+uint32_t     VSEP_Channel_Enabled;
 extern const SPI_Message_T VSEP_MESSAGE[ NUMBER_OF_VSEP ][VSEP_MESSAGE_MAX+7];
 
 
@@ -68,67 +57,6 @@ void VSEP_Clear_Device(IO_Configuration_T in_configuration)
 	Parameter_Not_Used( in_configuration );
 }
 
-//=============================================================================
-// VSEP_LEDMODE_Initialize_Device
-//=============================================================================
-void VSEP_LEDMODE_Initialize_Device(IO_Configuration_T in_configuration )
-{
-	VSEP_Index_T device = VSEP_Get_Device_Index( in_configuration );
-
-	VSEP_LEDMODE_Txd[ device ][ VSEP_LEDMODE_TXD_MESSAGE_CTRL ] = VSEP_Msg_Set_SDOA( VSEP_LEDMODE_Txd[ device ][ VSEP_LEDMODE_TXD_MESSAGE_CTRL ], VSEP_RXD_SDOA_NOT_USED );
-	VSEP_LEDMODE_Txd[ device ][ VSEP_LEDMODE_TXD_MESSAGE_CTRL ] = VSEP_Msg_Set_SDIA( VSEP_LEDMODE_Txd[ device ][ VSEP_LEDMODE_TXD_MESSAGE_CTRL ], VSEP_TXD_SDIA_LED_MODE_CTRL );
-}
-
-//=============================================================================
-// VSEP_LEDMODE_Set_Channel
-//=============================================================================
-void VSEP_LEDMODE_Set_Channel(IO_Configuration_T in_configuration, VSEP_LEDMODE_Channel_T in_group, uint32_t in_ledmode )
-{
-	VSEP_Index_T device = VSEP_Get_Device_Index( in_configuration );
-
-	switch ( in_group ) {
-	case VSEP_LEDMODE_25:
-		VSEP_LEDMODE_Txd[ device ][ VSEP_LEDMODE_TXD_MESSAGE_ENABLE ] = VSEP_Msg_LEDMODE_Set_Channel_25( VSEP_LEDMODE_Txd[ device ][ VSEP_LEDMODE_TXD_MESSAGE_ENABLE ], in_ledmode );
-		break;
-	case VSEP_LEDMODE_26:
-		VSEP_LEDMODE_Txd[ device ][ VSEP_LEDMODE_TXD_MESSAGE_ENABLE ] = VSEP_Msg_LEDMODE_Set_Channel_26( VSEP_LEDMODE_Txd[ device ][ VSEP_LEDMODE_TXD_MESSAGE_ENABLE ], in_ledmode );
-		break;
-	case VSEP_LEDMODE_30:
-		VSEP_LEDMODE_Txd[ device ][ VSEP_LEDMODE_TXD_MESSAGE_ENABLE ] = VSEP_Msg_LEDMODE_Set_Channel_30( VSEP_LEDMODE_Txd[ device ][ VSEP_LEDMODE_TXD_MESSAGE_ENABLE ], in_ledmode );
-	break;
-	case  VSEP_LEDMODE_ALL_CHANNEL:
-		VSEP_LEDMODE_Txd[ device ][ VSEP_LEDMODE_TXD_MESSAGE_ENABLE ] = VSEP_Msg_LEDMODE_Set_Channel_ALL( VSEP_LEDMODE_Txd[ device ][ VSEP_LEDMODE_TXD_MESSAGE_ENABLE ], in_ledmode );
-		break;
-	}
-	VSEP_SPI_Immediate_Transfer( in_configuration, VSEP_MESSAGE_LEDMODE );
-}
-
-
-//=============================================================================
-// VSEP_LEDMODE_Get_Channel
-//=============================================================================
-uint32_t VSEP_LEDMODE_Get_Channel(IO_Configuration_T in_configuration, VSEP_LEDMODE_Channel_T in_group )
-{
-	VSEP_Index_T device = VSEP_Get_Device_Index( in_configuration );
-	uint32_t ledmode = 0;
-
-	switch( in_group ) {
-	case VSEP_LEDMODE_25:
-		ledmode = VSEP_Msg_LEDMODE_Get_Channel_25( VSEP_LEDMODE_Txd[ device ][ VSEP_LEDMODE_TXD_MESSAGE_ENABLE ] );
-		break;
-	case VSEP_LEDMODE_26:
-		ledmode = VSEP_Msg_LEDMODE_Get_Channel_26( VSEP_LEDMODE_Txd[ device ][ VSEP_LEDMODE_TXD_MESSAGE_ENABLE ] );
-		break;
-	case VSEP_LEDMODE_30:
-		ledmode = VSEP_Msg_LEDMODE_Get_Channel_30( VSEP_LEDMODE_Txd[ device ][ VSEP_LEDMODE_TXD_MESSAGE_ENABLE ] );
-		break;
-	case VSEP_LEDMODE_ALL_CHANNEL:
-		ledmode = VSEP_Msg_LEDMODE_Get_Channel_ALL( VSEP_LEDMODE_Txd[ device ][ VSEP_LEDMODE_TXD_MESSAGE_ENABLE ] );
-		break;
-	}
-
-	return ledmode;
-}
 
 /* FUNCTION: SPI_Port_Transfer_Vsep                                          */
 /*===========================================================================*/

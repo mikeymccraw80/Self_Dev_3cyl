@@ -1,12 +1,5 @@
 #ifndef DD_VSEP_FAULT_CONFIG_H
 #define DD_VSEP_FAULT_CONFIG_H
-
-/*===========================================================================*/
-/* FILE: dd_vsep_config.h                                                         */
-/*===========================================================================*/
-/* COPYRIGHT 2004, Delphi Electronics and Safety Systems.                    */
-/* All Rights reserved, Delphi Confidential.                                 */
-/*===========================================================================*/
 /*===========================================================================*/
 /* DESCRIPTION:                                                              */
 /*   This file contains HWIO signals configuration.                          */
@@ -27,7 +20,6 @@
 extern uint32_t     VSEP_Channel_Enabled;
 
 
-/********** VSEP related signals STARTS**************/
 // PULSE_OUT_INJ_CYL_A
 #define PULSE_OUT_INJ_CYL_A_Type                      PORTDISCRETE
 #define PULSE_OUT_INJ_CYL_A_Fault                     VSEP_SPIDISCRETE
@@ -423,14 +415,4 @@ extern uint32_t     VSEP_Channel_Enabled;
 #define DISCRETE_OUT_VCM_Vlv_Flag                                   	VSEP_Channel_Enabled
 #define DISCRETE_OUT_VCM_Vlv_DiagMask                               ((Mask32(VSEP_Get_Channel(MTSA_CONFIG_VSEP_PCH_17),1)))
 
-/********** VSEP related signals ENDS**************/
-
-/* ============================================================================ *\
- * File revision history (top to bottom, first revision to last revision
- * ============================================================================
- *
- * Rev  Date         user id     SCR       (description on following lines)
- * ---  ------       -------     ---
- *  
-\*==========================================================================*/
 #endif /* DD_VSEP_CONFIG_H */

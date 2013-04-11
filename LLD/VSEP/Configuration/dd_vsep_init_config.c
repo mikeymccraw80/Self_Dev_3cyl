@@ -26,10 +26,8 @@
 // none
 //
 //=============================================================================
-
 #include "io_config_spi.h"
 #include "io_config_vsep.h"
-
 #include "dd_vsep.h"
 #include "dd_vsep_deps.h"
 #include "dd_vsep_discrete.h"
@@ -125,11 +123,6 @@ const uint16_t VSEP_INIT_TXD_INITIAL[NUMBER_OF_VSEP][VSEP_INIT_TXD_MESSAGE_MAX] 
 };
 #endif
 
-uint16_t VSEP_LEDMODE_Txd[NUMBER_OF_VSEP][VSEP_LEDMODE_TXD_MESSAGE_MAX];
-
-
-// uint16_t VSEP_EST_Select_Txd[NUMBER_OF_VSEP][VSEP_EST_SELECT_TXD_MESSAGE_MAX];
-// uint16_t VSEP_EST_Select_Rxd[NUMBER_OF_VSEP][VSEP_EST_SELECT_RXD_MESSAGE_MAX];
 
 #ifdef VSEP_EST_DIAGNOSTIC_DEBUG
 uint8_t VSEP_EST_Select_Dwell_Current_Time[NUMBER_OF_VSEP][8];
@@ -169,9 +162,8 @@ const uint16_t VSEP_EST_SELECT_INITIAL[NUMBER_OF_VSEP][VSEP_EST_SELECT_TXD_MESSA
 };
 #endif
 
-// uint16_t VSEP_DEPS_Txd[NUMBER_OF_VSEP][VSEP_DEPS_TXD_MESSAGE_MAX];
-const uint32_t VSEP_TIMER_DEPS_Base_Frequency = 0;
 
+const uint32_t VSEP_TIMER_DEPS_Base_Frequency = 0;
 const uint16_t VSEP_DEPS_TXD_INITIAL[NUMBER_OF_VSEP][VSEP_DEPS_TXD_MESSAGE_MAX] =
 {
 #if ( NUMBER_OF_VSEP > VSEP_DEVICES_0 )
@@ -196,11 +188,8 @@ const uint16_t VSEP_DEPS_TXD_INITIAL[NUMBER_OF_VSEP][VSEP_DEPS_TXD_MESSAGE_MAX] 
 #endif
 };
 
-// uint16_t VSEP_VR_Txd[NUMBER_OF_VSEP][VSEP_VR_TXD_MESSAGE_MAX];
-// uint16_t VSEP_VR_Rxd[NUMBER_OF_VSEP][VSEP_VR_RXD_MESSAGE_MAX];
 
 const uint32_t VSEP_TIMER_VR_Base_Frequency = 0;
-
 const uint16_t VSEP_VR_TXD_INITIAL[NUMBER_OF_VSEP][VSEP_VR_TXD_MESSAGE_MAX] = 
 {
 #if ( NUMBER_OF_VSEP > VSEP_DEVICES_0 )
@@ -238,9 +227,6 @@ const uint16_t VSEP_VR_TXD_INITIAL[NUMBER_OF_VSEP][VSEP_VR_TXD_MESSAGE_MAX] =
    }
 #endif
 };
-
-// uint16_t VSEP_PWM_Txd[NUMBER_OF_VSEP][VSEP_PWM_CHANNEL_MAX][VSEP_PWM_TXD_MESSAGE_MAX];
-// uint16_t VSEP_PWM_Rxd[NUMBER_OF_VSEP][VSEP_PWM_RXD_MESSAGE_MAX];
 
 const uint32_t VSEP_BASE_FREQUENCY = VSEP_EXTERNAL_CLOCK_BASE_FREQUENCY;
 
