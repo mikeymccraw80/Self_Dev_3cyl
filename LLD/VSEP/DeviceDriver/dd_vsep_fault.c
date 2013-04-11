@@ -32,7 +32,7 @@
 #include "dd_vsep_soh.h"
 #include "dd_vsep_est_select.h"
 #include "io_config_vsep.h"
-#include "dd_vsep_init.h"
+#include "dd_vsep_init_config.h"
 #include "dd_vsep_discrete_interface.h"
 #include "dd_vsep_pwm_interface.h"
 #include "io_config_crank.h"

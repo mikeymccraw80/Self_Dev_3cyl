@@ -48,7 +48,7 @@
 #include "io_config_vsep.h"
 #include "dd_vsep_est_select.h"
 #include "dd_vsep_config.h"
-#include "dd_vsep_init.h"
+#include "dd_vsep_init_config.h"
 #include "dd_vsep_vr.h"
 
 //#include "dd_dma_interface.h"

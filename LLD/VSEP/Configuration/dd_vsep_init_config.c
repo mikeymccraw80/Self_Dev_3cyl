@@ -38,7 +38,7 @@
 #include "dd_vsep_pwm.h"
 #include "dd_vsep_soh.h"
 #include "dd_vsep_vr.h"
-#include "dd_vsep_init.h"
+#include "dd_vsep_init_config.h"
 #include "hwiocald.h"
 
 
