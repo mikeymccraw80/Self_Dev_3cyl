@@ -1,5 +1,5 @@
-#ifndef DD_VSEP_INIT_H
-#define DD_VSEP_INIT_H
+#ifndef DD_VSEP_INIT_CONFIG_H
+#define DD_VSEP_INIT_CONFIG_H
 //=============================================================================
 //
 //       COPYRIGHT, 2007, Delphi Technologies, Inc. All Rights reserved
@@ -528,8 +528,11 @@
 void  VSEP_INIT_TXD_Buffer_Initialize(void);
 
 extern const uint16_t VSEP_PCH_TXD_INITIAL[NUMBER_OF_VSEP][VSEP_PCH_TXD_MESSAGE_MAX];
+extern const uint16_t VSEP_EST_FAULT_GRAD_INITIAL[NUMBER_OF_VSEP][VSEP_EST_FAULT_RXD_MESSAGE_MAX];
+extern const uint8_t  VSEP_EST_FAULT_SYNC_MESSAGE_BYTE_INITIAL[NUMBER_OF_VSEP][VSEP_EST_FAULT_SYNC_TXD_MESSAGE_MAX_BYTE];
+extern const uint16_t VSEP_FAULT_TXD[NUMBER_OF_VSEP][VSEP_FAULT_RXD_MESSAGE_MAX];
 
-#endif // DD_VSEP_INIT_H
+#endif // DD_VSEP_INIT_CONFIG_H
 /*===========================================================================*\
  * Revision Log                                                              *
  *===========================================================================*
