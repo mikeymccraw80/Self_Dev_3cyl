@@ -3,6 +3,7 @@
 //=============================================================================
 #include "hal_os.h"
 #include "HLS.h"
+#include "hal_diag.h"
 
 extern void Update_DiagStatus_10ms(void);
 
@@ -61,6 +62,7 @@ uint16_t OS_100ms_Cnt;
    {
     HLS_Task_200ms();
    }
+   //VSEP_Fault_Log_Clear();
 
 }
 
