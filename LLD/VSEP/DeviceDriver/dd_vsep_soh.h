@@ -31,6 +31,7 @@
 
 
 #include "dd_vsep.h"
+#include "spi_message.h"
 
 typedef enum
 {
@@ -314,10 +315,11 @@ FAR_COS void VSEP_SOH_Set_SOHRSTEN_Request( IO_Configuration_T in_configuration,
 //
 // @end
 //=============================================================================
+void VSEP_Calculate_Response( SPI_HClient_T in_hclient );
 uint32_t VSEP_SOH_Calculate_Response( uint32_t challenge );
-FAR_COS void VSEP_SOH_DisableSOH_Request( IO_Configuration_T in_configuration  );
+void VSEP_SOH_DisableSOH_Request( IO_Configuration_T in_configuration  );
 void VSEP_SeviceSOH( void ); 
-FAR_COS void VSEP_Disable_SOH( void );
+void VSEP_Disable_SOH( void );
 #endif // DD_VSEP_SOH_H
 /*===========================================================================*\
  * Revision Log                                                              *

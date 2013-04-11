@@ -44,14 +44,15 @@
 #include "t_custom.h"
 #include "io_config_spi.h"
 #include "dd_vsep_fault.h"
+#include "dd_vsep_led.h"
 #include "dd_vsep_init_config.h"
 
 
-extern FAR_COS uint16_t GetHWIO_EngineSpeed(void);
+extern uint16_t GetHWIO_EngineSpeed(void);
 //extern void  VSEP_Diagnostic_Set_Discrete_Channel_State(EMS_Discrete_Signals_T in_channel, bool in_state);
 //extern void VSEP_Diagnostic_PWM_Set_Duty_Cycle_Immediate(IO_Configuration_T in_configuration ,   uint32_t  in_duty_cycle);
 #define KwHWIO_VSEP_Gradthr_RPM_Low_Limit  0x00
-#define   KwHWIO_VSEP_Gradthr_RPM_High_Limit 0x00
+#define KwHWIO_VSEP_Gradthr_RPM_High_Limit 0x00
 
 /* temp */
 
@@ -59,8 +60,6 @@ bool vsep_gradthr_high_rpm_set, vsep_gradthr_low_rpm_set;
 
 static void VSEP_Update_Fault_Counter( SPI_HClient_T in_hclient );
 static void VSEP_IGBT_Set_GRADTHR_According_To_RPM(VSEP_Index_T in_index);
-
-void VSEP_Calculate_Response( SPI_HClient_T in_hclient );
 
 void VSEP_Fault_Execute_Diag( SPI_HClient_T in_hclient );
 
@@ -431,75 +430,6 @@ const SPI_Message_T VSEP_MESSAGE[ NUMBER_OF_VSEP ][VSEP_MESSAGE_MAX+7] =
       { &VSEP_PWM_MESSAGE_DEFINITION[ VSEP_INDEX_0 ][VSEP_PWM_CHANNEL_8], &VSEP_PWM_CB[ VSEP_INDEX_0 ][VSEP_PWM_CHANNEL_8] }   //VSEP_MESSAGE_PWM_8
   }
 };
-
-
-uint16_t VSEP_SOH_Challenge_Rxd[NUMBER_OF_VSEP][VSEP_SOH_RXD_MESSAGE_MAX];
-uint16_t VSEP_SOH_Challenge_Txd[NUMBER_OF_VSEP][VSEP_SOH_TXD_MESSAGE_MAX];
-
-uint16_t VSEP_SOH_Response_Rxd[NUMBER_OF_VSEP][VSEP_SOH_RXD_MESSAGE_MAX];
-uint16_t VSEP_SOH_Response_Txd[NUMBER_OF_VSEP][VSEP_SOH_TXD_MESSAGE_MAX];
-
-//=============================================================================
-// VSEP Calculate Response
-//=============================================================================
-void VSEP_Calculate_Response( SPI_HClient_T in_hclient )
-{
-   uint32_t device = (uint32_t)in_hclient;
-   uint8_t challenge = VSEP_Msg_Get_Challenge( VSEP_SOH_Rxd[device][VSEP_SOH_RXD_MESSAGE_CHALLENGE] );
-
-   uint8_t response = ( challenge << 1 ) & 0x3F;
-   uint8_t soh_algo_0 = 1;
-   uint8_t soh_algo_1 = 1;
-   uint8_t x;
-
-   if( VSEP_Msg_Get_SDOA( VSEP_SOH_Txd[ device ][ VSEP_SOH_TXD_MESSAGE_CTRL ] ) == 4 )
-   {
-      for( x = 0; x < 5; x++ )
-      {
-         if( !Extract_Bits( challenge, x, 1 ) )
-         {
-            soh_algo_0 = 0;
-            break;
-         }
-      }
-
-      soh_algo_1 = !((( challenge >> 5 ) & 0x01) ^ (( challenge >> 4 ) & 0x01));
-
-      response = Insert_Bits( response, ((soh_algo_0 ^ soh_algo_1) & 0x01), 0, 1);
-
-      for( x = 0; x < VSEP_SOH_RXD_MESSAGE_MAX; x++ )
-      {
-         VSEP_SOH_Challenge_Rxd[device][x] = VSEP_SOH_Rxd[device][x];
-      }
-
-      for( x = 0; x < VSEP_SOH_TXD_MESSAGE_MAX; x++ )
-      {
-         VSEP_SOH_Challenge_Txd[device][x] = VSEP_SOH_Txd[device][x];
-      }
-
-      VSEP_SOH_Txd[device][VSEP_SOH_TXD_MESSAGE_RESPONSE] = VSEP_Msg_Set_RESPONSE( VSEP_SOH_Txd[device][VSEP_SOH_TXD_MESSAGE_RESPONSE], response );
-
-      VSEP_SOH_Txd[device][VSEP_SOH_TXD_MESSAGE_CTRL] = VSEP_Msg_Set_SDOA( VSEP_SOH_Txd[device][VSEP_SOH_TXD_MESSAGE_CTRL], VSEP_RXD_SDOA_NOT_USED  );
-      VSEP_SOH_Txd[device][VSEP_SOH_TXD_MESSAGE_CTRL] = VSEP_Msg_Set_SDIA( VSEP_SOH_Txd[device][VSEP_SOH_TXD_MESSAGE_CTRL], VSEP_TXD_SDIA_RESPONSE  );
-
-   }
-   else
-   {
-      for( x = 0; x < VSEP_SOH_RXD_MESSAGE_MAX; x++ )
-      {
-         VSEP_SOH_Response_Rxd[device][x] = VSEP_SOH_Rxd[device][x];
-      }
-
-      for( x = 0; x < VSEP_SOH_TXD_MESSAGE_MAX; x++ )
-      {
-         VSEP_SOH_Response_Txd[device][x] = VSEP_SOH_Txd[device][x];
-      }
-
-      VSEP_SOH_Txd[device][VSEP_SOH_TXD_MESSAGE_CTRL] = VSEP_Msg_Set_SDOA( VSEP_SOH_Txd[device][VSEP_SOH_TXD_MESSAGE_CTRL], VSEP_RXD_SDOA_CHALLENGE );
-      VSEP_SOH_Txd[device][VSEP_SOH_TXD_MESSAGE_CTRL] = VSEP_Msg_Set_SDIA( VSEP_SOH_Txd[device][VSEP_SOH_TXD_MESSAGE_CTRL], VSEP_TXD_SDIA_NOT_USED  );
-
-   }
-}
 
 
 void VSEP_Fault_Task_7_8ms( void )

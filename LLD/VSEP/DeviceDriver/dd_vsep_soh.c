@@ -41,9 +41,16 @@
 #include "dd_vsep_config.h"
 #include "dd_vsep_init_config.h"
 
+/* global message buffer definition */
 uint16_t VSEP_SOH_Txd[NUMBER_OF_VSEP][VSEP_SOH_TXD_MESSAGE_MAX];
 uint16_t VSEP_SOH_Rxd[NUMBER_OF_VSEP][VSEP_SOH_RXD_MESSAGE_MAX];
 uint16_t VSEP_SOH_Status_Rxd[ NUMBER_OF_VSEP ][VSEP_SOH_STATUS_RXD_MESSAGE_MAX];
+
+/* local variable definition */
+uint16_t VSEP_SOH_Challenge_Rxd[NUMBER_OF_VSEP][VSEP_SOH_RXD_MESSAGE_MAX];
+uint16_t VSEP_SOH_Challenge_Txd[NUMBER_OF_VSEP][VSEP_SOH_TXD_MESSAGE_MAX];
+uint16_t VSEP_SOH_Response_Rxd[NUMBER_OF_VSEP][VSEP_SOH_RXD_MESSAGE_MAX];
+uint16_t VSEP_SOH_Response_Txd[NUMBER_OF_VSEP][VSEP_SOH_TXD_MESSAGE_MAX];
 
 ///////////////////////////////////////////////////////////////////////////////
 // VSEP PCH VSEP_SOH_Initialize_Device
@@ -184,6 +191,70 @@ uint32_t VSEP_SOH_Calculate_Response( uint32_t challenge )//not sure
    
    return response;
 }
+
+
+//=============================================================================
+// VSEP Calculate Response
+//=============================================================================
+void VSEP_Calculate_Response( SPI_HClient_T in_hclient )
+{
+   uint32_t device = (uint32_t)in_hclient;
+   uint8_t challenge = VSEP_Msg_Get_Challenge( VSEP_SOH_Rxd[device][VSEP_SOH_RXD_MESSAGE_CHALLENGE] );
+
+   uint8_t response = ( challenge << 1 ) & 0x3F;
+   uint8_t soh_algo_0 = 1;
+   uint8_t soh_algo_1 = 1;
+   uint8_t x;
+
+   if( VSEP_Msg_Get_SDOA( VSEP_SOH_Txd[ device ][ VSEP_SOH_TXD_MESSAGE_CTRL ] ) == 4 )
+   {
+      for( x = 0; x < 5; x++ )
+      {
+         if( !Extract_Bits( challenge, x, 1 ) )
+         {
+            soh_algo_0 = 0;
+            break;
+         }
+      }
+
+      soh_algo_1 = !((( challenge >> 5 ) & 0x01) ^ (( challenge >> 4 ) & 0x01));
+
+      response = Insert_Bits( response, ((soh_algo_0 ^ soh_algo_1) & 0x01), 0, 1);
+
+      for( x = 0; x < VSEP_SOH_RXD_MESSAGE_MAX; x++ )
+      {
+         VSEP_SOH_Challenge_Rxd[device][x] = VSEP_SOH_Rxd[device][x];
+      }
+
+      for( x = 0; x < VSEP_SOH_TXD_MESSAGE_MAX; x++ )
+      {
+         VSEP_SOH_Challenge_Txd[device][x] = VSEP_SOH_Txd[device][x];
+      }
+
+      VSEP_SOH_Txd[device][VSEP_SOH_TXD_MESSAGE_RESPONSE] = VSEP_Msg_Set_RESPONSE( VSEP_SOH_Txd[device][VSEP_SOH_TXD_MESSAGE_RESPONSE], response );
+
+      VSEP_SOH_Txd[device][VSEP_SOH_TXD_MESSAGE_CTRL] = VSEP_Msg_Set_SDOA( VSEP_SOH_Txd[device][VSEP_SOH_TXD_MESSAGE_CTRL], VSEP_RXD_SDOA_NOT_USED  );
+      VSEP_SOH_Txd[device][VSEP_SOH_TXD_MESSAGE_CTRL] = VSEP_Msg_Set_SDIA( VSEP_SOH_Txd[device][VSEP_SOH_TXD_MESSAGE_CTRL], VSEP_TXD_SDIA_RESPONSE  );
+
+   }
+   else
+   {
+      for( x = 0; x < VSEP_SOH_RXD_MESSAGE_MAX; x++ )
+      {
+         VSEP_SOH_Response_Rxd[device][x] = VSEP_SOH_Rxd[device][x];
+      }
+
+      for( x = 0; x < VSEP_SOH_TXD_MESSAGE_MAX; x++ )
+      {
+         VSEP_SOH_Response_Txd[device][x] = VSEP_SOH_Txd[device][x];
+      }
+
+      VSEP_SOH_Txd[device][VSEP_SOH_TXD_MESSAGE_CTRL] = VSEP_Msg_Set_SDOA( VSEP_SOH_Txd[device][VSEP_SOH_TXD_MESSAGE_CTRL], VSEP_RXD_SDOA_CHALLENGE );
+      VSEP_SOH_Txd[device][VSEP_SOH_TXD_MESSAGE_CTRL] = VSEP_Msg_Set_SDIA( VSEP_SOH_Txd[device][VSEP_SOH_TXD_MESSAGE_CTRL], VSEP_TXD_SDIA_NOT_USED  );
+
+   }
+}
+
 
 ///////////////////////////////////////////////////////////////////////////////
 // VSEP_SeviceSOH for SOH disable
