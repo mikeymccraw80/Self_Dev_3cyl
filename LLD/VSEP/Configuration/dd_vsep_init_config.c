@@ -460,9 +460,7 @@ const uint16_t VSEP_PWM_TXD_INITIAL[NUMBER_OF_VSEP][VSEP_PWM_CHANNEL_MAX][VSEP_P
 #endif
 };
 
-uint16_t VSEP_PCH_Txd[NUMBER_OF_VSEP][VSEP_PCH_TXD_MESSAGE_MAX];
-uint16_t VSEP_PCH_Rxd[NUMBER_OF_VSEP][VSEP_PCH_RXD_MESSAGE_MAX];
-
+/* VSEP PCH Init Value */
 const uint16_t VSEP_PCH_TXD_INITIAL[NUMBER_OF_VSEP][VSEP_PCH_TXD_MESSAGE_MAX] = 
 {  
 #if NUMBER_OF_VSEP > VSEP_DEVICES_0
@@ -518,10 +516,7 @@ const uint16_t VSEP_PCH_TXD_INITIAL[NUMBER_OF_VSEP][VSEP_PCH_TXD_MESSAGE_MAX] =
 #endif
 };
 
-// State of Health data
-// uint16_t VSEP_SOH_Txd[NUMBER_OF_VSEP][VSEP_SOH_TXD_MESSAGE_MAX];
-// uint16_t VSEP_SOH_Rxd[NUMBER_OF_VSEP][VSEP_SOH_RXD_MESSAGE_MAX];
-// uint16_t VSEP_SOH_Status_Rxd[ NUMBER_OF_VSEP ][VSEP_SOH_STATUS_RXD_MESSAGE_MAX];
+/* vsep soh module init value */
 const uint16_t VSEP_SOH_STATUS_TXD[ NUMBER_OF_VSEP ][VSEP_SOH_STATUS_TXD_MESSAGE_MAX] =
 {
 #if ( NUMBER_OF_VSEP > VSEP_DEVICES_0 )
@@ -640,173 +635,6 @@ const uint16_t VSEP_FAULT_TXD[NUMBER_OF_VSEP][VSEP_FAULT_TXD_MESSAGE_MAX]=
 #endif
 };
 
-uint16_t VSEP_Fault_Rxd[NUMBER_OF_VSEP][VSEP_FAULT_RXD_MESSAGE_MAX];
-
-Fault_Log_T VSEP_Fault_Log[NUMBER_OF_VSEP][VSEP_CHANNEL_MAX];
-
-#ifdef  VSEP_CALIBRATION_ENABLE
-void  VSEP_INIT_TXD_Buffer_Initialize(void)
-{
-	uint8_t               channel;
-	VSEP_FAULT_FILTER_T   filter_type = VSEP_FAULT_FILTER_MAX;
-	uint32_t              filter_time;
-
-	VSEP_INIT_TXD_INITIAL[0][0] = VSEP_Msg_Set_FLTCLR( 0, true                   ) |
-								VSEP_Msg_Set_CRTOCLR( 0, true                   ) |
-								VSEP_Msg_Set_SDOA( 0, VSEP_RXD_SDOA_NOT_USED ) | 
-								VSEP_Msg_Set_SDIA( 0, VSEP_TXD_SDIA_VR1_CTRL );
-
-	VSEP_INIT_TXD_INITIAL[0][1] = 
-							VSEP_Msg_VR_Set_Delay( 0, (uint16_t)KsVSEP_VR1_Setting_Initial.KeVSEP_VR1_DLY) |        
-							VSEP_Msg_VR_Set_AT( 0, (uint16_t)KsVSEP_VR1_Setting_Initial.KbVSEP_VR1_PERC50) |
-							VSEP_Msg_VR_Set_MT( 0, (uint16_t)KsVSEP_VR1_Setting_Initial.KeVSEP_VR1_MT);
-
-	VSEP_INIT_TXD_INITIAL[0][2] =     
-          VSEP_Msg_VR_Set_Delay( 0, (uint16_t)KsVSEP_VR2_Setting_Initial.KeVSEP_VR2_DLY) |        
-             VSEP_Msg_VR_Set_AT( 0, (uint16_t)KsVSEP_VR2_Setting_Initial.KbVSEP_VR2_PERC50) |
-             VSEP_Msg_VR_Set_MT( 0, (uint16_t)KsVSEP_VR2_Setting_Initial.KeVSEP_VR2_MT) 
-      ;
-	VSEP_INIT_TXD_INITIAL[0][3] =          
-          VSEP_Msg_DEPS_Set_Delay( 0, (uint16_t)KsVSEP_DEPSDLY_Setting_Initial.KeVSEP_DEPSDLY) 
-      ;
-	VSEP_INIT_TXD_INITIAL[0][4] =       
-          VSEP_Msg_SLEW_Set_Group_1( 0, (uint16_t)KsVSEP_SLEW_Initialization.KeVSEP_SLEW1) |
-          VSEP_Msg_SLEW_Set_Group_2( 0,(uint16_t)KsVSEP_SLEW_Initialization.KeVSEP_SLEW2) |
-          VSEP_Msg_SLEW_Set_Group_3( 0, (uint16_t)KsVSEP_SLEW_Initialization.KeVSEP_SLEW3) |
-          VSEP_Msg_SLEW_Set_Group_4( 0,(uint16_t)KsVSEP_SLEW_Initialization.KeVSEP_SLEW4) |
-          VSEP_Msg_SLEW_Set_Group_5( 0,(uint16_t)KsVSEP_SLEW_Initialization.KeVSEP_SLEW5) |
-        VSEP_Msg_SLEW_Set_Group_CAN( 0,(uint16_t)KsVSEP_SLEW_Initialization.KeVSEP_SLEWCAN)
-      ;
- 	VSEP_INIT_TXD_INITIAL[0][5] =     
-         VSEP_Msg_FAULT_Set_Level_1( 0, (uint16_t)KsVSEP_Fault_Level_Initial1.KeVSEP_FLTLVL1) |
-         VSEP_Msg_FAULT_Set_Level_2( 0, (uint16_t)KsVSEP_Fault_Level_Initial1.KeVSEP_FLTLVL2) |
-         VSEP_Msg_FAULT_Set_Level_3( 0, (uint16_t)KsVSEP_Fault_Level_Initial1.KeVSEP_FLTLVL3) |
-         VSEP_Msg_FAULT_Set_Level_4( 0, (uint16_t)KsVSEP_Fault_Level_Initial1.KeVSEP_FLTLVL4) 
-        
-      ;
-	VSEP_INIT_TXD_INITIAL[0][6] =      
-         VSEP_Msg_FAULT_Set_Level_5( 0, (uint16_t)KsVSEP_Fault_Level_Initial2.KeVSEP_FLTLVL5) |
-         VSEP_Msg_FAULT_Set_Level_6( 0,(uint16_t)KsVSEP_Fault_Level_Initial2.KeVSEP_FLTLVL6) |
-         VSEP_Msg_FAULT_Set_Level_7( 0, (uint16_t)KsVSEP_Fault_Level_Initial2.KeVSEP_FLTLVL7) 
-      ;
-  	VSEP_INIT_TXD_INITIAL[0][7] =    
-          ( VSEP_Msg_FAULT_Filter_Set_Non_Spark_Channels_1_To_8( 0, (uint16_t)KsVSEP_Fault_Filter_Initial.KeVSEP_FILT_1TO8NS) |
-                VSEP_Msg_FAULT_Filter_Set_Spark_Channels_1_To_8( 0,  (uint16_t)KsVSEP_Fault_Filter_Initial.KeVSEP_FILT_1TO8SP) |
-                     VSEP_Msg_FAULT_Filter_Set_Channels_9_To_12( 0,  (uint16_t)KsVSEP_Fault_Filter_Initial.KeVSEP_FILT_9TO12) |
-                    VSEP_Msg_FAULT_Filter_Set_Channels_13_To_16( 0, (uint16_t)KsVSEP_Fault_Filter_Initial.KeVSEP_FILT_13TO16) |
-                    VSEP_Msg_FAULT_Filter_Set_Channels_17_To_18( 0,  (uint16_t)KsVSEP_Fault_Filter_Initial.KeVSEP_FILT_17TO18) |
-                    VSEP_Msg_FAULT_Filter_Set_Channels_19_To_20( 0,  (uint16_t)KsVSEP_Fault_Filter_Initial.KeVSEP_FILT_19TO20) |
-                    VSEP_Msg_FAULT_Filter_Set_Channels_21_To_24( 0,  (uint16_t)KsVSEP_Fault_Filter_Initial.KeVSEP_FILT_21TO24) |
-                    VSEP_Msg_FAULT_Filter_Set_Channels_25_To_30( 0,  (uint16_t)KsVSEP_Fault_Filter_Initial.KeVSEP_FILT_25TO30))
-      ;
-	VSEP_INIT_TXD_INITIAL[0][8] =      
-          ( VSEP_Msg_LEDMODE_Set_Channel_25( 0, (uint16_t)KsVSEP_LEDMODE_Initial.KbVSEP_LEDMODE_25) |
-            VSEP_Msg_LEDMODE_Set_Channel_26( 0, (uint16_t)KsVSEP_LEDMODE_Initial.KbVSEP_LEDMODE_26) |
-            VSEP_Msg_LEDMODE_Set_Channel_30( 0, (uint16_t)KsVSEP_LEDMODE_Initial.KbVSEP_LEDMODE_30) )
-      ;
-  	VSEP_INIT_TXD_INITIAL[0][9] =     
-          VSEP_Msg_IGBT_Set_GRADFILT( 0, (uint16_t)KsVSEP_GRAD_Initialization.KbVSEP_GRADFILT) |
-         VSEP_Msg_IGBT_Set_GRADTHR( 0,  (uint16_t)KsVSEP_GRAD_Initialization.KbVSEP_GRADTHR) 
-      ;
-  	VSEP_INIT_TXD_INITIAL[0][10] =     
-            VSEP_Msg_EST_Set_EDGE( 0,     (uint16_t)KsVSEP_Spark_Mode_Initialization.KbVSEP_Spark_EDGE   ) |
-           VSEP_Msg_EST_Set_INDEX( 0,     (uint16_t)KsVSEP_Spark_Mode_Initialization.KbVSEP_Spark_INDEX   ) |
-          VSEP_Msg_EST_Set_PFMODE( 0,     (uint16_t)KsVSEP_Spark_Mode_Initialization.KeVSEP_Spark_PFMODE   ) 
-      ;
-   	VSEP_INIT_TXD_INITIAL[0][11] =  
-         VSEP_Msg_Set_SOHRSTEN( 0, VSEP_SOH_Get_SOHRSTEN( VSEP_0_SOHRSTEN_INIT )                                              ) |
-         VSEP_Msg_MPIO_Set_Mx_OHILOB_OEN( 0, (VSEP_CHANNEL_MPIO_1-VSEP_CHANNEL_MPIO_1), (uint16_t)KeHWIO_ACReq_pin79_Status) |
-         VSEP_Msg_MPIO_Set_Mx_OHILOB_OEN( 0, (VSEP_CHANNEL_MPIO_2-VSEP_CHANNEL_MPIO_1), (uint16_t)KeHWIO_PSPS_pin60_Status) |
-         VSEP_Msg_MPIO_Set_Mx_OHILOB_OEN( 0, (VSEP_CHANNEL_MPIO_3-VSEP_CHANNEL_MPIO_1), (uint16_t)KeHWIO_MIDAC_pin40_Status) |
-                 VSEP_Msg_EST_Set_CYLCNT( 0, (uint16_t)KsVSEP_Spark_Mode_Initialization.KeVSEP_Spark_CYLCNT   ) |
-              VSEP_Msg_EST_Set_DEC_DISCB( 0,    (uint16_t)KsVSEP_Spark_Mode_Initialization.KbVSEP_Spark_DEC_DISCB ) |
-                VSEP_Msg_EST_Set_IGBTCFG( 0,     (uint16_t)KsVSEP_Spark_Mode_Initialization.KbVSEP_Spark_IGBTCFG      ) |
-		VSEP_Msg_SOH_Set_CRDISARM( 0,     VSEP_SOH_Get_ENABLE_STATE( VSEP_0_SOH_ENABLE_INIT )        )
-	;
-	
-  VSEP_EST_SELECT_INITIAL[0][0] =      
-         VSEP_Msg_Set_SDOA( 0, VSEP_RXD_SDOA_EST_STAT  ) |
-         VSEP_Msg_Set_SDIA(0,VSEP_TXD_SDIA_EST_CTRL)  
-       ;
-    VSEP_EST_SELECT_INITIAL[0][1] =      
-           VSEP_Msg_EST_Set_EDGE( 0,     (uint16_t)KsVSEP_Spark_Mode_Initialization.KbVSEP_Spark_EDGE   ) |
-          VSEP_Msg_EST_Set_INDEX( 0,     (uint16_t)KsVSEP_Spark_Mode_Initialization.KbVSEP_Spark_INDEX   ) |
-          VSEP_Msg_EST_Set_PFMODE( 0,     (uint16_t)KsVSEP_Spark_Mode_Initialization.KeVSEP_Spark_PFMODE   ) 
-     ;
-
-	
-		
-for(channel=0;channel<30;channel++){
-	if( channel >= VSEP_CHANNEL_PCH_01_FLT_LVL_1 )
-   {
-      if( channel <= VSEP_CHANNEL_PCH_08_FLT_LVL_1_2 )
-      {
-         filter_type = KsVSEP_Fault_Filter_Initial.KeVSEP_FILT_1TO8NS;
-      }
-      else if (channel <= VSEP_CHANNEL_PCH_12_FLT_LVL_2)
-      {
-         filter_type =KsVSEP_Fault_Filter_Initial.KeVSEP_FILT_9TO12;
-      }
-      else if (channel <= VSEP_CHANNEL_PCH_16_PWM_2_FLT_LVL_3 )
-      {
-         filter_type = KsVSEP_Fault_Filter_Initial.KeVSEP_FILT_13TO16;
-      }
-      else if (channel <= VSEP_CHANNEL_PCH_18_FLT_LVL_4 )
-      {
-         filter_type = KsVSEP_Fault_Filter_Initial.KeVSEP_FILT_17TO18;
-      }
-      else if (channel <= VSEP_CHANNEL_PCH_20_FLT_LVL_5 )
-      {
-         filter_type = KsVSEP_Fault_Filter_Initial.KeVSEP_FILT_19TO20;
-      }
-      else if (channel <= VSEP_CHANNEL_PCH_24_PWM_5_FLT_LVL_6 )
-      {
-         filter_type = KsVSEP_Fault_Filter_Initial.KeVSEP_FILT_21TO24;
-      }
-      else if (channel <= VSEP_CHANNEL_PCH_30_FLT_LVL_7 )
-      {
-         filter_type = KsVSEP_Fault_Filter_Initial.KeVSEP_FILT_25TO30;
-      }
-      else
-      {
-         //  Not a valid value for channel
-      }
-   }
-
-   switch (filter_type)
-   {
-      case VSEP_FAULT_FILTER_7_5US:
-      {
-         filter_time = VSEP_FAULT_FILTER_TIME_7_5US;
-         break;
-      }
-      case VSEP_FAULT_FILTER_15US:
-      {
-         filter_time = VSEP_FAULT_FILTER_TIME_15US;
-         break;
-      }
-      case VSEP_FAULT_FILTER_34US:
-      {
-         filter_time = VSEP_FAULT_FILTER_TIME_34US;
-         break;
-      }
-      case VSEP_FAULT_FILTER_46US:
-      {
-         filter_time = VSEP_FAULT_FILTER_TIME_46US;
-         break;
-      }
-      default:
-      {
-         filter_time = 0;
-         break;
-      }
-   }
-   Filter_Time_Array[channel] = filter_time;
-}
-}
-#endif
-
-
 const uint16_t VSEP_MPIO_MODE_TXD_INITIAL[NUMBER_OF_VSEP][VSEP_MPIO_MODE_TXD_MESSAGE_MAX] =
 {
 #if ( NUMBER_OF_VSEP > VSEP_DEVICES_0 )
@@ -843,9 +671,6 @@ const uint16_t VSEP_MPIO_MODE_TXD_INITIAL[NUMBER_OF_VSEP][VSEP_MPIO_MODE_TXD_MES
    }
 #endif
 };
-
-uint16_t VSEP_MPIO_MODE_Txd[NUMBER_OF_VSEP][VSEP_MPIO_MODE_TXD_MESSAGE_MAX];
-
 
 /*===========================================================================*\
  * Revision Log                                                              *

@@ -524,8 +524,6 @@
 #define VSEP_1_GRADIENT_CHECK_INIT (VSEP_GRADIENT_CHECK_DEFAULT)
 #endif
 
-void  VSEP_INIT_TXD_Buffer_Initialize(void);
-
 /* vsep each module inital value */
 extern const uint16_t VSEP_PCH_TXD_INITIAL[NUMBER_OF_VSEP][VSEP_PCH_TXD_MESSAGE_MAX];
 extern const uint16_t VSEP_EST_FAULT_GRAD_INITIAL[NUMBER_OF_VSEP][VSEP_EST_FAULT_RXD_MESSAGE_MAX];
