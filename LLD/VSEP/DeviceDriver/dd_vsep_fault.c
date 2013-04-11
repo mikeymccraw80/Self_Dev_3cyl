@@ -508,7 +508,7 @@ void VSEP_Fault_Diagnose_Channels(void* in_pointer )
 	VSEP_Fault_PCH_T   vsep_pch_fault;
 
 	VSEP_Fault_Channel_Data_T *vsep_fault_channel_data = (VSEP_Fault_Channel_Data_T*)in_pointer;
-
+	VSEP_Fault_Log_Clear();
 	if (vsep_fault_channel_data != NULL) {
 		// diagnose fault, and also provide delay between IO_DISCRETE_Set_Immediate_State commands
 		//VSEP_Fault_Diagnose_Get_channel_state();
@@ -930,6 +930,19 @@ void VSEP_EST_Fault_SYNC_Interface(VSEP_Index_T vsep_index, EST_Select_Cylinder_
 				VSEP_Fault_Counter[vsep_index][x] = VSEP_Fault_Counter[vsep_index][x] + VSEP_CHANNEL_FAULT_COUNTER_INCREMENT_STEP;
 			}
 		}
+	}
+}
+
+void VSEP_Fault_Log_Clear(void)
+{
+	uint8_t channel;
+
+	for(channel = VSEP_CHANNEL_PCH_01_FLT_LVL_1 ; channel <= VSEP_CHANNEL_PCH_30_FLT_LVL_7;channel++){
+		//initialize the FaultLog, clear all fault flags
+		VSEP_Fault_Log[ VSEP_INDEX_0 ][ channel ] = 0x0;
+		VSEP_Fault_Log[ VSEP_INDEX_0 ][ channel ] = FAULT_Set_Supported_Open_Circuit( VSEP_Fault_Log[ VSEP_INDEX_0 ][ channel ], true );
+		VSEP_Fault_Log[ VSEP_INDEX_0 ][ channel ] = FAULT_Set_Supported_Short_To_Battery( VSEP_Fault_Log[ VSEP_INDEX_0 ][ channel ], true );
+		VSEP_Fault_Log[ VSEP_INDEX_0 ][ channel ] = FAULT_Set_Supported_Short_To_Ground( VSEP_Fault_Log[ VSEP_INDEX_0 ][ channel ], true );
 	}
 }
 

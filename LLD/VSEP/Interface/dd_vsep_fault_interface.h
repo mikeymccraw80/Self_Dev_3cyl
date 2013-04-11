@@ -29,7 +29,8 @@
 //
 //=============================================================================
 
-#include "fault.h"
+#include "dd_vsep_fault.h"
+
 
 void VSEP_Fault_Task_7_8ms( void );
 

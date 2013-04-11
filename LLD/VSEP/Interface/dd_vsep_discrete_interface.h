@@ -60,7 +60,7 @@
 	
 #define VSEP_DiscreteToggleImmediate(in_configuration) \
 	VSEP_DISCRETE_Toggle_Immediate_State(in_configuration)
-	
+
 #define VSEP_DiscreteGet_Fault(in_configuration, value) \
 	(OUTPUT_SHORT_CKT_FAULT == value? \
 	VSEP_FAULT_Get_OUTPUT_SHORT_CKT_FAULT(VSEP_Fault_Log[VSEP_Get_Device_Index(in_configuration)][VSEP_Get_Channel(in_configuration)]):\
@@ -80,7 +80,7 @@
 	VSEP_Fault_Log[VSEP_Get_Device_Index(in_configuration)][VSEP_Get_Channel(in_configuration)]=VSEP_FAULT_Clear_OUTPUT_OPEN_CKT_FAULT(VSEP_Fault_Log[VSEP_Get_Device_Index(in_configuration)][VSEP_Get_Channel(in_configuration)]):\
 	(OUTPUT_OPEN_CKT_TESTED == value? \
 	VSEP_Fault_Log[VSEP_Get_Device_Index(in_configuration)][VSEP_Get_Channel(in_configuration)]=VSEP_FAULT_Clear_OUTPUT_OPEN_CKT_TESTED(VSEP_Fault_Log[VSEP_Get_Device_Index(in_configuration)][VSEP_Get_Channel(in_configuration)]):0))))
-	
+
 
 #endif // DD_VSEP_DISCRETE_INTERFACE_H
 /*===========================================================================*\
