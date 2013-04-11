@@ -39,11 +39,12 @@
 #include "io_config_dspi.h"
 #include "io_config_dma.h"
 
+// est fault
+uint16_t VSEP_EST_Fault_Txd[NUMBER_OF_VSEP][VSEP_EST_FAULT_TXD_MESSAGE_MAX];
+uint16_t VSEP_EST_Fault_Rxd[NUMBER_OF_VSEP][VSEP_EST_FAULT_RXD_MESSAGE_MAX];
 
-
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-//new added function
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+uint8_t VSEP_EST_Fault_SYNC_Txd[NUMBER_OF_VSEP][VSEP_EST_FAULT_SYNC_TXD_MESSAGE_MAX_BYTE];
+uint8_t VSEP_EST_Fault_SYNC_Rxd[NUMBER_OF_VSEP][VSEP_EST_FAULT_SYNC_RXD_MESSAGE_MAX_BYTE];
 
 extern const 	VSEP_Fault_Channel_Data_T VSEP_Fault_Logging[NUMBER_OF_VSEP][VSEP_CHANNEL_PCH_30_FLT_LVL_7+1];
 uint16_t 		VSEP_Fault_Counter[NUMBER_OF_VSEP][VSEP_CHANNEL_PCH_30_FLT_LVL_7+1];
