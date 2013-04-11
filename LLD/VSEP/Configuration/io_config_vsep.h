@@ -21,8 +21,6 @@
 // REUSE:
 // None
 //=============================================================================
-#include "io_config_vsep.h"
-
 
 
 //port0~5 define were deleted
