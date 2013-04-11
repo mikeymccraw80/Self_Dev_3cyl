@@ -30,6 +30,13 @@
 #include "dd_vsep_pwm.h"
 #include "dd_vsep_txd.h"
 #include "dd_vsep_fault.h"
+#include "dd_vsep_fault.h"
+#include "dd_vsep_soh.h"
+#include "dd_vsep_est_select.h"
+#include "io_config_vsep.h"
+#include "dd_vsep_vr.h"
+#include "dd_vsep_discrete_interface.h"
+#include "dd_vsep_pwm_interface.h"
 #include "dd_vsep_init_config.h"
 /********************************************
 CDIV_PWM[x] Bit	 Valid Frequency Range (Hz) Step Size
