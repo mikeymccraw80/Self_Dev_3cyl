@@ -26,15 +26,11 @@
 // none
 //
 //=============================================================================
-
 #include "dd_vsep.h"
-
 #include "dd_vsep_pwm.h"
 #include "dd_vsep_txd.h"
-//#include "dd_pwm.h"
-//#include "lux_math.h"
-//#include "dd_port.h"
 #include "dd_vsep_fault.h"
+#include "dd_vsep_init_config.h"
 /********************************************
 CDIV_PWM[x] Bit	 Valid Frequency Range (Hz) Step Size
 0				  32 ¨C 475				  8Us/bit
@@ -46,6 +42,11 @@ CDIV_PWM[x] Bit	 Valid Frequency Range (Hz) Step Size
 
 /*it is a 12bit buffer for period setting*/
 #define VSEP_PWM_PERIOD_Limit	0xFFF
+
+/* vsep pwm global message buffer definition */
+uint16_t VSEP_PWM_Txd[NUMBER_OF_VSEP][VSEP_PWM_CHANNEL_MAX][VSEP_PWM_TXD_MESSAGE_MAX];
+uint16_t VSEP_PWM_Rxd[NUMBER_OF_VSEP][VSEP_PWM_RXD_MESSAGE_MAX];
+
 
 static const uint8_t VSEP_PWM_CHANNEL_MAP[VSEP_CHANNEL_MAX] =
 {
@@ -112,7 +113,7 @@ static uint16_t* VSEP_PWM_Get_PWM_Buffer(
 //=============================================================================
 // VSEP_PWM_Device_Initialize
 //=============================================================================
-FAR_COS void VSEP_PWM_Device_Initialize(
+void VSEP_PWM_Device_Initialize(
    IO_Configuration_T in_configuration)
 {
    VSEP_Index_T device = VSEP_Get_Device_Index( in_configuration );
@@ -156,7 +157,7 @@ void VSEP_PWM_Device_Clear(
 //=============================================================================
 // VSEP_PWM_Channel_Initialize
 //=============================================================================
-FAR_COS void VSEP_PWM_Channel_Initialize( 
+void VSEP_PWM_Channel_Initialize( 
    IO_Configuration_T in_configuration)
 {
    uint16_t *pwm_buf = VSEP_PWM_Get_PWM_Buffer( in_configuration );
@@ -177,7 +178,7 @@ FAR_COS void VSEP_PWM_Channel_Initialize(
 //=============================================================================
 // VSEP_PWM_Channel_Clear
 //=============================================================================
-FAR_COS void VSEP_PWM_Channel_Clear(
+void VSEP_PWM_Channel_Clear(
    IO_Configuration_T in_configuration )
 {
    uint16_t *pwm_buf = VSEP_PWM_Get_PWM_Buffer( in_configuration );
@@ -192,7 +193,7 @@ FAR_COS void VSEP_PWM_Channel_Clear(
 //=============================================================================
 // VSEP_PWM_Enable_Channel
 //=============================================================================
-FAR_COS void VSEP_PWM_Enable_Channel(
+void VSEP_PWM_Enable_Channel(
    IO_Configuration_T in_configuration )
 {
    Parameter_Not_Used( in_configuration );
@@ -201,7 +202,7 @@ FAR_COS void VSEP_PWM_Enable_Channel(
 //=============================================================================
 // VSEP_PWM_Disable_Channel
 //=============================================================================
-FAR_COS void VSEP_PWM_Disable_Channel( 
+void VSEP_PWM_Disable_Channel( 
    IO_Configuration_T in_configuration )
 {
    Parameter_Not_Used( in_configuration );
@@ -211,7 +212,7 @@ FAR_COS void VSEP_PWM_Disable_Channel(
 // VSEP_PWM_Get_Channel_Status
 //
 //=============================================================================
-FAR_COS bool VSEP_PWM_Get_Channel_Status( IO_Configuration_T in_configuration )
+bool VSEP_PWM_Get_Channel_Status( IO_Configuration_T in_configuration )
 {
    Parameter_Not_Used( in_configuration );
 
@@ -293,7 +294,7 @@ void VSEP_PWM_Set_Period(
 //=============================================================================
 // VSEP_PWM_Get_Period
 //=============================================================================
-FAR_COS uint32_t VSEP_PWM_Get_Period(
+uint32_t VSEP_PWM_Get_Period(
    IO_Configuration_T   in_configuration ,
    VSEP_PWM_Period_ReturnType_T  return_type)
 {
@@ -382,7 +383,7 @@ void VSEP_PWM_Set_Duty_Cycle(
 //=============================================================================
 // VSEP_PWM_Get_Duty_Cycle
 //=============================================================================
-FAR_COS uint32_t VSEP_PWM_Get_Duty_Cycle(
+uint32_t VSEP_PWM_Get_Duty_Cycle(
    IO_Configuration_T   in_configuration,
    VSEP_PWM_DutyCycle_ReturnType_T	return_type)
 {
@@ -432,7 +433,7 @@ FAR_COS uint32_t VSEP_PWM_Get_Duty_Cycle(
 //=============================================================================
 // VSEP_PWM_Set_Period_And_Duty_Cycle
 //=============================================================================
-FAR_COS void VSEP_PWM_Set_Period_And_Duty_Cycle(
+void VSEP_PWM_Set_Period_And_Duty_Cycle(
    IO_Configuration_T   in_configuration,
    uint32_t             in_period,
    VSEP_PWM_Period_InType_T in_period_type,
@@ -460,7 +461,7 @@ FAR_COS void VSEP_PWM_Set_Period_And_Duty_Cycle(
 //=============================================================================
 // VSEP_PWM_Set_Period_And_Duty_Cycle_Immediate
 //=============================================================================
-FAR_COS void VSEP_PWM_Set_Period_And_Duty_Cycle_Immediate(
+void VSEP_PWM_Set_Period_And_Duty_Cycle_Immediate(
    IO_Configuration_T   in_configuration,
    uint32_t             in_period,
    VSEP_PWM_Period_InType_T in_period_type,
@@ -478,7 +479,7 @@ FAR_COS void VSEP_PWM_Set_Period_And_Duty_Cycle_Immediate(
 //=============================================================================
 // VSEP_PWM_Get_Base_Frequency 
 //=============================================================================
-FAR_COS uint32_t VSEP_PWM_Timer_Get_Base_Frequency_HZ(
+uint32_t VSEP_PWM_Timer_Get_Base_Frequency_HZ(
    IO_Configuration_T in_configuration)
 {
    uint32_t base_frequency_hz = 0;
@@ -529,7 +530,7 @@ FAR_COS uint32_t VSEP_PWM_Timer_Get_Base_Frequency_HZ(
 //=============================================================================
 // VSEP_DISCRETE_Initialize_Channel
 //=============================================================================
-FAR_COS void VSEP_PWM_DISCRETE_Channel_Initialize(
+void VSEP_PWM_DISCRETE_Channel_Initialize(
    IO_Configuration_T in_configuration)
 {
    VSEP_PWM_DISCRETE_Set_State( in_configuration, 
@@ -539,7 +540,7 @@ FAR_COS void VSEP_PWM_DISCRETE_Channel_Initialize(
 //=============================================================================
 // VSEP_DISCRETE_Clear_Channel
 //=============================================================================
-FAR_COS void VSEP_PWM_DISCRETE_Channel_Clear(
+void VSEP_PWM_DISCRETE_Channel_Clear(
    IO_Configuration_T in_configuration)
 {
    VSEP_PWM_Set_Period( in_configuration, 0,VSEP_PWM_Period_InType_MS );
@@ -549,7 +550,7 @@ FAR_COS void VSEP_PWM_DISCRETE_Channel_Clear(
 //=============================================================================
 // VSEP_DISCRETE_Get_State
 //=============================================================================
-FAR_COS bool VSEP_PWM_DISCRETE_Get_State( 
+bool VSEP_PWM_DISCRETE_Get_State( 
    IO_Configuration_T in_configuration)
 {
 
@@ -587,7 +588,7 @@ FAR_COS bool VSEP_PWM_DISCRETE_Get_State(
 // VSEP_DISCRETE_Set_State
 // what is the logic? period = 0, ontime = 1=>    DISCRETE ON?
 //=============================================================================
-FAR_COS void VSEP_PWM_DISCRETE_Set_State(
+void VSEP_PWM_DISCRETE_Set_State(
    IO_Configuration_T in_configuration,
    bool               in_state)
 {
@@ -621,7 +622,7 @@ FAR_COS void VSEP_PWM_DISCRETE_Set_State(
 //=============================================================================
 // VSEP_DISCRETE_Set_Immediate_State
 //=============================================================================
-FAR_COS void VSEP_PWM_DISCRETE_Set_Immediate_State(
+void VSEP_PWM_DISCRETE_Set_Immediate_State(
    IO_Configuration_T in_configuration,
    bool               in_state)
 {
@@ -633,7 +634,7 @@ FAR_COS void VSEP_PWM_DISCRETE_Set_Immediate_State(
 //=============================================================================
 // VSEP_DISCRETE_Toggle_State
 //=============================================================================
-FAR_COS void VSEP_PWM_DISCRETE_Toggle_State(
+void VSEP_PWM_DISCRETE_Toggle_State(
    IO_Configuration_T in_configuration)
 {
          VSEP_PWM_DISCRETE_Set_State(in_configuration, 
@@ -643,7 +644,7 @@ FAR_COS void VSEP_PWM_DISCRETE_Toggle_State(
 //=============================================================================
 // VSEP_DISCRETE_Toggle_Immediate_State
 //=============================================================================
-FAR_COS void VSEP_PWM_DISCRETE_Toggle_Immediate_State(
+void VSEP_PWM_DISCRETE_Toggle_Immediate_State(
    IO_Configuration_T in_configuration)
 {
    VSEP_PWM_DISCRETE_Toggle_State( in_configuration );

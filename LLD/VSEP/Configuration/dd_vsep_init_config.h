@@ -527,10 +527,12 @@
 
 void  VSEP_INIT_TXD_Buffer_Initialize(void);
 
+/* vsep each module inital value */
 extern const uint16_t VSEP_PCH_TXD_INITIAL[NUMBER_OF_VSEP][VSEP_PCH_TXD_MESSAGE_MAX];
 extern const uint16_t VSEP_EST_FAULT_GRAD_INITIAL[NUMBER_OF_VSEP][VSEP_EST_FAULT_RXD_MESSAGE_MAX];
 extern const uint8_t  VSEP_EST_FAULT_SYNC_MESSAGE_BYTE_INITIAL[NUMBER_OF_VSEP][VSEP_EST_FAULT_SYNC_TXD_MESSAGE_MAX_BYTE];
 extern const uint16_t VSEP_FAULT_TXD[NUMBER_OF_VSEP][VSEP_FAULT_RXD_MESSAGE_MAX];
+extern const uint16_t VSEP_PWM_TXD_INITIAL[NUMBER_OF_VSEP][VSEP_PWM_CHANNEL_MAX][VSEP_PWM_TXD_MESSAGE_MAX];
 
 #endif // DD_VSEP_INIT_CONFIG_H
 /*===========================================================================*\
