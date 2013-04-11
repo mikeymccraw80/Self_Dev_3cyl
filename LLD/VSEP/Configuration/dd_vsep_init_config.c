@@ -146,19 +146,6 @@ const uint16_t VSEP_EST_SELECT_INITIAL[NUMBER_OF_VSEP][VSEP_EST_SELECT_TXD_MESSA
       }
    }
 #endif
-#if ( NUMBER_OF_VSEP > VSEP_DEVICES_1 )
-   ,{
-      {
-         VSEP_Msg_Set_SDOA( 0, VSEP_RXD_SDOA_EST_STAT  ) |
-         VSEP_Msg_Set_SDIA(0,VSEP_TXD_SDIA_EST_CTRL)  
-      },
-      { // Do not set the count for the initial structure.
-            VSEP_Msg_EST_Set_EDGE( 0,     VSEP_EST_Select_Get_Index_Pin_Select( VSEP_1_EST_SELECT_SETUP_INIT ) ) |
-           VSEP_Msg_EST_Set_INDEX( 0, VSEP_EST_Select_Get_Increment_Index_Mode( VSEP_1_EST_SELECT_SETUP_INIT ) ) |
-          VSEP_Msg_EST_Set_PFMODE( 0,     VSEP_EST_Select_Get_Paired_Fire_Mode( VSEP_1_EST_SELECT_SETUP_INIT ) ) 
-      }
-   }
-#endif
 };
 #endif
 
@@ -173,16 +160,6 @@ const uint16_t VSEP_DEPS_TXD_INITIAL[NUMBER_OF_VSEP][VSEP_DEPS_TXD_MESSAGE_MAX] 
       },
       {     
             VSEP_Msg_DEPS_Set_Delay( 0, VSEP_DEPS_Get_Initial_Delay( VSEP_0_DEPS_INIT ) ) 
-      }
-   }
-#endif
-#if ( NUMBER_OF_VSEP > VSEP_DEVICES_1 )
-   ,{
-      {     VSEP_Msg_Set_SDOA( 0, VSEP_RXD_SDOA_NOT_USED  ) |
-            VSEP_Msg_Set_SDIA( 0, VSEP_TXD_SDIA_DEPS_CTRL )   
-      },
-      {     
-            VSEP_Msg_DEPS_Set_Delay( 0, VSEP_DEPS_Get_Initial_Delay( VSEP_1_DEPS_INIT ) ) 
       }
    }
 #endif
@@ -206,23 +183,6 @@ const uint16_t VSEP_VR_TXD_INITIAL[NUMBER_OF_VSEP][VSEP_VR_TXD_MESSAGE_MAX] =
          VSEP_Msg_VR_Set_Delay( 0, VSEP_VR_Get_Initial_Delay( VSEP_0_VR_2_INIT )      ) |
             VSEP_Msg_VR_Set_AT( 0, VSEP_VR_Get_Adaptive_Threshold( VSEP_0_VR_2_INIT ) ) |
             VSEP_Msg_VR_Set_MT( 0, VSEP_VR_Get_Adaptive_Threshold( VSEP_0_VR_2_INIT ) ) 
-      }
-   }
-#endif
-#if ( NUMBER_OF_VSEP > VSEP_DEVICES_1 )
-   ,{
-      {     VSEP_Msg_Set_SDOA( 0, VSEP_RXD_SDOA_NOT_USED  ) |
-            VSEP_Msg_Set_SDIA( 0, VSEP_TXD_SDIA_VR1_CTRL  )   
-      },
-      { 
-         VSEP_Msg_VR_Set_Delay( 0, VSEP_VR_Get_Initial_Delay( VSEP_1_VR_1_INIT )      ) |
-            VSEP_Msg_VR_Set_AT( 0, VSEP_VR_Get_Adaptive_Threshold( VSEP_1_VR_1_INIT ) ) |
-            VSEP_Msg_VR_Set_MT( 0, VSEP_VR_Get_Adaptive_Threshold( VSEP_1_VR_1_INIT ) )
-      },
-      { 
-         VSEP_Msg_VR_Set_Delay( 0, VSEP_VR_Get_Initial_Delay( VSEP_1_VR_2_INIT )      ) |
-            VSEP_Msg_VR_Set_AT( 0, VSEP_VR_Get_Adaptive_Threshold( VSEP_1_VR_2_INIT ) ) |
-            VSEP_Msg_VR_Set_MT( 0, VSEP_VR_Get_Adaptive_Threshold( VSEP_1_VR_2_INIT ) ) 
       }
    }
 #endif
@@ -349,115 +309,6 @@ const uint16_t VSEP_PWM_TXD_INITIAL[NUMBER_OF_VSEP][VSEP_PWM_CHANNEL_MAX][VSEP_P
    }
 
 #endif
-#if (NUMBER_OF_VSEP > VSEP_DEVICES_1)
-   ,{
-      { //PWM Channel 1
-         {
-            VSEP_Msg_Set_SDOA( 0, VSEP_RXD_SDOA_FAULT_GRP_8 ) |
-            VSEP_Msg_Set_SDIA( 0, VSEP_TXD_SDIA_PWM_ONT_1   )   
-         },
-         {
-            VSEP_Msg_PWM_Set_OnTime( 0, VSEP_PWM_Get_Initial_Duty_Cycle( VSEP_1_PWM_1_PWM_INIT ) )   
-         },
-         {
-             VSEP_Msg_PWM_Set_Period( 0, VSEP_PWM_Get_Initial_Period( VSEP_1_PWM_1_PWM_INIT         ) ) |
-            VSEP_Msg_PWM_Set_Divider( 0, VSEP_PWM_Get_Base_Frequency_Divider( VSEP_1_PWM_1_PWM_INIT ) )
-         } 
-      },
-      { //PWM Channel 2
-         {      
-            VSEP_Msg_Set_SDOA( 0, VSEP_RXD_SDOA_FAULT_GRP_8 ) |
-            VSEP_Msg_Set_SDIA( 0, VSEP_TXD_SDIA_PWM_ONT_2   )
-         },
-         {
-            VSEP_Msg_PWM_Set_OnTime( 0, VSEP_PWM_Get_Initial_Duty_Cycle( VSEP_1_PWM_2_PWM_INIT ) )   
-         },
-         {
-             VSEP_Msg_PWM_Set_Period( 0, VSEP_PWM_Get_Initial_Period( VSEP_1_PWM_2_PWM_INIT         ) ) |
-            VSEP_Msg_PWM_Set_Divider( 0, VSEP_PWM_Get_Base_Frequency_Divider( VSEP_1_PWM_2_PWM_INIT ) )
-         }
-      },
-      { //PWM Channel 3
-         {      
-            VSEP_Msg_Set_SDOA( 0, VSEP_RXD_SDOA_FAULT_GRP_8 ) |
-            VSEP_Msg_Set_SDIA( 0, VSEP_TXD_SDIA_PWM_ONT_3   )   
-         },
-         {
-            VSEP_Msg_PWM_Set_OnTime( 0, VSEP_PWM_Get_Initial_Duty_Cycle( VSEP_1_PWM_3_PWM_INIT ) )   
-         },
-         {
-             VSEP_Msg_PWM_Set_Period( 0, VSEP_PWM_Get_Initial_Period( VSEP_1_PWM_3_PWM_INIT         ) ) |
-            VSEP_Msg_PWM_Set_Divider( 0, VSEP_PWM_Get_Base_Frequency_Divider( VSEP_1_PWM_3_PWM_INIT ) )
-         }
-      },
-      { //PWM Channel 4
-         {
-            VSEP_Msg_Set_SDOA( 0, VSEP_RXD_SDOA_FAULT_GRP_8 ) |
-            VSEP_Msg_Set_SDIA( 0, VSEP_TXD_SDIA_PWM_ONT_4   )   
-         },
-         {
-            VSEP_Msg_PWM_Set_OnTime( 0, VSEP_PWM_Get_Initial_Duty_Cycle( VSEP_1_PWM_4_PWM_INIT ) )   
-         },
-         {
-             VSEP_Msg_PWM_Set_Period( 0, VSEP_PWM_Get_Initial_Period( VSEP_1_PWM_4_PWM_INIT         ) ) |
-            VSEP_Msg_PWM_Set_Divider( 0, VSEP_PWM_Get_Base_Frequency_Divider( VSEP_1_PWM_4_PWM_INIT ) )
-         }
-      },
-      { //PWM Channel 5
-         {
-            VSEP_Msg_Set_SDOA( 0, VSEP_RXD_SDOA_FAULT_GRP_8 ) |
-            VSEP_Msg_Set_SDIA( 0, VSEP_TXD_SDIA_PWM_ONT_5   )   
-         },
-         {
-            VSEP_Msg_PWM_Set_OnTime( 0, VSEP_PWM_Get_Initial_Duty_Cycle( VSEP_1_PWM_5_PWM_INIT ) )   
-         },
-         {
-             VSEP_Msg_PWM_Set_Period( 0, VSEP_PWM_Get_Initial_Period( VSEP_1_PWM_5_PWM_INIT         ) ) |
-            VSEP_Msg_PWM_Set_Divider( 0, VSEP_PWM_Get_Base_Frequency_Divider( VSEP_1_PWM_5_PWM_INIT ) )
-         }
-      },
-      { //PWM Channel 6
-         {      
-            VSEP_Msg_Set_SDOA( 0, VSEP_RXD_SDOA_FAULT_GRP_8 ) |
-            VSEP_Msg_Set_SDIA( 0, VSEP_TXD_SDIA_PWM_ONT_6   )   
-         },
-         {
-            VSEP_Msg_PWM_Set_OnTime( 0, VSEP_PWM_Get_Initial_Duty_Cycle( VSEP_1_PWM_6_PWM_INIT ) )   
-         },
-         {
-             VSEP_Msg_PWM_Set_Period( 0, VSEP_PWM_Get_Initial_Period( VSEP_1_PWM_6_PWM_INIT         ) ) |
-            VSEP_Msg_PWM_Set_Divider( 0, VSEP_PWM_Get_Base_Frequency_Divider( VSEP_1_PWM_6_PWM_INIT ) )
-         }
-      },
-      { //PWM Channel 7
-         {      
-            VSEP_Msg_Set_SDOA( 0, VSEP_RXD_SDOA_FAULT_GRP_8 ) |
-            VSEP_Msg_Set_SDIA( 0, VSEP_TXD_SDIA_PWM_ONT_7   )   
-         },
-         {
-            VSEP_Msg_PWM_Set_OnTime( 0, VSEP_PWM_Get_Initial_Duty_Cycle( VSEP_1_PWM_7_PWM_INIT ) )   
-         },
-         {
-             VSEP_Msg_PWM_Set_Period( 0, VSEP_PWM_Get_Initial_Period( VSEP_1_PWM_7_PWM_INIT         ) ) |
-            VSEP_Msg_PWM_Set_Divider( 0, VSEP_PWM_Get_Base_Frequency_Divider( VSEP_1_PWM_7_PWM_INIT ) )
-         }
-      },
-      { //PWM Channel 8
-         {
-            VSEP_Msg_Set_SDOA( 0, VSEP_RXD_SDOA_FAULT_GRP_8 ) |
-            VSEP_Msg_Set_SDIA( 0, VSEP_TXD_SDIA_PWM_ONT_8   )   
-         },
-         {
-            VSEP_Msg_PWM_Set_OnTime( 0, VSEP_PWM_Get_Initial_Duty_Cycle( VSEP_1_PWM_8_PWM_INIT ) )   
-         },
-         {
-             VSEP_Msg_PWM_Set_Period( 0, VSEP_PWM_Get_Initial_Period( VSEP_1_PWM_8_PWM_INIT         ) ) |
-            VSEP_Msg_PWM_Set_Divider( 0, VSEP_PWM_Get_Base_Frequency_Divider( VSEP_1_PWM_8_PWM_INIT ) )
-         }
-      }
-   }
-
-#endif
 };
 
 /* VSEP PCH Init Value */
@@ -489,49 +340,12 @@ const uint16_t VSEP_PCH_TXD_INITIAL[NUMBER_OF_VSEP][VSEP_PCH_TXD_MESSAGE_MAX] =
       }
    }
 #endif
-#if NUMBER_OF_VSEP > VSEP_DEVICES_1
-   ,{
-      {      
-            VSEP_Msg_Set_SDOA( 0, VSEP_RXD_SDOA_Mx_INPUT ) |
-            VSEP_Msg_Set_SDIA( 0, VSEP_TXD_SDIA_PCH      )   
-      },
-      {
-          ( VSEP_Msg_PCHx_Set_State( 0, VSEP_PCH_CHANNEL_OUT_4,  VSEP_Msg_PCH_Get_Initial_State( VSEP_1_PCH4_INIT  ) ) ) |
-          ( VSEP_Msg_PCHx_Set_State( 0, VSEP_PCH_CHANNEL_OUT_5 , VSEP_Msg_PCH_Get_Initial_State( VSEP_1_PCH5_INIT  ) ) ) |
-          ( VSEP_Msg_PCHx_Set_State( 0, VSEP_PCH_CHANNEL_OUT_6 , VSEP_Msg_PCH_Get_Initial_State( VSEP_1_PCH6_INIT  ) ) ) |
-          ( VSEP_Msg_PCHx_Set_State( 0, VSEP_PCH_CHANNEL_OUT_7 , VSEP_Msg_PCH_Get_Initial_State( VSEP_1_PCH7_INIT  ) ) ) |
-          ( VSEP_Msg_PCHx_Set_State( 0, VSEP_PCH_CHANNEL_OUT_8 , VSEP_Msg_PCH_Get_Initial_State( VSEP_1_PCH8_INIT  ) ) ) |
-          ( VSEP_Msg_PCHx_Set_State( 0, VSEP_PCH_CHANNEL_OUT_13, VSEP_Msg_PCH_Get_Initial_State( VSEP_1_PCH13_INIT ) ) ) |
-          ( VSEP_Msg_PCHx_Set_State( 0, VSEP_PCH_CHANNEL_OUT_14, VSEP_Msg_PCH_Get_Initial_State( VSEP_1_PCH14_INIT ) ) ) |
-          ( VSEP_Msg_PCHx_Set_State( 0, VSEP_PCH_CHANNEL_OUT_17, VSEP_Msg_PCH_Get_Initial_State( VSEP_1_PCH17_INIT ) ) ) |
-          ( VSEP_Msg_PCHx_Set_State( 0, VSEP_PCH_CHANNEL_OUT_18, VSEP_Msg_PCH_Get_Initial_State( VSEP_1_PCH18_INIT ) ) ) |
-          ( VSEP_Msg_PCHx_Set_State( 0, VSEP_PCH_CHANNEL_OUT_19, VSEP_Msg_PCH_Get_Initial_State( VSEP_1_PCH19_INIT ) ) ) |
-          ( VSEP_Msg_PCHx_Set_State( 0, VSEP_PCH_CHANNEL_OUT_20, VSEP_Msg_PCH_Get_Initial_State( VSEP_1_PCH20_INIT ) ) ) |
-          ( VSEP_Msg_PCHx_Set_State( 0, VSEP_PCH_CHANNEL_OUT_23, VSEP_Msg_PCH_Get_Initial_State( VSEP_1_PCH23_INIT ) ) ) |
-          ( VSEP_Msg_PCHx_Set_State( 0, VSEP_PCH_CHANNEL_OUT_25, VSEP_Msg_PCH_Get_Initial_State( VSEP_1_PCH25_INIT ) ) ) |
-          ( VSEP_Msg_PCHx_Set_State( 0, VSEP_PCH_CHANNEL_OUT_26, VSEP_Msg_PCH_Get_Initial_State( VSEP_1_PCH26_INIT ) ) ) |
-          ( VSEP_Msg_PCHx_Set_State( 0, VSEP_PCH_CHANNEL_OUT_30, VSEP_Msg_PCH_Get_Initial_State( VSEP_1_PCH30_INIT ) ) ) 
-      }
-   }
-#endif
 };
 
 /* vsep soh module init value */
 const uint16_t VSEP_SOH_STATUS_TXD[ NUMBER_OF_VSEP ][VSEP_SOH_STATUS_TXD_MESSAGE_MAX] =
 {
 #if ( NUMBER_OF_VSEP > VSEP_DEVICES_0 )
-   {
-     {  
-         VSEP_Msg_Set_FLTCLR( 0, 0 ) |
-        VSEP_Msg_Set_CRTOCLR( 0, 0 ) |
-           VSEP_Msg_Set_SDOA(0, VSEP_RXD_SDOA_EST_STAT ) |
-           VSEP_Msg_Set_SDIA(0, VSEP_TXD_SDIA_NOT_USED )     
-     },
-     { 0                                                 }
-   }
-#endif
-#if ( NUMBER_OF_VSEP > VSEP_DEVICES_1 )
-   ,
    {
      {  
          VSEP_Msg_Set_FLTCLR( 0, 0 ) |
@@ -560,20 +374,6 @@ const uint16_t VSEP_EST_FAULT_GRAD_INITIAL[NUMBER_OF_VSEP][VSEP_EST_FAULT_TXD_ME
      }  // GRADIENT Threshold and Time
    }
 #endif
-#if ( NUMBER_OF_VSEP > VSEP_DEVICES_1 )
-   ,
-   {
-     {  
-         VSEP_Msg_Set_FLTCLR( 0, false ) |
-        VSEP_Msg_Set_CRTOCLR( 0, false ) |
-           VSEP_Msg_Set_SDOA(0, VSEP_RXD_SDOA_GRADCOUNT ) |
-           VSEP_Msg_Set_SDIA(0, VSEP_TXD_SDIA_GRAD_CTRL )     
-     },
-     {    VSEP_Msg_IGBT_Set_GRADTHR( 0,   VSEP_Gradient_Check_Get_Threshold(VSEP_1_GRADIENT_CHECK_INIT ) ) |
-         VSEP_Msg_IGBT_Set_GRADFILT( 0, VSEP_Gradient_Check_Get_Filter_Time(VSEP_1_GRADIENT_CHECK_INIT ) )
-     }  // GRADIENT Threshold and Time
-   }
-#endif
 };
 
 //for MT22.1 special spark and fault diagnostic logic.
@@ -589,18 +389,8 @@ const uint8_t VSEP_EST_FAULT_SYNC_MESSAGE_BYTE_INITIAL[NUMBER_OF_VSEP][VSEP_EST_
      { 0                                                 } // SDOA 5 byte 1
    }
 #endif
-#if ( NUMBER_OF_VSEP > VSEP_DEVICES_1 )
-   ,
-  {
-     {  
-         VSEP_Msg_Set_FLTCLR_BYTE_FORMAT( 0, true )  |
-        VSEP_Msg_Set_CRTOCLR_BYTE_FORMAT( 0, false ) |
-           VSEP_Msg_Set_SDOA_BYTE_FORMAT(0, VSEP_RXD_SDOA_FAULT_GRP_5 ) },
-     { VSEP_Msg_Set_SDIA_BYTE_FORMAT(0, VSEP_TXD_SDIA_EST_CTRL ) },
-     { 0                                                   } 
-   }
-#endif
 };
+
 //Fault data	for MT22.1, start at VSEP_RXD_SDOA_FAULT_GRP_6 
 const uint16_t VSEP_FAULT_TXD[NUMBER_OF_VSEP][VSEP_FAULT_TXD_MESSAGE_MAX]=
 {
@@ -616,21 +406,6 @@ const uint16_t VSEP_FAULT_TXD[NUMBER_OF_VSEP][VSEP_FAULT_TXD_MESSAGE_MAX]=
      { 0                                                 }, // SDOA 8 word 2
      { 0                                                 }, // SDOA A word 3
      { 0                                                 } // SDOA C word 4
-   }
-#endif
-#if ( NUMBER_OF_VSEP > VSEP_DEVICES_1 )
-   ,
-   {
-     {  
-         VSEP_Msg_Set_FLTCLR( 0, true )  |
-        VSEP_Msg_Set_CRTOCLR( 0, false ) |
-           VSEP_Msg_Set_SDOA(0, VSEP_RXD_SDOA_FAULT_GRP_6 ) |
-           VSEP_Msg_Set_SDIA(0, VSEP_TXD_SDIA_NOT_USED )     
-     },
-     { 0                                                 }, // SDOA 6 word 1
-     { 0                                                 }, // SDOA 8 word 2
-     { 0                                                 }, // SDOA A word 3
-     { 0                                                 }  // SDOA C word 4
    }
 #endif
 };
@@ -651,23 +426,6 @@ const uint16_t VSEP_MPIO_MODE_TXD_INITIAL[NUMBER_OF_VSEP][VSEP_MPIO_MODE_TXD_MES
               VSEP_Msg_EST_Set_DEC_DISCB( 0,    VSEP_EST_Select_Get_Select_Mode( VSEP_0_EST_SELECT_SETUP_INIT )                         ) |
                 VSEP_Msg_EST_Set_IGBTCFG( 0,     VSEP_EST_Select_Get_Drive_Mode( VSEP_0_EST_SELECT_SETUP_INIT )                         ) 
       }
-   }
-#endif
-#if ( NUMBER_OF_VSEP > VSEP_DEVICES_1 )
-   ,
-   {
-      {     VSEP_Msg_Set_SDOA( 0, VSEP_RXD_SDOA_NOT_USED  ) |
-            VSEP_Msg_Set_SDIA( 0, VSEP_TXD_SDIA_SETUP )   
-      },
-      {
-         VSEP_Msg_MPIO_Set_Mx_OHILOB_OEN( 0, (VSEP_CHANNEL_MPIO_1-VSEP_CHANNEL_MPIO_1), VSEP_MPIO_Get_Input_Mode( VSEP_1_MPIO_M1_INIT ) ) |
-         VSEP_Msg_MPIO_Set_Mx_OHILOB_OEN( 0, (VSEP_CHANNEL_MPIO_2-VSEP_CHANNEL_MPIO_1), VSEP_MPIO_Get_Input_Mode( VSEP_1_MPIO_M2_INIT ) ) |
-         VSEP_Msg_MPIO_Set_Mx_OHILOB_OEN( 0, (VSEP_CHANNEL_MPIO_3-VSEP_CHANNEL_MPIO_1), VSEP_MPIO_Get_Input_Mode( VSEP_1_MPIO_M3_INIT ) ) |
-                 VSEP_Msg_EST_Set_CYLCNT( 0, VSEP_EST_Select_Get_Cylinder_Count( VSEP_1_EST_SELECT_SETUP_INIT )                         ) |
-              VSEP_Msg_EST_Set_DEC_DISCB( 0,    VSEP_EST_Select_Get_Select_Mode( VSEP_1_EST_SELECT_SETUP_INIT )                         ) |
-                VSEP_Msg_EST_Set_IGBTCFG( 0,     VSEP_EST_Select_Get_Drive_Mode( VSEP_1_EST_SELECT_SETUP_INIT )                         ) 
-      }
-
    }
 #endif
 };
