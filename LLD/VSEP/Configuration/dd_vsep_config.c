@@ -39,15 +39,12 @@
 #include "dd_vsep_fault.h"
 #include "dd_vsep_vr.h"
 #include "dd_vsep_deps.h"
-//#include "dd_port.h"
 #include "io_config_vsep.h"
-//#include "dd_pwm.h"
 #include "dd_vsep_discrete_interface.h"
-
 #include "t_custom.h"
 #include "io_config_spi.h"
 #include "dd_vsep_fault.h"
-
+#include "dd_vsep_init_config.h"
 
 
 extern FAR_COS uint16_t GetHWIO_EngineSpeed(void);
@@ -352,7 +349,6 @@ const SPI_Message_T VSEP_VR_MESSAGE[ NUMBER_OF_VSEP ] =
    { &VSEP_VR_MESSAGE_DEFINITION[ VSEP_INDEX_0 ], &VSEP_VR_CB[ VSEP_INDEX_0 ] }
 };
 
-uint16_t VSEP_DEPS_Rxd[NUMBER_OF_VSEP][VSEP_DEPS_RXD_MESSAGE_MAX];
 
 //=============================================================================
 // VSEP DEPS Message Definition

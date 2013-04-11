@@ -36,6 +36,9 @@
 #include "dd_spark_interface.h"
 
 
+uint16_t VSEP_EST_Select_Txd[NUMBER_OF_VSEP][VSEP_EST_SELECT_TXD_MESSAGE_MAX];
+uint16_t VSEP_EST_Select_Rxd[NUMBER_OF_VSEP][VSEP_EST_SELECT_RXD_MESSAGE_MAX];
+
 //=============================================================================
 // This variable defines our current mode of operation.
 //=============================================================================

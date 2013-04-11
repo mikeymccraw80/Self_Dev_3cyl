@@ -32,6 +32,10 @@
 #include "dd_vsep_rxd.h"
 #include "dd_vsep.h"
 
+
+uint16_t VSEP_DEPS_Txd[NUMBER_OF_VSEP][VSEP_DEPS_TXD_MESSAGE_MAX];
+uint16_t VSEP_DEPS_Rxd[NUMBER_OF_VSEP][VSEP_DEPS_RXD_MESSAGE_MAX];
+
 //=============================================================================
 // VSEP_PULSE_DEPS_Initialize_Device
 //=============================================================================
