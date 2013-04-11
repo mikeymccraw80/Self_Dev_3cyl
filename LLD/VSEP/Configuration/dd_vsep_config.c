@@ -432,11 +432,6 @@ const SPI_Message_T VSEP_MESSAGE[ NUMBER_OF_VSEP ][VSEP_MESSAGE_MAX+7] =
 };
 
 
-void VSEP_Fault_Task_7_8ms( void )
-{
-	VSEP_Fault_Diagnose_Channels((void*)VSEP_Fault_Logging);
-}
-
 /* return true if channel fault counter reach threshold */
 bool VSEP_Is_Channel_Fault_Threshold_Reach(VSEP_Channel_T channel)
 {
@@ -449,7 +444,6 @@ static void VSEP_IGBT_Set_GRADTHR_According_To_RPM(VSEP_Index_T in_index)
    bool vsep_gradthr_changed = false;
    VSEP_Index_T device = in_index;
 
-  // if ((false == vsep_gradthr_high_rpm_set) && (GetHWIO_EngineSpeed() >= FixDefConst(KwHWIO_VSEP_Gradthr_RPM_High_Limit,RPM_HiResType2_W)))//need add a new calibration
    {
       vsep_gradthr_high_rpm_set = true;
       vsep_gradthr_low_rpm_set = false;
@@ -458,15 +452,7 @@ static void VSEP_IGBT_Set_GRADTHR_According_To_RPM(VSEP_Index_T in_index)
 
 
    }
-//   else if ((false == vsep_gradthr_low_rpm_set) && ( GetHWIO_EngineSpeed() <= FixDefConst(KwHWIO_VSEP_Gradthr_RPM_Low_Limit,RPM_HiResType2_W)))//a calibration
- //  {
-//      vsep_gradthr_high_rpm_set = false;
-//      vsep_gradthr_low_rpm_set = true;
-//      vsep_gradthr_changed = true;
- //     new_gradthr_value = VSEP_GRADIENT_CHECK_THRESHOLD_280MV; // 280 mV
-
-//   }
-
+   
    if (true == vsep_gradthr_changed)
    {
       VSEP_FAULT_EST_Set_Threshold_Immediate(MTSA_CONFIG_GRADIENT_COUNT, new_gradthr_value);

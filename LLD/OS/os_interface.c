@@ -9,6 +9,7 @@
 #include "io_config_mios.h"
 #include "dd_dspi_interface.h"
 #include "dd_fi_interface.h"
+#include "dd_vsep_fault_interface.h"
 
 //tempoary
 #include "soh.h"

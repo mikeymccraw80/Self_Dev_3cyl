@@ -36,11 +36,8 @@
 
 #define NUMBER_OF_VSEP (1)
 
-void VSEP_Fault_Task_7_8ms( void );
+
 extern const SPI_Message_Definition_T VSEP_HWTEST_INIT_MESSAGE_DEFINITION[ NUMBER_OF_VSEP ];
-
-
-
 
 
 
