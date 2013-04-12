@@ -1,0 +1,313 @@
+/*============================================================================*/
+/*                                                                            */
+/* ESTD Subsystem APPLICATION ANCILLARY FILE                                  */
+/*                                                                            */
+/*============================================================================*/
+
+*-estdmall.SaESTD_FaultFailureCounter[0]{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ESTDFC1";
+*-  variable_location.symbol = estdmall.SaESTD_FaultFailureCounter[0];
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-}
+
+*-estdmall.SaESTD_FaultFailureCounter[1]{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ESTDFC2";
+*-  variable_location.symbol = estdmall.SaESTD_FaultFailureCounter[1];
+*-  variable_location.offset = 0x01;
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-}
+
+
+*-estdmall.SaESTD_FaultFailureCounter[2]{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ESTDFC3";
+*-  variable_location.symbol = estdmall.SaESTD_FaultFailureCounter[2];
+*-  variable_location.offset = 0x02;
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-}
+
+*-estdmall.SaESTD_FaultFailureCounter[3]{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ESTDFC4";
+*-  variable_location.symbol = estdmall.SaESTD_FaultFailureCounter[3];
+*-  variable_location.offset = 0x03;
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-}
+
+
+*-estdmall.ScESTD_EST_OutputNumber{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ESTDOUT";
+*-  variable_location.symbol = estdmall.ScESTD_EST_OutputNumber;
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-}
+
+*-estdmall.SaESTD_FaultSampleCounter[0]{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ESTDSC1";
+*-  variable_location.symbol = estdmall.SaESTD_FaultSampleCounter[0];
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-}
+
+*-estdmall.SaESTD_FaultSampleCounter[1]{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ESTDSC2";
+*-  variable_location.symbol = estdmall.SaESTD_FaultSampleCounter[1];
+*-  variable_location.offset = 0x01;
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-}
+
+*-estdmall.SaESTD_FaultSampleCounter[2]{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ESTDSC3";
+*-  variable_location.symbol = estdmall.SaESTD_FaultSampleCounter[2];
+*-  variable_location.offset = 0x02;
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-}
+
+*-estdmall.SaESTD_FaultSampleCounter[3]{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ESTDSC4";
+*-  variable_location.symbol = estdmall.SaESTD_FaultSampleCounter[3];
+*-  variable_location.offset = 0x03;
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-}
+
+*-estdmall.SaESTD_FaultTestStatusReported[0]{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ESTDTSR1";
+*-  variable_location.symbol = estdmall.SaESTD_FaultTestStatusReported[0];
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-}
+
+*-estdmall.SaESTD_FaultTestStatusReported[1]{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ESTDTSR2";
+*-  variable_location.symbol = estdmall.SaESTD_FaultTestStatusReported[1];
+*-  variable_location.offset = 0x01;
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-}
+
+*-estdmall.SaESTD_FaultTestStatusReported[2]{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ESTDTSR3";
+*-  variable_location.symbol = estdmall.SaESTD_FaultTestStatusReported[2];
+*-  variable_location.offset = 0x02;
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-}
+
+*-estdmall.SaESTD_FaultTestStatusReported[3]{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ESTDTSR4";
+*-  variable_location.symbol = estdmall.SaESTD_FaultTestStatusReported[3];
+*-  variable_location.offset = 0x03;
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-}
+
+*-estdmall.SbESTD_FaultEnblCriteriaMet{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ESTDECM";
+*-  variable_location.symbol = estdmall.SbESTD_FaultEnblCriteriaMet;
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  bit_mask                 = 0x1;
+*-}
+
+*-estdmall.VaESTD_FailCriteriaMet[0]{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ESTDFCM1";
+*-  variable_location.symbol = estdmall.VaESTD_FailCriteriaMet[0];
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  bit_mask                 = 0x1;
+*-}
+
+*-estdmall.VaESTD_FailCriteriaMet[1]{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ESTDFCM2";
+*-  variable_location.symbol = estdmall.VaESTD_FailCriteriaMet[1];
+*-  variable_location.offset = 0x01;
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  bit_mask                 = 0x1;
+*-}
+
+*-estdmall.VaESTD_FailCriteriaMet[2]{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ESTDFCM3";
+*-  variable_location.symbol = estdmall.VaESTD_FailCriteriaMet[2];
+*-  variable_location.offset = 0x02;
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  bit_mask                 = 0x1;
+*-}
+
+*-estdmall.VaESTD_FailCriteriaMet[3]{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ESTDFCM4";
+*-  variable_location.symbol = estdmall.VaESTD_FailCriteriaMet[3];
+*-  variable_location.offset = 0x03;
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  bit_mask                 = 0x1;
+*-}
+
+
+*-estdmall.SaESTD_FaultTestComplete[0]{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ESTDTC1";
+*-  variable_location.symbol = estdmall.SaESTD_FaultTestComplete[0];
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  bit_mask                 = 0x1;
+*-}
+
+*-estdmall.SaESTD_FaultTestComplete[1]{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ESTDTC2";
+*-  variable_location.symbol = estdmall.SaESTD_FaultTestComplete[1];
+*-  variable_location.offset = 0x01;
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  bit_mask                 = 0x1;
+*-}
+
+
+*-estdmall.SaESTD_FaultTestComplete[2]{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ESTDTC3";
+*-  variable_location.symbol = estdmall.SaESTD_FaultTestComplete[2];
+*-  variable_location.offset = 0x02;
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  bit_mask                 = 0x1;
+*-}
+
+*-estdmall.SaESTD_FaultTestComplete[3]{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ESTDTC4";
+*-  variable_location.symbol = estdmall.SaESTD_FaultTestComplete[3];
+*-  variable_location.offset = 0x03;
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  bit_mask                 = 0x1;
+*-}
+
+*-estdmall.SaESTD_FaultTestFailed[0]{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ESTDTF1";
+*-  variable_location.symbol = estdmall.SaESTD_FaultTestFailed[0];
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  bit_mask                 = 0x1;
+*-}
+
+*-estdmall.SaESTD_FaultTestFailed[1]{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ESTDTF2";
+*-  variable_location.symbol = estdmall.SaESTD_FaultTestFailed[1];
+*-  variable_location.offset = 0x01;
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  bit_mask                 = 0x1;
+*-}
+
+*-estdmall.SaESTD_FaultTestFailed[2]{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ESTDTF3";
+*-  variable_location.symbol = estdmall.SaESTD_FaultTestFailed[2];
+*-  variable_location.offset = 0x02;
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  bit_mask                 = 0x1;
+*-}
+
+*-estdmall.SaESTD_FaultTestFailed[3]{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ESTDTF4";
+*-  variable_location.symbol = estdmall.SaESTD_FaultTestFailed[3];
+*-  variable_location.offset = 0x03;
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  bit_mask                 = 0x1;
+*-}
+
+
+
+/*============================================================================*/
+/* CHANGE LOG                                                                 */
+/*                                                                            */
+/*                                                                            */
+/* REV.   DATE     USER  RSM    DESCRIPTION                                   */
+/* 1.0    031017   pd   3152    Created Module                                */
+/*                                                                            */
+/* end of module                                                              */
+/*                                                                            */
+/*============================================================================*/

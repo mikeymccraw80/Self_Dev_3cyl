@@ -1,0 +1,125 @@
+/*============================================================================*/
+/*                                                                            */
+/* KNOD Subsystem APPLICATION ANCILLARY FILE                                  */
+/*                                                                            */
+/*============================================================================*/
+
+*-emsdmprd.VcEMSD_MPRDSampleCntr{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "MPRSMPLCNT";
+*-  variable_location.symbol = emsdmprd.VcEMSD_MPRDSampleCntr;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "EMSD MPR Output diag sample counter";
+*-}
+
+*-emsdmprd.ScEMSD_MPRDShortHiFailCntr{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "MPRFAHICNT";
+*-  variable_location.symbol = emsdmprd.ScEMSD_MPRDShortHiFailCntr;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "EMSD MPR Output diag short high fail counter";
+*-}
+
+*-emsdmprd.ScEMSD_MPRDShortLoFailCntr{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "MPRFALOCNT";
+*-  variable_location.symbol = emsdmprd.ScEMSD_MPRDShortLoFailCntr;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "EMSD MPR Output diag fail counter";
+*-}
+
+*-emsdmprd.SbEMSD_MPRDEnblCriteriaMet{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "MPRENLCRMT";
+*-  variable_location.symbol = emsdmprd.SbEMSD_MPRDEnblCriteriaMet;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "EMSD MPR Output diag system enable criteria met";
+*-}
+
+*-emsdmprd.SbEMSD_MPRDTestComplete{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "MPRTSTCMPL";
+*-  variable_location.symbol = emsdmprd.SbEMSD_MPRDTestComplete;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "EMSD MPR Output diag system test complete";
+*-}
+
+*-emsdmprd.SbEMSD_MPRDShortHiTestFailed{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "MPRTSTFAHI";
+*-  variable_location.symbol = emsdmprd.SbEMSD_MPRDShortHiTestFailed;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "EMSD MPR Output diag system short high test fail";
+*-}
+
+*-emsdmprd.SbEMSD_MPRDShortHiTestFailed{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "MPRTSTFALO";
+*-  variable_location.symbol = emsdmprd.SbEMSD_MPRDShortHiTestFailed;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "EMSD MPR Output diag system short low test fail";
+*-}
+
+*-emsdmprd.SbEMSD_MPRDShortHiFailCriteriaMet{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "MPRSHHIMET";
+*-  variable_location.symbol = emsdmprd.SbEMSD_MPRDShortHiFailCriteriaMet;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "EMSD MPR Output diag system test High fail condition meet";
+*-}
+
+*-emsdmprd.SbEMSD_MPRDShortLoFailCriteriaMet{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "MPRSHLOMET";
+*-  variable_location.symbol = emsdmprd.SbEMSD_MPRDShortLoFailCriteriaMet;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "EMSD MPR Output diag system test low fail condition meet";
+*-}
+
+
+/*============================================================================*/
+/* CHANGE LOG                                                                 */
+/*                                                                            */
+/*                                                                            */
+/* REV.   DATE     USER  RSM    DESCRIPTION                                   */
+/*                               */
+/*                                                                            */
+/* end of module                                                              */
+/*                                                                            */
+/*============================================================================*/

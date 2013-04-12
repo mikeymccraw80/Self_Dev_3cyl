@@ -1,0 +1,317 @@
+/******************************************************************************/
+/*                                                                            */
+/* Filename:          dd_atd.anc                                                */
+/*                                                                            */
+/* Description:       Private ancillary definitions file                      */
+/*                    for dd_atd.                                               */
+/*                                                                            */
+/* Global Functions Defined:                                                  */
+/*                    None                                                    */
+/* Static Functions Defined:                                                  */
+/*                    None                                                    */
+/* Inline Functions Defined:                                                  */
+/*                    None                                                    */
+/*                                                                            */
+/* Forward Engine Management Systems                                          */
+/*                                                                            */
+/* Copyright 2004, Delphi Technologies, Inc.                                  */
+/* All rights reserved.                                                       */
+/*                                                                            */
+/******************************************************************************/
+
+*-dd_atd.ATDR00{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ADESC";
+*-  variable_location.symbol = dd_atd.ATDR00;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "dd_atd.AD_ESCVI";
+*-}
+
+
+*-dd_atd.ATDR01{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ADEGRPOS";
+*-  variable_location.symbol = dd_atd.ATDR01;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "dd_atd.AD_EGR_PINTAL_POSITION_FB_TYPE";
+*-}
+
+*-dd_atd.ATDR02{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ADO2S12";
+*-  variable_location.symbol = dd_atd.ATDR02;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "dd_atd.AD_O2_SENSOR_12_TYPE";
+*-}
+
+*-dd_atd.ATDR03{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ADPPS1";
+*-  variable_location.symbol = dd_atd.ATDR03;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "dd_atd.AD_PEDAL_POSITION_1_TYPE";
+*-}
+
+
+*-dd_atd.ATDR04{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ADPPS2B";
+*-  variable_location.symbol = dd_atd.ATDR04;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "dd_atd.AD_PEDAL_POSITION_2_B_TYPE";
+*-}
+
+*-dd_atd.ATDR05{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ADTPS1";
+*-  variable_location.symbol = dd_atd.ATDR05;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "dd_atd.AD_THROTTLE_POSITION_1_TYPE";
+*-}
+
+*-dd_atd.ATDR06{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ADRUGHRD";
+*-  variable_location.symbol = dd_atd.ATDR06;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "dd_atd.AD_ROUGH_ROAD_ACCELEROMETER_TYPE";
+*-}
+
+*-dd_atd.ATDR07{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ADVREF1";
+*-  variable_location.symbol = dd_atd.ATDR07;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "dd_atd.AD_IGNITION_VOLTAGE_REF_1_TYPE";
+*-}
+
+*-dd_atd.ATDR10{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ADO2S11";
+*-  variable_location.symbol = dd_atd.ATDR10;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "dd_atd.AD_O2_SENSOR_11_TYPE";
+*-}
+
+*-dd_atd.ATDR11{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ADTPS2";
+*-  variable_location.symbol = dd_atd.ATDR11;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "dd_atd.AD_THROTTLE_POSITION_2_TYPE";
+*-}
+
+*-dd_atd.ATDR12{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ADPPS2";
+*-  variable_location.symbol = dd_atd.ATDR12;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "dd_atd.AD_PEDAL_POSITION_2_TYPE";
+*-}
+
+*-dd_atd.ATDR13{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ADPPS1B";
+*-  variable_location.symbol = dd_atd.ATDR13;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "dd_atd.AD_PEDAL_POSITION_1_B_TYPE";
+*-}
+
+*-dd_atd.ATDR14{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ADVREF2";
+*-  variable_location.symbol = dd_atd.ATDR14;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "dd_atd.AD_IGNITION_VOLTAGE_REF_2_TYPE";
+*-}
+
+*-dd_atd.ATDR15{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ADIAT";
+*-  variable_location.symbol = dd_atd.ATDR15;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "dd_atd.AD_INTAKE_AIR_TEMPERATURE_TYPE";
+*-}
+
+*-dd_atd.ATDR16{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ADMAP";
+*-  variable_location.symbol = dd_atd.ATDR16;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "dd_atd.AD_MANIFOLD_ABS_PRESSURE_TIME_BASE_TYPE";
+*-}
+
+*-dd_atd.ADC_RESULT_BUFFER{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ADCOOLNT";
+*-  variable_location.symbol = dd_atd.ADC_RESULT_BUFFER;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "dd_atd.AD_ENGINE_COOLANT_TEMPERATURE_TYPE";
+*-}
+
+
+*-dd_atd.ADC_RESULT_BUFFER{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ADFREVAP";
+*-  variable_location.symbol = dd_atd.ADC_RESULT_BUFFER;
+*-  variable_location.offset = 0x02;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "dd_atd.AD_FREVAPVI";
+*-}
+
+*-dd_atd.ADC_RESULT_BUFFER{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ADRREVAP";
+*-  variable_location.symbol = dd_atd.ADC_RESULT_BUFFER;
+*-  variable_location.offset = 0x04;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "dd_atd.AD_RREVAPVI";
+*-}
+
+*-dd_atd.ADC_RESULT_BUFFER{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ADOILNGK";
+*-  variable_location.symbol = dd_atd.ADC_RESULT_BUFFER;
+*-  variable_location.offset = 0x06;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "dd_atd.AD_OILTEMP_NGKAFVI_TYPE";
+*-}
+
+*-dd_atd.ADC_RESULT_BUFFER{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ADIGNIT";
+*-  variable_location.symbol = dd_atd.ADC_RESULT_BUFFER;
+*-  variable_location.offset = 0x08;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "dd_atd.AD_IGNITION_VOLTAGE_TYPE";
+*-}
+
+*-dd_atd.ADC_RESULT_BUFFER{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ADFUEL";
+*-  variable_location.symbol = dd_atd.ADC_RESULT_BUFFER;
+*-  variable_location.offset = 0x0A;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "dd_atd.AD_FUEL_LEVEL_TYPE";
+*-}
+
+*-dd_atd.ADC_RESULT_BUFFER{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ADACPRES";
+*-  variable_location.symbol = dd_atd.ADC_RESULT_BUFFER;
+*-  variable_location.offset = 0x0C;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "dd_atd.AD_AC_PRESSURE_TYPE";
+*-}
+
+*-dd_atd.ADC_RESULT_BUFFER{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ADBARO";
+*-  variable_location.symbol = dd_atd.ADC_RESULT_BUFFER;
+*-  variable_location.offset = 0x0E;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "dd_atd.AD_BARO_ALTERNATORVI";
+*-}
+
+
+/******************************************************************************/
+/*                                                                            */
+/* Revision History:                                                          */
+/*                                                                            */
+/* Rev.   DDMMYY  user id      Description                                    */
+/* ------ ------  -------      ---------------------------------------------- */
+/* 1.0    260804  sgchia      Created initial file.                           */
+/*                                                                            */
+/******************************************************************************/

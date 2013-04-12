@@ -1,0 +1,43 @@
+/*============================================================================*/
+/*                                                                            */
+/* KNOD Subsystem APPLICATION ANCILLARY FILE                                  */
+/*                                                                            */
+/*============================================================================*/
+
+*-emsdflhd.SbEMSD_FileROMTestComplete{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "FLHTSTCMPL";
+*-  variable_location.symbol = emsdflhd.SbEMSD_FileROMTestComplete;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "EMSD Flash checksum diag system test complete";
+*-}
+
+*-emsdflhd.SbEMSD_FileROMTestFailed{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "FLHTSTFAHI";
+*-  variable_location.symbol = emsdflhd.SbEMSD_FileROMTestFailed;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "EMSD Flash checksum diag system test fail";
+*-}
+
+
+
+
+/*============================================================================*/
+/* CHANGE LOG                                                                 */
+/*                                                                            */
+/*                                                                            */
+/* REV.   DATE     USER  RSM    DESCRIPTION                                   */
+/*                               */
+/*                                                                            */
+/* end of module                                                              */
+/*                                                                            */
+/*============================================================================*/

@@ -1,0 +1,256 @@
+/*============================================================================*/
+/*                                                                            */
+/* KNOD Subsystem APPLICATION ANCILLARY FILE                                  */
+/*                                                                            */
+/*============================================================================*/
+
+*-knodmall.ScKNKD_SensorFailCounter{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "KNKFACNT";
+*-  variable_location.symbol = knodmall.ScKNKD_SensorFailCounter;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "Knock sensor failed counter";
+*-}
+
+*-knodmall.VcKNKD_SensorSampleCounter{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "KNKSMCNT";
+*-  variable_location.symbol = knodmall.VcKNKD_SensorSampleCounter;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "Knock sensor sample counter";
+*-}
+
+*-knodmall.VcKNKD_SystemFailLoCounter{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "KNKFLCNT";
+*-  variable_location.symbol = knodmall.VcKNKD_SystemFailLoCounter;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "Knock system fail low counter";
+*-}
+
+*-knodmall.VcKNKD_SystemFailHiCounter{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "KNKFHCNT";
+*-  variable_location.symbol = knodmall.VcKNKD_SystemFailHiCounter;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "Knock system fail high counter";
+*-}
+
+*-knodmall.VcKNKD_SystemSampleCounter{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "KNKSSCNT";
+*-  variable_location.symbol = knodmall.VcKNKD_SystemSampleCounter;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "Knock system sample counter";
+*-}
+
+*-knodmall.LfKNKD_ESCGainMin{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ESCGAMIN";
+*-  variable_location.symbol = knodmall.LfKNKD_ESCGainMin;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.250000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "ESC gain min";
+*-}
+
+*-knodmall.SbKNKD_DsblgKeyOnFaultPresent{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "KNKDISFU";
+*-  variable_location.symbol = knodmall.SbKNKD_DsblgKeyOnFaultPresent;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "Knock diag disable key on fault";
+*-}
+
+*-knodmall.SbKNKD_SystemEnableCriteriaMet{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "KNKENCRM";
+*-  variable_location.symbol = knodmall.SbKNKD_SystemEnableCriteriaMet;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "Knock diag system enable criteria met";
+*-}
+
+*-knodmall.SbKNKD_CommonEnableCriteriaMet{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "KNKCENCM";
+*-  variable_location.symbol = knodmall.SbKNKD_CommonEnableCriteriaMet;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "Knock diag common enable criteria met";
+*-}
+
+*-knodmall.SbKNKD_SystemFailCriteriaMet{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "KNKFACRM";
+*-  variable_location.symbol = knodmall.SbKNKD_SystemFailCriteriaMet;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "Knock diag system fail criteria met";
+*-}
+
+*-knodmall.SbKNKD_SystemTestComplete{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "KNKTSTCP";
+*-  variable_location.symbol = knodmall.SbKNKD_SystemTestComplete;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "Knock diag system test complete";
+*-}
+
+*-knodmall.SbKNKD_SystemTestFailed{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "KNKTSTFA";
+*-  variable_location.symbol = knodmall.SbKNKD_SystemTestFailed;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "Knock diag system test fail";
+*-}
+
+*-knodmall.SbKNKD_SystemTestLoFailed{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "KNKTSTLF";
+*-  variable_location.symbol = knodmall.SbKNKD_SystemTestLoFailed;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "Knock diag system test low fail";
+*-}
+
+*-knodmall.SbKNKD_SystemTestHiFailed{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "KNKTSTHF";
+*-  variable_location.symbol = knodmall.SbKNKD_SystemTestHiFailed;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "Knock diag system test high fail";
+*-}
+
+*-knodmall.SbKNKD_SensorEnableCriteriaMet{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "KNKSENCM";
+*-  variable_location.symbol = knodmall.SbKNKD_SensorEnableCriteriaMet;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "Knock diag sensor enable criteria met";
+*-}
+
+*-knodmall.SbKNKD_SensorTestComplete{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "KNKSTSCP";
+*-  variable_location.symbol = knodmall.SbKNKD_SensorTestComplete;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "Knock diag sensor test complete";
+*-}
+
+*-knodmall.SbKNKD_SensorTestFailed{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "KNKSTSFA";
+*-  variable_location.symbol = knodmall.SbKNKD_SensorTestFailed;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "Knock diag sensor test fail";
+*-}
+
+*-knodmall.SeKNKD_SensorTestStatusReported{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "KNKSORRP";
+*-  variable_location.symbol = knodmall.SeKNKD_SensorTestStatusReported;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "Knock diag sensor test status report";
+*-} 
+
+*-knodmall.SeKNKD_SystemTestStatusReported{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "KNKSTURP";
+*-  variable_location.symbol = knodmall.SeKNKD_SystemTestStatusReported;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "Knock diag system test status report";
+*-}
+
+*-knodmall.SfKNKD_Pct_ADESC_Delta{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "KNKADESC";
+*-  variable_location.symbol = knodmall.SfKNKD_Pct_ADESC_Delta;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.003051757813";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "Knock diag delta ADESC in percentage";
+*-}
+
+/*============================================================================*/
+/* CHANGE LOG                                                                 */
+/*                                                                            */
+/*                                                                            */
+/* REV.   DATE     USER  RSM    DESCRIPTION                                   */
+/* 1.0    031017   pd   3152    Created Module                                */
+/*                                                                            */
+/* end of module                                                              */
+/*                                                                            */
+/*============================================================================*/

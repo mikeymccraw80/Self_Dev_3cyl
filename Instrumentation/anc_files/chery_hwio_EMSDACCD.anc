@@ -1,0 +1,125 @@
+/*============================================================================*/
+/*                                                                            */
+/* KNOD Subsystem APPLICATION ANCILLARY FILE                                  */
+/*                                                                            */
+/*============================================================================*/
+
+*-emsdaccd.VcEMSD_ACCDSampleCntr{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ACCSMPLCNT";
+*-  variable_location.symbol = emsdaccd.VcEMSD_ACCDSampleCntr;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "EMSD ACC Output diag sample counter";
+*-}
+
+*-emsdaccd.ScEMSD_ACCDShortHiFailCntr{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ACCFAHICNT";
+*-  variable_location.symbol = emsdaccd.ScEMSD_ACCDShortHiFailCntr;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "emsdaccd Output diag short high fail counter";
+*-}
+
+*-emsdaccd.ScEMSD_ACCDShortLoFailCntr{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ACCFALOCNT";
+*-  variable_location.symbol = emsdaccd.ScEMSD_ACCDShortLoFailCntr;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "emsdaccd Output diag fail counter";
+*-}
+
+*-emsdaccd.SbEMSD_ACCDEnblCriteriaMet{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ACCENLCRMT";
+*-  variable_location.symbol = emsdaccd.SbEMSD_ACCDEnblCriteriaMet;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "emsdaccd Output diag system enable criteria met";
+*-}
+
+*-emsdaccd.SbEMSD_ACCDTestComplete{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ACCTSTCMPL";
+*-  variable_location.symbol = emsdaccd.SbEMSD_ACCDTestComplete;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "emsdaccd Output diag system test complete";
+*-}
+
+*-emsdaccd.SbEMSD_ACCDShortHiTestFailed{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ACCTSTFAHI";
+*-  variable_location.symbol = emsdaccd.SbEMSD_ACCDShortHiTestFailed;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "emsdaccd Output diag system short high test fail";
+*-}
+
+*-emsdaccd.SbEMSD_ACCDShortHiTestFailed{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ACCTSTFALO";
+*-  variable_location.symbol = emsdaccd.SbEMSD_ACCDShortHiTestFailed;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "emsdaccd Output diag system short low test fail";
+*-}
+
+*-emsdaccd.SbEMSD_ACCDShortHiFailCriteriaMet{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ACCSHHIMET";
+*-  variable_location.symbol = emsdaccd.SbEMSD_ACCDShortHiFailCriteriaMet;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "emsdaccd Output diag system test High fail condition meet";
+*-}
+
+*-emsdaccd.SbEMSD_ACCDShortLoFailCriteriaMet{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ACCSHLOMET";
+*-  variable_location.symbol = emsdaccd.SbEMSD_ACCDShortLoFailCriteriaMet;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "emsdaccd Output diag system test low fail condition meet";
+*-}
+
+
+/*============================================================================*/
+/* CHANGE LOG                                                                 */
+/*                                                                            */
+/*                                                                            */
+/* REV.   DATE     USER  RSM    DESCRIPTION                                   */
+/*                               */
+/*                                                                            */
+/* end of module                                                              */
+/*                                                                            */
+/*============================================================================*/

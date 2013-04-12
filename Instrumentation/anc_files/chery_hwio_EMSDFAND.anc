@@ -1,0 +1,233 @@
+/*============================================================================*/
+/*                                                                            */
+/* KNOD Subsystem APPLICATION ANCILLARY FILE                                  */
+/*                                                                            */
+/*============================================================================*/
+
+*-emsdfand.VcEMSD_FANASampleCntr{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "FANASMPCNT";
+*-  variable_location.symbol = emsdfand.VcEMSD_FANASampleCntr;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "EMSD FANA Output diag sample counter";
+*-}
+
+*-emsdfand.ScEMSD_FANAShortHiFailCntr{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "FANAFHICNT";
+*-  variable_location.symbol = emsdfand.ScEMSD_FANAShortHiFailCntr;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "EMSD FANA Output diag short high fail counter";
+*-}
+
+*-emsdfand.ScEMSD_FANAShortLoFailCntr{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "FANAFLOCNT";
+*-  variable_location.symbol = emsdfand.ScEMSD_FANAShortLoFailCntr;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "EMSD FANA Output diag fail counter";
+*-}
+
+*-emsdfand.SbEMSD_FANAEnblCriteriaMet{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "FANAENCRMT";
+*-  variable_location.symbol = emsdfand.SbEMSD_FANAEnblCriteriaMet;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "EMSD FANA Output diag system enable criteria met";
+*-}
+
+*-emsdfand.SbEMSD_FANATestComplete{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "FANATSCMPL";
+*-  variable_location.symbol = emsdfand.SbEMSD_FANATestComplete;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "EMSD FANA Output diag system test complete";
+*-}
+
+*-emsdfand.SbEMSD_FANAShortHiTestFailed{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "FANATSFAHI";
+*-  variable_location.symbol = emsdfand.SbEMSD_FANAShortHiTestFailed;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "EMSD FANA Output diag system short high test fail";
+*-}
+
+*-emsdfand.SbEMSD_FANAShortHiTestFailed{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "FANATSFALO";
+*-  variable_location.symbol = emsdfand.SbEMSD_FANAShortHiTestFailed;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "EMSD FANA Output diag system short low test fail";
+*-}
+
+*-emsdfand.SbEMSD_FANAShortHiFailCriteriaMet{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "FANASHIMET";
+*-  variable_location.symbol = emsdfand.SbEMSD_FANAShortHiFailCriteriaMet;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "EMSD FANA Output diag system test High fail condition meet";
+*-}
+
+*-emsdfand.SbEMSD_FANAShortLoFailCriteriaMet{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "FANASLOMET";
+*-  variable_location.symbol = emsdfand.SbEMSD_FANAShortLoFailCriteriaMet;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "EMSD FANA Output diag system test low fail condition meet";
+*-}
+
+
+*-emsdfand.VcEMSD_FANBSampleCntr{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "FANBSMPCNT";
+*-  variable_location.symbol = emsdfand.VcEMSD_FANBSampleCntr;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "EMSD FANB Output diag sample counter";
+*-}
+
+*-emsdfand.ScEMSD_FANBShortHiFailCntr{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "FANBFHICNT";
+*-  variable_location.symbol = emsdfand.ScEMSD_FANBShortHiFailCntr;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "EMSD FANB Output diag short high fail counter";
+*-}
+
+*-emsdfand.ScEMSD_FANBShortLoFailCntr{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "FANBFLOCNT";
+*-  variable_location.symbol = emsdfand.ScEMSD_FANBShortLoFailCntr;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "EMSD FANB Output diag fail counter";
+*-}
+
+*-emsdfand.SbEMSD_FANBEnblCriteriaMet{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "FANBENCRMT";
+*-  variable_location.symbol = emsdfand.SbEMSD_FANBEnblCriteriaMet;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "EMSD FANB Output diag system enable criteria met";
+*-}
+
+*-emsdfand.SbEMSD_FANBTestComplete{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "FANBTSCMPL";
+*-  variable_location.symbol = emsdfand.SbEMSD_FANBTestComplete;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "EMSD FANB Output diag system test complete";
+*-}
+
+*-emsdfand.SbEMSD_FANBShortHiTestFailed{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "FANBTSFAHI";
+*-  variable_location.symbol = emsdfand.SbEMSD_FANBShortHiTestFailed;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "EMSD FANB Output diag system short high test fail";
+*-}
+
+*-emsdfand.SbEMSD_FANBShortHiTestFailed{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "FANBTSFALO";
+*-  variable_location.symbol = emsdfand.SbEMSD_FANBShortHiTestFailed;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "EMSD FANB Output diag system short low test fail";
+*-}
+
+*-emsdfand.SbEMSD_FANBShortHiFailCriteriaMet{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "FANBSHIMET";
+*-  variable_location.symbol = emsdfand.SbEMSD_FANBShortHiFailCriteriaMet;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "EMSD FANB Output diag system test High fail condition meet";
+*-}
+
+*-emsdfand.SbEMSD_FANBShortLoFailCriteriaMet{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "FANBSLOMET";
+*-  variable_location.symbol = emsdfand.SbEMSD_FANBShortLoFailCriteriaMet;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "EMSD FANB Output diag system test low fail condition meet";
+*-}
+
+/*============================================================================*/
+/* CHANGE LOG                                                                 */
+/*                                                                            */
+/*                                                                            */
+/* REV.   DATE     USER  RSM    DESCRIPTION                                   */
+/*                               */
+/*                                                                            */
+/* end of module                                                              */
+/*                                                                            */
+/*============================================================================*/

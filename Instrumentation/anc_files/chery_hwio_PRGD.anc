@@ -1,0 +1,114 @@
+/*============================================================================*/
+/*                                                                            */
+/* KNOD Subsystem APPLICATION ANCILLARY FILE                                  */
+/*                                                                            */
+/*============================================================================*/
+
+*-prgdmall.ScPRGD_Purge_SampleCntr{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "PRGSMPLCNT";
+*-  variable_location.symbol = prgdmall.ScPRGD_Purge_SampleCntr;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "Purge Output diag sample counter";
+*-}
+
+*-prgdmall.ScPRGD_Purge_FailCntr{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "PRGFAILCNT";
+*-  variable_location.symbol = prgdmall.ScPRGD_Purge_FailCntr;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "Purge Output diag fail counter";
+*-}
+
+
+*-prgdmall.SbPRGD_Purge_DisableFltPresent{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "PRGSLPRET";
+*-  variable_location.symbol = prgdmall.SbPRGD_Purge_DisableFltPresent;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "Purge Output diag disable key on fault";
+*-}
+
+*-prgdmall.SbPRGD_Purge_EnblCritMet{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "PRGENLCRMT";
+*-  variable_location.symbol = prgdmall.SbPRGD_Purge_EnblCritMet;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "Purge Output diag system enable criteria met";
+*-}
+
+*-prgdmall.SbPRGD_Purge_TestComplete{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "PRGTSTCMPL";
+*-  variable_location.symbol = prgdmall.SbPRGD_Purge_TestComplete;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "Purge Output diag system test complete";
+*-}
+
+*-prgdmall.SbPRGD_Purge_TestFailed{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "PRGTSTFAIL";
+*-  variable_location.symbol = prgdmall.SbPRGD_Purge_TestFailed;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "Purge Output diag system test fail";
+*-}
+
+*-prgdmall.SbPRGD_Purge_ShortLoCritMet{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "PRGSHLOMET";
+*-  variable_location.symbol = prgdmall.SbPRGD_Purge_ShortLoCritMet;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "Purge Output diag system test low fail condition meet";
+*-}
+
+*-prgdmall.SbPRGD_Purge_ShortHiCritMet{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "PRGSHHIMET";
+*-  variable_location.symbol = prgdmall.SbPRGD_Purge_ShortHiCritMet;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "Purge Output diag system test high fail condition meet";
+*-}
+
+
+/*============================================================================*/
+/* CHANGE LOG                                                                 */
+/*                                                                            */
+/*                                                                            */
+/* REV.   DATE     USER  RSM    DESCRIPTION                                   */
+/*                               */
+/*                                                                            */
+/* end of module                                                              */
+/*                                                                            */
+/*============================================================================*/

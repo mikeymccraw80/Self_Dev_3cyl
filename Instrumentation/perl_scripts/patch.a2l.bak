@@ -1,0 +1,223 @@
+//* old first *//
+    /begin\s+MOD_PAR
+//* old last *//
+    /end\s+IF_DATA
+
+//* new begin *//
+    /begin MOD_PAR "EDU HC12 test asap file"
+      VERSION     "Test date 07.07.04"
+      CUSTOMER_NO "DELPHID"
+      USER        "Your Name Here"
+      PHONE_NO    "765.555.1212"
+      CPU_TYPE    "68HC12"
+      ECU         "EDU"
+           
+           /begin MEMORY_SEGMENT Code "External Flash Code Space 1" 
+             CODE FLASH INTERN 0x7ff800 0x0000800 -1 -1 -1 -1 -1 
+           /end MEMORY_SEGMENT
+                      
+           /begin MEMORY_SEGMENT Code "External Flash Data Space 1" 
+             DATA FLASH INTERN 0x7fc000 0x0003800 -1 -1 -1 -1 -1 
+           /end MEMORY_SEGMENT            
+
+           /begin MEMORY_SEGMENT Code "External Flash Data Space 2" 
+             DATA FLASH INTERN 0x780000 0x0020000 -1 -1 -1 -1 -1 
+           /end MEMORY_SEGMENT            
+                      
+           /begin MEMORY_SEGMENT Code "External Flash Data Space 3" 
+             DATA FLASH INTERN 0x7e0000 0x001c000 -1 -1 -1 -1 -1 
+           /end MEMORY_SEGMENT            
+
+           /begin MEMORY_SEGMENT Ram "External Ram Space" 
+             VARIABLES RAM EXTERN 0x0FD000   0x03000    -1 -1 -1 -1 -1 
+           /end MEMORY_SEGMENT 
+      
+    /end MOD_PAR
+
+    /begin MOD_COMMON         ""
+      BYTE_ORDER        MSB_FIRST
+      ALIGNMENT_LONG    1
+      ALIGNMENT_WORD    1
+      ALIGNMENT_BYTE    1
+    /end   MOD_COMMON
+
+    /begin IF_DATA ASAP1B_CCP                       /* Specific definition for CCP          */
+      /begin SOURCE                                 /* Description of a DAQ                 */
+                                                    /* (Data Acquisition List)              */
+        "Cyl Event"                                 /* Name                                 */
+        103                                         /* Scaling Unit: 103 = cylinder segment */
+        1                                           /* Rate in Scaling Unit: 1              */
+                                                    /* Refresh rate =                       */
+                                                    /* every cylinder combustion            */
+                                                    /* Codes for Scaling units (CSE) look at*/
+                                                    /* ASAP1b Specification                 */
+        DISPLAY_IDENTIFIER  DAQ0 
+        /begin QP_BLOB                              /* The QP-BLOB specify the behavior of  */
+                                                    /* the corresponding DAQ-List           */
+          0                                         /* Number of DAQ-list                   */
+          LENGTH         0x0A                       /* Number of ODT's, which can be in-    */
+                                                    /* serted to this DAQ                   */
+          CAN_ID_FIXED   0x7D5                      /* CAN-ID for measuring this DAQ        */
+          RASTER         1                          /* ECU event-number according to event- */
+                                                    /* number by the keyword RASTER.        */
+          REDUCTION_ALLOWED                         /* Data reduction possible              */
+          FIRST_PID      0x00                       /* First PID for this DAQ               */
+        /end QP_BLOB
+      /end SOURCE
+
+      /begin SOURCE                                 /* Description of a DAQ                 */
+                                                    /* (Data Acquisition List)              */
+        "10ms"                                      /* Name                                 */
+        3                                           /* Scaling Unit: 3 = 1  ms              */
+        10                                          /* Rate in Scaling Unit: 10             */
+                                                    /* Refresh rate = 10 * 1  ms = 10ms     */
+                                                    /* Codes for Scaling units (CSE) look at*/
+                                                    /* ASAP1b Specification                 */
+        DISPLAY_IDENTIFIER  DAQ1 
+        /begin QP_BLOB                              /* The QP-BLOB specify the behavior of  */
+                                                    /* the corresponding DAQ-List           */
+          1                                         /* Number of DAQ-list                   */
+          LENGTH         0x14                       /* Number of ODT's, which can be in-    */
+                                                    /* serted to this DAQ                   */
+          CAN_ID_FIXED   0x7D6                      /* CAN-ID for measuring this DAQ        */
+          RASTER         0                          /* ECU event-number according to event- */
+                                                    /* number by the keyword RASTER.        */
+          REDUCTION_ALLOWED                         /* Data reduction possible              */
+          FIRST_PID      0x0A                       /* First PID for this DAQ               */
+        /end QP_BLOB
+      /end SOURCE
+      
+      /begin SOURCE                                 /* Description of a DAQ                 */
+                                                    /* (Data Acquisition List)              */
+        "100ms"                                      /* Name                                 */
+        3                                           /* Scaling Unit: 3 = 1  ms              */
+        100                                          /* Rate in Scaling Unit: 100             */
+                                                    /* Refresh rate = 100 * 1  ms = 100ms     */
+                                                    /* Codes for Scaling units (CSE) look at*/
+                                                    /* ASAP1b Specification                 */
+        DISPLAY_IDENTIFIER  DAQ2 
+        /begin QP_BLOB                              /* The QP-BLOB specify the behavior of  */
+                                                    /* the corresponding DAQ-List           */
+          2                                         /* Number of DAQ-list                   */
+          LENGTH         0x14                       /* Number of ODT's, which can be in-    */
+                                                    /* serted to this DAQ                   */
+          CAN_ID_FIXED   0x7D7                      /* CAN-ID for measuring this DAQ        */
+          RASTER         2                          /* ECU event-number according to event- */
+                                                    /* number by the keyword RASTER.        */
+          REDUCTION_ALLOWED                         /* Data reduction possible              */
+          FIRST_PID      0x1E                       /* First PID for this DAQ               */
+        /end QP_BLOB
+      /end SOURCE
+
+      /begin RASTER                                 /* ECU-event specification              */
+        "Cyl Event Trigger"                         /* Name of the ECU-event                */
+        "Cyl"                                       /* Shortname                            */
+        1                                           /* Number of ECU-event                  */
+        103                                         /* Scaling Unit: 103 = cylinder segment */
+        1                                           /* Rate in Scaling Unit: 1              */
+                                                    /* Refresh rate =                       */
+                                                    /* every cylinder combustion            */
+                                                    /* Codes for Scaling units (CSE) look at*/
+                                                    /* ASAP1b Specification                 */
+      /end RASTER
+
+      /begin RASTER                                 /* ECU-event specification              */
+        "10ms Trigger"                            /* Name of the ECU-event                */
+        "10"                                      /* Shortname                            */
+        0                                          /* Number of ECU-event                  */
+        3                                           /* Scaling Unit: 3 = 1 ms              */
+        10                                         /* Rate in Scaling Unit: 10            */
+                                                    /* Refresh rate = 10 * 1  ms = 10ms  */
+                                                    /* Codes for Scaling units (CSE) look at*/
+                                                    /* ASAP1b Specification                 */
+      /end RASTER
+      
+      /begin RASTER                                 /* ECU-event specification              */
+        "100ms Trigger"                            /* Name of the ECU-event                */
+        "100"                                      /* Shortname                            */
+        2                                          /* Number of ECU-event                  */
+        3                                           /* Scaling Unit: 3 = 1 ms              */
+        100                                         /* Rate in Scaling Unit: 10            */
+                                                    /* Refresh rate = 100 * 1  ms = 100ms  */
+                                                    /* Codes for Scaling units (CSE) look at*/
+                                                    /* ASAP1b Specification                 */
+      /end RASTER
+         
+      /begin SEED_KEY
+             "" 
+             "" 
+             "" 
+      /end SEED_KEY
+
+      /begin TP_BLOB
+        0x0201
+        0x0202         
+        0x7D0 0x7D4 0x0010 1
+        BAUDRATE 500000  
+        SAMPLE_POINT 70 
+        SAMPLE_RATE  1 
+        BTL_CYCLES   16 
+        SJW          2 
+        SYNC_EDGE    0  
+
+        DAQ_MODE           1 /* 1 = one DAQ per cycle                   */
+        CONSISTENCY        1 /* 1 = ODT consistant                      */
+        ADDRESS_EXTENSION  0 /* 0 = 1 extension per DAQ (not supported) */
+        RESUME_SUPPORTED     /* necessary for ResumeBit support         */
+     /* STORE_SUPPORTED  */  /* Not supported                           */
+                      
+        /begin CHECKSUM_PARAM
+          0x8004
+          0x4000
+          CHECKSUM_CALCULATION ACTIVE_PAGE
+        /end CHECKSUM_PARAM  
+
+        /begin DEFINED_PAGES
+          1 "Working page" 0 0x7fc000 0x3800
+          RAM
+          RAM_INIT_BY_ECU
+          DEFAULT
+        /end DEFINED_PAGES
+                      
+        /begin DEFINED_PAGES
+          2 "Working page" 0 0x780000 0x20000
+          RAM
+          RAM_INIT_BY_ECU
+          DEFAULT
+        /end DEFINED_PAGES
+        
+        /begin DEFINED_PAGES
+          3 "Working page" 0 0x7E0000 0x1C000
+          RAM
+          RAM_INIT_BY_ECU
+          DEFAULT
+        /end DEFINED_PAGES
+
+        /begin DEFINED_PAGES
+          4 "Reference page" 0 0x7fc000 0x3800
+          FLASH
+          DEFAULT
+        /end DEFINED_PAGES  
+
+        /begin DEFINED_PAGES
+          5 "Reference page" 0 0x780000 0x20000
+          FLASH
+          DEFAULT
+        /end DEFINED_PAGES  
+        
+        /begin DEFINED_PAGES
+          6 "Reference page" 0 0x7E0000 0x1C000
+          FLASH
+          DEFAULT
+        /end DEFINED_PAGES  
+
+        OPTIONAL_CMD 0x0C /* SET_S_STATUS    */
+        OPTIONAL_CMD 0x0D /* GET_S_STATUS    */
+        OPTIONAL_CMD 0x0E /* Build Checksum  */
+        OPTIONAL_CMD 0x11 /* SelectCal page  */
+        OPTIONAL_CMD 0x19 /* Move            */
+
+        
+      /end TP_BLOB
+    /end IF_DATA
+//* new end *//

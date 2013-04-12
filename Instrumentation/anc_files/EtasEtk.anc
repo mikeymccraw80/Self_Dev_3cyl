@@ -1,0 +1,108 @@
+#**************************************************#
+# ETAS test template                               #
+#                                                  #
+#                Version 5.0                       #
+#**************************************************#
+#**************************************************#
+
+
+
+DisplayTableA{
+	OBJECTS_CLASS: etas_etk_qp_blob_class;
+	name			= "1.00ms";
+	cse_scaling_unit_1 	= 4;
+	cse_scaling_unit_2 	= 1;
+	raster_num		= 1;
+	max_num			= 0x38;
+	display_tab_start_addr.symbol	= di13dist.s1c_DISTAB_A;
+	display_tab_output_addr.symbol	= di13chn.s1c_CHNL_A;
+	trigger_addr.symbol	= di13tr.s1c_TRGID_A;
+	repetitions		= 1;
+	bypass_max		= 0;
+	bypass_out		= 0;
+}
+DisplayTableB{
+	OBJECTS_CLASS: etas_etk_qp_blob_class;
+	name			= "15ms";
+	cse_scaling_unit_1 	= 5;
+	cse_scaling_unit_2 	= 1;
+	raster_num		= 2;
+	max_num			= 0x58;
+	display_tab_start_addr.symbol	= di13dist.s1c_DISTAB_B;
+	display_tab_output_addr.symbol	= di13chn.s1c_CHNL_B;
+	trigger_addr.symbol	= di13tr.s1c_TRGID_B;
+	repetitions		= 15;
+	bypass_max		= 0;
+	bypass_out		= 0;
+}
+
+DisplayTableC{
+	OBJECTS_CLASS: etas_etk_qp_blob_class;
+	name			= "60ms";
+	cse_scaling_unit_1 	= 5;
+	cse_scaling_unit_2 	= 5;
+	raster_num		= 3;
+	max_num			= 0x58;
+	display_tab_start_addr.symbol	= di13dist.s1c_DISTAB_C;
+	display_tab_output_addr.symbol	= di13chn.s1c_CHNL_C;
+	trigger_addr.symbol	= di13tr.s1c_TRGID_C;
+	repetitions		= 60;
+	bypass_max		= 0;
+	bypass_out		= 0;
+}
+
+tp_blob{
+	OBJECTS_CLASS: etas_etk_tp_blob_class;
+	version			= 0x1000001;
+	project_base_addr	= 0;
+	reset_cfg		= 0;
+	display_tab_num		= 0xd;
+	data_mod		= 0x2;
+	rfg			= 0x2;
+	trigger_seg_addr.symbol	= di13tr.s1c_TrigSeg;
+	trigger_cfg		= 0;
+	trigger_mod_id		= 0;
+	trigger_mod_ras_def_1	= 0x27;
+	trigger_mod_ras_def_2	= 0;
+	trigger_mod_ras_def_3	= 0;
+	trigger_mod_ras_def_4	= 0;
+	etk_cfg[0].num		= 0x83;
+	etk_cfg[1].num		= 0x0;
+	etk_cfg[2].num		= 0x0;
+	etk_cfg[3].num		= 0x0;
+	etk_cfg[4].num		= 0xb0;
+	etk_cfg[5].num		= 0x02;
+	etk_cfg[6].num		= 0x0;
+	etk_cfg[7].num		= 0x0;
+	etk_cfg[8].num		= 0x0;
+	etk_cfg[9].num		= 0x0;
+	etk_cfg[10].num		= 0x0;
+	etk_cfg[11].num		= 0x0;
+	etk_cfg[12].num		= 0xb0;
+	etk_cfg[13].num		= 0x02;
+	etk_cfg[14].num		= 0x0;
+	etk_cfg[15].num		= 0x0;
+	etk_cfg[16].num		= 0x0;
+	etk_cfg[17].num		= 0x0;
+	etk_cfg[18].num		= 0x0;
+	etk_cfg[19].num		= 0x0;
+	etk_cfg[20].num		= 0xa0;
+	etk_cfg[21].num		= 0x01;
+	etk_cfg[22].num		= 0x0;
+	etk_cfg[23].num		= 0x0;
+	etk_cfg[24].num		= 0x0;
+	etk_cfg[25].num		= 0x21;
+	etk_cfg[26].num		= 0xff;
+	etk_cfg[27].num		= 0xff;
+	etk_cfg[28].num		= 0xff;
+	etk_cfg[29].num		= 0xff;
+	etk_cfg[30].num		= 0xdf;
+	etk_cfg[31].num		= 0xff;
+	etk_cfg[32].num		= 0xff;
+	etk_cfg[33].num		= 0xff;
+	etk_cfg[34].num		= 0xff;
+	etk_cfg[35].num		= 0xff;
+	etk_cfg[36].num		= 0xff;
+}
+
+	

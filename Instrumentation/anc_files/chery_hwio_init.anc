@@ -1,0 +1,27 @@
+/*============================================================================*/
+/*                                                                            */
+/* INST Subsystem APPLICATION ANCILLARY FILE                                  */
+/*                                                                            */
+/*============================================================================*/
+
+*-io_init.CPU_Info{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CPUINFO";
+*-  variable_location.symbol = io_init.CPU_Info;
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-}
+
+*-io_init.Reset_Status{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "RESTRESN";
+*-  variable_location.symbol = io_init.Reset_Status;
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-}
+
+
