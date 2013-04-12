@@ -13,14 +13,6 @@
  * global variabes used by both lld and hls.
 \* ============================================================================ */
 
-/* IAC intrface variables between LLD and HLS*/
-Step_signals   StepSig; 
-
-
-
-uint8_t           StepPos; 
-
-
 LLD_atd_input_item LLD_atd_input_table[LLD_ATD_MAX_CHANNEL];
 LLD_di_item LLD_di_table[LLD_DI_MAX_CHANNEL];
 LLD_do_item LLD_do_table[LLD_DO_MAX_CHANNEL];
@@ -36,6 +28,8 @@ inj_signals inj_sig[MAX_INJ_CHANNEL];
 inj_enable_bits inj_enable;
 ign_enable_bits ign_enable;
 ign_signals ign_sig[LLD_MAX_IGN_CHANNEL];
+
+veh_spd_signals veh_spd_sig;
 
 
 bool knock_flag_a;
