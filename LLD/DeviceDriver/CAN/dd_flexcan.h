@@ -2,6 +2,7 @@
 #define DD_FLEXCAN_H
 
 #include "hw_flexcan.h"
+#include "io_type.h"
 #include "io_config_flexcan.h"
 
 #define SECTION_FLEXCAN_A_REGISTER
@@ -285,7 +286,258 @@ typedef enum FlexCAN_Interrupt_Type_Tag
    ,FlexCAN_C_Time_Quanta)
 
 
+//=============================================================================
+// @enum FlexCAN Message Object Configuration Position
+//=============================================================================
+typedef enum FlexCAN_MSGOBJ_Configuration_Position_Tag
+{
+   FLEXCAN_MSGOBJ_CONFIGURATION_POSITION_INDEX        = 3,  //@emem [ 7: 2] FlexCAN Message Object Index
+   FLEXCAN_MSGOBJ_CONFIGURATION_POSITION_DATA_LENGTH  = 9,  //@emem [11: 8] FlexCAN Message Object Data Length
+   FLEXCAN_MSGOBJ_CONFIGURATION_POSITION_ID_LENGTH    = 13, //@emem    12   FlexCAN Message Object ID Length
+   FLEXCAN_MSGOBJ_CONFIGURATION_POSITION_CODE         = 14, //@emem [16:13] FlexCAN Message Object Code
+   FLEXCAN_MSGOBJ_CONFIGURATION_POSITION_SRR          = 18, //@emem   17    FlexCAN Message Object Substitute Remote Request
+   FLEXCAN_MSGOBJ_CONFIGURATION_POSITION_RTR          = 19, //@emem   18    FlexCAN Message Object Remote Tx Request
+   FLEXCAN_MSGOBJ_CONFIGURATION_POSITION_DIRECTION    = 20, //@emem   19    FlexCAN Message Object Direction
+   FLEXCAN_MSGOBJ_CONFIGURATION_POSITION_INTERRUPT    = 21  //@emem   20    FlexCAN Message Object Interrupt Enable
+}FlexCAN_MSGOBJ_Configuration_Position_T;
 
+typedef enum FlexCAN_MSGOBJ_Configuration_Width_Tag
+{
+   FLEXCAN_MSGOBJ_CONFIGURATION_WIDTH_INDEX        = 6,  //@emem [ 7: 2] FlexCAN Message Object Index
+   FLEXCAN_MSGOBJ_CONFIGURATION_WIDTH_DATA_LENGTH  = 4,  //@emem [11: 8] FlexCAN Message Object Data Length
+   FLEXCAN_MSGOBJ_CONFIGURATION_WIDTH_ID_LENGTH    = 1,  //@emem    12   FlexCAN Message Object ID Length
+   FLEXCAN_MSGOBJ_CONFIGURATION_WIDTH_CODE         = 4,  //@emem [16:13] FlexCAN Message Object Code
+   FLEXCAN_MSGOBJ_CONFIGURATION_WIDTH_SRR          = 1,  //@emem   17    FlexCAN Message Object Substitute Remote Request
+   FLEXCAN_MSGOBJ_CONFIGURATION_WIDTH_RTR          = 1,  //@emem   18    FlexCAN Message Object Remote Tx Request
+   FLEXCAN_MSGOBJ_CONFIGURATION_WIDTH_DIRECTION    = 1,  //@emem   19    FlexCAN Message Object Direction
+   FLEXCAN_MSGOBJ_CONFIGURATION_WIDTH_INTERRUPT    = 1   //@emem   20    FlexCAN Message Object Interrupt Enable
+}FlexCAN_MSGOBJ_Configuration_Width_T;
+
+
+//=============================================================================
+// FlexCAN_MSGOBJ_Set_Index
+//
+// @func Set FlexCAN Message Object Index configuration
+//
+// @parm IO_Configuration_T | config | The value of the configuration prior to modification
+//
+// @parm FlexCAN_MSGOBJ_INDEX_T | value | A <t FlexCAN_MSGOBJ_INDEX_T> element
+//
+// @rdesc <t IO_Configuration_T> containing the element <t FlexCAN_MSGOBJ_INDEX_T>
+//
+// @end
+//=============================================================================
+#define FlexCAN_MSGOBJ_Set_Index(config,index) \
+   (IO_Configuration_T)( Insert_Bits( config, index, FLEXCAN_MSGOBJ_CONFIGURATION_POSITION_INDEX, FLEXCAN_MSGOBJ_CONFIGURATION_WIDTH_INDEX ) )
+//=============================================================================
+// FlexCAN_MSGOBJ_Get_Index
+//
+// @func Get FlexCAN Message Object Index configuration
+//
+// @parm IO_Configuration_T | config | A <t IO_Configuration_T> type
+//
+// @rdesc <t uint8_t> element decoded from the <t IO_Configuration_T>
+//
+// @end
+//=============================================================================
+#define FlexCAN_MSGOBJ_Get_Index(config) \
+   (FlexCAN_MSGOBJ_INDEX_T)( Extract_Bits( config, FLEXCAN_MSGOBJ_CONFIGURATION_POSITION_INDEX, FLEXCAN_MSGOBJ_CONFIGURATION_WIDTH_INDEX ) )
+//=============================================================================
+// FlexCAN_MSGOBJ_Set_Direction
+//
+// @func Set FlexCAN Message Object Direction configuration
+//
+// @parm IO_Configuration_T | config | The value of the configuration prior to modification
+//
+// @parm FlexCAN_MSGOBJ_DIR_T | value | A <t FlexCAN_MSGOBJ_DIR_T> element
+//
+// @rdesc <t IO_Configuration_T> containing the element <t FlexCAN_MSGOBJ_DIR_T>
+//
+// @end
+//=============================================================================
+#define FlexCAN_MSGOBJ_Set_Direction(config,dir) \
+   (IO_Configuration_T)( Insert_Bits( config, dir, FLEXCAN_MSGOBJ_CONFIGURATION_POSITION_DIRECTION, FLEXCAN_MSGOBJ_CONFIGURATION_WIDTH_DIRECTION ) )
+//=============================================================================
+// FlexCAN_MSGOBJ_Get_Direction
+//
+// @func Get FlexCAN Message Object Direction configuration
+//
+// @parm IO_Configuration_T | config | A <t IO_Configuration_T> type
+//
+// @rdesc <t FlexCAN_MSGOBJ_DIR_T> element decoded from the <t IO_Configuration_T>
+//
+// @end
+//=============================================================================
+#define FlexCAN_MSGOBJ_Get_Direction(config) \
+   (FlexCAN_MSGOBJ_DIR_T)( Extract_Bits( config, FLEXCAN_MSGOBJ_CONFIGURATION_POSITION_DIRECTION, FLEXCAN_MSGOBJ_CONFIGURATION_WIDTH_DIRECTION ) )
+//=============================================================================
+// FlexCAN_MSGOBJ_Set_ID_Length
+//
+// @func Set FlexCAN Message Object ID_Length configuration
+//
+// @parm IO_Configuration_T | config | The value of the configuration prior to modification
+//
+// @parm FlexCAN_MSGOBJ_ID_T | value | A <t FlexCAN_MSGOBJ_ID_T> element
+//
+// @rdesc <t IO_Configuration_T> containing the element <t FlexCAN_MSGOBJ_ID_T>
+//
+// @end
+//=============================================================================
+#define FlexCAN_MSGOBJ_Set_ID_Length(config,value) \
+   (IO_Configuration_T)( Insert_Bits( config, value, FLEXCAN_MSGOBJ_CONFIGURATION_POSITION_ID_LENGTH, FLEXCAN_MSGOBJ_CONFIGURATION_WIDTH_ID_LENGTH ) )
+//=============================================================================
+// FlexCAN_MSGOBJ_Get_ID_Length
+//
+// @func Get FlexCAN Message Object ID_Length configuration
+//
+// @parm IO_Configuration_T | config | A <t IO_Configuration_T> type
+//
+// @rdesc <t FlexCAN_MSGOBJ_DIR_T> element decoded from the <t IO_Configuration_T>
+//
+// @end
+//=============================================================================
+#define FlexCAN_MSGOBJ_Get_ID_Length(config) \
+   (FlexCAN_MSGOBJ_ID_T)( Extract_Bits( config, FLEXCAN_MSGOBJ_CONFIGURATION_POSITION_ID_LENGTH, FLEXCAN_MSGOBJ_CONFIGURATION_WIDTH_ID_LENGTH ) )
+//=============================================================================
+// FlexCAN_MSGOBJ_Set_Data_Length
+//
+// @func Set FlexCAN Message Object Data_Length configuration
+//
+// @parm IO_Configuration_T | config | The value of the configuration prior to modification
+//
+// @parm FlexCAN_MSGOBJ_Data_Length_T | value | A <t FlexCAN_MSGOBJ_DataLength_T> element
+//
+// @rdesc <t IO_Configuration_T> containing the element <t uint8_t>
+//
+// @end
+//=============================================================================
+#define FlexCAN_MSGOBJ_Set_Data_Length(config,value) \
+   (IO_Configuration_T)( Insert_Bits( config, value, FLEXCAN_MSGOBJ_CONFIGURATION_POSITION_DATA_LENGTH, FLEXCAN_MSGOBJ_CONFIGURATION_WIDTH_DATA_LENGTH ) )
+//=============================================================================
+// FlexCAN_MSGOBJ_Get_Data_Length
+//
+// @func Get FlexCAN Message Object Data_Length configuration
+//
+// @parm IO_Configuration_T | config | A <t IO_Configuration_T> type
+//
+// @rdesc <t FlexCAN_MSGOBJ_Data_Length_T> element decoded from the <t IO_Configuration_T>
+//
+// @end
+//=============================================================================
+#define FlexCAN_MSGOBJ_Get_Data_Length(config) \
+   (FlexCAN_MSGOBJ_Data_Length_T)( Extract_Bits( config, FLEXCAN_MSGOBJ_CONFIGURATION_POSITION_DATA_LENGTH, FLEXCAN_MSGOBJ_CONFIGURATION_WIDTH_DATA_LENGTH ) )
+//=============================================================================
+// FlexCAN_MSGOBJ_Set_Message_Code
+//
+// @func Set FlexCAN Message Object MsgCode configuration
+//
+// @parm IO_Configuration_T | config | The value of the configuration prior to modification
+//
+// @parm FlexCAN_Msg_Code_T | code | A <t FlexCAN_Msg_Code_T> element
+//
+// @rdesc <t IO_Configuration_T> containing the element <t FlexCAN_Msg_Code_T>
+//
+// @end
+//=============================================================================
+#define FlexCAN_MSGOBJ_Set_Message_Code(config,code) \
+   (IO_Configuration_T)( Insert_Bits( config, code, FLEXCAN_MSGOBJ_CONFIGURATION_POSITION_CODE, FLEXCAN_MSGOBJ_CONFIGURATION_WIDTH_CODE ) )
+//=============================================================================
+// FlexCAN_MSGOBJ_Get_Message_Code
+//
+// @func Get FlexCAN Message Object MsgCode configuration
+//
+// @parm IO_Configuration_T | config | A <t IO_Configuration_T> type
+//
+// @rdesc <t FlexCAN_Msg_Code_T> element decoded from the <t IO_Configuration_T>
+//
+// @end
+//=============================================================================
+#define FlexCAN_MSGOBJ_Get_Message_Code(config) \
+   (FlexCAN_Msg_Code_T)( Extract_Bits( config, FLEXCAN_MSGOBJ_CONFIGURATION_POSITION_CODE, FLEXCAN_MSGOBJ_CONFIGURATION_WIDTH_CODE ) )
+//=============================================================================
+// FlexCAN_MSGOBJ_Set_SRR
+//
+// @func Set FlexCAN Message Object SRR configuration
+//
+// @parm IO_Configuration_T | config | The value of the configuration prior to modification
+//
+// @parm bool | value | A <t bool> element
+//
+// @rdesc <t IO_Configuration_T> containing the element <t bool>
+//
+// @end
+//=============================================================================
+#define FlexCAN_MSGOBJ_Set_SRR(config,value) \
+   (IO_Configuration_T)( Insert_Bits( config, value, FLEXCAN_MSGOBJ_CONFIGURATION_POSITION_SRR, FLEXCAN_MSGOBJ_CONFIGURATION_WIDTH_SRR ) )
+//=============================================================================
+// FlexCAN_MSGOBJ_Get_SRR
+//
+// @func Get FlexCAN Message Object SRR configuration
+//
+// @parm IO_Configuration_T | config | A <t IO_Configuration_T> type
+//
+// @rdesc <t bool> element decoded from the <t IO_Configuration_T>
+//
+// @end
+//=============================================================================
+#define FlexCAN_MSGOBJ_Get_SRR(config) \
+   (bool)( Extract_Bits( config, FLEXCAN_MSGOBJ_CONFIGURATION_POSITION_SRR, FLEXCAN_MSGOBJ_CONFIGURATION_WIDTH_SRR ) )
+//=============================================================================
+// FlexCAN_MSGOBJ_Set_RTR
+//
+// @func Set FlexCAN Message Object RTR configuration
+//
+// @parm IO_Configuration_T | config | The value of the configuration prior to modification
+//
+// @parm bool | value | A <t bool> element
+//
+// @rdesc <t IO_Configuration_T> containing the element <t bool>
+//
+// @end
+//=============================================================================
+#define FlexCAN_MSGOBJ_Set_RTR(config,value) \
+   (IO_Configuration_T)( Insert_Bits( config, value, FLEXCAN_MSGOBJ_CONFIGURATION_POSITION_RTR, FLEXCAN_MSGOBJ_CONFIGURATION_WIDTH_RTR ) )
+//=============================================================================
+// FlexCAN_MSGOBJ_Get_RTR
+//
+// @func Get FlexCAN Message Object RTR configuration
+//
+// @parm IO_Configuration_T | config | A <t IO_Configuration_T> type
+//
+// @rdesc <t bool> element decoded from the <t IO_Configuration_T>
+//
+// @end
+//=============================================================================
+#define FlexCAN_MSGOBJ_Get_RTR(config) \
+   (bool)( Extract_Bits( config, FLEXCAN_MSGOBJ_CONFIGURATION_POSITION_RTR, FLEXCAN_MSGOBJ_CONFIGURATION_WIDTH_RTR ) )
+//=============================================================================
+// FlexCAN_MSGOBJ_Set_Interrupt
+//
+// @func Set FlexCAN Message Object RTR configuration
+//
+// @parm IO_Configuration_T | config | The value of the configuration prior to modification
+//
+// @parm bool | value | A <t bool> element
+//
+// @rdesc <t IO_Configuration_T> containing the element <t bool>
+//
+// @end
+//=============================================================================
+#define FlexCAN_MSGOBJ_Set_Interrupt(config,value) \
+   (IO_Configuration_T)( Insert_Bits( config, value, FLEXCAN_MSGOBJ_CONFIGURATION_POSITION_INTERRUPT, FLEXCAN_MSGOBJ_CONFIGURATION_WIDTH_INTERRUPT ) )
+//=============================================================================
+// FlexCAN_MSGOBJ_Get_Interrupt
+//
+// @func Get FlexCAN Message Object Interrupt configuration
+//
+// @parm IO_Configuration_T | config | A <t IO_Configuration_T> type
+//
+// @rdesc <t bool> element decoded from the <t IO_Configuration_T>
+//
+// @end
+//=============================================================================
+#define FlexCAN_MSGOBJ_Get_Interrupt(config) \
+   (bool)( Extract_Bits( config, FLEXCAN_MSGOBJ_CONFIGURATION_POSITION_INTERRUPT, FLEXCAN_MSGOBJ_CONFIGURATION_WIDTH_INTERRUPT ) )
 
 
 #endif // DD_FLEXCAN_H

@@ -20,6 +20,7 @@
 #include "section.h"
 FLASH_T FLASH_A;
 #define SECTION_END
+#include "section.h"
 
 #define SECTION_FLASH_B_REGISTER
 #include "section.h"

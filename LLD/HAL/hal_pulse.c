@@ -4,6 +4,7 @@
 #include "HLS.h"
 #include "io_config_mios.h"
 #include "io_config_vsep.h"
+#include "io_config_tpu.h"
 #include "dd_vsep_pwm_interface.h"
 
 
@@ -202,4 +203,19 @@
    
 }
 
+//=============================================================================
+// HAL_Pulse_Get_VSS_Count
+//=============================================================================
+ uint32_t  HAL_Pulse_Get_VSS_Count(void) 
+{
+  FI_Get_Current_Count(FEI_INDEX_VSSFI );
+}
+
+//=============================================================================
+// HAL_Pulse_Get_VSS_Period
+//=============================================================================
+ uint32_t  HAL_Pulse_Get_VSS_Period(void) 
+{
+  FI_Get_Current_Period(FEI_INDEX_VSSFI );
+}
 

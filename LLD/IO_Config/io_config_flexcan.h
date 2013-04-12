@@ -34,6 +34,15 @@
 #define FlexCAN_A_Prop_Segment  6
 #define FlexCAN_C_Prop_Segment  6
 
+#define FLEXCAN_MSG_OBJ_Index_CCP_CANID_CRO       FLEXCAN_MSG_OBJ_0
+#define FLEXCAN_MSG_OBJ_Index_CCP_CANID_DTO       FLEXCAN_MSG_OBJ_1
+#define FLEXCAN_MSG_OBJ_Index_CCP_CANID_DAQ0     FLEXCAN_MSG_OBJ_2
+#define FLEXCAN_MSG_OBJ_Index_CCP_CANID_DAQ1     FLEXCAN_MSG_OBJ_3
+#define FLEXCAN_MSG_OBJ_Index_CCP_CANID_DAQ2     FLEXCAN_MSG_OBJ_4
+#define FLEXCAN_MSG_OBJ_Index_CCP_CANID_DAQ3     FLEXCAN_MSG_OBJ_5
+#define FLEXCAN_MSG_OBJ_Index_CCP_INCA_RECEIVE   FLEXCAN_MSG_OBJ_6
+#define FLEXCAN_MSG_OBJ_Index_CCP_INCA_TRANSIT   FLEXCAN_MSG_OBJ_7
+
 
 
 //=============================================================================

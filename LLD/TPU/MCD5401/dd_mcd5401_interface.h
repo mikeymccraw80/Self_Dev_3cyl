@@ -65,4 +65,13 @@ uint32_t MCD5401_Get_Requested_Event(
     TPU_Index_T index,
    TPU_CHANNEL_Configuration_T   configure );
 
+//=============================================================================
+// MCD5401_Set_Host_Interrupt_Status
+//=============================================================================
+void MCD5401_Set_Host_Interrupt_Status(
+                      TPU_Index_T index,
+                     TPU_T         *p_tpu,
+   TPU_CHANNEL_Configuration_T   configure ,
+   bool                 in_status );
+
 #endif // DD_MCD5401_INTERFACE_H 

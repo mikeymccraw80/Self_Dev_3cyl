@@ -80,7 +80,16 @@ extern const TPU_CHANNEL_Configuration_T PFI_Desfi[PFI_MAX_CYLINDERS];
 
 
 #define FEI_TPU_INDEX  TPU_INDEX_0
-#define FEI_INDEX_MAX  4
+
+typedef enum
+{
+  FEI_INDEX_SPFI,
+  FEI_INDEX_VSSFI,
+  FEI_INDEX_WSSFI,
+  FEI_INDEX_ENSFI,
+  FEI_INDEX_MAX
+
+} FEI_INDEX_T;
 
 extern const TPU_CHANNEL_Configuration_T   TPU_CONFIG_IC_FI[FEI_INDEX_MAX];
 

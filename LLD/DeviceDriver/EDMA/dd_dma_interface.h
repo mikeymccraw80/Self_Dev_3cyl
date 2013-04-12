@@ -69,4 +69,8 @@ extern bool DMA_Get_Channel_Running_Status(DMA_Channel_T  dma_channel);
 // DMA_clear_request
 //=============================================================================
 extern void DMA_Clear_MAJ_Pending_INT(DMA_Channel_T  dma_channel);
+//=============================================================================
+// DMA_Clear_Device
+//=============================================================================
+void DMA_Clear_Device(  void);
 

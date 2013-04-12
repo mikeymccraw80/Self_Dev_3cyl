@@ -22,17 +22,18 @@
 #include "section.h"
 extern FLASHB0_T FLASH_B0;
 #define SECTION_END
+#include "section.h"
 
 #define SECTION_FLASH_B1A1_REGISTER
 #include "section.h"
 extern FLASHB1_T FLASH_B1A1;
 #define SECTION_END
+#include "section.h"
 
 #define SECTION_FLASH_B1A2_REGISTER
 #include "section.h"
 extern FLASHB1_T FLASH_B1A2;
 #define SECTION_END
-
 #include "section.h"
 
 

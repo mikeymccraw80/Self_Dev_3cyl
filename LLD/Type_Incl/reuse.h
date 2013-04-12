@@ -283,7 +283,7 @@ typedef void (*IO_Callback_T)(void);
 #define Cast_int32(x)           ((int32_t)(x))
 
 #define NULL            0
-
+#if 0
 #define Extract_Bits(value,position,width) (((value) & Mask32((position), (width))) >> (position))
 #define Insert_Bits(old_value,value,position,width)  (Zero_Bits_Macro((old_value),(position),(width)) | (((value) << (position)) & Mask32((position),(width))) )
 
@@ -295,8 +295,8 @@ typedef void (*IO_Callback_T)(void);
    (uint16_t)(((1 << (in_width )) - 1) << (in_position))
 #define Mask8(in_position,in_width)\
    (uint8_t)((( 1 << (in_width)) - 1) << (in_position))
+#endif
 
-#if 0
 //=============================================================================
 // Mask32
 //=============================================================================
@@ -323,6 +323,6 @@ typedef void (*IO_Callback_T)(void);
 
 #define Extract_Bits(value,position,width) ( ( value & Mask32( position, width ) ) >> position )
 
-#endif
+
 #endif // REUSE_H
 

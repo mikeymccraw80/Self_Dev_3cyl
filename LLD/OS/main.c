@@ -8,7 +8,6 @@
 #include "io_init.h"
 #include "io_config_swt.h"
 
-unsigned int test0; 
 
 extern  void exit(void);
 //=============================================================================
@@ -23,7 +22,6 @@ extern  void exit(void);
 void main(void)
 {
    InitializeHardwareRegisters();
-   test0++;
  //  if (!InitializeIllegalConditionCheck()) 
    //{
       StartOS(AM_normal);

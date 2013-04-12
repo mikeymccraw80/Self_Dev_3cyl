@@ -2,7 +2,6 @@
 
 
 FLEXCAN_T FlexCAN_A;
-
 FLEXCAN_T FlexCAN_C;
 
 #define FLEXCAN_MSGOBJ_16_31_MASK             (0xFFFF0000U)
@@ -20,6 +19,11 @@ static const uint32_t FlexCAN_Bit_Rate[ ] =
 
 
 
+void FlexCAN_TX_CallBack ( uint32_t message_id          );
+void FlexCAN_RX_CallBack (
+   uint32_t in_message_id,
+   uint8_t *in_data_buffer,
+   uint8_t  in_data_length    );
 //=============================================================================
 // FlexCAN_Clear_Message_Buffers
 //=============================================================================
@@ -391,7 +395,7 @@ void FlexCAN_Receive_Interrupt(
 
       //Make the message buffer available for next recieve
       pFlexCAN->MSGBUF[msg_obj].F.CTRSTS.F.CODE = FLEXCAN_MSGOBJ_RX_EMPTY;
-
+      FlexCAN_RX_CallBack(in_message_id,in_data_buffer, FLEXCAN_DATA_MAX_BYTES);
 
    }
    else
@@ -411,5 +415,34 @@ void FlexCAN_Receive_Interrupt(
       //Make the message buffer available for next recieve
       pFlexCAN->MSGBUF[msg_obj].F.CTRSTS.F.CODE = FLEXCAN_MSGOBJ_RX_EMPTY;
    }
+}
+
+
+
+//============================================================================
+// FlexCAN_Process_Transmitted_Message
+//============================================================================
+void FlexCAN_Transmit_Interrupt(
+     FLEXCAN_T *                  in_pFlexCAN,
+   FlexCAN_MSGOBJ_INDEX_T        msg_obj)
+{
+   FlexCAN_Index_T         FlexCAN_index;
+   uint32_t                msg_id;
+
+   // Get the message id of the message object
+   msg_id = FLEXCAN_Get_Msg_ID(in_pFlexCAN, msg_obj);
+
+         // FLEXCAN_MSGOBJ_INTERRUPT_Clear_Pending 
+   if( msg_obj < FLEXCAN_MSG_OBJ_32)
+   {
+         in_pFlexCAN->IFRL.U32 &= (1 << msg_obj);
+   }
+   else
+   {
+         msg_obj   -= FLEXCAN_MSG_OBJ_32;
+         in_pFlexCAN->IFRH.U32 &= (1 << msg_obj);
+   }
+  FlexCAN_TX_CallBack(msg_id);
+ 
 }
 

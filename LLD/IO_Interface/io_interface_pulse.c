@@ -123,3 +123,28 @@ void  IO_Pulse_VSEP_CLK_Enable(void)
  HAL_Pulse_VSEP_CLK_Enable(true);
 }
 
+uint32_t  Pulse_VSS_Count_Previous;
+uint32_t  Pulse_VSS_Time_Previous;
+uint32_t  Pulse_VSS_Count;
+uint32_t  Pulse_VSS_Time;
+
+//=============================================================================
+// IO_Pulse_VSS_Update_500ms
+//=============================================================================
+void  IO_Pulse_VSS_Update_500ms(void)
+{
+
+  Pulse_VSS_Count_Previous  =  Pulse_VSS_Count;
+  Pulse_VSS_Count =  HAL_Pulse_Get_VSS_Count();
+
+    if ( Pulse_VSS_Count == Pulse_VSS_Count_Previous )
+    {
+     veh_spd_sig.period = 0xFFFF;
+    } 
+    else
+    {  
+    //TPU time is 4M and VSS period resoultion is 0.01ms
+      veh_spd_sig.period = HAL_Pulse_Get_VSS_Period()/40;
+    }	 
+	
+}

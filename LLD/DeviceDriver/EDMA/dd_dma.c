@@ -187,5 +187,19 @@ void DMA_Clear_MAJ_Pending_INT(DMA_Channel_T  dma_channel)
   DMA_A.CIRQR.U8 = dma_channel;
 }
 
+//=============================================================================
+// DMA_Clear_Device
+//=============================================================================
+void DMA_Clear_Device(  void)
+{
+  
+   DMA_A.CR.U32 = 0x00000400;
+   
+   //Disable all DMA requests
+   DMA_A.ERQRL.U32 = 0;
 
+   //Disable all DMA error interrupts
+   DMA_A.EEIRL.U32 = 0;
+
+}
 	

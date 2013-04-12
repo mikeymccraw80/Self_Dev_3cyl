@@ -4,20 +4,13 @@
 //=============================================================================
 #include "dd_swt_interface.h"
 #include "io_config_swt.h"
+#include "inst_config.h"
 #include "os_type.h"
 
 //=============================================================================
 //  define
 //=============================================================================
-#define CSA_FILL_PATTERN 0xAA55AA55
-#define USTACK_FILL_PATTERN 0xB1B1
 
-#define APP_CAL_PRESENCE_PATTERN                       (0x6A6A)
-
-
-#define Cw_SOFTWARE_LEVEL       0x03
-#define Cw_REVISION_LEVEL       0x00
-#define Cw_CalFORM_ID           ( ( (0xff & Cw_SOFTWARE_LEVEL) << 8) + (0xff & Cw_REVISION_LEVEL) )
 
 #pragma section SECTION_PF_KKSUM address=0x00160000
 #pragma use_section SECTION_PF_KKSUM PF_KKSUM
@@ -60,10 +53,11 @@ uint8_t  Normal_10ms_CNT;
 // StartupHook
 //=============================================================================
 //start up before HWIO init last excute
-void StartupHook(void)
-{
+//void StartupHook(void)
+//{
 
-}
+
+//}
 
 
 

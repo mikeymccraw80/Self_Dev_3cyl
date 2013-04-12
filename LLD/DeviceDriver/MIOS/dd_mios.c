@@ -141,15 +141,15 @@ void MIOS_Initialize_Device(void )
 void MIOS_PWM_Set_Period_And_DutyCycle_US(
    MIOS_Channel_T   channel,
    uint32_t             in_period,
-   uint16_t             in_duty_cycle )
+   uint32_t             in_duty_cycle )
 {
 
    uint32_t period_count, duty_count;
 
 
-   //preiod and duty in us and duty in One thousandth
+   //preiod and duty in us to count
    period_count = in_period*(EMIOS_FREQUENCY_HZ /((MIOS_PRESCALER_RATIO_1+1)*1000000));
-   duty_count =  duty_count = period_count*in_duty_cycle/1000;;
+   duty_count =  in_duty_cycle*(EMIOS_FREQUENCY_HZ /((MIOS_PRESCALER_RATIO_1+1)*1000000));
 
   MIOS.CH[channel].CADR =  duty_count;
   MIOS.CH[channel].CBDR = period_count;
@@ -167,8 +167,7 @@ void MIOS_PWM_Set_Frequency_And_DutyCycle(
 {
 
    uint32_t period_count, duty_count;
-   
-  //Frequency in HZ and duty in us and duty in One thousandth
+  //duty cycle one count means 1/1000
    period_count =  EMIOS_FREQUENCY_HZ/(in_hz* (MIOS_PRESCALER_RATIO_1+1));
    duty_count = period_count*in_duty_cycle/1000;
 
@@ -182,16 +181,25 @@ void MIOS_PWM_Set_Frequency_And_DutyCycle(
 //=============================================================================
 void MIOS_PWM_Set_Duty_Cycle(
    MIOS_Channel_T   channel,
-   uint16_t             in_duty_cycle )
+   uint32_t             in_duty_cycle )
 {
-     uint32_t period_count, duty_count;
-     period_count = MIOS.CH[channel].CADR;
-     duty_count = period_count*in_duty_cycle/1000;
+  uint32_t  duty_count;
+  duty_count = ( EMIOS_FREQUENCY_HZ*in_duty_cycle)/((MIOS_PRESCALER_RATIO_1+1)*1000000);
 
   MIOS.CH[channel].CADR =  in_duty_cycle;
 
 }
 
+//=============================================================================
+// MIOS_PWM_Set_Period_And_Duty_Cycle
+//=============================================================================
+uint32_t  MIOS_PWM_Get_Duty_Cycle(
+   MIOS_Channel_T   channel )
+{
+
+   return MIOS.CH[channel].CADR;
+
+}
 
 //=============================================================================
 // MIOS_PULSE_Enable_Channel

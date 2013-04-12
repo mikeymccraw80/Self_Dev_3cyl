@@ -7,6 +7,7 @@
 #include "reuse.h"
 #include "dd_siu_hwinfo.h"
 #include "dd_flash_memory_interface.h"
+#include "dd_flash_interface.h"
 
 //===========================================================================
 //  Exported Object Declarations
@@ -26,6 +27,11 @@ INLINE FLASH_MODULE_T Get_FLASH_Driver_Mode(void)
    else
    {
       current_flash = C90FL_Module;
+   }
+
+   if(current_flash < FLASH_Module_Number)
+   {
+      flash_memory_interface = &FLASH_Memory_Interface[current_flash];
    }
 
    return current_flash;

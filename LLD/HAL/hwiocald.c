@@ -12,28 +12,28 @@
  * The crank tooth number were the first LoRes event occurs after the gap in
  * the crank wheel
 \*===========================================================================*/
+/*===========================================================================*\
+ * The crank tooth number were the state of the cam signal should be read
+\*===========================================================================*/
 /*
 *| hwiocald.{
 *|   KyHWIO_ToothOfFirstLoResEvent {
 *|     : is_calconst;
 *|     : description = "First tooth of crank position sensor which "
 *| "corresponds to a reference event";
-*|     : type = fixed.t_count_byte;
+*|     : type = types.t_count_byte;
 *|     : units = "count";
 *|   }
 *| }
 */
 const   uint8_t  KyHWIO_ToothOfFirstLoResEvent = 3;
 
-/*===========================================================================*\
- * The crank tooth number were the state of the cam signal should be read
-\*===========================================================================*/
 /*
 *| hwiocald.{
 *|   KyHWIO_phi_ToothAngleForCamRead {
 *|     : is_calconst;
 *|     : description = "Crank angle for CAM read";
-*|     : type = fixed.t_crank_angle;
+*|     : type = types.t_crank_angle;
 *|     : units = "degrees";
 *|   }
 *| }
@@ -50,7 +50,7 @@ const   T_CRANK_ANGLE   KyHWIO_phi_ToothAngleForCamRead = V_CRANK_ANGLE(18);
 *|     : is_calconst;
 *|     : description = "Crank tooth number were the start synchronization "
 *| "after the gap";
-*|     : type = fixed.t_count_byte;
+*|     : type = types.t_count_byte;
 *|     : units = "count";
 *|   }
 *| }
@@ -68,7 +68,7 @@ const   uint8_t    KyHWIO_CrankSyncStartTooth = 2;
 *|   KeHWIO_Cam1OccurredTrue {
 *|     : is_calconst;
 *|     : description = "Cam1 sensor input state when cylinder A is next";
-*|     : type = enum.size2_0to1;
+*|     : type = types.size2_0to1;
 *|     : units = "boolean";
 *|   }
 *| }
@@ -84,7 +84,7 @@ const   bool        KeHWIO_Cam1OccurredTrue     = false;
 *|   KeHWIO_Cam2OccurredTrue {
 *|     : is_calconst;
 *|     : description = "Cam2 sensor input state when cylinder A is next";
-*|     : type = enum.size2_0to1;
+*|     : type = types.size2_0to1;
 *|     : units = "boolean";
 *|   }
 *| }
@@ -101,7 +101,7 @@ const   bool        KeHWIO_Cam2OccurredTrue     = false;
 *|   KyHWIO_Num58xGapsBeforeSeqn {
 *|     : is_calconst;
 *|     : description = "Number of 58x gaps to be detected before trusting Cam";
-*|     : type = fixed.t_count_byte;
+*|     : type = types.t_count_byte;
 *|     : units = "gaps";
 *|   }
 *| }
@@ -117,7 +117,7 @@ const   uint8_t     KyHWIO_Num58xGapsBeforeSeqn = 3;
 *|   KfHWIO_phi_TopDeadCenter {
 *|     : is_calconst;
 *|     : description = "Crank angle offset from the reference event to TDC";
-*|     : type = fixed.t_crank_angle;
+*|     : type = types.t_crank_angle;
 *|     : units = "degrees";
 *|   }
 *| }
@@ -134,7 +134,7 @@ const   T_CRANK_ANGLE    KfHWIO_phi_TopDeadCenter = V_CRANK_ANGLE(102);
 *|     : is_calconst;
 *|     : description = "Crank angle between the fuel reference event and the "
 *| "closing of intake valve";
-*|     : type = fixed.t_crank_angle;
+*|     : type = types.t_crank_angle;
 *|     : units = "degree";
 *|   }
 *| }
@@ -151,7 +151,7 @@ const   T_CRANK_ANGLE    KfHWIO_phi_BoundaryFraction = V_CRANK_ANGLE(180);
 *|     : description ="This calibration determines the number of cylinders number. "
 *| "Value To Calibrate Out: N/A "
 *| "Engineering Range: 0 to 255  Resolution: 1 / Count ";
-*|     : type = fixed.t_count_byte;
+*|     : type = types.t_count_byte;
 *|     : units = "counts";
 *|   }
 *| }
@@ -164,7 +164,7 @@ const uint8_t KyHWIO_NumberOfCylinders = 4;
 *|     : is_calconst;
 *|     : description = "Number of valid 58x periods to be seen "
 *| "by the 58x logic before trying to synch ";
-*|     : type = fixed.t_count_byte;
+*|     : type = types.t_count_byte;
 *|     : units = "count";
 *|   }
 *| }
@@ -181,7 +181,7 @@ const uint8_t KyHWIO_NumValidPeriodsBeforeSyncStart = 3;
 *|     : is_calconst;
 *|     : description = "Number of 58x gaps to use Cam sensor for cylinder ID."
 *| " 255=Always use Cam";
-*|     : type = fixed.t_count_byte;
+*|     : type = types.t_count_byte;
 *|     : units = "gaps";
 *|   }
 *| }
@@ -196,7 +196,7 @@ const   uint8_t     KyHWIO_Num58xGapsUsingCamForSync = 12;
 *|     : description ="Calibratable IIR coefficient for DSP Knock low pass filter  "
 *| "Engineering Range: 0~ 0xFFFFFF";
 *|     : units = "filter";
-*|     : elements:type=fixed.t_count_long;
+*|     : elements:type=types.t_count_long;
 *|  }
 *| }
 */
@@ -228,7 +228,7 @@ const uint32_t  DSP_LOW_PASS_FILTER_IIR_COEFF[] =
 *|     : description ="Calibratable IIR coefficient for DSP Knock low pass filter  "
 *| "Engineering Range: 0~ 0xFFFFFF";
 *|     : units = "filter";
-*|     : elements:type=fixed.t_count_long;
+*|     : elements:type=types.t_count_long;
 *|  }
 *| }
 */
@@ -258,7 +258,7 @@ const uint32_t DSP_KNOCK_CENTER_FREQUENCY_IIR_COEFF1[] =
 *|     : description ="Calibratable IIR coefficient for DSP Knock low pass filter  "
 *| "Engineering Range: 0~ 0xFFFFFF";
 *|     : units = "filter";
-*|     : elements:type=fixed.t_count_long;
+*|     : elements:type=types.t_count_long;
 *|  }
 *| }
 */
@@ -289,7 +289,7 @@ const uint32_t DSP_KNOCK_CENTER_FREQUENCY_IIR_COEFF2[] =
 *|     : description ="Calibratable IIR coefficient for DSP Knock low pass filter  "
 *| "Engineering Range: 0~ 0xFFFFFF";
 *|     : units = "filter";
-*|     : elements:type=fixed.t_count_long;
+*|     : elements:type=types.t_count_long;
 *|  }
 *| }
 */
@@ -320,7 +320,7 @@ const uint32_t DSP_KNOCK_CENTER_FREQUENCY_IIR_COEFF3[] =
 *|     : description = "This calibration determines the dwell value used during initialization. "
 *| "Value To Calibrate Out: N/A "
 *| "Engineering Range: 0 to 1024 ms  Resolution: 0.015625 ms / Count ";
-*|     : type = fixed.t_millisecondsb;
+*|     : type = types.t_millisecondsb;
 *|     : units = "milliseconds";
 *|   }
 *| }
@@ -334,7 +334,7 @@ const T_MILLISECONDSb  KfSPRK_t_DwellInit = V_MILLISECONDSb(4);
 *|     : description = "This calibration determines the minimum dwell value used in initialization. "
 *| "Value To Calibrate Out: N/A "
 *| "Engineering Range: 0 to 1024 ms  Resolution: 0.015625 ms / Count ";
-*|     : type = fixed.t_millisecondsb;
+*|     : type = types.t_millisecondsb;
 *|     : units = "milliseconds";
 *|   }
 *| }
@@ -348,7 +348,7 @@ const T_MILLISECONDSb  KfSPRK_t_CrankMinDwellInit = V_MILLISECONDSb(0.5);
 *|     : description = "This calibration determines the maximum dwell value used in initialization. "
 *| "Value To Calibrate Out: N/A "
 *| "Engineering Range: 0 to 1024 ms  Resolution: 0.015625 ms / Count ";
-*|     : type = fixed.t_millisecondsb;
+*|     : type = types.t_millisecondsb;
 *|     : units = "milliseconds";
 *|   }
 *| }
@@ -358,8 +358,8 @@ const T_MILLISECONDSb KfSPRK_t_CrankMaxDwellInit = V_MILLISECONDSb(10);
 
 
 
-
 /*
+*| hwiocald.{
 *|   KsVSEP_Fault_Level_Initial1 {
 *|     : is_calconst;
 *|     : description = "If the voltage on any of these input becomes greater than the FLTLVL[x]  in the on state \n" 
@@ -404,7 +404,9 @@ const T_MILLISECONDSb KfSPRK_t_CrankMaxDwellInit = V_MILLISECONDSb(10);
 *|        :units = "0 TO 1";
 *|     }
 *| }
+*|   }
 */
+
 const  KsVSEP_Fault_Level_Cals1  KsVSEP_Fault_Level_Initial1= {
              3,1,0,
              13,5,0
@@ -412,6 +414,7 @@ const  KsVSEP_Fault_Level_Cals1  KsVSEP_Fault_Level_Initial1= {
  };
 
 /*
+*| hwiocald.{
 *|   KsVSEP_Fault_Level_Initial2 {
 *|     : is_calconst;
 *|     : description = "If the voltage on any of these input becomes greater than the FLTLVL[x]  in the on state \n" 
@@ -450,7 +453,9 @@ const  KsVSEP_Fault_Level_Cals1  KsVSEP_Fault_Level_Initial1= {
 *|        :units = "0 TO 1";
 *|     }
 *| }
+*|   }
 */
+
 const  KsVSEP_Fault_Level_Cals2  KsVSEP_Fault_Level_Initial2= {
 
              3,0,
@@ -460,6 +465,7 @@ const  KsVSEP_Fault_Level_Cals2  KsVSEP_Fault_Level_Initial2= {
 
 
 /*
+*| hwiocald.{
 *|   KsVSEP_VR1_Setting_Initial {
 *|     : is_calconst;
 *|     : description = "VR1 configuration initialization.";
@@ -502,7 +508,9 @@ const  KsVSEP_Fault_Level_Cals2  KsVSEP_Fault_Level_Initial2= {
 *|        :units = "0 TO 1";
 *|   }
 *| }
+*|   }
 */
+
 const   KsVSEP_VR1_Setting_Cals  KsVSEP_VR1_Setting_Initial= {
 
                 1, 0, 0, 0,
@@ -512,6 +520,7 @@ const   KsVSEP_VR1_Setting_Cals  KsVSEP_VR1_Setting_Initial= {
 
 
 /*
+*| hwiocald.{
 *|   KsVSEP_VR1_Setting_Initial_Crank {
 *|     : is_calconst;
 *|     : description = "Structure of calibrations for the vsep  "
@@ -529,13 +538,16 @@ const   KsVSEP_VR1_Setting_Cals  KsVSEP_VR1_Setting_Initial= {
 *|        :units = "0 TO 1";
 *|   }
 *| }
+*|   }
 */
+
 const   KsVSEP_VR1_HeavyDelay_T  KsVSEP_VR1_Setting_Initial_Crank= {
                 4, 0
  };
 
 
 /*
+*| hwiocald.{
 *|   KsVSEP_VR2_Setting_Initial {
 *|     : is_calconst;
 *|     : description = "VR2 configuration initialization.";
@@ -578,7 +590,9 @@ const   KsVSEP_VR1_HeavyDelay_T  KsVSEP_VR1_Setting_Initial_Crank= {
 *|        :units = "0 TO 1";
 *|   }
 *| }
+*|   }
 */
+
 const  KsVSEP_VR2_Setting_Cals  KsVSEP_VR2_Setting_Initial= {
 
                 1, 0, 0, 0,
@@ -588,6 +602,7 @@ const  KsVSEP_VR2_Setting_Cals  KsVSEP_VR2_Setting_Initial= {
 
 
 /*
+*| hwiocald.{
 *|   KsVSEP_DEPSDLY_Setting_Initial {
 *|     : is_calconst;
 *|     : description = "DEPS IN digital filter delay times. bit weight: 0,8us;1, 16us;2,32us;3,64us;4,128us;5,256us  ";
@@ -612,7 +627,9 @@ const  KsVSEP_VR2_Setting_Cals  KsVSEP_VR2_Setting_Initial= {
 *|        :units = "0 TO 1";
 *|     }
 *| }
+*|   }
 */
+
 const  KsVSEP_DEPSDLY_Setting_Cals  KsVSEP_DEPSDLY_Setting_Initial= {
 
                 0,
@@ -622,6 +639,7 @@ const  KsVSEP_DEPSDLY_Setting_Cals  KsVSEP_DEPSDLY_Setting_Initial= {
 
 
 /*
+*| hwiocald.{
 *|   KsVSEP_SLEW_Initialization {
 *|     : is_calconst;
 *|     : description = "Slew channel drive feature";
@@ -671,7 +689,9 @@ const  KsVSEP_DEPSDLY_Setting_Cals  KsVSEP_DEPSDLY_Setting_Initial= {
 *|        :units = "0 TO 7";
 *|     }
 *| }
+*|   }
 */
+
 const  KsVSEP_SLEW_Cals  KsVSEP_SLEW_Initialization= {
 
                 1,2,0,0,
@@ -681,6 +701,7 @@ const  KsVSEP_SLEW_Cals  KsVSEP_SLEW_Initialization= {
 
 
 /*
+*| hwiocald.{
 *|   KsVSEP_Fault_Filter_Initial {
 *|     : is_calconst;
 *|     : description = "If the voltage on any of these input becomes greater than the FLTLVL[x]  in the on state \n" 
@@ -735,7 +756,9 @@ const  KsVSEP_SLEW_Cals  KsVSEP_SLEW_Initialization= {
 *|        :units = "0 TO 3";
 *|     }
 *| }
+*|   }
 */
+
 const  KsVSEP_Fault_Filter_Cals  KsVSEP_Fault_Filter_Initial= {
 
                 3,3,3,3,
@@ -744,6 +767,7 @@ const  KsVSEP_Fault_Filter_Cals  KsVSEP_Fault_Filter_Initial= {
  };
 
 /*
+*| hwiocald.{
 *|   KsVSEP_LEDMODE_Initial {
 *|     : is_calconst;
 *|     : description = "PCH25, PCH26 & PCH30 can be configurated to drive LED. 0, normal mode, Off State Diagnostic Current Sounce is Enabled.\n"
@@ -781,7 +805,9 @@ const  KsVSEP_Fault_Filter_Cals  KsVSEP_Fault_Filter_Initial= {
 *|        :units = "0 TO 31";
 *|     }
 *| }
+*|   }
 */
+
 const  KsVSEP_LEDMODE_Cals  KsVSEP_LEDMODE_Initial= {
 
                 0,
@@ -790,6 +816,7 @@ const  KsVSEP_LEDMODE_Cals  KsVSEP_LEDMODE_Initial= {
  };
 
 /*
+*| hwiocald.{
 *|   KsVSEP_GRAD_Initialization {
 *|     : is_calconst;
 *|     : description = "configuration of  'slope gradient check' and current trip circuitry for STB protection of IGBT";
@@ -821,7 +848,9 @@ const  KsVSEP_LEDMODE_Cals  KsVSEP_LEDMODE_Initial= {
 *|        :units = "0 TO 3";
 *|     }
 *| }
+*|   }
 */
+
 const  KsVSEP_GRAD_Cals  KsVSEP_GRAD_Initialization= {
                 0,
                 0,7,0                
@@ -830,6 +859,7 @@ const  KsVSEP_GRAD_Cals  KsVSEP_GRAD_Initialization= {
 
 
 /*
+*| hwiocald.{
 *|   KsVSEP_Spark_Mode_Initialization {
 *|     : is_calconst;
 *|     : description = " Spark Mode configuration ";
@@ -889,7 +919,9 @@ const  KsVSEP_GRAD_Cals  KsVSEP_GRAD_Initialization= {
 *|        :units = "0 TO 31";
 *|     }
 *| }
+*|   }
 */
+
 const  KsVSEP_Spark_Mode_Cals  KsVSEP_Spark_Mode_Initialization= {
 #if CcSYST_NUM_OF_CYLINDERS == 3
 	   2,1,1,0,
@@ -901,50 +933,61 @@ const  KsVSEP_Spark_Mode_Cals  KsVSEP_Spark_Mode_Initialization= {
  };
 
 /*
+*| hwiocald.{
 *|   KeHWIO_ACReq_pin79_Status{
 *|       :is_calconst;
 *|       :units = "type";
 *|       :description = "Caution: configuration for VSEP MULTI channels";
 *|   }
+*|   }
 */
+
 
 
 const VSEP_MPIO_Input_Mode_T KeHWIO_ACReq_pin79_Status = VSEP_MPIO_INPUT_MODE_ACTIVE_HIGH_SWITCH_DETECT;
 
 /*
+*| hwiocald.{
 *|   KeHWIO_PSPS_pin60_Status{
 *|       :is_calconst;
 *|       :units = "type";
 *|       :description = "Caution: configuration for VSEP MULTI channels";
 *|   }
+*|   }
 */
+
 
 const VSEP_MPIO_Input_Mode_T KeHWIO_PSPS_pin60_Status = VSEP_MPIO_INPUT_MODE_ACTIVE_LOW_SWITCH_DETECT;
 /*
+*| hwiocald.{
 *|   KeHWIO_MIDAC_pin40_Status{
 *|       :is_calconst;
 *|       :units = "type";
 *|       :description = "Caution: configuration for VSEP MULTI channels";
 *|   }
+*|   }
 */
+
 
 const VSEP_MPIO_Input_Mode_T KeHWIO_MIDAC_pin40_Status = VSEP_MPIO_INPUT_MODE_ACTIVE_HIGH_SWITCH_DETECT;
 
 
-
 /*
+*| hwiocald.{
 *|   KsVSEP_Diagnostic_Counter_Thd {
 *|     : is_calconst;
 *|     : description ="threshold of fault counter(7.8ms/counter), if exceed, the coresponding channel will disabled untill key on again";
 *|     : type = types.t_count_word;
 *|     : units = "count";
 *|   }
+*|   }
 */
+
 
 const   uint16_t KsVSEP_Diagnostic_Counter_Thd = 16;
 
-
 /*
+*| hwiocald.{
 *|   t_soh_0_14_ubyte
 *|   {
 *|     : kind = fixed;
@@ -959,6 +1002,7 @@ const   uint16_t KsVSEP_Diagnostic_Counter_Thd = 16;
 *| "Count should be less than 15";
 *|     : type = hwiocald.t_soh_0_14_ubyte;
 *|     : units = "count";
+*|   }
 *|   }
 */
 const uint8_t KSOHCRTH = 10;

@@ -162,8 +162,20 @@ bool CAM_Get_State_Change_Occurred(
 bool CAM_Get_State_Change_Occurred_Current_Revolution(
    CAM_Sensors_T  in_sensor );
 
+//=============================================================================
+// CAM_Edge_Interrupt_Handler
+//=============================================================================
+uint8_t CAM_Get_CAM_Current_Index( uint32_t in_cam_sensor );
 
+//=============================================================================
+// CAM_Edge_Interrupt_Handler
+//=============================================================================
+uint32_t CAM_Get_CAM_Angle( uint32_t in_cam_sensor ,uint8_t index );
 
-
+//=============================================================================
+// uint8_t CAM_Get_Current_Edge
+//=============================================================================
+void CAM_Set_Current_Edge(
+   CAM_Sensors_T     in_sensor );
 
 #endif // DD_CAM_INTERFACE_H

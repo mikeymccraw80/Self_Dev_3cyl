@@ -151,9 +151,24 @@ volatile uCrank_Count_T          CRANK_Tooth_Sync_Count;  // PA @ last sync
 //=============================================================================
  void OS_Engine_Stall_Reset(void) ;
 //=============================================================================
+// OS_ToothInt_Hook
+//=============================================================================
+void OS_ToothInt_Hook(void);
+//=============================================================================
 // CRANK_Process_Stall_Event
 //=============================================================================
 void CRANK_Process_Stall_Event(void) ;
+//=============================================================================
+// OS_Engine_Start_Crank
+//=============================================================================
+ void OS_Engine_Start_Crank(void) ;
+
+//=============================================================================
+// OS_Engine_First_Gap
+//=============================================================================
+ void OS_Engine_First_Gap(void) ;
+
+
 //=============================================================================
 // CRANK_Convert_Ref_Period_To_RPM
 //=============================================================================
@@ -375,6 +390,7 @@ static void CRANK_Filter_Crank_Signal( void )
             CRANK_Internal_State.U32 = CRANK_Set_Filter_Enabled( CRANK_Internal_State.U32, false );
             CRANK_Internal_State.U32 = CRANK_Set_Sync_Started( CRANK_Internal_State.U32, true );
             CRANK_Valid_Sync_Period = 0;
+	  
          }
       }
       else
@@ -442,6 +458,9 @@ static bool CRANK_Gap_Cofirm( void )
                    (  (uint8_t)( CRANK_Parameters.F.virtual_teeth_per_cylinder_event -
                                      ( CRANK_First_Cylinder_Event_Tooth -
                                        CRANK_Synchronization_Start_Tooth ) ) ) ) ) ) & 0x00FFFFFF;
+		   OS_Engine_First_Gap();
+		   CAM_Set_Current_Edge(CAM1);
+		      CAM_Set_Current_Edge(CAM2);
            				 
 	     }
 	   else
@@ -473,7 +492,7 @@ static bool CRANK_Gap_Cofirm( void )
 					  
                      if(tooth_count > 2)
                       {
-                         CRANK_Error_Count_More = tooth_count - CRANK_VIRTUAL_TEETH_PER_CRANK;
+                         CRANK_Error_Count_More = tooth_count - CRANK_TEETH_PER_GAP;
 				   
 		          if(CRANK_Error_Count_More>CRANK_Error_Count_More_Max)
 		           {
@@ -482,7 +501,7 @@ static bool CRANK_Gap_Cofirm( void )
                       }
 		       else
 		       {
-		          CRANK_Error_Count_Less =  CRANK_ACTUAL_TEETH_PER_CRANK -tooth_count;
+		          CRANK_Error_Count_Less =  CRANK_TEETH_PER_GAP -tooth_count;
 			  
 		          if(CRANK_Error_Count_Less>CRANK_Error_Count_Less_Max)
 		            {
@@ -549,6 +568,7 @@ static void CRANK_Search_For_First_Gap( void )
       {
          CRANK_Internal_State.U32 = CRANK_Set_Engine_Turning( CRANK_Internal_State.U32, true );
          CRANK_Internal_State.U32 = CRANK_Set_Valid_Tooth( CRANK_Internal_State.U32, true );
+         OS_Engine_Start_Crank();
          if( !CRANK_Get_Sync_Started( CRANK_Internal_State.U32 ) )
          {
             //
@@ -556,6 +576,7 @@ static void CRANK_Search_For_First_Gap( void )
             // filter is disabled.
             //
             CRANK_Internal_State.U32 = CRANK_Set_Sync_Started( CRANK_Internal_State.U32, true );
+	      
          }
          else
          {
@@ -595,6 +616,8 @@ void CRANK_Process_Crank_Event( void )
      CRANK_Current_Event_Tooth = MCD5408_Get_Abs_Edge_Count(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT);
      CRANK_Parameters.F.current_tooth = CRANK_Current_Event_Tooth;
 
+     OS_ToothInt_Hook();
+	 
       // Check if first synchronization took place:
       if( !CRANK_Get_First_Sync_Occurred( CRANK_Internal_State.U32 ) )
       {
@@ -681,7 +704,6 @@ void CRANK_High_Priority_Cylinder_Event( void )
       if( CRANK_Cylinder_ID >= (uint16_t) CRANK_Initialization_Parameters->number_of_cylinders - 1 )
         {
            CRANK_Cylinder_ID = CRANK_CYLINDER_A;
-	    HAL_GPIO_SET_MIL_Enable(~ HAL_GPIO_GET_MIL_Status());
          }
       else
        {
@@ -981,13 +1003,15 @@ uint32_t CRANK_Convert_Ref_Period_To_RPM( void )
    uint8_t tooth_per_lores;
    uint8_t rpm_conv_factor;
 
-  // tooth_per_lores = CRANK_SCHEDULE_VIRTUAL_TEETH_PER_REVOLUTION / CRANK_Initialization_Parameters->number_of_cylinders;
+   tooth_per_lores = CRANK_SCHEDULE_CONFIG_VIRTUAL_TEETH_PER_REVOLUTION 
+   	                               / CRANK_Initialization_Parameters->number_of_cylinders;
 
    //The conversion factor is applied to support other crank profiles like 24x,30x etc
-   //rpm_conv_factor = (tooth_per_lores *CRANK_SECONDS_PER_MINUTE)/CRANK_VIRTUAL_TEETH_PER_CRANK;
-   rpm_conv_factor = (CRANK_SECONDS_PER_MINUTE)/CRANK_VIRTUAL_TEETH_PER_CRANK;
+   rpm_conv_factor = (CRANK_VIRTUAL_TEETH_PER_CRANK)/tooth_per_lores;
 
-
+  engine_speed = (CRANK_SECONDS_PER_MINUTE*CRANK_Parameters.F.time_base
+  	*CRANK_DEFAULT_RPM_PRECSION)/( CRANK_Parameters.F.lo_res_reference_period*rpm_conv_factor);
+#if 0
    //Check if the reference period is valid
    if((0 < CRANK_Parameters.F.lo_res_reference_period)&&(CRANK_Parameters.F.lo_res_reference_period < 0xFFFFFF))
    {
@@ -997,6 +1021,7 @@ uint32_t CRANK_Convert_Ref_Period_To_RPM( void )
          CRANK_Parameters.F.time_base,
          CRANK_Parameters.F.lo_res_reference_period);
    }
+   #endif
    return ( engine_speed );
 }
 
@@ -1091,7 +1116,36 @@ uCrank_Angle_T CRANK_Get_First_Cylinder_Event_Angle( void )
    return( CRANK_First_Cylinder_Event_Tooth * CRANK_DEGREES_PER_TOOTH );
 }
 
+//=============================================================================
+// CRANK_Get_Engine_Speed
+//=============================================================================
+uint32_t CRANK_Get_Engine_Speed( void )
+{
+   return( CRANK_Parameters.F.engine_speed );
+}
 
+//=============================================================================
+// CRANK_Get_Engine_Reference_Time
+//=============================================================================
+uint32_t CRANK_Get_Engine_Reference_Time( void )
+{
+   return( CRANK_Parameters.F.lo_res_reference_period  );
+}
+//=============================================================================
+// CRANK_Get_Loss_Of_Sync
+//=============================================================================
+bool CRANK_Get_Loss_Of_Sync( void )
+{
+   return( CRANK_Internal_State.F.sync_error_in_progress);
+}
+
+//=============================================================================
+// CRANK_Get_Engine_Tooth
+//=============================================================================
+uCrank_Count_T CRANK_Get_Engine_Tooth( void )
+{
+   return (CRANK_Current_Event_Tooth);
+}
 
 //=============================================================================
 // IO_PULSE_Convert_Counts_To_Time

@@ -177,7 +177,6 @@ uCrank_Angle_T  eoit_angle_in_ucrank;
       case PFI_ANGLE_NORMAL:
          PFI_Normal_EOIT      = in_angle;
          PFI_Normal_Offset    = eoit_angle_in_ucrank;
-		 //PFI_Trim_Offset = PFI_Normal_Offset/2;
          break;
 
       case PFI_ANGLE_TRIM:
@@ -378,7 +377,6 @@ void PFI_Process_Cylinder_Event(void)
                                  PFI_Normal_Offset,
                                  PFI_Trim_Offset );
       }
-	
    }
 
 

@@ -1,17 +1,20 @@
+
 //=============================================================================
 // include files
 //=============================================================================
 #include "hal_fuel.h"
+#include "hal_eng.h"
 #include"io_config_fuel.h"
 #include "io_conversion.h"
+#include "io_interface_eng.h"
+
 
 //=============================================================================
 // Chery fuel Variable
 //=============================================================================
 
    uint16_t Chery_Post_Injection[MAX_INJ_CHANNEL];
-   uint8_t Startup_Counter;
-   bool     First_Syn_Flag;
+
 
 //=============================================================================
 // Chery fuel Marco define
@@ -261,10 +264,6 @@ void  IO_Fuel_Syn_Update(void)
 //=============================================================================
  void  IO_Fuel_Engine_Stall_Reset(void) 
 {
-
-  First_Syn_Flag= false;
-  Startup_Counter = 0;
-   //PFI_Initialize((IO_PFI_Initialization_Parameters_T  * const)&IO_Init_Pfi_Initialization_Parameters );
 
    SetHWIO_SimultaneousFuelMode();
    ClrHWIO_PrimePulseComplete();

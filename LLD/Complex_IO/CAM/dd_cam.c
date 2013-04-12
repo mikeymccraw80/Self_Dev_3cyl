@@ -415,6 +415,15 @@ uint8_t CAM_Get_Current_Edge(
    return( CAM_Current_Edge[in_sensor] );
 }
 
+
+//=============================================================================
+// uint8_t CAM_Get_Current_Edge
+//=============================================================================
+void CAM_Set_Current_Edge(
+   CAM_Sensors_T     in_sensor )
+{
+   CAM_Current_Edge[in_sensor]  = 0;
+}
 //=============================================================================
 //  FUNCTION: CAM_Increment_Cam_Edge_Counter
 //=============================================================================
@@ -442,7 +451,7 @@ void CAM_Edge_Process( uint32_t in_cam_sensor )
    uint32_t       cam_event_time;
    
    uint8_t        current_edge_index;
-   uCrank_Count_T                         previous_pa_tooth_count;
+   uCrank_Count_T                         pa_tooth_count;
    uCrank_Count_T                         whole_angle_in_teeth;
    uCrank_Angle_T cam_event_angle_fraction;
    uint32_t                               delta_time;
@@ -453,8 +462,6 @@ void CAM_Edge_Process( uint32_t in_cam_sensor )
 
    CAM_EdgeDetected = Insert_Bits( CAM_EdgeDetected, true, cam_sensor, 1 );
 
-   // Increment CAM edge if edges are valid (we know where we are) else we have an issue.
-   CAM_Current_Edge[cam_sensor] = CAM_Increment_Cam_Edge_Counter( CAM_Current_Edge[cam_sensor] );
 
    current_edge_index = CAM_Current_Edge[cam_sensor];
 
@@ -464,18 +471,18 @@ void CAM_Edge_Process( uint32_t in_cam_sensor )
    MCD5411_Get_Coherent_Angle_With_History(CAME_TPU_INDEX ,CAM_CAME[cam_sensor], &(CAM_Sensor_Coherent_data[cam_sensor]));
 
     // get the tooth before for the correct tooth period.
-    previous_pa_tooth_count = CAM_Sensor_Coherent_data[cam_sensor].previous_crank_count_at_critical_edge;
+    pa_tooth_count = CAM_Sensor_Coherent_data[cam_sensor].current_crank_count_at_critical_edge;
 	
    // add the distance for the current cylinder event
   // we are subtracting 1 from the value to go from [1:120] to [0.00:119.FF]
   whole_angle_in_teeth  = CRANK_Get_Parameter(CRANK_PARAMETER_CURRENT_TOOTH,0,0) -
-                           (CRANK_Get_Parameter(CRANK_PARAMETER_CURRENT_EDGE_COUNT,0,0) -
-                                     previous_pa_tooth_count);
+                          ( (CRANK_Get_Parameter(CRANK_PARAMETER_CURRENT_EDGE_COUNT,0,0) -
+                                     pa_tooth_count));
 
-  current_time = CRANK_Get_Edge_Time_From_Count( previous_pa_tooth_count);
+  current_time = CRANK_Get_Edge_Time_From_Count( pa_tooth_count);
 
    // Get the time from the previous edge out of the array
-   previous_time =CRANK_Get_Edge_Time_From_Count( previous_pa_tooth_count-1);
+   previous_time =CRANK_Get_Edge_Time_From_Count( pa_tooth_count-1);
 
    delta_time = ( cam_event_time - current_time) & UINT24_MAX;
 
@@ -494,6 +501,11 @@ void CAM_Edge_Process( uint32_t in_cam_sensor )
 
   CAM_Edge_Data[( cam_sensor * CAM_Number_Of_Pulses ) + current_edge_index].Time = cam_event_time;
 
+
+  // Increment CAM edge if edges are valid (we know where we are) else we have an issue.
+ CAM_Current_Edge[cam_sensor] = CAM_Increment_Cam_Edge_Counter( CAM_Current_Edge[cam_sensor] );
+
+
 }
 
 
@@ -504,8 +516,9 @@ void CAM_W_Edge_Interrupt_Handler( void )
 {
 
 CAM_Edge_Process(CAM_W);
-MCD5411_Set_Host_Interrupt_Status(CAME_TPU_INDEX ,&TPU, CAM_CAME[CAM_W], false );
 OS_CAM_W_Hook();
+MCD5411_Set_Host_Interrupt_Status(CAME_TPU_INDEX ,&TPU, CAM_CAME[CAM_W], false );
+//
 
 }
 
@@ -516,8 +529,25 @@ void CAM_X_Edge_Interrupt_Handler( void )
 {
 
 CAM_Edge_Process(CAM_X);
-MCD5411_Set_Host_Interrupt_Status(CAME_TPU_INDEX ,&TPU, CAM_CAME[CAM_X], false );
 OS_CAM_X_Hook();
+MCD5411_Set_Host_Interrupt_Status(CAME_TPU_INDEX ,&TPU, CAM_CAME[CAM_X], false );
+//
 
+}
+
+//=============================================================================
+// CAM_Edge_Interrupt_Handler
+//=============================================================================
+uint8_t CAM_Get_CAM_Current_Index( uint32_t in_cam_sensor )
+{
+  return CAM_Current_Edge[in_cam_sensor] ;
+}
+
+//=============================================================================
+// CAM_Edge_Interrupt_Handler
+//=============================================================================
+uint32_t CAM_Get_CAM_Angle( uint32_t in_cam_sensor ,uint8_t index )
+{
+  return  CAM_Edge_Data[(in_cam_sensor*CAM_Number_Of_Pulses)+ index].Count ;
 }
 

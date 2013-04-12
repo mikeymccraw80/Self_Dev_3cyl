@@ -8,7 +8,6 @@
 ///
 #include "dd_pfi_interface.h"
 #include "io_conversion.h"
-#include "HLS.h"
 
 void OS_LoResTasks_Hook(void);
 

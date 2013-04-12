@@ -12,24 +12,29 @@
 //===========================================================================
 // !!! Note: Change this per the Flash_BIU_Initialize_From_RAM() size
 //===========================================================================
-#define FLASH_BIU_INITIALIZE_FROM_RAM_32BIT_SIZE  13  // 52 bytes
+#define FLASH_BIU_INITIALIZE_FROM_RAM_32BIT_SIZE 13  // 52 bytes
 
 #define SECTION_FLASH_B0_REGISTER
 #include "section.h"
 FLASHB0_T FLASH_B0;
 #define SECTION_END
+#include "section.h"
 
 #define SECTION_FLASH_B1A1_REGISTER
 #include "section.h"
 FLASHB1_T FLASH_B1A1;
 #define SECTION_END
+#include "section.h"
 
 #define SECTION_FLASH_B1A2_REGISTER
 #include "section.h"
 FLASHB1_T FLASH_B1A2;
 #define SECTION_END
-
 #include "section.h"
+
+
+
+
 
 //===========================================================================
 // Function definitions
@@ -51,13 +56,13 @@ void MPC5634_FLASH_BIU_Initialize(FLASH_BIUCR_T in_biucr, FLASH_BIUAPR_T in_biua
 
   ISYNC();
 }
-
+uint32_t ram_space[FLASH_BIU_INITIALIZE_FROM_RAM_32BIT_SIZE];
 //===========================================================================
 // Function definitions
 //===========================================================================
 void MPC5634_FLASH_Initialize(FLASH_Run_Mode_T  reprogram_mode )
 {
-   uint32_t ram_space[FLASH_BIU_INITIALIZE_FROM_RAM_32BIT_SIZE];
+   
    uint32_t* src;
    uint32_t  reg_value;
 
@@ -86,7 +91,7 @@ void MPC5634_FLASH_Initialize(FLASH_Run_Mode_T  reprogram_mode )
    {
 	//Global Configuration Enable (Read/Write)
       //1: Use the contents of BIUCR to configure both Bank0 and Bank1 operation
-      biucr.F.GCE= 1;
+      biucr.F.GCE= 0;
       //prefetching may be triggered by the processor core
       biucr.F.M0PFE = FLASH_PREFETCH_ENABLE;
 	//No prefetching may be triggered by the NDI  
@@ -109,17 +114,17 @@ void MPC5634_FLASH_Initialize(FLASH_Run_Mode_T  reprogram_mode )
 	//This field is used to control the number of wait states to be added to the best-case flash array access
        //time for reads.
 	//011: 3 additional wait-states are added
-      biucr.F.WWSC= FLASH_BIUCR_APC_THREE_HOLD_CYCLES;
+      biucr.F.RWSC= FLASH_BIUCR_APC_THREE_HOLD_CYCLES;
       //Data Prefetch Enable (Read/Write)
       //If page buffers are enabled (BFEN = 1), prefetching is triggered by any data read access
-      biucr.F.DPFEN= FLASH_BIUCR_DPFEN_PREFETCH_BY_ANY_READ;
+      biucr.F.DPFEN= FLASH_BIUCR_DPFEN_PREFETCH_ONLY_BY_BURST_READ;
       //Instruction Prefetch Enable (Read/Write)
       //If page buffers are enabled (BFEN = 1), prefetching is triggered by any instruction fetch read access
       biucr.F.IPFEN= FLASH_BIUCR_IPFEN_PREFETCH_BY_ANY_READ;  
        //Prefetch Limit (Read/Write)
       //1x: The referenced line is prefetched on a buffer miss, or the next sequential page is prefetched on a
       //buffer hit (if not already present), that is, prefetch on miss or hit.
-      biucr.F.PFLIM= FLASH_BIUCR_PFLIM_UNLIMITED_ADDITIONAL_LINES;
+      biucr.F.PFLIM= FLASH_BIUCR_PFLIM_UPTO_TWO_ADDITIONAL_LINES;
 	
 	//Buffer Enable (Read/Write)
       //The page buffers are enabled to satisfy read requests on hits. Buffer valid bits may be set when the
@@ -130,7 +135,7 @@ void MPC5634_FLASH_Initialize(FLASH_Run_Mode_T  reprogram_mode )
    	{
 	//Global Configuration Enable (Read/Write)
       //1: Use the contents of BIUCR to configure both Bank0 and Bank1 operation
-      biucr.F.GCE= 1;
+      biucr.F.GCE= 0;
       //prefetching may be triggered by the processor core
       biucr.F.M0PFE = FLASH_PREFETCH_DISABLE;
 	//No prefetching may be triggered by the NDI  
@@ -143,23 +148,23 @@ void MPC5634_FLASH_Initialize(FLASH_Run_Mode_T  reprogram_mode )
       //This field must be set to a value corresponding to the operating frequency and it must be the same value
       //as RWSC.
       // 010: Access requests require 2 additional hold cycles
-      biucr.F.APC= FLASH_BIUCR_APC_THREE_HOLD_CYCLES;
+      biucr.F.APC= FLASH_BIUCR_APC_NO_ADDRESS_PIPELINE;
 	//Write Wait State Control (Read/Write)
 	//This field is used to control the number of wait-states to be added to the best-case flash array access
        // time for writes.
 	//01: 1 additional wait-state is added
-      biucr.F.WWSC= FLASH_BIUCR_WWSC_ONE_WAIT_STATE;
+      biucr.F.WWSC= FLASH_BIUCR_WWSC_THREE_WAIT_STATES;
         //Read Wait State Control (Read/Write)
 	//This field is used to control the number of wait states to be added to the best-case flash array access
        //time for reads.
 	//011: 3 additional wait-states are added
-      biucr.F.WWSC= FLASH_BIUCR_APC_THREE_HOLD_CYCLES;
+      biucr.F.RWSC= FLASH_BIUCR_APC_NO_ADDRESS_PIPELINE;
       //Data Prefetch Enable (Read/Write)
       //If page buffers are enabled (BFEN = 1), prefetching is triggered by any data read access
-      biucr.F.DPFEN= FLASH_BIUCR_DPFEN_PREFETCH_BY_ANY_READ;
+      biucr.F.DPFEN= FLASH_BIUCR_DPFEN_PREFETCH_ONLY_BY_BURST_READ;
       //Instruction Prefetch Enable (Read/Write)
       //If page buffers are enabled (BFEN = 1), prefetching is triggered by any instruction fetch read access
-      biucr.F.IPFEN= FLASH_BIUCR_IPFEN_PREFETCH_BY_ANY_READ;  
+      biucr.F.IPFEN= FLASH_BIUCR_IPFEN_PREFETCH_ONLY_BY_BURST_READ;  
        //Prefetch Limit (Read/Write)
       //1x: The referenced line is prefetched on a buffer miss, or the next sequential page is prefetched on a
       //buffer hit (if not already present), that is, prefetch on miss or hit.
@@ -185,8 +190,10 @@ void MPC5634_FLASH_Initialize(FLASH_Run_Mode_T  reprogram_mode )
    biapr.F.M2AP = FLASH_BIUCR_MASTER_AP_READ_WRITE_ACCESS;
 
    
-   init( biucr, biapr );
-
+   init( biucr, biapr);
+  // MPC5634_FLASH_BIU_Initialize( biucr, biapr);
+ 
+  
    //Write 1 to Clear EER and RWE bits
    reg_value = FLASH_B0.MCR.U32;
    reg_value = (reg_value & FLASH_EER_CLEAR_MASK);

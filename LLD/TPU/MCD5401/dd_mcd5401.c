@@ -59,7 +59,7 @@ void MCD5401_Channel_Shutdown(
    TPU_Channel_Disable(index,configure );
 }
 
-
+MCD5401_SDM_T  *mcd5401_sdm_vis;
 //=============================================================================
 // MCD5401_Get_Edge_Time
 //=============================================================================
@@ -79,6 +79,7 @@ uint32_t MCD5401_Get_Edge_Count(
    TPU_CHANNEL_Configuration_T   configure )
 {
    MCD5401_SDM_T  *mcd5401_sdm = (MCD5401_SDM_T *)TPU_Get_Channel_SDM_Start_Address(index,configure );
+mcd5401_sdm_vis = mcd5401_sdm;
    return (mcd5401_sdm->F.Edge_Count.F.Edge_Cnt);
 }
 
@@ -130,6 +131,27 @@ uint32_t MCD5401_Get_Requested_Event(
    return(mcd5401_sdm->F.Requested_Time.F.Requested_Time);
 }
 
+//=============================================================================
+// MCD5411_Set_Host_Interrupt_Status
+//=============================================================================
+void MCD5401_Set_Host_Interrupt_Status(
+                      TPU_Index_T index,
+                     TPU_T         *p_tpu,
+   TPU_CHANNEL_Configuration_T   configure ,
+   bool                 in_status )
+{
+   TPU_Channel_T channel= configure.F.TPU_CHANNEL_CONFIGURATION_CHANNEL;
 
+   if ( true == in_status )
+   {
+      // request host interrupt
+      // Not supported in TPU
+   }
+   else
+   {
+      // clear pending host interrupt
+      p_tpu->CISR[index].U32 = (uint32_t)(1 << channel);
+   }
+}
 
 

@@ -219,7 +219,7 @@ const TPU_CHANNEL_Configuration_T   TPU_CONFIG_IC_FI[FEI_INDEX_MAX] =
    0,                                   //    Channel Function Mode1
    TPU_TCR1_TIME_BASE,                                     //   Channel Function Mode0
    0,                                      //  Entry Table Condition Select
-   TPU_CHANNEL_INTERRUPT_DISABLE,  //1  //Interrupt Request Enable
+   TPU_CHANNEL_INTERRUPT_ENABLE,  //1  //Interrupt Request Enable
    TPU_TRANSFER_REQUEST_DISABLE,   //Transfer Request Enable
    TPU_CHANNEL_PRIORITY_MEDIUM,  // Channel Priority Index
    ACTIVE_LOW,  //    Active state of channel
@@ -238,7 +238,7 @@ const TPU_CHANNEL_Configuration_T   TPU_CONFIG_IC_FI[FEI_INDEX_MAX] =
    0,                                   //    Channel Function Mode1
    TPU_TCR1_TIME_BASE,                                     //   Channel Function Mode0
    0,                                      //  Entry Table Condition Select
-   TPU_CHANNEL_INTERRUPT_DISABLE,  //1  //Interrupt Request Enable
+   TPU_CHANNEL_INTERRUPT_ENABLE,  //1  //Interrupt Request Enable
    TPU_TRANSFER_REQUEST_DISABLE,   //Transfer Request Enable
    TPU_CHANNEL_PRIORITY_MEDIUM,  // Channel Priority Index
    ACTIVE_LOW,  //    Active state of channel
@@ -258,7 +258,7 @@ const TPU_CHANNEL_Configuration_T   TPU_CONFIG_IC_FI[FEI_INDEX_MAX] =
    0,                                   //    Channel Function Mode1
    TPU_TCR1_TIME_BASE,                                     //   Channel Function Mode0
    0,                                      //  Entry Table Condition Select
-   TPU_CHANNEL_INTERRUPT_DISABLE,  //1  //Interrupt Request Enable
+   TPU_CHANNEL_INTERRUPT_ENABLE,  //1  //Interrupt Request Enable
    TPU_TRANSFER_REQUEST_DISABLE,   //Transfer Request Enable
    TPU_CHANNEL_PRIORITY_MEDIUM,  // Channel Priority Index
    ACTIVE_LOW,  //    Active state of channel
@@ -278,7 +278,7 @@ const TPU_CHANNEL_Configuration_T   TPU_CONFIG_IC_FI[FEI_INDEX_MAX] =
    0,                                   //    Channel Function Mode1
    TPU_TCR1_TIME_BASE,                                     //   Channel Function Mode0
    0,                                      //  Entry Table Condition Select
-   TPU_CHANNEL_INTERRUPT_DISABLE,  //1  //Interrupt Request Enable
+   TPU_CHANNEL_INTERRUPT_ENABLE,  //1  //Interrupt Request Enable
    TPU_TRANSFER_REQUEST_DISABLE,   //Transfer Request Enable
    TPU_CHANNEL_PRIORITY_MEDIUM,  // Channel Priority Index
    ACTIVE_LOW,  //    Active state of channel

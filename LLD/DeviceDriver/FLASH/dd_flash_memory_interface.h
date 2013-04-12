@@ -13,32 +13,51 @@ typedef enum FLASH_MODULE_Tag
 
 extern FLASH_MODULE_T Flash_Info;
 
-// ============================================================================
-// External function
 //=============================================================================
-//C90FL
-bool C90FL_Initialize(void);
-bool C90FL_SetLock(uint32_t in_address, bool lockstate);
-bool C90FL_Erase_Block(uint32_t in_address, void *function);
-bool C90FL_Write_Flash_Memory(uint32_t byte_length,
-                             uint32_t source_address,
-                             uint32_t destination_address,
-                             void *call_function);
-bool C90FL_Check_Erased(uint32_t byte_length,
-                       uint32_t start_address,
-                       void *function);
-//C90LC
-bool C90LC_Initialize(void);
-bool C90LC_SetLock(uint32_t in_address, bool lockstate);
-bool C90LC_Erase_Block(uint32_t in_address, void *function);
-bool C90LC_Write_Array_Memory(uint32_t byte_length,
-                             uint32_t source_address,
-                             uint32_t destination_address,
-                             void *call_function);
-bool C90LC_Check_Erased(uint32_t byte_length,
-                       uint32_t start_address,
-                       void *function);
+// FLASH_Memory_Initial_T
+//=============================================================================
+typedef bool (*FLASH_Memory_Initial_T)(void);
 
+//=============================================================================
+// FLASH_Set_Lock_T
+//=============================================================================
+typedef bool (*FLASH_Set_Lock_T)(uint32_t in_address, bool state);
+
+//=============================================================================
+// FLASH_Erase_Memory_T
+//=============================================================================
+typedef bool (*FLASH_Erase_Memory_T)(uint32_t in_address, void *call_function);
+
+//=============================================================================
+// FLASH_Program_Memory_T
+//=============================================================================
+typedef bool (*FLASH_Program_Memory_T)(uint32_t byte_length,
+                                       uint32_t source_address,
+                                       uint32_t destination_address,
+                                       void *call_function);
+
+//=============================================================================
+// FLASH_Check_Erased_T
+//=============================================================================
+typedef bool (*FLASH_Check_Erased_T)(uint32_t byte_length,
+                                   uint32_t start_address,
+                                   void *function);
+
+//===========================================================================
+//  Exported Function Prototypes
+//===========================================================================
+
+typedef struct FLASH_Memory_Interface_Tag
+{
+   FLASH_Memory_Initial_T         FLASH_Memory_Initial;
+   FLASH_Set_Lock_T               FLASH_Set_Lock;
+   FLASH_Erase_Memory_T           FLASH_Erase_Memory;
+   FLASH_Program_Memory_T         FLASH_Program_Memory;
+   FLASH_Check_Erased_T           FLASH_Check_Erased;
+}  FLASH_Memory_Interface_T;
+
+
+extern const FLASH_Memory_Interface_T FLASH_Memory_Interface[FLASH_Module_Number];
 
 
 #endif // DD_FLASH_MEMORY_INTERFACE_H

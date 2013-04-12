@@ -16,6 +16,7 @@
 #include "io_config_dma.h"
 #include "dd_mios_interface.h"
 #include "dd_dspi_interface.h"
+#include "hal_emulated_eeprom.h"
 
 #include "dd_l9958.h"
 #include "dd_vsep_est_select.h"
@@ -88,6 +89,7 @@ asm void CPU_DIAB_Set_Data_Area_Pointers(void)
 void InitializeHardwareRegisters(void)
 {
 
+
     bool flash_init_sucess;
    
    FMPLL_Initialize_Device();
@@ -107,20 +109,20 @@ void InitializeHardwareRegisters(void)
    {
        MPC5644_FLASH_Initialize_Normal();
        XBAR_MPC5644A_Initialize_Device();
-	flash_init_sucess = C90FL_Initialize();
+	//flash_init_sucess = C90FL_Initialize();
    }
    else
    {
-    //  MPC5634_FLASH_Initialize_Normal();
-      //XBAR_MPC5634M_Initialize_Device();
-      //flash_init_sucess = C90LC_Initialize();
+      MPC5634_FLASH_Initialize_Normal();
+      XBAR_MPC5634M_Initialize_Device();
+	//flash_init_sucess =	  C90LC_Initialize();
    }
-
+   flash_init_sucess = flash_memory_interface->FLASH_Memory_Initial();
    
   // must initial calibartion page after NVM restore and before EMS core initialization function
   // lots of calibartion data used to perform initialization
    MMU_MAS_Initialize_Device();
-  // io_flash_interface->FLASH_Memory_Initial();
+  // flash_memory_interface->FLASH_Memory_Initial();
    Reset_Status = SIU_RESET_Get_Status();
 
 
@@ -130,7 +132,9 @@ void InitializeHardwareRegisters(void)
    INTC_Initialize_Device();
 
    PIT_Initialize_Device();
-
+   
+   STM_Initialize_Device();
+   
    ECSM_Initialize_Device();
 
    DMA_Initialize_Device();
@@ -201,11 +205,22 @@ void InitializeHardwareRegisters(void)
 
   // DSPI_C_Initialize_Device();
    //
-
+      
+   STM_Set_Timer_Enable(true);
+  
    FlexCAN_A_Initialize_Device();
 
   // FlexCAN_C_Initialize_Device( );
 
+    HAL_CAN_RX_B00_Config();
+    HAL_CAN_TX_B01_Config();
+    HAL_CAN_TX_B02_Config();
+    HAL_CAN_TX_B03_Config();
+    HAL_CAN_TX_B04_Config();
+    HAL_CAN_TX_B05_Config();
+    HAL_CAN_RX_B06_Config();
+    HAL_CAN_TX_B07_Config();
+	
     L9958_Device_Initialize(MTSA_CONFIG_L9958_DEVICE_0);
   
     InitializeComplexIO();
@@ -220,18 +235,21 @@ void InitializeHardwareRegisters(void)
     VSEP_Initialize_Device();
      
     SOH_ETC_Initialize(true);
-   // restore NVRAM first, beacuse it will restore MFG from EEE too(always zero, when MFG in pflash is not full)
-   // it will be overwrited by next MFG restore function
-   //EEPROM_Restore_Vehicle_NVRAM_Block(status);  
-   //op_Return = EEPROM_Restore_MFG_NVM_Block();  // restore Pfalsh MFG if it is valid
+
 
    // only LCI will do the instrumentation operation
-  // if(CPU_LCI == CPU_Info)
-   //{
+   if(CPU_LCI == CPU_Info)
+   {
       // resotre cal backup to ram
-    //  INST_Restore_Working_Page(status);
-  // }
-
+      INST_Restore_Working_Page(Reset_Status);
+   }
+   //EBI Available only on the calibration system package 
+ //  if (CPU_VERTICAL == CPU_Info) 
+//   {
+//      VERTICAL_Config_MMU();
+   //   EBI_Initialize_Device(0);
+  //    INST_Restore_Working_Page(HWIO_reset_status);
+ //  }
 
 
 }
@@ -251,9 +269,15 @@ void RefreshHardwareRegisters(void)
 void InitializeHardwareLast(void)
 {
 
-  // INST_Initialize_Calibration_Pages();
-   // FIXME: xuhui added for CAL CAN
-   //CAN_Reset_Init();
+   EEPROM_Operation_Status_T op_Return; 
+   // restore NVRAM first, beacuse it will restore MFG from EEE too(always zero, when MFG in pflash is not full)
+   // it will be overwrited by next MFG restore function
+//  EEPROM_Restore_Vehicle_NVRAM_Block(Reset_Status);  
+  op_Return = EEPROM_Restore_MFG_NVM_Block();  // restore Pfalsh MFG if it is valid
+  INST_Initialize_Calibration_Pages();
+
+
+
 
 }
 

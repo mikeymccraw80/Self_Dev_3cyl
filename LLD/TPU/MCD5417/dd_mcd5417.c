@@ -1,8 +1,9 @@
 
 #include "dd_mcd5417.h"
 #include "io_config_tpu.h"
+#include "io_config_fuel.h"
 
-   volatile MCD5417_SDM_T  *mcd5417_sdm_vis[4]; 
+   volatile MCD5417_SDM_T  *mcd5417_sdm_vis[PFI_MAX_CYLINDERS]; 
 volatile DESFIE_GLOBAL_RAM_T *DESFIE_GLOBAL_RAM_vis;
 //=============================================================================
 // MCD5417_Initialize_Channel
