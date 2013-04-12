@@ -272,7 +272,7 @@ void InitializeHardwareLast(void)
    EEPROM_Operation_Status_T op_Return; 
    // restore NVRAM first, beacuse it will restore MFG from EEE too(always zero, when MFG in pflash is not full)
    // it will be overwrited by next MFG restore function
-//  EEPROM_Restore_Vehicle_NVRAM_Block(Reset_Status);  
+  EEPROM_Restore_Vehicle_NVRAM_Block(Reset_Status);  
   op_Return = EEPROM_Restore_MFG_NVM_Block();  // restore Pfalsh MFG if it is valid
   INST_Initialize_Calibration_Pages();
 

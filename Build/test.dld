@@ -8,7 +8,8 @@ MEMORY
    reserved:        org = 0x00010000, len = 0x00008000   /* 32K  */
    eeprom:          org = 0x00018000, len = 0x00008000   /* 32K  */
    cal:             org = 0x00020000, len = 0x00020000   /* 128K */
-   app_code:        org = 0x00040000, len = 0x0013C400   /* 1M + 256K - 15K */
+   app_code:        org = 0x00040000, len = 0x00137000   /* 1244K */
+   flashcode:       org = 0x00177000, len = 0x00005400   /* 21K */
    tsw_code:        org = 0x0017C400, len = 0x00003C00   /* 15K */
 
    /* RAM Allocation */
@@ -26,14 +27,73 @@ SECTIONS
       start_of_calrom = .;
       STORE(0xAAAA,2)
       /* #include "CAL_ROM.lcf"*/
+      hwiocald.o (.text_vle)
       end_of_calrom = .;
   } > cal
 
-  .testability:
+  .flashcode:
   {
-      start_of_testability = .;
+      start_of_flashcode = .;
       /*#include "Testability_ROM.lcf"*/
-      end_of_testability = .;
+              dd_flash_init_mpc5634.o (.text_vle)
+              dd_flash_init_mpc5644.o (.text_vle)
+              dd_flash_interface.o (.text_vle)
+              dd_flash_memory_interface.o (.text_vle)
+              dd_flash_mpc5634.o (.text_vle)
+              dd_flash_mpc5644.o (.text_vle)
+              dd_c90fl_flash.o (.text_vle)
+              dd_c90fl_flash_init.o (.text_vle)
+              dd_c90lc_flash.o (.text_vle)
+              dd_c90lc_flash_init.o (.text_vle)
+              cfactorymarginreadcheck.o (.text_vle)
+              cflasharrayintegritycheck.o (.text_vle)
+              CFlashDepletionRecover.o (.text_vle)
+              cflashecclogiccheck.o (.text_vle)
+              cflasherase.o (.text_vle)
+              cflashinit.o (.text_vle)
+              cflashprogram.o (.text_vle)
+              cflashresume.o (.text_vle)
+              cflashsuspend.o (.text_vle)
+              cgetlock.o (.text_vle)
+              ssd_c90fl_blankcheck.o (.text_vle)
+              ssd_c90fl_checksum.o (.text_vle)
+              ssd_c90fl_factorymarginreadcheck.o (.text_vle)
+              ssd_c90fl_flasharrayintegritycheck.o (.text_vle)
+              ssd_c90fl_FlashDepletionRecover.o (.text_vle)
+              ssd_c90fl_flashecclogiccheck.o (.text_vle)
+              ssd_c90fl_flasherase.o (.text_vle)
+              ssd_c90fl_flashinit.o (.text_vle)
+              ssd_c90fl_flashprogram.o (.text_vle)
+              ssd_c90fl_flashresume.o (.text_vle)
+              ssd_c90fl_flashsuspend.o (.text_vle)
+              ssd_c90fl_getlock.o (.text_vle)
+              ssd_c90fl_programverify.o (.text_vle)
+              ssd_c90fl_setlock.o (.text_vle)
+              ssd_c90lc_BlankCheck.o (.text_vle)
+              ssd_c90lc_CheckSum.o (.text_vle)
+              ssd_c90lc_FactoryMarginReadCheck.o (.text_vle)
+              ssd_c90lc_FlashArrayIntegrityCheck.o (.text_vle)
+              ssd_c90lc_FlashECCLogicCheck.o (.text_vle)
+              ssd_c90lc_FlashErase.o (.text_vle)
+              ssd_c90lc_FlashInit.o (.text_vle)
+              ssd_c90lc_FlashProgram.o (.text_vle)
+              ssd_c90lc_FlashResume.o (.text_vle)
+              ssd_c90lc_FlashSuspend.o (.text_vle)
+              ssd_c90lc_GetLock.o (.text_vle)
+              ssd_c90lc_ProgramVerify.o (.text_vle)
+              ssd_c90lc_SetLock.o (.text_vle)
+              hal_eeprom_mfg.o (.text_vle)
+	      hal_eeprom_nvm.o (.text_vle)
+              hal_emulated_eeprom.o (.text_vle)
+
+      end_of_flashcode = .;
+  } > flashcode
+  
+    .testability:
+    {
+        start_of_testability = .;
+        /*#include "Testability_ROM.lcf"*/
+        end_of_testability = .;
   } > tsw_code
   
   .ucram:
@@ -162,7 +222,7 @@ HWIO_NVRAM_SIZE       = SIZEOF( nvram );
 HWIO_BSS_START        = __BSS_START;
 HWIO_BSS_SIZE         = __BSS_END - __BSS_START;
 
-SIZE_OF_ALLOC_APPROM  = SIZEOF( app_code );
+SIZE_OF_ALLOC_APPROM  = SIZEOF( app_code )+SIZEOF( flashcode );
 SIZE_OF_ALLOC_CALROM  = SIZEOF( cal );
 SIZE_OF_ALLOC_APPRAM  = SIZEOF( app_ram );
 SIZE_OF_ALLOC_TSWROM  = SIZEOF( tsw_code );
