@@ -49,8 +49,11 @@ export BASH=\
 export CAT=\
 				$(subst \,/,$(TOOLS_PATH)\cat.exe)
 
+export MAP2SYM=\
+				$(subst \,/,$(TOOLS_PATH)\MAP2SYM.exe)
+
 export PERL=\
-				$(subst \,/,$(TOOLS_PATH)\perl)
+				$(subst \,/,$(TOOLS_PATH)\perl5.6.1)
 
 
 export SED =\
@@ -109,7 +112,7 @@ export LISTING_DIR  = $(HOME_DIR)/Listing
 # Section 2.6
 ###############################################################################
 BUILD_DIR = $(HOME_DIR)/Build
-
+INSTRUMT_DIR = $(HOME_DIR)/Instrumentation
 
 
 ###############################################################################
@@ -132,6 +135,7 @@ SUBDIRS += LLD/DeviceDriver/MIOS
 SUBDIRS += LLD/DeviceDriver/DSPI
 SUBDIRS += LLD/DeviceDriver/CAN
 SUBDIRS += LLD/DeviceDriver/TPU
+SUBDIRS += LLD/DeviceDriver/STM
 SUBDIRS += LLD/VSEP
 SUBDIRS += LLD/VSEP/DeviceDriver
 SUBDIRS += LLD/VSEP/SPI_Scheduler
@@ -155,6 +159,9 @@ SUBDIRS += LLD/Complex_IO/CXIO
 SUBDIRS += LLD/Complex_IO/CAM
 SUBDIRS += LLD/OS
 SUBDIRS += LLD/SOH
+SUBDIRS += LLD/Inst
+SUBDIRS += LLD/EEPROM
+SUBDIRS += LLD/Communications/CCP
 SUBDIRS += LLD/HAL
 SUBDIRS += LLD/IO_Interface
 SUBDIRS += LLD/Type_Incl
@@ -182,6 +189,7 @@ INCDIRS += LLD/DeviceDriver/MIOS
 INCDIRS += LLD/DeviceDriver/DSPI
 INCDIRS += LLD/DeviceDriver/CAN
 INCDIRS += LLD/DeviceDriver/TPU
+INCDIRS += LLD/DeviceDriver/STM
 INCDIRS += LLD/VSEP/SPI_Scheduler
 INCDIRS += LLD/VSEP/DeviceDriver
 INCDIRS += LLD/VSEP/Configuration
@@ -201,6 +209,9 @@ INCDIRS += LLD/Complex_IO/CAM
 INCDIRS += LLD/OS
 INCDIRS += LLD/HAL
 INCDIRS += LLD/SOH
+INCDIRS += LLD/Inst
+INCDIRS += LLD/EEPROM
+INCDIRS += LLD/Communications/CCP
 INCDIRS += LLD/IO_Interface
 INCDIRS += LLD/Type_Incl
 INCDIRS += HLS
@@ -306,12 +317,101 @@ DDUMP= $(COMP_DIR)\ddump -R -m3 -w16 -v -o $(OUTPUT_DIR)\$(OUTFILE).s19  $(OUTPU
 
 
 ###############################################################################
+# Command to generate i6l file
+# Section 5.9
+###############################################################################
+I695 = $(TOOLS_PATH)\i695x.exe
+ANCILLARY_TEMPLATES = $(subst /,\,$(INSTRUMT_DIR)/anc_files/V10)
+EANCILLARY_FILES  = $(subst /,\,$(OUTPUT_DIR)/$(PROG_NAME).anc)
+
+
+
+export I6L_FLAGS=\
+            -expl\
+            -nomisc \
+            -nt\
+            -ds2u\
+            -noancval\
+            -movanon \
+            -noqualif\
+            -local\
+            -ku\
+            -exit0\
+            -dev\
+            -textsec .vector_table .calibration .app_sec .bss\
+            -elfdwarf20\
+            -relaxed1\
+            -D FORCE_MSB_FIRST_DAQ_PROCESSING=1\
+            -anc $(ANCILLARY_TEMPLATES)\
+            -eanc $(EANCILLARY_FILES)\
+            -s\
+            $(subst /,\,$(OUTPUT_DIR)/$(OUTFILE).elf)
+
+
+
+I6LGEN = $(TOOLS_PATH)/i6lgen
+I6L_DEPENDS += $(OUTPUT_DIR)\$(OUTFILE).anc
+I6L= $(I6LGEN) -c $(OUTPUT_DIR)\$(PROG_NAME).cmd 
+
+
+export ASAP2_FILE =\
+				$(I695)\
+				ASAP2\
+				-UNITS\
+				-NOMOD\
+				-ETAS\
+				-OUTPUT_FILE="$(subst \,/,$(OUTPUT_DIR)\$(PROG_NAME)_org.a2l)"\
+				"$(subst \,/,$(OUTPUT_DIR)\$(OUTFILE).i6l)"
+
+export CORR_ETC_ARRAYS_ASAP2_FILE =\
+				"$(BASH)"\
+				-c\
+				"$(PERL) $(subst \,/,$(INSTRUMT_DIR)\perl_scripts\a2l_hand_edit.pl)\
+				$(subst \,/,$(OUTPUT_DIR)\$(PROG_NAME)_org.a2l)\
+				> $(subst \,/,$(OUTPUT_DIR)\mod_$(PROG_NAME).a2l)"
+
+export CORR_ASAP2_FILE =\
+				"$(BASH)"\
+				-c\
+				"$(PERL) $(subst \,/,$(INSTRUMT_DIR)\perl_scripts\a2lcorr.pl)\
+				$(subst \,/,$(OUTPUT_DIR)\$(PROG_NAME)_org.a2l)\
+				$(subst \,/,$(INSTRUMT_DIR)\perl_scripts\patch.a2l)\
+				0xFDFF \
+				> $(subst \,/,$(OUTPUT_DIR)\Engine.$(PROG_NAME).a2l)"
+
+export CONCAT_ANC_FILE =\
+				"$(BASH)"\
+				-c\
+				"$(CAT) $(subst \,/,$(INSTRUMT_DIR)\anc_files\chery_hwio*.anc)\
+				> $(subst \,/,$(OUTPUT_DIR)\pre.$(PROG_NAME).anc)"
+
+export ANC_FILE =\
+				"$(BASH)"\
+				-c\
+				"$(PERL) $(subst \,/,$(INSTRUMT_DIR)\perl_scripts\ancupdate.pl)\
+				$(subst \,/,$(OUTPUT_DIR)\$(OUTFILE).exmap)\
+				$(subst \,/,$(OUTPUT_DIR)\pre.$(PROG_NAME).anc)\
+				> $(subst \,/,$(OUTPUT_DIR)\$(PROG_NAME).anc)"
+
+export I6L_CMD_PREPROCESSOR_FILE ?=\
+            $(subst /,\,$(HOME_DIR)/build/$(PROG_NAME).cmd)
+
+            	
+export	EXMAP_FILE =\
+   $(MAP2SYM) $(OUTPUT_DIR)/$(PROG_NAME).map $(OUTPUT_DIR)/$(PROG_NAME).exmap 40000000 400177FF
+
+
+
+
+
+###############################################################################
 # Build Targets
 # Section 7
 ###############################################################################
 
 BUILD_TARGET += $(OUTPUT_DIR)/$(OUTFILE).elf
 BUILD_TARGET += $(OUTPUT_DIR)/$(OUTFILE).s19
+BUILD_TARGET += $(OUTPUT_DIR)/$(OUTFILE).i6l
 
 
 ###############################################################################
@@ -405,7 +505,36 @@ build_target:	;
 	@$(ECHO) Generating PTP file
 	-@cd ..\bin && $(DDUMP)
 
+###############################################################################
+# Build EXMAP file from elf file target
+###############################################################################
+	@$(ECHO) Generating XMAP Output
+	-@$(EXMAP_FILE)
 
+
+###############################################################################
+# Build ANC file from EXMAP file target
+###############################################################################
+	@if not exist $(subst \,/,$(TOOLS_PATH)\cygintl-1.dll) copy $(TOOLS_PATH)\cygintl_1.dll $(TOOLS_PATH)\cygintl-1.dll
+	-@$(CONCAT_ANC_FILE)
+	-@$(ANC_FILE)
+
+###############################################################################
+# Generating *.i6l
+###############################################################################
+	@$(ECHO) Generating I6L Output
+	@$(ECHO) $(I6L_FLAGS) > $(subst /,\,$(OUTPUT_DIR)/$(PROG_NAME).cmd)
+	$(TYPE) $(I6L_CMD_PREPROCESSOR_FILE) >> $(subst /,\,$(OUTPUT_DIR)/$(PROG_NAME).cmd)
+	-@cd ..\bin && $(I6L)
+
+
+###############################################################################
+# Build A2L from I6L file target
+###############################################################################
+	@$(ECHO) Generating A2L Output
+	-@cd ..\bin && $(ASAP2_FILE)
+#	-@$(CORR_ETC_ARRAYS_ASAP2_FILE)
+	-@$(CORR_ASAP2_FILE)
 
 ###############################################################################
 # 				CLEANING PROCESS UTILITY TARGETS
