@@ -30,6 +30,7 @@
 #include "hal.h"
 #include "dd_vsep_fault_config.h"
 #include "dd_vsep_fault.h"
+#include "dd_l9958.h"
 
 
 /******************************************************************************

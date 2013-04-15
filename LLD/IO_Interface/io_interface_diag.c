@@ -352,7 +352,7 @@ static void Diag_Digital_Output_Faults(void)
 
 static void Diag_ETC_Driver_Faults(void)
 {
-
+	etc_sig.status3.ETC_Fault=L9958_Rxd[0];
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////	 

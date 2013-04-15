@@ -91,6 +91,8 @@ bool                 B_Fof;
 unsigned int angle_crank_cam_inlet;
 unsigned int angle_crank_cam_outlet;
 
+//ETC
+etc_signals etc_sig;
 
 /* ============================================================================ *\
  * Local FUNCTION.
