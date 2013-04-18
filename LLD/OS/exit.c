@@ -12,10 +12,6 @@
 
 //=============================================================================
 // exit
-//
-// Implementation Characteristics:
-//
-//
 //=============================================================================
  void exit(void)
 {
@@ -36,7 +32,9 @@
 
 
    //Set TOD low now since all power down processing is complete
-  // IO_DISCRETE_Set_Immediate_State(&MTSA_C2PS_CONFIG_TURN_OFF_INHIBIT_CONTROL, false );
+    //  Deactivate_TimeOffDelay();
+    HAL_GPIO_SET_TODO_Enable(false);
+
     INTC_EXCEPTION_Halt();
    // Wait in an infinite loop for the power supply to shutdown
    do {} while (true);

@@ -10,9 +10,13 @@ DDUMP = ddump
 SUBPROJECT_MAK= submake
 
 
-OUTFILE= test
-PROG_NAME = test
-LINKFILE= test
+OUTFILE= mt22p3_chery_4cyl
+PROG_NAME = mt22p3_chery_4cyl
+ifeq ($(TARGET),HWIO)
+LINKFILE= mt22p3_chery_4cyl
+else
+LINKFILE= mt22p3_chery_4cyl
+endif
 
 
 
@@ -25,9 +29,10 @@ COMPILER_DIR = $(HOME_DIR)/tools/diab/WIN32/bin
 COMP_DIR     = $(subst /,\,$(COMPILER_DIR))
 TOOLS_PATH   = $(subst /,\,$(TOOLS_DIR))
 PROJECT_ROOT = $(HOME_DIR)
+LIB_DIR = $(HOME_DIR)/tools/delphilib/outputlib
 
-VERSION = 1.0
-LAST_UPDATE = July 2011
+VERSION = 1.1
+LAST_UPDATE = April 2013
 
 export TOOLS_PATH
 export ROOT_DIR = $(PROJECT_ROOT)
@@ -119,6 +124,7 @@ INSTRUMT_DIR = $(HOME_DIR)/Instrumentation
 # Include sub-project directories here
 # Section 3
 ###############################################################################
+ifeq ($(TARGET),HWIO)
 SUBDIRS += LLD/IO_Config
 SUBDIRS += LLD/DeviceDriver/SWT
 SUBDIRS += LLD/DeviceDriver/FMPLL
@@ -165,6 +171,7 @@ SUBDIRS += LLD/Communications/CCP
 SUBDIRS += LLD/HAL
 SUBDIRS += LLD/IO_Interface
 SUBDIRS += LLD/Type_Incl
+endif
 SUBDIRS += HLS
 
 
@@ -172,7 +179,7 @@ SUBDIRS += HLS
 # Directories included for compiling.
 # Section 4
 ###############################################################################
-
+ifeq ($(TARGET),HWIO)
 INCDIRS += LLD/IO_Config
 INCDIRS += LLD/DeviceDriver/SWT
 INCDIRS += LLD/DeviceDriver/FMPLL
@@ -214,6 +221,7 @@ INCDIRS += LLD/EEPROM
 INCDIRS += LLD/Communications/CCP
 INCDIRS += LLD/IO_Interface
 INCDIRS += LLD/Type_Incl
+endif
 INCDIRS += HLS
 
 export INCLUDE_DIR += $(patsubst %,-I$(HOME_DIR)/%,$(INCDIRS))
@@ -292,11 +300,19 @@ DIAB_PPC_MAPFILE  = $(OUTPUT_DIR)/$(PROG_NAME).map
 
 DIAB_PPC_LINKER_FLAGS +=\
                      -m6
-                     
+ifeq ($(TARGET),HWIO)
 DIAB_PPC_LINKER_LIB	+=\
 		     -L$(OBJ_DIR)\
                      -L$(DIABLIBS_DIR)\
                      -lc
+else                    
+DIAB_PPC_LINKER_LIB	+=\
+		     -L$(OBJ_DIR)\
+                     -L$(DIABLIBS_DIR)\
+                     -lc\
+                     -A $(LIB_DIR)/$(PROG_NAME).a
+
+endif
 
 DIAB_PPC_LINKER_COMMANDLINE =\
 		$(PPC_DIAB_TARGET) \
@@ -305,6 +321,7 @@ DIAB_PPC_LINKER_COMMANDLINE =\
 		$(DIAB_PPC_LINKER_LIB_FLAGS)\
 		$(DIAB_PPC_LINKER_LIB)\
 		> $(DIAB_PPC_MAPFILE)
+
 		
 LINK= $(COMP_DIR)\dld $(DIAB_PPC_LINKER_COMMANDLINE) $(BUILD_DIR)/obj_list.txt 
 
@@ -612,5 +629,5 @@ $(SUBMAKDEPS): $(SUBMAKS)
 
 
 display:
-	@$(ECHO) Compile for test software version: $(VERSION) date: $(LAST_UPDATE)
+	@$(ECHO) Compile for mt22p3_chery_4cyl software version: $(VERSION) date: $(LAST_UPDATE)
 	

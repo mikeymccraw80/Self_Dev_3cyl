@@ -66,7 +66,6 @@ unsigned char  Ta;
  int16_t dTqIdcI;
  int8_t dIgaKnc[4];
  uint16_t FtCntEmisCyl[4];
-// uint8_t StepPos;
  uint8_t StepPosDsr;
 bool                 B_Fan1;
 bool                 B_Fan2;

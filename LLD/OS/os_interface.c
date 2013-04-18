@@ -3,17 +3,13 @@
 // include files
 //=============================================================================
 #include "io_config_pit.h"
+#include "io_config_mios.h"
 #include "dd_pit_interface.h"
 #include "dd_dma_interface.h"
 #include "dd_mios_interface.h"
-#include "io_config_mios.h"
 #include "dd_dspi_interface.h"
-#include "io_interface_analog.h"
-#include "io_interface_fuel.h"
 #include "dd_fi_interface.h"
-#include "io_interface_eng.h"
-#include "io_interface_vcpc.h"
-#include "io_interface_pulse.h"
+
 
 //tempoary
 #include "soh.h"
@@ -34,18 +30,16 @@
   DMA_Enable_Request(DMA_CHANNEL_QADC_FISR4_RFDF_4);
   DMA_Enable_Request(DMA_CHANNEL_QADC_FISR4_CFFF_4);
 
+   // turn on Time Off Delay signal 
+   //Activate_TimeOffDelay
+   HAL_GPIO_SET_TODO_Enable(true);
+
   HAL_OS_Init_Task();   
 
   CAN_RX_B15_Config();
-  //app fuel setup
-  IO_Fuel_Syn_Init();
- //app spark setup
-  IO_Spark_Syn_Init();
-
+  
    FI_Initialize();
-
-   IO_Eng_Engine_Init();
-
+   
    CCP_Initialize();
 
 
@@ -56,7 +50,7 @@
 
  void MngOSTK_1msTasks(void)
 {
-  IO_Analog_1ms_Update();
+
   HAL_OS_1ms_Task();
     
 }
@@ -76,12 +70,9 @@ void MngOSTK_10msTasks(void)
 
   SWT_Service_WatchDog();
   VSEP_SPI_Scheduler_Manage_Periodic();
-  IO_GPIO_DI_Task();
-  IO_Analog_10ms_Update();
-  IO_Eng_Update_System_Time_Background();
+
   HAL_OS_10ms_Task(); 
-  IO_GPIO_DO_Task();
-  IO_Pulse_Update_Function();
+
   HAL_CAN_10ms_Task();
   test_cnt_30ms++;
   if (test_cnt_30ms == 3)
@@ -90,8 +81,8 @@ void MngOSTK_10msTasks(void)
      SOH_VSEP_CR_Service();
   } 
 
-  	/* CCP 10ms Trigger */
-     CCP_Trigger_Event_Channel( 10 );
+   /* CCP 10ms Trigger */
+   CCP_Trigger_Event_Channel( 10 );
   
 }
 
@@ -107,10 +98,9 @@ void MngOSTK_100msTasks(void)
   /* CCP 125ms Task 0 Trigger */
   CCP_Trigger_Event_Channel( 11 );
    test_cnt_500ms++;
-  if (test_cnt_500ms == 3)
+  if (test_cnt_500ms == 5)
   {
      test_cnt_500ms=0;
-     IO_Pulse_VSS_Update_500ms();
          /* CCP 500ms Task 0 Trigger */
     CCP_Trigger_Event_Channel( 25 );
   }
@@ -160,14 +150,10 @@ void OS_TimeBasedTask10ms(void)
 void OS_LoResTasks_Hook(void)
 {
 
-  IO_Eng_Cyl_Update();
+
    //syn of chery
    HAL_OS_SYN_Task();
-   //app fuel update
-   IO_Fuel_Syn_Update();    
-   //  app spark update
-   IO_Spark_Syn_Update();	
-       /* CCP LoRes Trigger */
+   /* CCP LoRes Trigger */
    CCP_Trigger_Event_Channel( 0 );
 }
 
@@ -176,17 +162,14 @@ void OS_LoResTasks_Hook(void)
 //=============================================================================
 void OS_ToothInt_Hook(void)
 {
- //Chery requirement
- IO_Eng_ToothInt(); 
+   HAL_OS_ToothInt_Hook(); 
 }
 //=============================================================================
 // OS_CAM_W_Hook
 //=============================================================================
 void OS_CAM_W_Hook(void)
 {
-   //syn of chery
-   IO_VCPC_Convert_CAMW();
-   HLS_ph1();	 
+   HAL_OS_CAM_W_Hook();
 }
 
 
@@ -194,10 +177,8 @@ void OS_CAM_W_Hook(void)
 // OS_CAM_X_Hook
 //=============================================================================
 void OS_CAM_X_Hook(void)
-{
-   //syn of chery
-   IO_VCPC_Convert_CAMX();
-   HLS_ph2();	 
+{  
+   HAL_OS_CAM_X_Hook();
 }
 
 //=============================================================================
@@ -205,10 +186,7 @@ void OS_CAM_X_Hook(void)
 //=============================================================================
  void OS_Engine_Stall_Reset(void) 
 {
-
- IO_Eng_Engine_Stall_Reset();
- IO_Fuel_Engine_Stall_Reset();
-
+  HAL_OS_Engine_Stall_Reset();
 }
 
 //=============================================================================
@@ -216,7 +194,7 @@ void OS_CAM_X_Hook(void)
 //=============================================================================
  void OS_Engine_Start_Crank(void) 
 {
-IO_Eng_Engine_Start_Crank();
+   HAL_OS_Engine_Start_Crank();
 }
 
 //=============================================================================
@@ -224,7 +202,7 @@ IO_Eng_Engine_Start_Crank();
 //=============================================================================
  void OS_Engine_First_Gap(void) 
 {
-IO_Eng_Engine_First_Gap();
+    HAL_OS_Engine_First_Gap();
 }
 
 

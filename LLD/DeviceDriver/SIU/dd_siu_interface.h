@@ -33,6 +33,10 @@ extern bool SIU_GPIO_DISCRETE_Get_State(SIU_GPIO_Channel_T channel );
 // SIU_GPIO_DISCRETE_Toggle_State
 //=============================================================================
 extern void SIU_GPIO_DISCRETE_Toggle_State(SIU_GPIO_Channel_T channel );
+//=============================================================================
+// SIU_GPIO_DISCRETE_Get_State_Local
+//=============================================================================
+ void SIU_GPIO_Output_Confige(SIU_GPIO_Channel_T channel, bool enable );
 
 #endif // DD_SIU_INTERFACE_H
 

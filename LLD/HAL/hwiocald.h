@@ -235,4 +235,8 @@ extern const bool K_Can_Meter_MIL_Disable;
 extern const bool K_Can_Meter_TACH_Disable;
 extern const bool K_Can_Meter_Fuel_Consum_Disable;
 
+extern const   bool        KbHWIO_ELOAD1_Active_High;
+extern const   bool        KbHWIO_ELOAD2_Active_High;
+extern const   bool        KbHWIO_BRKLMP_Active_High;
+
 #endif

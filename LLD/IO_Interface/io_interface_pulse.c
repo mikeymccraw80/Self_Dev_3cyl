@@ -77,13 +77,13 @@
  //VSEP channel :O2 HTRB
  if(LLD_pwm_out_table[LLD_PWM_O2_HEATER_2].B_enable)
   {
-    HAL_Pulse_O2AHTR_Set_Period_Duty( (uint32_t)LLD_pwm_out_table[LLD_PWM_O2_HEATER_2].period*64, 
+    HAL_Pulse_O2BHTR_Set_Period_Duty( (uint32_t)LLD_pwm_out_table[LLD_PWM_O2_HEATER_2].period*64, 
  	                                                      (uint16_t)LLD_pwm_out_table[LLD_PWM_O2_HEATER_2].duty*128);
   }
  else
  {
 
-    HAL_Pulse_O2AHTR_Set_Period_Duty( (uint32_t)0, 
+    HAL_Pulse_O2BHTR_Set_Period_Duty( (uint32_t)0, 
  	                                                      (uint16_t)LLD_pwm_out_table[LLD_PWM_O2_HEATER_1].duty*128);
  }
  

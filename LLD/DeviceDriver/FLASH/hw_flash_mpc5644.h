@@ -757,7 +757,7 @@ typedef union FLASH_AR_Tag
 typedef struct FLASH_BIUCR1_F_Tag
 {
    bitfield32_t         :  BIT_7;  // Bits  [31:25] Reserved
-   bitfield32_t         :  BIT_1;  // Bits  24
+   bitfield32_t  M8PFE  :  BIT_1;  // Bits  24
    bitfield32_t         :  BIT_1;  // Bits  23 Reserved
    bitfield32_t  M6PFE  :  BIT_1;  // Bits  22
    bitfield32_t         :  BIT_1;  // Bits  21 Reserved
@@ -821,7 +821,7 @@ typedef union FLASH_BIUCR1_Tag
 typedef struct FLASH_BIUAPR_F_Tag
 {
    bitfield32_t         :  BIT_14; // Bits [31:18] Reserved
-   bitfield32_t         :  BIT_2;  // Bits [17:16]
+   bitfield32_t  M8AP   :  BIT_2;  // Bits [17:16]
    bitfield32_t         :  BIT_2;  // Bits [15:14] Reserved
    bitfield32_t  M6AP   :  BIT_2;  // Bits [13:12]
    bitfield32_t         :  BIT_2;  // Bits [11:10]

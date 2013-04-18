@@ -188,25 +188,53 @@ void SIU_GPIO_Initialize_Device( void )
      SIU.PCR[SIU_GPIO_CHANNEL_202] =SIU_INITIAL_PCR_202;
 
 
+        // LCI&Prod for  GPIO 219
+      //SIU.PCR[SIU_GPIO_CHANNEL_219] =SIU_INITIAL_PCR_219 ;
+       
+     if(CPU_Info == CPU_LCI)
+     {
+        // LCI for  GPIO 219
+       // SIU.PCR[SIU_GPIO_CHANNEL_219] =SIU_INITIAL_PCR_219 ;
+	 //  LCI for GPIO 220
+        SIU.PCR[SIU_GPIO_CHANNEL_180] =SIU_INITIAL_PCR_180_LCI ;
+         // LCI for  GPIO 221
+        SIU.PCR[SIU_GPIO_CHANNEL_192] =SIU_INITIAL_PCR_192_LCI ;
+	  // LCI for  GPIO 222
+        SIU.PCR[SIU_GPIO_CHANNEL_194] =SIU_INITIAL_PCR_194_LCI ;
+	  // LCI for  GPIO 223
+        SIU.PCR[SIU_GPIO_CHANNEL_RESERVED_80] =SIU_INITIAL_PCR_80_LCI ;
+	  // LCI for  GPIO 224
+        SIU.PCR[SIU_GPIO_CHANNEL_RESERVED_81] =SIU_INITIAL_PCR_81_LCI ;
+	  //  LCI for GPIO 225
+        SIU.PCR[SIU_GPIO_CHANNEL_RESERVED_82] =SIU_INITIAL_PCR_82_LCI ;
+	  // LCI for  GPIO 227
+        SIU.PCR[SIU_GPIO_CHANNEL_99] =SIU_INITIAL_PCR_99_LCI ;
+        // LCI for GPIO231
+        SIU.PCR[SIU_GPIO_CHANNEL_98] =SIU_INITIAL_PCR_98_LCI ;
+     }	
+     else
+     {
+  	 // GPIO 219
+       // SIU.PCR[SIU_GPIO_CHANNEL_219] =SIU_INITIAL_PCR_219 ;
+	 // GPIO 220
+        SIU.PCR[SIU_GPIO_CHANNEL_220] =SIU_INITIAL_PCR_220 ;
+         // GPIO 221
+        SIU.PCR[SIU_GPIO_CHANNEL_221] =SIU_INITIAL_PCR_221 ;
+	  // GPIO 222
+        SIU.PCR[SIU_GPIO_CHANNEL_222] =SIU_INITIAL_PCR_222 ;
+	  // GPIO 223
+        SIU.PCR[SIU_GPIO_CHANNEL_223] =SIU_INITIAL_PCR_223 ;
+	  // GPIO 224
+        SIU.PCR[SIU_GPIO_CHANNEL_224] =SIU_INITIAL_PCR_224 ;
+	  // GPIO 225
+        SIU.PCR[SIU_GPIO_CHANNEL_225] =SIU_INITIAL_PCR_225 ;
+	  // GPIO 227
+        SIU.PCR[SIU_GPIO_CHANNEL_227] =SIU_INITIAL_PCR_227 ;
+	 // GPIO 231
+        SIU.PCR[SIU_GPIO_CHANNEL_231] =SIU_INITIAL_PCR_231 ;
+     }	 
 
-  	// GPIO 219
-     SIU.PCR[SIU_GPIO_CHANNEL_219] =SIU_INITIAL_PCR_219 ;
-	// GPIO 220
-     SIU.PCR[SIU_GPIO_CHANNEL_220] =SIU_INITIAL_PCR_220 ;
-       // GPIO 221
-     SIU.PCR[SIU_GPIO_CHANNEL_221] =SIU_INITIAL_PCR_221 ;
-	// GPIO 222
-     SIU.PCR[SIU_GPIO_CHANNEL_222] =SIU_INITIAL_PCR_222 ;
-	// GPIO 223
-     SIU.PCR[SIU_GPIO_CHANNEL_223] =SIU_INITIAL_PCR_223 ;
-	// GPIO 224
-     SIU.PCR[SIU_GPIO_CHANNEL_224] =SIU_INITIAL_PCR_224 ;
-	// GPIO 225
-     SIU.PCR[SIU_GPIO_CHANNEL_225] =SIU_INITIAL_PCR_225 ;
-	// GPIO 227
-     SIU.PCR[SIU_GPIO_CHANNEL_227] =SIU_INITIAL_PCR_227 ;
-	// GPIO 231
-     SIU.PCR[SIU_GPIO_CHANNEL_231] =SIU_INITIAL_PCR_231 ;
+
 
  
 
@@ -327,7 +355,15 @@ void SIU_GPIO_Initialize_Device( void )
   //Register, the SIU_GPDIx_x register reflects the actual state of the output pin.
   // channel_state = SIU.GPDI[channel].F.PDI;
 
-   return SIU.GPDO[channel].F.PDO;
+ if(SIU.PCR[channel].F.OBE)
+ {
+     return SIU.GPDO[channel].F.PDO; 
+ }
+ else
+ {
+    return SIU.GPDI[channel].F.PDI; 
+ }	
+	 
 }
 
 
@@ -343,3 +379,24 @@ void SIU_GPIO_Initialize_Device( void )
    // Set output to the toggled state
    SIU_GPIO_DISCRETE_Set_State( channel, state );
 }
+
+
+//=============================================================================
+// SIU_GPIO_DISCRETE_Get_State_Local
+//=============================================================================
+ void SIU_GPIO_Output_Confige(SIU_GPIO_Channel_T channel, bool enable )
+{
+
+      if(enable)
+      {
+      SIU.PCR[channel].F.IBE =false;
+      SIU.PCR[channel].F.OBE = true;
+      }
+      else
+ 	{
+ 	  SIU.PCR[channel].F.IBE =true;
+        SIU.PCR[channel].F.OBE = false;
+ 	}
+}
+
+

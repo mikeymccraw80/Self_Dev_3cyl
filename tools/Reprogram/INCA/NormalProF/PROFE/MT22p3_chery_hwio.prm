@@ -1,0 +1,70 @@
+;******************************************************************************
+;**                        Copyright (c) 2001 Delphi DE
+;**                          All rights reserved.
+;**                  Developed under contract by ETAS, Inc.
+;**
+;** File Name:    EMS_Core.pri
+;** Project:      Delphi EMS_Core ProF Configuration Development
+;** File Type:	  ProF Configuration File
+;** CM ID:        $Id: EMS_Core.prm,v 1.6 2001/04/10 17:33:19 dnutter Exp $
+;** Description:  Main script file for the ProF configuration
+;**
+;** Revision History: 
+;** Date     Engineer   Changes
+;** ---------------------------------------------------------------------------
+;** 03/20/01 * DLN      Initial release.
+;** 04/10/01 * DLN      Parameterized init and convert
+;******************************************************************************
+#include "common.pri"
+#include "%3.pri"
+#include "%4.pri"
+
+[START]
+   SET_RE_ENTRY (START)
+   CALL (init)
+   case TRUE : prog
+   default: ERROR_MSG
+[START_END]
+
+[prog]
+  DISPLAY_MESSAGE ("     Burning data...please be patient... ",FALSE)
+  WRITE_MEMORY_BY_ADDRESS(1,"%1."EXT)
+  case TRUE : end_session
+  default : ERROR_MSG
+[prog_END]
+
+[end_session]
+  DISPLAY_MESSAGE ("        Completing flash steps...",FALSE)
+  STOP_DIAGNOSTIC_SESSION
+  case TRUE : success
+  default : ERROR_MSG
+[end_session_END]
+
+[success]
+  DISPLAY_MESSAGE (" ", FALSE);
+  DISPLAY_MESSAGE ("     Programming complete, Reset to continue ...",FALSE);
+  DISPLAY_MESSAGE (" ", FALSE);
+  EXTENDED_MESSAGE(FALSE)
+  default : EXIT
+[success_END]
+
+[ERROR_MSG]
+   DISPLAY_MESSAGE ("", FALSE);
+   DISPLAY_MESSAGE (" ERROR-ERROR-ERROR-ERROR-ERROR-ERROR-ERROR-ERROR-ERROR-ERROR-ERROR-ERROR-ERROR", RED_FALSE)
+   DISPLAY_ERROR_MESSAGE (TRUE)
+   default : DSP_ERROR
+[ERROR_MSG_END]
+
+[DSP_ERROR]
+   DISPLAY_MESSAGE ("", FALSE);
+   DISPLAY_MESSAGE ("", FALSE);
+   DISPLAY_MESSAGE (" ERROR-ERROR-ERROR-ERROR-ERROR-ERROR-ERROR-ERROR-ERROR-ERROR-ERROR-ERROR-ERROR", RED_FALSE)
+   DISPLAY_MESSAGE ("         session aborted by error", BLINK_FALSE)
+   DISPLAY_MESSAGE (" ", FALSE);
+   DISPLAY_MESSAGE ("  If you can't solve your problem, please contact the support line  ", GREEN_FALSE)
+   DISPLAY_MESSAGE ("  and have the files FPSTAT.PRT and INCAPROT.LOG from the temporary ", GREEN_FALSE)
+   DISPLAY_MESSAGE ("  directory of your PC (e.g. C:\WINDOWS\TEMP) ready (e.g. for fax)  ", GREEN_FALSE)
+   EXTENDED_MESSAGE(FALSE)
+   default : EXIT
+[DSP_ERROR_END]
+

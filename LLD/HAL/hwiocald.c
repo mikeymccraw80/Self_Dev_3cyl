@@ -356,8 +356,6 @@ const T_MILLISECONDSb  KfSPRK_t_CrankMinDwellInit = V_MILLISECONDSb(0.5);
 const T_MILLISECONDSb KfSPRK_t_CrankMaxDwellInit = V_MILLISECONDSb(10);
 
 
-
-
 /*
 *| hwiocald.{
 *|   KsVSEP_Fault_Level_Initial1 {
@@ -1008,29 +1006,71 @@ const   uint16_t KsVSEP_Diagnostic_Counter_Thd = 16;
 const uint8_t KSOHCRTH = 10;
 
 /*
+*| hwiocald.{
 *|    K_Can_Meter_MIL_Disable {
 *|       :is_calconst;
 *|       :units = "BOOLEAN";
 *|       :description = "Disable MIL output on ECM pin";
 *|    }
+*|   }
 */
 const bool    K_Can_Meter_MIL_Disable = false ;
 
 /*
+*| hwiocald.{
 *|    K_Can_Meter_TACH_Disable {
 *|       :is_calconst;
 *|       :units = "BOOLEAN";
 *|       :description = "Disable tachometer output on ECM pin";
 *|    }
+*|   }
 */
 const bool    K_Can_Meter_TACH_Disable = false ;
 
 /*
+*| hwiocald.{
 *|    K_Can_Meter_Fuel_Consum_Disable {
 *|       :is_calconst;
 *|       :units = "BOOLEAN";
 *|       :description = "Disable Fuel_Consum output on ECM pin";
 *|    }
+*|   }
 */
 
 const bool    K_Can_Meter_Fuel_Consum_Disable = false ;
+
+/*
+*| hwiocald.{
+*|   KbHWIO_ELOAD1_Active_High {
+*|     : is_calconst;
+*|     : description = "KbHWIO_ELOAD1_Active_High";
+*|     : type = types.size2_0to1;
+*|     : units = "boolean";
+*|   }
+*| }
+*/
+const   bool        KbHWIO_ELOAD1_Active_High     = true;
+
+/*
+*| hwiocald.{
+*|   KbHWIO_ELOAD2_Active_High {
+*|     : is_calconst;
+*|     : description = "KbHWIO_ELOAD2_Active_High";
+*|     : type = types.size2_0to1;
+*|     : units = "boolean";
+*|   }
+*| }
+*/
+const   bool        KbHWIO_ELOAD2_Active_High     = true;
+
+/*
+*| hwiocald.{
+*|   KbHWIO_BRKLMP_Active_High {
+*|     : is_calconst;
+*|     : description = "KbHWIO_BRKLMP_Active_High";
+*|     : type = types.size2_0to1;
+*|     : units = "boolean";
+*|   }
+*| }
+*/
+const   bool        KbHWIO_BRKLMP_Active_High     = true;

@@ -85,5 +85,10 @@ void InitializeHardwareLast(void);
 //=============================================================================
 //bool InitializeIllegalConditionCheck(void);
 
+//=============================================================================
+// Refreshes all the hardware related registers.
+//=============================================================================
+bool Get_BatteryRemove_Status(void);
+
 #endif // IO_INIT_H
 

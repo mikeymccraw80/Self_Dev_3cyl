@@ -2,7 +2,6 @@
 #define DD_FLEXCAN_H
 
 #include "hw_flexcan.h"
-#include "io_type.h"
 #include "io_config_flexcan.h"
 
 #define SECTION_FLEXCAN_A_REGISTER

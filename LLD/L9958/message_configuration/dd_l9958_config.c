@@ -161,11 +161,12 @@ interrupt_state_t     irq_state;
    irq_state = Get_Interrupt_State();
    Disable_Interrupts();
 
-  // L9958_Rxd[index] = 
-	//		 	DSPI_B_Exchange_Data(ETC_CHIP_SELECT,
-	//		 	                                        ETC_CTAR_SELECT,
-	//		 	                                         DSPI_CTAR_FMSZ_16,
-        //                                                              L9958_Txd[index]);
+   L9958_Rxd[index] = 
+			 	DSPI_B_Exchange_Data1(ETC_CHIP_SELECT,
+			 	                                        ETC_CTAR_SELECT,
+			 	                                         DSPI_CTAR_FMSZ_16,
+                                                                     L9958_Txd[index],
+                                                                     1);
    #if 0
 
    transmint_length = 1;

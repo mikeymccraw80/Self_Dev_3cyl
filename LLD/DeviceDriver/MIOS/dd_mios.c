@@ -149,7 +149,7 @@ void MIOS_PWM_Set_Period_And_DutyCycle_US(
 
    //preiod and duty in us to count
    period_count = in_period*(EMIOS_FREQUENCY_HZ /((MIOS_PRESCALER_RATIO_1+1)*1000000));
-   duty_count =  in_duty_cycle*(EMIOS_FREQUENCY_HZ /((MIOS_PRESCALER_RATIO_1+1)*1000000));
+   duty_count =   period_count*in_duty_cycle/1000;//in_duty_cycle*(EMIOS_FREQUENCY_HZ /((MIOS_PRESCALER_RATIO_1+1)*1000000));
 
   MIOS.CH[channel].CADR =  duty_count;
   MIOS.CH[channel].CBDR = period_count;

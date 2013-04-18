@@ -34,6 +34,7 @@
 CPU_Info_T CPU_Info;
 FLASH_MODULE_T Flash_Info;
 HWIO_Reset_Status_T Reset_Status;
+bool BatteryRemoved;
 
 
 extern char HWIO_DATA_ROM_START[];
@@ -107,7 +108,7 @@ void InitializeHardwareRegisters(void)
 
    if(CPU_LCI == CPU_Info)
    {
-       MPC5644_FLASH_Initialize_Normal();
+      MPC5644_FLASH_Initialize_Normal();
        XBAR_MPC5644A_Initialize_Device();
 	//flash_init_sucess = C90FL_Initialize();
    }
@@ -121,7 +122,7 @@ void InitializeHardwareRegisters(void)
    
   // must initial calibartion page after NVM restore and before EMS core initialization function
   // lots of calibartion data used to perform initialization
-   MMU_MAS_Initialize_Device();
+//   MMU_MAS_Initialize_Device();
   // flash_memory_interface->FLASH_Memory_Initial();
    Reset_Status = SIU_RESET_Get_Status();
 
@@ -237,21 +238,6 @@ void InitializeHardwareRegisters(void)
     SOH_ETC_Initialize(true);
 
 
-   // only LCI will do the instrumentation operation
-   if(CPU_LCI == CPU_Info)
-   {
-      // resotre cal backup to ram
-      INST_Restore_Working_Page(Reset_Status);
-   }
-   //EBI Available only on the calibration system package 
- //  if (CPU_VERTICAL == CPU_Info) 
-//   {
-//      VERTICAL_Config_MMU();
-   //   EBI_Initialize_Device(0);
-  //    INST_Restore_Working_Page(HWIO_reset_status);
- //  }
-
-
 }
 
 //=============================================================================
@@ -270,16 +256,56 @@ void InitializeHardwareLast(void)
 {
 
    EEPROM_Operation_Status_T op_Return; 
+
+   HAL_GPIO_DI_Active_Status_Init();
+
+   if(!HAL_GPIO_GET_Reset_DIO_Status())
+   {
+     BatteryRemoved =  true;
+   }
+   else
+   {
+     BatteryRemoved =  false; 
+   }	  
+
+   HAL_GPIO_Reset_DIO_Output_Confige(true);
+   
+      // only LCI will do the instrumentation operation
+   if(CPU_LCI == CPU_Info)
+   {
+      // resotre cal backup to ram
+      INST_Restore_Working_Page(Reset_Status);
+   }
+   //EBI Available only on the calibration system package 
+ //  if (CPU_VERTICAL == CPU_Info) 
+//   {
+//      VERTICAL_Config_MMU();
+   //   EBI_Initialize_Device(0);
+  //    INST_Restore_Working_Page(HWIO_reset_status);
+ //  }
    // restore NVRAM first, beacuse it will restore MFG from EEE too(always zero, when MFG in pflash is not full)
    // it will be overwrited by next MFG restore function
+      if(CPU_LCI == CPU_Info)
+   {
+      
   EEPROM_Restore_Vehicle_NVRAM_Block(Reset_Status);  
   op_Return = EEPROM_Restore_MFG_NVM_Block();  // restore Pfalsh MFG if it is valid
+     }
+	  
   INST_Initialize_Calibration_Pages();
 
+   HAL_GPIO_SET_Reset_DIO_Enable(true);
 
 
 
 }
 
 
+//=============================================================================
+// Refreshes all the hardware related registers.
+//=============================================================================
+bool Get_BatteryRemove_Status(void)
+{
+  return BatteryRemoved;
+}
 

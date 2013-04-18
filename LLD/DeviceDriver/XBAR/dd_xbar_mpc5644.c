@@ -99,6 +99,12 @@ void XBAR_MPC5644A_Initialize_Device( void )
       //These bits are initialized by hardware reset. The reset value is 00.
       sgpcr.F.ARB  = XBAR_SLAVE_ROUND_ROBIN_ARBITRATION;
 
+     //                      This bit forces slave registers to be read only after
+     //                      to a 1.
+     //                      %0 = This slave register is writeable
+     //                      %1 = This slave register is Read Only
+      sgpcr.F.RO  = XBAR_SLAVE_CONFIG_UNLOCKED;
+
       //Parking Control
       //These bits determine the parking control used by this slave port.
       //These bits are initialized by hardware reset. The reset value is 00.

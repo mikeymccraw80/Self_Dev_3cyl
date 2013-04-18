@@ -95,6 +95,8 @@ void MPC5644_FLASH_Initialize(FLASH_Run_Mode_T reprogram_mode, FLASH_INDEX_T  de
        {
 
           //Master n prefetch enable
+          //Nexus
+	   biucr1.F.M8PFE= FLASH_PREFETCH_DISABLE;
           //FlexRay
 	   biucr1.F.M6PFE= FLASH_PREFETCH_DISABLE;
           //eDMA
@@ -110,7 +112,7 @@ void MPC5644_FLASH_Initialize(FLASH_Run_Mode_T reprogram_mode, FLASH_INDEX_T  de
          //...
          //110: Access requests require six additional hold cycles
          //111: No address pipelining
-	   biucr1.F.APC= FLASH_BIUCR_APC_THREE_HOLD_CYCLES ;
+	   biucr1.F.APC= FLASH_BIUCR_APC_TWO_HOLD_CYCLES ;
 	  //00: No additional wait-states are added
          //01: 1 additional wait-state is added
          //10: 2 additional wait-states are added
@@ -124,10 +126,10 @@ void MPC5644_FLASH_Initialize(FLASH_Run_Mode_T reprogram_mode, FLASH_INDEX_T  de
          //101: 5 additional wait-states are added
          //110: 6 additional wait-states are added
          //111: 7 additional wait-states are added
-	   biucr1.F.RWSC=FLASH_BIUCR_RWSC_THREE_WAIT_STATES ;
+	   biucr1.F.RWSC=FLASH_BIUCR_RWSC_TWO_WAIT_STATES ;
 	 // 0: No prefetching is triggered by a data read access
         //1: If page buffers are enabled (BFEN = 1), prefetching is triggered by any data read access
-	   biucr1.F.DPFEN=FLASH_BIUCR_DPFEN_PREFETCH_BY_ANY_READ ;
+	   biucr1.F.DPFEN=FLASH_BIUCR_IPFEN_PREFETCH_BY_ANY_READ ;
 	 //0: No prefetching is triggered by an instruction fetch read access
         //1: If page buffers are enabled (BFEN = 1), prefetching is triggered by any instruction fetch read access
 	   biucr1.F.IPFEN= FLASH_BIUCR_IPFEN_PREFETCH_BY_ANY_READ;
@@ -135,7 +137,7 @@ void MPC5644_FLASH_Initialize(FLASH_Run_Mode_T reprogram_mode, FLASH_INDEX_T  de
         //01: The referenced line is prefetched on a buffer miss, that is, prefetch on miss.
         //1x: The referenced line is prefetched on a buffer miss, or the next sequential page is prefetched on a
         //buffer hit (if not already present), that is, prefetch on miss or hit.
-	   biucr1.F.PFLIM= FLASH_BIUCR_PFLIM_PREFETCH_ON_MISS_OR_HIT;
+	   biucr1.F.PFLIM= FLASH_BIUCR_PFLIM_NO_PREFETCH;
 	 //0: The page buffers are disabled from satisfying read requests, and all buffer valid bits are cleared.
         //1: The page buffers are enabled to satisfy read requests on hits. Buffer valid bits may be set when the
         //buffers are successfully filled.
@@ -154,6 +156,8 @@ void MPC5644_FLASH_Initialize(FLASH_Run_Mode_T reprogram_mode, FLASH_INDEX_T  de
        else
        {
           //Master n prefetch enable
+          //Nexus
+	   biucr1.F.M8PFE= FLASH_PREFETCH_DISABLE;
           //FlexRay
 	   biucr1.F.M6PFE= FLASH_PREFETCH_DISABLE;
           //eDMA
@@ -169,7 +173,7 @@ void MPC5644_FLASH_Initialize(FLASH_Run_Mode_T reprogram_mode, FLASH_INDEX_T  de
          //...
          //110: Access requests require six additional hold cycles
          //111: No address pipelining
-	   biucr1.F.APC= FLASH_BIUCR_APC_THREE_HOLD_CYCLES ;
+	   biucr1.F.APC= FLASH_BIUCR_APC_TWO_HOLD_CYCLES ;
 	  //00: No additional wait-states are added
          //01: 1 additional wait-state is added
          //10: 2 additional wait-states are added
@@ -183,7 +187,7 @@ void MPC5644_FLASH_Initialize(FLASH_Run_Mode_T reprogram_mode, FLASH_INDEX_T  de
          //101: 5 additional wait-states are added
          //110: 6 additional wait-states are added
          //111: 7 additional wait-states are added
-	   biucr1.F.RWSC=FLASH_BIUCR_RWSC_THREE_WAIT_STATES ;
+	   biucr1.F.RWSC=FLASH_BIUCR_RWSC_TWO_WAIT_STATES ;
 	 // 0: No prefetching is triggered by a data read access
         //1: If page buffers are enabled (BFEN = 1), prefetching is triggered by any data read access
 	   biucr1.F.DPFEN=FLASH_BIUCR_DPFEN_PREFETCH_BY_ANY_READ ;
@@ -210,10 +214,14 @@ void MPC5644_FLASH_Initialize(FLASH_Run_Mode_T reprogram_mode, FLASH_INDEX_T  de
           biucr2.F.LBCFG = FLASH_BIUCR2_ALL_BUFFERS_FOR_FLASH_ACCESS ;
        }
 
+
+
       //00: No accesses may be performed by this master
       //01: Only read accesses may be performed by this master
       //10: Only write accesses may be performed by this master
      //11: Both read and write accesses may be performed by this master
+     //nexus
+      biapr.F.M8AP =  FLASH_BIUCR_MASTER_AP_READ_WRITE_ACCESS;
       //FlexRay
       biapr.F.M6AP =  FLASH_BIUCR_MASTER_AP_NO_ACCESS;
       //eDMA

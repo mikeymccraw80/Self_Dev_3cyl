@@ -35,56 +35,61 @@ SECTIONS
   {
       start_of_flashcode = .;
       /*#include "Testability_ROM.lcf"*/
-              dd_flash_init_mpc5634.o (.text_vle)
-              dd_flash_init_mpc5644.o (.text_vle)
-              dd_flash_interface.o (.text_vle)
-              dd_flash_memory_interface.o (.text_vle)
-              dd_flash_mpc5634.o (.text_vle)
-              dd_flash_mpc5644.o (.text_vle)
-              dd_c90fl_flash.o (.text_vle)
-              dd_c90fl_flash_init.o (.text_vle)
-              dd_c90lc_flash.o (.text_vle)
-              dd_c90lc_flash_init.o (.text_vle)
-              cfactorymarginreadcheck.o (.text_vle)
-              cflasharrayintegritycheck.o (.text_vle)
-              CFlashDepletionRecover.o (.text_vle)
-              cflashecclogiccheck.o (.text_vle)
-              cflasherase.o (.text_vle)
-              cflashinit.o (.text_vle)
-              cflashprogram.o (.text_vle)
-              cflashresume.o (.text_vle)
-              cflashsuspend.o (.text_vle)
-              cgetlock.o (.text_vle)
-              ssd_c90fl_blankcheck.o (.text_vle)
-              ssd_c90fl_checksum.o (.text_vle)
-              ssd_c90fl_factorymarginreadcheck.o (.text_vle)
-              ssd_c90fl_flasharrayintegritycheck.o (.text_vle)
-              ssd_c90fl_FlashDepletionRecover.o (.text_vle)
-              ssd_c90fl_flashecclogiccheck.o (.text_vle)
-              ssd_c90fl_flasherase.o (.text_vle)
-              ssd_c90fl_flashinit.o (.text_vle)
-              ssd_c90fl_flashprogram.o (.text_vle)
-              ssd_c90fl_flashresume.o (.text_vle)
-              ssd_c90fl_flashsuspend.o (.text_vle)
-              ssd_c90fl_getlock.o (.text_vle)
-              ssd_c90fl_programverify.o (.text_vle)
-              ssd_c90fl_setlock.o (.text_vle)
-              ssd_c90lc_BlankCheck.o (.text_vle)
-              ssd_c90lc_CheckSum.o (.text_vle)
-              ssd_c90lc_FactoryMarginReadCheck.o (.text_vle)
-              ssd_c90lc_FlashArrayIntegrityCheck.o (.text_vle)
-              ssd_c90lc_FlashECCLogicCheck.o (.text_vle)
-              ssd_c90lc_FlashErase.o (.text_vle)
-              ssd_c90lc_FlashInit.o (.text_vle)
-              ssd_c90lc_FlashProgram.o (.text_vle)
-              ssd_c90lc_FlashResume.o (.text_vle)
-              ssd_c90lc_FlashSuspend.o (.text_vle)
-              ssd_c90lc_GetLock.o (.text_vle)
-              ssd_c90lc_ProgramVerify.o (.text_vle)
-              ssd_c90lc_SetLock.o (.text_vle)
-              hal_eeprom_mfg.o (.text_vle)
-	      hal_eeprom_nvm.o (.text_vle)
-              hal_emulated_eeprom.o (.text_vle)
+      CFlashDepletionRecover.o (.text_vle) 
+      cblankcheck.o  (.text_vle)
+      cchecksum.o  (.text_vle)
+      cfactorymarginreadcheck.o  (.text_vle)
+      cflasharrayintegritycheck.o  (.text_vle)
+      cflashecclogiccheck.o  (.text_vle)
+      cflasherase.o  (.text_vle)
+      cflashinit.o (.text_vle) 
+      cflashprogram.o  (.text_vle)
+      cflashresume.o  (.text_vle)
+      cflashsuspend.o  (.text_vle)
+      cgetlock.o  (.text_vle)
+      cprogramverify.o  (.text_vle)
+      csetlock.o  (.text_vle)
+      dd_c90fl_flash.o  (.text_vle)
+      dd_c90fl_flash_init.o (.text_vle) 
+      dd_c90lc_flash.o (.text_vle) 
+      dd_c90lc_flash_init.o (.text_vle) 
+      dd_flash_memory_interface.o (.text_vle) 
+      dd_flash_mpc5634.o (.text_vle) 
+      dd_flash_mpc5644.o  (.text_vle)
+      ssd_c90fl_FlashDepletionRecover.o (.text_vle) 
+      ssd_c90fl_blankcheck.o (.text_vle) 
+      ssd_c90fl_checksum.o (.text_vle) 
+      ssd_c90fl_factorymarginreadcheck.o (.text_vle) 
+      ssd_c90fl_flasharrayintegritycheck.o (.text_vle) 
+      ssd_c90fl_flashecclogiccheck.o  (.text_vle)
+      ssd_c90fl_flasherase.o (.text_vle) 
+      ssd_c90fl_flashinit.o (.text_vle) 
+      ssd_c90fl_flashprogram.o (.text_vle)
+      ssd_c90fl_flashresume.o (.text_vle) 
+      ssd_c90fl_flashsuspend.o (.text_vle) 
+      ssd_c90fl_getlock.o (.text_vle) 
+      ssd_c90fl_programverify.o (.text_vle) 
+      ssd_c90fl_setlock.o (.text_vle) 
+      ssd_c90lc_BlankCheck.o (.text_vle) 
+      ssd_c90lc_CheckSum.o (.text_vle) 
+      ssd_c90lc_FactoryMarginReadCheck.o (.text_vle) 
+      ssd_c90lc_FlashArrayIntegrityCheck.o (.text_vle) 
+      ssd_c90lc_FlashECCLogicCheck.o (.text_vle) 
+      ssd_c90lc_FlashErase.o (.text_vle) 
+      ssd_c90lc_FlashInit.o (.text_vle) 
+      ssd_c90lc_FlashProgram.o (.text_vle) 
+      ssd_c90lc_FlashResume.o (.text_vle) 
+      ssd_c90lc_FlashSuspend.o (.text_vle) 
+      ssd_c90lc_GetLock.o (.text_vle) 
+      ssd_c90lc_ProgramVerify.o (.text_vle)
+      ssd_c90lc_SetLock.o (.text_vle) 
+      hal_eeprom_mfg.o (.text_vle)
+      hal_eeprom_nvm.o (.text_vle)
+      hal_emulated_eeprom.o (.text_vle)
+      inst_config.o (.text_vle)
+      inst_overlay.o (.text_vle)
+      inst_overlay_mem.o (.text_vle)
+      inst_overlay_nvm.o (.text_vle)
 
       end_of_flashcode = .;
   } > flashcode
@@ -99,6 +104,7 @@ SECTIONS
   .ucram:
   {
       /*PLACE_RAM(hal_ucram)*/
+    hal_ucram.o (.bss)
   } > unclear_ram
 
   GROUP :
@@ -136,8 +142,9 @@ SECTIONS
      .app_sec:
      {
          main.o (.text_vle)
+         mt22p3_chery_4cyl.a (.text_vle)
          /* locate main function at 0x00041400 exactly, it's for the jumping from boot block */
-         *(.text_vle)
+         *(.text_vle)         
      }
      end_of_approm = .;
      
@@ -164,6 +171,7 @@ SECTIONS
      .c_nvram :
      {
          /*#include "NVM_CRIT.lcf"*/
+
      } 
      end_of_crit_nvram = .;
 
@@ -173,6 +181,8 @@ SECTIONS
      .nc_nvram :
      {
         /* #include "NVM_NONCRIT.lcf"*/
+           ccp2nvmd.o (.bss)
+           inst_overlay_nvm.o (.bss)
      }
      end_of_noncrit_nvram = .;
 

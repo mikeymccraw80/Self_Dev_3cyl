@@ -11,6 +11,7 @@
 #include "dd_dma_interface.h"
 #include "dd_crank_interface.h"
 #include "dd_intc_interface.h"
+#include "hal_ucram.h"
 
 
 
@@ -49,17 +50,6 @@ static uint8_t FlexCAN_TX_Buffer_CCP_KW2KCAN[8];
 static uint8_t FlexCAN_RX_Buffer_CCP_CRO[8];
 static uint8_t FlexCAN_RX_Buffer_CCP_KW2KCAN[8];
 static uint8_t FlexCAN_RX_Buffer_MCAMOS[8];
-
-//define here tempoary
-typedef struct HAL_UNCLEARED_RAM_Tag 
-{
-   volatile uint8_t bootblock[4]; // refer to bootblock, data[0] - Running reset counter, data[1] - Reason of stay in boot
-   volatile uint8_t reset_exception_pattern;
-   volatile uint8_t reset_reason;
-   volatile uint8_t data[10];
-} HAL_UNCLEARED_RAM_T; // 16bytes are reserved
-
-HAL_UNCLEARED_RAM_T HAL_uncleard_ram;
 
 //=============================================================================
 //       CAN Application Data Configuration
@@ -279,8 +269,10 @@ void KW2KCAN_Received_Message( void )
 
       //Disable Watchdog
       //SCU_WDT_Enable_Watch_Dog_Timer(false);
-
-      INST_Set_Active_Calibration_Page( INST_CALIBRATION_PAGE_REFERENCE );
+     if(CPU_Info == CPU_LCI)
+     {
+        INST_Set_Active_Calibration_Page( INST_CALIBRATION_PAGE_REFERENCE );
+     }		
       Force_Stay_In_Boot(0xBEEF);
 
    }

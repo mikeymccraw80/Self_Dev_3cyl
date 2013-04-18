@@ -169,6 +169,7 @@ extern const SIU_PCR_T SIU_INITIAL_PCR_116;
 //etpu03
 //TODO
 extern const SIU_PCR_T SIU_INITIAL_PCR_117;
+#define  HAL_GPIO_TODO_CHANNEL       SIU_GPIO_CHANNEL_117
 //etpu04
 //WD
 extern const SIU_PCR_T SIU_INITIAL_PCR_118;
@@ -510,20 +511,33 @@ extern const SIU_PCR_T SIU_INITIAL_PCR_219;
 //not active
 extern const SIU_PCR_T SIU_INITIAL_PCR_220;
 
+//not active LCI for GPIO 220
+extern const SIU_PCR_T SIU_INITIAL_PCR_180_LCI;
 
 //The SIU_PCR221 register controls the drive strength of the MDO[1]_eTPU_A[19]_GPIO[221] pin.
 //not active
 extern const SIU_PCR_T SIU_INITIAL_PCR_221;
 
+//not active LCI for GPIO221
+extern const SIU_PCR_T SIU_INITIAL_PCR_192_LCI ;
+
 //The SIU_PCR222 register controls the drive strength of the MDO[2]_eTPU_A[21]_GPIO[222] pin.
 //VBATT_Det_Reset_DIO
 extern const SIU_PCR_T SIU_INITIAL_PCR_222;
 
-#define  HAL_GPIO_TODO_CHANNEL       SIU_GPIO_CHANNEL_222
+#define  HAL_GPIO_Reset_DIO_CHANNEL       SIU_GPIO_CHANNEL_222
+
+//VBATT_Det_Reset_DIO LCI for GPIO222
+extern const SIU_PCR_T SIU_INITIAL_PCR_194_LCI ;
+
+#define  HAL_GPIO_Reset_DIO_CHANNEL_LCI       SIU_GPIO_CHANNEL_194
 
 //The SIU_PCR223 register controls the drive strength of the MDO[3]_eTPU_A[25]_GPIO[223] pin.
 //not active
 extern const SIU_PCR_T SIU_INITIAL_PCR_223;
+
+//not active LCI for GPIO223
+extern const SIU_PCR_T SIU_INITIAL_PCR_80_LCI;
 
 
 //The SIU_PCR224 register controls the drive strength of the MSEO[0]_eTPU_A[27]_GPIO[224] pin.
@@ -532,18 +546,32 @@ extern const SIU_PCR_T SIU_INITIAL_PCR_224;
 
 #define  HAL_GPIO_BRKLMPDI_CHANNEL       SIU_GPIO_CHANNEL_224
 
+//LCI for GPIO224
+extern const SIU_PCR_T SIU_INITIAL_PCR_81_LCI;
+
+#define  HAL_GPIO_BRKLMPDI_CHANNEL_LCI       SIU_GPIO_CHANNEL_RESERVED_81
+
 //The SIU_PCR225 register controls the drive strength of the MSEO[1]_eTPU_A[29]_GPIO[225] pin.
 //ELOAD1DICTL
 extern const SIU_PCR_T SIU_INITIAL_PCR_225;
 
 #define  HAL_GPIO_ELOAD1DICTL_CHANNEL       SIU_GPIO_CHANNEL_225
 
+//LCI for GPIO225
+extern const SIU_PCR_T SIU_INITIAL_PCR_82_LCI ;
+
+#define  HAL_GPIO_ELOAD1DICTL_CHANNEL_LCI       SIU_GPIO_CHANNEL_RESERVED_82
+
 //The SIU_PCR227 register controls the drive strength of the EVTO_eTPU_A[4]_GPIO[227] pin.
 //ELOAD2DICTL
 extern const SIU_PCR_T SIU_INITIAL_PCR_227;
 
-
 #define  HAL_GPIO_ELOAD2DICTL_CHANNEL       SIU_GPIO_CHANNEL_227
+
+//LCI for GPIO227
+extern const SIU_PCR_T SIU_INITIAL_PCR_99_LCI;
+
+#define  HAL_GPIO_ELOAD2DICTL_CHANNEL_LCI       SIU_GPIO_CHANNEL_99
 
 //The SIU_PCR228 register controls the drive strength of the TDO_eMIOS[6]_GPIO[228] pin.
 
@@ -561,6 +589,11 @@ extern const SIU_PCR_T SIU_INITIAL_PCR_227;
 extern const SIU_PCR_T SIU_INITIAL_PCR_231;
 
 #define  HAL_GPIO_BRKLMPDICTL_CHANNEL       SIU_GPIO_CHANNEL_231
+
+//LCI for GPIO98
+extern const SIU_PCR_T SIU_INITIAL_PCR_98_LCI ;
+
+#define  HAL_GPIO_BRKLMPDICTL_CHANNEL_LCI       SIU_GPIO_CHANNEL_98
 
 //The SIU_PCR232 register controls the drive strength of the TDI_eMIOS[5]_GPIO[232] pin.
 

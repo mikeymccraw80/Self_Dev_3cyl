@@ -46,19 +46,10 @@ const uint16_t CAL_FORMID_INCAL = Cw_CalFORM_ID;
  void MngOSTK_10msTasks(void);
   void MngOSTK_100msTasks(void);
  void OS_Free_Time_Tasks_Hook(void);
-
-
+//=============================================================================
+// Local variable
+//=============================================================================
 uint8_t  Normal_10ms_CNT;
-//=============================================================================
-// StartupHook
-//=============================================================================
-//start up before HWIO init last excute
-//void StartupHook(void)
-//{
-
-
-//}
-
 
 
 //=============================================================================
@@ -76,8 +67,7 @@ void StartOS_Task_Normal(void)
    SWT_Service_WatchDog();
 
    /* do until application indicates shutdown */
-  // while( !OS_Get_Shutdown_Active() )
-  while( 1)
+  while(!HAL_OS_Get_Shutdown())
    {
 
       if (1 == RTI_Flags.bf.TimeFor1ms)
@@ -85,30 +75,29 @@ void StartOS_Task_Normal(void)
      	    MngOSTK_1msTasks();
 	    RTI_Flags.bf.TimeFor1ms = 0x00;
       	}
-      else if(1 == RTI_Flags.bf.TimeFor5ms)
+	  
+       if(1 == RTI_Flags.bf.TimeFor5ms)
       {
       
          MngOSTK_5msTasks();
 	   RTI_Flags.bf.TimeFor5ms = 0x00;
       }
-       else if (1 == RTI_Flags.bf.TimeFor10ms)
+	   
+       if (1 == RTI_Flags.bf.TimeFor10ms)
       {
-
-
          MngOSTK_10msTasks();
 	  RTI_Flags.bf.TimeFor10ms = 0x00;
 	  Normal_10ms_CNT++;
-
       }
-     else
-     {
-         if(10 == Normal_10ms_CNT)
-	  {
+
+      if(10 == Normal_10ms_CNT)
+      {
 	   MngOSTK_100msTasks();
 	   Normal_10ms_CNT = 0;
-	  }
+	}
+	  
        OS_Free_Time_Tasks_Hook();
-     }	 
+     	 
    }
 
    //Turn off power supply and return to OSEK

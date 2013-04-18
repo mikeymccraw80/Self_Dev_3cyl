@@ -18,9 +18,6 @@ void StartOS_Task_Normal(void);
 //=============================================================================
 void StartOS(AppModeType_T Mode)
 {
-
-
-   //StartupHook();
    InitializeHardwareLast();
 
 

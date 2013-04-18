@@ -114,7 +114,7 @@ void MPC5634_FLASH_Initialize(FLASH_Run_Mode_T  reprogram_mode )
 	//This field is used to control the number of wait states to be added to the best-case flash array access
        //time for reads.
 	//011: 3 additional wait-states are added
-      biucr.F.RWSC= FLASH_BIUCR_APC_THREE_HOLD_CYCLES;
+      biucr.F.RWSC= FLASH_BIUCR_RWSC_THREE_WAIT_STATES;
       //Data Prefetch Enable (Read/Write)
       //If page buffers are enabled (BFEN = 1), prefetching is triggered by any data read access
       biucr.F.DPFEN= FLASH_BIUCR_DPFEN_PREFETCH_ONLY_BY_BURST_READ;
@@ -158,7 +158,7 @@ void MPC5634_FLASH_Initialize(FLASH_Run_Mode_T  reprogram_mode )
 	//This field is used to control the number of wait states to be added to the best-case flash array access
        //time for reads.
 	//011: 3 additional wait-states are added
-      biucr.F.RWSC= FLASH_BIUCR_APC_NO_ADDRESS_PIPELINE;
+      biucr.F.RWSC= FLASH_BIUCR_RWSC_SEVEN_WAIT_STATES;
       //Data Prefetch Enable (Read/Write)
       //If page buffers are enabled (BFEN = 1), prefetching is triggered by any data read access
       biucr.F.DPFEN= FLASH_BIUCR_DPFEN_PREFETCH_ONLY_BY_BURST_READ;

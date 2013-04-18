@@ -267,6 +267,8 @@ const SIU_PCR_T SIU_INITIAL_PCR_92 =
       SIU_GPIO_PULL_DOWN  //WPS  Weak pullup/down select
 };
 
+
+
 //The SIU_PCR102 register controls the function, direction, and static electrical attributes of the
 //DSPI_B_SCK_DSPI_C_PCS[1]_GPIO[102] pin. This register allows selection of the DSPI_B_SCK,
 //DSPI_C_PCS[1] and GPIO functions.
@@ -1261,6 +1263,21 @@ const SIU_PCR_T SIU_INITIAL_PCR_220 =
       SIU_GPIO_PULL_DOWN  //WPS  Weak pullup/down select
 };
 
+//not active LCI for GPIO 220
+const SIU_PCR_T SIU_INITIAL_PCR_180_LCI = 
+{
+      SIU_GPIO_PIN_ASSIGNMENT_GPIO,  //PA Pin assignment 
+      SIU_GPIO_BUFFER_OUT_DISABLED, //OBE  Output buffer enable
+      SIU_GPIO_BUFFER_IN_ENABLED,   //IBE    Input buffer enable
+      SIU_GPIO_DRIVE_STRENGTH_10pF, //DSC  Drive strength control
+      SIU_GPIO_OPEN_DRAIN_DISABLED, //ODE  Open drain output enable
+      SIU_GPIO_INPUT_HYSTERESIS_DISABLED, //HYS Input hysteresis
+      SIU_GPIO_SLEW_RATE_MINIMUM,  //SRC  Slew rate control
+      SIU_GPIO_PULL_UP_Down_DISABLED,  //WPE  Weak pullup/down enable
+      SIU_GPIO_PULL_DOWN  //WPS  Weak pullup/down select
+};
+
+
 
 //The SIU_PCR221 register controls the drive strength of the MDO[1]_eTPU_A[19]_GPIO[221] pin.
 //not active
@@ -1277,13 +1294,12 @@ const SIU_PCR_T SIU_INITIAL_PCR_221 =
       SIU_GPIO_PULL_DOWN  //WPS  Weak pullup/down select
 };
 
-//The SIU_PCR222 register controls the drive strength of the MDO[2]_eTPU_A[21]_GPIO[222] pin.
-//VBATT_Det_Reset_DIO
-const SIU_PCR_T SIU_INITIAL_PCR_222 = 
+//not active LCI for GPIO221
+const SIU_PCR_T SIU_INITIAL_PCR_192_LCI = 
 {
       SIU_GPIO_PIN_ASSIGNMENT_GPIO,  //PA Pin assignment 
-      SIU_GPIO_BUFFER_OUT_ENABLED, //OBE  Output buffer enable
-      SIU_GPIO_BUFFER_IN_DISABLED,   //IBE    Input buffer enable
+      SIU_GPIO_BUFFER_OUT_DISABLED, //OBE  Output buffer enable
+      SIU_GPIO_BUFFER_IN_ENABLED,   //IBE    Input buffer enable
       SIU_GPIO_DRIVE_STRENGTH_10pF, //DSC  Drive strength control
       SIU_GPIO_OPEN_DRAIN_DISABLED, //ODE  Open drain output enable
       SIU_GPIO_INPUT_HYSTERESIS_DISABLED, //HYS Input hysteresis
@@ -1292,9 +1308,56 @@ const SIU_PCR_T SIU_INITIAL_PCR_222 =
       SIU_GPIO_PULL_DOWN  //WPS  Weak pullup/down select
 };
 
+
+
+//The SIU_PCR222 register controls the drive strength of the MDO[2]_eTPU_A[21]_GPIO[222] pin.
+//VBATT_Det_Reset_DIO
+const SIU_PCR_T SIU_INITIAL_PCR_222 = 
+{
+      SIU_GPIO_PIN_ASSIGNMENT_GPIO,  //PA Pin assignment 
+      SIU_GPIO_BUFFER_OUT_DISABLED, //OBE  Output buffer enable
+      SIU_GPIO_BUFFER_IN_ENABLED,   //IBE    Input buffer enable
+      SIU_GPIO_DRIVE_STRENGTH_10pF, //DSC  Drive strength control
+      SIU_GPIO_OPEN_DRAIN_DISABLED, //ODE  Open drain output enable
+      SIU_GPIO_INPUT_HYSTERESIS_DISABLED, //HYS Input hysteresis
+      SIU_GPIO_SLEW_RATE_MINIMUM,  //SRC  Slew rate control
+      SIU_GPIO_PULL_UP_Down_DISABLED,  //WPE  Weak pullup/down enable
+      SIU_GPIO_PULL_DOWN  //WPS  Weak pullup/down select
+};
+
+//VBATT_Det_Reset_DIO LCI for GPIO222
+const SIU_PCR_T SIU_INITIAL_PCR_194_LCI = 
+{
+      SIU_GPIO_PIN_ASSIGNMENT_GPIO,  //PA Pin assignment 
+      SIU_GPIO_BUFFER_OUT_DISABLED, //OBE  Output buffer enable
+      SIU_GPIO_BUFFER_IN_ENABLED,   //IBE    Input buffer enable
+      SIU_GPIO_DRIVE_STRENGTH_10pF, //DSC  Drive strength control
+      SIU_GPIO_OPEN_DRAIN_DISABLED, //ODE  Open drain output enable
+      SIU_GPIO_INPUT_HYSTERESIS_DISABLED, //HYS Input hysteresis
+      SIU_GPIO_SLEW_RATE_MINIMUM,  //SRC  Slew rate control
+      SIU_GPIO_PULL_UP_Down_DISABLED,  //WPE  Weak pullup/down enable
+      SIU_GPIO_PULL_DOWN  //WPS  Weak pullup/down select
+};
+
+
+
 //The SIU_PCR223 register controls the drive strength of the MDO[3]_eTPU_A[25]_GPIO[223] pin.
 //not active
 const SIU_PCR_T SIU_INITIAL_PCR_223 = 
+{
+      SIU_GPIO_PIN_ASSIGNMENT_GPIO,  //PA Pin assignment 
+      SIU_GPIO_BUFFER_OUT_DISABLED, //OBE  Output buffer enable
+      SIU_GPIO_BUFFER_IN_ENABLED,   //IBE    Input buffer enable
+      SIU_GPIO_DRIVE_STRENGTH_10pF, //DSC  Drive strength control
+      SIU_GPIO_OPEN_DRAIN_DISABLED, //ODE  Open drain output enable
+      SIU_GPIO_INPUT_HYSTERESIS_DISABLED, //HYS Input hysteresis
+      SIU_GPIO_SLEW_RATE_MINIMUM,  //SRC  Slew rate control
+      SIU_GPIO_PULL_UP_Down_DISABLED,  //WPE  Weak pullup/down enable
+      SIU_GPIO_PULL_DOWN  //WPS  Weak pullup/down select
+};
+
+//not active LCI for GPIO223
+const SIU_PCR_T SIU_INITIAL_PCR_80_LCI = 
 {
       SIU_GPIO_PIN_ASSIGNMENT_GPIO,  //PA Pin assignment 
       SIU_GPIO_BUFFER_OUT_DISABLED, //OBE  Output buffer enable
@@ -1322,6 +1385,22 @@ const SIU_PCR_T SIU_INITIAL_PCR_224 =
       SIU_GPIO_PULL_DOWN  //WPS  Weak pullup/down select
 };
 
+
+//LCI for GPIO224
+const SIU_PCR_T SIU_INITIAL_PCR_81_LCI = 
+{
+      SIU_GPIO_PIN_ASSIGNMENT_GPIO,  //PA Pin assignment 
+      SIU_GPIO_BUFFER_OUT_DISABLED, //OBE  Output buffer enable
+      SIU_GPIO_BUFFER_IN_ENABLED,   //IBE    Input buffer enable
+      SIU_GPIO_DRIVE_STRENGTH_10pF, //DSC  Drive strength control
+      SIU_GPIO_OPEN_DRAIN_DISABLED, //ODE  Open drain output enable
+      SIU_GPIO_INPUT_HYSTERESIS_DISABLED, //HYS Input hysteresis
+      SIU_GPIO_SLEW_RATE_MINIMUM,  //SRC  Slew rate control
+      SIU_GPIO_PULL_UP_Down_DISABLED,  //WPE  Weak pullup/down enable
+      SIU_GPIO_PULL_DOWN  //WPS  Weak pullup/down select
+};
+
+
 //The SIU_PCR225 register controls the drive strength of the MSEO[1]_eTPU_A[29]_GPIO[225] pin.
 //ELOAD1DICTL
 const SIU_PCR_T SIU_INITIAL_PCR_225 = 
@@ -1336,9 +1415,38 @@ const SIU_PCR_T SIU_INITIAL_PCR_225 =
       SIU_GPIO_PULL_UP_Down_DISABLED,  //WPE  Weak pullup/down enable
       SIU_GPIO_PULL_DOWN  //WPS  Weak pullup/down select
 };
+
+//LCI for GPIO225
+const SIU_PCR_T SIU_INITIAL_PCR_82_LCI = 
+{
+      SIU_GPIO_PIN_ASSIGNMENT_GPIO,  //PA Pin assignment 
+      SIU_GPIO_BUFFER_OUT_ENABLED, //OBE  Output buffer enable
+      SIU_GPIO_BUFFER_IN_DISABLED,   //IBE    Input buffer enable
+      SIU_GPIO_DRIVE_STRENGTH_10pF, //DSC  Drive strength control
+      SIU_GPIO_OPEN_DRAIN_DISABLED, //ODE  Open drain output enable
+      SIU_GPIO_INPUT_HYSTERESIS_DISABLED, //HYS Input hysteresis
+      SIU_GPIO_SLEW_RATE_MINIMUM,  //SRC  Slew rate control
+      SIU_GPIO_PULL_UP_Down_DISABLED,  //WPE  Weak pullup/down enable
+      SIU_GPIO_PULL_DOWN  //WPS  Weak pullup/down select
+};
+
 //The SIU_PCR227 register controls the drive strength of the EVTO_eTPU_A[4]_GPIO[227] pin.
 //ELOAD2DICTL
 const SIU_PCR_T SIU_INITIAL_PCR_227 = 
+{
+      SIU_GPIO_PIN_ASSIGNMENT_GPIO,  //PA Pin assignment 
+      SIU_GPIO_BUFFER_OUT_ENABLED, //OBE  Output buffer enable
+      SIU_GPIO_BUFFER_IN_DISABLED,   //IBE    Input buffer enable
+      SIU_GPIO_DRIVE_STRENGTH_10pF, //DSC  Drive strength control
+      SIU_GPIO_OPEN_DRAIN_DISABLED, //ODE  Open drain output enable
+      SIU_GPIO_INPUT_HYSTERESIS_DISABLED, //HYS Input hysteresis
+      SIU_GPIO_SLEW_RATE_MINIMUM,  //SRC  Slew rate control
+      SIU_GPIO_PULL_UP_Down_DISABLED,  //WPE  Weak pullup/down enable
+      SIU_GPIO_PULL_DOWN  //WPS  Weak pullup/down select
+};
+
+//LCI for GPIO227
+const SIU_PCR_T SIU_INITIAL_PCR_99_LCI = 
 {
       SIU_GPIO_PIN_ASSIGNMENT_GPIO,  //PA Pin assignment 
       SIU_GPIO_BUFFER_OUT_ENABLED, //OBE  Output buffer enable
@@ -1362,6 +1470,20 @@ const SIU_PCR_T SIU_INITIAL_PCR_227 =
 //pin.
 //BRKLMPDICTL
 const SIU_PCR_T SIU_INITIAL_PCR_231 = 
+{
+      SIU_GPIO_PIN_ASSIGNMENT_GPIO,  //PA Pin assignment 
+      SIU_GPIO_BUFFER_OUT_ENABLED, //OBE  Output buffer enable
+      SIU_GPIO_BUFFER_IN_DISABLED,   //IBE    Input buffer enable
+      SIU_GPIO_DRIVE_STRENGTH_10pF, //DSC  Drive strength control
+      SIU_GPIO_OPEN_DRAIN_DISABLED, //ODE  Open drain output enable
+      SIU_GPIO_INPUT_HYSTERESIS_DISABLED, //HYS Input hysteresis
+      SIU_GPIO_SLEW_RATE_MINIMUM,  //SRC  Slew rate control
+      SIU_GPIO_PULL_UP_Down_DISABLED,  //WPE  Weak pullup/down enable
+      SIU_GPIO_PULL_DOWN  //WPS  Weak pullup/down select
+};
+
+//LCI for GPIO98
+const SIU_PCR_T SIU_INITIAL_PCR_98_LCI = 
 {
       SIU_GPIO_PIN_ASSIGNMENT_GPIO,  //PA Pin assignment 
       SIU_GPIO_BUFFER_OUT_ENABLED, //OBE  Output buffer enable
