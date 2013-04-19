@@ -35,6 +35,7 @@ SECTIONS
   {
       start_of_flashcode = .;
       /*#include "Testability_ROM.lcf"*/
+      dd_swt.o(.text_vle)
       CFlashDepletionRecover.o (.text_vle) 
       cblankcheck.o  (.text_vle)
       cchecksum.o  (.text_vle)
