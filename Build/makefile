@@ -520,7 +520,9 @@ build_target:	;
 # Generating *.ptp
 ###############################################################################
 	@$(ECHO) Generating PTP file
-	-@cd ..\bin && $(DDUMP)
+	@cd ..\bin && $(DDUMP)
+	@cd ..\objs && @if exist *.lst $(COPY) *.lst	$(subst /,\,$(LISTING_DIR))\. >nul
+	@cd ..\objs && @if exist *.lst $(DEL) *.lst
 
 ###############################################################################
 # Build EXMAP file from elf file target
