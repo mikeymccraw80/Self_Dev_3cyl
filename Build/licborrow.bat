@@ -21,13 +21,15 @@ if %cur_month%==12 set month=Dec
 set day=%date:~3,2%
 set year=%date:~6,4%
 
+set line=-
 set licdate=%day%%line%%month%%line%%year%
 set lictime=23:59
-set line=-
+
 
 echo ================= try to get a new temparory license ====================
 REM echo "<command format>: lmborrow wrsd 20-Apr-2013 17:00"
 lmutil lmborrow wrsd %licdate% %lictime%
+echo %licdate% %lictime%
 lmutil lmborrow -status
 echo =========================================================================
 
