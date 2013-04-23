@@ -31,24 +31,7 @@
   HAL_Pulse_VVT2CTL_Set_Period_Duty((uint32_t)LLD_pwm_out_table[LLD_PWM_VVT2].period*1000,
   	                                                (uint16_t)LLD_pwm_out_table[LLD_PWM_VVT2].duty*1000/255);
 
-    
-  //MIOS channel: FUELCONCTL
-  //period in us
-  //duty resoultion is 1/1000
-  HAL_Pulse_FUELCONCTL_Enable((bool)LLD_pwm_out_table[LLD_PWM_FUEL_CONSUMPTION].B_enable);
-  HAL_Pulse_FUELCONCTL_Set_Period_Duty((uint32_t)LLD_pwm_out_table[LLD_PWM_FUEL_CONSUMPTION].period*1000,
-  	                                                          (uint16_t)LLD_pwm_out_table[LLD_PWM_FUEL_CONSUMPTION].duty*1000/255);
-   //test code
-  HAL_Pulse_CLTPUMPCTL_Enable((bool)LLD_pwm_out_table[LLD_PWM_FUEL_CONSUMPTION].B_enable);
-  HAL_Pulse_CLTPUMPCTL_Set_Period_Duty((uint32_t)LLD_pwm_out_table[LLD_PWM_FUEL_CONSUMPTION].period*1000,
-  	                                                          (uint16_t)LLD_pwm_out_table[LLD_PWM_FUEL_CONSUMPTION].duty*1000/255);
 
-    //test code
-  HAL_Pulse_CRUISICTL_Enable((bool)LLD_pwm_out_table[LLD_PWM_FUEL_CONSUMPTION].B_enable);
-  HAL_Pulse_CRUISICTL_Set_Period_Duty((uint32_t)LLD_pwm_out_table[LLD_PWM_FUEL_CONSUMPTION].period*1000,
-  	                                                          (uint16_t)LLD_pwm_out_table[LLD_PWM_FUEL_CONSUMPTION].duty*1000/255);
- 
-  
   //VSEP channel :CCP
   if(LLD_pwm_out_table[LLD_PWM_PURGE].B_enable)
    {
