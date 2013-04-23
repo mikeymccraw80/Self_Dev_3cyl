@@ -128,109 +128,18 @@ HLS_Filtered_DI_HEAD_LAMP=LLD_di_table[LLD_DI_HEAD_LAMP].value;
 }
 
 /*HWIO DO test code*/
-  void Test_DO_Toggle_Function(void)
+void Test_DO_Toggle_Function(void)
 {
-  if( LLD_do_table[LLD_DO_FAN1].value)
-  {
-      LLD_do_table[LLD_DO_FAN1].value = false;
-  }	
-  else
-  {
-      LLD_do_table[LLD_DO_FAN1].value = true;
-   }	
-
-    if( LLD_do_table[LLD_DO_FAN2].value)
-  {
-      LLD_do_table[LLD_DO_FAN2].value = false;
-  }	
-  else
-  {
-      LLD_do_table[LLD_DO_FAN2].value = true;
-   }	 
-
-    if( LLD_do_table[LLD_DO_FUEL_PUMP].value)
-  {
-      LLD_do_table[LLD_DO_FUEL_PUMP].value = false;
-  }	
-  else
-  {
-      LLD_do_table[LLD_DO_FUEL_PUMP].value = true;
-   }	 
-
-    if( LLD_do_table[LLD_DO_MAIN_RELAY].value)
-  {
-      LLD_do_table[LLD_DO_MAIN_RELAY].value = false;
-  }	
-  else
-  {
-      LLD_do_table[LLD_DO_MAIN_RELAY].value = true;
-   }	 
-
-    if( LLD_do_table[LLD_DO_MIL_LAMP].value)
-  {
-      LLD_do_table[LLD_DO_MIL_LAMP].value = false;
-  }	
-  else
-  {
-      LLD_do_table[LLD_DO_MIL_LAMP].value = true;
-   }	 
-
-    if( LLD_do_table[LLD_DO_SVS_LAMP].value)
-  {
-      LLD_do_table[LLD_DO_SVS_LAMP].value = false;
-  }	
-  else
-  {
-      LLD_do_table[LLD_DO_SVS_LAMP].value = true;
-   }	 
-
-    if( LLD_do_table[LLD_DO_AC_CLUTCH].value)
-  {
-      LLD_do_table[LLD_DO_AC_CLUTCH].value = false;
-  }	
-  else
-  {
-      LLD_do_table[LLD_DO_AC_CLUTCH].value = true;
-   }	 
-
-   if( LLD_do_table[LLD_DO_R_LINE].value)
-  {
-      LLD_do_table[LLD_DO_R_LINE].value = false;
-  }	
-  else
-  {
-      LLD_do_table[LLD_DO_R_LINE].value = true;
-   }
-
-    if( LLD_do_table[LLD_DO_VIS_SWITCH].value)
-  {
-      LLD_do_table[LLD_DO_VIS_SWITCH].value = false;
-  }	
-  else
-  {
-      LLD_do_table[LLD_DO_VIS_SWITCH].value = true;
-   }	
-
-   if( LLD_do_table[LLD_DO_ETB_DIR].value)
-  {
-      LLD_do_table[LLD_DO_ETB_DIR].value = false;
-  }	
-  else
-  {
-      LLD_do_table[LLD_DO_ETB_DIR].value = true;
-   }	
-
-
-   if( LLD_do_table[LLD_DO_START_MOTR_RLY].value)
-  {
-      LLD_do_table[LLD_DO_START_MOTR_RLY].value = false;
-  }	
-  else
-  {
-      LLD_do_table[LLD_DO_START_MOTR_RLY].value = true;
-   }
-
- }
+	LLD_do_table[LLD_DO_FAN1].value = !LLD_do_table[LLD_DO_FAN1].value;
+	LLD_do_table[LLD_DO_FAN2].value = !LLD_do_table[LLD_DO_FAN2].value;
+	LLD_do_table[LLD_DO_FUEL_PUMP].value = !LLD_do_table[LLD_DO_FUEL_PUMP].value;
+	LLD_do_table[LLD_DO_MAIN_RELAY].value = !LLD_do_table[LLD_DO_MAIN_RELAY].value;
+	LLD_do_table[LLD_DO_MIL_LAMP].value = !LLD_do_table[LLD_DO_MIL_LAMP].value;
+	LLD_do_table[LLD_DO_SVS_LAMP].value = !LLD_do_table[LLD_DO_SVS_LAMP].value;
+	LLD_do_table[LLD_DO_AC_CLUTCH].value = !LLD_do_table[LLD_DO_AC_CLUTCH].value;
+	LLD_do_table[LLD_DO_R_LINE].value = !LLD_do_table[LLD_DO_R_LINE].value;
+	LLD_do_table[LLD_DO_START_MOTR_RLY].value = !LLD_do_table[LLD_DO_START_MOTR_RLY].value;
+}
 
 
 /* ============================================================================ *\
@@ -281,121 +190,113 @@ Test_DO_Toggle_Function();
 }
 
 /*HLS initialization function.*/
-  void HLS_ini(void)
+void HLS_ini(void)
 {
+	/* etc signal output set */
+	etc_sig.etc_enable = true;
+	// etc_sig.etc_freq = 1; //set to 2khz
+	etc_sig.etc_duty = 128;
+	etc_sig.etc_direction = false;
+
+	/* data input debounce time set*/
+	LLD_di_table[LLD_DI_AC_REQUEST_INPUT].DebounceTimes = LLD_DI_AC_REQUEST_INPUT_DebTime ;
+	LLD_di_table[LLD_DI_AC_PRESSURE_SWITCH].DebounceTimes=LLD_DI_AC_PRESSURE_SWITCH_DebTime ;
+	LLD_di_table[LLD_DI_CAM_1].DebounceTimes = LLD_DI_CAM_1_DebTime;
+	LLD_di_table[LLD_DI_IGN_ON_OFF_SW].DebounceTimes = LLD_DI_IGN_ON_OFF_SW_DebTime ;
+	LLD_di_table[LLD_DI_HEAD_LAMP].DebounceTimes = LLD_DI_HEAD_LAMP_DebTime ;
+
+	/* pulse output enable/disable set */
+	LLD_pwm_out_table[LLD_PWM_O2_HEATER_1].B_enable = true;
+	LLD_pwm_out_table[LLD_PWM_O2_HEATER_2].B_enable = true;
+	LLD_pwm_out_table[LLD_PWM_PURGE].B_enable = true;
+	LLD_pwm_out_table[LLD_PWM_ECT].B_enable = true;
+	LLD_pwm_out_table[LLD_PWM_EGR].B_enable = true;
+	LLD_pwm_out_table[LLD_PWM_FUEL_CONSUMPTION].B_enable = true;
+	LLD_pwm_out_table[LLD_PWM_VVT1].B_enable = true;
+	LLD_pwm_out_table[LLD_PWM_VVT2].B_enable = true;
+
+	/* pulse output duty circle set */
+	LLD_pwm_out_table[LLD_PWM_O2_HEATER_1].duty = 128;
+	LLD_pwm_out_table[LLD_PWM_O2_HEATER_2].duty = 128;
+	LLD_pwm_out_table[LLD_PWM_PURGE].duty=128;
+	LLD_pwm_out_table[LLD_PWM_ECT].duty=128;
+	LLD_pwm_out_table[LLD_PWM_EGR].duty=128;
+	LLD_pwm_out_table[LLD_PWM_FUEL_CONSUMPTION].duty=128;
+	LLD_pwm_out_table[LLD_PWM_VVT1].duty=128;
+	LLD_pwm_out_table[LLD_PWM_VVT2].duty=128;
 
 
- 
- LLD_di_table[LLD_DI_AC_REQUEST_INPUT].DebounceTimes = LLD_DI_AC_REQUEST_INPUT_DebTime ;
- LLD_di_table[LLD_DI_AC_PRESSURE_SWITCH].DebounceTimes=LLD_DI_AC_PRESSURE_SWITCH_DebTime ;
- LLD_di_table[LLD_DI_CAM_1].DebounceTimes = LLD_DI_CAM_1_DebTime;
- LLD_di_table[LLD_DI_IGN_ON_OFF_SW].DebounceTimes = LLD_DI_IGN_ON_OFF_SW_DebTime ;
- LLD_di_table[LLD_DI_HEAD_LAMP].DebounceTimes = LLD_DI_HEAD_LAMP_DebTime ;
- LLD_pwm_out_table[LLD_PWM_O2_HEATER_1].B_enable = true;
-  LLD_pwm_out_table[LLD_PWM_O2_HEATER_2].B_enable = true;
- LLD_pwm_out_table[LLD_PWM_PURGE].B_enable = true;
- LLD_pwm_out_table[LLD_PWM_ECT].B_enable = true;
- LLD_pwm_out_table[LLD_PWM_EGR].B_enable = true;
- LLD_pwm_out_table[LLD_PWM_FUEL_CONSUMPTION].B_enable = true;
- LLD_pwm_out_table[LLD_PWM_VVT1].B_enable = true;
- LLD_pwm_out_table[LLD_PWM_VVT2].B_enable = true;
-  LLD_pwm_out_table[LLD_PWM_ETB].B_enable = true;
- 
- LLD_pwm_out_table[LLD_PWM_O2_HEATER_1].duty = 128;
-  LLD_pwm_out_table[LLD_PWM_O2_HEATER_2].duty = 128;
- LLD_pwm_out_table[LLD_PWM_PURGE].duty=128;
- LLD_pwm_out_table[LLD_PWM_ECT].duty=128;
-  LLD_pwm_out_table[LLD_PWM_EGR].duty=128;
- LLD_pwm_out_table[LLD_PWM_FUEL_CONSUMPTION].duty=128;
- LLD_pwm_out_table[LLD_PWM_VVT1].duty=128;
- LLD_pwm_out_table[LLD_PWM_VVT2].duty=128;
-LLD_pwm_out_table[LLD_PWM_ETB].duty=128;
-
- LLD_pwm_out_table[LLD_PWM_O2_HEATER_1].period = 100;
-  LLD_pwm_out_table[LLD_PWM_O2_HEATER_2].period = 100;
- LLD_pwm_out_table[LLD_PWM_PURGE].period = 100;
- LLD_pwm_out_table[LLD_PWM_ECT].period = 10;
- LLD_pwm_out_table[LLD_PWM_EGR].period = 100;
- LLD_pwm_out_table[LLD_PWM_VVT1].period = 10;
- LLD_pwm_out_table[LLD_PWM_VVT2].period = 10;
- LLD_pwm_out_table[LLD_PWM_FUEL_CONSUMPTION].period = 10;
-  LLD_pwm_out_table[LLD_PWM_ETB].period = 1;
-
- 
- inj_enable.B_inj_A = (uint8_t)true;
- inj_enable.B_inj_B = (uint8_t)true;
- inj_enable.B_inj_C = (uint8_t)true;
- inj_enable.B_inj_D = (uint8_t)true;
-
- inj_sig[INJ_CHANNEL_A].inj_time = 20000;
- inj_sig[INJ_CHANNEL_B].inj_time = 20000;
- inj_sig[INJ_CHANNEL_C].inj_time = 20000;
- inj_sig[INJ_CHANNEL_D].inj_time = 20000;
-
- inj_sig[INJ_CHANNEL_A].inj_end_angle = 200;
- inj_sig[INJ_CHANNEL_B].inj_end_angle = 200;
- inj_sig[INJ_CHANNEL_C].inj_end_angle = 200;
- inj_sig[INJ_CHANNEL_D].inj_end_angle = 200;
+	/* pulse output period set */
+	LLD_pwm_out_table[LLD_PWM_O2_HEATER_1].period = 100;
+	LLD_pwm_out_table[LLD_PWM_O2_HEATER_2].period = 100;
+	LLD_pwm_out_table[LLD_PWM_PURGE].period = 100;
+	LLD_pwm_out_table[LLD_PWM_ECT].period = 10;
+	LLD_pwm_out_table[LLD_PWM_EGR].period = 100;
+	LLD_pwm_out_table[LLD_PWM_VVT1].period = 10;
+	LLD_pwm_out_table[LLD_PWM_VVT2].period = 10;
+	LLD_pwm_out_table[LLD_PWM_FUEL_CONSUMPTION].period = 10;
 
 
- ign_enable.B_ign_A = (uint8_t)true;     
- ign_enable.B_ign_B = (uint8_t)true;
- ign_enable.B_ign_C = (uint8_t)true;
- ign_enable.B_ign_D = (uint8_t)true;
+	/* injection enable set */
+	inj_enable.B_inj_A = (uint8_t)true;
+	inj_enable.B_inj_B = (uint8_t)true;
+	inj_enable.B_inj_C = (uint8_t)true;
+	inj_enable.B_inj_D = (uint8_t)true;
 
- ign_sig[LLD_IGN_CHANNEL_A].dwell_time = 8000;
- ign_sig[LLD_IGN_CHANNEL_B].dwell_time = 8000;
- ign_sig[LLD_IGN_CHANNEL_C].dwell_time = 8000;
- ign_sig[LLD_IGN_CHANNEL_D].dwell_time = 8000;
+	inj_sig[INJ_CHANNEL_A].inj_time = 20000;
+	inj_sig[INJ_CHANNEL_B].inj_time = 20000;
+	inj_sig[INJ_CHANNEL_C].inj_time = 20000;
+	inj_sig[INJ_CHANNEL_D].inj_time = 20000;
 
- ign_sig[LLD_IGN_CHANNEL_A].ign_angle = -16;
- ign_sig[LLD_IGN_CHANNEL_B].ign_angle = -16;
- ign_sig[LLD_IGN_CHANNEL_C].ign_angle = -16;
- ign_sig[LLD_IGN_CHANNEL_D].ign_angle = -16;
-
-
- /*sys_cmd.B_after_run_end= false;
- sys_cmd.B_SW_Pwf = false;
- sys_cmd.B_rsv = 0x0;
- sys_status.B_after_run_end_abnormal = false;
- sys_status.B_Pwf = false;
- sys_status.B_rsv = 0x0;*/
-
-//TpPos_b=100;//tps=100*0.3922=39.22
-Pmap_b=100;//Pmap_b=100kpa
-Pmap=25650;//pmap=0.0039*25650=100.35kpa
- Tm=200;//Tm= 200*0.75-48 =102 
- TmLin=200;//TmLin= 200*0.75-48 =102
- Ta=200;
-
-// B_after_run_end_abnormal =0x00;
+	inj_sig[INJ_CHANNEL_A].inj_end_angle = 200;
+	inj_sig[INJ_CHANNEL_B].inj_end_angle = 200;
+	inj_sig[INJ_CHANNEL_C].inj_end_angle = 200;
+	inj_sig[INJ_CHANNEL_D].inj_end_angle = 200;
 
 
+	ign_enable.B_ign_A = (uint8_t)true;     
+	ign_enable.B_ign_B = (uint8_t)true;
+	ign_enable.B_ign_C = (uint8_t)true;
+	ign_enable.B_ign_D = (uint8_t)true;
 
-      LLD_do_table[LLD_DO_FAN1].value = true;
+	ign_sig[LLD_IGN_CHANNEL_A].dwell_time = 8000;
+	ign_sig[LLD_IGN_CHANNEL_B].dwell_time = 8000;
+	ign_sig[LLD_IGN_CHANNEL_C].dwell_time = 8000;
+	ign_sig[LLD_IGN_CHANNEL_D].dwell_time = 8000;
 
-      LLD_do_table[LLD_DO_FAN2].value = false;
+	ign_sig[LLD_IGN_CHANNEL_A].ign_angle = -16;
+	ign_sig[LLD_IGN_CHANNEL_B].ign_angle = -16;
+	ign_sig[LLD_IGN_CHANNEL_C].ign_angle = -16;
+	ign_sig[LLD_IGN_CHANNEL_D].ign_angle = -16;
 
-      LLD_do_table[LLD_DO_FUEL_PUMP].value = true;
+	 /*sys_cmd.B_after_run_end= false;
+	 sys_cmd.B_SW_Pwf = false;
+	 sys_cmd.B_rsv = 0x0;
+	 sys_status.B_after_run_end_abnormal = false;
+	 sys_status.B_Pwf = false;
+	 sys_status.B_rsv = 0x0;*/
 
-      LLD_do_table[LLD_DO_MAIN_RELAY].value = true;
+	//TpPos_b=100;//tps=100*0.3922=39.22
+	Pmap_b=100;//Pmap_b=100kpa
+	Pmap=25650;//pmap=0.0039*25650=100.35kpa
+	Tm=200;//Tm= 200*0.75-48 =102 
+	TmLin=200;//TmLin= 200*0.75-48 =102
+	Ta=200;
 
-      LLD_do_table[LLD_DO_MIL_LAMP].value = false;
+	// B_after_run_end_abnormal =0x00;
 
-      LLD_do_table[LLD_DO_SVS_LAMP].value = true;
-
-      LLD_do_table[LLD_DO_AC_CLUTCH].value = false;
-
-      LLD_do_table[LLD_DO_R_LINE].value = true;
-
-      LLD_do_table[LLD_DO_VIS_SWITCH].value = false;
-
-      LLD_do_table[LLD_DO_ETB_DIR].value = false;
-
-	     LLD_do_table[LLD_DO_START_MOTR_RLY].value = true;
-
-
+	/* data output set */
+	LLD_do_table[LLD_DO_FAN1].value = true;
+	LLD_do_table[LLD_DO_FAN2].value = false;
+	LLD_do_table[LLD_DO_FUEL_PUMP].value = true;
+	LLD_do_table[LLD_DO_MAIN_RELAY].value = true;
+	LLD_do_table[LLD_DO_MIL_LAMP].value = false;
+	LLD_do_table[LLD_DO_SVS_LAMP].value = true;
+	LLD_do_table[LLD_DO_AC_CLUTCH].value = false;
+	LLD_do_table[LLD_DO_R_LINE].value = true;
+	LLD_do_table[LLD_DO_START_MOTR_RLY].value = true;
 }
+
 /*HLS initialization function*/
  void HLS_ini2(void)
 {
@@ -419,11 +320,6 @@ telem_data.tele_Vsp = 0x55;
 //scnVehInfo.CVN[1] = 0xbb;
 //scnVehInfo.CVN[2] =0xcc;
 //scnVehInfo.CVN[3] =0xdd;
-
-
-
-LLD_do_table[LLD_DO_ETB_DIS].value = 0;
-
 }
 
 /*will be called after _ini() at ECU power on, and at engine stall*/

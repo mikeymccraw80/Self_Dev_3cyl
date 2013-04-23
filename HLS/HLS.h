@@ -158,35 +158,35 @@ uint8_t B_after_run_end: 1; /* HLS after-run end */
 uint8_t B_rsv : 6; /* reserved bits */
 } sys_cmmd_bits;
 
-//ETC interface
+/* ETC interface */
 typedef union {
-		 uint16_t  ETC_Fault;
-	 	 struct {
-			uint16_t B_reserverd13 : 4;			 
-			uint16_t OC_HS2 : 1;		// Over-Current on How Side 2
-			uint16_t OC_HS1 : 1;		// Over-Current on How Side 1
-			uint16_t OC_LS2 : 1;		// Over-Current on Low Side 2
-			uint16_t OC_LS1 : 1;		// Over-Current on Low Side 1
-			uint16_t ACT : 1;			 	// Bridge enable,Ture after reset
-			uint16_t TSD : 1;			 	// Over-temperature Shutdown
-			uint16_t TWARN : 1;		// Temperature warning
-			uint16_t ILIM : 1;			 // Current Limitation reached
-			uint16_t VDD_OV : 1;		// Power supply for ECT Dirver overvoltage
-			uint16_t VS_UV : 1;		// 12 Vs undervoltage
-			uint16_t OL_ON : 1;		 // Open Load in ON condition
-			uint16_t B_reserverd0 : 1;			 
-			}etc_status_bits;
-}ETC_Fault_type;
+	uint16_t ETC_Fault;
+	struct {
+		uint16_t B_reserverd13 : 4;
+		uint16_t OC_HS2 : 1;		// Over-Current on How Side 2
+		uint16_t OC_HS1 : 1;		// Over-Current on How Side 1
+		uint16_t OC_LS2 : 1;		// Over-Current on Low Side 2
+		uint16_t OC_LS1 : 1;		// Over-Current on Low Side 1
+		uint16_t ACT : 1;			// Bridge enable,Ture after reset
+		uint16_t TSD : 1;			// Over-temperature Shutdown
+		uint16_t TWARN : 1;			// Temperature warning
+		uint16_t ILIM : 1;			// Current Limitation reached
+		uint16_t VDD_OV : 1;		// Power supply for ECT Dirver overvoltage
+		uint16_t VS_UV : 1;			// 12 Vs undervoltage
+		uint16_t OL_ON : 1;			// Open Load in ON condition
+		uint16_t B_reserverd0 : 1;
+	}etc_status_bits;
+} ETC_Fault_type;
 
 typedef struct {
-uint16_t       	etc_freq;        			//ETC frequency
-uint16_t 			etc_duty;        		//ETC Duty
-uint8_t 			etc_enable;       		//ETC enable contorl
-uint8_t 			etc_direction;    		//ETC motor rotate direction control
-status_bits 		status1;      				// M- Status Code 
-status_bits 		status2;      				//M+ Status Code 
-ETC_Fault_type status3;  				//ETC Driver fault status 
-}etc_signals; 
+	uint16_t       etc_freq;        //ETC frequency
+	uint16_t       etc_duty;        //ETC Duty
+	uint8_t        etc_enable;      //ETC enable contorl
+	uint8_t        etc_direction;   //ETC motor rotate direction control
+	status_bits    status1;         // M- Status Code 
+	status_bits    status2;         //M+ Status Code 
+	ETC_Fault_type status3;         //ETC Driver fault status
+} etc_signals;
 
 extern etc_signals etc_sig;
 
@@ -281,39 +281,38 @@ CYLINDER_3
 } current_channel_num;
 
 
-typedef struct
-{			
-       uint8_t  tele_Monitor_status[4];      /*0x01  Monitor status since DTCs cleared */
+typedef struct {
+	uint8_t  tele_Monitor_status[4];      /*0x01  Monitor status since DTCs cleared */
 	//uint8_t   tele_Monitor_status_2;      /*0x02  Monitor status since DTCs cleared */
-       //uint8_t   tele_Monitor_status_3;      /*0x03  Monitor status since DTCs cleared */
+	//uint8_t   tele_Monitor_status_3;      /*0x03  Monitor status since DTCs cleared */
 	//uint8_t   tele_Monitor_status_4;      /*0x04 Monitor status since DTCs cleared */
-       uint16_t tele_Cause_Frame_Pcode;  /* 0x02 DTC that caused required freeze frame data storage */
-  uint8_t  tele_B_FuelStatus;      /* 0x03  fuel supply system status*/		                         
-  uint8_t  tele_CsMaf;	           /* 0x04  Calculated LOAD Value	*/
-  uint8_t  tele_TmLin;   	   /* 0x05  Engine Coolant Temperature	*/
-  uint8_t  tele_fLc;	           /* 0x06  Short Term Fuel Trim Bank 1 	*/
-  uint8_t  tele_fLcAd;	           /* 0x07  Long Term Fuel Trim Bank 1	*/
-  uint8_t  tele_Pmap;	           /* 0x0B  Intake Manifold Absolute Pressure	*/
-  uint16_t tele_N;	           /* 0x0C  Engine RPM	*/
-  uint8_t  tele_Vsp;	           /* 0x0D  Vehicle Speed Sensor	*/
-  uint8_t  tele_IgaOut;	           /* 0x0E  Ignition Timing Advance for #1 Cylinder	*/
-  uint8_t  tele_TaLin;	           /* 0x0F  Intake Air Temperature	*/
-  uint8_t  tele_TpPos;	           /* 0x11  Absolute Throttle Position	*/
-  uint8_t  tele_O2SPos;	           /* 0x13  Location of Oxygen Sensors	*/
-  uint8_t  tele_uLsb;	           /* 0x14  Sensor Output Voltage	*/
-  uint8_t  tele_uLsbfLc;           /* 0x14  Short Term Fuel Trim (B1-S1)	*/
-  uint8_t  tele_uLsa;	           /* 0x15  Sensor Output Voltage	*/
-  uint8_t  tele_uLsafLc;           /* 0x15  Short Term Fuel Trim (B1-S2)	*/
-  uint8_t  tele_obd_Type;          /* 0x1C  OBD requirements to which vehicle is designed 	*/
-  uint16_t tele_tStaEnd;           /* 0x1F  Time Since Engine Start	*/
-  uint16_t tele_KmQ6Mil;           /* 0x21  Distance Travelled While MIL is Activated	*/
-  uint8_t  tele_DuCyPgOut;         /* 0x2E  Command Evaporative Purge	*/
-  uint8_t  tele_fuel;	           /* 0x2F  Fuel Level Input	*/
-  uint8_t  tele_WmuCntVal;         /* 0x30  Number of warm-ups since diagnostic trouble codescleared	*/
-  uint8_t  tele_Pam;	           /* 0x33  Ambient air Pressure	*/
-  uint16_t tele_TcatMain;          /* 0x3C  Catalyst Temperature	*/
-  uint16_t tele_Ub_b;	           /* 0x42  System voltage	*/
-  uint8_t  tele_Tam;	           /* 0x46  Ambient air temperature	*/
+	uint16_t tele_Cause_Frame_Pcode;  /* 0x02 DTC that caused required freeze frame data storage */
+	uint8_t  tele_B_FuelStatus;      /* 0x03  fuel supply system status*/		                         
+	uint8_t  tele_CsMaf;	           /* 0x04  Calculated LOAD Value	*/
+	uint8_t  tele_TmLin;   	   /* 0x05  Engine Coolant Temperature	*/
+	uint8_t  tele_fLc;	           /* 0x06  Short Term Fuel Trim Bank 1 	*/
+	uint8_t  tele_fLcAd;	           /* 0x07  Long Term Fuel Trim Bank 1	*/
+	uint8_t  tele_Pmap;	           /* 0x0B  Intake Manifold Absolute Pressure	*/
+	uint16_t tele_N;	           /* 0x0C  Engine RPM	*/
+	uint8_t  tele_Vsp;	           /* 0x0D  Vehicle Speed Sensor	*/
+	uint8_t  tele_IgaOut;	           /* 0x0E  Ignition Timing Advance for #1 Cylinder	*/
+	uint8_t  tele_TaLin;	           /* 0x0F  Intake Air Temperature	*/
+	uint8_t  tele_TpPos;	           /* 0x11  Absolute Throttle Position	*/
+	uint8_t  tele_O2SPos;	           /* 0x13  Location of Oxygen Sensors	*/
+	uint8_t  tele_uLsb;	           /* 0x14  Sensor Output Voltage	*/
+	uint8_t  tele_uLsbfLc;           /* 0x14  Short Term Fuel Trim (B1-S1)	*/
+	uint8_t  tele_uLsa;	           /* 0x15  Sensor Output Voltage	*/
+	uint8_t  tele_uLsafLc;           /* 0x15  Short Term Fuel Trim (B1-S2)	*/
+	uint8_t  tele_obd_Type;          /* 0x1C  OBD requirements to which vehicle is designed 	*/
+	uint16_t tele_tStaEnd;           /* 0x1F  Time Since Engine Start	*/
+	uint16_t tele_KmQ6Mil;           /* 0x21  Distance Travelled While MIL is Activated	*/
+	uint8_t  tele_DuCyPgOut;         /* 0x2E  Command Evaporative Purge	*/
+	uint8_t  tele_fuel;	           /* 0x2F  Fuel Level Input	*/
+	uint8_t  tele_WmuCntVal;         /* 0x30  Number of warm-ups since diagnostic trouble codescleared	*/
+	uint8_t  tele_Pam;	           /* 0x33  Ambient air Pressure	*/
+	uint16_t tele_TcatMain;          /* 0x3C  Catalyst Temperature	*/
+	uint16_t tele_Ub_b;	           /* 0x42  System voltage	*/
+	uint8_t  tele_Tam;	           /* 0x46  Ambient air temperature	*/
 }tele_type;
 extern tele_type telem_data;
 
@@ -391,7 +390,6 @@ extern uint16_t	DTCs_SID07[SY_FCMTSIZE];		/* DTCs for service 07*/
 #define LLD_ATD_FRONT_EVAP_TEMP LLD_AN11
 #define LLD_ATD_AC_PRESSURE  LLD_AN12
 
-
 /*chery DI*/
 /* DI Index */
 #define LLD_DI_AC_REQUEST_INPUT LLD_DI00
@@ -403,32 +401,15 @@ extern uint16_t	DTCs_SID07[SY_FCMTSIZE];		/* DTCs for service 07*/
 #define LLD_DI_BRAKE_LAMP LLD_DI06
 #define LLD_DI_BRAKE_SWITCH LLD_DI07
 #define LLD_DI_CLUTCH_TOP LLD_DI08
-/* Add for start-stop application */
-//#define LLD_DI_CLUTCH_TOP LLD_DI06
-//#define LLD_DI_START_MOTOR_FEEDBACK LLD_DI07
-//#define LLD_DI_CLUTCH_BOTTOM LLD_DI08
-//#define LLD_DI_NEUTRAL_GEAR LLD_DI09
-//#define LLD_DI_DRIVE_CHAIN_RLY LLD_DI10
-//#define LLD_DI_START_STOP_SWITCH LLD_DI11
-//#define LLD_DI_HIGH_ENABLE_LOAD LLD_DI12
 
 /*debounce time*/
 /*Debounce time for all digital inputs are tentatively defined as 10ms. It could be changed later.*/
 #define LLD_DI_AC_REQUEST_INPUT_DebTime 10 /*ms*/
 #define LLD_DI_AC_PRESSURE_SWITCH_DebTime 10
-#define LLD_DI_CAM_1_DebTime 10 /**/
+#define LLD_DI_CAM_1_DebTime 10
 #define LLD_DI_IGN_ON_OFF_SW_DebTime 10
 #define LLD_DI_HEAD_LAMP_DebTime 10
 #define LLD_DI_POWER_STEERING_DebTime 10
-/* Add for start stop application */
-#define LLD_DI_CLUTCH_TOP_DebTime 10
-#define LLD_DI_HEAD_LAMP_COMP_DebTime 10
-#define LLD_DI_START_MOTOR_FEEDBACK_DebTime 10
-#define LLD_DI_CLUTCH_BOTTOM_DebTime 10
-#define LLD_DI_NEUTRAL_GEAR_DebTime 10
-#define LLD_DI_DRIVE_CHAIN_RLY_DebTime 10
-#define LLD_DI_START_STOP_SWITCH_DebTime 10
-#define LLD_DI_HIGH_ENABLE_LOAD_DebTime 10
 
 /* Corresponding PIN number of connector */
 #define LLD_DO_FAN1 LLD_DO00 //index of digital output channel 0
@@ -441,8 +422,6 @@ extern uint16_t	DTCs_SID07[SY_FCMTSIZE];		/* DTCs for service 07*/
 #define LLD_DO_R_LINE LLD_DO07 //index of digital output channel 7
 #define LLD_DO_START_MOTR_RLY LLD_DO08 //index of digital output channel 8
 #define LLD_DO_VIS_SWITCH LLD_DO09 //index of digital output channel 9
-#define LLD_DO_ETB_DIS LLD_DO10 //index of digital output channel 10
-#define LLD_DO_ETB_DIR LLD_DO11 //index of digital output channel 11
 
 #define LLD_PWM_O2_HEATER_1 LLD_PWM00 //index of digital output channel 0
 #define LLD_PWM_FUEL_CONSUMPTION LLD_PWM01 //index of digital output channel 6
@@ -453,9 +432,6 @@ extern uint16_t	DTCs_SID07[SY_FCMTSIZE];		/* DTCs for service 07*/
 #define LLD_PWM_O2_HEATER_2 LLD_PWM06
 #define LLD_PWM_VVT1 LLD_PWM07
 #define LLD_PWM_VVT2 LLD_PWM08
-#define LLD_PWM_ETB LLD_PWM09
-
-
 
 #define LLD_IGN_CHANNEL_A 0
 #define LLD_IGN_CHANNEL_B 1
@@ -463,14 +439,11 @@ extern uint16_t	DTCs_SID07[SY_FCMTSIZE];		/* DTCs for service 07*/
 #define LLD_IGN_CHANNEL_D 3
 #define LLD_MAX_IGN_CHANNEL 4
 
-
-
 #define INJ_CHANNEL_A 0
 #define INJ_CHANNEL_B 1
 #define INJ_CHANNEL_C 2
 #define INJ_CHANNEL_D 3
 #define MAX_INJ_CHANNEL 4
-
 
 /*===========================================================================*/
 /* Exported global variable                               */

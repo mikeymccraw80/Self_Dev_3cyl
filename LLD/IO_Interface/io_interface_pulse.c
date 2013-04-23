@@ -10,12 +10,11 @@
 //=============================================================================
  void  IO_Pulse_Update_Function(void) 
 {
-
   //MIOS channel: ETC
   //500us equal 2KHZ
   //duty resoultion is 1/1000
-  HAL_Pulse_ETC_Enable((bool)LLD_pwm_out_table[LLD_PWM_ETB].B_enable);
-  HAL_Pulse_ETC_Set_Period_Duty(500,(uint16_t)LLD_pwm_out_table[LLD_PWM_ETB].duty*1000/255);
+  HAL_Pulse_ETC_Enable((bool)etc_sig.etc_enable);
+  HAL_Pulse_ETC_Set_Period_Duty(500, (uint16_t)etc_sig.etc_duty*500/255);
 
   //MIOS channel: VVT1
   //period in us
