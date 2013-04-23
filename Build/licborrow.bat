@@ -32,6 +32,9 @@ echo %licdate% %lichour%%licmin%
 echo ================= try to get a new temparory license ====================
 REM echo "<command format>: lmborrow wrsd 20-Apr-2013 17:00"
 lmutil lmborrow wrsd %licdate% %lichour%%licmin%
+cd ..\objs
+del app_main.o
+cd ..\Build
 call build_HWIO.bat
 lmutil lmborrow -status
 REM echo =========================================================================
