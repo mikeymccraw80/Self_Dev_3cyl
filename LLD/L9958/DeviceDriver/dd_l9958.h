@@ -513,7 +513,7 @@ void L9958_Clear_Device(
 //
 // @end
 //===========================================================================
-FAR_COS void L9958_Fault_Diagnose_Channels(
+void L9958_Fault_Diagnose_Channels(
    IO_Configuration_T in_configuration );
 
 

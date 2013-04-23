@@ -222,7 +222,7 @@ const Fault_Diagnostic_Channel_T L9958_SPI_FAULT_CHANNELS[NUMBER_OF_L9958][2] =
 //=============================================================================
 // L9958_Fault_Diagnose_Channels
 //=============================================================================
-FAR_COS void L9958_Fault_Diagnose_Channels( IO_Configuration_T in_configuration )
+void L9958_Fault_Diagnose_Channels( IO_Configuration_T in_configuration )
 {
    L9958_Index_T index = L9958_Get_Device_Index( in_configuration );
    uint8_t x;

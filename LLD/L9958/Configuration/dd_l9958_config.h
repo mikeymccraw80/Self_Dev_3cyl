@@ -30,8 +30,6 @@
 
 #define NUMBER_OF_L9958 (1)
 
-void L9958_SPI_Immediate_Transfer( 
-   IO_Configuration_T  in_configuration ,
-   L9958_Txd_Message_T    in_msg_index);
+void L9958_SPI_Immediate_Transfer( IO_Configuration_T in_configuration , L9958_Txd_Message_T in_msg_index);
 
 #endif // DD_L9958_CONFIG_H

@@ -39,7 +39,7 @@
 //=============================================================================
 // L9958_DISCRETE_Device_Initialize
 //=============================================================================
-FAR_COS void L9958_Device_Initialize(
+void L9958_Device_Initialize(
    IO_Configuration_T in_configuration)
 {
    L9958_Index_T index = L9958_Get_Device_Index( in_configuration );

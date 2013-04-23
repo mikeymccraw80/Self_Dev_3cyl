@@ -42,37 +42,4 @@ const uint16_t  L9958_TXD_INITIAL[ NUMBER_OF_L9958 ]  =
            L9958_Msg_Set_Current_Slew_Control_Disable(0,  L9958_Get_Current_Slew_Control_Disable( L9958_CONFIGURATION_REG_INIT_0) ) | \
            L9958_Msg_Set_Open_Load_in_ON_Enable(      0,  L9958_Get_Open_Load_in_ON_Enable( L9958_CONFIGURATION_REG_INIT_0)       ) )
    }
-
-#if ( NUMBER_OF_L9958 > L9958_DEVICES_1 )
-   ,{
-       (   L9958_Msg_Set_Diag_Reset_Disable(          0,  L9958_Get_Diag_Reset_Disable( L9958_CONFIGURATION_REG_INIT_1 )          ) | \
-           L9958_Msg_Set_Regulation_Curr_Level(       0,  L9958_Get_Regulation_Curr_Level( L9958_CONFIGURATION_REG_INIT_1 )       ) | \
-           L9958_Msg_Set_Voltage_Slew_Control(        0,  L9958_Get_Voltage_Slew_Control( L9958_CONFIGURATION_REG_INIT_1 )        ) | \
-           L9958_Msg_Set_Voltage_Slew_Control(        0,  L9958_Get_Current_Slew_Control( L9958_CONFIGURATION_REG_INIT_1 )        ) | \
-           L9958_Msg_Set_Current_Slew_Control_Disable(0,  L9958_Get_Current_Slew_Control_Disable( L9958_CONFIGURATION_REG_INIT_1) ) | \
-           L9958_Msg_Set_Open_Load_in_ON_Enable(      0,  L9958_Get_Open_Load_in_ON_Enable( L9958_CONFIGURATION_REG_INIT_1)       ) )
-    }
-#endif
-
-#if ( NUMBER_OF_L9958 > L9958_DEVICES_2 )
-   ,{
-       (   L9958_Msg_Set_Diag_Reset_Disable(          0,  L9958_Get_Diag_Reset_Disable( L9958_CONFIGURATION_REG_INIT_2 )          ) | \
-           L9958_Msg_Set_Regulation_Curr_Level(       0,  L9958_Get_Regulation_Curr_Level( L9958_CONFIGURATION_REG_INIT_2 )       ) | \
-           L9958_Msg_Set_Voltage_Slew_Control(        0,  L9958_Get_Voltage_Slew_Control( L9958_CONFIGURATION_REG_INIT_2 )        ) | \
-           L9958_Msg_Set_Voltage_Slew_Control(        0,  L9958_Get_Current_Slew_Control( L9958_CONFIGURATION_REG_INIT_2 )        ) | \
-           L9958_Msg_Set_Current_Slew_Control_Disable(0,  L9958_Get_Current_Slew_Control_Disable( L9958_CONFIGURATION_REG_INIT_2) ) | \
-           L9958_Msg_Set_Open_Load_in_ON_Enable(      0,  L9958_Get_Open_Load_in_ON_Enable( L9958_CONFIGURATION_REG_INIT_2)       ) )
-   }
-#endif
-
-#if ( NUMBER_OF_L9958 > L9958_DEVICES_3 )
-   ,{
-       (   L9958_Msg_Set_Diag_Reset_Disable(          0,  L9958_Get_Diag_Reset_Disable( L9958_CONFIGURATION_REG_INIT_3 )          ) | \
-           L9958_Msg_Set_Regulation_Curr_Level(       0,  L9958_Get_Regulation_Curr_Level( L9958_CONFIGURATION_REG_INIT_3 )       ) | \
-           L9958_Msg_Set_Voltage_Slew_Control(        0,  L9958_Get_Voltage_Slew_Control( L9958_CONFIGURATION_REG_INIT_3 )        ) | \
-           L9958_Msg_Set_Voltage_Slew_Control(        0,  L9958_Get_Current_Slew_Control( L9958_CONFIGURATION_REG_INIT_3 )        ) | \
-           L9958_Msg_Set_Current_Slew_Control_Disable(0,  L9958_Get_Current_Slew_Control_Disable( L9958_CONFIGURATION_REG_INIT_3) ) | \
-           L9958_Msg_Set_Open_Load_in_ON_Enable(      0,  L9958_Get_Open_Load_in_ON_Enable( L9958_CONFIGURATION_REG_INIT_3)       ) )
-   }
-#endif
 };

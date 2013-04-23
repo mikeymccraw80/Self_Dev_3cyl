@@ -45,25 +45,4 @@
               L9958_CFG_REG_DEFAULT_CONFIGURATION      )
 #endif
 
-#ifndef L9958_CONFIGURATION_REG_INIT_1
-#define L9958_CONFIGURATION_REG_INIT_1 \
-     (        L9958_Set_Device_Index(0 , L9958_INDEX_1 ) | \
-              L9958_CFG_REG_DEFAULT_CONFIGURATION      )
-#endif
-
-
-#ifndef L9958_CONFIGURATION_REG_INIT_2
-#define L9958_CONFIGURATION_REG_INIT_2 \
-     (        L9958_Set_Device_Index(0 , L9958_INDEX_2 ) | \
-              L9958_CFG_REG_DEFAULT_CONFIGURATION      )
-#endif
-
-
-#ifndef L9958_CONFIGURATION_REG_INIT_3
-#define L9958_CONFIGURATION_REG_INIT_3 \
-     (        L9958_Set_Device_Index(0 , L9958_INDEX_3 ) | \
-              L9958_CFG_REG_DEFAULT_CONFIGURATION      )
-#endif
-
-
 #endif // DD_L9958_INIT_H
