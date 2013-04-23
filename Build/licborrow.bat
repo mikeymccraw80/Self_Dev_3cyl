@@ -1,9 +1,9 @@
 @echo off
 
-echo =================display the current license status =====================
-lmutil lmborrow -status
-echo =========================================================================
-pause
+REM echo =================display the current license status =====================
+REM lmutil lmborrow -status
+REM echo =========================================================================
+REM pause
 
 set cur_month=%date:~0,2%
 if %cur_month%==01 set month=Jan
@@ -23,15 +23,18 @@ set year=%date:~6,4%
 
 set line=-
 set licdate=%day%%line%%month%%line%%year%
-set lictime=23:59
-
+set lichour=%time:~0,2%
+set licmin=%time:~2,3%
+set /A lichour=%lichour%+12
+if %lichour% gtr 23 set lichour=23
+echo %licdate% %lichour%%licmin%
 
 echo ================= try to get a new temparory license ====================
 REM echo "<command format>: lmborrow wrsd 20-Apr-2013 17:00"
-lmutil lmborrow wrsd %licdate% %lictime%
-echo %licdate% %lictime%
+lmutil lmborrow wrsd %licdate% %lichour%%licmin%
+call build_HWIO.bat
 lmutil lmborrow -status
-echo =========================================================================
+REM echo =========================================================================
 
 pause
 @echo on
