@@ -1,0 +1,92 @@
+// T32-1 Tue Mar 11 16:55:36 2003
+
+ B::
+ 
+ TOOLBAR ON
+ STATUSBAR ON
+ WINPAGE.RESET
+ 
+ WINPAGE.CREATE P000     
+ 
+ WINCLEAR
+ WINPOS 0.125 0.0625 74. 25. 13. 1. W000
+ WINTABS 10. 10. 25. 62.
+ Data.List E: /Track
+ 
+ WINPOS 77.875 29.5 78. 19. 13. 1. W003
+ WINTABS 10. 10. 25. 62.
+ Data.List
+ 
+ WINPOS 78.0 0.0 78. 25. 10. 1. W001
+ WINTABS 32.
+ TRace.List
+ 
+ WINPOS 46.0 11.562 64. 25. 0. 1. W008
+ WINTABS 21. 21.
+ V.AW %sp *
+ WINPAN 0. 4198.
+ 
+ WINPOS 0.0 29.0 75. 19. 0. 0. W004
+ VAR.WATCH %location %spotlight %e
+ 
+ VAR.ADDWATCH QSPI_Exec_State
+ VAR.ADDWATCH QSPI_Request
+ VAR.ADDWATCH QSPIB_Exec_State
+ VAR.ADDWATCH QSPIB_Request
+ VAR.ADDWATCH EPI_Test.Engine_Speed
+ VAR.ADDWATCH \\boot\Global\MainMcp_Tx_Active
+ VAR.ADDWATCH \\boot\Global\MainMcp_Rx_Error
+ VAR.ADDWATCH \\boot\Global\MainMcp_Rx_Data
+ VAR.ADDWATCH \\boot\Global\VaSPDD_u_RxBuffer
+ VAR.ADDWATCH \\boot\Global\VaSPDD_u_TxBuffer
+ VAR.ADDWATCH Boot_Test_Mode_Const
+ VAR.ADDWATCH \\application\Global\MainMcp_Tx_Active
+ VAR.ADDWATCH \\application\Global\MainMcp_Rx_Error
+ VAR.ADDWATCH \\application\Global\MainMcp_Rx_Data
+ VAR.ADDWATCH \\application\Global\VaSPDD_u_RxBuffer
+ VAR.ADDWATCH \\application\Global\VaSPDD_u_TxBuffer
+ 
+; Setup Power Probe
+ PP::
+ 
+ NAME.RESET
+ NAME.SET X.1 X.sclk_a 
+ NAME.SET X.2 X.mosi_a 
+ NAME.SET X.3 X.miso_a 
+ NAME.SET X.4 X.lods1_cs
+ NAME.SET X.5 X.lods2_cs
+ NAME.SET X.6 X.quest_cs
+ NAME.SET X.7 X.mvr_cs
+ NAME.SET X.8 X.sclk_b
+ NAME.SET X.9 X.mosi_b
+ NAME.SET X.10 X.miso_b
+ NAME.SET X.11 X.star12_cs
+ NAME.SET X.12 X.flid_cs 
+ NAME.SET X.13 X.phd2_cs 
+ NAME.SET X.14 X.viki_cs 
+ 
+; Setup Windows
+
+ B::
+ 
+ WINPAGE.CREATE P001     
+ 
+ WINCLEAR
+ WINPOS 0.0 28.75 70. 20. 13. 1. W008
+ WINTABS 10. 10. 25. 62.
+ Data.List E: /Track
+ 
+ WINPOS 1.375 0.0 52. 25. 10. 1. W006
+ WINTABS
+ PP::a.l x.star12_cs x.FLID_CS x.PHD2_CS x.viki_cs
+ 
+ WINPOS 73.0 28.562 84. 20. 12. 1. W007
+ WINTABS 32. 32. 32. 9.
+ Trace.List ALL /Track
+ 
+ WINPOS 50.25 0.0 106. 24. 17. 2. W001
+ PP::ANALYZER.TIMING x.SCLK_B x.STAR12_CS x.MOSI_B x.MISO_B x.FLID_CS x.PHD2_CS x.VIKI_CS x.SCLK_A x.MOSI_A x.MISO_A x.LODS1_CS x.LODS2_CS x.QUEST_CS x.MVR_CS /TRACK 
+ 
+ WINPAGE.SELECT P000     
+ 
+ ENDDO

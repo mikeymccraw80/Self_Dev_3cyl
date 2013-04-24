@@ -1,0 +1,57 @@
+;*============================================================================*
+;* (a) File header block including the copyright notice
+;*===========================================================================*
+;*===========================================================================*
+;* FILE: %name:  spi_powerprobe.cmm %
+;*===========================================================================
+;* Copyright 2009 Delphi Technologies, Inc., All Rights Reserved.
+;* Delphi Confidential
+;*---------------------------------------------------------------------------
+;* %full_filespec: spi_powerprobe.cmm~1:ascii:ctc_pt3#1 %
+;* %version: 1 %
+;* %derived_by: rz65p6 %
+;* %date_created: Tue Jul 26 10:11:50 2011 %
+;*---------------------------------------------------------------------------
+;*
+;* DESCRIPTION:
+;*
+;* ABBREVIATIONS:
+;*   None.
+;*
+;* TRACEABILITY INFO:
+;*   None
+;*
+;* DEVIATIONS FROM STANDARDS:
+;*   None.
+;*
+;\*===========================================================================*/
+
+; Setup Power Probe
+ IF POWERNEXUS()
+ (
+    PP::
+    NAME.RESET
+    NAME.SET X.0 X.pcsa0 
+    NAME.SET X.1 X.sclka 
+    NAME.SET X.2 X.misoa 
+    NAME.SET X.3 X.mosia
+    NAME.SET X.4 X.pcsa0_x
+    NAME.SET X.5 X.sclka_x
+ 
+    PP::ANALYZER.TIMING x.pcsa0 x.sclka x.misoa x.mosia x.pcsa0_x x.sclka_x /TRACK 
+ )
+ ENDDO
+
+;*===========================================================================*
+;* File Revision History (top to bottom: first revision to last revision)
+;*===========================================================================
+;*
+;* Date        userid    (Description on following lines: SCR #, etc.)
+;* ----------- --------
+;* 13-SEP-2006 zzyl53 (TWK)
+;* + Task#45144 SCR - 4854
+;*   + Added this revision log and header box.
+;*   + Added check for POWERNEXUS connectivity so that certain Nexus
+;*     commands are not used if JTAG debugger is connected (instead of
+;*     LA-7610 Nexus probe).
+;*===========================================================================*

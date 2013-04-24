@@ -1,0 +1,21 @@
+// T32-3 Thu Jul 14 11:30:09 2005
+
+ B::
+ 
+ TOOLBAR ON
+ STATUSBAR ON
+ WINPAGE.RESET
+ 
+ WINCLEAR
+ WINPOS 17.125 2.25 77. 13. 0. 0. W009
+ Var.Watch    %location %spotlight %e
+ 
+ VAR.ADDWATCH ms6p25_counter
+ VAR.ADDWATCH \\appl\Global\VaSPDD_u_RxBuffer
+ VAR.ADDWATCH \\appl\Global\MPM_Handshake_State
+ VAR.ADDWATCH Wait_Data_Byte_Number
+ VAR.ADDWATCH Sent_Data_Byte_Number
+ 
+ WINPAGE.SELECT P000     
+ 
+ ENDDO

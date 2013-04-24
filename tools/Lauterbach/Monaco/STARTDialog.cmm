@@ -1,0 +1,39 @@
+;*===========================================================================*
+; Filename:           STARTDialog.cmm 
+; %version:           1 % 
+; %derived_by:        rz65p6 % 
+; 100xxxxx: All Control Program 
+; Copyright 2010 Delphi, Inc., All Rights Reserved. 
+;*===========================================================================*
+
+;*===========================================================================*
+;                        STARTDialog.cmm 
+; Description 
+; ----------- 
+;   This is the main module that is executed to erase and/or program the 
+;   target's internal flash for all programs
+;   This calls the generic flashing script passing in the base directory  
+;   from which the flash utility should pull the flash files from 
+;   (i.e. the project root directory). 
+;  
+; Reuse 
+; ----- 
+;   This file should be reusable with only a change to the paths. 
+; 
+; Owners : Larry Burkholder 
+; ------ 
+;   Any reports of problems or requests for changes to this module 
+;   should be made by above owner(s). 
+;*===========================================================================*
+
+DO START.CMM 12345679
+ENDDO 
+;*===========================================================================*
+;* File Revision History (top to bottom: first revision to last revision)
+;*===========================================================================
+;*
+;* Date        userid   (Description on following lines: SCR #, etc.)
+;* ----------- --------
+;* 24-Feb-2010 tz6mz7   (ldb)
+;* + Modified for all programs
+;*===========================================================================*

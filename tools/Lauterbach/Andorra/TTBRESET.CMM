@@ -1,0 +1,36 @@
+      GLOBAL &do_event
+      
+      GLOBAL &macrodir
+      GLOBAL &cwd
+      
+
+      ;only running from external ROM/RAM
+      B::
+      ;Clear all events since a reset should 
+      ;clear standby, interrupts
+      &do_event=0x00
+
+      ;Issue an in target reset!
+      ;Now reset Externals to prevent RESET error
+      IF OS.FILE("&macrodir\external.cmm") 
+      (
+         ;Modes 0-5 are DOWN states, all others are UP states
+         IF SYSTEM.MODE()>=6
+         (;do an in target reset
+            ;SYSTEM.MODE EmulExt
+            REGISTER.RESET 
+            ;------------------------------------------
+            ; Initialise the Coral MMU and  EBI
+            ;------------------------------------------
+            DO "&cwd\mmu_init.cmm"
+            DO "&cwd\ebi_init.cmm"
+         )
+         DO &macrodir\external
+      )
+      ELSE                                              
+      (
+         DO &macrodir\cyclepower           
+         REGISTER.RESET 
+         DIALOG.OK "Can not find &macrodir\external.cmm, Default path may have changed..."   
+      )
+         

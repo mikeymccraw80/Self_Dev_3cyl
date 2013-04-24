@@ -1,0 +1,141 @@
+;*===========================================================================*
+; Filename:           start_Mamba.cmm 
+; %version:           1 % 
+; %derived_by:        rz65p6 % 
+; 10005893: E67 MY2006 Engine Control Program 
+; 10012104: E38 MY2006 Engine Control Program
+; Copyright 2003 Delphi Technologies, Inc., All Rights Reserved. 
+;*===========================================================================*
+
+;*===========================================================================*
+;                        start_Mamba.cmm 
+; Description 
+; ----------- 
+;   This is the main module that is executed to erase and/or program the 
+;   target's internal flash for the MPC5633. This is for the xx program
+;   This calls the generic flashing script passing in the base directory  
+;   from which the flash utility should pull the flash files from 
+;   (i.e. the project root directory). 
+;  
+; Reuse 
+; ----- 
+;   This file should be reusable with only a change to the paths. 
+; 
+; Owners : Jeff Hyatt, Jason Howerton, Larry Burkholder 
+; ------ 
+;   Any reports of problems or requests for changes to this module 
+;   should be made by above owner(s). 
+;*===========================================================================*
+
+GLOBAL &macrodir
+GLOBAL &homedir
+GLOBAL &platform_type
+GLOBAL &default_winfile
+GLOBAL &last_session_file
+GLOBAL &flashd_default_file
+GLOBAL &COPY_RP_TO_WP_DONE
+GLOBAL &WP_IS_SELECTED
+GLOBAL &TTB_flash_control
+
+
+&COPY_RP_TO_WP_DONE=(0==1)
+&WP_IS_SELECTED=(0==1)
+
+&platform_type="EDU2_OrLater"
+&TTB_flash_control=12345678
+
+;select ICD Debugger 
+B:: 
+
+;Where are the scripts located?   Can use relative paths here also
+;&macrodir="."
+&macrodir="."
+;&macrodir="C:\DelphiScripts\Monaco"
+;&macrodir=".\Mamba"
+;&macrodir="Supplier\lauterbach"
+;&macrodir="c:\users\rel_path\supplier\lauterbach"
+
+&homedir=OS.PPD()
+
+&default_winfile="&homedir\defaultwin.cmm"
+
+
+;To make sure that we can find the macro directory we must commit
+;it to a global variable with complete path not the allowed relative path.
+
+ON ERROR JUMPTO pathnotfound
+CHDIR "&macrodir"
+GOTO pathset
+
+pathnotfound:
+  DIALOG.OK "Cannot find the script directory '&macrodir'..."
+  END
+  
+pathset:
+ON ERROR
+
+;&macrodir=OS.PWD()
+
+CHDIR "&homedir"
+
+; Remove old menu structure and buttons. 
+MENU.RESET 
+; Add menus and buttons. 
+MENU.REPROGRAM "&macrodir\Mambamenu.men" 
+MENU.REPROGRAM "&macrodir\cal.men" 
+
+;Set restore files.
+&last_session_file="last_session.ini"
+&flashd_default_file="&macrodir\flashd_defaults.ini"
+ 
+DO "&macrodir\flashd" "&homedir"
+
+;If there is an error in loading the Window script
+;then continue on so that the environment variables
+;are set.
+ON ERROR GOTO SkipWIN   
+
+;Display default windows
+IF OS.FILE(&default_winfile)
+(
+ DO "&default_winfile"
+)
+ELSE
+(
+ DO "&macrodir\win" 
+) 
+
+SkipWIN:
+;The following macro will stay resident and handle what needs to be
+;done when a beakpoint is hit.
+DO "&macrodir\do_events"
+
+;We never return
+ENDDO
+ 
+
+;*===========================================================================*
+;* File Revision History (top to bottom: first revision to last revision)
+;*===========================================================================
+;*
+;* Date        userid    (Description on following lines: SCR #, etc.)
+;* ----------- --------
+;* 18-JAN-2005 jzcpfk (JWH2)
+;* + Module created for D-One. Task#34797 - "SCR None"
+;* 26-JAN-2005 jzcpfk (JWH2) 
+;* + Updated for D1 Task#34809. SCR - None
+;*
+;* 10-FEB-2005 jzcpfk (JWH2) 
+;* + Updated for D1 Task#34876. SCR - None
+;*
+;* 19-APR-2005 jzcpfk (JWH2)
+;* + Task#35509 SCR - 4003
+;* + Continue to updated functionality of scripts
+;*
+;* 26-APR-2005 jzcpfk (JWH2)
+;* + Task#36470 SCR - 4003
+;* + Add functionality to select hardware type...EDU1 or EDU2.
+;*
+;* 23-AUG-2006 tz6mz7 (ldb)
+;* + Modified for MPC5633 (Mamba)                              
+;*===========================================================================*

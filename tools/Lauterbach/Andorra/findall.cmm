@@ -1,0 +1,549 @@
+;*============================================================================*
+;* (a) File header block including the copyright notice
+;*===========================================================================*
+;*===========================================================================*
+;* FILE: %name:  findall.cmm %
+;*===========================================================================
+;* Copyright 2009 Delphi Technologies, Inc., All Rights Reserved.
+;* Delphi Confidential
+;*---------------------------------------------------------------------------
+; %full_filespec: findall.cmm~1:ascii:ctc_pt3#2 %
+; %version: 1 %
+; %derived_by: rz65p6 %
+; %date_created: Thu Aug 25 12:32:12 2011 %
+;---------------------------------------------------------------------------
+;
+; DESCRIPTION:
+;    This function provides search capability from within the Analyzer Trace.
+;
+;    This file can be reused with little functional change. 
+;
+; ABBREVIATIONS:
+;   None.
+;
+; TRACEABILITY INFO:
+;   Design Document(s):
+;     None
+;
+;   Requirements Document(s):
+;     None
+;
+;   Applicable Standards (in order of precedence: highest first):
+;     None
+;
+; DEVIATIONS FROM STANDARDS:
+;   None.
+;
+;===========================================================================
+LOCAL &find_string
+LOCAL &temp_string
+LOCAL &access_string
+
+dialog
+(
+   HEADER "Analyzer Find All in Trace"
+
+   POS 0. 1. 4. 1
+   TEXT "Find 1:"
+   TEXT "Find 2:"
+   TEXT "Find 3:"
+   TEXT "Find 4:"
+   TEXT "Find 5:"
+   TEXT "Find 6:"
+   
+   POS 5. 0. 2. 1
+   TEXT "En"
+   CHECK1: CHECKBOX ""
+   (
+      if dialog.boolean(CHECK1)
+      (
+         DIALOG.ENABLE FIND1
+         DIALOG.ENABLE ACCESS1
+         DIALOG.ENABLE SIZE1
+         DIALOG.ENABLE DATA1
+      )
+      else
+      (
+         DIALOG.DISABLE FIND1
+         DIALOG.DISABLE ACCESS1
+         DIALOG.DISABLE SIZE1
+         DIALOG.DISABLE DATA1
+      )
+   )
+
+   CHECK2: CHECKBOX ""
+   (
+      if dialog.boolean(CHECK2)
+      (
+         DIALOG.ENABLE FIND2
+         DIALOG.ENABLE ACCESS2
+         DIALOG.ENABLE SIZE2
+         DIALOG.ENABLE DATA2
+      )
+      else
+      (
+         DIALOG.DISABLE FIND2
+         DIALOG.DISABLE ACCESS2
+         DIALOG.DISABLE SIZE2
+         DIALOG.DISABLE DATA2
+      )
+   )
+
+   CHECK3: CHECKBOX ""
+   (
+      if dialog.boolean(CHECK3)
+      (
+         DIALOG.ENABLE FIND3
+         DIALOG.ENABLE ACCESS3
+         DIALOG.ENABLE SIZE3
+         DIALOG.ENABLE DATA3
+      )
+      else
+      (
+         DIALOG.DISABLE FIND3
+         DIALOG.DISABLE ACCESS3
+         DIALOG.DISABLE SIZE3
+         DIALOG.DISABLE DATA3
+      )
+   )
+
+   CHECK4: CHECKBOX ""
+   (
+      if dialog.boolean(CHECK4)
+      (
+         DIALOG.ENABLE FIND4
+         DIALOG.ENABLE ACCESS4
+         DIALOG.ENABLE SIZE4
+         DIALOG.ENABLE DATA4
+      )
+      else
+      (
+         DIALOG.DISABLE FIND4
+         DIALOG.DISABLE ACCESS4
+         DIALOG.DISABLE SIZE4
+         DIALOG.DISABLE DATA4
+      )
+   )
+
+   CHECK5: CHECKBOX ""
+   (
+      if dialog.boolean(CHECK5)
+      (
+         DIALOG.ENABLE FIND5
+         DIALOG.ENABLE ACCESS5
+         DIALOG.ENABLE SIZE5
+         DIALOG.ENABLE DATA5
+      )
+      else
+      (
+         DIALOG.DISABLE FIND5
+         DIALOG.DISABLE ACCESS5
+         DIALOG.DISABLE SIZE5
+         DIALOG.DISABLE DATA5
+      )
+   )
+
+   CHECK6: CHECKBOX ""
+   (
+      if dialog.boolean(CHECK6)
+      (
+         DIALOG.ENABLE FIND6
+         DIALOG.ENABLE ACCESS6
+         DIALOG.ENABLE SIZE6
+         DIALOG.ENABLE DATA6
+      )
+      else
+      (
+         DIALOG.DISABLE FIND6
+         DIALOG.DISABLE ACCESS6
+         DIALOG.DISABLE SIZE6
+         DIALOG.DISABLE DATA6
+      )
+   )
+
+   POS 8. 1. 2. 1
+   BUTTON "S"
+   (
+      Symbol.Browse * /click "DIALOG.SET FIND1 ""*"""
+   )
+   BUTTON "S"
+   (
+      Symbol.Browse * /click "DIALOG.SET FIND2 ""*"""
+   )
+   BUTTON "S"
+   (
+      Symbol.Browse * /click "DIALOG.SET FIND3 ""*"""
+   )
+   BUTTON "S"
+   (
+      Symbol.Browse * /click "DIALOG.SET FIND4 ""*"""
+   )
+   BUTTON "S"
+   (
+      Symbol.Browse * /click "DIALOG.SET FIND5 ""*"""
+   )
+   BUTTON "S"
+   (
+      Symbol.Browse * /click "DIALOG.SET FIND6 ""*"""
+   )
+
+   POS 10. 0. 23. 1
+   TEXT "Address"
+   FIND1: EDIT ""
+   (
+   )
+   
+   FIND2: EDIT ""
+   (
+   )
+   
+   FIND3: EDIT ""
+   (
+   )
+   
+   FIND4: EDIT ""
+   (
+   )
+   
+   FIND5: EDIT ""
+   (
+   )
+   
+   FIND6: EDIT ""
+   (
+   )
+  
+   POS 33. 0. 10. 1
+   TEXT "Access Type"
+   ACCESS1: PULLDOWN "Any,Write,Read,Read/Write,Program"
+   (
+   )
+   ACCESS2: PULLDOWN "Any,Write,Read,Read/Write,Program"
+   (
+   )
+   ACCESS3: PULLDOWN "Any,Write,Read,Read/Write,Program"
+   (
+   )
+   ACCESS4: PULLDOWN "Any,Write,Read,Read/Write,Program"
+   (
+   )
+   ACCESS5: PULLDOWN "Any,Write,Read,Read/Write,Program"
+   (
+   )
+   ACCESS6: PULLDOWN "Any,Write,Read,Read/Write,Program"
+   (
+   )
+
+   POS 43. 0. 10. 1
+   TEXT "Access Size"
+   SIZE1: PULLDOWN "Any,Long,Word,Byte"
+   (
+   )
+   SIZE2: PULLDOWN "Any,Long,Word,Byte"
+   (
+   )
+   SIZE3: PULLDOWN "Any,Long,Word,Byte"
+   (
+   )
+   SIZE4: PULLDOWN "Any,Long,Word,Byte"
+   (
+   )
+   SIZE5: PULLDOWN "Any,Long,Word,Byte"
+   (
+   )
+   SIZE6: PULLDOWN "Any,Long,Word,Byte"
+   (
+   )
+
+   POS 53. 0. 8. 1
+   TEXT "Data"
+   DATA1: EDIT ""
+   (
+   )
+   DATA2: EDIT ""
+   (
+   )
+   DATA3: EDIT ""
+   (
+   )
+   DATA4: EDIT ""
+   (
+   )
+   DATA5: EDIT ""
+   (
+   )
+   DATA6: EDIT ""
+   (
+   )
+ 
+   POS 0. 7. 61. 1
+   LINE ""
+   
+   POS 0. 8. 7. 1
+   BUTTON "Find All"
+   (
+      &find_string=""
+      GOSUB Create_Listing
+
+      if ("&find_string"!="")
+      (
+         IF POWERNEXUS()
+         (
+            analyzer.findall , &find_string
+         )
+      )
+
+   )
+   
+   POS 8. 8. 7. 1
+   CLEARALL: BUTTON "Clear"
+   (
+      DIALOG.SET ACCESS1 "Any"
+      DIALOG.SET SIZE1 "Any"
+      DIALOG.SET DATA1 ""
+      DIALOG.SET FIND1 ""
+      DIALOG.ENABLE ACCESS1
+      DIALOG.ENABLE SIZE1
+      DIALOG.ENABLE DATA1
+      DIALOG.ENABLE FIND1
+      DIALOG.SET CHECK1
+      
+      DIALOG.SET ACCESS2 "Any"
+      DIALOG.SET SIZE2 "Any"
+      DIALOG.SET DATA2 ""
+      DIALOG.SET FIND2 ""
+      DIALOG.DISABLE FIND2
+      DIALOG.DISABLE ACCESS2
+      DIALOG.DISABLE SIZE2
+      DIALOG.DISABLE DATA2
+      DIALOG.SET CHECK2 "1"
+      
+      DIALOG.SET ACCESS3 "Any"
+      DIALOG.SET SIZE3 "Any"
+      DIALOG.SET DATA3 ""
+      DIALOG.SET FIND3 ""
+      DIALOG.DISABLE FIND3
+      DIALOG.DISABLE ACCESS3
+      DIALOG.DISABLE SIZE3
+      DIALOG.DISABLE DATA3
+      DIALOG.SET CHECK3 "1"
+      
+      DIALOG.SET ACCESS4 "Any"
+      DIALOG.SET SIZE4 "Any"
+      DIALOG.SET DATA4 ""
+      DIALOG.SET FIND4 ""
+      DIALOG.DISABLE FIND4
+      DIALOG.DISABLE ACCESS4
+      DIALOG.DISABLE SIZE4
+      DIALOG.DISABLE DATA4
+      DIALOG.SET CHECK4 "1"
+      
+      DIALOG.SET ACCESS5 "Any"
+      DIALOG.SET SIZE5 "Any"
+      DIALOG.SET DATA5 ""
+      DIALOG.SET FIND5 ""
+      DIALOG.DISABLE FIND5
+      DIALOG.DISABLE ACCESS5
+      DIALOG.DISABLE SIZE5
+      DIALOG.DISABLE DATA5
+      DIALOG.SET CHECK5 "1"
+      
+      DIALOG.SET ACCESS6 "Any"
+      DIALOG.SET SIZE6 "Any"
+      DIALOG.SET DATA6 ""
+      DIALOG.SET FIND6 ""
+      DIALOG.DISABLE FIND6
+      DIALOG.DISABLE ACCESS6
+      DIALOG.DISABLE SIZE6
+      DIALOG.DISABLE DATA6
+      DIALOG.SET CHECK6 "1"
+   )
+   
+   POS 16. 8. 7. 1
+   BUTTON "Text Dump"
+   (
+      ON ERROR JUMPTO No_Print
+
+      printer.file *
+
+      &find_string=""
+      GOSUB Create_Listing   
+
+      if ("&find_string"!="")
+      (
+         IF POWERNEXUS()
+         (
+            winprint.analyzer.findall , &find_string
+         )
+      )
+No_Print: 
+      ON ERROR     
+   )
+   
+   POS 24. 8. 7. 1
+   BUTTON "Close"
+   (
+      DIALOG.END
+   )
+   
+)
+
+DIALOG.EXECUTE CLEARALL
+
+stop
+
+Get_Access_Type:
+(
+   &access_string=" "
+  
+   if ("&access_dialog"=="Write")
+   (
+      &access_string="Cycle Write"
+      GOSUB Get_Data_Type
+   )
+   if ("&access_dialog"=="Read")
+   (
+      &access_string="Cycle Read"
+      GOSUB Get_Data_Type
+   )
+   if ("&access_dialog"=="Read/Write")
+   (
+      &access_string="Cycle ReadWrite"
+      GOSUB Get_Data_Type
+   )
+   if ("&access_dialog"=="Program")
+   (
+      &access_string="Cycle Program"
+   )
+
+   RETURN
+)
+
+Get_Data_Type:
+
+   if ("&data_dialog"!="")
+   (
+      &access_string="&access_string Data"
+      
+      if ("&size_dialog"=="Long")
+      (
+         &access_string="&access_string.L"
+      )
+      if ("&size_dialog"=="Word")
+      (
+         &access_string="&access_string.W"
+      )
+      if ("&size_dialog"=="Byte")
+      (
+         &access_string="&access_string.B"
+      )
+      
+      &access_string="&access_string &data_dialog"
+      
+   )
+RETURN
+
+Create_Listing:
+   if dialog.boolean(CHECK1)
+   (
+      &access_dialog=DIALOG.STRING(ACCESS1)
+      &size_dialog=DIALOG.STRING(SIZE1)
+      &data_dialog=DIALOG.STRING(DATA1)
+      GOSUB Get_Access_Type
+      &find_dialog=DIALOG.STRING(FIND1)
+      &find_string="&find_string y &find_dialog &access_string"
+   )
+   
+   if dialog.boolean(CHECK2)
+   (
+      if ("&find_string"!="")
+      (
+         &find_string="&find_string or"
+      )
+      &access_dialog=DIALOG.STRING(ACCESS2)
+      &size_dialog=DIALOG.STRING(SIZE2)
+      &data_dialog=DIALOG.STRING(DATA2)
+      GOSUB Get_Access_Type
+      &find_dialog=DIALOG.STRING(FIND2)
+      &find_string="&find_string y &find_dialog &access_string"
+   
+   )
+   
+   if dialog.boolean(CHECK3)
+   (
+      if ("&find_string"!="")
+      (
+         &find_string="&find_string or"
+      )
+      &access_dialog=DIALOG.STRING(ACCESS3)
+      &size_dialog=DIALOG.STRING(SIZE3)
+      &data_dialog=DIALOG.STRING(DATA3)
+      GOSUB Get_Access_Type
+      &find_dialog=DIALOG.STRING(FIND3)
+      &find_string="&find_string y &find_dialog &access_string"
+   
+   )
+   
+   if dialog.boolean(CHECK4)
+   (
+      if ("&find_string"!="")
+      (
+         &find_string="&find_string or"
+      )
+      &access_dialog=DIALOG.STRING(ACCESS4)
+      &size_dialog=DIALOG.STRING(SIZE4)
+      &data_dialog=DIALOG.STRING(DATA4)
+      GOSUB Get_Access_Type
+      &find_dialog=DIALOG.STRING(FIND4)
+      &find_string="&find_string y &find_dialog &access_string"
+   
+   )
+   
+   if dialog.boolean(CHECK5)
+   (
+      if ("&find_string"!="")
+      (
+         &find_string="&find_string or"
+      )
+      &access_dialog=DIALOG.STRING(ACCESS5)
+      &size_dialog=DIALOG.STRING(SIZE5)
+      &data_dialog=DIALOG.STRING(DATA5)
+      GOSUB Get_Access_Type
+      &find_dialog=DIALOG.STRING(FIND5)
+      &find_string="&find_string y &find_dialog &access_string"
+   
+   )
+   
+   if dialog.boolean(CHECK6)
+   (
+      if ("&find_string"!="")
+      (
+         &find_string="&find_string or"
+      )
+      &access_dialog=DIALOG.STRING(ACCESS6)
+      &size_dialog=DIALOG.STRING(SIZE6)
+      &data_dialog=DIALOG.STRING(DATA6)
+      GOSUB Get_Access_Type
+      &find_dialog=DIALOG.STRING(FIND6)
+      &find_string="&find_string y &find_dialog &access_string"
+   
+   )
+
+RETURN
+
+;===========================================================================
+; File Revision History (top to bottom: first revision to last revision)
+;===========================================================================
+;
+; Date        userid    (Description on following lines: SCR #, etc.)
+; ----------- --------
+; 03-OCT-2005 zzyl53 (TWK)
+; + SCR-4409, Task-39265
+;   + Created by Chris McDaniel for D1.
+;*
+;* 13-SEP-2006 zzyl53 (TWK)
+;* + Task#45144 SCR - 4854
+;*   + Added check for POWERNEXUS connectivity so that certain Nexus
+;*     commands are not used if JTAG debugger is connected (instead of
+;*     LA-7610 Nexus probe).
+;===========================================================================

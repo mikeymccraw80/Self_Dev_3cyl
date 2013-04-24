@@ -1,0 +1,141 @@
+; This script initializes the MPC5565 MMU the same as the BAM.
+;
+; Randy Dees 10 December 2003
+;
+; modified by Larry Burkholder 20-JUN-2006 for D1 Tiapan target.
+;
+; modified by Chris McLean   7-27-2004
+;
+; 08-03-04 : Task#32613
+; Randy Krakora - commented out TLB set for Periph B Modules
+;  it seemed to cause the BAM to run wfter the first instructions
+;  was executed with the debugger. Will uncomment it when we find the
+;  cause of this.
+;
+; 09-30-04 : Task#33325
+; Chris McLean -  changed TLB for Periph B Modules to 
+;  entry 6 so as not to conflict with BAM.
+;
+; 10-29-04 : Task# 33470
+;  Chris McLean - changed all modules to be non cacheable.
+;   to be set in boot code
+;
+; 11-09-04 : Task# 34018
+;  Chris McLean - merged with tci file / divided L2RAM into
+;   cacheable and noncacheable blocks
+;   
+;
+; MAS0 register:  TLBSET value    0 - 22 (  table entries )
+; MAS1 register:  valid  and tsize
+; MAS2 register:  effective page, cashe, guarded, endianness
+; MAS3 register:  real page, permission bits ( access )
+;
+; tsize:  1 = 4k  
+;         2 = 16k
+;         3 = 64k
+;         4 = 256k
+;         5 = 1M
+;         6 = 4m
+;         7 = 16M
+;
+; Lauterbach  command string is:
+;
+; MMU.TBLSET  < 0-22 >  MAS1  MAS2  MAS3
+;
+;
+; Setup MMU for for Periph B Modules
+; Base address = 0xFFF0_0000
+; TLB0, 1 MByte Memory Space, Guarded, Don't Cache, All Access
+MMU.TLBSET 6 0xC0000500 0xFFF0000A 0xFFF0003F
+
+; Set up MMU for Internal Flash
+; Base address = 0x0000_0000
+; TLB1, 16 MByte Memory Space, Not Guarded, Cachable, All Access
+; Don't Cache
+MMU.TLBSET 1 0xC0000700 0x00000008 0x0000003F 
+
+; Set up MMU for External Memory
+; Presently set for RAM on Baker board using CS0(switch S4-4).
+; to use ext FLASH switch S4-4 must be off/open and
+; switches S4-5 and S4-6 turned on/closed 
+; Base address = 0x2000_0000
+; TLB2, 16 MByte Memory Space, Not Guarded, Cachable, All Access
+; Don't Cache
+;MMU.TLBSET 2 0xC0000700 0x20000008 0x2000003F
+MMU.TLBSET 2 0xC0000700 0x20000018 0x2000003F
+
+; Set up MMU for Internal SRAM  /  4 - 16K blocks = 64k SRAM
+; Base address = 0x4000_0000
+; TLB3, 16 KByte Memory Space, Not Guarded,  Cache, All Access
+MMU.TLBSET 3 0xC0000200 0x40000000 0x4000003F
+; Address = 0x4000_4000
+; TLB7, 16 KByte Memory Space, Not Guarded,  Cache, All Access
+MMU.TLBSET 7 0xC0000200 0x40004000 0x4000403F
+; Address = 0x4000_8000
+; TLB8, 16 KByte Memory Space, Not Guarded,  Cache, All Access
+MMU.TLBSET 8 0xC0000200 0x40008000 0x4000803F
+; Address = 0x4000_C000
+; TLB9, 16 KByte Memory Space, Not Guarded, Don't Cache, All Access
+MMU.TLBSET 9 0xC0000200 0x4000C008 0x4000C03F
+
+; Set up MMU for Periph A Modules
+; Base address = 0xC3F0_0000
+; TLB4, 1 MByte Memory Space, Not Guarded, Don't Cache, All Access
+MMU.TLBSET 4 0xC0000500 0xC3F00008 0xC3F0003F  
+
+PRINT "Create MMU for address range to fix debug problem"
+MMU.RESET
+MMU.CREATE c:0xFFFFF000--0xFFFFFFFF a:0xFFFFF000--0xFFFFFFFF /m
+MMU.CREATE c:0x00000000--0x00FFFFFF a:0x00000000--0x00FFFFFF /m
+MMU.CREATE c:0x20000000--0x20FFFFFF a:0x20000000--0x20FFFFFF /m
+MMU.CREATE c:0x40000000--0x40003FFF a:0x40000000--0x40003FFF /m
+MMU.CREATE c:0xC3F00000--0xC3FFFFFF a:0xC3F00000--0xC3FFFFFF /m
+MMU.CREATE c:0xFFF00000--0xFFFFFFFF a:0xFFF00000--0xFFFFFFFF /m
+MMU.CREATE c:0x40004000--0x40007FFF a:0x40004000--0x40007FFF /m
+MMU.CREATE c:0x40008000--0x4000BFFF a:0x40008000--0x4000BFFF /m
+MMU.CREATE c:0x4000C000--0x4000FFFF a:0x4000C000--0x4000FFFF
+
+IF (&WP_IS_SELECTED)
+(
+MMU.CREATE c:0x001C0000--0x001FFFFF a:0x20000000--0x2003FFFF
+)
+ELSE
+(
+)
+
+MMU.ON
+
+;*===========================================================================*
+;* File Revision History (top to bottom: first revision to last revision)
+;*===========================================================================
+;*
+;* Date        userid    (Description on following lines: SCR #, etc.)
+;* ----------- --------
+;*
+;* 25-APR-2005 jzcpfk (JWH2)
+;* + Task#36421 SCR - 4003
+;* + Add MMU.CREATE entries to fix debug step-go problems
+;*
+;* 26-APR-2005 jzcpfk (JWH2)
+;* + Task#36470 SCR - 4003
+;* + Remove /m from the last MMU.CREATE entry.
+;*
+;* 03-MAY-2005 jzcpfk (JWH2)
+;* + Task#36528 SCR - 4003
+;* + Change MMU.CREATE entries to match MMU.TLBSET entries.
+;*
+;* 06-MAY-2005 jzcpfk (JWH2)
+;* + Task#36690 SCR - 4003
+;* + To prevent duplicates, Reset MMU translation tables before MMU.CREATE
+;* + entries
+;* + For calram area, make MMU.CREATE entries dependent on WP/RP status.
+;*
+;* 20-JUN-2006 tz6mz7 (LDB)
+;* + modified for Tiapan target.
+;*
+;* 18-SEP-2006 zzyl53 (TWK)
+;* + Task#45144 SCR - 4854
+;* + Changed the MMU entries back to the original entries.
+;* + Added the WP_IS_SELECTED check back in.
+;*===========================================================================*
+

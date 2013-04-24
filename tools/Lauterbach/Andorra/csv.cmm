@@ -1,0 +1,321 @@
+;*===========================================================================*
+; Filename:           csv.cmm 
+; %version:           1 %  
+; %date_modified:      %  
+; %derived_by:        rz65p6 %  
+; D1 MY2009 Engine Control Program  
+; Copyright 2009 Delphi Technologies, Inc., All Rights Reserved.  
+;*===========================================================================*
+  
+;*===========================================================================*
+;                        csv.cmm  
+; Description  
+; -----------  
+;   This script displays the default windows for use with D1.  
+;   This script puts up a Dialog box that is intended to help with   
+;   the testing of MPM SPI Messages for D1.  
+;  
+; Reuse  
+; -----  
+;   This file is very specific to D1.  However, the basic layout should be   
+;   reusable for other programs.   
+; 
+;   This routine assumes that the chip selects are already set up! 
+;  
+;*===========================================================================*
+    
+ENTRY &filepath  
+  
+LOCAL &null  
+LOCAL &UploadDidRun
+  
+GLOBAL &cwd  
+GLOBAL &ftstart
+
+&UploadDidRun=(0==1)   
+&cwd=OS.PPD()  
+
+;-------------------------------------------------
+; The following section verifies that the passed
+; in path exists, if it does not then the current
+; directory is used.
+;-------------------------------------------------
+ON ERROR JUMPTO pathnotfound
+CHDIR "&filepath"
+GOTO pathset
+pathnotfound:
+  &filepath="."
+pathset:
+ON ERROR
+
+&defaults="&filepath\csv_defaults.ini"  
+  
+area.reset 
+  
+WINPOS ,,,,,, _a_dialog  
+DIALOG  
+(  
+   HEADER "D1 Memory convert to CSV Utility Ver. 1.01"  
+  
+   POS 0. 0. 33.  
+   LINE ""  
+   POS 35. 0. 22.  
+   TEXT "  Upload to CSV from Flash/RAM"  
+   POS 53. 0. 33.  
+   LINE ""  
+   POS  1. 3. 10.  
+   TEXT "Colums of Data" 
+   POS 11. 3. 8.  
+   REC_SIZE: EDIT "20" "" 
+  
+   POS 0. 5. 86.  
+   line ""  
+  
+   POS 1. 7. 8.  
+   TEXT "Section"   
+   POS 10. 7. 8.  
+   TEXT "Start"   
+   POS 18. 7. 8.  
+   TEXT "Size"   
+   POS 29. 7. 45.   
+   TEXT "Destination File Name"  
+  
+   POS 2. 8. 4.  
+   CHK[0x1]:  CHECKBOX "1" ""   
+   POS 8. 8. 9.  
+   BSTRT[0x1]: EDIT "0x00000000" ""  
+   POS 17. 8. 9.  
+   BSIZE[0x1]: EDIT "0x00004000" "1"  
+   POS 29. 8. 45.   
+   file[0x1]:   EDIT "" ""  
+   POS 75. 8. 10.         
+   BUTTON "Select File..."   
+   (  
+      DIALOG.SETFILEW file[0x1] "*.csv"            
+   )  
+         
+   POS 2. 9. 4.  
+   CHK[0x2]: CHECKBOX "2" ""  
+   POS 8. 9. 9.    
+   BSTRT[0x2]: EDIT "0x00004000" ""  
+   POS 17. 9. 9.  
+   BSIZE[0x2]: EDIT "0x0000c000" ""
+  
+   POS 2. 10. 4.  
+   CHK[0x3]:  CHECKBOX "3" ""    
+   POS 8. 10. 9.         
+   BSTRT[0x3]: EDIT "0x00010000" ""  
+   POS 17. 10. 9.  
+   BSIZE[0x3]: EDIT "0x0000c000" "" 
+         
+   POS 2. 11. 4.  
+   CHK[0x4]:  CHECKBOX "4" ""  
+   POS 8. 11. 9.    
+   BSTRT[0x4]: EDIT "0x001c0000" ""  
+   POS 17. 11. 9.  
+   BSIZE[0x4]: EDIT "0x00020000" ""
+
+   POS 2. 12. 4.  
+   CHK[0x5]:  CHECKBOX "5" ""         
+   POS 8. 12. 9.    
+   BSTRT[0x5]: EDIT "0x001e0000" ""  
+   POS 17. 12. 9.  
+   BSIZE[0x5]: EDIT "0x00020000" "" 
+  
+   POS 2. 13. 4.  
+   CHK[0x6]:  CHECKBOX "6" ""         
+   POS 8. 13. 9.    
+   BSTRT[0x6]: EDIT "0x00040000" ""  
+   POS 17. 13. 9.  
+   BSIZE[0x6]: EDIT "0x00020000" ""  
+
+   POS 45. 15. 12.  
+   BUTTON " Upload Selected " "JUMPTO UploadSelected"  
+  
+   POS 60. 15. 8.  
+   BUTTON "Cancel" "JUMPTO WinCloseFlash"    
+)  
+  
+; If the csv_defaults.ini file exists, then override the above defaults.  
+ReadDefaults:  
+LOCAL &element &value  
+  
+PRINT "Reading in defaults for CSV..."  
+  
+IF OS.FILE("&defaults")  
+(  
+   OPEN #1 "&defaults" /READ  
+   WHILE (0==0)  
+   (  
+      READ #1 &element &value  
+  
+      IF "&element"==""  
+      (
+         GOTO DoneRead  
+      )
+      
+      IF "&element"!=";"  
+      (  
+         DIALOG.SET &element "&value"  
+      )  
+   )  
+  
+DoneRead:  
+CLOSE #1  
+)  
+  
+STOP  
+;*===========================================================================*
+; end of scripting for dialog window.  
+;*===========================================================================*
+  
+  
+;*===========================================================================*
+UploadSelected:   
+;*===========================================================================*
+LOCAL &n  
+LOCAL &fname  
+LOCAL &bstrt  
+LOCAL &bsiz  
+LOCAL &cpfile 
+LOCAL &rsize 
+
+IF RUN()
+(
+   BREAK
+)
+
+PRINT "Start Time (Upload): "+CLOCK.TIME()  
+&n=1  
+&fname=DIALOG.STRING(file[&n])  
+GOSUB GetFileType &fname  
+ENTRY &filetype  
+  
+IF "&filetype"=="elf"||"&filetype"=="h12"  
+(  
+   DIALOG.OK "Can not upload file '&fname' of type '&filetype'"  
+   STOP 
+)  
+&x=0 
+WHILE &n<7  
+(  
+   IF DIALOG.BOOLEAN(CHK[&n])  
+   (   
+      &bstrt=DIALOG.STRING(BSTRT[&n])  
+      &bsiz=DIALOG.STRING(BSIZE[&n])  
+      &x=&x+1
+      &tempfile="tempcsv&x.tmp"
+      DATA.SAVE.S2RECORD &tempfile (&bstrt)++(&bsiz-1) 
+
+      IF &x>1
+      (
+         &cpfile="&cpfile+&tempfile"
+      )
+      ELSE
+      (
+         &cpfile="&tempfile"
+      )
+   ) 
+   &n=&n+1 
+) 
+
+IF &x>0
+(
+   &x=&x+1
+   &tempfile="tempcsv&x.tmp"
+   &rsize=DIALOG.STRING(REC_SIZE)
+   OS.area "copy &cpfile &tempfile"
+   PRINT "&cwd\srec -r&rsize -csv -o&fname &tempfile -c &fname"    
+   OS.area "&cwd\srec -r&rsize -csv -o&fname &tempfile -c &fname"
+   OS.area "del tempcsv*.tmp"
+)
+
+&UploadDidRun=(1==1)
+   
+PRINT "End Time (Upload): "+CLOCK.TIME() 
+ 
+;*===========================================================================*
+WinCloseFlash:   
+;*===========================================================================*
+;For each section changed display a data dump 
+IF &UploadDidRun
+(
+   &n=1 
+   WHILE &n<7
+   (  
+      &offset=DIALOG.STRING(BSTRT[&n]) 
+      IF "&offset"!="&null"&&DIALOG.BOOLEAN(CHK[&n])
+      ( 
+         DATA.DUMP &offset /DIALOG 
+      ) 
+      &n=&n+1 
+   ) 
+)
+; WRITE dialog window settings to csv_defaults.ini to file. 
+WriteDefaults: 
+LOCAL &value 
+  
+OPEN #1 "&defaults" /Create  
+ 
+&n=1  
+&value= DIALOG.STRING(file[&n])  
+WRITE #1 "file[&n] &value"   
+&value= DIALOG.STRING(REC_SIZE)  
+WRITE #1 "REC_SIZE &value" 
+
+WHILE &n<7  
+(  
+   IF DIALOG.BOOLEAN(CHK[&n])  
+   (  
+      WRITE #1 "CHK[&n] (0==0)"  
+   )  
+   &value=DIALOG.STRING(BSTRT[&n])  
+   WRITE #1 "BSTRT[&n] &value"  
+   &value=DIALOG.STRING(BSIZE[&n])  
+   WRITE #1 "BSIZE[&n] &value"  
+   &n=&n+1  
+)  
+  
+CLOSE #1  
+    
+PRINT "CSV upload script completed."  
+ 
+;*===========================================================================*
+WinCancelFlash:  
+;close dialog window.  
+DIALOG.END  
+    
+ENDDO  
+; End of csv script.  Return to calling script.  
+;*===========================================================================*
+  
+;*===========================================================================*
+GetFileType:  
+;*===========================================================================*
+ENTRY &FilePath  
+;  
+LOCAL &filename  
+LOCAL &filetype  
+LOCAL &null  
+  
+&filename=OS.FILE.name(&FilePath)  
+&strt=OS.FILE.NAME(STRING.SCAN("&filename",".",0))  
+&filetype=STRING.MID("&filename",&strt+1,3)  
+&filetype=STRING.LWR("&filetype")  
+  
+RETURN &filetype  
+   
+;*===========================================================================*
+;* File Revision History (top to bottom: first revision to last revision)
+;*===========================================================================
+;*
+;* Date        userid    (Description on following lines: SCR #, etc.)
+;* ----------- --------
+;* 26-JAN-2005 jzcpfk (JWH2) 
+;* + Updated for D1 Task#34825. SCR - None
+;*
+;* 19-APR-2005 jzcpfk (JWH2)
+;* + Task#35509 SCR - 4003
+;* + Continue to updated functionality of scripts
+;*===========================================================================*
+ 

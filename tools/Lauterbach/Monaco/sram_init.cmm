@@ -1,0 +1,77 @@
+;*============================================================================*
+;* (a) File header block including the copyright notice
+;*===========================================================================*
+;*===========================================================================*
+;* FILE: %name:  sram_init.cmm %
+;*===========================================================================
+;* Copyright 2009 Delphi Technologies, Inc., All Rights Reserved.
+;* Delphi Confidential
+;*---------------------------------------------------------------------------
+;* %full_filespec: sram_init.cmm~1:ascii:ctc_pt3#1 %
+;* %version: 1 %
+;* %derived_by: rz65p6 %
+;* %date_created: Tue Jul 26 10:11:51 2011 %
+;*---------------------------------------------------------------------------
+;*
+;* DESCRIPTION:
+;* Initializes internal SRAM in Viper uP using Lauterbach debugger
+;*
+;***  Per MPC5500 spec, internal RAM must be initialized       ***
+;***  before using. Initialize, by writing to every location.  ***
+;*
+;* Initializes internal SRAM by writing a 0 to all 128K memory locations
+;*
+;* Lauterbach command string is: 
+;*    data.set  a:<address range> < %format>  < data string >
+;*
+;* ABBREVIATIONS:
+;*   None.
+;*
+;* TRACEABILITY INFO:
+;*   None
+;*
+;* DEVIATIONS FROM STANDARDS:
+;*   None.
+;*
+;\*===========================================================================*/ 
+
+PRINT "SRAM Init"
+; 128K SRAM for MPC5633 (Monaco)
+Data.Set EA:0x40000000--0x4000bfff %quad 0
+enddo
+;*===========================================================================*
+;* File Revision History (top to bottom: first revision to last revision)
+;*===========================================================================
+;*
+;* Date        userid    (Description on following lines: SCR #, etc.)
+;* ----------- --------
+;* 29-JUN-2004 rzr2kh (DS)
+;* SCR-(none) - Task#32301
+;* Initial creation.
+;* 
+;* 27-JUL-2004 zzz0p5 (Chris McLean)
+;* SCR-(none) - Task#31986
+;* due to conflicts with mmu_init.cmm
+;* (the values for MMU.TLBSET were incorrect)
+;*
+;* 14-FEB-2005 - zzksgz (RFK)
+;* SCR-(none) - Task#35081
+;* + Commented write to L2SRAM to initialize RAM hardware for MCU use.
+;*    Wanted to allow CPU to do this, so we know we are doing it correctly.
+;*
+;* 11-MAY-2005 jzcpfk (JWH2)
+;* + Task#36995 SCR - 4003
+;* + Added DATA.SET command back in.
+;*
+;* 13-MAY-2005 jzcpfk (JWH2)
+;* + Task#37054 SCR - 4003
+;* + Consolidated revision logs
+;*
+;* 20-JUN-2006 tz6mz7 (LDB)
+;* + modified for Tiapan target.
+;*
+;* 19-OCT-2006 zzyl53 (TWK)
+;* + Task#45727 SCR - 4989
+;* + Modifed for Viper target.
+;*===========================================================================*
+

@@ -1,0 +1,840 @@
+;*============================================================================*
+;* (a) File header block including the copyright notice
+;*===========================================================================*
+;*===========================================================================*
+;* FILE: %name:  set_trigger.cmm %
+;*===========================================================================
+;* Copyright 2009 Delphi Technologies, Inc., All Rights Reserved.
+;* Delphi Confidential
+;*---------------------------------------------------------------------------
+; %full_filespec: set_trigger.cmm~1:ascii:ctc_pt3#2 %
+; %version: 1 %
+; %derived_by: rz65p6 %
+; %date_created: Thu Aug 25 12:32:15 2011 %
+;---------------------------------------------------------------------------
+;
+; DESCRIPTION:
+;    This function provides trigger setup capability for Analyzer Trace.
+;
+;    This file can be reused with little functional change. 
+;
+; ABBREVIATIONS:
+;   None.
+;
+; TRACEABILITY INFO:
+;   Design Document(s):
+;     None
+;
+;   Requirements Document(s):
+;     None
+;
+;   Applicable Standards (in order of precedence: highest first):
+;     None
+;
+; DEVIATIONS FROM STANDARDS:
+;   None.
+;
+;===========================================================================
+
+b::
+
+LOCAL &start 
+LOCAL &end
+LOCAL &type
+LOCAL &mode
+LOCAL &type_command
+LOCAL &file
+
+dialog
+(
+   Analyzer_Header: HEADER "Analyzer Trigger Setup"
+
+   ;---------------------------------------------------
+   ; Buffer Modes
+   ;---------------------------------------------------
+   POS 0. 0. 15. 1.
+   TEXT "Branch Trace Mode:"
+   BRANCH_ENABLE: PULLDOWN "Enable,Disable"
+   (
+      GOSUB Set_BTM
+   )
+
+   POS 16. 0. 15. 1   
+   TEXT "Data Trace Mode:"
+   DATA_ENABLE: PULLDOWN "Write,Read,Read/Write,Disable"
+   (
+      GOSUB Set_DTM
+   )
+
+   POS 32. 0. 15. 1   
+   TEXT "Buffer Mode:"
+   ANALYZER_MODE: PULLDOWN "Continuous (FIFO),Fill & Stop (Stack)"
+   (
+      GOSUB Set_Analyzer      
+   )
+
+   POS 48. 0. 15. 1   
+   TEXT "Post Trigger Store:"
+   TDELAY: PULLDOWN "89%,50%,10%,0%"
+   (
+      GOSUB Set_Analyzer      
+   )
+ 
+   POS 64. 0. 15. 1
+   TEXT "Buffer Size:"
+   BUFF_SIZE: EDIT "1000000" 
+   (
+      &mode=DIALOG.STRING(BUFF_SIZE)
+      DIALOG.SET TDELAY "50%"
+      GOSUB Set_Analyzer      
+   )
+   
+   POS 0. 2. 79. 1
+   LINE ""  
+
+   ;---------------------------------------------------
+   ; Indicator
+   ;---------------------------------------------------
+   POS 45. 11. 22. 1   
+   Indicator: EDIT "" ""
+
+   ;---------------------------------------------------
+   ; Column 1 - Trigger Type
+   ;---------------------------------------------------
+   POS 0. 4. 10. 1
+   TEXT "Trigger 1:"
+   TEXT "Trigger 2:"
+   TEXT "Trace On Trig:"
+   TEXT "Trace Off Trig:"
+   TEXT "Data Filter 1:"
+   TEXT "Data Filter 2:"
+
+   ;---------------------------------------------------
+   ; Column 2 - Range Start
+   ;--------------------------------------------------- 
+   POS 10. 4. 2. 1
+   TStart_1_Sym: BUTTON "S"
+   (
+      Symbol.Browse * /click "DIALOG.SET TStart_1 ""*"""
+      DIALOG.SET Indicator "Trigger Needs Set"
+   )
+   TStart_2_Sym: BUTTON "S"
+   (
+      Symbol.Browse * /click "DIALOG.SET TStart_2 ""*"""
+      DIALOG.SET Indicator "Trigger Needs Set"
+   )
+   OStart_1_Sym: BUTTON "S"
+   (
+      Symbol.Browse * /click "DIALOG.SET OStart_1 ""*"""
+      DIALOG.SET Indicator "Trigger Needs Set"
+   )
+   OStart_2_Sym: BUTTON "S"
+   (
+      Symbol.Browse * /click "DIALOG.SET OStart_2 ""*"""
+      DIALOG.SET Indicator "Trigger Needs Set"
+   )
+   FStart_1_Sym: BUTTON "S"
+   (
+      Symbol.Browse * /click "DIALOG.SET FStart_1 ""*"""
+      DIALOG.SET Indicator "Trigger Needs Set"
+   )
+   FStart_2_Sym: BUTTON "S"
+   (
+      Symbol.Browse * /click "DIALOG.SET FStart_2 ""*"""
+      DIALOG.SET Indicator "Trigger Needs Set"
+   )
+   
+  
+   POS 12. 3. 24. 1
+   TEXT "Range Start (Address or Symbol)"
+   TStart_1: EDIT ""
+   (
+      DIALOG.SET Indicator "Trigger Needs Set"
+   )
+   TStart_2: EDIT ""
+   (
+      DIALOG.SET Indicator "Trigger Needs Set"
+   )
+   OStart_1: EDIT ""
+   (
+      DIALOG.SET Indicator "Trigger Needs Set"
+   )
+   OStart_2: EDIT "" 
+   (
+      DIALOG.SET Indicator "Trigger Needs Set"
+   )
+   FStart_1: EDIT "" 
+   (
+      DIALOG.SET Indicator "Trigger Needs Set"
+   )
+   FStart_2: EDIT "" 
+   (
+      DIALOG.SET Indicator "Trigger Needs Set"
+   )
+
+   ;---------------------------------------------------
+   ; Column 3 - Range End
+   ;---------------------------------------------------
+   POS 37. 4. 2. 1
+   TEnd_1_Sym: BUTTON "S"
+   (
+      Symbol.Browse * /click "DIALOG.SET TEnd_1 ""*"""
+      DIALOG.SET Indicator "Trigger Needs Set"
+   )
+   TEnd_2_Sym: BUTTON "S"
+   (
+      Symbol.Browse * /click "DIALOG.SET TEnd_2 ""*"""
+      DIALOG.SET Indicator "Trigger Needs Set"
+   )
+   OEnd_1_Sym: BUTTON "S"
+   (
+      Symbol.Browse * /click "DIALOG.SET OEnd_1 ""*"""
+      DIALOG.SET Indicator "Trigger Needs Set"
+   )
+   OEnd_2_Sym: BUTTON "S"
+   (
+      Symbol.Browse * /click "DIALOG.SET OEnd_2 ""*"""
+      DIALOG.SET Indicator "Trigger Needs Set"
+   )
+   FEnd_1_Sym: BUTTON "S"
+   (
+      Symbol.Browse * /click "DIALOG.SET FEnd_1 ""*"""
+      DIALOG.SET Indicator "Trigger Needs Set"
+   )
+   FEnd_2_Sym: BUTTON "S"
+   (
+      Symbol.Browse * /click "DIALOG.SET FEnd_1 ""*"""
+      DIALOG.SET Indicator "Trigger Needs Set"
+   )
+
+   POS 39. 3. 24. 1
+   TEXT "Range End (Address or Symbol)"
+   TEnd_1: EDIT "" 
+   (
+      DIALOG.SET Indicator "Trigger Needs Set"
+   )
+   TEnd_2: EDIT "" 
+   (
+      DIALOG.SET Indicator "Trigger Needs Set"
+   )
+   OEnd_1: EDIT "" 
+   (
+      DIALOG.SET Indicator "Trigger Needs Set"
+   )
+   OEnd_2: EDIT "" 
+   (
+      DIALOG.SET Indicator "Trigger Needs Set"
+   )
+   FEnd_1: EDIT "" 
+   (
+      DIALOG.SET Indicator "Trigger Needs Set"
+   )
+   FEnd_2: EDIT "" 
+   (
+      DIALOG.SET Indicator "Trigger Needs Set"
+   )
+
+   ;---------------------------------------------------
+   ; Column 4 - Access Type
+   ;---------------------------------------------------
+   POS 64. 3. 15. 1
+   TEXT "Access Type"
+   TType_1: PULLDOWN "Program Branch,Data Write,Data Read,Data Read/Write" 
+   (
+      DIALOG.SET Indicator "Trigger Needs Set"
+   )
+   TType_2: PULLDOWN "Program Branch,Data Write,Data Read,Data Read/Write"
+   (
+      DIALOG.SET Indicator "Trigger Needs Set"
+   )
+   OType_1: PULLDOWN "Program Branch,Data Write,Data Read,Data Read/Write" 
+   (
+      DIALOG.SET Indicator "Trigger Needs Set"
+   )
+   OType_2: PULLDOWN "Program Branch,Data Write,Data Read,Data Read/Write"
+   (
+      DIALOG.SET Indicator "Trigger Needs Set"
+   )
+   FType_1: PULLDOWN "Data Write,Data Read,Data Read/Write"
+   (
+      DIALOG.SET Indicator "Trigger Needs Set"
+   )
+   FType_2: PULLDOWN "Data Write,Data Read,Data Read/Write"
+   (
+      DIALOG.SET Indicator "Trigger Needs Set"
+   )
+
+   POS 0. 10. 79. 1
+   LINE ""  
+
+   ;---------------------------------------------------
+   ; SET
+   ;---------------------------------------------------
+   POS 2. 11. 10. 1.
+   Set: BUTTON "Set"
+   (
+      Break.Delete
+      DIALOG.SET Indicator ""
+      GOSUB Set_Analyzer
+
+      &start=DIALOG.STRING(TStart_1)
+      &end=DIALOG.STRING(TEnd_1)
+      &type=DIALOG.STRING(TType_1)
+      &mode="TRACETRIGGER"
+      GOSUB Set_Trigger 
+
+      &start=DIALOG.STRING(TStart_2)
+      &end=DIALOG.STRING(TEnd_2)
+      &type=DIALOG.STRING(TType_2)
+      &mode="TRACETRIGGER"
+      GOSUB Set_Trigger
+
+      &start=DIALOG.STRING(OStart_1)
+      &end=DIALOG.STRING(OEnd_1)
+      &type=DIALOG.STRING(OType_1)
+      &mode="TRACEON"
+      GOSUB Set_Trigger
+
+      &start=DIALOG.STRING(OStart_2)
+      &end=DIALOG.STRING(OEnd_2)
+      &type=DIALOG.STRING(OType_2)
+      &mode="TRACEOFF"
+      GOSUB Set_Trigger
+
+      &start=DIALOG.STRING(FStart_1)
+      &end=DIALOG.STRING(FEnd_1)
+      &type=DIALOG.STRING(FType_1)
+      &mode="TRACEDATA"
+      GOSUB Set_Trigger
+
+      &start=DIALOG.STRING(FStart_2)
+      &end=DIALOG.STRING(FEnd_2)
+      &type=DIALOG.STRING(FType_2)
+      &mode="TRACEDATA"
+      GOSUB Set_Trigger
+      
+   )
+
+   ;---------------------------------------------------
+   ; Clear
+   ;---------------------------------------------------
+   POS 12. 11. 10. 1
+   Clear: BUTTON "Clear"
+   (      
+      IF POWERNEXUS()
+      (
+         Break.Delete
+      )
+      GOSUB Reset_Analyzer
+
+      DIALOG.SET TStart_1 ""
+      DIALOG.SET TEnd_1 ""
+      DIALOG.SET TType_1 "Program Branch"
+
+      DIALOG.SET TStart_2 ""
+      DIALOG.SET TEnd_2 ""
+      DIALOG.SET TType_2 "Program Branch"
+
+      DIALOG.SET OStart_1 ""
+      DIALOG.SET OEnd_1 ""
+      DIALOG.SET OType_1 "Program Branch"
+
+      DIALOG.SET OStart_2 ""
+      DIALOG.SET OEnd_2 ""
+      DIALOG.SET OType_2 "Program Branch"
+
+      DIALOG.SET FStart_1 ""
+      DIALOG.SET FEnd_1 ""
+      DIALOG.SET FType_1 "Data Write"
+
+      DIALOG.SET FStart_2 ""
+      DIALOG.SET FEnd_2 ""
+      DIALOG.SET FType_2 "Data Write"
+
+      DIALOG.EXECUTE Set
+
+      DIALOG.SET BRANCH_ENABLE "Enable"
+      GOSUB Set_BTM
+      DIALOG.SET DATA_ENABLE "Write"
+      GOSUB Set_DTM       
+
+   )
+   
+   ;---------------------------------------------------
+   ; Save
+   ;---------------------------------------------------
+   POS 24. 11. 10. 1
+   Save: BUTTON "Save"
+   (
+      DIALOG.FILEW *.ats
+      ENTRY &file
+      ON ERROR JUMPTO File_Open_Error
+      OPEN #1 "&file" /CREATE
+      ON ERROR JUMPTO Save_Config_Error
+      GOSUB Save_Config
+      CLOSE #1
+      ON ERROR
+   )
+
+   ;---------------------------------------------------
+   ; Load
+   ;---------------------------------------------------
+   POS 34. 11. 10. 1
+   Load: BUTTON "Load"
+   (
+      DIALOG.FILE *.ats
+      ENTRY &file
+      ON ERROR JUMPTO File_Open_Error
+      OPEN #1 "&file" /READ
+      ON ERROR JUMPTO Load_Config_Error
+      GOSUB Load_Config
+      CLOSE #1  
+      ON ERROR      
+
+      GOSUB Set_BTM
+      GOSUB Set_DTM       
+      GOSUB Set_Analyzer
+      DIALOG.EXECUTE Set 
+   )
+   
+   ;---------------------------------------------------
+   ; Close
+   ;---------------------------------------------------
+   POS 68. 11. 10. 1
+   Close: BUTTON "Close"
+   (
+      JUMPTO Dialog_Destructor
+   )
+   
+   CLOSE 
+   (
+      JUMPTO Dialog_Destructor
+   )
+)
+DIALOG.DISABLE Indicator
+
+JUMPTO Dialog_Constructor
+STOP
+
+;------------------------------------------------------
+; Set_Trigger
+;------------------------------------------------------
+Set_Trigger:
+   ON ERROR JUMPTO Set_Trigger_Error
+
+   if ("&type"=="Program Branch")
+   (
+      &type_command="Program"
+   )
+   if ("&type"=="Data Write")
+   (
+      &type_command="Write"
+   )
+   if ("&type"=="Data Read")
+   (
+      &type_command="Read"
+   )
+   if ("&type"=="Data Read/Write")
+   (
+      &type_command="ReadWrite"
+   )
+      
+   
+   if ("&start"!="")
+   (
+      if ("&end"=="")
+      (
+         IF POWERNEXUS()
+         (
+            Break.Set (&start) /&type_command /&mode 
+         )
+      )
+      else
+      (
+         IF POWERNEXUS()
+         (
+            Break.Set (&start)--(&end) /&type_command /&mode
+         )
+      )
+   )
+   ON ERROR   
+
+RETURN
+
+Set_Trigger_Error:
+   ON ERROR
+   DIALOG.SET Indicator "Error: Trigger Not Set"
+   DIALOG.OK "Error Setting Trigger (&start) /&type_command /&mode."
+STOP
+
+;------------------------------------------------------
+; Reset_Analyzer
+;------------------------------------------------------
+Reset_Analyzer:
+   DIALOG.SET ANALYZER_MODE "Continuous (FIFO)"
+   DIALOG.SET BUFF_SIZE "1000000"
+   DIALOG.SET TDELAY "50%"
+
+   GOSUB Set_Analyzer
+RETURN
+
+;------------------------------------------------------
+; Set_Analyzer
+;------------------------------------------------------
+Set_Analyzer:
+   analyzer.reset
+   wait 0.1s
+   GOSUB Set_Buffer_Mode
+   GOSUB Set_Buffer_Size
+   GOSUB Set_Buffer_Delay
+RETURN
+
+;------------------------------------------------------
+; Set_BTM:
+;------------------------------------------------------
+Set_BTM:
+   ON ERROR JUMPTO Set_BTM_Error
+   if DIALOG.STRING(BRANCH_ENABLE)=="Disable"
+   (
+      IF POWERNEXUS()
+      (
+         System.Option BTM Off
+      )
+   )
+   if DIALOG.STRING(BRANCH_ENABLE)=="Enable"
+   (
+      IF POWERNEXUS()
+      (
+         System.Option BTM On
+      )
+   )
+   ON ERROR
+RETURN
+
+Set_BTM_Error:
+   ON ERROR
+   DIALOG.OK "Error Setting Branch Trace Mode"
+STOP
+
+;------------------------------------------------------
+; Set_DTM:
+;------------------------------------------------------
+Set_DTM:
+   ON ERROR JUMPTO Set_DTM_Error
+   if DIALOG.STRING(DATA_ENABLE)=="Disable"
+   (
+      DIALOG.DISABLE FStart_1
+      DIALOG.DISABLE FStart_2
+      DIALOG.DISABLE FStart_1_Sym
+      DIALOG.DISABLE FStart_2_Sym
+      DIALOG.DISABLE FEnd_1
+      DIALOG.DISABLE FEnd_2
+      DIALOG.DISABLE FEnd_1_Sym
+      DIALOG.DISABLE FEnd_2_Sym
+      DIALOG.DISABLE FType_1
+      DIALOG.DISABLE FType_2
+      System.Option DTM Off
+   )
+   else
+   (
+      DIALOG.ENABLE FStart_1
+      DIALOG.ENABLE FStart_2
+      DIALOG.ENABLE FStart_1_Sym
+      DIALOG.ENABLE FStart_2_Sym
+      DIALOG.ENABLE FEnd_1
+      DIALOG.ENABLE FEnd_2
+      DIALOG.ENABLE FEnd_1_Sym
+      DIALOG.ENABLE FEnd_2_Sym
+      DIALOG.ENABLE FType_1
+      DIALOG.ENABLE FType_2      
+   )
+   if DIALOG.STRING(DATA_ENABLE)=="Write"
+   (
+      IF POWERNEXUS()
+      (
+         System.Option DTM Write
+      )
+   )
+   if DIALOG.STRING(DATA_ENABLE)=="Read"
+   (
+      IF POWERNEXUS()
+      (
+         System.Option DTM Read
+      )
+   )
+   if DIALOG.STRING(DATA_ENABLE)=="Read/Write"
+   (
+      IF POWERNEXUS()
+      (
+         System.Option DTM ReadWrite
+      )
+   )
+RETURN
+
+Set_DTM_Error:
+   ON ERROR
+   DIALOG.OK "Error Setting Data Trace Mode"
+STOP
+
+;------------------------------------------------------
+; Set_Buffer_Mode:
+;------------------------------------------------------
+Set_Buffer_Mode:
+   ON ERROR JUMPTO Set_Buffer_Mode_Error
+
+   if DIALOG.STRING(TStart_1)!=""
+   (
+      IF POWERNEXUS()
+      (
+         analyzer.mode leash
+      )
+   )
+   ELSE if DIALOG.STRING(TStart_2)!=""
+   (
+      IF POWERNEXUS()
+      (
+         analyzer.mode leash 
+      )
+   )
+   ELSE if DIALOG.STRING(ANALYZER_MODE)=="Continuous (FIFO)"
+   (
+      IF POWERNEXUS()
+      (
+         Analyzer.Mode FIFO
+      )
+   )
+   ELSE if DIALOG.STRING(ANALYZER_MODE)=="Fill & Stop (Stack)"
+   (
+      IF POWERNEXUS()
+      (
+         Analyzer.Mode STACK
+      )
+   )
+
+   ON ERROR
+RETURN
+
+Set_Buffer_Mode_Error:
+   ON ERROR
+   DIALOG.OK "Error Setting Buffer Mode"
+STOP
+
+;------------------------------------------------------
+; Set_Buffer_Delay: 
+;------------------------------------------------------
+Set_Buffer_Delay: 
+   ON ERROR JUMPTO Set_Buffer_Delay_Error
+
+   &mode=DIALOG.STRING(TDelay)
+
+   IF POWERNEXUS()
+   (
+      Analyzer.TDelay &mode
+   )
+
+   ON ERROR
+
+RETURN
+
+Set_Buffer_Delay_Error:
+   ON ERROR
+   DIALOG.OK "Error Setting Buffer Delay"
+STOP
+ 
+;------------------------------------------------------
+; Set_Buffer_Size:
+;------------------------------------------------------
+Set_Buffer_Size: 
+   ON ERROR JUMPTO Set_Buffer_Size_Error
+   &mode=DIALOG.STRING(BUFF_SIZE)
+   IF POWERNEXUS()
+   (
+      Analyzer.Size &mode
+   )
+   ON ERROR
+RETURN
+
+Set_Buffer_Size_Error:
+   ON ERROR
+   DIALOG.OK "Error Setting Buffer Size"
+STOP
+
+;------------------------------------------------------
+; Save_Config
+;------------------------------------------------------
+Save_Config:
+   &mode=DIALOG.STRING(BRANCH_ENABLE)
+   WRITE #1 "&mode"
+   &mode=DIALOG.STRING(DATA_ENABLE)
+   WRITE #1 "&mode"
+   &mode=DIALOG.STRING(ANALYZER_MODE)
+   WRITE #1 "&mode"
+   &mode=DIALOG.STRING(TDELAY)
+   WRITE #1 "&mode"
+   &mode=DIALOG.STRING(BUFF_SIZE)
+   WRITE #1 "&mode"
+   &mode=DIALOG.STRING(TStart_1)
+   WRITE #1 "&mode"
+   &mode=DIALOG.STRING(TStart_2)
+   WRITE #1 "&mode"
+   &mode=DIALOG.STRING(OStart_1)
+   WRITE #1 "&mode"
+   &mode=DIALOG.STRING(OStart_2)
+   WRITE #1 "&mode"
+   &mode=DIALOG.STRING(FStart_1)
+   WRITE #1 "&mode"
+   &mode=DIALOG.STRING(FStart_2)
+   WRITE #1 "&mode"
+   &mode=DIALOG.STRING(TEnd_1)
+   WRITE #1 "&mode"
+   &mode=DIALOG.STRING(TEnd_2)
+   WRITE #1 "&mode"
+   &mode=DIALOG.STRING(OEnd_1)
+   WRITE #1 "&mode"
+   &mode=DIALOG.STRING(OEnd_2)
+   WRITE #1 "&mode"
+   &mode=DIALOG.STRING(FEnd_1)
+   WRITE #1 "&mode"
+   &mode=DIALOG.STRING(FEnd_2)
+   WRITE #1 "&mode"
+   &mode=DIALOG.STRING(TType_1)
+   WRITE #1 "&mode"
+   &mode=DIALOG.STRING(TType_2)
+   WRITE #1 "&mode"
+   &mode=DIALOG.STRING(OType_1)
+   WRITE #1 "&mode"
+   &mode=DIALOG.STRING(OType_2)
+   WRITE #1 "&mode"
+   &mode=DIALOG.STRING(FType_1)
+   WRITE #1 "&mode"
+   &mode=DIALOG.STRING(FType_2)
+   WRITE #1 "&mode"
+RETURN
+
+Save_Config_Error:
+   ON ERROR
+   DIALOG.OK "Error Writing file &file"
+   CLOSE #1
+STOP
+
+;------------------------------------------------------
+; Load_Config
+;------------------------------------------------------
+Load_Config:
+   READ #1 %LINE &mode
+   DIALOG.SET BRANCH_ENABLE "&mode" 
+   READ #1 %LINE &mode
+   DIALOG.SET DATA_ENABLE "&mode" 
+   READ #1 %LINE &mode
+   DIALOG.SET ANALYZER_MODE "&mode"
+   READ #1 %LINE &mode
+   DIALOG.SET TDELAY "&mode" 
+   READ #1 %LINE &mode
+   DIALOG.SET BUFF_SIZE "&mode" 
+   READ #1 %LINE &mode
+   DIALOG.SET TStart_1 "&mode" 
+   READ #1 %LINE &mode
+   DIALOG.SET TStart_2 "&mode" 
+   READ #1 %LINE &mode
+   DIALOG.SET OStart_1 "&mode" 
+   READ #1 %LINE &mode
+   DIALOG.SET OStart_2 "&mode" 
+   READ #1 %LINE &mode
+   DIALOG.SET FStart_1 "&mode" 
+   READ #1 %LINE &mode
+   DIALOG.SET FStart_2 "&mode" 
+   READ #1 %LINE &mode
+   DIALOG.SET TEnd_1 "&mode" 
+   READ #1 %LINE &mode
+   DIALOG.SET TEnd_2 "&mode" 
+   READ #1 %LINE &mode
+   DIALOG.SET OEnd_1 "&mode" 
+   READ #1 %LINE &mode
+   DIALOG.SET OEnd_2 "&mode" 
+   READ #1 %LINE &mode
+   DIALOG.SET FEnd_1 "&mode" 
+   READ #1 %LINE &mode
+   DIALOG.SET FEnd_2 "&mode" 
+   READ #1 %LINE &mode
+   DIALOG.SET TType_1 "&mode" 
+   READ #1 %LINE &mode
+   DIALOG.SET TType_2 "&mode" 
+   READ #1 %LINE &mode
+   DIALOG.SET OType_1 "&mode" 
+   READ #1 %LINE &mode
+   DIALOG.SET OType_2 "&mode" 
+   READ #1 %LINE &mode
+   DIALOG.SET FType_1 "&mode" 
+   READ #1 %LINE &mode
+   DIALOG.SET FType_2 "&mode" 
+RETURN
+
+Load_Config_Error:
+   ON ERROR
+   DIALOG.OK "Error Reading file &file"
+   CLOSE #1
+STOP
+
+;------------------------------------------------------
+; File_Open_Error
+;------------------------------------------------------
+File_Open_Error:
+   ON ERROR
+;   DIALOG.OK "Error Opening file &file"
+;   CLOSE #1
+STOP
+
+;------------------------------------------------------
+; Dialog_Constructor
+;------------------------------------------------------
+Dialog_Constructor:
+   ON ERROR JUMPTO Dialog_Constructor_Error
+   OPEN #1 "last_session.ats" /READ
+   GOSUB Load_Config
+   CLOSE #1  
+   ON ERROR
+
+   GOSUB Set_BTM
+   GOSUB Set_DTM    
+   GOSUB Set_Analyzer
+   DIALOG.EXECUTE Set 
+STOP
+
+Dialog_Constructor_Error:
+   ON ERROR
+   DIALOG.EXECUTE Clear
+STOP
+
+;------------------------------------------------------
+; Dialog_Destructor
+;------------------------------------------------------
+Dialog_Destructor:
+   ON ERROR JUMPTO The_End
+   OPEN #1 "last_session.ats" /CREATE
+   GOSUB Save_Config
+   CLOSE #1  
+   
+The_End:
+   ON ERROR      
+   DIALOG.END
+STOP
+
+;===========================================================================
+; File Revision History (top to bottom: first revision to last revision)
+;===========================================================================
+;
+; Date        userid    (Description on following lines: SCR #, etc.)
+; ----------- --------
+; 03-OCT-2005 zzyl53 (TWK)
+; + SCR-4409, Task-39265
+;   + Created by Chris McDaniel for D1.
+;
+; 04-OCT-2005 kz7f97 Chris McDaniel
+;    + Modified Leash mode and TDelay to prevent controller from halting.
+;*
+;* 13-SEP-2006 zzyl53 (TWK)
+;* + Task#45144 SCR - 4854
+;*   + Added check for POWERNEXUS connectivity so that certain Nexus
+;*     commands are not used if JTAG debugger is connected (instead of
+;*     LA-7610 Nexus probe).
+;===========================================================================

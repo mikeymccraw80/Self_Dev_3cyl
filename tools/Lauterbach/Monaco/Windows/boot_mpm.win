@@ -1,0 +1,35 @@
+// T32-5550 Tue Feb 21 15:30:18 2006 
+
+ B::
+ 
+ TOOLBAR ON
+ STATUSBAR ON
+ 
+ WINPOS 64.875 21.25 83. 26. 0. 0. W009
+ Var.Watch    %location %spotlight %e
+ 
+ VAR.ADDWATCH %hex.off SecCPU_Boot_SPI_Continue_Test_Enable
+ VAR.ADDWATCH SecCPU_Comm_Chksum_Error
+ VAR.ADDWATCH Second_CPU_Boot_Handshake_Status
+ VAR.ADDWATCH MPM_Handshake_State
+ VAR.ADDWATCH %hex.on SecCPU_Tx_Active
+ VAR.ADDWATCH SecondCPU_Tx_Active
+ VAR.ADDWATCH SecCPU_Rx_Data
+ VAR.ADDWATCH SecondCPU_Rx_Data
+ VAR.ADDWATCH SecCPU_Rx_Error
+ VAR.ADDWATCH SecondCPU_Rx_Error
+ VAR.ADDWATCH SecCPU_Rx_Data_Count
+ VAR.ADDWATCH SecCPU_Comm_Chksum
+ VAR.ADDWATCH SecCPU_Rx_Buffer
+ VAR.ADDWATCH MPM_Rx
+ VAR.ADDWATCH SecCPU_Tx_Buffer
+ VAR.ADDWATCH MPM_Tx
+ VAR.ADDWATCH %hex.off SecCPU_Boot_SPI_Previous_Test_Case
+ VAR.ADDWATCH SecCPU_Boot_SPI_Test_Case
+ VAR.ADDWATCH SecCPU_Boot_SPI_Test_Counting
+ VAR.ADDWATCH HWIO_Periodic_Count_B
+ VAR.ADDWATCH Tst_Boot_Test_Mode
+
+ WINPAGE.SELECT P0000     
+ 
+ ENDDO

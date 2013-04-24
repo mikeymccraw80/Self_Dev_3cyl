@@ -1,0 +1,83 @@
+;*===========================================================================*
+; Filename:           cal.men 
+; %version:           1 % 
+; %date_modified:       % 
+; %derived_by:        rz65p6 % 
+; Copyright 2009 Delphi Technologies, Inc., All Rights Reserved. 
+;*===========================================================================*
+ 
+;*===========================================================================*
+;                        cal.men 
+; Description 
+; ----------- 
+;   Customized menu structure and toolbars for use on the D1 program. 
+; 
+; Reuse 
+; ----- 
+;   This file is very specific to D1.  However, the basic layout should be  
+;   usefule for creating a similar menu structure for other programs. 
+;   should be made to above owner(s). 
+;*===========================================================================*
+ 
+;*===========================================================================*
+ADD 
+;*===========================================================================*
+TOOLBAR 
+( 
+  SEPARATOR 
+
+  TOOLITEM "Make Working Page active" "[=7VDAs17F07l1R2Ml3RtY1x00IFT3AihprTQwximS6XN007l1R2Ml3RtY1x00IFT3AihprTQwximS6XN007l1R2Ml3RtY1x00IFT3AihprTQwximS6XN007l1R2Ml3Rt7kCt303TV0l1P0VtUosBt101t0UtE$$ef@]" 
+  (
+   IF OS.FILE("&macrodir\cal.cmm") 
+     (
+      DO "&macrodir\cal" WP
+     )
+   ELSE
+     (
+      DIALOG.OK "Can not find &macrodir\cal.cmm, Default path may have changed..."              
+     )
+  )
+  TOOLITEM "Make Reference Page active" "RP,B"
+  (
+   IF OS.FILE("&macrodir\cal.cmm") 
+     (
+      DO "&macrodir\cal" RP
+     )
+   ELSE
+     (
+      DIALOG.OK "Can not find &macrodir\cal.cmm, Default path may have changed..."              
+     )
+  )
+
+  SEPARATOR 
+
+  TOOLITEM "copy RP to WP" "[=7VDAsKsF07l1R2Ml3RtgYsS0f2lB0j0F10f0F60008F012FFK2fDlK0P2FH007l1R2Ml3RtgWsS0f2lB0j0F10f0F60008F012FFK2fDlK0P2FH007l1R2Ml3Rto03RMKoRG1KZ107l1R2Ml3RtY1x00IFT3AihprTQwximS6XN007l1R2Ml3RtY1x00IFT3AihprTQwximS6XN007l1R2Ml3Rt7kCt303TV0l1P0VtUosBt101t0UtE$$ef@]"
+  (
+   IF OS.FILE("&macrodir\cal.cmm") 
+     (
+      DO "&macrodir\cal" CPRPTOWP
+     )
+   ELSE
+     (
+      DIALOG.OK "Can not find &macrodir\cal.cmm, Default path may have changed..."              
+     )
+
+  )
+)
+
+;*===========================================================================*
+;* File Revision History (top to bottom: first revision to last revision)
+;*===========================================================================
+;*
+;* Date        userid    (Description on following lines: SCR #, etc.)
+;* ----------- --------
+;* 26-JAN-2005 jzcpfk (JWH2) 
+;* + Updated for D1 Task#34825. SCR - None
+;*
+;* 19-APR-2005 jzcpfk (JWH2)
+;* + Task#35509 SCR - 4003
+;* + Continue to updated functionality of scripts
+;*===========================================================================*
+
+
+

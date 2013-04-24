@@ -1,0 +1,163 @@
+;/*===========================================================================*\
+; * FILE: %name: cyclepower.cmm %
+; *===========================================================================
+; * Copyright 2009 Delphi Technologies, Inc., All Rights Reserved.
+; * Delphi Confidential
+; *---------------------------------------------------------------------------
+; * %full_filespec: cyclepower.cmm~1:ascii:ctc_pt3#1 %
+; * %version: 1 %
+; * %derived_by: rz65p6 %
+; * %date_created: Tue Jul 26 10:11:32 2011 %
+; *---------------------------------------------------------------------------
+; *
+; * DESCRIPTION:
+; *    This function is called to try and get the system back on line.  If it
+; *    fails it will retry up to ## times.  If it fails it will attempt to 
+; *    close the open dialog if any and END all practice programs.
+; *    Creates a customized menu structure and toolbars for use on the D1
+; *    program.
+; *
+; *    This file is can be reused with no functional change. 
+; *
+; * ABBREVIATIONS:
+; *   None.
+; *
+; * TRACEABILITY INFO:
+; *   Design Document(s):
+; *     None
+; *
+; *   Requirements Document(s):
+; *     None
+; *
+; *   Applicable Standards (in order of precedence: highest first):
+; *     None
+; *
+; * DEVIATIONS FROM STANDARDS:
+; *   None.
+; *
+;\*===========================================================================*/
+
+;--------------------------------------
+; Error recovery
+;--------------------------------------
+
+LOCAL &pdn_cnt
+&pdn_cnt=1
+
+ON ERROR GOTO ID_SYS_DOWN
+;Modes 0-5 are DOWN states, all others are UP states
+IF (SYSTEM.MODE()>5)
+(
+   IF RUN()
+   (
+      ;Make sure that we can stop. since if in run away condition
+      ;a BREAK command will not work!!
+      SYSTEM.DOWN
+   )
+   ELSE
+   (
+      ;we are fine so just return
+      ENDDO
+   )
+)
+
+ID_SYS_DOWN:
+   IF (SYSTEM.MODE()<6)&&(&pdn_cnt<4)
+   (
+      IF &pdn_cnt>1
+      (
+         DIALOG.OK "System has gone off-line!  Cycle Ignition (not Battery!!!) Then select 'OK'"
+      )
+      IF POWERNEXUS()
+      (
+      &pdn_cnt=&pdn_cnt+1
+;      diag 3301 1          ;needed for ETKS2b arbitration
+;      diag 3314 1          ;needed for ETKS3 arbitration. Comment out if using ETKS2b.
+;      SYStem.Option.ETK ON ;required for T32 Aug version
+      SYStem.Option.RSTOUT ON ;required for run-through-reset
+      to.toolio2 high      ;disables the external watchdog. Requires T32 Dec version.
+      )
+      WAIT 1.s
+      SYS.UP
+      WAIT 1.s
+      IF POWERNEXUS()
+      (
+;      diag 3301 1          ;needed for ETKS2b arbitration
+;      diag 3314 1          ;needed for ETKS3 arbitration. Comment out if using ETKS2b.
+;      SYStem.Option.ETK ON ;required for T32 Aug version
+      SYStem.Option.RSTOUT ON ;required for run-through-reset
+      )
+   )
+   ELSE
+   (
+      ON ERROR GOTO SKIP_DLG_END
+      PRINT "System not ready...Could not continue after " (&pdn_cnt-1) " tries!"
+      SYS.VIEW
+      AREA
+      DIALOG.END
+SKIP_DLG_END:
+      END
+   )
+   ON ERROR
+
+   ENDDO
+
+
+;*===========================================================================*
+;* File Revision History (top to bottom: first revision to last revision)
+;*===========================================================================
+;*
+;* Date        userid    (Description on following lines: SCR #, etc.)
+;* ----------- --------
+;* 26-JAN-2005 jzcpfk (JWH2) 
+;* + Updated for D1 Task#34825. SCR - None
+;*
+;* 14-APR-2005 zzksgz (RFK)
+;* + SCR-4020 - Task#36285
+;* - Commented "diag 3301 1" statement before sys.up. It was causing EDU2
+;*    hardware to lock up during Reading Defaults in start_Cuhead.cmm.
+;*   Siitari mentioned the problem is probably because the EDU2 hardware
+;*   does not have the arbitration lines setup the same as EDU1. Since this
+;*   diag statement enables arbitratuion diagnostic messages.
+;* 
+;* 19-APR-2005 jzcpfk (JWH2)
+;* + Task#35509 SCR - 4003
+;* + Continue to updated functionality of scripts
+;*
+;* 25-APR-2005 jzcpfk (JWH2)
+;* + Task#36421 SCR - 4003
+;* + Put "diag 3301 1" back in code.
+;*
+;* 24-JUN-2005 zzyl53 (TWK)
+;* + SCR-4041, Task-36029
+;*   + Added "diag 3314 1" for ETKS3 arbitration.
+;*
+;* 13-JUL-2005 zzyl53 (TWK)
+;* + SCR4263, Task-38028
+;*   + Commented out "diag 3314 1" since we are using ETKS2b for now.
+;*
+;* 10-AUG-2005 zzyl53 (TWK)
+;* + SCR4219, Task-38446
+;*   + Uncommented "diag 3314 1" since we are now using ETKS3.
+;*   + Added "SYStem.Option.ETK ON" for TRACE32 Aug version. This change is
+;*     based on e-mail located at:
+;*     T:\Sys_Software\Powertrain\Reuse\HWIO\D One\Requirements\
+;*     Requirements Analysis\Customer Answers or Assumptions\
+;*     RE Aug Lauterbach version that supports Watchdog Control feature .rtf
+;*   + Modified module header to standards.
+;*
+;* 24-FEB-2006 zzyl53 (TWK)
+;* + SCR4609, Task-41788
+;*   + Added "to.toolio2 high" command before the "sys.up" command to allow
+;*     debugger to drive external watchdog line high (disable external WD).
+;*
+;* 13-SEP-2006 zzyl53 (TWK)
+;* + Task#45144 SCR - 4854
+;*   + Added check for POWERNEXUS connectivity so that certain Nexus
+;*     commands are not used if JTAG debugger is connected (instead of
+;*     LA-7610 Nexus probe).
+;*
+;* 31-OCT-2006 zzyl53 (TWK)
+;* + SCR-4989, Task#46068
+;*   + Changes brought over from D1.
+;*===========================================================================*

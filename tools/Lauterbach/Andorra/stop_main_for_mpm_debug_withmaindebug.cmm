@@ -1,0 +1,99 @@
+;/*===========================================================================*\
+; * FILE: stop_main_for_mpm_debug_maindebug.cmm
+; *===========================================================================
+; * Copyright 2009 Delphi Technologies, Inc., All Rights Reserved.
+; * Delphi Confidential
+; *---------------------------------------------------------------------------
+; * %full_filespec: stop_main_for_mpm_debug_withmaindebug.cmm~1:ascii:ctc_pt3#2 %
+; * %version: 1 %
+; * %derived_by: rz65p6 %
+; * %date_created: Thu Aug 25 12:32:18 2011 %
+; *---------------------------------------------------------------------------
+; *
+; * DESCRIPTION:
+; *   Bring up and stop the Main so that it does not interfere with the MPM
+; *   while user is trying to debug with P&E MON08 debugger. This script will
+; *   put the debugger in Standby Mode, so it will tolerate target power
+; *   cycling, and will stop it at an early breakpoint so the Main code does
+; *   not run and turn TPUA30 pin into an output and drive it low. MPM Debug
+; *   requires that signal to be high when coming out of HC08 reset, in order
+; *   to enter Monitor Mode. 
+; *   This file is very specific to D1.
+; *
+; * ABBREVIATIONS:
+; *   None.
+; *
+; * TRACEABILITY INFO:
+; *   Design Document(s):
+; *     None
+; *
+; *   Requirements Document(s):
+; *     None
+; *
+; *   Applicable Standards (in order of precedence: highest first):
+; *     None
+; *
+; * DEVIATIONS FROM STANDARDS:
+; *   None.
+; *
+;\*===========================================================================*/
+
+; run cmd to arbitrate nexus with ETK ? should be redundant to regular startup
+; scripts, but will leave in for now
+IF POWERNEXUS()
+(
+;   DIAG 3301 1          ;needed for ETKS2b arbitration.
+;   DIAG 3314 1          ;needed for ETKS3 arbitration. Comment out if using ETKS2b.
+;   SYStem.Option.ETK ON ;required for T32 Aug version
+   SYStem.Option.RSTOUT ON ;required for run-through-reset
+)
+
+ ; OR, set breakpoint early in D1 code instead ? Does not seem to matter...
+;; b.s 0x12ca8 /program /onchip
+
+
+SYS.DOWN
+SYS.MODE STANDBY
+
+ENDDO
+
+;*===========================================================================*
+;* File Revision History (top to bottom: first revision to last revision)
+;*===========================================================================
+;*
+;* Date        userid    (Description on following lines: SCR #, etc.)
+;* ----------- --------
+;* 25-APR-2005 JSiitari 
+;* + Module created for D-One. Task#None - "SCR None"
+;*
+;* 11-MAY-2005 JSiitari 
+;* + Module created for D-One. Task#None - "SCR None"
+;* + Added/modified comments, and put breakpoint back to 0xFFFF_F070.
+;*
+;* 25-MAY-2005 JZCPFK (JWH2) 
+;* + Module created in CMSynergy for D-One . Task#37239 - "SCR 4161"
+;*
+;* 24-JUN-2005 zzyl53 (TWK)
+;* + SCR-4041, Task-36029
+;*   + Added "DIAG 3314 1" for ETKS3 arbitration.
+;*
+;* 13-JUL-2005 zzyl53 (TWK)
+;* + SCR4263, Task-38028
+;*   + Commented out "DIAG 3314 1" since we are using ETKS2b for now.
+;*
+;* 10-AUG-2005 zzyl53 (TWK)
+;* + SCR4219, Task-38446
+;*   + Uncommented "DIAG 3314 1" since we are now using ETKS3.
+;*   + Added "SYStem.Option.ETK ON" for TRACE32 Aug version. This change is
+;*     based on e-mail located at:
+;*     T:\Sys_Software\Powertrain\Reuse\HWIO\D One\Requirements\
+;*     Requirements Analysis\Customer Answers or Assumptions\
+;*     RE Aug Lauterbach version that supports Watchdog Control feature .rtf
+;*   + Modified module header to standards.
+;*
+;* 13-SEP-2006 zzyl53 (TWK)
+;* + Task#45144 SCR - 4854
+;*   + Added check for POWERNEXUS connectivity so that certain Nexus
+;*     commands are not used if JTAG debugger is connected (instead of
+;*     LA-7610 Nexus probe).
+;*============================================================================*

@@ -1,0 +1,301 @@
+;===========================================================================
+; FILE: %name: acp.cmm %
+;===========================================================================
+; Copyright 2009 Delphi Technologies, Inc., All Rights Reserved.
+; Delphi Confidential
+;---------------------------------------------------------------------------
+; %full_filespec: acp.cmm~1:ascii:ctc_pt3#2 %
+; %version: 1 %
+; %derived_by: rz65p6 %
+; %date_created: Thu Aug 25 12:32:05 2011 %
+;---------------------------------------------------------------------------
+;
+; DESCRIPTION:
+;   This script combines all of the trace window and power probe controls 
+;   into one window.
+;   
+; ABBREVIATIONS:
+;   None.
+;
+; TRACEABILITY INFO:
+;
+; DEVIATIONS FROM STANDARDS:
+;   
+;
+;===========================================================================
+GLOBAL &macrodir
+
+b::
+
+dialog
+(
+   HEADER "Analyzer Control Panel"
+
+   ;-------------------------------------------------------
+   ; Group Control
+   ;-------------------------------------------------------  
+   POS 0. 0. 37. 3.
+   BOX "Group Control"
+
+   POS 1. 1. 11. 1.
+   INIT_ALL: BUTTON "Initialize" 
+   (
+      IF POWERNEXUS()
+      (
+         analyzer.init
+         probe.init
+      )
+   )
+
+   POS 13. 1. 11. 1.
+   ARM_ALL: BUTTON "Arm"
+   (
+      IF POWERNEXUS()
+      (
+         analyzer.arm
+         probe.arm
+      )
+   )
+   
+   POS 25. 1. 11. 1
+   ALL_OFF: BUTTON "Off"
+   (
+      IF POWERNEXUS()
+      (
+         analyzer.off
+         probe.off
+      )
+   )
+   
+   ;-------------------------------------------------------
+   ; Program Analyzer
+   ;-------------------------------------------------------  
+   POS 0. 3. 37. 8.
+   BOX "Analyzer"
+
+   ; Column One -------------------------------------------   
+   POS 1. 4. 11. 1.
+   BUTTON "Initialize"
+   (
+      IF POWERNEXUS()
+      (
+         analyzer.init
+      )
+   )
+
+   BUTTON "Arm"
+   (
+      IF POWERNEXUS()
+      (
+         analyzer.arm
+      )
+   )
+   
+   BUTTON "Off"
+   (
+      IF POWERNEXUS()
+      (
+         analyzer.off
+      )
+   )
+
+   ; Column Two -------------------------------------------   
+   POS 13. 4. 11. 1.
+   BUTTON "Setup"
+   (
+      IF POWERNEXUS()
+      (
+         Analyzer
+      )
+   )
+   
+   BUTTON "Trace Window"
+   (
+      IF POWERNEXUS()
+      (
+         Trace.List default ti.zero /Track
+      )
+   )
+
+   BUTTON "Source Tracking"
+   (
+      IF POWERNEXUS()
+      (
+         Data.List E: /Track
+      )
+   )
+
+   BUTTON "Find All"
+   (
+      DO "&macrodir\findall.cmm"
+   )
+
+   ; Column Three -----------------------------------------
+   POS 25. 4. 11. 1.
+   BUTTON "Save Trace"
+   (
+      IF POWERNEXUS()
+      (
+         Trace.Save
+      )
+   )
+   
+   BUTTON "Load Trace"
+   (
+      IF POWERNEXUS()
+      (
+         Trace.Load *.ad
+         Trace.List default ti.zero /Track /File
+      )
+   )
+
+   BUTTON "Text Dump"
+   (
+      IF POWERNEXUS()
+      (
+         printer.file *
+         winprint.trace.list (-09999999)--(09999999) all
+      )
+   )
+
+   ; Triggers ---------------------------------------------
+   POS 0. 8. 37. 1.
+   LINE "Triggers"
+
+   POS 1. 9. 11. 1.
+   BUTTON "Set Trigger"
+   (
+      DO "&macrodir\set_trigger.cmm"
+   )
+
+   POS 13. 9. 11. 1.
+   BUTTON "Set Break"
+   (
+      Break.Set
+   )
+
+   POS 25. 9. 11. 1.
+   BUTTON "List Breaks"
+   (
+      Break.List
+   )
+
+   ;-------------------------------------------------------
+   ; Power Probe
+   ;-------------------------------------------------------  
+   POS 0. 11. 37. 5.
+   BOX "Power Probe"
+
+   ; Column One -------------------------------------------   
+   
+   POS 1. 12. 11. 1.
+   PROBE_INIT: BUTTON "Initialize"
+   (
+      IF POWERNEXUS()
+      (
+         probe.init
+      )
+   )
+
+   PROBE_ARM: BUTTON "Arm"
+   (
+      IF POWERNEXUS()
+      (
+         probe.arm
+      )
+   )
+   
+   PROBE_OFF: BUTTON "Off"
+   (
+      IF POWERNEXUS()
+      (
+         probe.off
+      )
+   )
+
+   ; Column Two -------------------------------------------   
+   
+   POS 13. 12. 11. 1.
+   PROBE_SETUP: BUTTON "Setup"
+   (
+      IF POWERNEXUS()
+      (
+         Probe
+      )
+   )
+   
+   PROBE_TRACE: BUTTON "Trace Window"
+   (
+      IF POWERNEXUS()
+      (
+         Probe.Timing /Track
+      )
+   )
+
+   PROBAE_DATA: BUTTON "Data List"
+   (
+      IF POWERNEXUS()
+      (
+         Probe.List ALL /Track
+      )
+   )
+
+   ; Column Three -----------------------------------------
+   POS 25. 12. 11. 1.
+   PROBE_SAVE: BUTTON "Save Trace"
+   (
+      IF POWERNEXUS()
+      (
+         Probe.Save
+      )
+   )
+   
+   PROBE_LOAD: BUTTON "Load Trace"
+   (
+      IF POWERNEXUS()
+      (
+         Probe.Load *.ad
+         Probe.Timing /Track /File
+      )
+   )
+)
+
+   ON ERROR jumpto Disable_Power_Probe
+   IF POWERNEXUS()
+   (
+      probe.size
+   )
+   ON ERROR
+   stop
+
+Disable_Power_Probe:
+   ON ERROR
+   dialog.disable INIT_ALL
+   dialog.disable ARM_ALL
+   dialog.disable ALL_OFF
+   dialog.disable PROBE_INIT
+   dialog.disable PROBE_ARM
+   dialog.disable PROBE_OFF
+   dialog.disable PROBE_SETUP
+   dialog.disable PROBE_TRACE
+   dialog.disable PROBAE_DATA
+   dialog.disable PROBE_SAVE
+   dialog.disable PROBE_LOAD
+stop
+
+;===========================================================================
+; File Revision History (top to bottom: first revision to last revision)
+;===========================================================================
+;
+; Date        userid    (Description on following lines: SCR #, etc.)
+; ----------- --------
+; 03-OCT-2005 zzyl53 (TWK)
+; + SCR-4409, Task-39265
+;   + Created by Chris McDaniel for D1.
+;*
+;* 13-SEP-2006 zzyl53 (TWK)
+;* + Task#45144 SCR - 4854
+;*   + Added check for POWERNEXUS connectivity so that certain Nexus
+;*     commands are not used if JTAG debugger is connected (instead of
+;*     LA-7610 Nexus probe).
+;===========================================================================

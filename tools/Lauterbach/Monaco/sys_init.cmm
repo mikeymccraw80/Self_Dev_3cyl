@@ -1,0 +1,225 @@
+;/*===========================================================================*\
+; * FILE: %name: sys_init.cmm %
+; *===========================================================================
+; * Copyright 2009 Delphi Technologies, Inc., All Rights Reserved.
+; * Delphi Confidential
+; *---------------------------------------------------------------------------
+; * %full_filespec: sys_init.cmm~1:ascii:ctc_pt3#1 %
+; * %version: 1 %
+; * %derived_by: rz65p6 %
+; * %date_created: Tue Jul 26 10:11:58 2011 %
+; *---------------------------------------------------------------------------
+; *
+; * DESCRIPTION:
+; *   A boolean parameter is passed to this script to enable (TRUE) or  
+; *   disable (FALSE) the internal bus cycles and trace messages across 
+; *   the NEXUS bus.  
+; *
+; *   This file is can be reused with no functional change. 
+; *
+; * ABBREVIATIONS:
+; *   None.
+; *
+; * TRACEABILITY INFO:
+; *   Design Document(s):
+; *     None
+; *
+; *   Requirements Document(s):
+; *     None
+; *
+; *   Applicable Standards (in order of precedence: highest first):
+; *     None
+; *
+; * DEVIATIONS FROM STANDARDS:
+; *   None.
+; *
+; * modified by Larry Burkholder 19-JUN-2006 for D1 Tiapan target.
+; *
+;\*===========================================================================*/
+
+; Boolean parameter passed to this script. 
+ENTRY &showit 
+
+GLOBAL &macrodir
+GLOBAL &proctype
+;Used to make sure that we do not get into a endless loop
+ 
+IF RUN()
+(
+   BREAK
+)
+ 
+IF SYSTEM.MODE()>5
+(
+   ; This reset clears out some junk left behind with the ELF
+   ; File that can cause the Nexus port to go offline and can
+   ; only be issued if the system is up. The same as selecting
+   ; "In Target Reset"
+   PRINT "Reset Registers..."
+   IF &TTB_flash_control!=12345678
+   (
+;      SYSTEM.MODE EmulExt
+   )
+   REGISTER.RESET 
+)
+
+
+;-=-=-=-=-=-=-=-=- Set System Settings -=-=-=-=-=-=-=-=- 
+; "GOSUB LT" was added to put delays in to reduce Nexus
+; port "fatal error #C8" from happening.
+;Supose to bring system down before making SYSTEM changes
+SYS.DOWN
+ON ERROR GOSUB CYCLE_POWER
+SYS.RESET
+
+WAIT 0.5s
+
+;These values are set in the Flashd.cmm script file.
+; $$$ldb modified for Tiapan...
+IF "&proctype"=="MPC5634M"||"&proctype"=="MPC5633M"
+(
+   SYS.CPU &proctype
+)
+ELSE
+(
+   DIALOG.OK "Invalid processor type '&proctype'..."
+   DIALOG.END
+   END
+) 
+
+; Enable real-time access of data memory.
+IF POWERNEXUS()
+(
+   SYS.MEMACCESS NEXUS
+)
+;don't allow debugger to stop the CPU while running to read memory
+SYS.CPUACCESS DENIED 
+
+;tie Watchdog to freeze line 
+SYS.OPTION WATCHDOG Off ; not supported in Cu Head, Tiapan.
+SYS.OPTION DUALPORT Off 
+ 
+; SYS.OPTION.SCRATCH AUTO
+ 
+;enable IBUS show cycles with "Change" 
+; SYS.OPTION IBUS CHG 
+ 
+PRINT "Bringing System ON-line"
+IF POWERNEXUS()
+(
+;   diag 3301 1          ;needed for ETKS2b arbitration
+;   diag 3314 1          ;needed for ETKS3 arbitration. Comment out if using ETKS2b.
+;   SYStem.Option.ETK ON ;required for T32 Aug version
+;   SYStem.Option.RSTOUT ON ;required for run-through-reset
+;   to.toolio2 high      ;disables the external watchdog. Requires T32 Dec version.
+)
+WAIT 1.s
+SYS.UP
+WAIT 1.s
+;Wait for system to come up to prevent NEXUS port errors
+ON ERROR 
+
+;add tronchip seie cancel
+;TRONCHIP.SET SEIE OFF
+ 
+IF POWERNEXUS()
+(
+   ANALYZER.RESET
+
+   ;Analyzer Access to Virtual Memory (VM) during
+   ; realtime run for program analysis.
+   Analyzer.Access VM:
+
+   ; Start filling the trace buffer when armed and stop
+   ;  when the buffer is full (i.e., don't overwrite data).
+   ANALYZER.MODE STACK
+
+   ;Make Instruction Showcycles on change of flow.
+   ;Only capture Branch Traces (not data R/W).
+
+   ;Put analyzer in FlowTrace Mode.
+
+   ANALYZER.MODE FLOWT 
+
+   ;-=-=-=-=-=-=-=- End of default System Settings -=-=-=-=-=-=-=- 
+ 
+   ;enable Data Trace Messages 
+   ;SYS.OPTION BTM On 
+   ;SYS.OPTION DTM On 
+   ;SYS.OPTION OTM OFF
+ 
+   ;disable Data Trace Messages 
+   ;SYS.OPTION BTM ON 
+   ;SYS.OPTION DTM Off 
+   ;SYS.OPTION OTM Off 
+)
+ENDDO
+
+;----------------------------------
+CYCLE_POWER:
+   DO "&macrodir\cyclepower"
+RETURN
+
+;*===========================================================================*
+;* File Revision History (top to bottom: first revision to last revision)
+;*===========================================================================
+;*
+;* Date        userid    (Description on following lines: SCR #, etc.)
+;* ----------- --------
+;* 26-JAN-2005 jzcpfk (JWH2) 
+;* + Updated for D1 Task#34825. SCR - None
+;*
+;* 10-FEB-2005 jzcpfk (JWH2) 
+;* + Updated for D1 Task#34876. SCR - None
+;*
+;* 14-APR-2005 zzksgz (RFK)
+;* + SCR-4020 - Task#36285
+;* - Commented "diag 3301 1" statement before sys.up. It was causing EDU2
+;*    hardware to lock up during Reading Defaults in start_Cuhead.cmm.
+;*   Siitari mentioned the problem is probably because the EDU2 hardware
+;*   does not have the arbitration lines setup the same as EDU1. Since this
+;*   diag statement enables arbitratuion diagnostic messages.
+;*
+;* 19-APR-2005 jzcpfk (JWH2)
+;* + Task#35509 SCR - 4003
+;* + Set CPUACCESS to DENIED
+;*
+;* 25-APR-2005 jzcpfk (JWH2)
+;* + Task#36421 SCR - 4003
+;* + Add "diag 3301 1"
+;*
+;* 24-JUN-2005 zzyl53 (TWK)
+;* + SCR-4041, Task-36029
+;*   + Added "diag 3314 1" for ETKS3 arbitration.
+;*
+;* 13-JUL-2005 zzyl53 (TWK)
+;* + SCR4263, Task-38028
+;*   + Commented out "diag 3314 1" since we are using ETKS2b for now.
+;*
+;* 10-AUG-2005 zzyl53 (TWK)
+;* + SCR4219, Task-38446
+;*   + Uncommented "diag 3314 1" since we are now using ETKS3.
+;*   + Added "SYStem.Option.ETK ON" for TRACE32 Aug version. This change is
+;*     based on e-mail located at:
+;*     T:\Sys_Software\Powertrain\Reuse\HWIO\D One\Requirements\
+;*     Requirements Analysis\Customer Answers or Assumptions\
+;*     RE Aug Lauterbach version that supports Watchdog Control feature .rtf
+;*   + Modified module header to standards.
+;*
+;* 24-FEB-2006 zzyl53 (TWK)
+;* + SCR4609, Task-41788
+;*   + Added "to.toolio2 high" command before the "sys.up" command to allow
+;*     debugger to drive external watchdog line high (disable external WD).
+;* 
+;* 20-JUN-2006 tz6mz7 (LDB)
+;* + modified for Tiapan target.
+;* 
+;* 31-OCT-2006 zzyl53 (TWK) 
+;* + SCR-4989, Task#46068 
+;*   + Changes brought over from D1. 
+;*
+;* 07-DEC-2006 zzl091 (PDM)
+;*  No SCR- Updates need for LAuterbach probe with no analyzer capability
+;*  comment out all lines that start with .A or Analyzer
+;*===========================================================================*
+

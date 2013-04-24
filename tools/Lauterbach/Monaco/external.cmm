@@ -1,0 +1,73 @@
+;*===========================================================================*
+; Filename:           external.cmm 
+; %version:           1 % 
+; %date_modified:      % 
+; %derived_by:        rz65p6 % 
+; D1 MY2009 Engine Control Program 
+; Copyright 2009 Delphi Technologies, Inc., All Rights Reserved. 
+;*===========================================================================*
+ 
+;*===========================================================================*
+;                        external.cmm 
+; Description 
+; ----------- 
+;   Does a reset and sets up registers for use with external RAM. 
+; Reuse 
+; ----- 
+;   This file is very specific to D1.  However, the basic layout should be  
+;   reusable for other programs using a PowerPC.  
+; 
+;*===========================================================================*
+GLOBAL &cwd 
+GLOBAL &hardware_type
+GLOBAL &macrodir
+ 
+&cwd=OS.PPD() 
+IF RUN()
+(
+   BREAK
+)
+
+;Now reset Externals to prevent RESET error
+IF SYSTEM.MODE()<6
+(
+   DO "&macrodir\cyclepower"
+)
+;=============== Setup other Chip Selects  ================ 
+
+print "Set up Memory Controller CS0 @ 0x2000_0000, 0 wait states."
+;set BRO to set BI bit
+data.set  A:0xC3F84010 %long 0x20000001
+;set OR0 for a size of 512KB
+data.set  A:0xC3F84014 %long 0xFFE00000
+
+ENDDO 
+
+;*===========================================================================*
+;* File Revision History (top to bottom: first revision to last revision)
+;*===========================================================================
+;*
+;* Date        userid    (Description on following lines: SCR #, etc.)
+;* ----------- --------
+;* 02-NOV-2004 EPM & DA Task tci_pt2#5346
+;* + Modified for Copperhead/D1 program.
+;* 18-JAN-2005 jzcpfk (JWH2)
+;* + Module created for D-One. Task#34797 - "SCR None"
+;* 26-JAN-2005 jzcpfk (JWH2) 
+;* + Updated for D1 Task#34809. SCR - None
+;*
+;* 10-FEB-2005 jzcpfk (JWH2) 
+;* + Updated for D1 Task#34876. SCR - None
+;* 
+;* 19-APR-2005 jzcpfk (JWH2)
+;* + Task#35509 SCR - 4003
+;* + Continue to updated functionality of scripts
+;*
+;* 25-APR-2005 jzcpfk (JWH2)
+;* + Task#36421 SCR - 4003
+;* + Change to CS3 from CS0
+;*
+;* 26-APR-2005 jzcpfk (JWH2)
+;* + Task#36528 SCR - 4003
+;* + Add functionality to select hardware type...EDU1 or EDU2.
+;*===========================================================================*

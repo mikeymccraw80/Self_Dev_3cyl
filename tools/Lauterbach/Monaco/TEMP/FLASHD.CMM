@@ -1,0 +1,1559 @@
+;*============================================================================*
+;* (a) File header block including the copyright notice
+;*===========================================================================*
+;*===========================================================================*
+;* FILE: %name:  FLASHD.CMM %
+;*===========================================================================
+;* Copyright 2009 Delphi Technologies, Inc., All Rights Reserved.
+;* Delphi Confidential
+;*---------------------------------------------------------------------------
+;* %full_filespec: FLASHD.CMM~1:ascii:ctc_pt3#2 %
+;* %version: 1 %
+;* %derived_by: rz65p6 %
+;* %date_created: Tue Jul 26 10:12:07 2011 %
+;*---------------------------------------------------------------------------
+;*
+;* DESCRIPTION:
+;*
+;*  1) This script is for FLASH execution only.   
+;*  
+;*  2) The user should check the appropriate box to determine flash sectors to
+;*     erase+flash. For those flash sectors that are not checked, NOPs are used
+;*     when creating its flash area.
+;* 
+;*  3) The first time you checkout the code and this script is run,  
+;*  a flashd_defauts.ini file will be read to get the default settings
+;*  for the dialog window.  When the script finishes it will write to a 
+;*  last_session.ini file to save your settings.  The next time the script
+;*  is run the last_session.ini file is read and written over by the script
+;*  to save your last session settings.
+;*
+;*  Freescale Remarks -
+;*
+;* Internal Flash Memory 1.0 MByte:
+;*   Low address range   256 kByte (16, 48, 48, 16, 64, 64 kByte)
+;*                       0x00000000--0x0003ffff
+;*   Mid address range   256 kByte (2 * 128 kByte)
+;*                       0x00040000--0x0007ffff
+;*   High address range  512 kByte (2 * 256 kByte)
+;*                       0x00080000--0x000fffff
+;*   Shadow row          32 kByte
+;*                       0x00ff8000--0x00ffffff
+;* 
+;* Internal SRAM         48 kByte
+;*                       0x40000000--0x4000bfff 
+;*
+;* Flash register base address is 0xc3f88000
+;*
+;* Version of flash algorithm depends on processor revision:
+;*   MPC556X all revisions       h7fa_v320.bin or higher
+;*
+;*   h7fa.bin contains latest version of flash algorithm.
+;*
+;* NOTES:
+;* 
+;*   Flash register base address has to be 0xc3f88000, because target
+;*   program does currently not support another base address.
+;*
+;*   Programming a 32 byte row more than once until next erasure may
+;*   cause bus error on this row. To avoid such problems FLASH.AUTO
+;*   can be used for programming.
+;*
+;* ABBREVIATIONS:
+;*   None.
+;*
+;* TRACEABILITY INFO:
+;*   None
+;*
+;* DEVIATIONS FROM STANDARDS:
+;*   None.
+;*
+;* modified by Larry Burkholder 20-JUN-2006 for Monaco target.
+;*
+;\*===========================================================================*/
+
+ENTRY &filepath 
+
+GLOBAL &last_session_file
+GLOBAL &macrodir
+GLOBAL &cwd 
+GLOBAL &proctype
+GLOBAL &clks
+GLOBAL &cpu
+
+GLOBAL &BINVDM1
+GLOBAL &BINVDM2
+GLOBAL &BINVDM1LEN
+GLOBAL &BINVDM2LEN
+
+GLOBAL &INSTSLEW
+GLOBAL &INSTSLEWLEN
+GLOBAL &INSTSLEWEND
+GLOBAL &flash_programming_active
+
+LOCAL &null 
+LOCAL &last_session
+LOCAL &proctnum
+
+IF &TTB_flash_control!=12345678
+(
+   IF &TTB_flash_control!=12345679
+   (
+      SYMBOL.RESET
+   )
+)
+
+&flash_programming_active=0x00000000
+&flashbase=0x00000000
+&flashsize="tbd"
+&shadowbase=0x00fffc00
+&shadowrow="no"
+&rambase=0x40000000
+&flashdriver="tbd.bin"
+
+&BINVDM1=0x00000000
+&BINVDM2=0x0001C000
+&INSTSLEW=0x001FFC00
+
+&BINVDM1LEN=0x4000
+&BINVDM2LEN=0x4000
+&INSTSLEWLEN=0x400
+&INSTSLEWEND=(&INSTSLEW+(&INSTSLEWLEN-1))
+
+&applbootstart=0x00004000
+&applbootlen=0x0c000
+&hwiobootstart=0x00010000
+&hwiobootlen=0x0c000
+
+&cal1start=0x00020000
+&cal1len=0x10000
+&cal2start=0x00030000
+&cal2len=0x10000
+
+B:: 
+AREA.RESET
+&defaults="" 
+&proctnum=0           ;processor type
+&cwd=OS.PPD() 
+
+;-------------------------------------------------
+; The following section verifies that the passed
+; in path exists, if it does not then the current
+; directory is used.
+;-------------------------------------------------
+IF &TTB_flash_control==12345678
+(
+  &filepath="."
+  ON ERROR
+
+  &defaults="&cwd\flashd_defaults.ini" 
+  &last_session="&macrodir\last_session.ini"
+)
+ELSE
+(
+ON ERROR JUMPTO pathnotfound
+  CHDIR "&filepath"
+  GOTO pathset
+pathnotfound:
+    &filepath="."
+pathset:
+  ON ERROR
+
+  &filepath="."
+  &defaults="&cwd\flashd_defaults.ini" 
+  &last_session="&macrodir\&last_session_file"
+)
+
+;flashdialog:
+&file="" 
+
+;----------------------------------------------------------- 
+; create and display dialog box 
+;----------------------------------------------------------- 
+WINPOS 15,,,,,, _a_dialog
+
+DIALOG
+(
+  HEADER "Monaco Flash Utility -  Version 1.00"
+ 
+  POS 2. 2. 15. 1.
+  Proc.MPC5633: CHOOSEBOX "MPC5633" 
+  (
+     &proctype="MPC5633M"
+  )
+  Proc.MPC5634: CHOOSEBOX "MPC5634"
+  (
+     &proctype="MPC5634M"
+  )
+  POS 1. 1. 17. 4.
+  BOX " Processor Type "
+
+ ; POS 61. 2. 9. 1.
+ ; TEXT "ROM"
+ ; POS 60. 1. 15. 4.
+ ; BOX " Memory Type "
+
+  POS 26. 2. 15. 1.
+  PLATFORM.EDU1: CHOOSEBOX "EDU1" 
+  (
+     &platform_type="EDU1"
+  )
+  PLATFORM.EDU2OL: CHOOSEBOX "EDU2 or later"
+  (
+     &platform_type="EDU2_OrLater"
+  )
+
+  POS 25. 1. 17. 4.
+  BOX "Platform Type "
+  
+  POS 50. 2. 15. 1.
+  EnhancedFlash.useforflash: CHOOSEBOX "Enhanced flashing" 
+  (
+     &enhanced_flashing="FAST_FLASH"
+  )
+  EnhancedFlash.donotuseforflash: CHOOSEBOX "Normal flashing" 
+  (
+     &enhanced_flashing="NORMAL_FLASH"
+  )
+
+  POS 49. 1. 17. 4.
+  BOX "Enhanced Flash "
+  
+  POS 1. 5. 82. 6.
+  BOX "Memory Sections "
+
+;  POS 46. 6. 17. 1.
+;  SLEW.erase: CHOOSEBOX "Erase+Program Slews" 
+;  (
+;     &slew_type="SLEWERASE"
+;  )
+;  SLEW.clear: CHOOSEBOX "Clear Slews"
+;  (
+;     &slew_type="SLEWCLEAR"
+;  )
+;  SLEW.keep: CHOOSEBOX "Keep Current Slews"
+;  (
+;     &slew_type="SLEWKEEP"
+;  )
+
+; 0x00000000-0x00003fff & 0x0001c000-0x0001ffff 
+  POS 2. 6. 22. 1.
+  NVEENOSKIP:     CHECKBOX "Erase+Program NV/EE" ""
+
+; 0x00004000-0x000ffff
+  POS 2. 7. 22. 1.
+  APPLBOOTNOSKIP:     CHECKBOX "Erase+Program APPL BOOT" ""
+
+; 0x00010000-0x0001bfff
+  POS 2. 8. 22. 1.
+  HWIOBOOTNOSKIP:     CHECKBOX "Erase+Program HWIO BOOT" ""
+
+; 0x00020000-0x0007ffff
+  POS 27. 6. 22. 1.
+  HWIOCODENOSKIP: CHECKBOX "Erase+Program HWIO" ""
+
+; 0x00080000-0x001bffff
+  POS 27. 7. 22. 1.
+  APPLCODENOSKIP:   CHECKBOX "Erase+Program APPL" ""
+
+; 0x001c0000-0x001fffff. Includes Slew area.
+  POS 27. 8. 22. 1.
+  APPLCALNOSKIP:    CHECKBOX "Erase+Program CALS" ""
+
+  POS 49. 9. 35. 1.
+  PRE_ERASE:      CHECKBOX "Check this to erase Memory Sections before flashing." ""
+  POS 2. 9. 46. 1. 
+  TEXT "CAUTION: Do not attempt to program areas that are not part of ptp file."
+
+
+;  POS 48. 6. 16. 1.
+;  SLEWCLEAR:    CHECKBOX "Clear Slew(s)" ""
+
+  POS 1. 11. 4. 
+  TEXT "Code"  
+  POS 5. 11. 5. 
+  TEXT "Symbol"  
+  POS 10. 11. 6. 
+  TEXT "Verify"  
+ 
+  POS 2. 12. 2. 
+  LCODE[0x1]:  CHECKBOX "" "GOSUB ChkLOAD 0x1"  
+  POS 7. 12. 2. 
+  LSYM[0x1]:  CHECKBOX "" "GOSUB ChkLOAD 0x1"  
+  POS 11. 12. 3. 
+  LVRFY[0x1]:  CHECKBOX "1" "GOSUB ChkLOAD 0x1"  
+
+  POS 16. 12. 50.
+  file[0x1]:   EDIT "" ""
+  POS 68. 12. 15.
+  BUTTON "Select File..."
+  (
+     &file=DIALOG.STRING(file[0x1])
+     IF "&file"==""
+     (
+        &file="&filepath\..\"
+     )
+     DIALOG.SETFILE file[0x1] "&file;*.elf;*.695;*.s19;*.ptp"
+  )
+
+  POS 2. 13. 2. 
+  LCODE[0x2]:  CHECKBOX "" "GOSUB ChkLOAD 0x2"  
+  POS 7. 13. 2. 
+  LSYM[0x2]:  CHECKBOX "" "GOSUB ChkLOAD 0x2"  
+  POS 11. 13. 3. 
+  LVRFY[0x2]:  CHECKBOX "2" "GOSUB ChkLOAD 0x2"  
+
+  POS 16. 13. 50.
+  file[0x2]:   EDIT "" ""
+  POS 68. 13. 15.
+  BUTTON "Select File..."
+  (
+     &file=DIALOG.STRING(file[0x2])
+     IF "&file"==""
+     (
+        &file="&filepath\..\"
+     )
+     DIALOG.SETFILE file[0x2] "&file;*.elf;*.695;*.s19;*.ptp"
+  )
+     
+  POS 2. 14. 2. 
+  LCODE[0x3]:  CHECKBOX "" "GOSUB ChkLOAD 0x3"  
+  POS 7. 14. 2. 
+  LSYM[0x3]:  CHECKBOX "" "GOSUB ChkLOAD 0x3"  
+  POS 11. 14. 3. 
+  LVRFY[0x3]:  CHECKBOX "3" "GOSUB ChkLOAD 0x3"  
+
+  POS 16. 14. 50.
+  file[0x3]:   EDIT "" ""
+  POS 68. 14. 15.
+  BUTTON "Select File..."
+  (
+     &file=DIALOG.STRING(file[0x3])
+     IF "&file"==""
+     (
+        &file="&filepath\..\"
+     )
+     DIALOG.SETFILE file[0x3] "&file;*.elf;*.695;*.s19;*.ptp;*.ort"
+  )
+
+  POS 2. 15. 2. 
+  LCODE[0x4]:  CHECKBOX "" "GOSUB ChkLOAD 0x4"  
+  POS 7. 15. 2. 
+  LSYM[0x4]:  CHECKBOX "" "GOSUB ChkLOAD 0x4"  
+  POS 11. 15. 3. 
+  LVRFY[0x4]:  CHECKBOX "4" "GOSUB ChkLOAD 0x4"  
+
+  POS 16. 15. 50.
+  file[0x4]:   EDIT "" ""
+  POS 68. 15. 15.
+  BUTTON "Select File..."
+  (
+     &file=DIALOG.STRING(file[0x4])
+     IF "&file"==""
+     (
+        &file="&filepath\..\"
+     )
+     DIALOG.SETFILE file[0x4] "&file;*.elf;*.695;*.s19;*.ptp;*.ort"
+  )
+
+  POS 2. 16. 2. 
+  LCODE[0x5]:  CHECKBOX "" "GOSUB ChkLOAD 0x5"  
+  POS 7. 16. 2. 
+  LSYM[0x5]:  CHECKBOX "" "GOSUB ChkLOAD 0x5"  
+  POS 11. 16. 3. 
+  LVRFY[0x5]:  CHECKBOX "5" "GOSUB ChkLOAD 0x5"  
+
+  POS 16. 16. 50.
+  file[0x5]:   EDIT "" ""
+  POS 68. 16. 15.
+  BUTTON "Select File..."
+  (
+     &file=DIALOG.STRING(file[0x5])
+     IF "&file"==""
+     (
+        &file="&filepath\..\"
+     )
+     DIALOG.SETFILE file[0x5] "&file;*.elf;*.695;*.s19;*.ptp;*.ort"
+  )
+  
+  POS 0. 18. 12.
+  BUTTON " OK " 
+  (
+     PRINT "Flashing"
+     &clks=CLOCK.SECONDS() 
+     PRINT "Start Flashing: "+CLOCK.TIME()
+     GOSUB SetDebuggerType
+     jumpto FlashAll
+  )
+     
+  POS 15. 18. 12.
+  BUTTON "   Cancel   " "jumpto WinCancelFlash"
+
+  POS 30. 18. 12.
+  BUTTON " Erase Flash " 
+  (
+     PRINT "Erasing"
+     &clks=CLOCK.SECONDS() 
+     PRINT "Start EraseFlash: "+CLOCK.TIME()
+     GOSUB SetDebuggerType
+     jumpto EraseAllFlash
+  )
+) 
+
+; Default values before reading in .ini file.
+DIALOG.SET NVEENOSKIP     "ON" 
+DIALOG.SET APPLBOOTNOSKIP     "ON"
+DIALOG.SET HWIOBOOTNOSKIP     "ON"
+DIALOG.SET HWIOCODENOSKIP "ON"
+DIALOG.SET APPLCODENOSKIP   "ON"
+DIALOG.SET APPLCALNOSKIP    "ON"
+;DIALOG.SET SLEWCLEAR      "OFF"
+
+;DIALOG.SET SLEW.clear "(0==1)"
+;DIALOG.SET SLEW.keep  "(0==1)"
+;DIALOG.SET SLEW.erase "(1==1)" 
+
+DIALOG.SET PLATFORM.EDU1 "(0==1)" 
+DIALOG.SET PLATFORM.EDU2OL "(1==1)"
+
+DIALOG.SET EnhancedFlash.useforflash "(1==1)" 
+DIALOG.SET EnhancedFlash.donotuseforflash "(0==1)"
+
+; If the flashd_defaults.ini file exists, then override the above defaults. 
+Read_Defaults: 
+LOCAL &element &value 
+ 
+PRINT "Reading in defaults..." 
+ 
+;If it exists, use the last_session.ini file instead of the defaults.ini file
+;this file is created to fix a problem in CM.
+
+IF OS.FILE("&last_session")
+(
+   &defaults="&last_session"
+)
+
+IF OS.FILE("&defaults") 
+( 
+  OPEN #1 "&defaults" /Read 
+  WHILE (0==0) 
+  ( 
+    READ #1 &element &value 
+ 
+    IF "&element"=="" 
+      GOTO DoneRead 
+ 
+    IF "&element"!=";" 
+    ( 
+ON ERROR GOTO SKIP_DEF_ERROR 
+      DIALOG.SET &element "&value" 
+SKIP_DEF_ERROR:
+ON ERROR
+    ) 
+  ) 
+ 
+DoneRead: 
+  CLOSE #1 
+) 
+
+
+IF DIALOG.BOOLEAN(Platform.EDU1)
+(
+   &platform_type="EDU1"
+)
+ELSE
+(
+   &platform_type="EDU2_OrLater"
+)
+
+IF DIALOG.BOOLEAN(EnhancedFlash.useforflash)
+(
+   &enhanced_flashing="FAST_FLASH"
+)
+ELSE
+(
+   &enhanced_flashing="NORMAL_FLASH"
+)
+
+;Any time flashd gets here, standby will be reset, so we need to reset do_event
+&do_event=0x0
+
+;detect Processor type 
+;&proctnum= Data.Word(SD:0xC3F90004) 
+;&proctnum= 0x5633
+sys.detect CPU
+&cpu=CPU()
+;IF &cpu==0x5633
+IF "&cpu"=="MPC5633M"
+(
+   &proctype="MPC5633M"
+   &proctnum= 0x5633
+)
+ELSE
+(
+   &proctype="MPC5634M"
+   &proctnum= 0x5634
+)
+
+SYS.CPU &proctype
+
+; Set fast slew on debug interface for Monaco...
+;data.set  A:0xC3F901f6 %word 0x0c
+;data.set  A:0xC3F901f8 %word 0x0c
+;data.set  A:0xC3F901fa %word 0x0c
+;data.set  A:0xC3F901fc %word 0x0c
+;data.set  A:0xC3F901fe %word 0x0c
+;data.set  A:0xC3F90200 %word 0x0c
+;data.set  A:0xC3F90202 %word 0x0c
+;data.set  A:0xC3F90206 %word 0x0c
+;data.set  A:0xC3F90208 %word 0x0c
+
+DO "&macrodir\cyclepower"
+
+;------------------------------------------
+; Initialise the Monaco MMU, EBI and SRAM
+;------------------------------------------
+DO "&cwd\mmu_init.cmm"
+DO "&cwd\ebi_init.cmm"
+
+IF &proctnum==0x5633
+(
+   PRINT "MPC5633M"
+   DIALOG.SET Proc.MPC5633 "(0==0)"                           
+   DIALOG.DISABLE Proc.MPC5634 
+)
+ELSE IF &proctnum==0x5634
+(
+   PRINT "MPC5634M"
+   DIALOG.SET Proc.MPC5634 "(0==0)"                           
+   DIALOG.DISABLE Proc.MPC5633 
+)
+ELSE
+(
+   DIALOG.OK "Unsupported/unknown Processor type '&proctnum' choose correct from list"   
+)
+
+IF DIALOG.BOOLEAN(Proc.MPC5633)
+(
+   &proctype="MPC5633M"
+)
+ELSE
+(
+   &proctype="MPC5634M"
+)
+
+SYS.CPU &proctype
+
+IF DIALOG.BOOLEAN(EnhancedFlash.useforflash)
+(
+   &enhanced_flashing="FAST_FLASH"
+)
+ELSE
+(
+   &enhanced_flashing="NORMAL_FLASH"
+)
+
+;IF DIALOG.BOOLEAN(SLEW.erase)
+;(
+;   &slew_type="SLEWERASE"
+;)
+;ELSE IF DIALOG.BOOLEAN(SLEW.clear)
+;(
+;   &slew_type="SLEWCLEAR"
+;)
+;ELSE
+;(
+;   &slew_type="SLEWKEEP"
+;)
+
+;------------------------------------------
+; Initialise the Lauterbach tool
+;------------------------------------------
+
+DO "&cwd\sys_init" FALSE 
+
+;If file names specified do not exist then clear it 
+&n=1 
+WHILE &n<6. 
+( 
+   &file=DIALOG.STRING(file[&n]) 
+   IF "&file"==""||(!OS.FILE("&file")) 
+   ( 
+      IF "&file"==""
+      ( 
+         &file="&filepath\..\*.elf;*.695;*.s19;*.ptp" 
+         DIALOG.SET file[&n] "" 
+         DIALOG.SET LCODE[&n] "OFF"
+         DIALOG.SET LSYM[&n] "OFF"
+         DIALOG.SET LVRFY[&n] "OFF"
+      )
+      ELSE
+      (
+         IF (!OS.FILE(&file)) 
+         ( 
+            &file="&filepath\..\*.elf;*.695;*.s19;*.ptp" 
+            DIALOG.SET file[&n] "" 
+            DIALOG.SET LCODE[&n] "OFF"
+            DIALOG.SET LSYM[&n] "OFF"
+            DIALOG.SET LVRFY[&n] "OFF"
+         )
+      )
+   ) 
+   &n=&n+1 
+) 
+ 
+IF &TTB_flash_control==12345678
+(
+     PRINT "Flashing"
+     &clks=CLOCK.SECONDS() 
+     PRINT "Start Flashing: "+CLOCK.TIME()
+     GOSUB SetDebuggerType
+     DIALOG.SET Proc.MPC5633 (0==0)
+     DIALOG.SET PLATFORM.EDU2OL (0==0)
+     DIALOG.SET EnhancedFlash.donotuseforflash (0==0)
+     DIALOG.SET NVEENOSKIP (0==0)
+     DIALOG.SET APPLBOOTNOSKIP (0==0)
+     DIALOG.SET HWIOBOOTNOSKIP (0==0)
+     DIALOG.SET HWIOCODENOSKIP (0==0)
+     DIALOG.SET APPLCODENOSKIP (0==0)
+     DIALOG.SET APPLCALNOSKIP (0==0)
+     jumpto FlashAll
+)
+ELSE
+(
+     IF &TTB_flash_control==12345679
+     (
+        &clks=CLOCK.SECONDS() 
+        GOSUB SetDebuggerType
+        DIALOG.SET Proc.MPC5633 (0==0)
+        DIALOG.SET PLATFORM.EDU2OL   (0==0)
+        DIALOG.SET EnhancedFlash.donotuseforflash (0==0)
+        GOSUB SetDialogAreaDefaults
+        jumpto FlashDone
+     )
+     ELSE
+     (
+        PRINT " " 
+        STOP 
+     )
+)
+;----------------------------------------------------------- 
+; end of scripting for dialog window. 
+;----------------------------------------------------------- 
+  
+;*===========================================================================*
+EraseAllFlash: 
+;*===========================================================================*
+GOSUB CreateFlash 
+GOSUB EraseSpecificBlocks
+
+GOTO WinCloseFlash 
+ 
+  
+;*===========================================================================*
+FlashAll:
+;*===========================================================================*
+ 
+; This wipes all of flash including emulated EEPROM 
+
+  GOSUB EraseandProgramSpecificBlocks
+
+;*===========================================================================*
+FlashDone: 
+;*===========================================================================*
+
+MAP.BONCHIP 0x0--0xFFFFFFFF
+
+; Source path names 
+
+;Create a source path for each program file (ELF or H12) loaded
+;do not bother for any other file type.
+; USE sYmbol.list.spath to see current paths
+&n=1 
+GLOBAL &fpath_old
+&fpath_old=""
+&source_type=""
+WHILE &n<6. 
+( 
+   &fname=DIALOG.STRING(file[&n]) 
+
+   IF "&fname"!=""
+   (
+      GOSUB GetFileType &fname     
+      ENTRY &filetype 
+ 
+      IF "&filetype"=="elf"||"&filetype"=="h12"
+      (
+         &fpath=OS.FILE.PATH(&fname) ;Directory where elf resides
+         IF "products"==STRING.MID(STRING.LWR(OS.FILE.NAME(&fpath)),0,8)
+         ( 
+            &fpath=OS.FILE.PATH(&fpath)  ;Back 1
+            &fpath=OS.FILE.PATH(&fpath)  ;Back 2
+        
+            IF "supplier"==STRING.MID(STRING.LWR(OS.FILE.NAME(&fpath)),0,8)
+            (
+               &source_type="DELPHI_D1"
+            )
+            ELSE
+            (
+            )  
+         )
+         ELSE IF "final_products"==STRING.MID(STRING.LWR(OS.FILE.NAME(&fpath)),0,14)
+         ( 
+            &fpath=OS.FILE.PATH(&fpath)  ;Back 1
+            &source_type="DELPHI_D1" 
+         )
+         ELSE
+         (
+            &source_type="APPL" 
+            ;Must be a APPL build.
+            ;GO back one more directory to get ROOT
+            &fpath=OS.FILE.PATH(&fpath)  ;Back 1
+         )
+
+         ;If the path was just added don't do it again to prevent
+         ;duplicates.  It assumes that the files are grouped by
+         ;directory paths.
+         ;    print "fname = &fname   fpath = &fpath"
+         IF "&fpath_old"!="&fpath"
+         (
+            IF "&source_type"=="APPL"
+            (
+               SYMBOL.SPATH + "&fpath\APPL\Source" 
+               SYMBOL.SPATH + "&fpath\BOOT\Source" 
+            )
+            ELSE IF "&source_type"=="DELPHI_D1"
+            (
+               PRINT "Setting SYMBOL.SPATH.SETRECURSEDIR " "&fpath\Supplier"
+               SYMBOL.SPATH.SETRECURSEDIR &fpath
+            )
+            ELSE
+            (
+            ;Currently only two types for D1
+            ;So if we get here do nothing
+            )
+         )
+      &fpath_old="&fpath"
+      )
+   )
+   &n=&n+1 
+) 
+
+;Make the searches not case sensitive
+SYMBOL.CASE ON
+ 
+;*===========================================================================*
+WinCloseFlash:   
+;*===========================================================================*
+ 
+SYStem.BdmClock 4.0MHz
+;; D1 EDU4 setting ;; SYStem.BdmClock 3.0MHz
+
+; write dialog window settings to last_session.ini to file. 
+Write_Defaults: 
+LOCAL &value 
+
+ON ERROR GOTO ERR_WRITE_SESSION
+
+OPEN #1 "&last_session" /Create 
+ 
+;-------------------------------------
+IF DIALOG.BOOLEAN(Proc.MPC5633)
+(
+   WRITE #1 "Proc.MPC5633 (0==0)"
+)
+ELSE
+(
+   WRITE #1 "Proc.MPC5634 (0==0)"
+)
+;-------------------------------------
+IF DIALOG.BOOLEAN(PLATFORM.EDU1)
+(
+   WRITE #1 "PLATFORM.EDU1 (0==0)"
+)
+ELSE
+(
+   WRITE #1 "PLATFORM.EDU2OL (0==0)"
+)
+;-------------------------------------
+IF DIALOG.BOOLEAN(EnhancedFlash.useforflash)
+(
+   WRITE #1 "EnhancedFlash.useforflash (0==0)"
+)
+ELSE
+(
+   WRITE #1 "EnhancedFlash.donotuseforflash (0==0)"
+)
+;-------------------------------------
+;IF DIALOG.BOOLEAN(SLEW.erase)
+;(
+;   WRITE #1 "SLEW.erase (0==0)"
+;)
+;ELSE IF DIALOG.BOOLEAN(SLEW.clear)
+;(
+;   WRITE #1 "SLEW.clear (0==0)"
+;)
+;ELSE
+;(
+;   WRITE #1 "SLEW.keep (0==0)"
+;)
+;-------------------------------------
+IF DIALOG.BOOLEAN(NVEENOSKIP)
+(
+   WRITE #1 "NVEENOSKIP ON"
+)
+ELSE
+(
+   WRITE #1 "NVEENOSKIP OFF"
+)
+;-------------------------------------
+IF DIALOG.BOOLEAN(APPLBOOTNOSKIP)
+(
+   WRITE #1 "APPLBOOTNOSKIP ON"
+)
+ELSE
+(
+   WRITE #1 "APPLBOOTNOSKIP OFF"
+)
+;-------------------------------------
+IF DIALOG.BOOLEAN(HWIOBOOTNOSKIP)
+(
+   WRITE #1 "HWIOBOOTNOSKIP ON"
+)
+ELSE
+(
+   WRITE #1 "HWIOBOOTNOSKIP OFF"
+)
+;-------------------------------------
+IF DIALOG.BOOLEAN(HWIOCODENOSKIP)
+(
+   WRITE #1 "HWIOCODENOSKIP ON"
+)
+ELSE
+(
+   WRITE #1 "HWIOCODENOSKIP OFF"
+)
+;-------------------------------------
+IF DIALOG.BOOLEAN(APPLCODENOSKIP)
+(
+   WRITE #1 "APPLCODENOSKIP ON"
+)
+ELSE
+(
+   WRITE #1 "APPLCODENOSKIP OFF"
+)
+;-------------------------------------
+IF DIALOG.BOOLEAN(APPLCALNOSKIP)
+(
+   WRITE #1 "APPLCALNOSKIP ON"
+)
+ELSE
+(
+   WRITE #1 "APPLCALNOSKIP OFF"
+)
+;-------------------------------------
+;IF DIALOG.BOOLEAN(SLEWCLEAR)
+;(
+;   WRITE #1 "SLEWCLEAR ON"
+;)
+;ELSE
+;(
+;   WRITE #1 "SLEWCLEAR OFF"
+;)
+;-------------------------------------
+IF DIALOG.BOOLEAN(PRE_ERASE)
+(
+   WRITE #1 "PRE_ERASE ON"
+)
+ELSE
+(
+   WRITE #1 "PRE_ERASE OFF"
+)
+;-------------------------------------
+
+&n=1 
+WHILE &n<6.
+(    
+   &value= DIALOG.STRING(file[&n]) 
+   WRITE #1 "file[&n] &value" 
+   IF DIALOG.BOOLEAN(LCODE[&n])
+   (
+      WRITE #1 "LCODE[&n] ON"
+   )
+   ELSE
+   (
+      WRITE #1 "LCODE[&n] OFF"
+   )
+   
+   IF DIALOG.BOOLEAN(LSYM[&n])
+   (
+      WRITE #1 "LSYM[&n] ON"
+   )
+   ELSE
+   (
+      WRITE #1 "LSYM[&n] OFF"
+   )
+   
+   IF DIALOG.BOOLEAN(LVRFY[&n])
+   (
+      WRITE #1 "LVRFY[&n] ON"
+   )
+   ELSE
+   (
+      WRITE #1 "LVRFY[&n] OFF"
+   )
+
+   &n=&n+1 
+) 
+ 
+CLOSE #1 
+
+GOTO SKIP_SESSION_ERR
+ERR_WRITE_SESSION:
+  DIALOG.OK "Can not write Session Defaults,  File and/or directory may be write protected..."
+SKIP_SESSION_ERR:
+;Now reset Externals to prevent RESET error
+ON ERROR
+
+IF SYSTEM.MODE()<6 
+(
+   DIALOG.OK "System has went off-line!  Cycle Ignition (not Battery!!!) Then select 'OK'"
+)
+
+PRINT "Clear all the registers "
+REGISTER.RESET 
+
+PRINT "In Target Reset"
+;SYSTEM.MODE EmulExt
+;------------------------------------------
+; Initialise the Monaco MMU, EBI and SRAM
+;------------------------------------------
+DO "&cwd\mmu_init.cmm"
+DO "&cwd\ebi_init.cmm"
+;Make sure we start at the PPC start vector 
+IF Y.EXIST(system_reset)
+(
+   PRINT "issue R.S IP system_reset command"
+   R.S IP system_reset
+)
+ELSE
+(
+)
+ 
+PRINT "flashd script completed at "+CLOCK.TIME() 
+
+&clke=CLOCK.SECONDS() 
+&tsecs=&clke-&clks
+&tmin=&tsecs/60.
+&tsecs=&tsecs%60.
+
+PRINT "Total FLASH time was &tmin Minutes and &tsecs seconds"
+WAIT 1.s
+
+IF POWERNEXUS()
+(
+;   SYStem.Option.ETK ON ;required for T32 Aug 2005 version
+   SYStem.Option.RSTOUT ON ;required for run-through-reset
+   PRINT "Enabling external watchdog timer during code execution..."
+   IF POWERNEXUS()
+   (
+     to.toolio2 run      ;disables external watchdog during break. Requires T32 Mar 2006 version.
+   )
+)
+ 
+;*===========================================================================*
+WinCancelFlash: 
+;*===========================================================================*
+
+;close dialog window. 
+DIALOG.END 
+ 
+ 
+ENDDO 
+; End of flashd.cmm script.  Return to calling script. 
+;*===========================================================================*
+ 
+;*===========================================================================*
+ChkLOAD:
+;*===========================================================================*
+ENTRY &cur
+LOCAL &fname
+&fname=DIALOG.STRING(file[&cur]) 
+   IF "&fname"==""||(!OS.FILE("&fname"))
+   (
+      IF "&fname"==""||(!OS.FILE(&fname))
+      (
+         DIALOG.OK "File '&fname' does not exist! Can not set..."
+         DIALOG.SET LCODE[&cur] "OFF"
+         DIALOG.SET LSYM[&cur] "OFF"
+         DIALOG.SET LVRFY[&cur] "OFF"
+      )
+   )
+   
+RETURN
+
+ 
+;*===========================================================================*
+CreateFlash: 
+;*===========================================================================*
+
+; set BIUAPR register to make Flash memory visible for Nexus
+;d.s ASD:0xC3F88020 %LONG 0x00033f03
+
+;========================================================================
+; Check SIU_MIDR register to select flash driver depending on processor 
+; revision
+;&corerevision=data.long(EA:0xC3F90004)
+;PRINT "Core revision 0x" &corerevision
+;&partnum=&corerevision>>16.
+&flashdriver="&macrodir\c90fl.bin /STACKSIZE 0x0200"
+IF "&proctype"=="MPC5633M"
+(
+   &flashsize=0x000100000
+)
+else if "&proctype"=="MPC5634M"
+(
+   &flashsize=0x000180000
+)
+else
+(
+   PRINT %error "flash driver for MPC&proctnum not defined"
+   END
+)
+
+;========================================================================
+; Flash declaration
+FLASH.RESet
+;------------------------------------------------------------------------------
+; Check if user requested EE/NV areas to be erased
+; and create flash area accordingly.
+IF (DIALOG.BOOLEAN(NVEENOSKIP))
+(
+   PRINT "Erase includes BINVDM1&2 areas 0x0--0x00003fff & 0x0001c000--0x0001ffff"  
+   FLASH.Create 1. (&flashbase+&BINVDM1)++(&BINVDM1LEN-1) TARGET Quad 0. ; L0
+   FLASH.Create 1. (&flashbase+&BINVDM2)++(&BINVDM2LEN-1) TARGET Quad 3. ; L3
+)
+ELSE
+(
+   PRINT "Erase excludes BINVDM1&2 areas 0x0--0x00003fff & 0x0001c000--0x0001ffff"  
+   FLASH.Create 1. (&flashbase+&BINVDM1)++(&BINVDM1LEN-1) NOP ; L0
+   FLASH.Create 1. (&flashbase+&BINVDM2)++(&BINVDM2LEN-1) NOP ; L3
+)
+;------------------------------------------------------------------------------
+; Check if user requested appl boot area to be erased
+; and create flash area accordingly.
+IF (DIALOG.BOOLEAN(APPLBOOTNOSKIP))
+(
+   PRINT "Erase includes applboot area 0x00004000--0x000ffff"  
+   FLASH.Create 1. (&flashbase+&applbootstart)++(&applbootlen-1) TARGET Quad 1. ; L1 
+)
+ELSE
+(
+   PRINT "Erase excludes applboot area 0x00004000--0x000ffff"
+   FLASH.Create 1. (&flashbase+&applbootstart)++(&applbootlen-1) NOP ; L1 
+)
+;------------------------------------------------------------------------------
+; Check if user requested hwio boot area to be erased
+; and create flash area accordingly.
+IF (DIALOG.BOOLEAN(HWIOBOOTNOSKIP))
+(
+   PRINT "Erase includes hwioboot area 0x00010000--0x0001bfff"  
+   FLASH.Create 1. (&flashbase+&hwiobootstart)++(&hwiobootlen-1) TARGET Quad 2. ; L2 
+)
+ELSE
+(
+   PRINT "Erase excludes hwioboot area 0x00010000--0x0001bfff"
+   FLASH.Create 1. (&flashbase+&hwiobootstart)++(&hwiobootlen-1) NOP ; L2 
+)
+;------------------------------------------------------------------------------
+; Check if user requested cal area to be erased
+; and create flash area accordingly.
+
+&cal1start=0x00020000
+&cal1len=0x10000
+&cal2start=0x00030000
+&cal2len=0x10000
+
+IF (DIALOG.BOOLEAN(APPLCALNOSKIP))
+(
+   PRINT "Erase includes cal area 0x00020000--0x0003ffff"
+   FLASH.Create 1. (&flashbase+&cal1start)++(&cal1len-1) TARGET Quad 4. ; H10
+   FLASH.Create 1. (&flashbase+&cal2start)++(&cal2len-1) TARGET Quad 5. ; H11
+)
+ELSE
+(
+   PRINT "Erase excludes cal area 0x00020000--0x0003ffff"
+   FLASH.Create 1. (&flashbase+&cal1start)++(&cal1len-1) NOP ; H10
+   FLASH.Create 1. (&flashbase+&cal2start)++(&cal2len-1) NOP ; H11
+)
+;------------------------------------------------------------------------------
+; Check if user requested hwio code area to be erased
+; and create flash area accordingly.
+IF (DIALOG.BOOLEAN(HWIOCODENOSKIP))
+(
+   PRINT "Erase includes hwiocode area 0x00040000--0x0007ffff"
+   FLASH.Create 2. (&flashbase+0x00040000)++0x1ffff TARGET Quad 0. ; L4
+   FLASH.Create 2. (&flashbase+0x00060000)++0x1ffff TARGET Quad 1. ; L5
+)
+ELSE
+(
+   PRINT "Erase excludes hwiocode area 0x00040000--0x0007ffff"
+   FLASH.Create 2. (&flashbase+0x00040000)++0x1ffff NOP ; L4
+   FLASH.Create 2. (&flashbase+0x00060000)++0x1ffff NOP ; L5
+)
+;------------------------------------------------------------------------------
+; Check if user requested application area to be erased
+; and create flash area accordingly.
+IF (DIALOG.BOOLEAN(APPLCODENOSKIP))
+(
+   &flashaddr=&flashbase+0x00080000
+   &Hx=0.
+   while &flashaddr<(&flashbase+&flashsize)
+   (
+     FLASH.Create 3. &flashaddr++0x1ffff TARGET Quad &Hx ; H0..H3
+     &flashaddr=&flashaddr+0x20000
+     &Hx=&Hx+1.
+   )
+)
+ELSE
+(
+   &flashaddr=&flashbase+0x00080000
+   &Hx=0.
+   while &flashaddr<(&flashbase+&flashsize)
+   (
+     FLASH.Create 3. &flashaddr++0x1ffff NOP ; H0..H3
+     &flashaddr=&flashaddr+0x20000
+     &Hx=&Hx+1.
+   )
+)
+;------------------------------------------------------------------------------
+; Declare shadow row
+if "&shadowrow"=="yes"
+(
+  PRINT "Erase includes shadow row area 0x00ff8000--0x00ffffff"
+  FLASH.Create 4. (&shadowbase+0x00000000)++0x3fff TARGET Quad 0.
+)
+else
+(
+  PRINT "Erase excludes shadow row area 0x00ff8000--0x00ffffff"
+  FLASH.Create 4. (&shadowbase+0x00000000)++0x3fff NOP Quad
+)
+;------------------------------------------------------------------------------
+
+FLASH.TARGET E:&rambase E:&rambase+0x2000 0x1000 &flashdriver
+
+RETURN  
+;from CreateFlash
+ 
+;*===========================================================================*
+EraseandProgramSpecificBlocks: 
+;*===========================================================================*
+ 
+LOCAL &null 
+LOCAL &n 
+LOCAL &lcode_flag
+LOCAL &dload_flags
+LOCAL &lvrfy_flag
+LOCAL &ftext
+; 
+;
+; $$$ldb 80MHz flashing...
+IF (DIALOG.BOOLEAN(EnhancedFlash.useforflash))
+(
+;   PER.S ASD:0XC3F80000 %LONG 0X06050000
+;   WAIT 2.
+;   PER.S ASD:0XC3F80000 %LONG 0X06070000
+    system.bdmclock 18.75MHz
+)    
+ELSE
+(
+;   PER.S ASD:0XC3F80000 %LONG 0X01150000
+;   WAIT 2.
+;   PER.S ASD:0XC3F80000 %LONG 0X01170000
+    system.bdmclock 4.MHz
+)
+
+&n=1
+&lcode_flag=(0==1)
+&lvrfy_flag=(0==1)
+WHILE &n<6.  
+(
+   IF DIALOG.BOOLEAN(LCODE[&n]) 
+   (
+      &lcode_flag=(0==0)
+   )
+
+   IF DIALOG.BOOLEAN(LVRFY[&n]) 
+   (
+      &lvrfy_flag=(0==0)
+   )
+   &n=&n+1
+)  
+;
+IF &lcode_flag
+( ; -- Only erase if loading code --
+      GOSUB CreateFlash
+      IF DIALOG.BOOLEAN(PRE_ERASE)
+      (
+         GOSUB EraseSpecificBlocks    
+      )
+)
+ 
+&n=1 
+WHILE &n<6.  
+( 
+   &fname=DIALOG.STRING(file[&n]) 
+   
+   IF "&fname"=="&null"||(!(DIALOG.BOOLEAN(LCODE[&n])||DIALOG.BOOLEAN(LSYM[&n])))
+   (;There is no code to load!!! 
+   )
+   ELSE 
+   ( 
+      GOSUB GetFileType &fname 
+     
+      ENTRY &filetype 
+
+ON ERROR GOTO FileLoadError
+      
+      IF "&filetype"=="ort"
+      (
+        IF DIALOG.BOOLEAN(LSYM[&n])
+        (
+           IF(!(&lvrfy_flag))
+           (
+              PRINT "Loading ORTI file '&fname'"
+              TASK.ORTI  "&fname" 
+           )
+           ;Else it will be loaded below so skip
+        )
+        ELSE
+        (
+           DIALOG.OK "ORTI file is a symbol file not code"
+        )
+      )   
+      ELSE IF "&filetype"=="ptp"
+      (
+;         &dload_flags="/NoClear /Quad /PlusVM" 
+         &dload_flags="/Quad /PlusVM" 
+         &ftext="Loading"
+         PRINT "&ftext &fname &dload_flags into FLASH"
+         IF &flash_programming_active==0
+         (
+            FLASH.ReProgram ALL
+;           FLASH.AUTO ALL
+;           FLASH.Program ALL
+            &flash_programming_active=0x00000001
+         )
+;        DATA.LOAD "&fname" &dload_flags
+         Data.LOAD "&fname" E:0x00--(&flashsize-1) &dload_flags
+      )
+      ELSE IF "&filetype"=="s19"
+      (
+;         &dload_flags="/NoClear /Quad /PlusVM" 
+         &dload_flags="/Quad /PlusVM" 
+         &ftext="Loading"
+         PRINT "&ftext &fname &dload_flags into FLASH"
+         IF &flash_programming_active==0
+         (
+            FLASH.ReProgram ALL
+;           FLASH.AUTO ALL
+;           FLASH.Program ALL
+            &flash_programming_active=0x00000001
+         )
+;        DATA.LOAD "&fname" &dload_flags
+         Data.LOAD "&fname" E:0x00--(&flashsize-1) &dload_flags
+      )
+      ELSE
+      (
+         &dload_flags="/NoClear /Quad" 
+         &ftext="Loading"
+         IF DIALOG.BOOLEAN(LSYM[&n])
+         (
+            IF DIALOG.BOOLEAN(LCODE[&n])
+            (
+               &dload_flags="&dload_flags"+" /PlusVM"
+            )
+            ELSE
+            (;Load the virtual machine only
+               IF &lvrfy_flag
+               ( ;Save time and do not load since will load during the
+                 ;Verify
+                  GOTO SKIP_FileLoadError
+               )
+               &dload_flags="&dload_flags"+" /VM"+" /NOCODE"
+               &ftext="&ftext Symbols from "
+            )
+         )
+
+         
+         PRINT "&ftext &fname into FLASH" 
+        
+
+         IF "&filetype"=="elf"
+         (
+            DATA.LOAD.ELF  "&fname" &dload_flags
+         )
+         ELSE
+         (
+            IF "&filetype"=="h12"
+            (
+               DATA.LOAD.COSMIC  "&fname" &dload_flags
+            )
+            ELSE
+            (
+               DATA.LOAD "&fname" /NoClear /Quad
+            )
+         )
+      ) 
+   )
+
+GOTO SKIP_FileLoadError
+FileLoadError:
+      DIALOG.OK "Error loading file '&fname' see 'AREA' window for details!"
+   AREA
+SKIP_FileLoadError:
+ON ERROR 
+   &n=&n+1 
+) 
+
+IF &lvrfy_flag
+(
+   ;Clear symbols since comparing will reload 
+   ;and you will end up with duplicates.
+
+   IF &lcode_flag
+   ( 
+      SYMBOL.RESET
+   )
+
+   &n=1 
+   WHILE &n<6.  
+   ( 
+      &fname=DIALOG.STRING(file[&n]) 
+
+      IF "&fname"=="&null"||(!(DIALOG.BOOLEAN(LVRFY[&n])||DIALOG.BOOLEAN(LSYM[&n])))
+      (;--Nothing to do!--
+      )
+      ELSE 
+      ( 
+         GOSUB GetFileType &fname     
+         ENTRY &filetype 
+
+         &dload_flags="" 
+         IF DIALOG.BOOLEAN(LVRFY[&n])
+         (
+            &dload_flags="/ComPare" 
+            PRINT "Comparing Loaded program with file &fname" 
+         )
+         ELSE
+         (
+            PRINT "Loaded symbols for program with file &fname" 
+         )
+
+      IF DIALOG.BOOLEAN(LSYM[&n])
+      ( ;--Does the user wish symbols to be loaded from this file?--
+         &dload_flags="&dload_flags /VM"       
+      )
+      &dload_flags="&dload_flags /NoClear /Quad" 
+  
+      ON ERROR GOTO VRFY_ERROR
+      IF "&filetype"=="elf"
+      (
+         &dload_flags=""
+         DATA.LOAD.ELF  "&fname" &dload_flags
+      )
+      ELSE
+      (
+         IF "&filetype"=="h12"
+         (
+            DATA.LOAD.COSMIC  "&fname"  &dload_flags  
+         )
+         ELSE
+         (
+            IF "&filetype"=="ort"
+            (
+               IF DIALOG.BOOLEAN(LSYM[&n])
+               (
+                  PRINT "Loading ORTI file '&fname'"
+                  TASK.ORTI  "&fname" 
+               )
+            )
+            ELSE
+            (;PTP files fall into this slot
+               DATA.LOAD.S2RECORD  "&fname" /ComPare /NoClear
+            )
+         )
+      )
+     GOTO SKIP_VRFYERR
+VRFY_ERROR: 
+     DIALOG.OK "Verify Error for file '&fname' --Symbols not loaded--"
+SKIP_VRFYERR:
+     ON ERROR
+   )
+   &n=&n+1
+  )
+)
+;End ComPare 
+
+;Is Slew checked on dialog?  IF so, then we write zeros to the slew area.
+;Else we will leave it with the flash values from the DATA.LOAD
+;Moved this until after the compare, as it was causing errors if we erased 
+;slews before doing the compare.
+;IF DIALOG.BOOLEAN(SLEWCLEAR)
+;(
+;   PRINT "Clearing slew area 0x001ffc00--0x001fffff"
+;   FLASH.UNLOCK 0x1ffc00--0x1fffff
+;   FLASH.AUTO 0x1ffc00--0x1fffff
+;   DATA.SET 0x1ffc00--0x1fffff %LONG 0x00
+;   FLASH.LOCK 0x1ffc00--0x1fffff
+;   FLASH.AUTO OFF
+;)
+
+IF &flash_programming_active!=0
+(
+   FLASH.ReProgram OFF 
+   ;FLASH.AUTO OFF
+   ;FLASH.PROGRAM OFF 
+   &flash_programming_active=0x00000000
+)
+system.bdmclock 4.MHz
+
+PRINT "Flash program done!!!" 
+
+ 
+RETURN 
+;return from EraseandProgramSpecificBlocks 
+
+;*===========================================================================*
+EraseSpecificBlocks: 
+;*===========================================================================*
+wait 2.s
+FLASH.Erase 0x0--(&flashsize-1)
+
+;PRINT "Erasing Complete." 
+
+RETURN 
+;return from EraseSpecificBlocks 
+
+;*===========================================================================*
+GetFileType: 
+;*===========================================================================*
+ENTRY &FilePath 
+ 
+LOCAL &filename 
+LOCAL &filetype 
+LOCAL &null 
+ 
+&filename=OS.FILE.NAME(&FilePath) 
+&strt=OS.FILE.NAME(string.scan("&filename",".",0)) 
+&filetype=STRING.MID("&filename",&strt+1,3) 
+&filetype=STRING.LWR("&filetype") 
+ 
+RETURN &filetype 
+ 
+
+;*===========================================================================*
+SetDebuggerType: 
+;*===========================================================================*
+ 
+   DO "&cwd\sys_init" FALSE 
+   
+   ;------------------------------------------
+   ; Initialise the Monaco MMU, EBI and SRAM
+   ;------------------------------------------
+   DO "&cwd\sram_init.cmm"
+   wait 1.s
+   DO "&cwd\mmu_init.cmm"
+   wait 1.s
+   DO "&cwd\ebi_init.cmm"
+   wait 1.s
+
+RETURN
+
+
+;*===========================================================================*
+;* File Revision History (top to bottom: first revision to last revision)
+;*===========================================================================
+;*
+;* Date        userid    (Description on following lines: SCR #, etc.)
+;* ----------- --------
+;* 18-JAN-2005 jzcpfk (JWH2)
+;* + Module created for D-One. Task#34797 - "SCR None"
+;* + updated to use internal flash rather than external ram.
+;* 26-JAN-2005 jzcpfk (JWH2) 
+;* + Updated for D1 Task#34825. SCR - None
+;*
+;* 10-FEB-2005 jzcpfk (JWH2) 
+;* + Updated for D1 Task#34876. SCR - None
+;* 18-FEB-2005 jzcpfk (JWH2)
+;* + Task#35260 SCR - None
+;* + Added new D1 directory structure to spath
+;* 18-FEB-2005 jzcpfk (JWH2)
+;* + Task#35271 SCR - None
+;* + Corrected additions of new D1 directory structure to spath
+;* 23-FEB-2005 jzcpfk (JWH2)
+;* + Modifications to support moving elf files from the "Final Products" to
+;* + the "Products" directory.
+;*
+;* 19-APR-2005 jzcpfk (JWH2)
+;* + Task#35509 SCR - 4003
+;* + Continue to updated functionality of scripts
+;*
+;* 26-APR-2005 jzcpfk (JWH2)
+;* + Task#36528 SCR - 4003
+;* + Add functionality to select hardware type...EDU1 or EDU2.
+;*
+;* 11-MAY-2005 jzcpfk (JWH2)
+;* + Task#36995 SCR - 4003
+;*   +Remove all calls to sram_init except during SetDebuggerType.  This
+;*   +will ensure that sram_init is only done during a flash or erase.
+;*   +This wasn't being done anyway because all lines in sram_init.cmm
+;*   +have been commented out.  I'm now going to comment the sram_init.cmm
+;*   +data.set back in so we had to remove the call to sram_init.cmm
+;* 
+;* 23-MAY-2005 jzcpfk (JWH2)
+;* + Task#37200 SCR - 4154
+;*   + Updated address of INSTSLEW to 1FFC00 because of memory map change.
+;*
+;* 23-MAY-2005 jzcpfk (JWH2)
+;* + Task#37201 SCR - 4154
+;*   + Updated address of INSTSLEW to 1FFC00 because of memory map change.
+;*
+;* 12-OCT-2005 zzyl53 (TWK)
+;* + Task#39429 SCR - 4426
+;*   + Updated based on Freescale recommendations to allow faster erase time.
+;*      NOTE1: Freescale had &shadowrow="yes." which, based on our current core
+;*      revision, would erase shadow area. Our Tools Group (Ben McCormick)
+;*      recommended to set this to "no" to not allow erase of shadow area.
+;*      NOTE2: Did not include Freescale's NOP of BAM since our current
+;*      core revision is not affected.
+;*   + Updated to allow erasure of different memory areas based on values
+;*      of several user check boxes. This was a customer request.
+;*   + Changed module header to match standards.
+;*
+;* 07-NOV-2005 zzyl53 (TWK)
+;* + Task#39781 SCR - 4450
+;*   + Added user check boxes for HWIO boot and APPL boot.
+;*   + Added user warning for flashing areas not included in ptp.
+;*   + Changed user message to indicate correct range for hwiocode area.
+;*
+;* 23-NOV-2005 zzyl53 (TWK)
+;* + Task#40199 SCR - 4468
+;*   + Changed positioning of Memory Sections to resolve truncation.
+;*   + Added Configuration Management keyword "%name:  %" to module header.
+;*
+;* 03-MAR-2006 zzyl53 (TWK)
+;* + Task#42475 SCR - 4714
+;*   + Added the "to.toolio2 run" command after flash to allow
+;*     debugger to assert COPDIS line during break. This requires the
+;*     March 2006 version of Trace 32 software as well as other hardware
+;*     mods (see SCR description).
+;*
+;* 22-AUG-2006 tz6mz7 (ldb)
+;* + modified for Monaco target.
+;*
+;* 02-NOV-2006 zzyl53 (TWK)
+;* + Task#42475 SCR - 4714
+;*   + Changed FLASH.Erase 0x0--0xfffff to FLASH.Erase 0x0--0xfffff to
+;*     accomodate entire 1-meg range for Monaco.
+;*===========================================================================*

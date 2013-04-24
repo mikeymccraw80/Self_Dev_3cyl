@@ -1,0 +1,55 @@
+// T32-5550 Tue Feb 21 15:30:18 2006 
+
+ B::
+ 
+ TOOLBAR ON
+ STATUSBAR ON
+ 
+ WINPOS 64.875 21.25 83. 26. 0. 0. W009
+ Var.Watch    %location %spotlight %e
+ 
+ VAR.ADDWATCH %hex.on SPI_Test_Message_Counter
+ VAR.ADDWATCH RPGM_Downloaded_Byte_Count
+ VAR.ADDWATCH RPGM_Source_Data_Buffer_32bit_Ptr
+ VAR.ADDWATCH RPGM_PTP_Buffer_Address
+ VAR.ADDWATCH RPGM_SPI_Loop_State
+ VAR.ADDWATCH RPGM_Continue_SPI_Message_Enable
+ VAR.ADDWATCH Upload_Byte_Buffer
+ VAR.ADDWATCH Second_CPU_Upload_Address
+ VAR.ADDWATCH Previous_Second_CPU_Upload_Address
+ VAR.ADDWATCH Current_Second_CPU_Upload_Address
+ VAR.ADDWATCH RPGM_Second_CPU_Upload_State
+ VAR.ADDWATCH RPGM_Second_CPU_In_Boot
+ VAR.ADDWATCH SPI_Message_ID
+ VAR.ADDWATCH Previous_SPI_Message_ID
+ VAR.ADDWATCH Second_CPU_Respond
+ VAR.ADDWATCH Second_CPU_Data_Status
+ VAR.ADDWATCH SPI_Received_Data_Checksum_Error
+ VAR.ADDWATCH Second_CPU_Handshake_Status
+ VAR.ADDWATCH Test_Rx_Byte_Data_Buffer
+ VAR.ADDWATCH Test_Tx_Byte_Data_Buffer
+ VAR.ADDWATCH SecondCPU_Tx_Active
+ VAR.ADDWATCH SecondCPU_Rx_Data
+ VAR.ADDWATCH SecondCPU_Rx_Error
+ VAR.ADDWATCH %hex.off Wait_Data_Byte_Number
+ VAR.ADDWATCH Sent_Data_Byte_Number
+ VAR.ADDWATCH %hex.on MPM_Rx
+ VAR.ADDWATCH MPM_Tx
+ VAR.ADDWATCH Initialize_Flash_Programming
+ VAR.ADDWATCH RPGM_Execute_Once_Flag
+ VAR.ADDWATCH RPGM_Flash_Device_Error
+ VAR.ADDWATCH RPGM_Test_Data_Longword_Buffer
+ VAR.ADDWATCH RPGM_Test_Write_Long_Word_Value
+ VAR.ADDWATCH RPGM_Test_Write_Start_Address
+ VAR.ADDWATCH Block_Lock_Status
+ VAR.ADDWATCH %hex.off RPGM_Test_Block_Number
+ VAR.ADDWATCH RPGM_Test_Write_Byte_Size
+ VAR.ADDWATCH RPGM_Test_Flash_Write_Status
+ VAR.ADDWATCH RPGM_Test_Flash_Block_Erase_Status
+ VAR.ADDWATCH RPGM_Previous_Test_Case
+ VAR.ADDWATCH RPGM_NVM_Prog_Test_Case
+ VAR.ADDWATCH RPGM_Test_Code_Running
+
+ WINPAGE.SELECT P0000     
+ 
+ ENDDO

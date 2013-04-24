@@ -1,0 +1,147 @@
+;******************************************************************** 
+; Filename:           load_filled_ptp_to_ram.cmm 
+; %version:           1 % 
+; %date_modified:      % 
+; %derived_by:        rz65p6 % 
+; 10005893: E67 MY2006 Engine Control Program 
+; Copyright 2002 Delphi Technologies, Inc., All Rights Reserved. 
+;******************************************************************** 
+ 
+;############################################################################ 
+;                        load_2nd_cpu_filled_ptp.cmm
+; Description 
+; ----------- 
+;   Creates a customized menu structure for flashing the 2nd CPU application
+;   code through the main with Lauterbach.
+; 
+; Reuse 
+; ----- 
+;   This file is very specific to D1.  However, the basic layout should be  
+;   usefule for creating a similar menu structure for other programs. 
+; 
+; Owners : Duane Markell, Jason Howerton 
+; ------ 
+;   Any reports of problems or requests for changes to this module 
+;   should be made to above owner(s). 
+;############################################################################ 
+GLOBAL   &homedir
+GLOBAL   &macrodir 
+LOCAL    &defaults
+LOCAL    &Bdefaults
+LOCAL    &to_loc
+LOCAL &filepath
+
+&defaults="&homedir\last_session.ini"
+&Bdefaults=0
+&filepath="&homedir\..\Supplier_COP\COPAPPL\Products"
+
+IF "&macrodir"==""
+(
+  DIALOG.OK "You must first run the 'start_Tiapan' macro to set the defaults!"
+  END
+)
+
+IF Y.EXIST(RPGM_PTP_Buffer_Address)
+(
+  &to_loc=DATA.LONG(RPGM_PTP_Buffer_Address)
+)
+ELSE
+(
+  &to_loc=0x20000000
+)
+
+;Load the file
+GOSUB DoDLG
+
+ENDDO
+;If we return there is an error so stop all macros
+END
+
+winloaderr:
+ DIALOG.OK "Could not load window file!"
+RETURN
+
+;----------------------
+DoDLG:
+&dlg_flag=(0==0)
+WINPOS ,,,,,, _a_dialog
+
+DIALOG
+(
+  HEADER "Load 2nd CPU filled.ptp to Main External RAM through the Main"
+  
+  POS 2. 2. 60. 1.
+  TEXT "Select a file to load into RAM memory that is for the second CPU. "
+  POS 2. 3. 60. 1.
+  TEXT "Flash memory address 0xde00--0xf5ff in the second CPU. "
+  POS 2. 4. 60. 1.
+  TEXT "so that the flash routines will work correctly. Also, the BOOT and RPGM files must "
+  POS 2. 5. 60. 1.
+  TEXT "already be loaded on the Main."
+
+
+   POS 2. 8. 68. 1. 
+  file[0x1]:   EDIT "" "" 
+ 
+  POS 20. 10. 20. 1.
+  BUTTON "Select File - Secondary CPU filled ptp ..."
+  ( 
+    &file=DIALOG.STRING(file[0x1]) 
+    IF "&file"=="" 
+    ( 
+      &file="&filepath\" 
+    ) 
+    DIALOG.SETFILE file[0x1] "&file;*.ptp"           
+  ) 
+
+  POS 2. 10. 10. 1.
+  BUTTON " OK " 
+   (
+   GOSUB Begin_Load_PTP_To_RAM
+   )
+  POS 48. 10. 10. 1.
+  BUTTON " Close " 
+   (
+   GOSUB WinClose
+   )
+)
+
+
+STOP
+
+Begin_Load_PTP_To_RAM:
+;---------------------------------------------
+LOCAL &fname
+&fname=DIALOG.STRING(file[0x1]) 
+
+; &to_loc-0xde00 is an offet from ptp address of 0xde00.
+; Thus load ptp to the sart address of &to_loc.
+DATA.LOAD.S1RECORD "&fname" /OFFSET (&to_loc-0xde00) /NOCLEAR
+
+DIALOG.OK "File loaded now change ???? to ## !"
+
+
+WinClose:
+;---------------------------------------------
+ON ERROR goto EndWIN
+ DIALOG.END
+
+EndWIN:
+ ENDDO
+;Will end all calls, if not lets make sure.
+END
+
+;***************************************************************************
+; 10005893: E67 Revision Log In CCM: 
+; 
+; Date     By   Change 
+; -------- ---  ---------------------------------------------------------- 
+; 12/16/03 DSM/LD   Initial revision.
+; 02/05/04 LD   Task#28913
+;                Used PTP_Buffer_Address to assign a start address of
+;                RAM buffer. The default value is 0x245800.
+; 07/26/05 LD  SCR-4281, Task#38173
+;              Copied from E67 and changed for D1.
+;              Used RPGM_PTP_Buffer_Address to assign a start address of
+;              RAM buffer. The default value is 0x20000000.
+;***************************************************************************

@@ -1,0 +1,117 @@
+;*===========================================================================*
+; Filename:           ebi_init.cmm 
+; %version:           1 % 
+; %date_modified:      % 
+; %derived_by:        rz65p6 % 
+; Copyright 2009 Delphi Technologies, Inc., All Rights Reserved. 
+;*===========================================================================*
+ 
+;*===========================================================================*
+;                     ebi_init.cmm
+;
+; Initializes the MPC5644A external bus pins, CS0 for ext SRAM
+;
+; Randy Dees 10 December 2003, S.Mihalik mod on Chip Selects Jan 16 2004
+;
+; 08-03-04 Task#32613
+; Randy Krakora - modified CS0 to allow access to the full external
+;  memory range.
+;
+; 11-02-04 Task tci_pt2#5346
+; EPM & DA  - Modified OR0.
+;*===========================================================================*
+
+; Set up the pins
+; Address bus PCR 4 - 27 43
+print "Configure address bus pins."
+data.set  A:0xC3F90048 %long 0x04400440
+data.set  A:0xC3F9004C %long 0x04400440
+data.set  A:0xC3F90050 %long 0x04400440
+data.set  A:0xC3F90054 %long 0x04400440
+data.set  A:0xC3F90058 %long 0x04400440
+data.set  A:0xC3F9005C %long 0x04400440
+data.set  A:0xC3F90060 %long 0x04400440
+data.set  A:0xC3F90064 %long 0x04400440
+data.set  A:0xC3F90068 %long 0x04400440
+data.set  A:0xC3F9006C %long 0x04400440
+data.set  A:0xC3F90070 %long 0x04400440
+data.set  A:0xC3F90074 %long 0x04400440
+
+; Data bus PCR 28-59
+print "Configure data bus pins."
+data.set  A:0xC3F90078 %long 0x04400440
+data.set  A:0xC3F9007C %long 0x04400440
+data.set  A:0xC3F90080 %long 0x04400440
+data.set  A:0xC3F90084 %long 0x04400440
+data.set  A:0xC3F90088 %long 0x04400440
+data.set  A:0xC3F9008C %long 0x04400440
+data.set  A:0xC3F90090 %long 0x04400440
+data.set  A:0xC3F90094 %long 0x04400440
+; these next 8 can be deleted for 16-bit data bus
+data.set  A:0xC3F90098 %long 0x04400440
+data.set  A:0xC3F9009C %long 0x04400440
+data.set  A:0xC3F900A0 %long 0x04400440
+data.set  A:0xC3F900A4 %long 0x04400440
+data.set  A:0xC3F900A8 %long 0x04400440
+data.set  A:0xC3F900Ac %long 0x04400440
+data.set  A:0xC3F900B0 %long 0x04400440
+data.set  A:0xC3F900B4 %long 0x04400440
+
+print "Configure minimum bus control pins..."
+; External Read/Write (RD_WR) pin.
+; External Burst Data In Progress (BDIR) pin.
+; RD/WR  & BDIP PCR 62/63
+data.set  A:0xC3F900BC %long 0x04400440
+
+; External Write/Byte Enable (WE) pins.
+; WE[0-4] PCR 64-67
+data.set  A:0xC3F900C0 %long 0x04430443
+data.set  A:0xC3F900C4 %long 0x04430443
+
+; External Output Enable (OE) pin.
+; External Transfer Start (TS) pin.
+; OE & TS PCR 68-69
+data.set  A:0xC3F900C8 %long 0x04430443
+
+; Configure the chip selects.
+; CS[0-3] PCR 0-3
+data.set  A:0xC3F90040 %long 0x04430443
+data.set  A:0xC3F90044 %long 0x04430443
+
+; Configure CLKOUT.
+; CLKOUT PCR 229
+data.set A:0xC3F9020A %word 0x02c0
+
+print "Set up Memory Controller CS0 @ 0x2000_0000, 0 wait states."
+; Set EBI_BR0 to set BI bit. EBI_BRn is used to define the base address
+; and other attributes for the corresponding chip select.
+; NOTE!!!! Value for CDS = 0x20000803, value for P1B1 = 0x20000003
+data.set  A:0xC3F84010 %long 0x20000003
+data.set  A:0xC3F84010 %long 0x20000803
+
+; Set OR0 for a size of 512KB. EBI_ORn is used to define the address mask
+; and other attributes for the corresponding chip select.
+data.set  A:0xC3F84014 %long 0xFFE00000
+ENDDO
+;*===========================================================================*
+;* File Revision History (top to bottom: first revision to last revision)
+;*===========================================================================
+;*
+;* Date        userid    (Description on following lines: SCR #, etc.)
+;* ----------- --------
+;* 19-APR-2005 jzcpfk (JWH2)
+;* + Task#35509 SCR - 4003
+;* + Continue to updated functionality of scripts
+;*
+;* 25-APR-2005 jzcpfk (JWH2)
+;* + Task#36421 SCR - 4003
+;* + Change to CS3 from CS0
+;*
+;* 26-APR-2005 jzcpfk (JWH2)
+;* + Task#36528 SCR - 4003
+;* + Add functionality to select hardware type...EDU1 or EDU2.
+;*
+;* 12-OCT-2006 zzyl53 (TWK)
+;* + Task#45727 SCR - 4989
+;* + Modifications for E78 P1B1 w/Viper.
+;*===========================================================================*

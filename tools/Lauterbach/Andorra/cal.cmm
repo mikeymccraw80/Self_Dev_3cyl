@@ -1,0 +1,427 @@
+;*===========================================================================*
+;* (a) File header block including the copyright notice
+;*===========================================================================*
+;*===========================================================================*
+;* FILE: %name:  cal.cmm %
+;*===========================================================================
+;* Copyright 2009 Delphi Technologies, Inc., All Rights Reserved.
+;* Delphi Confidential
+;*---------------------------------------------------------------------------
+;* Configuration Management keywords, i.e.:
+;* %full_filespec: cal.cmm~1:ascii:ctc_pt3#2 %
+;* %version:       1 %
+;* %date_modified:  %
+;* %derived_by:    rz65p6 %
+;*---------------------------------------------------------------------------
+;* Description                                                                
+;*   This script sets up the calibration RAM chip to be active or not.  It also
+;*   will allow the copy of reference page to working page.  It is intended to
+;*   be called from the cal.men and from from the flash routine to make sure
+;* 
+;*   DO cal WP       - Switch to Working Page
+;*   DO cal RP       - Switch to Refernece Page
+;*   DO cal CPRPTOWP - Copy Reference page to Working Page
+;*   DO cal RESET    - Will make sure cal is in desired state use after a reset
+;*   DO cal          - brings up a dialog box
+;*
+;* ABBREVIATIONS:
+;* N/A
+;*============================================================================*
+
+ENTRY &dothis
+B::
+
+GLOBAL &RP_WP_MAILBOX
+GLOBAL &RP_REQ
+GLOBAL &RP_ACK
+GLOBAL &WP_REQ
+GLOBAL &WP_ACK
+
+LOCAL &dlg_flag
+
+&RP_WP_MAILBOX=0x4000EFE4
+&RP_REQ=0x52524551
+&RP_ACK=0x5241434B
+&WP_REQ=0x57524551
+&WP_ACK=0x5741434B
+
+&CAL_SIZE=0x040000
+&CAL_RP=0x01c0000
+&CAL_WP=0x020000000
+
+&dlg_flag=(0==1)
+
+
+IF "&dothis"=="WP"
+(
+   GOSUB SwitchToWP
+)
+ELSE IF "&dothis"=="RP"
+(
+   GOSUB SwitchToRP
+)
+ELSE IF "&dothis"=="CPRPTOWP"
+(
+   GOSUB CopyToRef
+)
+ELSE IF "&dothis"=="RESET"
+(
+   GOSUB ResetCAL_RAM
+)
+ELSE IF "&dothis"=="WPCHECK"
+(
+   GOSUB CheckCAL_RAM
+)
+ELSE
+(
+   JUMPTO DoDLG
+)
+
+ENDDO
+
+
+;*===========================================================================*
+DoDLG:
+;*===========================================================================*
+&dlg_flag=(0==0)
+WINPOS ,,,,,, _a_dialog
+
+DIALOG
+(
+   HEADER "Switch Between Working/Reference Pages"
+   POS 5. 1. 11. 1.
+   MEM.WP: CHOOSEBOX "Working Page" "GOSUB SwitchToWP"
+
+   POS 20. 1. 20. 1.
+   MEM.RP: CHOOSEBOX "Reference Page" "GOSUB SwitchToRP"
+
+   POS 7. 2. 10. 1.
+   WPADDR: EDIT "0x20000000" ""
+   POS 22. 2. 10. 1.
+   RPADDR: EDIT "0x001c0000" ""
+
+   POS 5. 4. 15. 2.
+   BUTTON "Copy RP to WP"
+   (
+      GOSUB CopyToRef
+   )
+   POS 21. 4. 15. 2.
+   BUTTON " Close "
+   (
+      GOSUB WinClose
+   )
+)
+
+IF (DATA.LONG(ESD:&RP_WP_MAILBOX)==&WP_ACK)
+(
+   DIALOG.SET MEM.WP "ON"
+)
+ELSE
+(
+   DIALOG.SET MEM.RP "ON"
+)
+
+DIALOG.SET RPADDR "&CAL_RP"
+DIALOG.SET WPADDR "&CAL_WP"
+
+DIALOG.DISABLE WPADDR
+DIALOG.DISABLE RPADDR
+
+ON PBREAK GOSUB CHK_PAGE
+
+STOP
+
+
+;*===========================================================================*
+CHK_PAGE:
+;*===========================================================================*
+GOSUB SetDialog 0
+RETURN
+
+
+;*===========================================================================*
+ResetCAL_RAM:
+;*===========================================================================*
+;This should only be called from a RESET script
+;
+;This GO WAIT BREAK sequence gives the application time to acknowledge change.
+;Init code initializes mailbox to run from RP so we need to make sure we're past
+;that point before writing to mailbox with WP pattern or it will simply get
+;overwritten in init code.
+IF RUN()
+(
+   BREAK
+)
+;Wait for init code to initialize mailbox to RP.
+GO
+WAIT 0.1s
+
+IF RUN()
+(
+   BREAK
+)
+;Now we can write the WP pattern to mailbox.
+D.S SD:&RP_WP_MAILBOX %BE %LONG &WP_REQ
+
+PRINT "Reset Working Page Active"
+GO
+RETURN
+
+;*===========================================================================*
+CheckCAL_RAM:
+;*===========================================================================*
+;This routine simply writes the working page request pattern to the mailbox in
+;order for the HWIO code to recognize it during the next 100mSec task. This is
+;to ensure that we stay in working page.
+IF RUN()
+(
+   BREAK
+)
+
+D.S SD:&RP_WP_MAILBOX %BE %LONG &WP_REQ
+GO
+WAIT 0.1s
+
+IF RUN()
+(
+   BREAK
+)
+GO
+PRINT "WP request pattern written to mailbox."
+RETURN
+
+
+;*===========================================================================*
+CopyToRef:
+;*===========================================================================*
+IF RUN()
+(
+   LOCAL &result
+   DIALOG.YESNO "Target will halt!  Do you wish to continue?"
+   ENTRY &result
+   IF !&result
+   (
+      RETURN
+   )
+   ELSE
+   (
+      IF RUN()
+      (
+         BREAK
+      )
+   )
+)
+
+D.S SD:&RP_WP_MAILBOX %BE %LONG &RP_REQ
+
+;This is required to keep this table in line with the mmu table
+;being controlled by the software
+MMU.DELETE c:0x001C0000--0x001FFFFF
+MMU.CREATE c:0x001C0000--0x001FFFFF a:0x001C0000--0x001FFFFF
+
+;This GO WAIT BREAK sequence gives the application time to acknowledge change
+;No guarantee if user has break points enabled since the switch occurs during
+;100mSec OS task in HWIO code. Any break points set to 100mSec or sooner will
+;not access respective page until 100mSec OS loop has expired.
+GO
+WAIT 0.1s
+
+IF RUN()
+(
+   BREAK
+)
+
+PRINT "Copy &CAL_RP++(&CAL_SIZE-1) to &CAL_WP"
+D.COPY &CAL_RP++(&CAL_SIZE-1) &CAL_WP /Verify
+&COPY_RP_TO_WP_DONE=(1==1)
+PRINT "Copy &CAL_RP++(&CAL_SIZE-1) to &CAL_WP Complete"
+
+RETURN
+
+
+;*===========================================================================*
+SetDialog:
+;*===========================================================================*
+ENTRY &typ
+
+IF (&typ==1)
+(
+   GOSUB WinClose
+   RETURN
+)
+ELSE
+(
+   IF (DATA.LONG(ESD:&RP_WP_MAILBOX)==&WP_ACK)
+   (
+      DIALOG.SET MEM.WP "ON"
+   )
+   ELSE
+   (
+      DIALOG.SET MEM.RP "ON"
+   )
+)
+RETURN
+
+
+;*===========================================================================*
+SwitchToWP:
+;*===========================================================================*
+LOCAL &result
+&result=(0==1)
+ 
+;If we haven't copied reference page to working page at least once
+;then give them the option prior to switching to working page.
+
+IF !&COPY_RP_TO_WP_DONE
+(
+   DIALOG.YESNO "Copy of RP to WP has not been done.  Do you wish to copy now?"
+   ENTRY &result
+   IF &result
+   (
+      GOSUB CopyToRef
+   )
+   ELSE
+   (
+      &COPY_RP_TO_WP_DONE=(1==1)
+   )
+)
+
+IF RUN()
+(
+   DIALOG.YESNO "Target will pull a momentary halt!  Do you wish to continue?"
+   ENTRY &result
+   IF !&result
+   (
+      IF &dlg_flag
+      (
+         GOSUB SetDialog 0
+      )
+      RETURN
+   )
+   IF RUN()
+   ( 
+      BREAK
+   )
+)
+
+D.S SD:&RP_WP_MAILBOX %BE %LONG &WP_REQ
+
+;This GO WAIT BREAK sequence gives the application time to acknowledge change.
+;No guarantee if user has break points enabled since the switch occurs during
+;100mSec OS task in HWIO code. Any break points set to 100mSec or sooner will
+;not access respective page until 100mSec OS loop has expired.
+GO
+WAIT 0.1s
+IF RUN()
+(
+   BREAK
+)
+&WP_IS_SELECTED=(1==1)
+;This is required to keep this table in line with the mmu table
+;being controlled by the software
+MMU.DELETE c:0x001C0000--0x001FFFFF
+MMU.CREATE c:0x001C0000--0x001FFFFF a:0x20000000--0x2003FFFF
+PRINT "Working Page Active"
+GO
+ 
+IF &dlg_flag
+(
+   GOSUB SetDialog 0
+)
+
+RETURN
+
+
+;*===========================================================================*
+SwitchToRP:
+;*===========================================================================*
+LOCAL &result
+&result=(0==1)
+
+IF RUN()
+(
+   DIALOG.YESNO "Target will pull a momentary halt!  Do you wish to continue?"
+   ENTRY &result
+   IF !&result
+   (
+      IF &dlg_flag
+      (
+         GOSUB SetDialog 0
+      )
+      RETURN
+   )
+   IF RUN()
+   (
+      BREAK
+   )
+)
+ 
+D.S SD:&RP_WP_MAILBOX %BE %LONG &RP_REQ
+
+;This GO WAIT BREAK sequence gives the application time to acknowledge change
+;No guarantee if user has break points enabled since the switch occurs during
+;100mSec OS task in HWIO code. Any break points set to 100mSec or sooner will
+;not access respective page until 100mSec OS loop has expired.
+GO
+WAIT 0.1s
+IF RUN()
+(
+   BREAK
+)
+&WP_IS_SELECTED=(0==1)
+;This is required to keep this table in line with the mmu table
+;being controlled by the software
+MMU.DELETE c:0x001C0000--0x001FFFFF
+MMU.CREATE c:0x001C0000--0x001FFFFF a:0x001C0000--0x001FFFFF
+PRINT "Reference Page Active"
+GO
+  
+IF &dlg_flag
+(
+   GOSUB SetDialog 0
+)
+
+RETURN
+
+
+;*===========================================================================*
+WinClose:
+;*===========================================================================*
+IF &dlg_flag
+(
+   DIALOG.END
+ )
+END
+
+RETURN
+
+;*===========================================================================*
+;* File Revision History (top to bottom: first revision to last revision)
+;*===========================================================================
+;*
+;* Date        userid    (Description on following lines: SCR #, etc.)
+;* ----------- --------
+;* 26-JAN-2005 jzcpfk (JWH2) 
+;* + Updated for D1 Task#34825. SCR - None
+;*
+;* 10-FEB-2005 jzcpfk (JWH2) 
+;* + Updated for D1 Task#34876. SCR - None
+;*
+;* 19-APR-2005 jzcpfk (JWH2)
+;* + Task#35509 SCR - 4003
+;* + Continue to updated functionality of scripts
+;* 
+;* 06-MAY-2005 jzcpfk (JWH2)
+;* + Task#36690 SCR - 4003
+;* + For calram area, make MMU.CREATE entries dependent on WP/RP status.
+;* 
+;* 20-MAY-2005 qz965y (Hill,M)
+;* + Task#37050 SCR - 4155
+;* + Changed RP_WP_MAILBOX to match memory map changes for EDU2.\
+;*
+;* 23-NOV-2005 zzyl53 (TWK)
+;* + Task#40199 SCR - 4468
+;*   + Change how the GO WAIT BREAK sequences are handled when switching RP/WP.
+;*   + Added Configuration Management keyword "%name:  %" to module header.
+;*   + Added CheckCAL_RAM routine for use with the "Go" button on user menu.
+;*===========================================================================*

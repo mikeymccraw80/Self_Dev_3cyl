@@ -1,0 +1,49 @@
+// T32-3 Sat Feb 12 13:41:57 2005
+
+ B::
+ 
+ TOOLBAR ON
+ STATUSBAR ON
+ WINPAGE.RESET
+ 
+ WINCLEAR
+ WINPOS 0.0 31.5 88. 18. 0. 0. W004
+ Register
+ 
+ WINPOS 91.5 0.125 66. 6. 13. 1. W000
+ data.dump e:0x40000000 /DIALOG /LONG
+ 
+ WINPOS 91.125 33.0 77. 13. 0. 0. W009
+ Var.Watch    %location %spotlight %e
+ 
+ VAR.ADDWATCH Inst_ETK_Present
+ VAR.ADDWATCH Inst_Emul_Status
+ VAR.ADDWATCH Inst_Page_Switch_Mbox
+ VAR.ADDWATCH ms3p125_counter
+ VAR.ADDWATCH ms6p25_counter
+ VAR.ADDWATCH ms12p5_counter
+ VAR.ADDWATCH ms25_counter
+ VAR.ADDWATCH ms50_counter
+ VAR.ADDWATCH ms100_counter
+ VAR.ADDWATCH ms250_counter
+ VAR.ADDWATCH ms500_counter
+ VAR.ADDWATCH ms1000_counter
+ VAR.ADDWATCH HWIO_Periodic_Count_B
+ VAR.ADDWATCH Tst_Boot_Test_Mode
+ VAR.ADDWATCH HWIO_Periodic_Count
+ VAR.ADDWATCH Tst_Test_Mode
+ VAR.ADDWATCH Reset_Source
+ 
+ WINPOS 91.0 11.125 66. 6. 13. 1. W007
+ data.dump e:0x001c0000 /DIALOG /LONG
+ 
+ WINPOS 90.75 22.0 66. 6. 13. 1. W006
+ data.dump e:0x20000000 /DIALOG /LONG
+ 
+ WINPOS 0.0 0.0 88. 27. 13. 1. W000
+ WINTABS 10. 17. 25. 62.
+ Data.List
+ 
+ WINPAGE.SELECT P000     
+ 
+ ENDDO

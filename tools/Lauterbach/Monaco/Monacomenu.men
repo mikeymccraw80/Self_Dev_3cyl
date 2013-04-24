@@ -1,0 +1,872 @@
+;*===========================================================================*
+;* (a) File header block including the copyright notice
+;*===========================================================================*
+;*===========================================================================*
+;* FILE: %name:  Monacomenu.men %
+;*===========================================================================
+;* Copyright 2009 Delphi Technologies, Inc., All Rights Reserved.
+;* Delphi Confidential
+;*---------------------------------------------------------------------------
+;* %full_filespec: Monacomenu.men~1:ascii:ctc_pt3#1 %
+;* %version: 1 %
+;* %derived_by: rz65p6 %
+;* %date_created: Tue Jul 26 10:11:48 2011 %
+;*---------------------------------------------------------------------------
+;*
+;* DESCRIPTION:
+;*   Creates a customized menu structure and toolbars for use on the D1
+;*   program.
+;*   This file is very specific to D1. However, the basic layout should  
+;*   be useful for creating a similar menu structure for other programs. 
+;*   NOTE: to edit the icons use BITMAPEDIT on the Lauterbach command line
+;*
+;* ABBREVIATIONS:
+;*   None.
+;*
+;* TRACEABILITY INFO:
+;*   Design Document(s):
+;*     None
+;*
+;*   Requirements Document(s):
+;*     None
+;*
+;*   Applicable Standards (in order of precedence: highest first):
+;*     None
+;*
+;* DEVIATIONS FROM STANDARDS:
+;*   None.
+;*
+;*===========================================================================*
+
+;*===========================================================================*
+ADD 
+MENU 
+( 
+;*===========================================================================*
+   POPUP    "&Delphi" 
+   ( 
+      MENUITEM "&Flash..." 
+      ( 
+         IF OS.FILE("&macrodir\flashd.cmm") 
+         (
+            DO "&macrodir\flashd" &homedir
+         )
+         ELSE                                              
+         (
+            DIALOG.OK "Can not find &macrodir\flashd.cmm, Default path may have changed..."              
+         )
+      ) 
+      MENUITEM "&Upload \ Download..." 
+      ( 
+         IF OS.FILE("&macrodir\upload.cmm") 
+         (
+            DO "&macrodir\upload" &homedir
+         )
+         ELSE
+         (
+            DIALOG.OK "Can not find &macrodir\upload.cmm, Default path may have changed..."              
+         )
+      )
+      SEPARATOR
+
+      POPUP "&Calibration" 
+      (
+         MENUITEM "&Toolbar ON"
+         (
+            MENU.REPROGRAM "&macrodir\cal.men"
+         )
+         MENUITEM "Toolbar &OFF"
+         (
+            MENU.DELETE "&macrodir\cal.men"
+         )
+         MENUITEM "&Dialog..."
+         ( 
+            IF OS.FILE("&macrodir\cal.cmm") 
+            (
+               DO "&macrodir\cal"
+            )
+            ELSE
+            (
+               DIALOG.OK "Can not find &macrodir\cal.cmm, Default path may have changed..."              
+            )
+         )
+      )
+
+      MENUITEM "Make &CSV..." 
+      ( 
+         IF OS.FILE("&macrodir\csv.cmm") 
+         (
+            DO "&macrodir\csv" &homedir
+         )
+         ELSE
+         (
+            DIALOG.OK "Can not find &macrodir\csv.cmm, Default path may have changed..."              
+         )
+      ) 
+
+      MENUITEM "&Function Performance..." 
+      ( 
+         BREAK.DELETE /ALL 
+         ANALYZER.RESET 
+         PERF.RESET 
+         PERF.MODE FUNCTION 
+         PERF.SORT RATIO 
+         PERF.METHOD ANALYZER 
+         PERF.GATE 1.S 
+         PERF.LIST ALL 
+      ) 
+      
+;*===========================================================================*
+      POPUP    "&Trace on Var" 
+      ( 
+         MENUITEM "Trace on &Write..." 
+         ( 
+            SYS.OPTION DTM ON
+            SYMBOL.B.V * /CLICK "BREAK.SET V.RANGE(""*"") /WRITE /TraceEnable " 
+         ) 
+
+         MENUITEM "Trace on &Read..." 
+         ( 
+            SYS.OPTION DTM ON
+            SYMBOL.B.V * /CLICK "BREAK.SET V.RANGE(""*"") /READ /TraceEnable " 
+         ) 
+
+         MENUITEM "&Trace on Access..." 
+         ( 
+            SYS.OPTION DTM ON
+            SYMBOL.B.V * /CLICK "BREAK.SET V.RANGE(""*"") /READWRITE /TraceEnable " 
+         ) 
+
+         MENUITEM "&Clear Data Trace" 
+         (
+            SYS.OPTION DTM ON
+            BREAK.DELETE /ALL
+         )
+      )
+
+;*===========================================================================*
+;This is here as a work around for Data Value Breakpoints.  Once Lauterbach
+;adds this functionality to their tool, this POPUP should be removed.
+      POPUP "Set Breakpoint"
+      (
+         MENUITEM "&Set Data Value Breakpoint..." 
+         (
+            IF OS.FILE("&macrodir\datavaluebreak.cmm") 
+            (
+               DO "&macrodir\datavaluebreak.cmm"
+            )  
+            ELSE
+            (
+               DIALOG.OK "&macrodir\datavaluebreak.cmm Not Available"
+            )
+         )
+      )
+   ;---------------------------------------------------- 
+;      POPUP "TP&U" 
+;      ( 
+;         MENUITEM "TPU Registers" "TPU.Register" 
+;         MENUITEM "TPU List" "TPU.List" 
+;         MENUITEM "TPU List Entry Points" "TPU.ListEntry" 
+;         MENUITEM "TPU Dump Controlstore" "TPU.DUMP" 
+; 
+;         MENUITEM "TPU View Channels"  
+;         ( 
+;            IF OS.FILE("&macrodir\e67tpu3.per") 
+;            (
+;               B::TPU.VIEW "&macrodir\e67tpu3"
+;            )
+;         ) 
+; 
+;         SEPARATOR 
+; 
+;         MENUITEM "select TPU &A" "B::TPU.select a" 
+; 
+;         MENUITEM "select TPU &B" "B::TPU.select b" 
+; 
+;         MENUITEM "select TPU &C" 
+;         (
+;            IF "&proctype"=="MPC565"
+;            (
+;               B::TPU.select c 
+;            )
+;            ELSE
+;            (
+;               DIALOG.OK "&proctype only has 2 TPU channels!"
+;            )
+;         ) 
+;      )
+ 
+   ;---------------------------------------------------- 
+      POPUP "PrintTr&ace" 
+      ( 
+         MENUITEM "Print &Default"  
+         ( 
+            Printer.filetype ascii 
+            Printer.file ".\default.lst"  
+            wp.trace.list (-900.)--(900.) def ti.zero 
+         ) 
+ 
+         MENUITEM "Print &All"  
+         ( 
+            Printer.filetype ascii 
+            Printer.file ".\all.lst"  
+            wp.trace.list ALL (-900.)--(900.)  
+         ) 
+      )  
+
+   ;---------------------------------------------------- 
+;      POPUP "&Power Probe" 
+;      ( 
+;         MENUITEM "&Settings..."  
+;         ( 
+;            PP::POD.STATE
+;            PP::NAME.LIST
+;         ;Set control back to Nexus Probe
+;         B::
+;         )
+;         MENUITEM "Set &Default (Delphi) Labels..."  
+;         ( 
+;            PP::POD.RESET
+;            PP:ANALYZER.RESET
+;            PP:ANALYZER.AUTOARM ON
+;       
+;            PP::NAME.RESET
+;            ;assign individual names to the input signals
+;            PP::NAME.RESET
+;            PP::NAME.SET x.0 Crank 
+;            PP::NAME.SET x.1 CAM_W MARK
+;            PP::NAME.SET x.2 CAM_X MARK
+;            PP::NAME.SET x.3 CAM_Y MARK
+;            PP::NAME.SET x.4 CAM_Z MARK
+;            PP::NAME.SET x.5 TACH
+;    
+;            PP::NAME.GROUP g.EPI x.0 x.1 x.2 x.3 x.4 x.5
+;            PP::NAME.SET x.6 INJ_A MARK
+;            PP::NAME.SET x.7 INJ_B MARK
+;            PP::NAME.SET x.8 INJ_C MARK
+;            PP::NAME.SET x.9 INJ_D MARK
+;            PP::NAME.SET x.10 INJ_E MARK
+;            PP::NAME.SET x.11 INJ_H MARK
+;            PP::NAME.SET x.12 INJ_I MARK
+;            PP::NAME.SET x.13 INJ_J MARK
+;    
+;            PP::NAME.GROUP g.INJ x.6 x.7 x.8 x.9 x.10 x.11 x.12 x.13
+;            PP::NAME.SET x.16 EST_A
+;            PP::NAME.SET x.17 EST_B
+;            PP::NAME.SET x.18 EST_C
+;            PP::NAME.SET x.19 EST_D
+;            PP::NAME.SET x.20 EST_E
+;            PP::NAME.SET x.21 EST_H
+;            PP::NAME.SET x.22 EST_I
+;            PP::NAME.SET x.23 EST_J
+;
+;            PP::NAME.GROUP g.EST x.16 x.17 x.18 x.19 x.20 x.21 x.22 x.23
+;            PP::NAME.SET x.24 CYLD_1 MARK
+;            PP::NAME.SET x.25 CYLD_2 MARK
+;            PP::NAME.SET x.26 CYLD_3 MARK
+;            PP::NAME.SET x.14 CYLD_4 MARK
+;
+;            PP::NAME.GROUP g.CYLD x.24 x.25 x.26 x.14
+;            PP::NAME.GROUP g.UNUSED x.15 x.27 x.28 x.29 x.30 x.31
+;      
+;            ;Set control back to Nexus Probe
+;            B::
+;            ON ERROR
+;            ENDDO
+;   
+;            NO_PWR_PROBE:
+;            B::
+;            DIALOG.OK "Either no Power Probe exists, or there is an error..."
+;            ENDDO
+;         )
+;         MENUITEM "Set &Default GMPT Labels..."  
+;         ( 
+;            PP::POD.RESET
+;            PP:ANALYZER.RESET
+;            PP:ANALYZER.AUTOARM ON
+;     
+;            PP::NAME.RESET
+;            ;assign individual names to the input signals
+;            PP::NAME.SET x.0 Crank MARK
+;            PP::NAME.SET x.1 CAM_W RED
+;            PP::NAME.SET x.2 CAM_X 
+;            PP::NAME.GROUP g.PWM x.0 x.1 x.2
+;
+;            PP::NAME.SET x.16 INJ_A MARK
+;            PP::NAME.SET x.17 INJ_B 
+;            PP::NAME.SET x.18 INJ_C MARK
+;            PP::NAME.SET x.19 INJ_D 
+;            PP::NAME.SET x.20 INJ_E MARK
+;            PP::NAME.SET x.21 INJ_F 
+;            PP::NAME.SET x.22 INJ_G MARK
+;            PP::NAME.SET x.23 INJ_H
+;            PP::NAME.GROUP g.INJ x.16 x.17 x.18 x.19 x.20 x.21 x.22 x.23
+;
+;            PP::NAME.SET x.24 EST_A MARK
+;            PP::NAME.SET x.25 EST_B
+;            PP::NAME.SET x.26 EST_C MARK
+;            PP::NAME.SET x.27 EST_D
+;            PP::NAME.SET x.28 EST_E MARK
+;            PP::NAME.SET x.29 EST_F
+;            PP::NAME.SET x.30 EST_G MARK
+;            PP::NAME.SET x.31 EST_H
+;            PP::NAME.GROUP g.EST x.24 x.25 x.26 x.27 x.28 x.29 x.30 x.31
+;
+;            ;Set control back to Nexus Probe
+;            B::
+;            ON ERROR
+;            ENDDO
+;
+;NO_PWR_PROBE:
+;               B::
+;               DIALOG.OK "Either no Power Probe exists, or there is an error..."
+;               ENDDO
+;         )
+;         MENUITEM "&Code/Waveforms Tracking..."  
+;         ( 
+;            ON ERROR GOTO ERR_WAVE
+;            PP::ANALYZER.TIMING GROUP.PWM GROUP.INJ GROUP.EST /TRACK
+;            B::ANALYZER.LIST /TRACK
+;            ;Set control back to Nexus Probe
+;            B::
+;            ENDDO
+;ERR_WAVE:
+;               DIALOG.OK "Default groups are not set up!"
+;               ENDDO
+;         )
+;      )
+;
+   ;---------------------------------------------------- 
+      POPUP "&Windows"
+      (
+         MENUITEM "&Reload Default" 
+         ( 
+            IF OS.FILE(&default_winfile)
+            (
+               DO &default_winfile
+            )
+            ELSE
+            (
+               DIALOG.OK "There is no default selected!"
+            )
+         )
+ 
+         MENUITEM "&Change Default Window" 
+         (
+            LOCAL &file
+ 
+            ;------------------------------- 
+            ; create and display dialog box 
+            ;-------------------------------
+            WINPOS 15,,,,,, _a_dialog
+; 
+            DIALOG
+            (
+               HEADER "Default Window Select"
+ 
+               POS 2. 0. 18. 1.
+               TEXT " Select default file to load "
+               POS 3. 2. 50.
+               file:   EDIT "" ""
+               POS 54. 2. 5. 1.
+               BUTTON "..."
+               (
+                  &file=DIALOG.STRING(file)
+                  IF "&file"==""
+                  (
+                     &file="&macrodir\Windows\"
+                  )
+                  DIALOG.SETFILE file "&file;*.win"
+               )
+               POS 0. 4. 12.
+               BUTTON " OK " "GOSUB Copy_and_Run_defaultwin"
+               POS 15. 4. 12.
+               BUTTON "   Cancel   " "DIALOG.END"
+            )
+ 
+            STOP
+ 
+Copy_and_Run_defaultwin:
+               &file=DIALOG.STRING(file)
+    
+               IF OS.FILE(&file) 
+               ( 
+                  ;remove default file if it is there.
+                  IF OS.FILE(&default_winfile) 
+                  ( 
+                     DEL &default_winfile
+                  )
+          
+                  COPY &file &default_winfile
+ 
+                  ;close the window used to browse for the default window
+                  DIALOG.END
+ 
+                  ;load the default window settings.
+                  DO &default_winfile
+               )
+               ELSE
+               (
+                  DIALOG.OK "File: &file, does not exist."
+                  RETURN
+               )
+         )
+ 
+         MENUITEM "&Save Current Window as default Setup" 
+         (
+            STORE &default_winfile WIN
+         )
+      )
+      ;--End Windows Menu--
+      SEPARATOR
+
+      POPUP "&MPM" 
+      (
+         MENUITEM "&Stop Main for MPM w/Main Debug"
+         ( 
+            IF OS.FILE("&macrodir\Stop_Main_for_MPM_Debug_withMainDebug.cmm") 
+            (
+               DO "&macrodir\Stop_Main_for_MPM_Debug_withMainDebug"
+            )
+            ELSE
+            (
+               DIALOG.OK "Can not find &macrodir\Stop_Main_for_MPM_Debug_withMainDebug.cmm..."              
+            )
+         )
+         MENUITEM "&Stop Main for MPM w/No Main Debug"
+         ( 
+            IF OS.FILE("&macrodir\Stop_Main_for_MPM_Debug_NoMainDebug.cmm") 
+            (
+               DO "&macrodir\Stop_Main_for_MPM_Debug_NoMainDebug"
+            )
+            ELSE
+            (
+               DIALOG.OK "Can not find &macrodir\Stop_Main_for_MPM_Debug_NoMainDebug.cmm..."              
+            )
+         )
+      )
+      SEPARATOR
+
+      POPUP "&Analyzer" 
+      (
+         MENUITEM "&Analyzer Control Panel"
+         ( 
+            IF OS.FILE("&macrodir\acp.cmm") 
+            (
+               DO "&macrodir\acp"
+            )
+            ELSE
+            (
+               DIALOG.OK "Can not find &macrodir\acp.cmm..."              
+            )
+         )
+         MENUITEM "&Analyzer Trigger Setup"
+         ( 
+            IF OS.FILE("&macrodir\set_trigger.cmm") 
+            (
+               DO "&macrodir\set_trigger"
+            )
+            ELSE
+            (
+               DIALOG.OK "Can not find &macrodir\set_trigger.cmm..."              
+            )
+         )
+         MENUITEM "&Analyzer Find All in Trace"
+         ( 
+            IF OS.FILE("&macrodir\findall.cmm") 
+            (
+               DO "&macrodir\findall"
+            )
+            ELSE
+            (
+               DIALOG.OK "Can not find &macrodir\findall.cmm..."              
+            )
+         )
+      )
+     ) 
+     ;--End Delphi Menu--
+) 
+;--End Add Menu--
+ 
+ 
+;====================================================== 
+;TOOLBAR 
+;( 
+  ;SEPARATOR 
+  ;TOOLITEM "TPU STEP" "t,R,STEP" "tpu.s" 
+; 
+;  TOOLITEM "TPU GO" "t,R,GO"  
+;  ( 
+;    ON ERROR
+;    TPU.GO     
+;    GO 
+;  ) 
+; 
+;  TOOLITEM "TPU Break" "t,R,BRK"  
+;  ( 
+;    BREAK.DIRECT 
+;    TPU.BREAK 
+;  ) 
+; 
+  ;SEPARATOR 
+; 
+;  TOOLITEM "TPU A" "A,G,reg" "tpu.sel a" 
+; 
+;  TOOLITEM "TPU B" "B,G,reg" "tpu.sel b" 
+; 
+;  TOOLITEM "TPU C" "C,G,reg" "tpu.sel c" 
+; 
+;  SEPARATOR 
+;) 
+ 
+ 
+;====================================================== 
+TOOLBAR 
+( 
+   REPLACE
+   TOOLITEM "Go" "[=7V4Xq17uSe@ppvKIhh31Bl1ExmE$QwPvOu007xl7$xkigeca30xtmkUY7M7307l1R2Ml3RtY1x00IFT3AihprTQwximS6XN007l1R2Ml3RtY1x00IFT3AihprTQwximS6XN007l1R2Ml3RtY1x00IFT3AihprTQwximS6XN007l1R2Ml3Rt7kCt303TV0l1P0VtUosBt101t0UtE$$ef@]" 
+   (
+      IF (&WP_IS_SELECTED)
+      (
+         DO "&macrodir\cal" WPCHECK
+      )
+      ELSE
+      (
+         GO
+      )
+   )
+)
+
+TOOLBAR 
+( 
+   TOOLITEM "Sys Up" "[=5V4AcD03l3x3$o$kJKK001t0UtE$$ef@]" 
+   (
+      &do_event=(&do_event)&0xef
+      DO "&macrodir\cyclepower"
+      ;------------------------------------------
+      ; Initialise the Cu Head MMU and EBI
+      ;------------------------------------------
+      DO "&cwd\mmu_init.cmm"
+      DO "&cwd\ebi_init.cmm"
+      R.S IP system_reset
+   )
+;
+   TOOLITEM "Sys Standby" "[=AV4AkOLth2807t3$CKu$McF17p2V0fX0040VK101I91f0SFg0F00@C454245001t0UtffxUz3UD1101t0UtE$$ef@]"
+   (
+      IF ((&do_event)&(0x10))==0x10
+      (
+         PRINT "Standby is already Enabled, use SYSTEM Down to cancel..."
+      )
+      ELSE
+      (
+         SYS.DOWN
+         WAIT 1.s 
+;         DIAG 3301 1          ;required for ETKS2b arbitration
+;         DIAG 3314 1          ;required for ETKS3 arbitration. Comment out if using ETKS2b.
+;         SYStem.Option.ETK ON ;required for T32 Aug version
+         SYStem.Option.RSTOUT ON ;required for run-through-reset
+         SYS.MODE STANDBY
+         WAIT 0.5s
+         ;NOTE The global &do_event must be declared outside the menu in the start script
+         &do_event=(&do_event)|0x10
+         PRINT "Standby Enabled..."
+
+         IF (&WP_IS_SELECTED)
+         (
+            DO "&macrodir\cal" RESET        
+         )
+         ELSE
+         (
+         )
+      )
+      ON ERROR GOTO ErrStdby
+      CB
+      GOTO Stdby
+ErrStdby:
+   DO "&macrodir\do_events"
+Stdby:
+   ON ERROR
+   ;Set reset delay for 10ms default is 250ms
+   DIAG 3000 34. 10.
+   ENDDO
+  )
+
+   TOOLITEM "Sys Down" "[=5V437LVYffxUz3UD1101t0UtE$$ef@]" 
+   (
+      SYS.DOWN
+      &do_event=(&do_event)&0xef
+      ;Set reset delay back to default of 250ms 
+      DIAG 3000 34. 250.
+   )
+   SEPARATOR 
+   TOOLITEM "Reset to Code Start" "RS,R"  
+   ( 
+      ;GLOBAL &do_event
+      ;only running from external ROM/RAM
+      B::
+      ;Clear all events since a reset should 
+      ;clear standby, interrupts
+      &do_event=0x00
+
+      ;Issue an in target reset!
+      ;Now reset Externals to prevent RESET error
+      IF OS.FILE("&macrodir\external.cmm") 
+      (
+         ;Modes 0-5 are DOWN states, all others are UP states
+         IF SYSTEM.MODE()>=6
+         (;do an in target reset
+            SYSTEM.MODE DOWN
+            SYSTEM.MODE UP
+            REGISTER.RESET 
+            ;------------------------------------------
+            ; Initialise the Cu Head MMU and  EBI
+            ;------------------------------------------
+            DO "&cwd\mmu_init.cmm"
+            DO "&cwd\ebi_init.cmm"
+         )
+         DO "&macrodir\external"
+      )
+      ELSE                                              
+      (
+         DO "&macrodir\cyclepower"
+         DIALOG.OK "Can not find &macrodir\external.cmm, Default path may have changed..."   
+      )
+         
+      REGISTER.RESET 
+ 
+      ;need to make sure we start at system_reset.
+      R.S IP system_reset
+   ) 
+   SEPARATOR 
+
+   TOOLITEM "Disable Interupts" "[=7V4@SHmOtitz7xEVUEt1DR0DU0jU0sR0QRVCRlDRN7RD7Rc7xW7xVcE0$30UEl1DR0DT0jQ0sN0QNVCNl6NN7ND7Nc7tW7xVcE0$101t0UtE$$ef@]"  
+   ( 
+     ;NOTE The global &do_event must be declared outside the menu in the start script
+      IF ((&do_event)&(0x1))==0x1
+      (
+         PRINT "Interrupts are already Disabled, nothing to do..."
+      )
+      ELSE
+      (
+         ;Modes 0-5 are DOWN states, all others are UP states
+         &do_event=(&do_event)|0x1
+         IF !RUN()&&SYSTEM.MODE()>=6
+         (
+            R.S EE 0
+         )
+         PRINT "Interrupts have been Disabled"
+      
+         ON ERROR GOTO ErrReLoadInt
+         CB
+         GOTO LoadedInt
+ErrReLoadInt:
+         DO "&macrodir\do_events"
+LoadedInt:
+         ON ERROR
+      )
+   ENDDO
+   )
+    
+   TOOLITEM "Enable Interupts" "[=9VZb5wDv0t1V$07DRVomt6Erz$iSCy0$Y3$3z7l$7x$7z$c$xE$$$K5$xExu7x$1xU00DU0jU0sR0QRVCRlDRN7RD7Rc7xW7xVcE0$30UEl1DR0DT0jQ0sN0QNVCNl6NN7ND7Nc7tW7xVcE0$101t0UtE$$ef@]"  
+   ( 
+     ;NOTE The global &do_event must be declared outside the menu in the start script
+      IF ((&do_event)&(0x1))==0x1
+      (
+         &do_event=(&do_event)&0xfe
+         PRINT "Interrupts have been Enabled"
+      )
+      ELSE
+      (
+         PRINT "Interupts were not Disabled"
+      )
+      ON ERROR GOTO ErrReLoadInt
+      CB
+      GOTO LoadedInt
+ErrReLoadInt:
+      DO "&macrodir\do_events"
+LoadedInt:
+      ON ERROR
+      ENDDO
+  ) 
+
+SEPARATOR 
+
+  TOOLITEM "Performance.Reset" "PR,X" "PERF.RESET" 
+
+  TOOLITEM "Single Step backwards" "SB,X" "STEP.BACK"
+ 
+  TOOLITEM "Log Variables into a file" "LV,X" 
+  ( 
+    AREA.RESET 
+    AREA.OPEN A000 flags.log 
+    VAR.LOG %E FLAGS /TIMESTAMP /ONTIME 100.MS 
+    AREA 
+  ) 
+ 
+  TOOLITEM "Log Variables OFF" "LO,X"  
+  ( 
+    AREA.CLOSE 
+    VAR.LOG 
+  ) 
+  TOOLITEM "Code Coverage" "CC,X"  
+  ( 
+    ;DO reg 
+     B::
+     ;Modes 0-5 are DOWN states, all others are UP states
+     IF SYSTEM.MODE()<6
+     (
+        IF OS.FILE("&macrodir\external.cmm") 
+        (
+           DO "&macrodir\external"
+        )
+        ELSE                                              
+        (
+           DO "&macrodir\cyclepower"
+           DIALOG.OK "Can not find &macrodir\external.cmm, Default path may have changed..."              
+        )
+     )
+
+    ;Make sure we start at addr 0x008, the PPC start vector 
+;    IF Y.EXIST(ZERODIVI_EXCEPT_FRAME_OFFSET_FOR_FAULT_INSTRUC_PC)
+;      (
+;       R.S IP ZERODIVI_EXCEPT_FRAME_OFFSET_FOR_FAULT_INSTRUC_PC
+;      )
+;
+;sys.option BTM On
+;sys.option DTM Off
+    ;Make sure we start at addr 0xFFFFFFFC, the start vector 
+
+       R.S IP system_reset
+
+    ANALYZER.RESET 
+    ANALYZER.SIZE 03FFF
+    ANALYZER.MODE STACK 
+    ANALYZER.COVERAGE.RESET 
+
+    GO 
+    WAIT 2.S 
+    ANALYZER.COVERAGE.ADD 
+    ANALYZER.COVERAGE.LISTFUNC 
+  ) 
+ 
+SEPARATOR 
+  
+  TOOLITEM "Analyzer Arm" "ARM,X"
+    (
+;     PP::ANALYZER.ARM
+     B::ANALYZER.ARM
+    )
+  TOOLITEM "Analyzer Off" "OFF,X"
+    (
+;     PP::ANALYZER.OFF
+     B::ANALYZER.OFF
+    )
+  TOOLITEM "Analyzer Init" "INIT,X"
+   (
+;    PP::ANALYZER.INIT
+    B::ANALYZER.INIT
+   )
+
+SEPARATOR
+
+   TOOLITEM "MPM_NoMainDebug" "[=5V4nWMp5iKQKMKJ43000e7l@1pHrjtzH2XXWNbu8H0DU0jU0sR0QRVCRlDRN7RD7Rc7xW7xVcE0$30UEl1DR0DT0jQ0sN0QNVCNl6NN7ND7Nc7tW7xVcE0$101t0UtE$$ef@]"  
+   ( 
+      
+      IF OS.FILE("&macrodir\Stop_Main_for_MPM_Debug_NoMainDebug.cmm") 
+      (
+         DO "&macrodir\Stop_Main_for_MPM_Debug_NoMainDebug"
+      )
+      ELSE
+      (
+         DIALOG.OK "Can not find &macrodir\Stop_Main_for_MPM_Debug_NoMainDebug.cmm..."              
+      )
+   )
+
+   TOOLITEM "MPM_MainDebug" "[=5V4nWMp5iKQKMKJ4300022VZ80UtXwA98@DXObY810DU0jU0sR0QRVCRlDRN7RD7Rc7xW7xVcE0$30UEl1DR0DT0jQ0sN0QNVCNl6NN7ND7Nc7tW7xVcE0$101t0UtE$$ef@]"  
+   ( 
+      IF OS.FILE("&macrodir\Stop_Main_for_MPM_Debug_withMainDebug.cmm") 
+      (
+         DO "&macrodir\Stop_Main_for_MPM_Debug_withMainDebug"
+      )
+      ELSE
+      (
+         DIALOG.OK "Can not find &macrodir\Stop_Main_for_MPM_Debug_withMainDebug.cmm..."              
+      )
+      
+   )
+
+) 
+
+;*===========================================================================*
+;* File Revision History (top to bottom: first revision to last revision)
+;*===========================================================================
+;*
+;* Date        userid    (Description on following lines: SCR #, etc.)
+;* ----------- --------
+;* 18-JAN-2005 jzcpfk (JWH2)
+;* + Module created for D-One. Task#34797 - "SCR None"
+;* 26-JAN-2005 jzcpfk (JWH2) 
+;* + Updated for D1 Task#34825. SCR - None
+;*
+;* 10-FEB-2005 jzcpfk (JWH2) 
+;* + Updated for D1 Task#34876. SCR - None
+;*
+;* 19-APR-2005 jzcpfk (JWH2)
+;* + Task#35509 SCR - 4003
+;* + Continue to updated functionality of scripts
+;*
+;* 25-APR-2005 jzcpfk (JWH2)
+;* + Task#36421 SCR - 4003
+;*   +Add DIAG 3301 1 to before the SYSTEM.MODE Standy
+;*
+;* 11-MAY-2005 jzcpfk (JWH2)
+;* + Task#36995 SCR - 4003
+;*   +Remove sram_init call during "UP" & "RS".
+;*   +This wasn't being done anyway because all lines in sram_init.cmm
+;*   +had been commented out.  I'm now going to comment the sram_init.cmm
+;*   +data.set back in so I had to remove the call to sram_init.cmm
+;*
+;* 12-MAY-2005 jzcpfk (JWH2)
+;* + Task#37021 SCR - 4003
+;*   +Fix DIALOG.OK repsonse for missing sram_init.cmm
+;*
+;* 13-MAY-2005 jzcpfk (JWH2)
+;* + Task#37054 SCR - 4003
+;*   +Remove comments referencing SRAM from "UP" & "RS"
+;*   +Add reference to task#37021
+;*   +Re-number cuheadmenu.men file number to next whole number
+;*
+;* 26-MAY-2005 JZCPFK (JWH2) 
+;* + Added MPM Menu option. Task#37239 - "SCR 4161"
+;* + Added MPM buttons to match menu options
+;*
+;* 24-JUN-2005 zzyl53 (TWK)
+;* + SCR-4041, Task-36029
+;*   + Added "DIAG 3314 1" for ETKS3 arbitration.
+;*
+;* 13-JUL-2005 zzyl53 (TWK)
+;* + SCR4263, Task-38028
+;*   + Commented out "DIAG 3314 1" since we are using ETKS2b for now.
+;*
+;* 10-AUG-2005 zzyl53 (TWK)
+;* + SCR4219, Task-38446
+;*   + Uncommented "DIAG 3314 1" since we are now using ETKS3.
+;*   + Added "SYStem.Option.ETK ON" for TRACE32 Aug version. This change is
+;*     based on e-mail located at:
+;*     T:\Sys_Software\Powertrain\Reuse\HWIO\D One\Requirements\
+;*     Requirements Analysis\Customer Answers or Assumptions\
+;*     RE Aug Lauterbach version that supports Watchdog Control feature .rtf
+;*   + Modified module header to standards.
+;*
+;* 03-OCT-2005 zzyl53 (TWK)
+;* + SCR-4409, Task-39265
+;*   + Added POPUP "&Analyzer" under the Delphi menu to support Chris
+;*     McDaniel's new Analyzer Control Panel scripts.
+;*   + Changed the option name from TRE to TraceEnable for the "Trace on Var"
+;*     POPUP menu items. TRE was causing an "unknown command" error message.
+;*
+;* 23-NOV-2005 zzyl53 (TWK)
+;* + Task#40199 SCR - 4468
+;*   + Changed parameter from RESET to WPCHECK for the "Go" TOOLITEM.
+;*   + Added Configuration Management keyword "%name:  %" to module header.
+;*===========================================================================*

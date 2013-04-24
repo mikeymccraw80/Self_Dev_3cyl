@@ -1,0 +1,111 @@
+;*===========================================================================*
+; FILE: %name:  do_events.cmm %
+; %version:           1 % 
+; %date_modified:      % 
+; %derived_by:        rz65p6 % 
+; 10005893: E67 MY2006 Engine Control Program 
+; Copyright 2002 Delphi Technologies, Inc., All Rights Reserved. 
+;*===========================================================================*
+ 
+;*===========================================================================*
+;                        do_events.cmm 
+; Description 
+; ----------- 
+;   This file is a 'TSR' that handles what the debugger will do when an event
+;   such as a breakpoint or powerup occurs.
+;
+; Reuse 
+; ----- 
+;   This file is very specific to D1.  However, the basic layout should be  
+;   reusable for other programs using a PowerPC.  
+; 
+; Owners : Duane Markell, Jason Howerton, Jeff Hyatt 
+; ------ 
+;   Any reports of problems or requests for changes to this module 
+;   should be made to above owner(s). 
+;*===========================================================================*
+GLOBAL &do_event
+GLOBAL &macrodir
+
+&do_event=0
+
+;// switch to debugger prompt, just in case default was changed (to PowerProbe, etc.)
+B::
+
+;//The following is used to tell the calling program if the 
+;//TSR is already loaded
+ON CMD CB GOSUB
+(
+   RETURN 1
+)
+
+
+ON POWERUP GOSUB
+(
+   B::
+   PRINT "Powerup gosub called"
+   PRINT "Configuring SEC_WAIT signal."
+   IF RUN()
+   (
+      BREAK
+      data.set A:0xC3F900F2 %word 0x0112
+      GO
+   )
+   ELSE
+   (
+      data.set A:0xC3F900F2 %word 0x0112    
+   )
+
+   IF ((&do_event)&(0x10))==0x10
+   (
+      IF SYSTEM.MODE()==0
+        (;User is no longer in StandBy mode so skip this macro
+          RETURN
+        )
+      ON ERROR GOTO SkipPwr
+      IF (&WP_IS_SELECTED)
+      (
+         DO "&macrodir\cal" RESET
+      )
+
+      PRINT "Standby Initialized..."
+   )
+
+SkipPwr:
+   ON ERROR
+   RETURN
+)
+
+;================== start of Subr ==========================
+ON PBREAK GOSUB 
+(
+   ; switch to debugger prompt, just in case default was changed
+   B::
+   RETURN
+)
+;================== end of Subr ==========================
+
+; must execute STOP cmd to keep above Subr resident & active 
+; in the Lauterbach PRACTICE macro stack, after initial load.
+; That is why this file must be called last in startup scripts.
+STOP
+;///////////////// end of file ///////////////////////////
+
+
+;*===========================================================================*
+;* File Revision History (top to bottom: first revision to last revision)
+;*===========================================================================
+;*
+;* Date        userid    (Description on following lines: SCR #, etc.)
+;* ----------- --------
+;* 10-FEB-2005 jzcpfk (JWH2) 
+;* + Updated for D1 Task#34876. SCR - None
+;*
+;* 19-APR-2005 jzcpfk (JWH2)
+;* + Task#35509 SCR - 4003
+;* + Continue to updated functionality of scripts
+;*
+;* 31-OCT-2006 zzyl53 (TWK)
+;* + SCR-4989, Task#46068
+;*   + Changes brought over from D1.
+;*===========================================================================*

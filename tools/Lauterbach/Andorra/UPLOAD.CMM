@@ -1,0 +1,1261 @@
+;*============================================================================*
+;* (a) File header block including the copyright notice
+;*===========================================================================*
+;*===========================================================================*
+;* FILE: %name:  UPLOAD.CMM %
+;*===========================================================================
+;* Copyright 2009 Delphi Technologies, Inc., All Rights Reserved.
+;* Delphi Confidential
+;*---------------------------------------------------------------------------
+;* %full_filespec: UPLOAD.CMM~1:ascii:ctc_pt3#2 %
+;* %version: 1 %
+;* %derived_by: rz65p6 %
+;* %date_created: Thu Aug 25 12:32:20 2011 %
+;*---------------------------------------------------------------------------
+;*
+;* DESCRIPTION:
+;*   This script displays the default windows for use with E78.
+;*   This script puts up a Dialog box that is intended to help with  
+;*   Updload / Download of MPC5644A Flash areas.
+;*   This file is very specific to MPC5644a. The basic layout should be  
+;*   reusable for other programs.  
+;*
+;* ABBREVIATIONS:
+;*   None.
+;*
+;* TRACEABILITY INFO:
+;*   None
+;*
+;* DEVIATIONS FROM STANDARDS:
+;*   None.
+;*
+;\*===========================================================================*/ 
+
+ENTRY &filepath 
+ 
+GLOBAL &macrodir
+GLOBAL &cwd 
+
+GLOBAL &L0end 
+GLOBAL &L1end
+GLOBAL &L2end
+GLOBAL &L3end
+GLOBAL &L4end
+GLOBAL &L5end
+GLOBAL &M0end
+GLOBAL &M1end
+GLOBAL &H0end
+GLOBAL &H1end
+GLOBAL &H2end
+GLOBAL &H3end
+GLOBAL &H4end
+GLOBAL &H5end
+GLOBAL &H6end
+GLOBAL &H7end
+GLOBAL &H8end
+GLOBAL &H9end
+GLOBAL &H10end
+GLOBAL &H11end
+; Below added for Viper 3-meg flash
+GLOBAL &H12end
+GLOBAL &H13end
+GLOBAL &H14end
+GLOBAL &H15end
+GLOBAL &H16end
+GLOBAL &H17end
+GLOBAL &H18end
+GLOBAL &H19end
+GLOBAL &ExternalCalRamEnd
+GLOBAL &RamEnd
+
+GLOBAL &L0strt
+GLOBAL &L1strt
+GLOBAL &L2strt
+GLOBAL &L3strt
+GLOBAL &L4strt
+GLOBAL &L5strt
+GLOBAL &M0strt
+GLOBAL &M1strt
+GLOBAL &H0strt
+GLOBAL &H1strt
+GLOBAL &H2strt
+GLOBAL &H3strt
+GLOBAL &H4strt
+GLOBAL &H5strt
+GLOBAL &H6strt
+GLOBAL &H7strt
+GLOBAL &H8strt
+GLOBAL &H9strt
+GLOBAL &H10strt
+GLOBAL &H11strt
+; Below added for Viper 3-meg flash
+GLOBAL &H12strt
+GLOBAL &H13strt
+GLOBAL &H14strt
+GLOBAL &H15strt
+GLOBAL &H16strt
+GLOBAL &H17strt
+GLOBAL &H18strt
+GLOBAL &H19strt
+GLOBAL &ExternalCalRamStrt
+GLOBAL &RamStrt
+
+LOCAL &null 
+
+&L0strt=0x0
+&L1strt=0x4000
+&L2strt=0x10000
+&L3strt=0x1c000
+&L4strt=0x20000
+&L5strt=0x30000
+
+&M0strt=0x40000
+&M1strt=0x60000
+
+&H0strt=0x80000
+&H1strt=0xa0000
+&H2strt=0xc0000
+&H3strt=0xe0000
+&H4strt=0x100000
+&H5strt=0x120000
+&H6strt=0x140000
+&H7strt=0x160000
+&H8strt=0x180000
+&H9strt=0x1a0000
+&H10strt=0x1c0000
+&H11strt=0x1e0000
+; Below added for Viper 3-meg flash
+&H12strt=0x200000
+&H13strt=0x220000
+&H14strt=0x240000
+&H15strt=0x260000
+&H16strt=0x280000
+&H17strt=0x2a0000
+&H18strt=0x2c0000
+&H19strt=0x2e0000
+
+&L0end=0x3fff
+&L1end=0xffff
+&L2end=0x1bfff
+&L3end=0x1ffff
+&L4end=0x2ffff
+&L5end=0x3ffff
+
+&M0end=0x5ffff
+&M1end=0x7ffff
+
+&H0end=0x9ffff
+&H1end=0xbffff
+&H2end=0xdffff
+&H3end=0xfffff
+&H4end=0x11ffff
+&H5end=0x13ffff
+&H6end=0x15ffff
+&H7end=0x17ffff
+&H8end=0x19ffff
+&H9end=0x1bffff
+&H10end=0x1dffff
+&H11end=0x1fffff
+; Below added for Viper 3-meg flash
+&H12end=0x21ffff
+&H13end=0x23ffff
+&H14end=0x25ffff
+&H15end=0x27ffff
+&H16end=0x29ffff
+&H17end=0x2bffff
+&H18end=0x2dffff
+&H19end=0x2fffff
+
+&ExternalCalRamStrt=0x20000000
+&ExternalCalRamEnd=0x2003ffff
+
+&RamStrt=0x40000000
+&RamEnd=0x4001EFFF
+ 
+&flashbase=0x00000000
+&shadowbase=0x00fffc00
+&rambase=0x40000000
+&flashdriver="tbd.bin"
+
+&cwd=OS.PPD() 
+;-------------------------------------------------
+; The following section verifies that the passed
+; in path exists, if it does not then the current
+; directory is used.
+;-------------------------------------------------
+ON ERROR JUMPTO pathnotfound
+CHDIR "&filepath"
+GOTO pathset
+pathnotfound:
+   &filepath="."
+pathset:
+ON ERROR
+
+&defaults="&filepath\ud_defaults.ini" 
+
+
+WINPOS ,,,,,, _a_dialog 
+DIALOG 
+( 
+   HEADER "Power PC Flash/Emulation Upload Download Utility Ver. 1.01" 
+ 
+   POS 0. 0. 33. 
+   LINE "" 
+   POS 35. 0. 26. 
+   TEXT "  Modify Internal Flash/Emulation RAM" 
+   POS 53. 0. 33. 
+   LINE "" 
+
+   POS 1. 1. 84. 6.
+   BOX " Overview "
+   POS 3. 2. 75. 1. 
+   ;     -----------------------------------------------------------------------------------------------------------------
+   TEXT "For ROM you must use the entire flash block when erasing, uploading, or downloading."
+   POS 3. 3. 75. 1.
+   TEXT "Example: L0's range is 0x0--0x3FFF, you must select the entire range, you can't select only 0x0--0x3000, etc."
+   POS 3. 4. 75. 1.
+   TEXT "For Emulation RAM(i.e.0x20000000--0x2003FFFF) you aren't restricted, you can select any subset in the range."
+   POS 3. 5. 75. 1.
+   TEXT "Example: You can erase, upload, or download 0x20000000--0x20000010, 0x2000FFFF--0x2001FFFF, etc."
+
+   POS 0. 9. 86. 1.
+   LINE "" 
+ 
+   POS 1. 10. 8. 
+   TEXT "U/D"
+   POS 5. 10. 8. 
+   TEXT "VRFY"     
+   POS 11. 10. 8. 
+   TEXT "Start"  
+   POS 20. 10. 8. 
+   TEXT "Size"  
+   POS 27. 10. 45.  
+   TEXT "File to upload / download" 
+
+   POS 1. 11. 4. 
+   CHK[0x1]:  CHECKBOX "" ""  
+   POS 6. 11. 4. 
+   VRFY[0x1]:  CHECKBOX "1" ""  
+   POS 11. 11. 9. 
+   BSTRT[0x1]: EDIT "0x0" "GOSUB CheckAddr 0x1" 
+   POS 20. 11. 7. 
+   BSIZE[0x1]: EDIT "0x4000" "GOSUB CheckAddr 0x1" 
+   POS 27. 11. 42.  
+   file[0x1]:   EDIT "" "" 
+         
+   POS 70. 11. 15.        
+   BUTTON "Select File..."  
+   ( 
+         DIALOG.SETFILEW file[0x1] "*.s19;*.ptp"           
+   ) 
+                  
+   POS 1. 12. 4. 
+   CHK[0x2]:  CHECKBOX "" ""
+   POS 6. 12. 4. 
+   VRFY[0x2]:  CHECKBOX "2" ""   
+   POS 11. 12. 9.   
+   BSTRT[0x2]: EDIT "0x4000" "GOSUB CheckAddr 0x2" 
+   POS 20. 12. 7. 
+   BSIZE[0x2]: EDIT "0xc000" "GOSUB CheckAddr 0x2" 
+   POS 27. 12. 42.  
+   file[0x2]:   EDIT "" "" 
+   POS 70. 12. 15.        
+
+   BUTTON "Select File..."  
+   ( 
+      DIALOG.SETFILEW file[0x2] "*.s19;*.ptp"         
+   )        
+         
+   POS 1. 13. 4. 
+   CHK[0x3]:  CHECKBOX "" "" 
+   POS 6. 13. 4. 
+   VRFY[0x3]:  CHECKBOX "3" ""    
+   POS 11. 13. 9.        
+   BSTRT[0x3]: EDIT "0x10000" "GOSUB CheckAddr 0x3" 
+   POS 20. 13. 7. 
+   BSIZE[0x3]: EDIT "0xc000" "GOSUB CheckAddr 0x3" 
+   POS 27. 13. 42.  
+   file[0x3]:   EDIT "" "" 
+   POS 70. 13. 15.        
+
+   BUTTON "Select File..."  
+   ( 
+      DIALOG.SETFILEW file[0x3] "*.s19;*.ptp"    
+   )   
+                
+   POS 1. 14. 4. 
+   CHK[0x4]:  CHECKBOX "" "" 
+   POS 6. 14. 4. 
+   VRFY[0x4]:  CHECKBOX "4" ""  
+   POS 11. 14. 9.   
+   BSTRT[0x4]: EDIT "0x1c0000" "GOSUB CheckAddr 0x4" 
+   POS 20. 14. 7. 
+   BSIZE[0x4]: EDIT "0x20000" "GOSUB CheckAddr 0x4" 
+   POS 27. 14. 42.  
+   file[0x4]:   EDIT "" "" 
+   POS 70. 14. 15.        
+
+   BUTTON "Select File..."  
+   ( 
+      DIALOG.SETFILEW file[0x4] "*.s19;*.ptp"    
+   )        
+         
+   POS 1. 15. 4. 
+   CHK[0x5]:  CHECKBOX "" "" 
+   POS 6. 15. 4. 
+   VRFY[0x5]:  CHECKBOX "5" ""         
+   POS 11. 15. 9.   
+   BSTRT[0x5]: EDIT "0x1e0000" "GOSUB CheckAddr 0x5" 
+   POS 20. 15. 7. 
+   BSIZE[0x5]: EDIT "0x20000" "GOSUB CheckAddr 0x5"  
+   POS 27. 15. 42.  
+   file[0x5]:   EDIT "" "" 
+   POS 70. 15. 15.        
+
+   BUTTON "Select File..."  
+   ( 
+      DIALOG.SETFILEW file[0x5] "*.s19;*.ptp"    
+   )        
+        
+   POS 1. 16. 4. 
+   CHK[0x6]:  CHECKBOX "" ""
+   POS 6. 16. 4. 
+   VRFY[0x6]:  CHECKBOX "6" ""          
+   POS 11. 16. 9.   
+   BSTRT[0x6]: EDIT "0x40000" "GOSUB CheckAddr 0x6" 
+   POS 20. 16. 7. 
+   BSIZE[0x6]: EDIT "0x20000" "GOSUB CheckAddr 0x6" 
+   POS 27. 16. 42.  
+   file[0x6]:   EDIT "" "" 
+   POS 70. 16. 15.        
+
+   BUTTON "Select File..."  
+   ( 
+      DIALOG.SETFILEW file[0x6] "*.s19;*.ptp"    
+   )        
+  
+   POS  1. 18. 12. 
+   BUTTON " Erase Selected " "GOSUB EraseSelectedFlash" 
+  
+   POS 30. 18. 13. 
+   BUTTON " Download Selected " "GOSUB DownloadSelected" 
+  
+   POS 45. 18. 12. 
+   BUTTON " Upload Selected " "GOSUB UploadSelected" 
+ 
+   POS 60. 18. 8. 
+   BUTTON "Cancel" "JUMPTO WinCancelFlash"   
+) 
+ 
+;If ud_defaults.ini exists, then override the above defaults. 
+ReadDefaults: 
+LOCAL &element &value 
+ 
+PRINT "Reading in defaults..." 
+ 
+IF OS.FILE("&defaults") 
+(  
+   PRINT "Opening &defaults for read"
+   OPEN #1 "&defaults" /READ 
+   WHILE (0==0) 
+   ( 
+      READ #1 &element &value 
+ 
+      IF "&element"=="" 
+         GOTO DoneRead 
+ 
+      IF "&element"!=";" 
+      ( 
+         ON ERROR GOTO SKIP_DEF_ERROR 
+         DIALOG.SET &element "&value" 
+SKIP_DEF_ERROR:
+   ON ERROR
+      ) 
+   ) 
+ 
+DoneRead: 
+PRINT "Close File for ReadDefaults"
+   CLOSE #1 
+) 
+
+
+&n=1 
+WHILE &n<7
+( 
+   &file=DIALOG.STRING(file[&n]) 
+   IF (!OS.FILE("&file")) 
+   ( 
+      &file="&filepath\HWIOBOOT\Products\*.elf;*.h12;*.s19;*.ptp" 
+      DIALOG.SET file[&n] "" 
+   ) 
+   &n=&n+1 
+) 
+   
+;Debug 
+; AREA.RES 
+; AREA.C UPDWN 84 200. 
+; AREA UPDWN 
+ 
+STOP 
+;----------------------------------------------------------- 
+; end of scripting for dialog window. 
+;----------------------------------------------------------- 
+ 
+;*===========================================================================*
+EraseSelectedFlash: 
+;*===========================================================================*
+
+&clks=CLOCK.SECONDS() 
+PRINT "Start EraseAll: "+CLOCK.TIME()
+
+GOSUB SetDebuggerType
+GOSUB EraseSelectedBlocks
+ 
+&clke=CLOCK.SECONDS() 
+PRINT "End EraseAll: "+CLOCK.TIME()
+&clke=&clke-&clks
+&mint=&clke
+&clke=&mint%60.
+&mint=(&mint-&clke)/60.
+PRINT "Total ERASE time was &mint Minutes and &clke seconds"
+
+RETURN
+  
+;*===========================================================================*
+UploadSelected:  
+;*===========================================================================*
+LOCAL &n 
+LOCAL &fname 
+LOCAL &bstrt 
+LOCAL &bsiz
+LOCAL &UploadDone
+
+&UploadDone=(0==1) 
+
+IF RUN()
+(
+   BREAK
+)
+
+PRINT "Start Time (Upload): "+CLOCK.TIME() 
+&n=1 
+WHILE &n<7 
+( 
+   IF (DIALOG.BOOLEAN(CHK[&n]))
+   (  
+      &bstrt=DIALOG.STRING(BSTRT[&n])  
+      &bsiz=DIALOG.STRING(BSIZE[&n])  
+      &fname=DIALOG.STRING(file[&n]) 
+      IF "&fname"=="&null"
+      (
+         ;--Nothing to do!--
+      ) 
+      ELSE
+      (
+         GOSUB GetFileType &fname 
+         ENTRY &filetype 
+ 
+         IF "&filetype"=="elf"||"&filetype"=="h12" 
+         ( 
+            DIALOG.OK "Can not upload file '&fname' of type '&filetype'" 
+         ) 
+         ELSE 
+         ( 
+            DATA.SAVE.S3RECORD &fname (&bstrt)++(&bsiz-1) 
+         )
+         &UploadDone=(1==1)
+      ) 
+   ) 
+   &n=&n+1 
+)
+
+;If they press the upload selected button and didn't provide a valid filename
+;then we warn them that they forgot to do something.
+IF (&UploadDone)
+(
+)
+ELSE
+(
+   DIALOG.OK "There was nothing to upload"
+) 
+
+PRINT "End Time (Upload): "+CLOCK.TIME()+" for file &fname"
+ 
+RETURN
+
+;*===========================================================================*
+DownloadSelected:
+;*===========================================================================*
+LOCAL &n
+LOCAL &offcnt
+LOCAL &chkcnt 
+LOCAL &fname
+
+IF RUN()
+(
+   BREAK
+)
+
+&clks=CLOCK.SECONDS() 
+PRINT "Start Time (Download): "+CLOCK.TIME() 
+
+;make sure there is actually a file to download to the micro
+;if a box is checked and no filename is present, then we will erase the flash
+;and not have anything to load.
+&n=1 
+&offcnt=0
+&chkcnt=0
+
+;Download was selected, so we need to make sure that all checkboxes that are
+;checked have an associated file.  If not we will remove the check from the 
+;checkbox.
+WHILE &n<7 
+(
+   IF (DIALOG.BOOLEAN(CHK[&n]))
+   (
+      &chkcnt=&chkcnt+1  
+      &fname=DIALOG.STRING(file[&n]) 
+      IF "&fname"=="&null"
+      (
+         DIALOG.SET CHK[&n] "OFF"
+         &offcnt=&offcnt+1
+      )
+   )
+   ELSE
+   (
+   )
+   &n=&n+1  
+)
+
+;Now that all of the checkboxes have been verified we need to make sure we still
+;have work to do.  If we have turned all of the checkboxes off then no need to 
+;continue.
+IF (&chkcnt>&offcnt)
+(
+   GOSUB SetDebuggerType
+   GOSUB EraseSelectedBlocks
+   GOSUB EraseandProgramSpecificBlocks
+
+   GOSUB ShowAndSaveSelected
+
+   &clke=CLOCK.SECONDS() 
+   PRINT "End Time (Download): "+CLOCK.TIME() 
+   &clke=&clke-&clks
+   &mint=&clke
+   &clke=&mint%60.
+   &mint=(&mint-&clke)/60.
+   PRINT "Total DOWNLOAD time was &mint Minutes and &clke seconds"
+)
+ELSE
+(
+   DIALOG.OK "There was nothing to download!"
+)
+
+RETURN
+ 
+;*===========================================================================*
+ShowAndSaveSelected:   
+;*===========================================================================*
+ 
+;For each section changed display a data dump 
+&n=1 
+WHILE &n<7 
+(  
+   &offset=DIALOG.STRING(BSTRT[&n]) 
+   IF (("&offset"!="&null")&&(DIALOG.BOOLEAN(CHK[&n])))
+   ( 
+      DATA.DUMP &offset /DIALOG 
+   ) 
+   &n=&n+1 
+) 
+ 
+; WRITE dialog window settings to ud_defaults.ini to file. 
+WriteDefaults: 
+LOCAL &value 
+PRINT ("WriteDefaults &defaults")
+IF OS.FILE("&defaults") 
+(  
+   PRINT "Open &defaults for create"
+   OPEN #1 "&defaults" /CREATE 
+ 
+   &n=1 
+   WHILE &n<7 
+   ( 
+      IF DIALOG.BOOLEAN(CHK[&n]) 
+      ( 
+         WRITE #1 "CHK[&n] ON" 
+      )
+      IF DIALOG.BOOLEAN(VRFY[&n]) 
+      ( 
+         WRITE #1 "VRFY[&n] ON" 
+      ) 
+      &value=DIALOG.STRING(BSTRT[&n]) 
+      WRITE #1 "BSTRT[&n] &value" 
+      &value=DIALOG.STRING(BSIZE[&n]) 
+      WRITE #1 "BSIZE[&n] &value" 
+      &value= DIALOG.STRING(file[&n]) 
+      WRITE #1 "file[&n] &value" 
+
+      &n=&n+1 
+   ) 
+ 
+   CLOSE #1 
+)
+PRINT "Upload/Download script completed." 
+RETURN
+ 
+;*===========================================================================*
+WinCancelFlash: 
+;*===========================================================================*
+;close dialog window. 
+DIALOG.END 
+ 
+ENDDO 
+; End of flashd.cmm script.  Return to calling script. 
+ 
+;*===========================================================================*
+CheckAddr: 
+;*===========================================================================*
+ENTRY &caddr
+ 
+LOCAL &Astrt 
+LOCAL &Asiz 
+LOCAL &Temp
+&Astrt=DIALOG.STRING(BSTRT[&caddr]) 
+&Asiz=DIALOG.STRING(BSIZE[&caddr])
+
+   IF (&Astrt<&L0end)
+   (
+      &Asiz=((&L0end-&L0strt)+1)
+      DIALOG.SET BSTRT[&caddr] "&L0strt"
+      DIALOG.SET BSIZE[&caddr] "&Asiz"
+   )
+   ELSE IF (&Astrt<&L1end)
+   (
+      &Asiz=((&L1end-&L1strt)+1)
+      DIALOG.SET BSTRT[&caddr] "&L1strt"
+      DIALOG.SET BSIZE[&caddr] "&Asiz"
+   )
+   ELSE IF (&Astrt<&L2end)
+   (
+      &Asiz=((&L2end-&L2strt)+1)
+      DIALOG.SET BSTRT[&caddr] "&L2strt"
+      DIALOG.SET BSIZE[&caddr] "&Asiz"
+   )
+   ELSE IF (&Astrt<&L3end)
+   (
+      &Asiz=((&L3end-&L3strt)+1)
+      DIALOG.SET BSTRT[&caddr] "&L3strt"
+      DIALOG.SET BSIZE[&caddr] "&Asiz"
+   )
+   ELSE IF (&Astrt<&L4end)
+   (
+      &Asiz=((&L4end-&L4strt)+1)
+      DIALOG.SET BSTRT[&caddr] "&L4strt"
+      DIALOG.SET BSIZE[&caddr] "&Asiz"
+   )
+   ELSE IF (&Astrt<&L5end)
+   (
+      &Asiz=((&L5end-&L5strt)+1)
+      DIALOG.SET BSTRT[&caddr] "&L5strt"
+      DIALOG.SET BSIZE[&caddr] "&Asiz"
+   )
+   ELSE IF (&Astrt<&M0end)
+   (
+      &Asiz=((&M0end-&M0strt)+1)
+      DIALOG.SET BSTRT[&caddr] "&M0strt"
+      DIALOG.SET BSIZE[&caddr] "&Asiz"
+   )
+   ELSE IF (&Astrt<&M1end)
+   (
+      &Asiz=((&M1end-&M1strt)+1)
+      DIALOG.SET BSTRT[&caddr] "&M1strt"
+      DIALOG.SET BSIZE[&caddr] "&Asiz"
+   )
+   ELSE IF (&Astrt<&H0end)
+   (
+      &Asiz=((&H0end-&H0strt)+1)
+      DIALOG.SET BSTRT[&caddr] "&H0strt"
+      DIALOG.SET BSIZE[&caddr] "&Asiz"
+   )
+   ELSE IF (&Astrt<&H1end)
+   (
+      &Asiz=((&H1end-&H1strt)+1)
+      DIALOG.SET BSTRT[&caddr] "&H1strt"
+      DIALOG.SET BSIZE[&caddr] "&Asiz"
+   )
+   ELSE IF (&Astrt<&H2end)
+   (
+      &Asiz=((&H2end-&H2strt)+1)
+      DIALOG.SET BSTRT[&caddr] "&H2strt"
+      DIALOG.SET BSIZE[&caddr] "&Asiz"
+   )
+   ELSE IF (&Astrt<&H3end)
+   (
+      &Asiz=((&H3end-&H3strt)+1)
+      DIALOG.SET BSTRT[&caddr] "&H3strt"
+      DIALOG.SET BSIZE[&caddr] "&Asiz"
+   )
+   ELSE IF (&Astrt<&H4end)
+   (
+      &Asiz=((&H4end-&H4strt)+1)
+      DIALOG.SET BSTRT[&caddr] "&H4strt"
+      DIALOG.SET BSIZE[&caddr] "&Asiz"
+   )
+   ELSE IF (&Astrt<&H5end)
+   (
+      &Asiz=((&H5end-&H5strt)+1)
+      DIALOG.SET BSTRT[&caddr] "&H5strt"
+      DIALOG.SET BSIZE[&caddr] "&Asiz"
+   )
+   ELSE IF (&Astrt<&H6end)
+   (
+      &Asiz=((&H6end-&H6strt)+1)
+      DIALOG.SET BSTRT[&caddr] "&H6strt"
+      DIALOG.SET BSIZE[&caddr] "&Asiz"
+   )
+   ELSE IF (&Astrt<&H7end)
+   (
+      &Asiz=((&H7end-&H7strt)+1)
+      DIALOG.SET BSTRT[&caddr] "&H7strt"
+      DIALOG.SET BSIZE[&caddr] "&Asiz"
+   ) 
+   ELSE IF (&Astrt<&H8end)
+   (
+      &Asiz=((&H8end-&H8strt)+1)
+      DIALOG.SET BSTRT[&caddr] "&H8strt"
+      DIALOG.SET BSIZE[&caddr] "&Asiz"
+   ) 
+   ELSE IF (&Astrt<&H9end)
+   (
+      &Asiz=((&H9end-&H9strt)+1)
+      DIALOG.SET BSTRT[&caddr] "&H9strt"
+      DIALOG.SET BSIZE[&caddr] "&Asiz"
+   ) 
+   ELSE IF (&Astrt<&H10end)
+   (
+      &Asiz=((&H10end-&H10strt)+1)
+      DIALOG.SET BSTRT[&caddr] "&H10strt"
+      DIALOG.SET BSIZE[&caddr] "&Asiz"
+   ) 
+   ELSE IF (&Astrt<&H11end)
+   (
+      &Asiz=((&H11end-&H11strt)+1)
+      DIALOG.SET BSTRT[&caddr] "&H11strt"
+      DIALOG.SET BSIZE[&caddr] "&Asiz"
+   )
+; Below added for Viper 3-meg flash
+   ELSE IF (&Astrt<&H12end)
+   (
+      &Asiz=((&H12end-&H12strt)+1)
+      DIALOG.SET BSTRT[&caddr] "&H12strt"
+      DIALOG.SET BSIZE[&caddr] "&Asiz"
+   )
+   ELSE IF (&Astrt<&H13end)
+   (
+      &Asiz=((&H13end-&H13strt)+1)
+      DIALOG.SET BSTRT[&caddr] "&H13strt"
+      DIALOG.SET BSIZE[&caddr] "&Asiz"
+   )
+   ELSE IF (&Astrt<&H14end)
+   (
+      &Asiz=((&H14end-&H14strt)+1)
+      DIALOG.SET BSTRT[&caddr] "&H14strt"
+      DIALOG.SET BSIZE[&caddr] "&Asiz"
+   )
+   ELSE IF (&Astrt<&H15end)
+   (
+      &Asiz=((&H15end-&H15strt)+1)
+      DIALOG.SET BSTRT[&caddr] "&H15strt"
+      DIALOG.SET BSIZE[&caddr] "&Asiz"
+   )
+   ELSE IF (&Astrt<&H16end)
+   (
+      &Asiz=((&H16end-&H16strt)+1)
+      DIALOG.SET BSTRT[&caddr] "&H16strt"
+      DIALOG.SET BSIZE[&caddr] "&Asiz"
+   )
+   ELSE IF (&Astrt<&H17end)
+   (
+      &Asiz=((&H17end-&H17strt)+1)
+      DIALOG.SET BSTRT[&caddr] "&H17strt"
+      DIALOG.SET BSIZE[&caddr] "&Asiz"
+   )
+   ELSE IF (&Astrt<&H18end)
+   (
+      &Asiz=((&H18end-&H18strt)+1)
+      DIALOG.SET BSTRT[&caddr] "&H18strt"
+      DIALOG.SET BSIZE[&caddr] "&Asiz"
+   )
+   ELSE IF (&Astrt<&H19end)
+   (
+      &Asiz=((&H19end-&H19strt)+1)
+      DIALOG.SET BSTRT[&caddr] "&H19strt"
+      DIALOG.SET BSIZE[&caddr] "&Asiz"
+   )
+   ELSE IF ((&Astrt>=&ExternalCalRamStrt)&&(&Astrt<=&ExternalCalRamEnd))
+   (
+      &Temp=&Astrt%4
+      &Astrt=&Astrt-&Temp 
+
+      IF ((&Astrt+&Asiz)>&ExternalCalRamEnd)
+      (
+         &Asiz=(&ExternalCalRamEnd-&Astrt)+1
+      )
+      DIALOG.SET BSTRT[&caddr] "&Astrt"
+      DIALOG.SET BSIZE[&caddr] "&Asiz"
+   )  
+   ELSE IF ((&Astrt>=&RamStrt)&&(&Astrt<=&RamEnd))
+   (
+      &Temp=&Astrt%4
+      &Astrt=&Astrt-&Temp 
+
+      IF ((&Astrt+&Asiz)>&RamEnd)
+      (
+         &Asiz=(&RamEnd-&Astrt)+1
+      )
+      DIALOG.SET BSTRT[&caddr] "&Astrt"
+      DIALOG.SET BSIZE[&caddr] "&Asiz"
+   )
+   ELSE
+   (
+      DIALOG.OK "Invalid start address!"
+      DIALOG.SET BSTRT[&caddr] "0x0"
+      DIALOG.SET BSIZE[&caddr] "0x0"
+   )
+
+RETURN 
+ 
+;*===========================================================================*
+EraseandProgramSpecificBlocks: 
+;*===========================================================================*
+ 
+LOCAL &null 
+LOCAL &n 
+LOCAL &baddr 
+LOCAL &eaddr 
+
+DO "&macrodir\cal" RP
+
+IF RUN()
+(
+   BREAK
+)
+
+FLASH.Program ALL
+
+&n=1 
+WHILE &n<7.  
+(  
+   &fname=DIALOG.STRING(file[&n]) 
+
+   IF "&fname"=="&null"||(!DIALOG.BOOLEAN(CHK[&n]))
+   (
+      ;--Nothing to do!--
+   ) 
+   ELSE 
+   ( 
+      IF (!DIALOG.BOOLEAN(VRFY[&n]))
+      (   
+         GOSUB GetFileType &fname 
+         ENTRY &filetype 
+ 
+         ON ERROR GOTO FL_ERROR 
+         IF "&filetype"=="elf"
+         (
+            DATA.LOAD.ELF  "&fname" /Long /NoClear /PlusVM
+         )
+         ELSE IF "&filetype"=="ptp"
+         ( 
+            &dload_flags="/NoClear /Quad /PlusVM /DIAG /MAP" 
+            &ftext="Loading"
+            &baddr=DIALOG.STRING(BSTRT[&n]) 
+            &eaddr=DIALOG.STRING(BSIZE[&n])
+            &eaddr=&baddr+(&eaddr-1) 
+            PRINT "Loading &fname (&baddr--&eaddr) &dload_flags"    
+            DATA.LOAD.S3RECORD  "&fname" (&baddr--&eaddr) &dload_flags
+         )
+         ELSE
+         (
+            IF "&filetype"=="h12"
+            (
+               DATA.LOAD.COSMIC  "&fname" /Long /NoClear /PlusVM
+            )
+            ELSE
+            (
+               DATA.LOAD.S3RECORD  "&fname" 0x000000 /Long /NoClear
+            )
+         )
+      )
+      ELSE
+      (
+         ;Skip the load here and do it during verify
+         ;No need to load the file twice.
+      )
+   )
+
+GOTO SKIP_FL_ERROR 
+FL_ERROR:
+   DIALOG.OK "Can not download file '&fname'...Possible RAM/ROM mismatch?"
+SKIP_FL_ERROR:
+   ON ERROR
+   &n=&n+1 
+) 
+ 
+&n=1 
+WHILE &n<7.  
+( 
+   &fname=DIALOG.STRING(file[&n]) 
+
+   IF "&fname"=="&null"||(!DIALOG.BOOLEAN(CHK[&n]))
+   (
+      ;--Nothing to do!--
+   )
+   ELSE 
+   (
+      IF (DIALOG.BOOLEAN(VRFY[&n])) 
+      (
+         GOSUB GetFileType &fname     
+         ENTRY &filetype 
+
+         PRINT "Comparing Loaded program with file &fname" 
+
+         ON ERROR GOTO VRFY_ERROR 
+         IF "&filetype"=="elf"
+         (
+            ;Clear symbols since comparing will reload 
+            ;and you will end up with duplicates.
+            SYMBOL.RESET
+            DATA.LOAD.ELF  "&fname" /ComPare /NoClear /PlusVM
+         )
+         ELSE
+         (
+            IF "&filetype"=="h12"
+            (
+               DATA.LOAD.COSMIC  "&fname" /ComPare /NoClear /PlusVM
+            )
+            ELSE
+            (
+               &baddr=DIALOG.STRING(BSTRT[&n]) 
+               &eaddr=DIALOG.STRING(BSIZE[&n])
+               &eaddr=&baddr+(&eaddr-1) 
+               PRINT "Loading &fname (&baddr--&eaddr) /NoClear /PlusVM"
+               DATA.LOAD.S3RECORD  "&fname" (&baddr--&eaddr) /NoClear /PlusVM
+               PRINT "Comparing &fname (&baddr--&eaddr) /NoClear /NOCODE /ComPare" 
+               DATA.LOAD.S3RECORD  "&fname" (&baddr--&eaddr) /NoClear /NOCODE /ComPare
+            )
+         )
+         GOTO SKIP_VRFYERR
+VRFY_ERROR: 
+   DIALOG.OK "Verify Error for file '&fname' --Symbols not loaded--"
+SKIP_VRFYERR:
+   ON ERROR
+      )
+      ELSE
+      (
+         ;Nothing to verify
+      ) 
+   )     
+&n=&n+1
+)
+   
+;End COMPARE 
+FLASH.PROGRAM OFF 
+PRINT "Flash program done" 
+
+RETURN 
+;EraseandProgramSpecificBlocks
+
+;*===========================================================================*
+EraseSelectedBlocks: 
+;*===========================================================================*
+LOCAL &eaddr 
+LOCAL &n
+
+IF RUN()
+(
+   BREAK
+)
+
+; set BIUAPR register to make Flash memory visible for Nexus
+D.S ASD:0xC3F88020 %LONG 0x00033f03
+
+;*===========================================================================*
+; Check SIU_MIDR register to select flash driver for processor revision
+;*===========================================================================*
+;&corerevision=data.long(EA:0xC3F90004)
+;PRINT "Core revision 0x" &corerevision
+;&partnum=&corerevision>>16.
+;if (&partnum==0x5565||&partnum==0x5567)
+;(
+;  &flashdriver="~~/demo/powerpc/flash/quad/h7fa.bin"
+; 2-meg part  &flashsize=0x000200000
+;)
+;else if &partnum==0x5674
+;(
+  &flashdriver="~~/demo/powerpc/flash/quad/h7fa.bin"
+; 3-meg part &flashsize=0x000300000
+;)
+;else
+;(
+;  PRINT %error "flash driver for MPC&partnum not defined"
+;  END
+;)
+
+FLASH.RESET
+PRINT "Creating Flash Areas"
+
+;BINVDM1
+FLASH.Create 1. (&flashbase+0x00000000)++0x03fff TARGET Quad 0. ; L0
+FLASH.Create 1. (&flashbase+0x00004000)++0x0bfff TARGET Quad 1. ; L1 
+FLASH.Create 1. (&flashbase+0x00010000)++0x0bfff TARGET Quad 2. ; L2 
+;BINVDM2
+FLASH.Create 1. (&flashbase+0x0001c000)++0x03fff TARGET Quad 3. ; L3
+FLASH.Create 1. (&flashbase+0x00020000)++0x0ffff TARGET Quad 4. ; L4
+FLASH.Create 1. (&flashbase+0x00030000)++0x0ffff TARGET Quad 5. ; L5
+FLASH.Create 2. (&flashbase+0x00040000)++0x1ffff TARGET Quad 0. ; M0
+FLASH.Create 2. (&flashbase+0x00060000)++0x1ffff TARGET Quad 1. ; M1
+&flashaddr=&flashbase+0x00080000
+&Hx=0.
+;The "." after the 11 ensures decimal comparison as opposed to hex.
+WHILE (&Hx<=19.)
+(
+   FLASH.Create 3. &flashaddr++0x1ffff TARGET Quad &Hx ; H0..H19
+   &flashaddr=&flashaddr+0x20000
+   &Hx=&Hx+1.
+)
+;do not erase shadow row
+FLASH.Create 4. (&shadowbase+0x00000000)++0x3ff NOP Quad 
+FLASH.TARGET &rambase E:&rambase+0x2000 0x1000 &flashdriver
+
+&n=1 
+WHILE &n<7. 
+( 
+   IF DIALOG.BOOLEAN(CHK[&n]) 
+   ( 
+      &baddr=DIALOG.STRING(BSTRT[&n]) 
+      &eaddr=DIALOG.STRING(BSIZE[&n]) 
+      &eaddr=&baddr+(&eaddr-1)
+      
+      IF ((&baddr>=&ExternalCalRamStrt)&&(&eaddr<=&ExternalCalRamEnd))
+      ( 
+         PRINT "Filling Emulation Range &baddr--&eaddr with 'FF'" 
+         DATA.SET D:&baddr--&eaddr %BYTE 0xFF 
+      )
+      ELSE IF ((&baddr>=&RamStrt)&&(&eaddr<=&RamEnd))
+      ( 
+         PRINT "Filling RAM Range &baddr--&eaddr with 'FF'" 
+         DATA.SET D:&baddr--&eaddr %BYTE 0xFF 
+      )
+      ELSE IF (&baddr==&L0strt)
+      (
+         PRINT "Erasing 0x0--0x3fff"  
+         FLASH.Erase 0x0--0x3fff
+      )
+      ELSE IF (&baddr==&L1strt)
+      (
+         PRINT "Erasing 0x4000--0xffff" 
+         FLASH.Erase 0x4000--0xffff
+      )
+      ELSE IF (&baddr==&L2strt)
+      (
+         PRINT "Erasing 0x10000--0x1bfff"
+         FLASH.Erase 0x10000--0x1bfff
+      )
+      ELSE IF (&baddr==&L3strt)
+      (
+         PRINT "Erasing 0x1c000--0x1ffff"
+         FLASH.Erase 0x1c000--0x1ffff  
+      )
+      ELSE IF (&baddr==&L4strt)
+      (
+         PRINT "Erasing 0x20000--0x2ffff"
+         FLASH.Erase 0x20000--0x2ffff
+      )
+      ELSE IF (&baddr==&L5strt)
+      (
+         PRINT "Erasing 0x30000--0x3ffff"
+         FLASH.Erase 0x30000--0x3ffff
+      )
+      ELSE IF (&baddr==&M0strt)
+      (
+         PRINT "Erasing 0x40000--0x5ffff"
+         FLASH.Erase 0x40000--0x5ffff
+      )
+      ELSE IF (&baddr==&M1strt)
+      (
+         PRINT "Erasing 0x60000--0x7ffff"
+         FLASH.Erase 0x60000--0x7ffff
+      )
+      ELSE IF (&baddr==&H0strt)
+      (
+         PRINT "Erasing 0x80000--0x9ffff"
+         FLASH.Erase 0x80000--0x9ffff
+      )
+      ELSE IF (&baddr==&H1strt)
+      (
+         PRINT "Erasing 0xa0000--0xbffff"
+         FLASH.Erase 0xa0000--0xbffff
+      )
+      ELSE IF (&baddr==&H2strt)
+      (
+         PRINT "Erasing 0xc0000--0xdffff"
+         FLASH.Erase 0xc0000--0xdffff
+      )
+      ELSE IF (&baddr==&H3strt)
+      (
+         PRINT "Erasing 0xe0000--0xfffff"
+         FLASH.Erase 0xe0000--0xfffff
+      )
+      ELSE IF (&baddr==&H4strt)
+      (
+         PRINT "Erasing 0x100000--0x11ffff"
+         FLASH.Erase 0x100000--0x11ffff
+      )
+      ELSE IF (&baddr==&H5strt)
+      (
+         PRINT "Erasing 0x120000--0x13ffff"
+         FLASH.Erase 0x120000--0x13ffff
+      )
+      ELSE IF (&baddr==&H6strt)
+      (
+         PRINT "Erasing 0x140000--0x15ffff"
+         FLASH.Erase 0x140000--0x15ffff
+      )
+      ELSE IF (&baddr==&H7strt)
+      (
+         PRINT "Erasing 0x160000--0x17ffff"
+         FLASH.Erase 0x160000--0x17ffff
+      )
+      ELSE IF (&baddr==&H8strt)
+      (
+         PRINT "Erasing 0x180000--0x19ffff"
+         FLASH.Erase 0x180000--0x19ffff
+      )
+      ELSE IF (&baddr==&H9strt)
+      (
+         PRINT "Erasing 0x1a0000--0x1bffff"
+         FLASH.Erase 0x1a0000--0x1bffff
+      )
+      ELSE IF (&baddr==&H10strt)
+      (
+         PRINT "Erasing 0x1c0000--0x1dffff"
+         FLASH.Erase 0x1c0000--0x1dffff
+      )
+      ELSE IF (&baddr==&H11strt)
+      (
+         PRINT "Erasing 0x1e0000--0x1fffff"
+         FLASH.Erase 0x1e0000--0x1fffff
+      )  
+; Below added for Viper 3-meg flash
+      ELSE IF (&baddr==&H12strt)
+      (
+         PRINT "Erasing 0x200000--0x21ffff"
+         FLASH.Erase 0x200000--0x21ffff
+      )  
+      ELSE IF (&baddr==&H13strt)
+      (
+         PRINT "Erasing 0x220000--0x23ffff"
+         FLASH.Erase 0x220000--0x23ffff
+      )  
+      ELSE IF (&baddr==&H14strt)
+      (
+         PRINT "Erasing 0x240000--0x25ffff"
+         FLASH.Erase 0x240000--0x25ffff
+      )  
+      ELSE IF (&baddr==&H15strt)
+      (
+         PRINT "Erasing 0x260000--0x27ffff"
+         FLASH.Erase 0x260000--0x27ffff
+      )  
+      ELSE IF (&baddr==&H16strt)
+      (
+         PRINT "Erasing 0x280000--0x29ffff"
+         FLASH.Erase 0x280000--0x29ffff
+      )  
+      ELSE IF (&baddr==&H17strt)
+      (
+         PRINT "Erasing 0x2a0000--0x2bffff"
+         FLASH.Erase 0x2a0000--0x2bffff
+      )  
+      ELSE IF (&baddr==&H18strt)
+      (
+         PRINT "Erasing 0x2c0000--0x2dffff"
+         FLASH.Erase 0x2c0000--0x2dffff
+      )  
+      ELSE IF (&baddr==&H19strt)
+      (
+         PRINT "Erasing 0x2e0000--0x2fffff"
+         FLASH.Erase 0x2e0000--0x2fffff
+      )  
+      ELSE
+      (
+         PRINT "Invalid Address"
+      )
+   )
+   &n=&n+1
+) 
+
+PRINT "Erasing Complete." 
+ 
+RETURN 
+;return from EraseSelectedBlocks 
+
+;*===========================================================================*
+SetDebuggerType: 
+;*===========================================================================*
+ 
+   DO "&cwd\sys_init" FALSE 
+   
+   ;------------------------------------------
+   ; Initialise the Cu Head MMU, EBI and SRAM
+   ;------------------------------------------
+   DO "&cwd\sram_init.cmm"
+   DO "&cwd\mmu_init.cmm"
+   DO "&cwd\ebi_init.cmm"
+
+RETURN
+ 
+;*===========================================================================*
+GetFileType: 
+;*===========================================================================*
+ENTRY &FilePath 
+LOCAL &filename 
+LOCAL &filetype 
+LOCAL &null 
+ 
+   &filename=OS.FILE.name(&FilePath) 
+   &strt=OS.FILE.NAME(STRING.SCAN("&filename",".",0)) 
+   &filetype=STRING.MID("&filename",&strt+1,3) 
+   &filetype=STRING.LWR("&filetype") 
+ 
+RETURN &filetype 
+ 
+ 
+;*===========================================================================*
+;* File Revision History (top to bottom: first revision to last revision)
+;*===========================================================================
+;*
+;* Date        userid    (Description on following lines: SCR #, etc.)
+;* ----------- --------
+;* 18-JAN-2005 jzcpfk (JWH2)
+;* + Module created for D-One. Task#34797 - "SCR None"
+;* + updated to use internal flash rather than external ram.
+;* 26-JAN-2005 jzcpfk (JWH2) 
+;* + Updated for D1 Task#34825. SCR - None
+;*
+;* 10-FEB-2005 jzcpfk (JWH2) 
+;* + Updated for D1 Task#34876. SCR - None
+;*
+;* 19-APR-2005 jzcpfk (JWH2)
+;* + Task#35509 SCR - 4003
+;* + Correct upload / download functionality.
+;*
+;* 11-MAY-2005 jzcpfk (JWH2)
+;* + Task#36995 SCR - 4003
+;* + Remove a couple of out-dated comments.
+;*
+;* 19-OCT-2006 zzyl53 (TWK)
+;* + Task#45727 SCR - 4989
+;* + Updated for Viper 3-meg flash.
+;*===========================================================================*
