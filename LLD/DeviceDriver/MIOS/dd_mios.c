@@ -58,7 +58,7 @@ void MIOS_Initialize_Device(void )
 //=======================================================================================
 // MIOS_CHANNEL_INIT_8 - 
 //=======================================================================================
-     MIOS.CH[MIOS_CHANNEL_8].CADR    = MIOS_CH8_CBDR_INITIAL/2;
+     MIOS.CH[MIOS_CHANNEL_8].CADR    = 0;
      MIOS.CH[MIOS_CHANNEL_8].CBDR    = MIOS_CH8_CBDR_INITIAL;
      MIOS.CH[MIOS_CHANNEL_8].CCR.U32 = MIOS_CH8_INITIAL.U32;
      //MIOS.CH[MIOS_CHANNEL_8].CSR.U32 = MIOS_RESET_CSR.U32;
@@ -69,7 +69,7 @@ void MIOS_Initialize_Device(void )
 //=======================================================================================
 // MIOS_CHANNEL_INIT_9 - 
 //=======================================================================================
-     MIOS.CH[MIOS_CHANNEL_9].CADR    = MIOS_CH9_CBDR_INITIAL/2;
+     MIOS.CH[MIOS_CHANNEL_9].CADR    = 0;
      MIOS.CH[MIOS_CHANNEL_9].CBDR    = MIOS_CH9_CBDR_INITIAL;
      MIOS.CH[MIOS_CHANNEL_9].CCR.U32 = MIOS_CH9_INITIAL.U32;
     // MIOS.CH[MIOS_CHANNEL_9].CSR.U32 = MIOS_RESET_CSR.U32;
@@ -79,7 +79,7 @@ void MIOS_Initialize_Device(void )
 //=======================================================================================
 // MIOS_CHANNEL_INIT_10 - 
 //=======================================================================================
-     MIOS.CH[MIOS_CHANNEL_10].CADR    = MIOS_CH10_CBDR_INITIAL/2;
+     MIOS.CH[MIOS_CHANNEL_10].CADR    = 0;
      MIOS.CH[MIOS_CHANNEL_10].CBDR    = MIOS_CH10_CBDR_INITIAL;
      MIOS.CH[MIOS_CHANNEL_10].CCR.U32 = MIOS_CH10_INITIAL.U32;
 
@@ -95,7 +95,7 @@ void MIOS_Initialize_Device(void )
 //=======================================================================================
 // MIOS_CHANNEL_INIT_12 - 
 //=======================================================================================
-     MIOS.CH[MIOS_CHANNEL_12].CADR    = MIOS_CH12_CBDR_INITIAL/2;
+     MIOS.CH[MIOS_CHANNEL_12].CADR    = 0;
      MIOS.CH[MIOS_CHANNEL_12].CBDR    = MIOS_CH12_CBDR_INITIAL;
      MIOS.CH[MIOS_CHANNEL_12].CCR.U32 = MIOS_CH12_INITIAL.U32;
     // MIOS.CH[MIOS_CHANNEL_12].CSR.U32 = MIOS_RESET_CSR.U32;
@@ -108,7 +108,7 @@ void MIOS_Initialize_Device(void )
 //=======================================================================================
 // MIOS_CHANNEL_INIT_14 - 
 //=======================================================================================
-     MIOS.CH[MIOS_CHANNEL_14].CADR    = MIOS_CH14_CBDR_INITIAL/2;
+     MIOS.CH[MIOS_CHANNEL_14].CADR    = 0;
      MIOS.CH[MIOS_CHANNEL_14].CBDR    = MIOS_CH14_CBDR_INITIAL;
      MIOS.CH[MIOS_CHANNEL_14].CCR.U32 = MIOS_CH14_INITIAL.U32;
      //MIOS.CH[MIOS_CHANNEL_14].CSR.U32 = MIOS_RESET_CSR.U32;
@@ -128,7 +128,7 @@ void MIOS_Initialize_Device(void )
 //=======================================================================================
 // MIOS_CHANNEL_INIT_23
 //=======================================================================================
-     MIOS.CH[MIOS_CHANNEL_23].CADR    = MIOS_CH23_CBDR_INITIAL/2;
+     MIOS.CH[MIOS_CHANNEL_23].CADR    = 0;
      MIOS.CH[MIOS_CHANNEL_23].CBDR    = MIOS_CH23_CBDR_INITIAL;
      MIOS.CH[MIOS_CHANNEL_23].CCR.U32 = MIOS_CH23_INITIAL.U32;
      //MIOS.CH[MIOS_CHANNEL_23].CSR.U32 = MIOS_RESET_CSR.U32;
