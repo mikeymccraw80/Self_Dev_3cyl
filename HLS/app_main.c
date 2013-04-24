@@ -149,7 +149,7 @@ void Test_DO_Toggle_Function(void)
 	LLD_do_table[LLD_DO_FAN1].value = !LLD_do_table[LLD_DO_FAN1].value;
 	LLD_do_table[LLD_DO_FAN2].value = !LLD_do_table[LLD_DO_FAN2].value;
 	LLD_do_table[LLD_DO_FUEL_PUMP].value = !LLD_do_table[LLD_DO_FUEL_PUMP].value;
-	LLD_do_table[LLD_DO_MAIN_RELAY].value = !LLD_do_table[LLD_DO_MAIN_RELAY].value;
+	//LLD_do_table[LLD_DO_MAIN_RELAY].value = !LLD_do_table[LLD_DO_MAIN_RELAY].value;
 	LLD_do_table[LLD_DO_MIL_LAMP].value = !LLD_do_table[LLD_DO_MIL_LAMP].value;
 	LLD_do_table[LLD_DO_SVS_LAMP].value = !LLD_do_table[LLD_DO_SVS_LAMP].value;
 	LLD_do_table[LLD_DO_AC_CLUTCH].value = !LLD_do_table[LLD_DO_AC_CLUTCH].value;
@@ -317,6 +317,7 @@ void HLS_ini(void)
 	LLD_do_table[LLD_DO_AC_CLUTCH].value = false;
 	LLD_do_table[LLD_DO_R_LINE].value = true;
 	LLD_do_table[LLD_DO_START_MOTR_RLY].value = true;
+
 }
 
 /*HLS initialization function*/

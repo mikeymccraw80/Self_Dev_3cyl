@@ -3,6 +3,7 @@
 //=============================================================================
 #include "HLS.h"
 #include "hal_eng.h"
+#include "hal_pulse.h"
 
 
 //=============================================================================
@@ -26,9 +27,10 @@ unsigned char Tooth_Interrupt_Flag;
    crank_sig.engine_rpm = HAL_Eng_Get_Engine_Speed()/2;//rpm scale 0.125 to 0.25(chery) 
    crank_sig.segment_time = HAL_Eng_Get_Engine_Reference_Time()/4;// time base is 4M, convert to 1us
    crank_sig.crank_status.B_crank_loss_of_sync =  HAL_Eng_Get_Loss_Of_Sync();
+
    if(!First_Syn_Flag)
    {
-         HLS_firstsyn();
+      HLS_firstsyn();
    }		 
 }
 
@@ -113,6 +115,16 @@ void  IO_Eng_ToothInt(void)
      crank_sig.engine_rpm = 400; //100rpm
      crank_sig.segment_time = 300000;//100rpm,300ms
    }
-   
+
+  if(crank_sig.engine_rpm >0)
+  {
+     //vsep pwm period scale is 1/64ms, duty scale is 1/32768
+      HAL_Pulse_TACH_Set_Period_Duty((uint32_t)(crank_sig.segment_time*2*64)/1000, 32768/2 );
+  }
+  else
+  {
+      //vsep pwm period scale is 1/64ms, duty scale is 1/32768
+      HAL_Pulse_TACH_Set_Period_Duty((uint32_t)(crank_sig.segment_time*2*64)/1000, 0 );
+  }		
 }
 
