@@ -20,7 +20,7 @@
 //=============================================================================
 
 #include "ccp2nvmd.h"
-
+#pragma section DATA " " ".nc_nvram"
 uint8_t ccp_session_configuration_id_NVM[ 4 ];
-
 uint8_t ccp_session_status_NVM;
+#pragma section DATA " " ".bss"

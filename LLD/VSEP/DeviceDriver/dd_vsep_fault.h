@@ -43,6 +43,14 @@
 
 #define MICROSECOND_RESOLUTION (6)//need consider again
 
+typedef enum {
+             CeUndefinedEST,
+             CeSingleChannelEST,
+             CeWasteEST,
+             CeSequentialEST,
+             CeSimultaneousEST
+             } TeSpkMode;
+
 typedef unsigned long                                                    TIME_DWELL_DW;
 #define Prec_TIME_DWELL_DW                                 (1.0/1000000)
 #define Min_TIME_DWELL_DW                                                    (0)

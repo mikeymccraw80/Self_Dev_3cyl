@@ -5,8 +5,6 @@
  * Standard Header Files
 \*===========================================================================*/
 #include "reuse.h"
-#include "t_scaled.h"
-#include "t_custom.h"
 
 /*===========================================================================*\
  * Other Header Files
@@ -582,6 +580,8 @@ extern   void LLD_disable_interrupt(void);
 extern   void LLD_enable_interrupt(void);
 /* Call back function for 1ms task */
 extern  void HLS_Task_1ms(void);
+/* Call back function for 2ms task */
+extern  void HLS_Task_2ms(void);
 /* Call back function for 5ms task */
 extern   void HLS_Task_5ms(void);
 /* Call back function for 10ms task */

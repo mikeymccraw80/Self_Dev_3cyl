@@ -75,6 +75,12 @@ void StartOS_Task_Normal(void)
      	    MngOSTK_1msTasks();
 	    RTI_Flags.bf.TimeFor1ms = 0x00;
       	}
+
+	if (1 == RTI_Flags.bf.TimeFor2ms)
+      	{
+     	    MngOSTK_2msTasks();
+	    RTI_Flags.bf.TimeFor2ms = 0x00;
+      	}
 	  
        if(1 == RTI_Flags.bf.TimeFor5ms)
       {

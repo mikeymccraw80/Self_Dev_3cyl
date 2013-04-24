@@ -17,8 +17,9 @@ RtiFlagsType RTI_Flags;
 // local functions
 //=============================================================================
  void OS_TimeBasedTask1ms(void) ;
+ void OS_TimeBasedTask2ms(void) ;
  void OS_TimeBasedTask5ms(void) ;
-void OS_TimeBasedTask10ms(void);
+ void OS_TimeBasedTask10ms(void);
 
 
 
@@ -34,10 +35,13 @@ void OS_TimeBasedTask10ms(void);
 
  switch (loop)
    {
+      case 2:
+	     RTI_Flags.bf.TimeFor2ms = 1;
+            OS_TimeBasedTask2ms();	
+            break;
       case 5:
 	     RTI_Flags.bf.TimeFor5ms = 1;
-            OS_TimeBasedTask5ms();
-	
+            OS_TimeBasedTask5ms();	
             break;
    
       case 10:

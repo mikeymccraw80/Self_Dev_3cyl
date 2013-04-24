@@ -6,6 +6,7 @@
 #include "io_config_vsep.h"
 #include "dd_vsep_est_select.h"
 #include "hwiocald.h"
+#include "HLS.h"
 
 //=============================================================================
 // Chery spark Marco define

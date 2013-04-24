@@ -70,6 +70,8 @@ typedef unsigned long     LONGCARD;
 #define MIN_LONGCARD          (0uL)     /*--- 000000000h ---*/
 #define MAX_LONGCARD (4294967295uL)     /*--- 0FFFFFFFFh ---*/
 
+typedef long signed int    LONGINT;
+
 
 
 /*--- internal macros ---*/

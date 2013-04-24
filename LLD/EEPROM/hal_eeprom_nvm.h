@@ -51,10 +51,11 @@ extern uint8_t            MFG_Data_After_Backup_Debug_Counter;
 extern MFG_Data_Debug_T   MFG_Data_Before_Backup[NUMBER_OF_DEBUG_DATA_SET];
 extern MFG_Data_Debug_T   MFG_Data_After_Backup[NUMBER_OF_DEBUG_DATA_SET];
 #endif
+#pragma section DATA " " ".nc_nvram"
 extern Backup_Disrupted_T Backup_Disrupted;
 // FIXME - A... for test
 extern uint32_t rolling_counter_vehicle;
-
+#pragma section DATA " " ".bss"
 
 #endif /* HAL_EMULATED_NVM_H */
 

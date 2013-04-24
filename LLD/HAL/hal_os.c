@@ -30,15 +30,24 @@
 //=============================================================================
 // HAL_OS_1ms_Task
 //=============================================================================
-  void  HAL_OS_1ms_Task(void) 
+void  HAL_OS_1ms_Task(void) 
  {
      IO_Analog_1ms_Update();
      HLS_Task_1ms();
      IO_OS_BackGround_1ms_Status_Check();
+
  }
 
 //=============================================================================
-// HAL_OS_1ms_Task
+// HAL_OS_2ms_Task
+//=============================================================================
+void  HAL_OS_2ms_Task(void) 
+ {
+     HLS_Task_2ms();
+ }
+
+//=============================================================================
+// HAL_OS_5ms_Task
 //=============================================================================
   void  HAL_OS_5ms_Task(void) 
  {
@@ -47,26 +56,29 @@
 //=============================================================================
 //  HAL_OS_10ms_Task
 //=============================================================================
-uint16_t OS_10ms_Cnt;
+uint16_t OS_10ms_Cnt0;
+uint16_t OS_10ms_Cnt1;
 void  HAL_OS_10ms_Task(void) 
  {
-     OS_10ms_Cnt++;
+     OS_10ms_Cnt0++;
     IO_GPIO_DI_Task();
     IO_Analog_10ms_Update();
     IO_Eng_Update_System_Time_Background();
     HLS_Task_10ms();
     IO_GPIO_DO_Task();
     IO_Pulse_Update_Function();
-   if(OS_10ms_Cnt ==5)
+    if(OS_10ms_Cnt1&1)
+    {
+       HLS_Task_20ms();
+    }
+   OS_10ms_Cnt1++;
+   if(OS_10ms_Cnt0 ==5)
    {
         HLS_Task_50ms();
-      OS_10ms_Cnt = 0;
-   }
+        OS_10ms_Cnt0 = 0;
+    }
    
-   if(OS_10ms_Cnt&1)
-   {
-    HLS_Task_20ms();
-   }
+
    Update_DiagStatus_10ms();
  }
 

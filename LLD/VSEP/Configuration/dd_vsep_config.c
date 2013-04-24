@@ -41,7 +41,6 @@
 #include "dd_vsep_deps.h"
 #include "io_config_vsep.h"
 #include "dd_vsep_discrete_interface.h"
-#include "t_custom.h"
 #include "io_config_spi.h"
 #include "dd_vsep_fault.h"
 #include "dd_vsep_led.h"
@@ -53,6 +52,7 @@ extern uint16_t GetHWIO_EngineSpeed(void);
 //extern void VSEP_Diagnostic_PWM_Set_Duty_Cycle_Immediate(IO_Configuration_T in_configuration ,   uint32_t  in_duty_cycle);
 #define KwHWIO_VSEP_Gradthr_RPM_Low_Limit  0x00
 #define KwHWIO_VSEP_Gradthr_RPM_High_Limit 0x00
+#define DISCRETE_OUT_VSEP_CSS 0x00
 
 /* temp */
 

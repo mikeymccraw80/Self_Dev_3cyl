@@ -12,6 +12,7 @@
 #include "dd_crank_interface.h"
 #include "dd_intc_interface.h"
 #include "hal_ucram.h"
+#include "hal.h" //for V_rpm
 
 
 

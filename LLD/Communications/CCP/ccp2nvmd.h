@@ -42,6 +42,8 @@
 #define DAQ3_NUMBER_OF_ODTS   (0x3A)
 #define DAQ3_ELEMENTS_PER_ODT (0x07)
 
+#pragma section DATA " " ".nc_nvram"
+
 extern uint16_t daq0_config_buffer_NVM[ CCP_CONFIG_BUFFER_SIZE_IN_SHORTWORDS( DAQ0_NUMBER_OF_ODTS,
                                                                               DAQ0_ELEMENTS_PER_ODT ) ];
 extern uint16_t daq1_config_buffer_NVM[ CCP_CONFIG_BUFFER_SIZE_IN_SHORTWORDS( DAQ1_NUMBER_OF_ODTS,
@@ -56,5 +58,5 @@ extern CCP_DAQ_Resume_Data_NVM_T CCP_DAQ_Resume_Data_NVM[ NUMBER_OF_RESUMEABLE_D
 extern uint8_t ccp_session_configuration_id_NVM[ 4 ];
 
 extern uint8_t ccp_session_status_NVM;
-
+#pragma section DATA " " ".bss"
 #endif //CCP2NVMD_H

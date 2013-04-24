@@ -93,6 +93,22 @@ unsigned int angle_crank_cam_outlet;
 //ETC
 etc_signals etc_sig;
 
+#define START_SECTION_static_volatile_SlowRam_32bit
+#include "PRAGMA_CHERY.h"
+uint32_t hlsbss_test0;
+uint32_t hlsbss_test1;
+uint32_t hlsbss_test2;
+#define STOP_SECTION_static_volatile_SlowRam_32bit
+#include "PRAGMA_CHERY.h"
+
+#define START_SECTION_static_nonvolatile_SlowRam_32bit
+#include "PRAGMA_CHERY.h"
+uint32_t nvram_test0;
+uint32_t nvram_test1;
+uint32_t  nvram_test2;
+#define STOP_SECTION_static_nonvolatile_SlowRam_32bit
+#include "PRAGMA_CHERY.h"
+
 /* ============================================================================ *\
  * Local FUNCTION.
 \* ============================================================================ */
@@ -101,18 +117,18 @@ etc_signals etc_sig;
   void TestATD_ATD_Function(void)
 {
 
-HLS_MAP_Value = LLD_atd_input_table[LLD_ATD_MAP].LLD_atd_val;
-//HLS_MAP_Status = LLD_atd_input_table[LLD_ATD_MAP].LLD_atd_status;
-HLS_OXYGEN_Value = LLD_atd_input_table[LLD_ATD_OXYGEN_SENSOR_1].LLD_atd_val;
-//HLS_OXYGEN_Status = LLD_atd_input_table[LLD_ATD_OXYGEN_SENSOR_1].LLD_atd_status;
-HLS_BATT_Value = LLD_atd_input_table[LLD_ATD_VBATT_SW].LLD_atd_val;
-//HLS_BATT_Status = LLD_atd_input_table[LLD_ATD_VBATT_SW].LLD_atd_status;
-HLS_TA_Value = LLD_atd_input_table[LLD_ATD_TA].LLD_atd_val;
-//HLS_TA_Status = LLD_atd_input_table[LLD_ATD_TA].LLD_atd_status;
-HLS_ECT_Value = LLD_atd_input_table[LLD_ATD_ECT].LLD_atd_val;
-//HLS_ECT_Status = LLD_atd_input_table[LLD_ATD_ECT].LLD_atd_status;
-HLS_TPS_Value = LLD_atd_input_table[LLD_ATD_THROTTLE_1].LLD_atd_val;
-//HLS_TPS_Status = LLD_atd_input_table[LLD_ATD_THROTTLE_1].LLD_atd_status;
+	HLS_MAP_Value = LLD_atd_input_table[LLD_ATD_MAP].LLD_atd_val;
+	//HLS_MAP_Status = LLD_atd_input_table[LLD_ATD_MAP].LLD_atd_status;
+	HLS_OXYGEN_Value = LLD_atd_input_table[LLD_ATD_OXYGEN_SENSOR_1].LLD_atd_val;
+	//HLS_OXYGEN_Status = LLD_atd_input_table[LLD_ATD_OXYGEN_SENSOR_1].LLD_atd_status;
+	HLS_BATT_Value = LLD_atd_input_table[LLD_ATD_VBATT_SW].LLD_atd_val;
+	//HLS_BATT_Status = LLD_atd_input_table[LLD_ATD_VBATT_SW].LLD_atd_status;
+	HLS_TA_Value = LLD_atd_input_table[LLD_ATD_TA].LLD_atd_val;
+	//HLS_TA_Status = LLD_atd_input_table[LLD_ATD_TA].LLD_atd_status;
+	HLS_ECT_Value = LLD_atd_input_table[LLD_ATD_ECT].LLD_atd_val;
+	//HLS_ECT_Status = LLD_atd_input_table[LLD_ATD_ECT].LLD_atd_status;
+	HLS_TPS_Value = LLD_atd_input_table[LLD_ATD_THROTTLE_1].LLD_atd_val;
+	//HLS_TPS_Status = LLD_atd_input_table[LLD_ATD_THROTTLE_1].LLD_atd_status;
 
 }
 
@@ -149,6 +165,12 @@ void Test_DO_Toggle_Function(void)
  void HLS_Task_1ms(void)
 {
   TestATD_ATD_Function();
+}
+
+/* Call back function for 2ms task */
+ void HLS_Task_2ms(void)
+{
+  
 }
 
  void HLS_Task_5ms(void)

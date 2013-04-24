@@ -14,6 +14,7 @@ typedef union
    struct
    {
       uint8_t TimeFor1ms     : 1 ;
+      uint8_t TimeFor2ms     : 1 ;
       uint8_t TimeFor5ms     : 1 ;
       uint8_t TimeFor10ms   : 1 ;
       uint8_t Unused                : 5 ;

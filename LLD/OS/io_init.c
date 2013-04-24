@@ -62,7 +62,7 @@ void CPU_DIAB_Copy_Table( void )
    /* clear uninitialized data				*/
    if (&HWIO_BSS_SIZE) 
    {
-   // bss zero has been done in dd_start.s - shoujun April 26, 2011
+   // bss zero has been done in dd_start.s 
    // Clear_Longs(&HWIO_BSS_START[0],(((uint16_t)(&HWIO_BSS_SIZE)+3)/4));
    }
 }

@@ -7,6 +7,7 @@
 #include"io_config_fuel.h"
 #include "io_conversion.h"
 #include "io_interface_eng.h"
+#include "HLS.h"
 
 
 //=============================================================================

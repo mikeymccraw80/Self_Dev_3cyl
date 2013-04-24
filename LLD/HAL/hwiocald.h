@@ -3,10 +3,9 @@
 
 
 
-#include "reuse.h"
+#include "hal.h"
 #include "dd_vsep_discrete.h"
 
-#include "HLS.h"
 
 typedef struct COND_Test_Option_Tag /* 1 - test enable, 0 - test disabled */
 {
@@ -41,16 +40,8 @@ typedef enum {
    WINGATE_TYPE_NONE,
    WINGATE_TYPE_ON
 } WINGATE_TYPE_T;
-/*
-typedef uint16_t            T_CRANK_ANGLE;
-#define V_CRANK_ANGLE(val)     (uint16_t)((val)*64)
-#define S_CRANK_ANGLE          6
 
-//power-of-two range: [0, 65536) 
-typedef uint16_t   T_MICROSECONDS;
-#define V_MICROSECONDS(val) (uint16_t)(val)
-#define S_MICROSECONDS 0
-*/
+
 
 //crank
 extern const uint8_t     KyHWIO_ToothOfFirstLoResEvent;

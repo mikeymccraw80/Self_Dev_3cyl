@@ -13,7 +13,7 @@
 #define Onehour_CNT    (3600)//count with 1s step
 
 
-#define Is_IGN_Off()    (HAL_Analog_Get_IGNVI_Value()<UINT16_MAX/4)? true:false
+#define Is_IGN_Off()    (HAL_Analog_Get_IGNVI_Value()<2500)? true:false
  
 //NV_ram
 bool B_SW_Pwf;
@@ -26,9 +26,12 @@ unsigned int IgnitionOffTimeVar;
 bool    B_HLS_afterrun;
 unsigned int   Pwr_Afruncnt;
 //=============================================================================
-// static variable
+// extern variable
 //=============================================================================
-
+//The address of these variables are the size numbers because these variables 
+// are calculated by the linker
+extern char HWIO_HLSBSS_START[];
+extern uint16_t HWIO_HLSBSS_SIZE;
 /**********************************************************************/
 /*** Initialize the HLS Crank and Cam Status as the requirement required    ***/
 /**********************************************************************/
@@ -129,6 +132,12 @@ INLINE void Init_HLS_Crank_Cam_Status(void)
            sys_status.B_Pwf = false;
            /* Chery requirement: Clear all the Chery HLS non-initialized variables */
           // HLS_Clear_Variables();
+             /* clear uninitialized data				*/
+            if (&HWIO_HLSBSS_SIZE) 
+            {
+
+               Clear_Longs(&HWIO_HLSBSS_START[0],(((uint16_t)(&HWIO_HLSBSS_SIZE)+3)/4));
+             }
            /* Call the chery initialize functions */
            HLS_ini();
            HLS_inisyn();
