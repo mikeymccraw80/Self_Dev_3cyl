@@ -16,11 +16,14 @@
 /* ============================================================================ *\
  * Exported variables.
 \* ============================================================================ */
-uint8_t   CAN_Message_Transmit_0x480[FLEXCAN_DATA_MAX_BYTES];
-uint8_t    test_can =0;
+uint8_t CAN_Message_Transmit_0x480[FLEXCAN_DATA_MAX_BYTES];
+uint8_t test_can =0;
 
-uint8_t   CAN_Message_RX_DATA[FLEXCAN_DATA_MAX_BYTES];
-uint32_t   CAN_Message_RX_ID;
+/* define receive temp buffer, this buffer is only as 
+ * FlexCAN_Receive_Interrupt() buffer only feel curious
+ */
+uint8_t  CAN_Message_RX_DATA[FLEXCAN_DATA_MAX_BYTES];
+uint32_t CAN_Message_RX_ID;
 
 //=============================================================================
 // HAL_CAN_RX_B00_Config
@@ -232,6 +235,31 @@ FlexCAN_Transmit_Interrupt(
 
 }
 
+void CCP_Initialize(void)
+{
+	HAL_CAN_RX_B00_Config();
+	HAL_CAN_TX_B01_Config();
+	HAL_CAN_TX_B02_Config();
+	HAL_CAN_TX_B03_Config();
+	HAL_CAN_TX_B04_Config();
+	HAL_CAN_TX_B05_Config();
+	HAL_CAN_RX_B06_Config();
+	HAL_CAN_TX_B07_Config();
+}
+
+void HAL_CAN_Transmit_Message(uint32_t id, uint8_t len, uint8_t *pdata)
+{
+	bool result;
+	static int can_obj_num = FLEXCAN_MSG_OBJ_16;
+	can_obj_num = can_obj_num >= FLEXCAN_MSG_OBJ_31?can_obj_num++ : FLEXCAN_MSG_OBJ_16;
+	result = FlexCAN_Transmit_Message(
+			&FlexCAN_A,
+			can_obj_num,
+			id,
+			pdata,
+			len);
+}
+
 /* ============================================================================ *\
  * HAL_DI_10ms_Task
 \*============================================================================ */
@@ -278,4 +306,6 @@ FlexCAN_Receive_Interrupt(
           );
 
 }
+
+
 
