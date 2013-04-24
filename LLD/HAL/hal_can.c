@@ -235,17 +235,6 @@ FlexCAN_Transmit_Interrupt(
 
 }
 
-void CCP_Initialize(void)
-{
-	HAL_CAN_RX_B00_Config();
-	HAL_CAN_TX_B01_Config();
-	HAL_CAN_TX_B02_Config();
-	HAL_CAN_TX_B03_Config();
-	HAL_CAN_TX_B04_Config();
-	HAL_CAN_TX_B05_Config();
-	HAL_CAN_RX_B06_Config();
-	HAL_CAN_TX_B07_Config();
-}
 
 void HAL_CAN_Transmit_Message(uint32_t id, uint8_t len, uint8_t *pdata)
 {
@@ -307,5 +296,154 @@ FlexCAN_Receive_Interrupt(
 
 }
 
+extern uint8_t  VsCAN_CHERY_ID2E9[8];
+extern uint8_t  VsCAN_CHERY_ID310[8];
+extern uint8_t  VsCAN_CHERY_ID391[8];
+extern uint8_t  VsCAN_CHERY_ID3C0[8];
+extern uint8_t  VsCAN_CHERY_ID430[8];
 
+void HAL_CAN_RX_B08_Config(void)
+{
+ FlexCAN_Receive_Configure(
+            &FlexCAN_A,
+           FLEXCAN_MSG_OBJ_8,
+           0x2E9
+          );
+  FLEXCAN_MSGOBJ_INTERRUPT_Set_Enable(
+   &FlexCAN_A,
+   FLEXCAN_MSG_OBJ_8,
+   true );
+}
+
+void HAL_CAN_RX_B08_INT(void)
+{
+
+FlexCAN_Receive_Interrupt(
+           FLEXCAN_DEVICE_A,
+           FLEXCAN_MSG_OBJ_8,
+           CAN_Message_RX_ID,
+           VsCAN_CHERY_ID2E9
+          );
+
+}
+
+void HAL_CAN_RX_B09_Config(void)
+{
+ FlexCAN_Receive_Configure(
+            &FlexCAN_A,
+           FLEXCAN_MSG_OBJ_9,
+           0x310
+          );
+  FLEXCAN_MSGOBJ_INTERRUPT_Set_Enable(
+   &FlexCAN_A,
+   FLEXCAN_MSG_OBJ_9,
+   true );
+}
+
+void HAL_CAN_RX_B09_INT(void)
+{
+
+FlexCAN_Receive_Interrupt(
+           FLEXCAN_DEVICE_A,
+           FLEXCAN_MSG_OBJ_9,
+           CAN_Message_RX_ID,
+           VsCAN_CHERY_ID310
+          );
+
+}
+
+void HAL_CAN_RX_B10_Config(void)
+{
+ FlexCAN_Receive_Configure(
+            &FlexCAN_A,
+           FLEXCAN_MSG_OBJ_10,
+           0x391
+          );
+  FLEXCAN_MSGOBJ_INTERRUPT_Set_Enable(
+   &FlexCAN_A,
+   FLEXCAN_MSG_OBJ_10,
+   true );
+}
+
+void HAL_CAN_RX_B10_INT(void)
+{
+
+FlexCAN_Receive_Interrupt(
+           FLEXCAN_DEVICE_A,
+           FLEXCAN_MSG_OBJ_10,
+           CAN_Message_RX_ID,
+           VsCAN_CHERY_ID391
+          );
+
+}
+
+void HAL_CAN_RX_B11_Config(void)
+{
+ FlexCAN_Receive_Configure(
+            &FlexCAN_A,
+           FLEXCAN_MSG_OBJ_11,
+           0x3C0
+          );
+  FLEXCAN_MSGOBJ_INTERRUPT_Set_Enable(
+   &FlexCAN_A,
+   FLEXCAN_MSG_OBJ_11,
+   true );
+}
+
+void HAL_CAN_RX_B11_INT(void)
+{
+
+FlexCAN_Receive_Interrupt(
+           FLEXCAN_DEVICE_A,
+           FLEXCAN_MSG_OBJ_11,
+           CAN_Message_RX_ID,
+           VsCAN_CHERY_ID3C0
+          );
+
+}
+
+void HAL_CAN_RX_B12_Config(void)
+{
+ FlexCAN_Receive_Configure(
+            &FlexCAN_A,
+           FLEXCAN_MSG_OBJ_12,
+           0x430
+          );
+  FLEXCAN_MSGOBJ_INTERRUPT_Set_Enable(
+   &FlexCAN_A,
+   FLEXCAN_MSG_OBJ_12,
+   true );
+}
+
+void HAL_CAN_RX_B12_INT(void)
+{
+
+FlexCAN_Receive_Interrupt(
+           FLEXCAN_DEVICE_A,
+           FLEXCAN_MSG_OBJ_12,
+           CAN_Message_RX_ID,
+           VsCAN_CHERY_ID430
+          );
+
+}
+
+
+void CCP_Initialize(void)
+{
+	HAL_CAN_RX_B00_Config();
+	HAL_CAN_TX_B01_Config();
+	HAL_CAN_TX_B02_Config();
+	HAL_CAN_TX_B03_Config();
+	HAL_CAN_TX_B04_Config();
+	HAL_CAN_TX_B05_Config();
+	HAL_CAN_RX_B06_Config();
+	HAL_CAN_TX_B07_Config();
+
+	/* for chery receive interrupt */
+	HAL_CAN_RX_B08_Config();
+	HAL_CAN_RX_B09_Config();
+	HAL_CAN_RX_B10_Config();
+	HAL_CAN_RX_B11_Config();
+	HAL_CAN_RX_B12_Config();
+}
 
