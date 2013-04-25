@@ -37,7 +37,6 @@ const MIOS_CSR_T MIOS_RESET_CSR =
 
 
 //OPWFMB
-//PWM_WATERPUMP
 //MIOS_CHANNEL_BIG
 //=======================================================================================
 // MIOS_CHANNEL_INIT_0 - 
@@ -71,7 +70,7 @@ const MIOS_CCR_T MIOS_CH0_INITIAL =
       MIOS_CLOCK_BUS_INTERNAL_COUNTER, // Bus select BSL
       //0 The EDPOL value
       0, // Edge select EDSEL
-      MIOS_EDGE_POLARITY_OUTPUT_MODE_MATCH_A_CLEAR_B_SET, // Edge polarity
+      MIOS_EDGE_POLARITY_OUTPUT_MODE_MATCH_A_SET_B_CLEAR, // Edge polarity
       MIOS_CHANNEL_BASE_MODE_PULSE_WIDTH_FREQUENCY_MODULATION_BUFFERED  // Mode selection
   };
 
@@ -134,7 +133,7 @@ const MIOS_CCR_T MIOS_CH8_INITIAL =
       MIOS_CLOCK_BUS_INTERNAL_COUNTER, // Bus select BSL
       //0 The EDPOL value
       0, // Edge select EDSEL
-      MIOS_EDGE_POLARITY_OUTPUT_MODE_MATCH_A_SET_B_CLEAR, // Edge polarity
+      MIOS_EDGE_POLARITY_OUTPUT_MODE_MATCH_A_CLEAR_B_SET, // Edge polarity
       MIOS_CHANNEL_BASE_MODE_PULSE_WIDTH_FREQUENCY_MODULATION_BUFFERED  // Mode selection
   };
 

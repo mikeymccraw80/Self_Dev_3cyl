@@ -59,7 +59,8 @@ uint8_t   LLD_di_samplecnt[LLD_DI_MAX_CHANNEL];
  HAL_GPIO_SET_SMR_Enable((bool) LLD_do_table[LLD_DO_START_MOTR_RLY].value);
  HAL_GPIO_SET_VGIS1_Enable((bool) LLD_do_table[LLD_DO_VIS_SWITCH].value);
  HAL_GPIO_SET_ETCDIS_Enable(!(bool)etc_sig.etc_enable);
- HAL_GPIO_SET_ETCDIR_Enable((bool) etc_sig.etc_direction);
+ //etc direction 1 equal ETC open
+ HAL_GPIO_SET_ETCDIR_Enable(!(bool) etc_sig.etc_direction);
 
 //test
  //HAL_GPIO_SET_VGIS2_Enable((bool) LLD_do_table[LLD_DO_VIS_SWITCH].value);
