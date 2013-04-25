@@ -19,7 +19,6 @@
 //=============================================================================
 // OS_Startup_Hook
 //=============================================================================
-
  void OS_Startup_Hook(void)
 {
   //set up os loop time 10ms
@@ -36,8 +35,6 @@
 
   HAL_OS_Init_Task();   
 
-  CAN_RX_B15_Config();
-  
    FI_Initialize();
    
    CCP_Initialize();

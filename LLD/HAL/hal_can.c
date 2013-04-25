@@ -240,7 +240,7 @@ void HAL_CAN_Transmit_Message(uint32_t id, uint8_t len, uint8_t *pdata)
 {
 	bool result;
 	static int can_obj_num = FLEXCAN_MSG_OBJ_16;
-	can_obj_num = can_obj_num >= FLEXCAN_MSG_OBJ_31?can_obj_num++ : FLEXCAN_MSG_OBJ_16;
+	can_obj_num = can_obj_num >= FLEXCAN_MSG_OBJ_31?FLEXCAN_MSG_OBJ_16:can_obj_num++;
 	result = FlexCAN_Transmit_Message(
 			&FlexCAN_A,
 			can_obj_num,
@@ -269,31 +269,6 @@ void HAL_CAN_Transmit_Message(uint32_t id, uint8_t len, uint8_t *pdata)
    CAN_Message_Transmit_0x480,
    FLEXCAN_DATA_MAX_BYTES   );
     
-}
-
-void CAN_RX_B15_Config(void)
-{
- FlexCAN_Receive_Configure(
-            &FlexCAN_A,
-           FLEXCAN_MSG_OBJ_15,
-           0x555
-          );
-  FLEXCAN_MSGOBJ_INTERRUPT_Set_Enable(
-   &FlexCAN_A,
-   FLEXCAN_MSG_OBJ_15,
-   true );
-}
-
-void CAN_RX_10ms_B15_INT(void)
-{
-
-FlexCAN_Receive_Interrupt(
-           FLEXCAN_DEVICE_A,
-           FLEXCAN_MSG_OBJ_15,
-           CAN_Message_RX_ID,
-           CAN_Message_RX_DATA
-          );
-
 }
 
 extern uint8_t  VsCAN_CHERY_ID2E9[8];
@@ -428,7 +403,7 @@ FlexCAN_Receive_Interrupt(
 }
 
 
-void CCP_Initialize(void)
+void HAL_CAN_Initialize(void)
 {
 	HAL_CAN_RX_B00_Config();
 	HAL_CAN_TX_B01_Config();

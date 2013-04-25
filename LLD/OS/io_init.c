@@ -206,7 +206,7 @@ void InitializeHardwareRegisters(void)
 	// FlexCAN_C_Initialize_Device( )
 
 	/* init ccp can id and channel */
-	CCP_Initialize();
+	HAL_CAN_Initialize();
 
 	L9958_Device_Initialize(MTSA_CONFIG_L9958_DEVICE_0);
 
