@@ -45,7 +45,7 @@ const bool    K_Can_Meter_Fuel_Consum_Disable = false ;
 *|   }
 */
 
-const bool    KbHwio_CheryCanID0FA_Enable = true ;
+const bool    KbHwio_CheryCanID0FA_Enable = false ;
 
 /*
 *| vehicle_can_cald.{
@@ -57,7 +57,7 @@ const bool    KbHwio_CheryCanID0FA_Enable = true ;
 *|   }
 */
 
-const bool    KbHwio_CheryCanID101_Enable = true ;
+const bool    KbHwio_CheryCanID101_Enable = false;
 
 /*
 *| vehicle_can_cald.{
@@ -69,7 +69,7 @@ const bool    KbHwio_CheryCanID101_Enable = true ;
 *|   }
 */
 
-const bool    KbHwio_CheryCanID270_Enable = true ;
+const bool    KbHwio_CheryCanID270_Enable = false ;
 
 /*
 *| vehicle_can_cald.{
@@ -81,7 +81,7 @@ const bool    KbHwio_CheryCanID270_Enable = true ;
 *|   }
 */
 
-const bool    KbHwio_CheryCanID278_Enable = true ;
+const bool    KbHwio_CheryCanID278_Enable = false ;
 
 /*
 *| vehicle_can_cald.{
@@ -93,7 +93,7 @@ const bool    KbHwio_CheryCanID278_Enable = true ;
 *|   }
 */
 
-const bool    KbHwio_CheryCanID2C1_Enable = true ;
+const bool    KbHwio_CheryCanID2C1_Enable = false ;
 
 /*
 *| vehicle_can_cald.{
@@ -105,7 +105,7 @@ const bool    KbHwio_CheryCanID2C1_Enable = true ;
 *|   }
 */
 
-const bool    KbHwio_CheryCanID370_Enable = true ;
+const bool    KbHwio_CheryCanID370_Enable = false ;
 
 /*
 *| vehicle_can_cald.{
@@ -117,7 +117,7 @@ const bool    KbHwio_CheryCanID370_Enable = true ;
 *|   }
 */
 
-const bool    KbHwio_CheryCanID378_Enable = true ;
+const bool    KbHwio_CheryCanID378_Enable = false ;
 
 /*
 *| vehicle_can_cald.{
@@ -129,7 +129,7 @@ const bool    KbHwio_CheryCanID378_Enable = true ;
 *|   }
 */
 
-const bool    KbHwio_CheryCanID501_Enable = true ;
+const bool    KbHwio_CheryCanID501_Enable = false ;
 
 /*
 *| vehicle_can_cald.{
@@ -141,7 +141,7 @@ const bool    KbHwio_CheryCanID501_Enable = true ;
 *|   }
 */
 
-const bool    KbHwio_CheryCanID623_Enable = true ;
+const bool    KbHwio_CheryCanID623_Enable = false ;
 
 /*
 *| vehicle_can_cald.{
@@ -153,6 +153,6 @@ const bool    KbHwio_CheryCanID623_Enable = true ;
 *|   }
 */
 
-const bool    KbHwio_CheryCanID7C1_Enable = true ;
+const bool    KbHwio_CheryCanID7C1_Enable = false ;
 
 
