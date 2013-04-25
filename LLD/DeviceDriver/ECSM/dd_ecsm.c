@@ -7,7 +7,11 @@
 //=============================================================================
 // Register overlay of the submodule
 //=============================================================================
+#define SECTION_ECSM_REGISTER
+#include "section.h"
 ECSM_T ECSM;
+#define SECTION_END
+#include "section.h"
 
 //=============================================================================
 // ECSM_Initialize_Device

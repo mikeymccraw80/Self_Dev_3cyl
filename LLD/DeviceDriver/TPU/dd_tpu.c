@@ -4,7 +4,11 @@
 //=============================================================================
 //                        TPU Variables
 //=============================================================================
+#define SECTION_TPU_REGISTER
+#include "section.h"
 TPU_T           TPU;
+#define SECTION_END
+#include "section.h"
 
 #define TPU_SCM_BLOCK_SIZE         (uint32_t)(2048)
 

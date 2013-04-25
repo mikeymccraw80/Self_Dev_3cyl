@@ -9,8 +9,11 @@
 //=============================================================================
 // Local object definitions
 //=============================================================================
+#define SECTION_FMPLL_REGISTER
+#include "section.h"
 FMPLL_T FMPLL;
-
+#define SECTION_END
+#include "section.h"
 
 //=============================================================================
 // Global object definitions

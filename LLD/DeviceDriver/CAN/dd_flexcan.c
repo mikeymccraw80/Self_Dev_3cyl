@@ -1,8 +1,16 @@
 #include "dd_flexcan.h"
 
-
+#define SECTION_FLEXCAN_A_REGISTER
+#include "section.h"
 FLEXCAN_T FlexCAN_A;
+#define SECTION_END
+#include "section.h"
+
+#define SECTION_FLEXCAN_C_REGISTER
+#include "section.h"
 FLEXCAN_T FlexCAN_C;
+#define SECTION_END
+#include "section.h"
 
 #define FLEXCAN_MSGOBJ_16_31_MASK             (0xFFFF0000U)
 #define FLEXCAN_MSGOBJ_32_63_MASK             (0xFFFFFFFFU)

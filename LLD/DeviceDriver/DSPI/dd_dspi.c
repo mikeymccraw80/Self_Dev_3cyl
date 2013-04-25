@@ -6,12 +6,19 @@
 
 // DSPI_B
 // @type DSPI_B | Handle to DSPI_B Registers
+#define SECTION_DSPI_B_REGISTER
+#include "section.h"
 DSPI_T DSPI_B;
+#define SECTION_END
+#include "section.h"
 
 // DSPI_C
 // @type DSPI_C | Handle to DSPI_C Registers
+#define SECTION_DSPI_C_REGISTER
+#include "section.h"
 DSPI_T DSPI_C;
-
+#define SECTION_END
+#include "section.h"
 
 #define DSPI_TCF_EOQF_RFDF_CLEAR_FLAG (0xB587FFFF)
 
