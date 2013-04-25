@@ -19,7 +19,6 @@
 //=============================================================================
 // OS_Startup_Hook
 //=============================================================================
-
  void OS_Startup_Hook(void)
 {
   //set up os loop time 10ms
@@ -36,8 +35,6 @@
 
   HAL_OS_Init_Task();   
 
-  CAN_RX_B15_Config();
-  
    FI_Initialize();
    
    CCP_Initialize();
@@ -84,7 +81,6 @@ void MngOSTK_10msTasks(void)
 
   HAL_OS_10ms_Task(); 
 
-  HAL_CAN_10ms_Task();
   test_cnt_30ms++;
   if (test_cnt_30ms == 3)
   {

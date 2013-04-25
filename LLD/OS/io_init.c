@@ -89,155 +89,139 @@ asm void CPU_DIAB_Set_Data_Area_Pointers(void)
 //=============================================================================
 void InitializeHardwareRegisters(void)
 {
+	bool flash_init_sucess;
+
+	FMPLL_Initialize_Device();
+
+	// Set the watchdog timeout for 400ms during initialization
+	SWT_Set_Timeout_Value(SWT_TIMEOUT_VALUE_INIT) ;
+	SWT_Service_WatchDog();
+
+	CPU_DIAB_Set_Data_Area_Pointers();
+	CPU_DIAB_Copy_Table();
 
 
-    bool flash_init_sucess;
-   
-   FMPLL_Initialize_Device();
- 
-   // Set the watchdog timeout for 400ms during initialization
-   SWT_Set_Timeout_Value(SWT_TIMEOUT_VALUE_INIT) ;
-   SWT_Service_WatchDog();
+	CPU_Info =  SIU_Get_CPU_Information();
+	Flash_Info = Get_FLASH_Driver_Mode();
 
-   CPU_DIAB_Set_Data_Area_Pointers();
-   CPU_DIAB_Copy_Table();
+	if (CPU_LCI == CPU_Info) {
+		MPC5644_FLASH_Initialize_Normal();
+		XBAR_MPC5644A_Initialize_Device();
+		// flash_init_sucess = C90FL_Initialize();
+	} else {
+		MPC5634_FLASH_Initialize_Normal();
+		XBAR_MPC5634M_Initialize_Device();
+		// flash_init_sucess =	  C90LC_Initialize();
+	}
+	flash_init_sucess = flash_memory_interface->FLASH_Memory_Initial();
 
+	// must initial calibartion page after NVM restore and before EMS core initialization function
+	// lots of calibartion data used to perform initialization
+	//   MMU_MAS_Initialize_Device();
+	// flash_memory_interface->FLASH_Memory_Initial();
+	Reset_Status = SIU_RESET_Get_Status();
 
-   CPU_Info =  SIU_Get_CPU_Information();
-   Flash_Info = Get_FLASH_Driver_Mode();
+	SIU_Initialize_Device();
+	SIU_GPIO_Initialize_Device();
 
-   if(CPU_LCI == CPU_Info)
-   {
-      MPC5644_FLASH_Initialize_Normal();
-       XBAR_MPC5644A_Initialize_Device();
-	//flash_init_sucess = C90FL_Initialize();
-   }
-   else
-   {
-      MPC5634_FLASH_Initialize_Normal();
-      XBAR_MPC5634M_Initialize_Device();
-	//flash_init_sucess =	  C90LC_Initialize();
-   }
-   flash_init_sucess = flash_memory_interface->FLASH_Memory_Initial();
-   
-  // must initial calibartion page after NVM restore and before EMS core initialization function
-  // lots of calibartion data used to perform initialization
-//   MMU_MAS_Initialize_Device();
-  // flash_memory_interface->FLASH_Memory_Initial();
-   Reset_Status = SIU_RESET_Get_Status();
+	INTC_Initialize_Device();
 
+	PIT_Initialize_Device();
 
-   SIU_Initialize_Device();
-   SIU_GPIO_Initialize_Device();
-      
-   INTC_Initialize_Device();
+	STM_Initialize_Device();
 
-   PIT_Initialize_Device();
-   
-   STM_Initialize_Device();
-   
-   ECSM_Initialize_Device();
+	ECSM_Initialize_Device();
 
-   DMA_Initialize_Device();
+	DMA_Initialize_Device();
 
-   DMA_Initialize_Channel(
-   DMA_CHANNEL_QADC_FISR4_CFFF_4,
-   DMA_QADC_CFFF_4_Source_Address,
-   DMA_QADC_CFFF_4_Second_32Bit,
-   DMA_QADC_CFFF_4_Third_32Bit,
-   DMA_QADC_CFFF_4_Slast,
-   DMA_QADC_CFFF_4_Dest_Address,
-   DMA_QADC_CFFF_4_Sixth_32Bit,
-   DMA_QADC_CFFF_4_Dlast,
-   DMA_QADC_CFFF_4_Eighth_32Bit);
+	DMA_Initialize_Channel(
+	DMA_CHANNEL_QADC_FISR4_CFFF_4,
+	DMA_QADC_CFFF_4_Source_Address,
+	DMA_QADC_CFFF_4_Second_32Bit,
+	DMA_QADC_CFFF_4_Third_32Bit,
+	DMA_QADC_CFFF_4_Slast,
+	DMA_QADC_CFFF_4_Dest_Address,
+	DMA_QADC_CFFF_4_Sixth_32Bit,
+	DMA_QADC_CFFF_4_Dlast,
+	DMA_QADC_CFFF_4_Eighth_32Bit);
 
 
-      DMA_Initialize_Channel(
-   DMA_CHANNEL_QADC_FISR4_RFDF_4,
-   DMA_QADC_RFDF_4_Source_Address,
-   DMA_QADC_RFDF_4_Second_32Bit,
-   DMA_QADC_RFDF_4_Third_32Bit,
-   DMA_QADC_RFDF_4_Slast,
-   DMA_QADC_RFDF_4_Dest_Address,
-   DMA_QADC_RFDF_4_Sixth_32Bit,
-   DMA_QADC_RFDF_4_Dlast,
-   DMA_QADC_RFDF_4_Eighth_32Bit);
+	DMA_Initialize_Channel(
+	DMA_CHANNEL_QADC_FISR4_RFDF_4,
+	DMA_QADC_RFDF_4_Source_Address,
+	DMA_QADC_RFDF_4_Second_32Bit,
+	DMA_QADC_RFDF_4_Third_32Bit,
+	DMA_QADC_RFDF_4_Slast,
+	DMA_QADC_RFDF_4_Dest_Address,
+	DMA_QADC_RFDF_4_Sixth_32Bit,
+	DMA_QADC_RFDF_4_Dlast,
+	DMA_QADC_RFDF_4_Eighth_32Bit);
 
-   QADC_Initialize_Device();
-
-    
-  // Enable_Interrupts();
-   //ECSM_NVM_ChecksumCheck();
-  //  Disable_Interrupts();
-
- //  Enable_MachineCheck();
-
-   MIOS_Initialize_Device();
-
-   TPU_Initialize_Device();   
- 
-  //
-   DSPI_B_Initialize_Device();
-
-   DMA_Initialize_Channel(
-   DMA_CHANNEL_DSPI_B_SR_TFFF,
-   DMA_DSPIB_SR_TFFF_Source_Address,
-   DMA_DSPIB_SR_TFFF_Second_32Bit,
-   DMA_DSPIB_SR_TFFF_Third_32Bit,
-   DMA_DSPIB_SR_TFFF_Slast,
-   DMA_DSPIB_SR_TFFF_Dest_Address,
-   DMA_DSPIB_SR_TFFF_Sixth_32Bit,
-   DMA_DSPIB_SR_TFFF_Dlast,
-   DMA_DSPIB_SR_TFFF_Eighth_32Bit);
+	QADC_Initialize_Device();
 
 
-      DMA_Initialize_Channel(
-   DMA_CHANNEL_DSPI_B_SR_RFDF,
-   DMA_DSPIB_SR_RFDF_Source_Address,
-   DMA_DSPIB_SR_RFDF_Second_32Bit,
-   DMA_DSPIB_SR_RFDF_Third_32Bit,
-   DMA_DSPIB_SR_RFDF_Slast,
-   DMA_DSPIB_SR_RFDF_Dest_Address,
-   DMA_DSPIB_SR_RFDF_Sixth_32Bit,
-   DMA_DSPIB_SR_RFDF_Dlast,
-   DMA_DSPIB_SR_RFDF_Eighth_32Bit);
-	  
-   DSPI_B_Enable_Transfer(true);
+	// Enable_Interrupts();
+	//ECSM_NVM_ChecksumCheck();
+	//  Disable_Interrupts();
 
-  // DSPI_C_Initialize_Device();
-   //
-      
-   STM_Set_Timer_Enable(true);
-  
-   FlexCAN_A_Initialize_Device();
+	//  Enable_MachineCheck();
 
-  // FlexCAN_C_Initialize_Device( );
+	MIOS_Initialize_Device();
 
-    HAL_CAN_RX_B00_Config();
-    HAL_CAN_TX_B01_Config();
-    HAL_CAN_TX_B02_Config();
-    HAL_CAN_TX_B03_Config();
-    HAL_CAN_TX_B04_Config();
-    HAL_CAN_TX_B05_Config();
-    HAL_CAN_RX_B06_Config();
-    HAL_CAN_TX_B07_Config();
-	
-    L9958_Device_Initialize(MTSA_CONFIG_L9958_DEVICE_0);
-  
-    InitializeComplexIO();
+	TPU_Initialize_Device();   
 
-   //Prepare Vsep clock
-    IO_Pulse_VSEP_CLK_Enable();
-   // Enable FSE pin
-    HAL_GPIO_SET_GEN_Enable(false);
-   // Enable the IOEN line to enable the IO pins
-    HAL_GPIO_SET_FSE_Enable(false);
+	DSPI_B_Initialize_Device();
 
-    VSEP_Initialize_Device();
-     
-    SOH_ETC_Initialize(true);
+	DMA_Initialize_Channel(
+	DMA_CHANNEL_DSPI_B_SR_TFFF,
+	DMA_DSPIB_SR_TFFF_Source_Address,
+	DMA_DSPIB_SR_TFFF_Second_32Bit,
+	DMA_DSPIB_SR_TFFF_Third_32Bit,
+	DMA_DSPIB_SR_TFFF_Slast,
+	DMA_DSPIB_SR_TFFF_Dest_Address,
+	DMA_DSPIB_SR_TFFF_Sixth_32Bit,
+	DMA_DSPIB_SR_TFFF_Dlast,
+	DMA_DSPIB_SR_TFFF_Eighth_32Bit);
 
 
+	DMA_Initialize_Channel(
+	DMA_CHANNEL_DSPI_B_SR_RFDF,
+	DMA_DSPIB_SR_RFDF_Source_Address,
+	DMA_DSPIB_SR_RFDF_Second_32Bit,
+	DMA_DSPIB_SR_RFDF_Third_32Bit,
+	DMA_DSPIB_SR_RFDF_Slast,
+	DMA_DSPIB_SR_RFDF_Dest_Address,
+	DMA_DSPIB_SR_RFDF_Sixth_32Bit,
+	DMA_DSPIB_SR_RFDF_Dlast,
+	DMA_DSPIB_SR_RFDF_Eighth_32Bit);
+
+	DSPI_B_Enable_Transfer(true);
+
+	// DSPI_C_Initialize_Device();
+
+	STM_Set_Timer_Enable(true);
+
+	FlexCAN_A_Initialize_Device();
+
+	// FlexCAN_C_Initialize_Device( )
+
+	/* init ccp can id and channel */
+	HAL_CAN_Initialize();
+
+	L9958_Device_Initialize(MTSA_CONFIG_L9958_DEVICE_0);
+
+	InitializeComplexIO();
+
+	//Prepare Vsep clock
+	IO_Pulse_VSEP_CLK_Enable();
+	// Enable FSE pin
+	HAL_GPIO_SET_GEN_Enable(false);
+	// Enable the IOEN line to enable the IO pins
+	HAL_GPIO_SET_FSE_Enable(false);
+
+	VSEP_Initialize_Device();
+
+	SOH_ETC_Initialize(true);
 }
 
 //=============================================================================

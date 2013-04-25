@@ -12,6 +12,7 @@
 #include "io_interface_os.h"
 #include "io_interface_gpio.h"
 //#include "hal_diag.h"
+#include "io_interface_can.h"
 
 
 //extern void Update_DiagStatus_10ms(void);
@@ -59,76 +60,71 @@ void  HAL_OS_2ms_Task(void)
 uint16_t OS_10ms_Cnt0;
 uint16_t OS_10ms_Cnt1;
 void  HAL_OS_10ms_Task(void) 
- {
-     OS_10ms_Cnt0++;
-    IO_GPIO_DI_Task();
-    IO_Analog_10ms_Update();
-    IO_Eng_Update_System_Time_Background();
-    HLS_Task_10ms();
-    IO_GPIO_DO_Task();
-    IO_Pulse_Update_Function();
-    if(OS_10ms_Cnt1&1)
-    {
-       HLS_Task_20ms();
-    }
-   OS_10ms_Cnt1++;
-   if(OS_10ms_Cnt0 ==5)
-   {
-        HLS_Task_50ms();
-        OS_10ms_Cnt0 = 0;
-    }
-   
-
-   Update_DiagStatus_10ms();
- }
+{
+	OS_10ms_Cnt0++;
+	IO_GPIO_DI_Task();
+	IO_Analog_10ms_Update();
+	IO_Eng_Update_System_Time_Background();
+	HLS_Task_10ms();
+	IO_GPIO_DO_Task();
+	IO_Pulse_Update_Function();
+	if(OS_10ms_Cnt1&1)
+	{
+		HLS_Task_20ms();
+	}
+	OS_10ms_Cnt1++;
+	if(OS_10ms_Cnt0 ==5)
+	{
+		HLS_Task_50ms();
+		OS_10ms_Cnt0 = 0;
+	}
+	MngChery_Can_10ms();
+	Update_DiagStatus_10ms();
+}
 
 //=============================================================================
 //  HAL_OS_100ms_Task
 //=============================================================================
 uint16_t OS_100ms_Cnt;
-  void  HAL_OS_100ms_Task(void)
+void HAL_OS_100ms_Task(void)
 {
-
-   OS_100ms_Cnt++;
-   HLS_Task_100ms();
-   if(OS_100ms_Cnt ==5)
-   {
-     IO_Pulse_VSS_Update_500ms();
-   }
-   if(OS_100ms_Cnt ==10)
-   {
-      IO_Pulse_VSS_Update_500ms();
-      IO_OS_OneSecond_Task();
-      HLS_Task_1000ms();
-      OS_100ms_Cnt = 0;
-   }
-   
-   if(!(OS_100ms_Cnt&&0x01))
-   {
-    HLS_Task_200ms();
-   }
-
+	OS_100ms_Cnt++;
+	HLS_Task_100ms();
+	if(OS_100ms_Cnt ==5) {
+		IO_Pulse_VSS_Update_500ms();
+	}
+	if(OS_100ms_Cnt == 10) {
+		IO_Pulse_VSS_Update_500ms();
+		IO_OS_OneSecond_Task();
+		HLS_Task_1000ms();
+		OS_100ms_Cnt = 0;
+		MngChery_Can_1000ms();
+		MngChery_Can_2000ms();
+	}
+	if(!(OS_100ms_Cnt&&0x01)) {
+		HLS_Task_200ms();
+	}
+	MngChery_Can_100ms();
 }
 
 //=============================================================================
 //  App_Init_Task
 //=============================================================================
-  void HAL_OS_Init_Task(void)
-  {
+void HAL_OS_Init_Task(void)
+{
+	IO_OS_Power_Status_Init();
+	//chery init	
+	HLS_ini();
+	HLS_inisyn();
+	//app fuel setup
+	IO_Fuel_Syn_Init();
+	//app spark setup
+	IO_Spark_Syn_Init();
+	//app eng status setup
+	IO_Eng_Engine_Init();
 
-    IO_OS_Power_Status_Init();
-    //chery init	
-    HLS_ini();
-    HLS_inisyn();
-    //app fuel setup
-    IO_Fuel_Syn_Init();
-    //app spark setup
-    IO_Spark_Syn_Init();
-    //app eng status setup
-    IO_Eng_Engine_Init();
-	
-    HLS_ini2();	
-  }
+	HLS_ini2();
+}
 
 
 //=============================================================================
