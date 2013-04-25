@@ -34,7 +34,7 @@
 #include "dd_vsep_pwm_interface.h"
 #include "dd_vsep_est_select.h"
 #include "hal.h"
-#include "hwiocald.h"
+#include "vsepcald.h"
 
 //#ifdef HW_TEST_SW
 #define GetSPRK_SparkDeliveryMode() CeWasteEST // 2IGBT

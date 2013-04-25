@@ -120,9 +120,9 @@ static void  VSEP_INIT_TXD_Buffer_Initialize(void)
       ;
    	VSEP_INIT_TXD_INITIAL[0][11] =  
          VSEP_Msg_Set_SOHRSTEN( 0, VSEP_SOH_Get_SOHRSTEN( VSEP_0_SOHRSTEN_INIT )                                              ) |
-         VSEP_Msg_MPIO_Set_Mx_OHILOB_OEN( 0, (VSEP_CHANNEL_MPIO_1-VSEP_CHANNEL_MPIO_1), (uint16_t)KeHWIO_ACReq_pin79_Status) |
-         VSEP_Msg_MPIO_Set_Mx_OHILOB_OEN( 0, (VSEP_CHANNEL_MPIO_2-VSEP_CHANNEL_MPIO_1), (uint16_t)KeHWIO_PSPS_pin60_Status) |
-         VSEP_Msg_MPIO_Set_Mx_OHILOB_OEN( 0, (VSEP_CHANNEL_MPIO_3-VSEP_CHANNEL_MPIO_1), (uint16_t)KeHWIO_MIDAC_pin40_Status) |
+         VSEP_Msg_MPIO_Set_Mx_OHILOB_OEN( 0, (VSEP_CHANNEL_MPIO_1-VSEP_CHANNEL_MPIO_1), (uint16_t)KeVSEP_ACReq_pin79_Status) |
+         VSEP_Msg_MPIO_Set_Mx_OHILOB_OEN( 0, (VSEP_CHANNEL_MPIO_2-VSEP_CHANNEL_MPIO_1), (uint16_t)KeVSEP_PSPS_pin60_Status) |
+         VSEP_Msg_MPIO_Set_Mx_OHILOB_OEN( 0, (VSEP_CHANNEL_MPIO_3-VSEP_CHANNEL_MPIO_1), (uint16_t)KeVSEP_MIDAC_pin40_Status) |
                  VSEP_Msg_EST_Set_CYLCNT( 0, (uint16_t)KsVSEP_Spark_Mode_Initialization.KeVSEP_Spark_CYLCNT   ) |
               VSEP_Msg_EST_Set_DEC_DISCB( 0,    (uint16_t)KsVSEP_Spark_Mode_Initialization.KbVSEP_Spark_DEC_DISCB ) |
                 VSEP_Msg_EST_Set_IGBTCFG( 0,     (uint16_t)KsVSEP_Spark_Mode_Initialization.KbVSEP_Spark_IGBTCFG      ) |

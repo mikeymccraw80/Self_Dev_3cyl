@@ -37,7 +37,7 @@
 #include "dd_vsep_soh.h"
 #include "dd_vsep_vr.h"
 #include "dd_vsep_init_config.h"
-#include "hwiocald.h"
+#include "vsepcald.h"
 
 
 #ifdef  VSEP_CALIBRATION_ENABLE

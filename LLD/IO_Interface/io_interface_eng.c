@@ -4,6 +4,7 @@
 #include "HLS.h"
 #include "hal_eng.h"
 #include "hal_pulse.h"
+#include "vehicle_can_cald.h"
 
 
 //=============================================================================
@@ -116,15 +117,19 @@ void  IO_Eng_ToothInt(void)
      crank_sig.segment_time = 300000;//100rpm,300ms
    }
 
-  if(crank_sig.engine_rpm >0)
+  //TACH output 
+  if(!K_Can_Meter_TACH_Disable)
   {
-     //vsep pwm period scale is 1/64ms, duty scale is 1/32768
-      HAL_Pulse_TACH_Set_Period_Duty((uint32_t)(crank_sig.segment_time*2*64)/1000, 32768/2 );
-  }
-  else
-  {
-      //vsep pwm period scale is 1/64ms, duty scale is 1/32768
-      HAL_Pulse_TACH_Set_Period_Duty((uint32_t)(crank_sig.segment_time*2*64)/1000, 0 );
-  }		
+     if(crank_sig.engine_rpm >0)
+       {
+         //vsep pwm period scale is 1/64ms, duty scale is 1/32768
+         HAL_Pulse_TACH_Set_Period_Duty((uint32_t)(crank_sig.segment_time*2*64)/1000, 32768/2 );
+       }
+      else
+      {
+         //vsep pwm period scale is 1/64ms, duty scale is 1/32768
+        HAL_Pulse_TACH_Set_Period_Duty((uint32_t)(crank_sig.segment_time*2*64)/1000, 0 );
+      }	
+   }	  
 }
 

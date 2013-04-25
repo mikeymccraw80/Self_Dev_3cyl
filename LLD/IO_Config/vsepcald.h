@@ -1,78 +1,16 @@
-#ifndef HWIOCALD_H
-#define HWIOCALD_H
+#ifndef VSEPCALD_H
+#define VSEPCALD_H
 
-
-
-#include "hal.h"
+//=============================================================================
+// include files
+//=============================================================================
+#include "reuse.h"
 #include "dd_vsep_discrete.h"
 
-
-typedef struct COND_Test_Option_Tag /* 1 - test enable, 0 - test disabled */
-{
-	bitfield16_t	CPU_Clock		: 1; /* CPU clock test */
-	bitfield16_t	GPR			: 1; /* general purpose register test */
-	bitfield16_t	WDT_Timer		: 1; /* all watchdog timeout test */
-	bitfield16_t	ADC			: 1; /* ADC conversion test and status */
-	bitfield16_t	Flash_ECC		: 1; /* Flash ECC fault detection */
-	bitfield16_t	RAM_Parity		: 1; /* RAM parity checking */
-	bitfield16_t	NotUsed			: 10; /* not used */
-} COND_Test_Option_T;
-
-typedef enum WSS_Type_Tag
-{
-	WSS_VR = 0,
-	WSS_HALL
-}  WSS_Type_T ;
-
-typedef enum VSS_Source_Tag
-{
-	VSS_SOURCE_NONE,
-	VSS_SOURCE_SENSOR,
-	VSS_SOURCE_COMMUNICATION
-} VSS_Source_T ;
-
-
 //=============================================================================
-// Description: Calibration file for 58x section of hardware input output
-//                          subsystem.
+// type define
 //=============================================================================
-typedef enum {
-   WINGATE_TYPE_NONE,
-   WINGATE_TYPE_ON
-} WINGATE_TYPE_T;
-
-
-
-//crank
-extern const uint8_t     KyHWIO_ToothOfFirstLoResEvent;
-extern const T_CRANK_ANGLE    KyHWIO_phi_ToothAngleForCamRead;
-extern const uint8_t     KyHWIO_CrankSyncStartTooth;
-extern const uint8_t     KyHWIO_Num_58X_Teeth_Before_Sync;
-extern const bool        KeHWIO_Cam1OccurredTrue;
-extern const bool        KeHWIO_Cam2OccurredTrue;
-extern const uint8_t     KyHWIO_Num58xGapsBeforeSeqn;
-extern const T_CRANK_ANGLE    KfHWIO_phi_TopDeadCenter;
-extern const uint8_t       KyHWIO_NumberOfCylinders;
-extern const uint8_t       KyHWIO_NumValidPeriodsBeforeSyncStart;
-extern const uint8_t       KyHWIO_Num58xGapsUsingCamForSync;
-
-//pfi
-extern const T_CRANK_ANGLE      KfHWIO_phi_BoundaryFraction;
-
-//knock
-extern const uint32_t  DSP_LOW_PASS_FILTER_IIR_COEFF[] ;
-extern const uint32_t DSP_KNOCK_CENTER_FREQUENCY_IIR_COEFF1[];
-extern  const uint32_t DSP_KNOCK_CENTER_FREQUENCY_IIR_COEFF2[];
-extern  const uint32_t DSP_KNOCK_CENTER_FREQUENCY_IIR_COEFF3[];
-
-//spark
-extern const T_MILLISECONDSb  KfSPRK_t_DwellInit;
-extern const T_MILLISECONDSb  KfSPRK_t_CrankMinDwellInit ;
-extern const T_MILLISECONDSb KfSPRK_t_CrankMaxDwellInit ;
-
 //vesp
-
-
 typedef struct
 {
 
@@ -200,6 +138,10 @@ typedef struct
 
 }KsVSEP_Spark_Mode_Cals;
 
+ //=============================================================================
+// extern variables
+//=============================================================================
+
 extern const  KsVSEP_VR1_Setting_Cals  KsVSEP_VR1_Setting_Initial;
 extern const  KsVSEP_VR1_HeavyDelay_T  KsVSEP_VR1_Setting_Initial_Crank;
 extern const  KsVSEP_VR2_Setting_Cals  KsVSEP_VR2_Setting_Initial;
@@ -212,11 +154,11 @@ extern const  KsVSEP_LEDMODE_Cals  KsVSEP_LEDMODE_Initial;
 extern const  KsVSEP_GRAD_Cals  KsVSEP_GRAD_Initialization;
 //extern const  KsVSEP_HW_Protect_Enable   KsVSEP_HW_Protect_Setting;
 extern const  KsVSEP_Spark_Mode_Cals  KsVSEP_Spark_Mode_Initialization;
-extern const VSEP_MPIO_Input_Mode_T KeHWIO_ACReq_pin79_Status ;
+extern const VSEP_MPIO_Input_Mode_T KeVSEP_ACReq_pin79_Status ;
 
-extern const VSEP_MPIO_Input_Mode_T KeHWIO_PSPS_pin60_Status;
+extern const VSEP_MPIO_Input_Mode_T KeVSEP_PSPS_pin60_Status;
 
-extern const VSEP_MPIO_Input_Mode_T KeHWIO_MIDAC_pin40_Status;
+extern const VSEP_MPIO_Input_Mode_T KeVSEP_MIDAC_pin40_Status;
 
 extern const  uint16_t KsVSEP_Diagnostic_Counter_Thd;
 
@@ -226,8 +168,6 @@ extern const bool K_Can_Meter_MIL_Disable;
 extern const bool K_Can_Meter_TACH_Disable;
 extern const bool K_Can_Meter_Fuel_Consum_Disable;
 
-extern const   bool        KbHWIO_ELOAD1_Active_High;
-extern const   bool        KbHWIO_ELOAD2_Active_High;
-extern const   bool        KbHWIO_BRKLMP_Active_High;
 
 #endif
+
