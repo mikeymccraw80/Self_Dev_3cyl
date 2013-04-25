@@ -368,8 +368,9 @@ static void CRANK_Filter_Crank_Signal( void )
    if( CRANK_Get_Run_Reset_Bypass_Filter( CRANK_Internal_State.U32 ) )
    {
       CRANK_Internal_State.U32 = CRANK_Set_Filter_Enabled( CRANK_Internal_State.U32, false );
-      CRANK_Internal_State.U32 = CRANK_Set_Sync_Started( CRANK_Internal_State.U32, true );
+      CRANK_Internal_State.U32 = CRANK_Set_Sync_Started( CRANK_Internal_State.U32, true );	
       CRANK_Internal_State.U32 = CRANK_Set_Run_Reset_Bypass_Filter( CRANK_Internal_State.U32, false );
+     CRANK_Set_Flag( CRANK_FLAG_STALL_DETECTED, false );
    }
    else
    {
@@ -389,6 +390,7 @@ static void CRANK_Filter_Crank_Signal( void )
             CRANK_Internal_State.U32 = CRANK_Set_Engine_Turning( CRANK_Internal_State.U32, true );
             CRANK_Internal_State.U32 = CRANK_Set_Filter_Enabled( CRANK_Internal_State.U32, false );
             CRANK_Internal_State.U32 = CRANK_Set_Sync_Started( CRANK_Internal_State.U32, true );
+	     CRANK_Set_Flag( CRANK_FLAG_STALL_DETECTED, false );
             CRANK_Valid_Sync_Period = 0;
 	  
          }

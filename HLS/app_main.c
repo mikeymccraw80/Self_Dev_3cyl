@@ -216,7 +216,7 @@ void HLS_ini(void)
 {
 	/* etc signal output set */
 	etc_sig.etc_enable = true;
-	// etc_sig.etc_freq = 1; //set to 2khz
+	 etc_sig.etc_freq = 500; //set to 2khz
 	etc_sig.etc_duty = 32768;
 	etc_sig.etc_direction = false;
 
