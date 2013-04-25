@@ -4,7 +4,11 @@
 //=============================================================================
 // Register overlay of the submodule
 //=============================================================================
+#define SECTION_SWT_REGISTER
+#include "section.h"
 SWT_T SWT;
+#define SECTION_END
+#include "section.h"
 
 //==========================================================================
 // Local object-like(name and constant) macros

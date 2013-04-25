@@ -410,6 +410,7 @@
              VSEP_PCH_Set_Initial_State( 0, IO_INACTIVE                                   ) )
 
 #define VSEP_0_MPIO_M1_INIT MTSA_CONFIG_VSEP_MPIO1
+#define VSEP_MPIO_ACRequest_CH  MTSA_CONFIG_VSEP_MPIO1
 
 //=============================================================================
 // MPIO2 
@@ -423,6 +424,7 @@
 
 
 #define VSEP_0_MPIO_M2_INIT MTSA_CONFIG_VSEP_MPIO2
+#define VSEP_MPIO_PSPS_CH  MTSA_CONFIG_VSEP_MPIO2
 
 //=============================================================================
 // MPIO3
@@ -435,6 +437,7 @@
                 VSEP_PCH_Set_Initial_State( 0, IO_INACTIVE                         ) )
 
 #define VSEP_0_MPIO_M3_INIT MTSA_CONFIG_VSEP_MPIO3
+#define VSEP_MPIO_MIDAC_CH  MTSA_CONFIG_VSEP_MPIO3
 
 //=============================================================================
 // SOHRSTEN_STAT 

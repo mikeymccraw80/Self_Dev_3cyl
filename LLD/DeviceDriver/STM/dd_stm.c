@@ -7,8 +7,11 @@
 //=============================================================================
 // define
 //=============================================================================
-STM_T  STM;
-
+#define SECTION_STM_REGISTER
+#include "section.h"
+ STM_T  STM;
+#define SECTION_END
+#include "section.h"
 #define STM_CHANNEL_ENABLE_MASK (0x00000001)
 #define STM_INTERRUPT_MASK (0x00000001)
 //=============================================================================

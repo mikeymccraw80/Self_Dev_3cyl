@@ -18,7 +18,7 @@
 //===========================================================================
 //  Exported object definitions
 //===========================================================================
-//#define SECTION_FLASH_A_REGISTER
+#define SECTION_FLASH_A_REGISTER
 #include "section.h"
 extern FLASH_T FLASH_A;
 #define SECTION_END

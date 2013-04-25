@@ -49,7 +49,7 @@
 \*===========================================================================*/
 #include "soh.h"
 #include "soh_s12x.h"
-#include "hwiocald.h"
+#include "vsepcald.h"
 #include "hal_soh.h"
 
 

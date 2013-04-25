@@ -5,7 +5,11 @@
 //=============================================================================
 // QADC
 //=============================================================================
-QADC_T QADC;
+#define SECTION_QADC_REGISTER
+#include "section.h"
+ QADC_T QADC;
+#define SECTION_END
+#include "section.h"
 
 uint16_t QADC_Queue_Result_4[AD_ANALOG_MAX_SIGNAL_NAMES];
 

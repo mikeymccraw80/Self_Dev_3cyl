@@ -39,7 +39,9 @@
 */
 
 /*
-*|                  hwiocald;
+*|                  hwiocald,
+*|                  vsepcald,
+*|                  vehicle_can_cald;
 */
 
 /*

@@ -30,7 +30,7 @@
   } 
   else
   {
-   LLD_atd_input_table[LLD_ATD_MAP].LLD_atd_val =HAL_Analog_Get_MAPVI_Value()>>6;
+   LLD_atd_input_table[LLD_ATD_MAP].LLD_atd_val =HAL_Analog_Get_MAPVI_Value()>>2;
 
   }//chery requirement
 
@@ -42,7 +42,7 @@
  // } 
  // else
   {
-   LLD_atd_input_table[LLD_ATD_THROTTLE_1].LLD_atd_val =HAL_Analog_Get_TPS1VI_Value()>>6;
+   LLD_atd_input_table[LLD_ATD_THROTTLE_1].LLD_atd_val =HAL_Analog_Get_TPS1VI_Value()>>2;
 
   }//chery requirement
 
@@ -54,7 +54,7 @@
  // } 
  // else
   {
-   LLD_atd_input_table[LLD_ATD_THROTTLE_2].LLD_atd_val =HAL_Analog_Get_TPS2VI_Value()>>6;;
+   LLD_atd_input_table[LLD_ATD_THROTTLE_2].LLD_atd_val =HAL_Analog_Get_TPS2VI_Value()>>2;;
   }//chery requirement
 }
 
@@ -71,7 +71,7 @@
   } 
   else
   {
-   LLD_atd_input_table[LLD_ATD_OXYGEN_SENSOR_1].LLD_atd_val = HAL_Analog_Get_O2AVI_Value()>>6;
+   LLD_atd_input_table[LLD_ATD_OXYGEN_SENSOR_1].LLD_atd_val = HAL_Analog_Get_O2AVI_Value()>>2;
   }//chery requirement
   
   // O2 sensor B 
@@ -82,7 +82,7 @@
   } 
   else
   {
-   LLD_atd_input_table[LLD_ATD_OXYGEN_SENSOR_2].LLD_atd_val =HAL_Analog_Get_O2BVI_Value()>>6;
+   LLD_atd_input_table[LLD_ATD_OXYGEN_SENSOR_2].LLD_atd_val =HAL_Analog_Get_O2BVI_Value()>>2;
   }//chery requirement
   
  // TA 
@@ -93,7 +93,7 @@
   } 
   else
   {
-   LLD_atd_input_table[LLD_ATD_TA].LLD_atd_val = HAL_Analog_Get_MATVI_Value()>>6;
+   LLD_atd_input_table[LLD_ATD_TA].LLD_atd_val = HAL_Analog_Get_MATVI_Value()>>2;
   }//chery requirement
   
   // Tm 
@@ -104,19 +104,23 @@
   } 
   else
   {
-   LLD_atd_input_table[LLD_ATD_ECT].LLD_atd_val = HAL_Analog_Get_CLTVI_Value()>>6;
+   LLD_atd_input_table[LLD_ATD_ECT].LLD_atd_val = HAL_Analog_Get_CLTVI_Value()>>2;
   }//chery requirement
-  
-
-  
+    
   //Ingition voltage 
-  LLD_atd_input_table[LLD_ATD_VBATT_SW].LLD_atd_val = HAL_Analog_Get_IGNVI_Value()>>6;
+  LLD_atd_input_table[LLD_ATD_VBATT_SW].LLD_atd_val = HAL_Analog_Get_IGNVI_Value()>>2;
   
   //Front Evap Temperature 
-  LLD_atd_input_table[LLD_ATD_FRONT_EVAP_TEMP].LLD_atd_val = HAL_Analog_Get_FREPVI_Value()>>6;
+  LLD_atd_input_table[LLD_ATD_FRONT_EVAP_TEMP].LLD_atd_val = HAL_Analog_Get_FREPVI_Value()>>2;
 
  //AC PRESSURE 
-  LLD_atd_input_table[LLD_ATD_AC_PRESSURE].LLD_atd_val = HAL_Analog_Get_ACPREVI_Value()>>6;
+  LLD_atd_input_table[LLD_ATD_AC_PRESSURE].LLD_atd_val = HAL_Analog_Get_ACPREVI_Value()>>2;
+
+   //PPS1
+  LLD_atd_input_table[LLD_ATD_PEDAL_1].LLD_atd_val = HAL_Analog_Get_PPS1VI_Value()>>2;
+
+ //PPS2 
+  LLD_atd_input_table[LLD_ATD_PEDAL_2].LLD_atd_val = HAL_Analog_Get_PPS2VI_Value()>>2;
   
 
   

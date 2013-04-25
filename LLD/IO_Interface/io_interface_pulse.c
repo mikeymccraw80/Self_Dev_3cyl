@@ -31,7 +31,7 @@
   HAL_Pulse_VVT2CTL_Set_Period_Duty((uint32_t)LLD_pwm_out_table[LLD_PWM_VVT2].period*1000,
   	                                                (uint16_t)LLD_pwm_out_table[LLD_PWM_VVT2].duty*1000/255);
 
-
+  //VSEP channel: period resoultion is 1/64ms; duty resoultion is 1/32768
   //VSEP channel :CCP
   if(LLD_pwm_out_table[LLD_PWM_PURGE].B_enable)
    {
@@ -44,6 +44,8 @@
     HAL_Pulse_CCP_Set_Period_Duty( (uint32_t)0, 
  	                                                      (uint16_t)LLD_pwm_out_table[LLD_PWM_PURGE].duty*128);
   }
+
+ //VSEP channel: period resoultion is 1/64ms; duty resoultion is 1/32768
  //VSEP channel :O2 HTRA
  if(LLD_pwm_out_table[LLD_PWM_O2_HEATER_1].B_enable)
   {
@@ -56,6 +58,8 @@
     HAL_Pulse_O2AHTR_Set_Period_Duty( (uint32_t)0, 
  	                                                      (uint16_t)LLD_pwm_out_table[LLD_PWM_O2_HEATER_1].duty*128);
  }
+ 
+ //VSEP channel: period resoultion is 1/64ms; duty resoultion is 1/32768
  //VSEP channel :O2 HTRB
  if(LLD_pwm_out_table[LLD_PWM_O2_HEATER_2].B_enable)
   {
@@ -69,30 +73,25 @@
  	                                                      (uint16_t)LLD_pwm_out_table[LLD_PWM_O2_HEATER_1].duty*128);
  }
  
+   //VSEP channel: period resoultion is 1/64ms; duty resoultion is 1/32768
  //VSEP channel :CLT Gauge
   if(LLD_pwm_out_table[LLD_PWM_ECT].B_enable)
   {
     HAL_Pulse_CLTGAUGE_Set_Period_Duty( (uint32_t)LLD_pwm_out_table[LLD_PWM_ECT].period*64, 
  	                                                      (uint16_t)LLD_pwm_out_table[LLD_PWM_ECT].duty*128);
  //test code
-    HAL_Pulse_TACH_Set_Period_Duty( (uint32_t)LLD_pwm_out_table[LLD_PWM_ECT].period*64, 
- 	                                                      (uint16_t)LLD_pwm_out_table[LLD_PWM_ECT].duty*128);
-
- //test code
-    HAL_Pulse_ALTCTL_Set_Period_Duty( (uint32_t)LLD_pwm_out_table[LLD_PWM_ECT].period*64, 
- 	                                                      (uint16_t)LLD_pwm_out_table[LLD_PWM_ECT].duty*128);
+  //  HAL_Pulse_ALTCTL_Set_Period_Duty( (uint32_t)LLD_pwm_out_table[LLD_PWM_ECT].period*64, 
+ 	//                                                      (uint16_t)LLD_pwm_out_table[LLD_PWM_ECT].duty*128);
   }
  else
  {
 
     HAL_Pulse_CLTGAUGE_Set_Period_Duty( (uint32_t)0, 
  	                                                      (uint16_t)LLD_pwm_out_table[LLD_PWM_ECT].duty*128);
-    //test code	
-    HAL_Pulse_TACH_Set_Period_Duty( (uint32_t)0, 
- 	                                                      (uint16_t)LLD_pwm_out_table[LLD_PWM_ECT].duty*128);
+
    //test code
-    HAL_Pulse_ALTCTL_Set_Period_Duty( (uint32_t)0, 
- 	                                                      (uint16_t)LLD_pwm_out_table[LLD_PWM_ECT].duty*128);
+    //HAL_Pulse_ALTCTL_Set_Period_Duty( (uint32_t)0, 
+ 	   //                                                   (uint16_t)LLD_pwm_out_table[LLD_PWM_ECT].duty*128);
  }
 
     

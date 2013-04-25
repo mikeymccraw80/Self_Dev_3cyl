@@ -4,7 +4,11 @@
 //=============================================================================
 // INTC
 //=============================================================================
+#define SECTION_INTC_REGISTER
+#include "section.h"
 INTC_T INTC;
+#define SECTION_END
+#include "section.h"
 
 //=============================================================================
 // INTC & exception address define in dld file
