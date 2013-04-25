@@ -81,7 +81,6 @@ void MngOSTK_10msTasks(void)
 
   HAL_OS_10ms_Task(); 
 
-  HAL_CAN_10ms_Task();
   test_cnt_30ms++;
   if (test_cnt_30ms == 3)
   {
