@@ -16,9 +16,6 @@
 /* ============================================================================ *\
  * Exported variables.
 \* ============================================================================ */
-uint8_t CAN_Message_Transmit_0x480[FLEXCAN_DATA_MAX_BYTES];
-uint8_t test_can =0;
-
 /* define receive temp buffer, this buffer is only as 
  * FlexCAN_Receive_Interrupt() buffer only feel curious
  */
@@ -249,27 +246,6 @@ void HAL_CAN_Transmit_Message(uint32_t id, uint8_t len, uint8_t *pdata)
 			len);
 }
 
-/* ============================================================================ *\
- * HAL_DI_10ms_Task
-\*============================================================================ */
- void HAL_CAN_10ms_Task(void) 
-{ 
-   bool transmit_complete;
-   uint8_t index;
-
-      for(index = FLEXCAN_DATA_0_BYTES; index < FLEXCAN_DATA_MAX_BYTES; index++)
-      {
-         CAN_Message_Transmit_0x480[index] = test_can++;
-      	}
-	  
-   transmit_complete = FlexCAN_Transmit_Message(
-   &FlexCAN_A,
-   FLEXCAN_MSG_OBJ_14,
-   0x480,
-   CAN_Message_Transmit_0x480,
-   FLEXCAN_DATA_MAX_BYTES   );
-    
-}
 
 extern uint8_t  VsCAN_CHERY_ID2E9[8];
 extern uint8_t  VsCAN_CHERY_ID310[8];
