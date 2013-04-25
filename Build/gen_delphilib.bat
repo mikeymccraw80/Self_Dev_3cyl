@@ -30,7 +30,8 @@ REM ..\tools\diab\WIN32\bin\dar -r ..\tools\delphilib\outputlib\mt22p3_chery_4cy
 
 
 
-python gen_delphilib.py
+REM python gen_delphilib.py
+gen_delphilib.exe
 del ..\tools\delphilib\outputlib\mt22p3_chery_4cyl.a
 call get_lib.bat
 del get_lib.bat

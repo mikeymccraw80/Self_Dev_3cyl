@@ -1,4 +1,5 @@
 import os
+import sys
 
 def gen_objs_lib():
 	objs_file = file("obj_list.txt", "r")
@@ -21,4 +22,4 @@ def gen_objs_lib():
 	bat_file.close()
 if __name__ == "__main__":
 	gen_objs_lib()
-	quit()
+	sys.exit()
