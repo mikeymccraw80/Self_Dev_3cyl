@@ -18,6 +18,10 @@ void  IO_Pulse_VSEP_CLK_Enable(void);
 // IO_Pulse_VSS_Update_500ms
 //=============================================================================
 void  IO_Pulse_VSS_Update_500ms(void);
+//=============================================================================
+// IO_Pulse_Update_Function_1ms
+//=============================================================================
+ void  IO_Pulse_Update_Function_1ms(void) ;
  
 
 #endif

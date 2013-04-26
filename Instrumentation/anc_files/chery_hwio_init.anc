@@ -25,3 +25,14 @@
 *-}
 
 
+*-io_init.BatteryRemoved{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "BATTRMOV";
+*-  variable_location.symbol = io_init.BatteryRemoved;
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-}
+
+

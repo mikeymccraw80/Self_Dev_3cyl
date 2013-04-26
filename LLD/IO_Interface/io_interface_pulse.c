@@ -10,19 +10,7 @@
 //=============================================================================
  void  IO_Pulse_Update_Function(void) 
 {
-  //MIOS channel: ETC
-  //500us equal 2KHZ
-  //duty resoultion is 1/1000
-  //etf freq is period form HLS, not frequency
-    //HAL_Pulse_ETC_Enable((bool)etc_sig.etc_enable);
-    if((bool)etc_sig.etc_enable)
-   {
-      HAL_Pulse_ETC_Set_Period_Duty((uint16_t)etc_sig.etc_freq, (uint16_t)etc_sig.etc_duty*1000/65535);
-   }
-   else
-   {
-        HAL_Pulse_ETC_Set_Period_Duty((uint16_t)etc_sig.etc_freq, 0);
-   }		
+	
   //MIOS channel: VVT1
   //period in us
   //duty resoultion is 1/1000
@@ -148,4 +136,25 @@ void  IO_Pulse_VSS_Update_500ms(void)
       veh_spd_sig.period = HAL_Pulse_Get_VSS_Period()/40;
     }	 
 	
+}
+
+//=============================================================================
+// IO_Pulse_Update_Function_1ms
+//=============================================================================
+ void  IO_Pulse_Update_Function_1ms(void) 
+{
+  //MIOS channel: ETC
+  //500us equal 2KHZ
+  //duty resoultion is 1/1000
+  //etf freq is period form HLS, not frequency
+    //HAL_Pulse_ETC_Enable((bool)etc_sig.etc_enable);
+    if((bool)etc_sig.etc_enable)
+   {
+      HAL_Pulse_ETC_Set_Period_Duty((uint16_t)etc_sig.etc_freq, (uint16_t)etc_sig.etc_duty*1000/65535);
+   }
+   else
+   {
+        HAL_Pulse_ETC_Set_Period_Duty((uint16_t)etc_sig.etc_freq, 0);
+   }	
+
 }
