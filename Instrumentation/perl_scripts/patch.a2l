@@ -54,29 +54,29 @@
     /end   MOD_COMMON
 
     /begin IF_DATA ASAP1B_CCP                       /* Specific definition for CCP          */
+
       /begin SOURCE                                 /* Description of a DAQ                 */
                                                     /* (Data Acquisition List)              */
-        "Cyl Event"                                 /* Name                                 */
-        103                                         /* Scaling Unit: 103 = cylinder segment */
-        1                                           /* Rate in Scaling Unit: 1              */
-                                                    /* Refresh rate =                       */
-                                                    /* every cylinder combustion            */
+        "500ms"                                     /* Name                                 */
+        3                                           /* Scaling Unit: 3 = 1 ms               */
+        125                                         /* Rate in Scaling Unit: 500            */
+                                                    /* Refresh rate = 1 * 500 ms = 500ms    */
                                                     /* Codes for Scaling units (CSE) look at*/
                                                     /* ASAP1b Specification                 */
-        DISPLAY_IDENTIFIER  DAQ0 
+        DISPLAY_IDENTIFIER  DAQ3 
         /begin QP_BLOB                              /* The QP-BLOB specify the behavior of  */
                                                     /* the corresponding DAQ-List           */
-          0                                         /* Number of DAQ-list                   */
-          LENGTH         0x14                       /* Number of ODT's, which can be in-    */
+          3                                         /* Number of DAQ-list                   */
+          LENGTH         0x3A                       /* Number of ODT's, which can be in-    */
                                                     /* serted to this DAQ                   */
-          CAN_ID_FIXED   0x7D5                      /* CAN-ID for measuring this DAQ        */
-          RASTER         0                          /* ECU event-number according to event- */
+          CAN_ID_FIXED   0x7D8                      /* CAN-ID for measuring this DAQ        */
+          RASTER         25                         /* ECU event-number according to event- */
                                                     /* number by the keyword RASTER.        */
           REDUCTION_ALLOWED                         /* Data reduction possible              */
-          FIRST_PID      0x00                       /* First PID for this DAQ               */
+          FIRST_PID      0x3C                       /* First PID for this DAQ               */
         /end QP_BLOB
       /end SOURCE
-
+      
       /begin SOURCE                                 /* Description of a DAQ                 */
                                                     /* (Data Acquisition List)              */
         "10ms"                                      /* Name                                 */
@@ -119,30 +119,31 @@
           REDUCTION_ALLOWED                         /* Data reduction possible              */
           FIRST_PID      0x28                       /* First PID for this DAQ               */
         /end QP_BLOB
-      /end SOURCE
-
+      /end SOURCE   
+      
       /begin SOURCE                                 /* Description of a DAQ                 */
                                                     /* (Data Acquisition List)              */
-        "500ms"                                     /* Name                                 */
-        3                                           /* Scaling Unit: 3 = 1 ms               */
-        125                                         /* Rate in Scaling Unit: 500            */
-                                                    /* Refresh rate = 1 * 500 ms = 500ms    */
+        "Cyl Event"                                 /* Name                                 */
+        103                                         /* Scaling Unit: 103 = cylinder segment */
+        1                                           /* Rate in Scaling Unit: 1              */
+                                                    /* Refresh rate =                       */
+                                                    /* every cylinder combustion            */
                                                     /* Codes for Scaling units (CSE) look at*/
                                                     /* ASAP1b Specification                 */
-        DISPLAY_IDENTIFIER  DAQ3 
+        DISPLAY_IDENTIFIER  DAQ0 
         /begin QP_BLOB                              /* The QP-BLOB specify the behavior of  */
                                                     /* the corresponding DAQ-List           */
-          3                                         /* Number of DAQ-list                   */
-          LENGTH         0x3A                       /* Number of ODT's, which can be in-    */
+          0                                         /* Number of DAQ-list                   */
+          LENGTH         0x14                       /* Number of ODT's, which can be in-    */
                                                     /* serted to this DAQ                   */
-          CAN_ID_FIXED   0x7D8                      /* CAN-ID for measuring this DAQ        */
-          RASTER         25                         /* ECU event-number according to event- */
+          CAN_ID_FIXED   0x7D5                      /* CAN-ID for measuring this DAQ        */
+          RASTER         0                          /* ECU event-number according to event- */
                                                     /* number by the keyword RASTER.        */
           REDUCTION_ALLOWED                         /* Data reduction possible              */
-          FIRST_PID      0x3C                       /* First PID for this DAQ               */
+          FIRST_PID      0x00                       /* First PID for this DAQ               */
         /end QP_BLOB
       /end SOURCE
-
+      
       /begin RASTER                                 /* ECU-event specification              */
         "Cyl Event Trigger"                         /* Name of the ECU-event                */
         "Cyl"                                       /* Shortname                            */
@@ -151,17 +152,6 @@
         1                                           /* Rate in Scaling Unit: 1              */
                                                     /* Refresh rate =                       */
                                                     /* every cylinder combustion            */
-                                                    /* Codes for Scaling units (CSE) look at*/
-                                                    /* ASAP1b Specification                 */
-      /end RASTER
-
-      /begin RASTER                                 /* ECU-event specification              */
-        "AMAF Trigger"                              /* Name of the ECU-event                */
-        "1.00"                                      /* Shortname                            */
-        1                                           /* Number of ECU-event                  */
-        3                                           /* Scaling Unit: 3 = 1 ms               */
-        1                                           /* Rate in Scaling Unit: 1              */
-                                                    /* Refresh rate = 1 * 1 ms = 1ms        */
                                                     /* Codes for Scaling units (CSE) look at*/
                                                     /* ASAP1b Specification                 */
       /end RASTER

@@ -7,6 +7,7 @@
 #include"io_config_fuel.h"
 #include "io_conversion.h"
 #include "io_interface_eng.h"
+#include "io_interface_os.h"
 #include "HLS.h"
 
 
@@ -153,7 +154,7 @@ void  IO_Fuel_Syn_Update(void)
     Chery_Post_Injection[INJ_CHANNEL_A] = 0;
    }
 
-   if(inj_enable.B_inj_A )
+   if((inj_enable.B_inj_A )&&(!Is_IGN_Off()))
    {
     chery_inj_width =  inj_sig[INJ_CHANNEL_A].inj_time+Chery_Post_Injection[INJ_CHANNEL_A]; 
    }
@@ -181,7 +182,7 @@ void  IO_Fuel_Syn_Update(void)
     Chery_Post_Injection[INJ_CHANNEL_B] = 0;
    }
 
-   if(inj_enable.B_inj_B)
+   if((inj_enable.B_inj_B)&&(!Is_IGN_Off()))
    {
     chery_inj_width =  inj_sig[INJ_CHANNEL_B].inj_time+Chery_Post_Injection[INJ_CHANNEL_B]; 
    }
@@ -210,7 +211,7 @@ void  IO_Fuel_Syn_Update(void)
     Chery_Post_Injection[INJ_CHANNEL_C] = 0;
    }
 
-   if(inj_enable.B_inj_C)
+   if((inj_enable.B_inj_C)&&(!Is_IGN_Off()))
    {
     chery_inj_width =  inj_sig[INJ_CHANNEL_C].inj_time+Chery_Post_Injection[INJ_CHANNEL_C]; 
    }
@@ -239,7 +240,7 @@ void  IO_Fuel_Syn_Update(void)
     Chery_Post_Injection[INJ_CHANNEL_D] = 0;
    }
 
-   if(inj_enable.B_inj_D)
+   if((inj_enable.B_inj_D)&&(!Is_IGN_Off()))
    {
     chery_inj_width =  inj_sig[INJ_CHANNEL_D].inj_time+Chery_Post_Injection[INJ_CHANNEL_D]; 
    }

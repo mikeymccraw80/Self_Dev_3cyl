@@ -13,7 +13,7 @@
 #define Onehour_CNT    (3600)//count with 1s step
 
 
-#define Is_IGN_Off()    (HAL_Analog_Get_IGNVI_Value()<2500)? true:false
+
  
 //NV_ram
 bool B_SW_Pwf;
