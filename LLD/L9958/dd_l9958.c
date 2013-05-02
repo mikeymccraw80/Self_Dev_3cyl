@@ -3,30 +3,10 @@
 //       COPYRIGHT, 2007, Delphi Technologies, Inc. All Rights reserved
 //
 //       Delphi Confidential
-//
-// ============================================================================
-// %name:            dd_l9958.c %
-//
-// created_by:       hz23l2
-//
-// date_created:     Thu Mar 29 19:53:36 2006
-//
-// %derived_by:      wzmkk7 %
-//
-// %date_modified:   %
-//
-// %version:         mt20u2#2 %
-//
-// ============================================================================
-// REUSE:
-// DO NOT MODIFY THIS FILE. It contains no configurable parameters.
-// none
-//
 //=============================================================================
 //=============================================================================
 // Include the Type file for the device driver and io layers
 //=============================================================================
-//#include "io_type.h"
 
 //=============================================================================
 // Include interface for the device driver
