@@ -5,33 +5,13 @@
 //       COPYRIGHT, 2003, Delphi Technologies, Inc. All Rights reserved
 //
 //       Delphi Confidential
-//
-// ============================================================================
-// %name:            dd_l9958_txd.h %
-//
-// created_by:       fz3pdz
-//
-// date_created:     Tue Feb 13 13:53:44 2006
-//
-// %derived_by:      jznxv7 %
-//
-// %date_modified:   Mon May  8 12:48:37 2006 %
-//
-// %version:         1 %
-//
-// ============================================================================
-// REUSE:
-// DO NOT MODIFY THIS FILE. It contains no configurable parameters.
-// none
-//
 //=============================================================================
 
 typedef enum
 {
-  L9958_TXD_MESSAGE_CFG_REG,            //@emem Config Reg
-  L9958_TXD_MESSAGE_DIAG_REG,          //@emem Diagnostics Reg
-  L9958_TXD_MESSAGE_MAX 
-  
+	L9958_TXD_MESSAGE_CFG_REG,            //@emem Config Reg
+	L9958_TXD_MESSAGE_DIAG_REG,          //@emem Diagnostics Reg
+	L9958_TXD_MESSAGE_MAX 
 }L9958_Txd_Message_T;
 
 
@@ -41,24 +21,22 @@ typedef enum
 
 typedef enum
 {
-   L9958_CFG_WIDTH_DIAG_RST_DISABLE               = 1, // [   1 ] DIAG_RST_DIS 
-   L9958_CFG_WIDTH_REGULATION_CURR_LEVEL          = 2, // [ 3:2 ] CL_1, CL_2 
-   L9958_CFG_WIDTH_VOLT_SLEW_CONTROL              = 1, // [   8 ] VSR Value 
-   L9958_CFG_WIDTH_CURR_SLEW_CONTROL              = 1, // [   9 ] ISR Value 
-   L9958_CFG_WIDTH_CURR_SLEW_CONTROL_DISABLE      = 1, // [  10 ] ISR_DIS 
-   L9958_CFG_WIDTH_OPEN_LOAD_ON_ENABLE            = 1  // [  11 ] OL_ON 
-
+	L9958_CFG_WIDTH_DIAG_RST_DISABLE               = 1, // [   1 ] DIAG_RST_DIS 
+	L9958_CFG_WIDTH_REGULATION_CURR_LEVEL          = 2, // [ 3:2 ] CL_1, CL_2 
+	L9958_CFG_WIDTH_VOLT_SLEW_CONTROL              = 1, // [   8 ] VSR Value 
+	L9958_CFG_WIDTH_CURR_SLEW_CONTROL              = 1, // [   9 ] ISR Value 
+	L9958_CFG_WIDTH_CURR_SLEW_CONTROL_DISABLE      = 1, // [  10 ] ISR_DIS 
+	L9958_CFG_WIDTH_OPEN_LOAD_ON_ENABLE            = 1  // [  11 ] OL_ON 
 }L9958_Msg_CFG_REG_Width_T;
 
 typedef enum
-{   
-   L9958_CFG_POSITION_DIAG_RST_DISABLE            = 1,  // [   1 ] DIAG_RST_DIS 
-   L9958_CFG_POSITION_REGULATION_CURR_LEVEL       = 2,  // [ 3:2 ] CL_1, CL_2 
-   L9958_CFG_POSITION_VOLT_SLEW_CONTROL           = 8,  // [   8 ] VSR Value 
-   L9958_CFG_POSITION_CURR_SLEW_CONTROL           = 9,  // [   9 ] ISR Value 
-   L9958_CFG_POSITION_CURR_SLEW_CONTROL_DISABLE   = 10, // [   10] ISR_DIS 
-   L9958_CFG_POSITION_OPEN_LOAD_ON_ENABLE         = 11  // [   11] OL_ON 
-
+{
+	L9958_CFG_POSITION_DIAG_RST_DISABLE            = 1,  // [   1 ] DIAG_RST_DIS 
+	L9958_CFG_POSITION_REGULATION_CURR_LEVEL       = 2,  // [ 3:2 ] CL_1, CL_2 
+	L9958_CFG_POSITION_VOLT_SLEW_CONTROL           = 8,  // [   8 ] VSR Value 
+	L9958_CFG_POSITION_CURR_SLEW_CONTROL           = 9,  // [   9 ] ISR Value 
+	L9958_CFG_POSITION_CURR_SLEW_CONTROL_DISABLE   = 10, // [   10] ISR_DIS 
+	L9958_CFG_POSITION_OPEN_LOAD_ON_ENABLE         = 11  // [   11] OL_ON 
 }L9958_Msg_CFG_REG_Position_T;
 
 

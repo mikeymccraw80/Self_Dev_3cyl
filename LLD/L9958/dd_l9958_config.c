@@ -3,20 +3,6 @@
 //       COPYRIGHT, 2006, Delphi Technologies, Inc. All Rights reserved
 //
 //       Delphi Confidential
-//
-// ============================================================================
-// %name:            dd_l9958_config.c %
-//
-// created_by:       fz3pdz
-//
-// date_created:     Thu Apr 27 11:00:23 2005
-//
-// %derived_by:      wzmkk7 %
-//
-// %date_modified:   Thu Nov  8 22:02:01 2007 %
-//
-// %version:         mt20u2#3 %
-//
 //=============================================================================
 #include "io_config_spi.h"
 #include "dd_l9958.h"
@@ -36,8 +22,8 @@
 //=============================================================================
 typedef struct Fault_Diagnostic_Channel_Tag
 {
-   const IO_Configuration_T   L9958_config;
-   bool                       is_parallel;
+	const IO_Configuration_T   L9958_config;
+	bool                       is_parallel;
 } Fault_Diagnostic_Channel_T;
 
 //=============================================================================

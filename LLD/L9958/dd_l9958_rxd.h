@@ -41,42 +41,40 @@ typedef enum
 
 typedef enum
 {
-   L9958_DIAG_WIDTH_OL_OFF             = 1, // [   0 ] DIAG_RST_DIS 
-   L9958_DIAG_WIDTH_OL_ON              = 1, // [   1 ] CL_1, CL_2 
-   L9958_DIAG_WIDTH_VS_UV              = 1, // [   2 ] VSR Value 
-   L9958_DIAG_WIDTH_VDD_OV             = 1, // [   3 ] ISR Value 
-   L9958_DIAG_WIDTH_ILIM               = 1, // [   4 ] ISR_DIS 
-   L9958_DIAG_WIDTH_TWARN              = 1, // [   5 ] OL_ON 
-   L9958_DIAG_WIDTH_TSD                = 1, // [   6 ] OL_ON 
-   L9958_DIAG_WIDTH_ACT                = 1, // [   7 ] OL_ON 
-   L9958_DIAG_WIDTH_OC_LS1             = 1, // [   8 ] OL_ON 
-   L9958_DIAG_WIDTH_OC_LS2             = 1, // [   9 ] OL_ON 
-   L9958_DIAG_WIDTH_OC_HS1             = 1, // [   10] OL_ON 
-   L9958_DIAG_WIDTH_OC_HS2             = 1, // [   11] OL_ON 
-   L9958_DIAG_WIDTH_NOT_USED           = 2, // [13:12] OL_ON 
-   L9958_DIAG_WIDTH_SGND_OFF           = 1, // [   14] OL_ON 
-   L9958_DIAG_WIDTH_SBAT_OFF           = 1  // [   15] OL_ON 
-   
+	L9958_DIAG_WIDTH_OL_OFF             = 1, // [   0 ] DIAG_RST_DIS 
+	L9958_DIAG_WIDTH_OL_ON              = 1, // [   1 ] CL_1, CL_2 
+	L9958_DIAG_WIDTH_VS_UV              = 1, // [   2 ] VSR Value 
+	L9958_DIAG_WIDTH_VDD_OV             = 1, // [   3 ] ISR Value 
+	L9958_DIAG_WIDTH_ILIM               = 1, // [   4 ] ISR_DIS 
+	L9958_DIAG_WIDTH_TWARN              = 1, // [   5 ] OL_ON 
+	L9958_DIAG_WIDTH_TSD                = 1, // [   6 ] OL_ON 
+	L9958_DIAG_WIDTH_ACT                = 1, // [   7 ] OL_ON 
+	L9958_DIAG_WIDTH_OC_LS1             = 1, // [   8 ] OL_ON 
+	L9958_DIAG_WIDTH_OC_LS2             = 1, // [   9 ] OL_ON 
+	L9958_DIAG_WIDTH_OC_HS1             = 1, // [   10] OL_ON 
+	L9958_DIAG_WIDTH_OC_HS2             = 1, // [   11] OL_ON 
+	L9958_DIAG_WIDTH_NOT_USED           = 2, // [13:12] OL_ON 
+	L9958_DIAG_WIDTH_SGND_OFF           = 1, // [   14] OL_ON 
+	L9958_DIAG_WIDTH_SBAT_OFF           = 1  // [   15] OL_ON 
 }L9958_Msg_DIAG_REG_Width_T;
 
 typedef enum
-{   
-   L9958_DIAG_POSITION_OL_OFF          = 0, // [   0 ] DIAG_RST_DIS 
-   L9958_DIAG_POSITION_OL_ON           = 1, // [   1 ] CL_1, CL_2 
-   L9958_DIAG_POSITION_VS_UV           = 2, // [   2 ] VSR Value 
-   L9958_DIAG_POSITION_VDD_OV          = 3, // [   3 ] ISR Value 
-   L9958_DIAG_POSITION_ILIM            = 4, // [   4 ] ISR_DIS 
-   L9958_DIAG_POSITION_TWARN           = 5, // [   5 ] OL_ON 
-   L9958_DIAG_POSITION_TSD             = 6, // [   6 ] OL_ON 
-   L9958_DIAG_POSITION_ACT             = 7, // [   7 ] OL_ON 
-   L9958_DIAG_POSITION_OC_LS1          = 8, // [   8 ] OL_ON 
-   L9958_DIAG_POSITION_OC_LS2          = 9, // [   9 ] OL_ON 
-   L9958_DIAG_POSITION_OC_HS1          = 10,// [   10] OL_ON 
-   L9958_DIAG_POSITION_OC_HS2          = 11,// [   11] OL_ON 
-   L9958_DIAG_POSITION_NOT_USED        = 12,// [13:12] OL_ON 
-   L9958_DIAG_POSITION_SGND_OFF        = 14,// [   14] OL_ON 
-   L9958_DIAG_POSITION_SBAT_OFF        = 15 // [   15] OL_ON 
-   
+{
+	L9958_DIAG_POSITION_OL_OFF          = 0, // [   0 ] DIAG_RST_DIS 
+	L9958_DIAG_POSITION_OL_ON           = 1, // [   1 ] CL_1, CL_2 
+	L9958_DIAG_POSITION_VS_UV           = 2, // [   2 ] VSR Value 
+	L9958_DIAG_POSITION_VDD_OV          = 3, // [   3 ] ISR Value 
+	L9958_DIAG_POSITION_ILIM            = 4, // [   4 ] ISR_DIS 
+	L9958_DIAG_POSITION_TWARN           = 5, // [   5 ] OL_ON 
+	L9958_DIAG_POSITION_TSD             = 6, // [   6 ] OL_ON 
+	L9958_DIAG_POSITION_ACT             = 7, // [   7 ] OL_ON 
+	L9958_DIAG_POSITION_OC_LS1          = 8, // [   8 ] OL_ON 
+	L9958_DIAG_POSITION_OC_LS2          = 9, // [   9 ] OL_ON 
+	L9958_DIAG_POSITION_OC_HS1          = 10,// [   10] OL_ON 
+	L9958_DIAG_POSITION_OC_HS2          = 11,// [   11] OL_ON 
+	L9958_DIAG_POSITION_NOT_USED        = 12,// [13:12] OL_ON 
+	L9958_DIAG_POSITION_SGND_OFF        = 14,// [   14] OL_ON 
+	L9958_DIAG_POSITION_SBAT_OFF        = 15 // [   15] OL_ON 
 }L9958_Msg_DIAG_REG_Position_T;
 
 //=============================================================================
