@@ -33,9 +33,9 @@
 #include "dd_L9958_txd.h"
 //#include "dd_L9958_rxd.h"
 
-extern const uint16_t  L9958_TXD_INITIAL[ NUMBER_OF_L9958 ];
-extern uint16_t        L9958_Txd[ NUMBER_OF_L9958 ];
-extern uint16_t        L9958_Rxd[ NUMBER_OF_L9958 ];
+extern const uint16_t  L9958_TXD_INITIAL;
+extern uint16_t        L9958_Txd;
+extern uint16_t        L9958_Rxd;
 
 typedef enum
 {
@@ -274,13 +274,11 @@ typedef enum
 //
 // @func This function initializes L9958 
 //
-// @parm IO_Configuration_T| in_configuration |
-//
 // @rdesc None. 
 //
 // @end
 //===========================================================================
-FAR_COS void L9958_Device_Initialize(IO_Configuration_T in_configuration);
+void L9958_Device_Initialize(void);
 
 
 //===========================================================================
@@ -295,9 +293,7 @@ FAR_COS void L9958_Device_Initialize(IO_Configuration_T in_configuration);
 //
 // @end
 //===========================================================================
-void L9958_Diag_Rst_Disable_Set( 
-   IO_Configuration_T          in_configuration,
-   L9958_DIAG_RST_DISABLE_T    in_diag_rst_disable);
+void L9958_Diag_Rst_Disable_Set(L9958_DIAG_RST_DISABLE_T in_diag_rst_disable);
 
 
 //===========================================================================
@@ -312,9 +308,7 @@ void L9958_Diag_Rst_Disable_Set(
 //
 // @end
 //===========================================================================
-void L9958_Diag_Rst_Disable_Set_Immediate( 
-   IO_Configuration_T         in_configuration,
-   L9958_DIAG_RST_DISABLE_T   in_diag_rst_disable);
+void L9958_Diag_Rst_Disable_Set_Immediate(L9958_DIAG_RST_DISABLE_T   in_diag_rst_disable);
 
 
 //===========================================================================
@@ -329,9 +323,7 @@ void L9958_Diag_Rst_Disable_Set_Immediate(
 //
 // @end
 //===========================================================================
-void L9958_Regulation_Curr_Level_Set( 
-   IO_Configuration_T     in_configuration,
-   L9958_CURRENT_LEVEL_T  in_curr_level);
+void L9958_Regulation_Curr_Level_Set(L9958_CURRENT_LEVEL_T  in_curr_level);
 
 
 //===========================================================================
@@ -346,9 +338,7 @@ void L9958_Regulation_Curr_Level_Set(
 //
 // @end
 //===========================================================================
-void L9958_Regulation_Curr_Level_Set_Immediate( 
-   IO_Configuration_T     in_configuration,
-   L9958_CURRENT_LEVEL_T  in_diag_rst_disable);
+void L9958_Regulation_Curr_Level_Set_Immediate(L9958_CURRENT_LEVEL_T  in_diag_rst_disable);
 
 
 //===========================================================================
@@ -363,9 +353,7 @@ void L9958_Regulation_Curr_Level_Set_Immediate(
 //
 // @end
 //===========================================================================
-void L9958_VSR_Set( 
-   IO_Configuration_T    in_configuration,
-   L9958_VSR_CONTROL_T   in_volt_slew);
+void L9958_VSR_Set(L9958_VSR_CONTROL_T in_volt_slew);
 
 
 //===========================================================================
@@ -380,9 +368,7 @@ void L9958_VSR_Set(
 //
 // @end
 //===========================================================================
-void L9958_VSR_Set_Immediate( 
-   IO_Configuration_T    in_configuration,
-   L9958_VSR_CONTROL_T   in_volt_slew);
+void L9958_VSR_Set_Immediate(L9958_VSR_CONTROL_T in_volt_slew);
 
 
 //===========================================================================
@@ -397,9 +383,7 @@ void L9958_VSR_Set_Immediate(
 //
 // @end
 //===========================================================================
-void L9958_ISR_Set( 
-   IO_Configuration_T    in_configuration,
-   L9958_ISR_CONTROL_T   in_curr_slew);
+void L9958_ISR_Set(L9958_ISR_CONTROL_T in_curr_slew);
 
 
 //===========================================================================
@@ -414,9 +398,7 @@ void L9958_ISR_Set(
 //
 // @end
 //===========================================================================
-void L9958_ISR_Set_Immediate( 
-   IO_Configuration_T    in_configuration,
-   L9958_ISR_CONTROL_T   in_volt_slew);
+void L9958_ISR_Set_Immediate(L9958_ISR_CONTROL_T   in_volt_slew);
 
 
 //===========================================================================
@@ -431,9 +413,7 @@ void L9958_ISR_Set_Immediate(
 //
 // @end
 //===========================================================================
-void L9958_ISR_Disable_Set( 
-   IO_Configuration_T    in_configuration,
-   L9958_ISR_DISABLE_T   in_curr_slew_Disable);
+void L9958_ISR_Disable_Set(L9958_ISR_DISABLE_T   in_curr_slew_Disable);
 
 
 //===========================================================================
@@ -448,9 +428,7 @@ void L9958_ISR_Disable_Set(
 //
 // @end
 //===========================================================================
-void L9958_ISR_Disable_Set_Immediate( 
-   IO_Configuration_T    in_configuration,
-   L9958_ISR_DISABLE_T   in_curr_slew_Disable);
+void L9958_ISR_Disable_Set_Immediate(L9958_ISR_DISABLE_T   in_curr_slew_Disable);
 
 
 //===========================================================================
@@ -465,9 +443,7 @@ void L9958_ISR_Disable_Set_Immediate(
 //
 // @end
 //===========================================================================
-void L9958_OL_ON_Enable_Set( 
-   IO_Configuration_T    in_configuration,
-   L9958_OPEN_LOAD_ON_T  in_open_load_state);
+void L9958_OL_ON_Enable_Set(L9958_OPEN_LOAD_ON_T  in_open_load_state);
 
 
 //===========================================================================
@@ -482,9 +458,7 @@ void L9958_OL_ON_Enable_Set(
 //
 // @end
 //===========================================================================
-void L9958_OL_ON_Enable_Set_Immediate( 
-   IO_Configuration_T     in_configuration,
-   L9958_OPEN_LOAD_ON_T   in_open_load_state);
+void L9958_OL_ON_Enable_Set_Immediate(L9958_OPEN_LOAD_ON_T   in_open_load_state);
 
 
 //===========================================================================
@@ -498,8 +472,7 @@ void L9958_OL_ON_Enable_Set_Immediate(
 //
 // @end
 //===========================================================================
-void L9958_Clear_Device(
-   IO_Configuration_T in_configuration);
+void L9958_Clear_Device(void);
 
 
 //===========================================================================
@@ -513,8 +486,7 @@ void L9958_Clear_Device(
 //
 // @end
 //===========================================================================
-void L9958_Fault_Diagnose_Channels(
-   IO_Configuration_T in_configuration );
+void L9958_Fault_Diagnose_Channels(void);
 
 
 #endif // DD_L9958_H

@@ -91,8 +91,7 @@ typedef enum
 //
 // @end
 //=============================================================================
-void L9958_FAULT_Initialize_Device(
-   IO_Configuration_T in_configuration );
+void L9958_FAULT_Initialize_Device(void);
 
 //=============================================================================
 // L9958_FAULT_Get_Device_Fault
@@ -107,8 +106,7 @@ void L9958_FAULT_Initialize_Device(
 //
 // @end
 //=============================================================================
-bool L9958_FAULT_Get_Device_Fault(
-   IO_Configuration_T in_configuration );
+bool L9958_FAULT_Get_Device_Fault(void);
 
 //=============================================================================
 // L9958_FAULT_Clear_Device_Fault
@@ -123,8 +121,7 @@ bool L9958_FAULT_Get_Device_Fault(
 //
 // @end
 //=============================================================================
-void L9958_FAULT_Clear_Device_Fault(
-   IO_Configuration_T in_configuration );
+void L9958_FAULT_Clear_Device_Fault(void);
 
 //=============================================================================
 // L9958_FAULT_Diagnose_Fault
@@ -144,10 +141,8 @@ void L9958_FAULT_Clear_Device_Fault(
 //
 // @end
 //=============================================================================
-void L9958_FAULT_Diagnose_Fault( 
-   IO_Configuration_T in_configuration, 
-   bool      in_parallel );
+void L9958_FAULT_Diagnose_Fault(void);
 
-extern Fault_Log_T L9958_Fault_Log[ NUMBER_OF_L9958 ];
+extern Fault_Log_T L9958_Fault_Log;
 
 #endif // DD_L9958_FAULT_H
