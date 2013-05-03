@@ -117,7 +117,7 @@ const DSPI_CTAR_T   DSPI_B_CTAR0_INIT=
        DSPI_CTAR_FMSZ_16,            //Frame Size
        DSPI_CTAR_SCK_INACTIVE_STATE_LO, //Clock Polarity
        DSPI_CTAR_SCK_PHASE_LEADING_EDGE, //Clock Phase
-       false, //LSB First
+       false, //MSB First
        DSPI_CTAR_PCSSCK_1, //PCS to SCK Delay Prescaler
        DSPI_CTAR_PASC_1,   //After SCK Delay Prescaler
        DSPI_CTAR_PDT_1, //Delay after Transfer Prescaler
@@ -139,7 +139,7 @@ const DSPI_CTAR_T   DSPI_B_CTAR1_INIT=
        DSPI_CTAR_DBR_DISABLE,    //Double Baud Rate 
        DSPI_CTAR_FMSZ_16,            //Frame Size
        DSPI_CTAR_SCK_INACTIVE_STATE_LO, //Clock Polarity
-       DSPI_CTAR_SCK_PHASE_LEADING_EDGE, //Clock Phase
+       DSPI_CTAR_SCK_PHASE_FALLING_EDGE, //Clock Phase
        true, //LSB First
        DSPI_CTAR_PCSSCK_1, //PCS to SCK Delay Prescaler
        DSPI_CTAR_PASC_1,   //After SCK Delay Prescaler
