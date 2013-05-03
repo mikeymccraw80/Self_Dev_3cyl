@@ -106,7 +106,7 @@ void L9958_ISR_Disable_Set(L9958_ISR_DISABLE_T in_curr_slew_Disable)
 //===========================================================================
 // L9958_ISR_Disable_Set_Immediate
 //===========================================================================
-void L9958_ISR_Disable_Set_Immediate(L9958_ISR_DISABLE_T  n_curr_slew_Disable)
+void L9958_ISR_Disable_Set_Immediate(L9958_ISR_DISABLE_T  in_curr_slew_Disable)
 {
 	L9958_ISR_Disable_Set(in_curr_slew_Disable);
 	L9958_SPI_Immediate_Transfer(L9958_TXD_MESSAGE_CFG_REG );

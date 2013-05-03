@@ -8,7 +8,6 @@
 //=============================================================================
 
 #include "io_type.h"
-#include "dd_l9958_config.h"
 #include "dd_l9958_txd.h"
 #include "dd_l9958_init.h"
 
