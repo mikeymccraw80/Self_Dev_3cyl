@@ -14,6 +14,8 @@
 #include "dd_l9958.h"
 #include "dd_l9958_txd.h"
 #include "dd_l9958_rxd.h"
+#include "io_config_dspi.h"
+#include "dd_dspi_interface.h"
 
 //=============================================================================
 // L9958_DISCRETE_Device_Initialize
@@ -22,6 +24,7 @@ void L9958_Device_Initialize(void)
 {
 	L9958_Txd = L9958_TXD_INITIAL;
 	L9958_SPI_Immediate_Transfer(L9958_TXD_MESSAGE_CFG_REG);
+	L9958_FAULT_Initialize_Device();
 }
 
 //===========================================================================
@@ -133,4 +136,19 @@ void L9958_Clear_Device(void)
 {
 	L9958_Txd = 0;
 }
+
+//=============================================================================
+// L9958_SPI_Immediate_Transfer
+//=============================================================================
+void L9958_SPI_Immediate_Transfer(L9958_Txd_Message_T in_msg_index)
+{
+	interrupt_state_t irq_state;
+	uint8_t           transmint_length;
+
+	irq_state = Get_Interrupt_State();
+	Disable_Interrupts();
+	L9958_Rxd = DSPI_B_Exchange_Data1(ETC_CHIP_SELECT, ETC_CTAR_SELECT, DSPI_CTAR_FMSZ_16, L9958_Txd, 1);
+	Set_Interrupt_State(irq_state) ;
+}
+
 

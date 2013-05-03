@@ -8,12 +8,9 @@
 //=============================================================================
 
 #include "io_type.h"
-#include "dd_L9958_config.h"
-#include "dd_L9958_txd.h"
-
-extern const uint16_t  L9958_TXD_INITIAL;
-extern uint16_t        L9958_Txd;
-extern uint16_t        L9958_Rxd;
+#include "dd_l9958_config.h"
+#include "dd_l9958_txd.h"
+#include "dd_l9958_init.h"
 
 //===========================================================================
 // L9958_Device_Initialize
@@ -220,19 +217,6 @@ void L9958_OL_ON_Enable_Set_Immediate(L9958_OPEN_LOAD_ON_T   in_open_load_state)
 //===========================================================================
 void L9958_Clear_Device(void);
 
-
-//===========================================================================
-// L9958_Fault_Diagnose_Channels
-//
-// @func This function 
-//
-// @parm L9958_Index_T
-//
-// @rdesc None. 
-//
-// @end
-//===========================================================================
-void L9958_Fault_Diagnose_Channels(void);
-
+void L9958_SPI_Immediate_Transfer(L9958_Txd_Message_T in_msg_index);
 
 #endif // DD_L9958_H

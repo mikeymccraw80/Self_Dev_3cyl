@@ -8,5 +8,7 @@
 //=============================================================================
 
 extern const uint16_t L9958_TXD_INITIAL;
+extern uint16_t L9958_Rxd;
+extern uint16_t L9958_Txd;
 
 #endif // DD_L9958_INIT_H

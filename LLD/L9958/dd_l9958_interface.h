@@ -6,9 +6,9 @@
 //
 //       Delphi Confidential
 //=============================================================================
-#include "io_type.h"
 #include "fault.h"
 #include "dd_l9958_fault.h"
+#include "dd_l9958.h"
 
 //=============================================================================
 // L9958 Interface structures
