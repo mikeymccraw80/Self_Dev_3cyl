@@ -47,7 +47,7 @@ bool L9958_FAULT_Get_Device_Fault(void)
 //=============================================================================
 L9958_Fault_Status_T L9958_Get_Fault_Status(void)
 {
-	return L9958_Msg_Get_Fault_Status(L9958_Rxd);  
+	return L9958_Msg_Get_Fault_Status(L9958_Rxd.Value);  
 }
 
 //=============================================================================
@@ -75,26 +75,26 @@ uint16_t L9958_FAULT_Diagnose_Update(void)
 	L9958_Diag_Rst_Disable_Set(L9958_DIAG_RST_DISABLE_FALSE);
 	L9958_SPI_Immediate_Transfer();
 
-	if( true== L9958_Msg_Get_Temp_Warning(L9958_Rxd)  ||
-	 true == L9958_Msg_Get_OverTemp_Shutdown (L9958_Rxd) )
+	if( true== L9958_Msg_Get_Temp_Warning(L9958_Rxd.Value)  ||
+	 true == L9958_Msg_Get_OverTemp_Shutdown (L9958_Rxd.Value) )
 	{
 	  L9958_Fault_Log |= FAULT_Set_Occured_Thermal(L9958_Fault_Log, true);
 	}
 
-	if( true == L9958_Msg_Get_OL_OFF(L9958_Rxd) ||
-	 true == L9958_Msg_Get_OL_ON (L9958_Rxd) )
+	if( true == L9958_Msg_Get_OL_OFF(L9958_Rxd.Value) ||
+	 true == L9958_Msg_Get_OL_ON (L9958_Rxd.Value) )
 	{
 	  L9958_Fault_Log |= FAULT_Set_Occured_Open_Circuit(L9958_Fault_Log, true);
 	}
 
-	if( true ==  L9958_Msg_Get_Vdd_OverVolt(L9958_Rxd)  ||
-	 true == L9958_Msg_Get_VS_UnderVolt(L9958_Rxd))
+	if( true ==  L9958_Msg_Get_Vdd_OverVolt(L9958_Rxd.Value)  ||
+	 true == L9958_Msg_Get_VS_UnderVolt(L9958_Rxd.Value))
 	{
 	  L9958_Fault_Log |= FAULT_Set_Occured_Voltage_Regulation(L9958_Fault_Log, true);
 	}
 
-	L9958_Fault_Log |= FAULT_Set_Occured_Short_To_Battery(L9958_Fault_Log, L9958_Msg_Get_Short_to_BAT_in_OFF(L9958_Rxd));
-	L9958_Fault_Log |= FAULT_Set_Occured_Short_To_Ground(L9958_Fault_Log, L9958_Msg_Get_Short_to_GND_in_OFF(L9958_Rxd));
+	L9958_Fault_Log |= FAULT_Set_Occured_Short_To_Battery(L9958_Fault_Log, L9958_Msg_Get_Short_to_BAT_in_OFF(L9958_Rxd.Value));
+	L9958_Fault_Log |= FAULT_Set_Occured_Short_To_Ground(L9958_Fault_Log, L9958_Msg_Get_Short_to_GND_in_OFF(L9958_Rxd.Value));
 
-	return L9958_Rxd;
+	return L9958_Rxd.Value;
 }

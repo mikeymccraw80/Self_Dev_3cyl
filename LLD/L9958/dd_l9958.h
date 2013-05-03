@@ -10,8 +10,47 @@
 #include "io_type.h"
 #include "dd_l9958_txd.h"
 
-extern uint16_t L9958_Rxd;
-extern uint16_t L9958_Txd;
+/* L9958 Diag Register define */
+typedef union {
+	uint16_t Value;
+	struct {
+		uint16_t SBAT_OFF : 1;		//Short to Battery in OFF condition
+		uint16_t SGND_OFF : 1;		//Short to GND in OFF condition
+		uint16_t RES13_12 : 2;
+		uint16_t OC_HS2 : 1;		// Over-Current on How Side 2
+		uint16_t OC_HS1 : 1;		// Over-Current on How Side 1
+		uint16_t OC_LS2 : 1;		// Over-Current on Low Side 2
+		uint16_t OC_LS1 : 1;		// Over-Current on Low Side 1
+		uint16_t ACT : 1;			// Bridge enable,Ture after reset
+		uint16_t TSD : 1;			// Over-temperature Shutdown
+		uint16_t TWARN : 1;			// Temperature warning
+		uint16_t ILIM : 1;			// Current Limitation reached
+		uint16_t VDD_OV : 1;		// Power supply for ECT Dirver overvoltage
+		uint16_t VS_UV : 1;			// 12 Vs undervoltage
+		uint16_t OL_ON : 1;			// Open Load in ON condition
+		uint16_t OL_OFF : 1;		// Open Load in OFF condition
+	} Bits;
+} l9958_diag_t;
+
+/* L9958 Configuration Register define */
+typedef union {
+	uint16_t Value;
+	struct {
+		uint16_t RES15_12: 4;
+		uint16_t OL_ON : 1;		// Open Load in ON state Enable
+		uint16_t ISR_DIS : 1;		// Current Slew Rate Control Disable
+		uint16_t ISR : 1;		// Over-Current on Low Side 2
+		uint16_t VSR : 1;		// Over-Current on Low Side 1
+		uint16_t RES7_4 : 4;			// Bridge enable,Ture after reset
+		uint16_t CL_2 : 1;			// Over-temperature Shutdown
+		uint16_t CL_1 : 1;			// Temperature warning
+		uint16_t DR : 1;			// Current Limitation reached
+		uint16_t RES0 : 1;		// Power supply for ECT Dirver overvoltage
+	} Bits;
+} l9958_conf_t;
+
+extern l9958_diag_t L9958_Rxd;
+extern l9958_conf_t L9958_Txd;
 
 //===========================================================================
 // L9958_Device_Initialize
