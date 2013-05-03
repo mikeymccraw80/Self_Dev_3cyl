@@ -9,7 +9,9 @@
 
 #include "io_type.h"
 #include "dd_l9958_txd.h"
-#include "dd_l9958_init.h"
+
+extern uint16_t L9958_Rxd;
+extern uint16_t L9958_Txd;
 
 //===========================================================================
 // L9958_Device_Initialize
@@ -216,6 +218,6 @@ void L9958_OL_ON_Enable_Set_Immediate(L9958_OPEN_LOAD_ON_T   in_open_load_state)
 //===========================================================================
 void L9958_Clear_Device(void);
 
-void L9958_SPI_Immediate_Transfer(L9958_Txd_Message_T in_msg_index);
+void L9958_SPI_Immediate_Transfer(void);
 
 #endif // DD_L9958_H

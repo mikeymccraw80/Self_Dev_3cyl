@@ -72,8 +72,8 @@ uint16_t L9958_FAULT_Diagnose_Update(void)
 	L9958_Fault_Log = FAULT_Set_Tested_Thermal(L9958_Fault_Log, true);
 
 	/* get the fault reg value from l9958, and then pick up information to Fault_log*/
-	L9958_Diag_Rst_Disable_Set(L9958_DIAG_RST_DISABLE_TRUE);
-	L9958_SPI_Immediate_Transfer(L9958_TXD_MESSAGE_DIAG_REG );
+	L9958_Diag_Rst_Disable_Set(L9958_DIAG_RST_DISABLE_FALSE);
+	L9958_SPI_Immediate_Transfer();
 
 	if( true== L9958_Msg_Get_Temp_Warning(L9958_Rxd)  ||
 	 true == L9958_Msg_Get_OverTemp_Shutdown (L9958_Rxd) )
