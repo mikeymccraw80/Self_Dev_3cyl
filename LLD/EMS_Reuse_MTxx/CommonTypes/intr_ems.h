@@ -34,7 +34,6 @@
 #include "dd_atd.h"
 #include "dd_nvram.h"
 #include "mem_util.h"
-//#include "icmdpapi.h"
 #include "es_knock.h"
 #include "id_cald.h"
 #include "hal_eng.h"
@@ -45,7 +44,7 @@
 #include "hal_can.h" 
 #include "dd_vsep_fault.h"
 #include "io_config_vsep.h"
-#include  "dd_vsep_discrete_interface.h"
+#include "dd_vsep_discrete_interface.h"
 
 
 /* ============================================================================ *\
@@ -225,9 +224,9 @@ typedef int16_t                             EOBD_ANGLEa;
 
 
 typedef enum {
-               CeIGN_OFF,              /* 00 */
-               CeIGN_ON                /* 01 */
-             } TeIGN_STATE;
+	CeIGN_OFF,              /* 00 */
+	CeIGN_ON                /* 01 */
+} TeIGN_STATE;
 
 
 #define Prec_T_DECIBELS                     (0.25)
@@ -503,23 +502,6 @@ INLINE void ConvertIntrParam_Airflow(void)
 {
     EOBD_dm_Airflow =  FixConvert(Maf, CHERY_AIRFLOW, EOBD_AIRFLOW);
 }
-
-/***********************************************************************
- ********************    EGR       *************************************
- ***********************************************************************/
-#define GetVIOS_Pct_EGR_Pstn()	FixDefConst(0.0, EOBD_PERCENTa)
-
-/***********************************************************************
- ********************    Table Index       *****************************
- ***********************************************************************/
-extern uint16_t          EOBD_17h_RPM_Rescale;
-#define GetVIOS_17h_RPM_Rescale()\
-                   (EOBD_17h_RPM_Rescale)
-//INLINE void ConvertIntrParam_TableIndex(void)
-//{
-//	EOBD_17h_RPM_Rescale = usLookup_Rescale_xy_us( &CsRSCL_MAP17_RPM,
-   //                                                    GetVIOS_n_EngSpd() );
-//}
 
 /***********************************************************************
  ********************    Air Fuel Ratio    *****************************
@@ -911,6 +893,9 @@ return (LbHVAC_ClutchTrnstngForMisfire);
 #define GetVIOS_MPRD_FaultShortLo()    (DD_GetDiscreteDiagStatus(DISCRETE_OUT_MAINRLY,OUTPUT_OPEN_CKT_FAULT))
 #define GetVIOS_MPRD_FaultAny()        (GetVIOS_MPRD_FaultShortHi()||GetVIOS_MPRD_FaultShortLo() )
 #define GetVIOS_MPRD_Presnt()              (true)//(IsMPRPresent())
+#define GetVIOS_t_IgnOnTime()                 (IgnitionOn_Time_)
+#define GetVIOS_MainPwrRly_Status()           (IsMPRPresent() ? CbTRUE : CbTRUE)
+
 
 
 /******************************************************************************
@@ -1033,6 +1018,7 @@ INLINE void SetVIOS_MainRlyOff(void)
 {
   LLD_do_table[LLD_DO_MAIN_RELAY].value  = CbTRUE;
 }
+
 /******************************************************************************
  * for Chery Can Meters 
  ******************************************************************************/
