@@ -28,8 +28,7 @@
 /* a definition from a system library, it should be done here so that        */
 /* compiler differences do not force application code to change.             */
 /*****************************************************************************/
-#include <stddef.h>
-#include <string.h>
+
 
 /*****************************************************************************
  *
@@ -50,7 +49,6 @@
 /*****************************************************************************/
 /* Define CPU Dependent Information                                          */
 /*****************************************************************************/
-/*
 /*  BigEndian:    One who breaks open an egg on the big end                  */
 /*  LittleEndian: One who breaks open an egg on the little end               */
 /*  It is a long standing war between the Lilliput and the Blefuscu.         */

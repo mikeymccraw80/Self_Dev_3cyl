@@ -54,16 +54,16 @@
  *  These are prototypes to private functions.                         *
  *                                                                     *
  ***********************************************************************/
-void @far UpdateTIMC_StopWatchesUp16(WORD *LaTIMC_TmrArr, BYTE *LaTIMC_TmrEnbl,
+void UpdateTIMC_StopWatchesUp16(WORD *LaTIMC_TmrArr, BYTE *LaTIMC_TmrEnbl,
                                  WORD LwTIMC_Size);
 
-void @far UpdateTIMC_StopWatchesDown16(WORD *LaTIMC_TmrArr, BYTE *LaTIMC_TmrEnbl,
+void UpdateTIMC_StopWatchesDown16(WORD *LaTIMC_TmrArr, BYTE *LaTIMC_TmrEnbl,
                                    WORD LwTIMC_Size) ;
 
-void @far UpdateTIMC_StopWatchesUp8(BYTE *LaTIMC_TmrArr, BYTE *LaTIMC_TmrEnbl,
+void UpdateTIMC_StopWatchesUp8(BYTE *LaTIMC_TmrArr, BYTE *LaTIMC_TmrEnbl,
                                 WORD LwTIMC_Size);
 
-void @far UpdateTIMC_StopWatchesDown8(BYTE *LaTIMC_TmrArr, BYTE *LaTIMC_TmrEnbl,
+void UpdateTIMC_StopWatchesDown8(BYTE *LaTIMC_TmrArr, BYTE *LaTIMC_TmrEnbl,
                                   WORD LwTIMC_Size);
 
 /***********************************************************************

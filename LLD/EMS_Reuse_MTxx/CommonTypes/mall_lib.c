@@ -32,9 +32,7 @@
  *   Include Files
  *****************************************************************************/
 #include "intr_ems.h"
-#include "emsdpapi.h" /* For forced declaration definition check */
-#include "emsdcald.h" /* For local calibrations                  */
-
+#include "t_gentypes.h"
 
 
 /******************************************************************************
@@ -51,19 +49,6 @@
  *    TbBOOLEAN                 LbOBD_PSVI_TPICFault               (input)
  * Return:
  *    TbBOOLEAN                 LbEMSD_xxxxEnblCriteriaMet        (output)
- *mfgtest.o
-hw_xep100.o
-
-
-################################################################################
-# Program flash page FE (0xfE8000 - 0xfEBFFF)
-################################################################################
-+seg .text -b 0x7f8000 -o 0x08000 -m 0x4000  -f0x00 -n .pagefe -s flash
-+seg .const -a .pagefe -n .pagefe_const -s flash
-
-#reflash kernel, protected 8k space
-mt2x_kernel.o
-
  *****************************************************************************/
  TbBOOLEAN ChkEMSD_GetPSVIorTPICFault (
             TbBOOLEAN            LbEMSD_xxxxEnblCriteriaMet,

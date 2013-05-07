@@ -322,7 +322,8 @@ typedef void (*IO_Callback_T)(void);
 #define  Insert_Bits(old_value,value,position,width) ( Zero_Bits_Macro(old_value,position,width) | ( ( value << position ) & Mask32( position, width ) ) )
 
 #define Extract_Bits(value,position,width) ( ( value & Mask32( position, width ) ) >> position )
-
+#define Inc(var)\
+           ( (var) = ( (var) != (sizeof(var) == 1 ? 0xff : 0xffff) ? (var) + 1 : (var) ) )
 
 #endif // REUSE_H
 

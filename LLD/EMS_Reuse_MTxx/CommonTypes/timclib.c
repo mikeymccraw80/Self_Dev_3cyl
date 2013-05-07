@@ -39,7 +39,7 @@
  * PRIVATE, called by macros which exist in timclib.h
  *
  */
-@far void UpdateTIMC_StopWatchesUp16 ( WORD *LaTIMC_TmrArr, BYTE *LaTIMC_TmrEnbl,
+void UpdateTIMC_StopWatchesUp16 ( WORD *LaTIMC_TmrArr, BYTE *LaTIMC_TmrEnbl,
                                   WORD LwTIMC_Size )
 {
   int i;
@@ -55,8 +55,7 @@
   }
 }
 
-
-@far void UpdateTIMC_StopWatchesDown16 ( WORD *LaTIMC_TmrArr, BYTE *LaTIMC_TmrEnbl,
+void UpdateTIMC_StopWatchesDown16 ( WORD *LaTIMC_TmrArr, BYTE *LaTIMC_TmrEnbl,
                                     WORD LwTIMC_Size)
 {
   int i;
@@ -72,7 +71,7 @@
   }
 }
 
-@far void UpdateTIMC_StopWatchesUp8 ( BYTE *LaTIMC_TmrArr, BYTE *LaTIMC_TmrEnbl,
+void UpdateTIMC_StopWatchesUp8 ( BYTE *LaTIMC_TmrArr, BYTE *LaTIMC_TmrEnbl,
                                  WORD LwTIMC_Size )
 {
   int i;
@@ -88,7 +87,7 @@
   }
 }
 
-@far void UpdateTIMC_StopWatchesDown8 ( BYTE *LaTIMC_TmrArr, BYTE *LaTIMC_TmrEnbl,
+void UpdateTIMC_StopWatchesDown8 ( BYTE *LaTIMC_TmrArr, BYTE *LaTIMC_TmrEnbl,
                                    WORD LwTIMC_Size )
 {
   int i;

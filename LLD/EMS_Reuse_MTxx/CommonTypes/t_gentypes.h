@@ -37,7 +37,6 @@
 #include "t_scaled.h"
 #include "t_range.h"
 #include "t_custom.h"
-#include "cfg_app.h"
 #include "reuse.h"
 
 #endif /* T_GENTYPES_H */
