@@ -403,3 +403,129 @@ const   bool        KbHWIO_ELOAD2_Active_High     = true;
 *| }
 */
 const   bool        KbHWIO_BRKLMP_Active_High     = true;
+
+/*
+*|    K_MainPowerRelayPresent {
+*|       : is_calconst;
+*|       : description = "Main Power Relay is present";
+*|       : units = "boolean";
+*|       : type = types.size2_0to1;
+*|    }
+*/
+const bool                     K_MainPowerRelayPresent = true ;
+
+/*
+*|   KfVIOS_T_RunCoolHi {
+*|     : is_calconst;
+*|     : description ="This calibration determines coolant temperature above which "
+*| "KcVIOS_RunRefHot is selected as the cylinder event threshold.  If the "
+*| "coolant temperature is less than this cal and greater than KfVIOS_T_RunCoolHi "
+*| "then KcVIOS_RunRefWarm will be chosen. "
+*| "Value To Calibrate Out: -256 "
+*| "Engineering Range: -256 to +255 deg C  Resolution: 0.0078125 deg C / Count ";
+*|     : type = types.t_deg_ca;
+*|     : units = "deg C";
+*|   }
+*/
+const T_DEG_Ca      KfVIOS_T_RunCoolHi = V_DEG_Ca(65);
+
+/*
+*|   KfVIOS_T_RunCoolLo {
+*|     : is_calconst;
+*|     : description ="This calibration determines coolant temperature below which "
+*| "KcVIOS_RunRefCold is selected as the cylinder event threshold.  If the "
+*| "coolant temperature is greater than this cal and less than KfVIOS_T_RunCoolLo "
+*| "then KcVIOS_RunRefWarm will be chosen. "
+*| "Value To Calibrate Out: -256 "
+*| "Engineering Range: -256 to +255 deg C  Resolution: 0.0078125 deg C / Count ";
+*|     : type = types.t_deg_ca;
+*|     : units = "deg C";
+*|   }
+*/
+const T_DEG_Ca      KfVIOS_T_RunCoolLo = V_DEG_Ca(10);
+
+/*
+*|   KcVIOS_RunRefCold{
+*|     : is_calconst;
+*|     : description ="This calibration determines the number of consecutive cylinder events that "
+*| "the engine speed must be greater than KfVIOS_n_CrankToRunThrsh when the "
+*| "coolant temperature is less than KfVIOS_T_RunCoolLo for the engine state to "
+*| "become RUN."
+*| "Value To Calibrate Out: 1 "
+*| "Engineering Range: 0 to 255 cylinder events  Resolution: 1 cylinder event / Count ";
+*|     : type = types.t_count_byte;
+*|     : units = "counts";
+*|   }
+*/
+const T_COUNT_BYTE  KcVIOS_RunRefCold = V_COUNT_BYTE(12);
+
+/*
+*|   KcVIOS_RunRefWarm {
+*|     : is_calconst;
+*|     : description ="This calibration determines the number of consecutive cylinder events that "
+*| "the engine speed must be greater than KfVIOS_n_CrankToRunThrsh when the "
+*| "coolant temperature is greater than KfVIOS_T_RunCoolLo and less than "
+*| "KfVIOS_T_RunCoolHi for the engine state to become RUN."
+*| "Value To Calibrate Out: 1 "
+*| "Engineering Range: 0 to 255 cylinder events  Resolution: 1 cylinder event / Count ";
+*|     : type = types.t_count_byte;
+*|     : units = "counts";
+*|   }
+*/
+const T_COUNT_BYTE  KcVIOS_RunRefWarm = V_COUNT_BYTE(9);
+
+/*
+*|   KcVIOS_RunRefHot {
+*|     : is_calconst;
+*|     : description ="This calibration determines the number of consecutive cylinder events that "
+*| "the engine speed must be greater than KfVIOS_n_CrankToRunThrsh when the "
+*| "coolant temperature is greater than KfVIOS_T_RunCoolHi for the engine state to "
+*| "become RUN."
+*| "Value To Calibrate Out: 1 "
+*| "Engineering Range: 0 to 255 cylinder events  Resolution: 1 cylinder event / Count ";
+*|     : type = types.t_count_byte;
+*|     : units = "counts";
+*|   }
+*/
+const T_COUNT_BYTE  KcVIOS_RunRefHot = V_COUNT_BYTE(6);
+
+/*
+*|   KfVIOS_n_CrankToRunThrsh {
+*|     : is_calconst;
+*|     : description ="This calibration determines the crank-to-run engine speed threshold. "
+*| "The engine speed must be greater than this calibration for a selective "
+*| "number of cylinder events before the engine state is RUN. "
+*| "Value To Calibrate Out: N/A "
+*| "Enginerring Range: 0 to 8192 rpm  Resolution: 0.125 rpm / Count ";
+*|     : type = types.t_rpma;
+*|     : units = "RPM";
+*|   }
+*/
+const T_RPMa       KfVIOS_n_CrankToRunThrsh = V_RPMa(450);
+
+/*
+*|   KfVIOS_n_RunToCrankThrsh {
+*|     : is_calconst;
+*|     : description ="This calibration determines the run-to-crank engine speed threshold. "
+*| "The engine speed must be less than this calibration before the "
+*| "engine state is CRANK. "
+*| "Value To Calibrate Out: N/A "
+*| "Enginerring Range: 0 to 8192 rpm  Resolution: 0.125 rpm / Count ";
+*|     : type = types.t_rpma;
+*|     : units = "RPM";
+*|   }
+*/
+const T_RPMa        KfVIOS_n_RunToCrankThrsh = V_RPMa(150);
+
+/*
+*|   KfVIOS_t_PowerdownDelayTime {
+*|     : is_calconst;
+*|     : description ="This calibration determines the delay time after key-off to begin the "
+*| "shutdown process. "
+*| "Value To Calibrate Out: 0 "
+*| "Enginerring Range: 0 to 256 s  Resolution: 0.0078125 s / Count ";
+*|     : type = types.t_w_R7p8125ms;
+*|     : units = "seconds";
+*|   }
+*/
+const TwTIME_t_R7p8125ms   KfVIOS_t_PowerdownDelayTime = C_R7p8125ms16(3);

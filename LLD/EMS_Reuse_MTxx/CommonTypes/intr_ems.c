@@ -54,7 +54,7 @@
 // EOBD_BPW                             EOBD_SyncFuel_Var;
 // EOBD_A_DEG_Cb                        EOBD_ConverterTempFilt; 
 
-// int16_t                              EOBD_CoolTemp;
+int16_t                              EOBD_CoolTemp;
 // int16_t                              EOBD_CoolTempStartup;
 // int16_t                              EOBD_IntakeTemp;
 // int16_t                              EOBD_IntakeTempStartup;

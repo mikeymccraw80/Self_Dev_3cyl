@@ -6,6 +6,8 @@
 // include files
 //=============================================================================
 #include "hal.h"
+// #include "t_gentypes.h"
+#include "timepcvc.h"
 
 //=============================================================================
 // type define
@@ -47,5 +49,16 @@ extern const T_MILLISECONDSb KfSPRK_t_CrankMaxDwellInit ;
 extern const   bool        KbHWIO_ELOAD1_Active_High;
 extern const   bool        KbHWIO_ELOAD2_Active_High;
 extern const   bool        KbHWIO_BRKLMP_Active_High;
+
+extern const   bool        K_MainPowerRelayPresent;
+
+extern const T_DEG_Ca      KfVIOS_T_RunCoolHi;
+extern const T_DEG_Ca      KfVIOS_T_RunCoolLo;
+extern const T_COUNT_BYTE  KcVIOS_RunRefCold;
+extern const T_COUNT_BYTE  KcVIOS_RunRefWarm;
+extern const T_COUNT_BYTE  KcVIOS_RunRefHot;
+extern const T_RPMa        KfVIOS_n_CrankToRunThrsh;
+extern const T_RPMa        KfVIOS_n_RunToCrankThrsh;
+extern const TwTIME_t_R7p8125ms   KfVIOS_t_PowerdownDelayTime;
 
 #endif

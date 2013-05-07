@@ -28,14 +28,12 @@
  * Standard header files.
 \* ============================================================================ */
 #include "reuse.h"
-#include "reuse.h"
 #include "v_ignit.h"
 #include "HLS.h"
-#include "hal_can.h" 
 #include "dd_vsep_fault.h"
-#include "io_config_vsep.h"
-#include "dd_vsep_discrete_interface.h"
-
+#include "hwiocald.h"
+#include "hal_gpio.h"
+#include "hal_eng.h"
 
 /* ============================================================================ *\
  * Other header files.
@@ -429,13 +427,13 @@ typedef enum {
  **************    Coolant Temperature  ********************************
  ***********************************************************************/
 // extern EOBD_T_PERCENT    EOBD_RawCoolant;
-// extern int16_t           EOBD_CoolTemp;
+extern int16_t           EOBD_CoolTemp;
 // extern int16_t           EOBD_CoolTempStartup;
 // extern int16_t           EOBD_UndefCoolTemp;
 // #define GetVIOS_Pct_RawCoolant()\
                        // (EOBD_RawCoolant)
-// #define GetVIOS_T_CoolTemp()\
-                       // (EOBD_CoolTemp)
+#define GetVIOS_T_CoolTemp()\
+                       (EOBD_CoolTemp)
 // #define GetVIOS_T_CoolTempStartup()\
                        // (EOBD_CoolTempStartup)
 // #define GetVIOS_T_UndefCoolTemp()\
@@ -750,7 +748,7 @@ typedef enum {
 #define Ignition_On()                                     ((bool)(IgnitionOnStatus.IgnitionIsOn))
 // #define GetFILE_NVM_Failure()                             (NvRamTestFailed)
 #define GetVIOS_IgnSt()                                   (Ignition_On())
-// #define GetVIOS_t_EngRunTime()                            (NfVIOS_t_EngRunTime)
+#define GetVIOS_t_EngRunTime()                            (NfVIOS_t_EngRunTime)
 // #define GetVIOS_EngSt()                                   (VeVIOS_EngSt)
 // #define GetVIOS_CoolTempRange()                           (CLT_Range_High)
 
@@ -849,6 +847,7 @@ typedef enum {
 // #define GetVIOS_O2_12_Htr_PSVIFaultShortLow()\
    // ( DD_GetDiscreteDiagStatus(PULSE_OUT_O2_HEATER_12,OUTPUT_OPEN_CKT_FAULT) )
 
+#define GetOSSP_O2_DiagCntrDsbl()        (CbFALSE)
 
 
 // #define GetOpenFault(function)       (DD_GetDiscreteDiagStatus(function,OUTPUT_OPEN_CKT_FAULT))
@@ -867,14 +866,14 @@ typedef enum {
 // #define GetAcClutch_ShortFault() (DD_GetDiscreteDiagStatus(DISCRETE_OUT_AC_CLUTCH,OUTPUT_SHORT_CKT_FAULT))
 // #define GetAcClutch_OpenFault()  (DD_GetDiscreteDiagStatus(DISCRETE_OUT_AC_CLUTCH,OUTPUT_OPEN_CKT_FAULT))
 
-// /******************************************************************************
- // * TPIC Fault reading for AcClutch diagnostic 
- // ******************************************************************************/
-// #define GetVIOS_ACCD_FaultShortHi()    (DD_GetDiscreteDiagStatus(DISCRETE_OUT_AC_CLUTCH,OUTPUT_SHORT_CKT_FAULT))
-// #define GetVIOS_ACCD_FaultShortLo()    (DD_GetDiscreteDiagStatus(DISCRETE_OUT_AC_CLUTCH,OUTPUT_OPEN_CKT_FAULT))
-// #define GetVIOS_ACCD_FaultAny()        (GetVIOS_ACCD_FaultShortHi() ||\
-                                            // GetVIOS_ACCD_FaultShortLo() )
-// #define GetVIOS_ACCD_Presnt()              (true)//(AcFlags.AcPresent)
+/******************************************************************************
+ * TPIC Fault reading for AcClutch diagnostic 
+ ******************************************************************************/
+#define GetVIOS_ACCD_FaultShortHi()    (DD_GetDiscreteDiagStatus(DISCRETE_OUT_AC_CLUTCH,OUTPUT_SHORT_CKT_FAULT))
+#define GetVIOS_ACCD_FaultShortLo()    (DD_GetDiscreteDiagStatus(DISCRETE_OUT_AC_CLUTCH,OUTPUT_OPEN_CKT_FAULT))
+#define GetVIOS_ACCD_FaultAny()        (GetVIOS_ACCD_FaultShortHi() ||\
+                                        GetVIOS_ACCD_FaultShortLo() )
+#define GetVIOS_ACCD_Presnt()          (true)//(AcFlags.AcPresent)
 
 /******************************************************************************
  * TPIC Fault reading for Main Power Relay diagnostic 
@@ -882,9 +881,15 @@ typedef enum {
 #define GetVIOS_MPRD_FaultShortHi()    (DD_GetDiscreteDiagStatus(DISCRETE_OUT_MAINRLY,OUTPUT_SHORT_CKT_FAULT))
 #define GetVIOS_MPRD_FaultShortLo()    (DD_GetDiscreteDiagStatus(DISCRETE_OUT_MAINRLY,OUTPUT_OPEN_CKT_FAULT))
 #define GetVIOS_MPRD_FaultAny()        (GetVIOS_MPRD_FaultShortHi()||GetVIOS_MPRD_FaultShortLo() )
-#define GetVIOS_MPRD_Presnt()              (true)//(IsMPRPresent())
-#define GetVIOS_t_IgnOnTime()                 (IgnitionOn_Time)
-#define GetVIOS_MainPwrRly_Status()           (IsMPRPresent() ? CbTRUE : CbTRUE)
+#define GetVIOS_MPRD_Presnt()          (true)//(IsMPRPresent())
+#define GetVIOS_t_IgnOnTime()          (IgnitionOn_Time)
+#define GetVIOS_MainPwrRly_Status()    (s() ? CbTRUE : CbTRUE)
+#define IsMPRPresent()\
+               (K_MainPowerRelayPresent == true)
+#define IsMPRNotPresent()\
+               (K_MainPowerRelayPresent == false)
+#define GetMPRState()\
+               (HAL_GPIO_GET_MPR_Status())
 
 
 
@@ -897,21 +902,21 @@ typedef enum {
                                             // GetVIOS_FPRD_FaultShortLo())
 // #define GetVIOS_FPRD_Presnt()              (CbTRUE)
 
-// /******************************************************************************
- // * TPIC Fault reading for FAN1 diagnostic 
- // ******************************************************************************/
-// #define GetVIOS_FANA_FaultShortHi()    (GetShortFault(DISCRETE_OUT_FAN_1))
-// #define GetVIOS_FANA_FaultShortLo()    (GetOpenFault(DISCRETE_OUT_FAN_1))
-// #define GetVIOS_FANA_FaultAny()        (GetAnyFault(DISCRETE_OUT_FAN_1))
-// #define GetVIOS_FANA_Presnt()              (true)//(FanPresentFlags.bf.Fan1Present)
+/******************************************************************************
+ * TPIC Fault reading for FAN1 diagnostic 
+ ******************************************************************************/
+#define GetVIOS_FANA_FaultShortHi()    (GetShortFault(DISCRETE_OUT_FAN_1))
+#define GetVIOS_FANA_FaultShortLo()    (GetOpenFault(DISCRETE_OUT_FAN_1))
+#define GetVIOS_FANA_FaultAny()        (GetAnyFault(DISCRETE_OUT_FAN_1))
+#define GetVIOS_FANA_Presnt()          (true)//(FanPresentFlags.bf.Fan1Present)
 
-// /******************************************************************************
- // * TPIC Fault reading for FAN2 diagnostic 
- // ******************************************************************************/
-// #define GetVIOS_FANB_FaultShortHi()    (GetShortFault(DISCRETE_OUT_FAN_2))
-// #define GetVIOS_FANB_FaultShortLo()    (GetOpenFault(DISCRETE_OUT_FAN_2))
-// #define GetVIOS_FANB_FaultAny()        (GetAnyFault(DISCRETE_OUT_FAN_2))
-// #define GetVIOS_FANB_Presnt()              (true)//(FanPresentFlags.bf.Fan2Present)
+/******************************************************************************
+ * TPIC Fault reading for FAN2 diagnostic 
+ ******************************************************************************/
+#define GetVIOS_FANB_FaultShortHi()    (GetShortFault(DISCRETE_OUT_FAN_2))
+#define GetVIOS_FANB_FaultShortLo()    (GetOpenFault(DISCRETE_OUT_FAN_2))
+#define GetVIOS_FANB_FaultAny()        (GetAnyFault(DISCRETE_OUT_FAN_2))
+#define GetVIOS_FANB_Presnt()              (true)//(FanPresentFlags.bf.Fan2Present)
 
 
 // /******************************************************************************
