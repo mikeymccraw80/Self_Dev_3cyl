@@ -20,15 +20,13 @@
  *   None.
  *
 \* ============================================================================ */
-#include "types.h"     /* for Volts_B, Volts_W, Volts_Plus_Fraction,*/
 #include "v_ignit.h"
-#include "dd_config.h"
-#include "dd_atd.h"
+#include "hal_analog.h"
 
 /******************* Global Variables **************/
-Volts_B                         Ignition_Voltage_B_ ;
-IgnitionOnStatus_Type           IgnitionOnStatus ;
-Seconds_MedPrec                 IgnitionOn_Time_;
+Volts_B                         Ignition_Voltage_B;
+IgnitionOnStatus_Type           IgnitionOnStatus;
+Seconds_MedPrec                 IgnitionOn_Time;
 Every_Loop_Sec_B                Timer_125ms_Mark;
 
 
@@ -37,17 +35,14 @@ Every_Loop_Sec_B                Timer_125ms_Mark;
 \* ============================================================================ */
 static void Update_IgnitionOn_Time( void )
 {
-    if ( Timer_125ms_Mark == FixDefConst( 0.125, Every_Loop_Sec_B ) )
-    /*--- Every 0.125 second, do: ---*/
-    {
-        Inc(IgnitionOn_Time_);
-        Timer_125ms_Mark = FixDefConst( 0.0, Every_Loop_Sec_B ) ;
-    }
-    else
-    {
-        Timer_125ms_Mark++ ;
-    }
-}                             
+	/*--- Every 0.125 second, do: ---*/
+	if (Timer_125ms_Mark == FixDefConst( 0.125, Every_Loop_Sec_B )) {
+		Inc(IgnitionOn_Time);
+		Timer_125ms_Mark = FixDefConst(0.0, Every_Loop_Sec_B);
+	} else {
+		Timer_125ms_Mark++;
+	}
+}
 
 
 /**************************************************************************/
@@ -59,29 +54,30 @@ static void Update_IgnitionOn_Time( void )
 /*                                                                        */
 /* GLOBAL: Nil.                                                           */
 /**************************************************************************/
-FAR_COS void UpdateIgnitionState( void )
+void UpdateIgnitionState( void )
 {
-    /* Update ignition voltage */
-    Ignition_Voltage_B_ = FixConvert( ATD_buffer[AD_IGNITION_VOLTAGE_TYPE], Volts_Plus_Fraction, Volts_B ) ;
+	uint16_t v_ign_value;
+	v_ign_value = HAL_Analog_Get_IGNVI_Value();
+	/* Update ignition voltage */
+	Ignition_Voltage_B = FixConvert(v_ign_value, Volts_Plus_Fraction, Volts_B ) ;
 
-    if ( Ignition_Voltage_B_ < FixDefConst( 4.0, Volts_B ) )
-    {
-        IgnitionOnStatus.IgnitionWasBelow4Volts = ( bitfield8_t )true ;
-        IgnitionOnStatus.IgnitionIsOn = ( bitfield8_t )false ;
-        IgnitionOn_Time_=FixDefConst(0.0, Seconds_MedPrec);
-    }
-    else if ( ( IgnitionOnStatus.IgnitionWasBelow4Volts == ( bitfield8_t )false ) ||
-             ( Ignition_Voltage_B_ > FixDefConst(9.0, Volts_B) ) )
-    {
-        IgnitionOnStatus.IgnitionWasBelow4Volts = ( bitfield8_t )false ;
-        IgnitionOnStatus.IgnitionIsOn = ( bitfield8_t )true ;
-        Update_IgnitionOn_Time();
-    }
-    else
-    {
-        // nothing
-    }
-
+	if ( Ignition_Voltage_B < FixDefConst( 4.0, Volts_B ) )
+	{
+		IgnitionOnStatus.IgnitionWasBelow4Volts = ( bitfield8_t )true ;
+		IgnitionOnStatus.IgnitionIsOn = ( bitfield8_t )false ;
+		IgnitionOn_Time = FixDefConst(0.0, Seconds_MedPrec);
+	}
+	else if ( ( IgnitionOnStatus.IgnitionWasBelow4Volts == ( bitfield8_t )false ) ||
+			 ( Ignition_Voltage_B > FixDefConst(9.0, Volts_B) ) )
+	{
+		IgnitionOnStatus.IgnitionWasBelow4Volts = ( bitfield8_t )false ;
+		IgnitionOnStatus.IgnitionIsOn = ( bitfield8_t )true ;
+		Update_IgnitionOn_Time();
+	}
+	else
+	{
+		// nothing
+	}
 }
 
 

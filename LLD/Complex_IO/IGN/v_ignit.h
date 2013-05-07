@@ -23,7 +23,7 @@
  *
 \* ============================================================================ */
 #include "reuse.h"
-#include "lux_type.h"
+#include "lux_math.h"
 
 /* ============================================================================ *\
  * Exported type declarations.
@@ -42,21 +42,21 @@ typedef uint16_t               Seconds_MedPrec ;
 /* ============================================================================ *\
  * Exported variables.
 \* ============================================================================ */
-extern Volts_B                Ignition_Voltage_B_ ;
-extern IgnitionOnStatus_Type  IgnitionOnStatus ;
-extern Seconds_MedPrec        IgnitionOn_Time_;
+extern Volts_B                Ignition_Voltage_B;
+extern IgnitionOnStatus_Type  IgnitionOnStatus;
+extern Seconds_MedPrec        IgnitionOn_Time;
 extern Every_Loop_Sec_B       Timer_125ms_Mark;
 
 /* ============================================================================ *\
  * Exported Func.
 \* ============================================================================ */
-void UpdateIgnitionState( void );
+void UpdateIgnitionState(void);
 
 /* ============================================================================ *\
  * Exported Macro
 \* ============================================================================ */
 #define Ignition_Voltage()\
-                       ( Ignition_Voltage_B_ )
+                       (Ignition_Voltage_B)
                        
 
 /* ============================================================================ *\
