@@ -55,11 +55,14 @@
 /*-------------------------------------------------------------------*/
 /*-------------------------------------------------------------------*/
 /* DELPHI Delco Luxembourg C Engine Management Software              */
-/* (c) Copyright DELPHI Delco Electronics Systems 2001               */
+/*  Copyright 2001-2008, Delphi Technologies, Inc.  */
 /*-------------------------------------------------------------------*/
 
-#include "t_gentypes.h"
+//#include "t_gentypes.h"
 #include "reuse.h"
+#include "hal.h"
+
+// #define MULTITARGET_FRAMEWORK
 
 /*-------------------------------------*/
 /*---                               ---*/
@@ -124,6 +127,12 @@
 #define Bit1Position            (1)
 #define Bit0Position            (0)
 
+#if OS_SCHEDULER_10ms == CeSYST_AVAILABLE
+#define RegularRtiPrescaler  (0.010000)
+#else
+#define RegularRtiPrescaler  (0.015625)
+#endif
+
 /*---------------------------------*/
 /*---                           ---*/
 /*--- Scalar types redefinition ---*/
@@ -132,9 +141,8 @@
 /*---------------------------------*/
 
 typedef unsigned char    SHORTCARD;
-#define Prec_SHORTCARD         (1u)
-#define Min_SHORTCARD          (0u)     /*--- 000000000h ---*/
-#define Max_SHORTCARD        (255u)     /*--- 0000000FFh ---*/
+#define MIN_SHORTCARD          (0u)     /*--- 000000000h ---*/
+#define MAX_SHORTCARD        (255u)     /*--- 0000000FFh ---*/
 /*      CALDEF
 *|      types.SHORTCARD
 *|      {
@@ -176,19 +184,6 @@ typedef unsigned long     LONGCARD;
 #define MAX_LONGINT   (2147483647L)     /*--- 07FFFFFFFh ---*/
 #endif
 
-#ifndef UINT24_MIN
-#define UINT24_MIN     (0)             // Minimum value for uint32_t containing 24 bits
-#endif
-#ifndef UINT24_MAX
-#define UINT24_MAX     (0x00ffffffU)   // Maximum value for uint32_t containing 24 bits
-#endif
-
-#ifndef INT24_MIN
-#define INT24_MIN     (-INT24_MAX-1)   // Minimum value for int32_t containing 24 bits
-#endif
-#ifndef INT24_MAX
-#define INT24_MAX     (8388607)        // Maximum value for int32_t containing 24 bits
-#endif
 /*--------------------------------*/
 /*---                          ---*/
 /*---    Mathematical types    ---*/
@@ -199,6 +194,18 @@ typedef unsigned long     LONGCARD;
 #ifndef NULL
 #define NULL ((void*)(0))
 #endif
+
+// /*--- Boolean Type ---*/
+// #ifdef MULTITARGET_FRAMEWORK
+// /* TRICORE The multitarget architecture defines a incompatible bool type     */
+// /* For more information about boolean definition see : tc1775_tasking.h file */
+// typedef boolean_T BOOLEAN;
+// #else
+// typedef
+  // enum
+    // {FALSE, TRUE}
+  // BOOLEAN;
+// #endif
 
 /*--- BitField Type ---*/
 typedef unsigned int BITFIELD;
@@ -571,6 +578,7 @@ typedef CARDINAL                                              ETC_Percent_Type;
 #define RFactor_Percent_BPrec1_Percent_B                                (256.0)
 #define RFactor_ETC_Percent_Type_Percent_B                              (10.24)
 #define RFactor_Percent_B_ETC_Percent_Type                              (10.24)
+#define RFactor_ETC_Percent_Type_Percent_W                              (40.96)
 
 /*---------------------------------*/
 /*---                           ---*/
@@ -587,6 +595,14 @@ typedef CARDINAL                                        Multiplier_0_to_0p25_W;
 #define Prec_Multiplier_0_to_0p25_W           (Prec_Multiplier_0_to_0p25 / 256)
 #define Min_Multiplier_0_to_0p25_W                   (Min_Multiplier_0_to_0p25)
 #define Max_Multiplier_0_to_0p25_W        (65535 * Prec_Multiplier_0_to_0p25_W)
+/*      CALDEF
+*|      types.Multiplier_0_to_0p25_W
+*|      {
+*|         : kind = fixed;
+*|         : precision = (0.0009765625/256);
+*|         : range = (0.000000) TO (65535 * 0.0009765625/256);
+*|      }
+*/
 
 typedef SHORTCARD                                          Multiplier_0_to_0p5;
 #define Prec_Multiplier_0_to_0p5                                    (0.5 / 256)
@@ -709,6 +725,19 @@ typedef SHORTCARD                                            Multiplier_0_to_8;
 *|      }
 */
 
+typedef CARDINAL                                           Multiplier_0_to_8_W;
+#define Prec_Multiplier_0_to_8_W                                  (8.0 / 65536)
+#define Min_Multiplier_0_to_8_W                                           (0.0)
+#define Max_Multiplier_0_to_8_W              (65535 * Prec_Multiplier_0_to_8_W)
+/*      CALDEF
+*|      types.Multiplier_0_to_8_W
+*|      {
+*|         : kind = fixed;
+*|         : precision = (8.0 / 65536.0);
+*|         : range = (0.0) TO (65535 *(8.0 / 65536.0));
+*|      }
+*/
+
 typedef SHORTCARD                                           Multiplier_0_to_16;
 #define Prec_Multiplier_0_to_16                                    (16.0 / 256)
 #define Min_Multiplier_0_to_16                                            (0.0)
@@ -723,6 +752,14 @@ typedef SHORTCARD                                           Multiplier_0_to_32;
 #define Prec_Multiplier_0_to_32                                    (32.0 / 256)
 #define Min_Multiplier_0_to_32                                            (0.0)
 #define Max_Multiplier_0_to_32                               (255 * 32.0 / 256)
+/*      CALDEF
+*|      types.Multiplier_0_to_32
+*|      {
+*|         : kind = fixed;
+*|         : precision = (32.0 / 256);
+*|         : range = (0.000000) TO (255 * 32.0 / 256);
+*|      }
+*/
 
 typedef SHORTCARD                                           Multiplier_0_to_64;
 #define Prec_Multiplier_0_to_64                                    (64.0 / 256)
@@ -802,6 +839,14 @@ typedef SHORTCARD                                         Multiplier_0_to_25p5;
 #define RFactor_Multiplier_0_to_2_W_Multiplier_0_to_2                 (32768.0)
 #define RFactor_Multiplier_0_to_2_Multiplier_0_to_4                     (128.0)
 #define RFactor_Multiplier_1_to_2_Multiplier_0_to_4_W                   (16384)
+#define RFactor_Multiplier_0_to_8_W_Multiplier_0_to_8                  (8192.0)
+#define RFactor_Multiplier_0_to_8_Multiplier_0_to_8_W                  (8192.0)
+#define RFactor_Multiplier_0_to_1_W_Multiplier_0_to_2_W               (65536.0)
+#define RFactor_Multiplier_0_to_2_W_Multiplier_0_to_1_W               (65536.0)
+#define RFactor_Multiplier_0_to_4_W_Multiplier_0_to_1_W               (65536.0)
+#define RFactor_Multiplier_0_to_32_W_Multiplier_0_to_2_W              (32768.0)
+#define RFactor_Multiplier_0_to_32_Multiplier_0_to_32_W \
+                                                (1 / Prec_Multiplier_0_to_32_W)
 
 /*-----------------------------*/
 /*---                       ---*/
@@ -947,11 +992,6 @@ typedef CARDINAL                                                Volts_0_to_5_W;
 #define Min_Volts_0_to_5_W                                                (0.0)
 #define Max_Volts_0_to_5_W                                                (5.0)
 
-typedef CARDINAL                            EOBD_2nd_LOOP_W;
-#define Prec_EOBD_2nd_LOOP_W                (2 * EOBD_LOOPTIME_SEC)
-#define Min_EOBD_2nd_LOOP_W                 (0.0)
-#define Max_EOBD_2nd_LOOP_W                 (65535 * Prec_EOBD_2nd_LOOP_W)
-
 /*---  Axis Enumerations for Volt Types  ---*/
 
 #define Volts_8to16by2_Steps                                                (5)
@@ -975,6 +1015,15 @@ typedef CARDINAL                            EOBD_2nd_LOOP_W;
 /*      CALDEF      */
 #define Volts_0to25p6by1p6_Steps                                           (17)
 /*      CALDEF      */
+#define Volts_0to5by0p5_Steps                                              (11)
+/*      CALDEF
+*|      types.Volts_0to5by0p5_Steps
+*|      {
+*|         : kind = define_annotation;
+*|         : units = "volts";
+*|         : table = (0 TO 5.0 BY 0.5);
+*|      }
+*/
 #define Volts_0to12p8by1p6_Steps                                            (9)
 /*      CALDEF      */
 #define Mvolts_0to1350by270_Steps                                           (6)
@@ -1099,6 +1148,21 @@ typedef CARDINAL                                     NewtonMeterPerKiloWatts_W;
 
 #define RFactor_KiloWatts_L_KiloWatts_W                               (32768.0)
 #define RFactor_KiloWatts_W_KiloWatts_L                               (32768.0)
+
+typedef CARDINAL                                                    Velocity_S;
+#define Prec_Velocity_S                                         (512.0 / 65536)
+#define Min_Velocity_S                                                 (-256.0)
+#define Max_Velocity_S                             (65535 * Prec_Velocity_S + \
+                                                                Min_Velocity_S)
+
+typedef CARDINAL                                          Velocity_W_NonBiased;
+#define Prec_Velocity_W_NonBiased                               (512.0 / 65536)
+#define Min_Velocity_W_NonBiased                                          (0.0)
+#define Max_Velocity_W_NonBiased         (65535 * Prec_Velocity_W_NonBiased + \
+                                                      Min_Velocity_W_NonBiased)
+
+#define RFactor_Velocity_S_Velocity_W_NonBiased           (1 / Prec_Velocity_S)
+#define RFactor_Velocity_W_NonBiased_Velocity_S           (1 / Prec_Velocity_S)
 
 /*-----------------------------*/
 /*---                       ---*/
@@ -1438,19 +1502,30 @@ typedef CARDINAL                                     KPH_Per_Sec_Unsigned_Type;
 /*---------------------------------------------------------------------------*/
 
 typedef CARDINAL                                                         RPM_W;
-#define Prec_RPM_W                                                    (1.0 / 8)
+#define Prec_RPM_W                                                 (50.0 / 256)
 #define Min_RPM_W                                                         (0.0)
-#define Max_RPM_W                                          (65535 * Prec_RPM_W)
-
-typedef CARDINAL                                                   RPM_W_Chery;
-#define Prec_RPM_W_Chery                                              (1.0 / 4)
-#define Min_RPM_W_Chery                                                   (0.0)
-#define Max_RPM_W_Chery                              (65535 * Prec_RPM_W_Chery)
+#define Max_RPM_W                                          (65535 * 50.0 / 256)
+/*      CALDEF
+*|      types.RPM_W
+*|      {
+*|         : kind = fixed;
+*|         : precision = (50.0 / 256);
+*|         : range = (0.0) TO (65535 * 50.0 / 256);
+*|      }
+*/
 
 typedef SHORTCARD                                                        RPM_B;
 #define Prec_RPM_B                                                       (50.0)
 #define Min_RPM_B                                                         (0.0)
 #define Max_RPM_B                                            (255 * Prec_RPM_B)
+/*      CALDEF
+*|      types.RPM_B
+*|      {
+*|         : kind = fixed;
+*|         : precision = (50.0);
+*|         : range = (0.000000) TO (255 * 50.0);
+*|      }
+*/
 
 typedef CARDINAL                                                 RPM_Med_Res_W;
 #define Prec_RPM_Med_Res_W                                         (12.5 / 256)
@@ -1461,6 +1536,20 @@ typedef CARDINAL                                RPM_Med_Res_Per_2ndLoop_Time_W;
 #define Prec_RPM_Med_Res_Per_2ndLoop_Time_W                (Prec_RPM_Med_Res_W)
 #define Min_RPM_Med_Res_Per_2ndLoop_Time_W                                (0.0)
 #define Max_RPM_Med_Res_Per_2ndLoop_Time_W         (65535 * Prec_RPM_Med_Res_W)
+
+typedef CARDINAL                                                       RPM_W_S;
+#define Prec_RPM_W_S                                               (Prec_RPM_W)
+#define Min_RPM_W_S                                   (-32768.0 * Prec_RPM_W_S)
+#define Max_RPM_W_S                        (32767 * Prec_RPM_W_S - Min_RPM_W_S)
+/*      CALDEF
+*|      types.RPM_W_S
+*|      {
+*|         : kind = fixed;
+*|         : precision = (50.0 / 256);
+*|         : range = -6400 TO <6400;
+*|         : biased;
+*|      }
+*/
 
 typedef SHORTCARD                                                RPM_Med_Res_B;
 #define Prec_RPM_Med_Res_B                                               (12.5)
@@ -1503,6 +1592,15 @@ typedef SHORTCARD                                     RPM_Gradient_100rpmsec_B;
 
 /*---  Axis Enumerations for Rotational Speed Speed Types  ---*/
 
+#define RPM_400to1200by200_Steps  (5)
+/*      CALDEF
+*|      types.RPM_400to1200by200_Steps
+*|      {
+*|       :kind = define_annotation;
+*|       :units = "RPM";
+*|       :table = (400 TO 1200 BY 200);
+*|      }
+*/
 #define RPM_0to500by50_Steps                                               (11)
 /*      CALDEF      */
 #define RPM_0to600by50_Steps                                               (13)
@@ -1585,18 +1683,25 @@ typedef SHORTCARD                                     RPM_Gradient_100rpmsec_B;
 #define RPM_2000to3000by100_Steps                                          (11)
 /*      CALDEF      */
 #define RPM_0to6400by1600_Steps                                             (5)
-/*      CALDEF      */
+/*      CALDEF
+*|      types.RPM_0to6400by1600_Steps
+*|      {
+*|         : kind = define_annotation;
+*|         : units = "RPM";
+*|         : table = (0 TO 6400 BY 1600);
+*|      }
+*/
+
 #define RPM_0to400by100_400to6400by400_Steps                               (20)
 /*      CALDEF      */
 #define RefCounts_0to16by1_Steps                                           (17)
 /*      CALDEF      */
 
-
-#define kPa_20to80by10_80to100by5_Steps ( 11 )
 /*---  RFactors for Rotational Speed Speed Types  ---*/
 
 #define RFactor_RPM_Med_Res_W_RPM_Med_Res_Per_2ndLoop_Time_W       (512.0 / 25)
 #define RFactor_RPM_Med_Res_Per_2ndLoop_Time_W_RPM_Med_Res_W       (512.0 / 25)
+#define RFactor_RPM_Med_Res_B_RPM_Hi_Res_W      (2)
 #define RFactor_RPM_Hi_Res_W_RPM_Hi_Res_W_Error                           (1.0)
 #define RFactor_RPM_Hi_Res_W_Error_RPM_Hi_Res_W                           (1.0)
 #define RFactor_HiResRPM_Period_Sec_RPM_Gradient_1rpmper100msec_W         (1.0)
@@ -1607,6 +1712,10 @@ typedef SHORTCARD                                     RPM_Gradient_100rpmsec_B;
 #define RFactor_RPM_B_RPM_W                                (256.0 / Prec_RPM_B)
 #define RFactor_RPM_Med_Res_W_RPM_W                                (512.0 / 25)
 #define RFactor_RPM_W_RPM_Med_Res_W                                (512.0 / 25)
+#define RFactor_RPM_W_RPM_W_S                                    (1/Prec_RPM_W)
+#define RFactor_RPM_W_S_RPM_W                                    (1/Prec_RPM_W)
+
+#define RFactor_RPM_Med_Res_B_RPM_W_S                          (1/Prec_RPM_W_S)
 #define RFactor_RPM_Med_Res_W_RPM_Med_Res_B                        (512.0 / 25)
 #define RFactor_RPM_Med_Res_B_RPM_Med_Res_W                        (512.0 / 25)
 #define RFactor_RPM_W_RPM_Hi_Res_W                                      (256.0)
@@ -1621,14 +1730,11 @@ typedef SHORTCARD                                     RPM_Gradient_100rpmsec_B;
 /*---   Time Fixed Types   ---*/
 /*---                      ---*/
 /*----------------------------*/
-/* TBD->PD Changed from 0.015625 to 0.0078125                                          */
-/* This change will not affect application as the data types using RegularRtiPrescaler */
-/* (Seconds and Seconds_B) are not used in application                                 */
-/* In GMDAT10p1 migration, the data types using RegularRtiPrescaler are being used     */
-/* SO CHECK !!! IMPORTANT                                                              */
-#define RegularRtiPrescaler                                          (0.01)//(0.0078125) the base loop
-#define EOBD_LOOPTIME_SEC                   (0.008)
-                                                                           //has changed to 10ms for chery
+#if OS_SCHEDULER_10ms == CeSYST_AVAILABLE
+#define RegularRtiPrescaler                                          (0.010000)
+#else
+#define RegularRtiPrescaler                                          (0.015625)
+#endif
 
 /*---------------------------------------------------------------------------*/
 /*--- The times that require a lot of precision are based on the timing   ---*/
@@ -1645,13 +1751,10 @@ typedef SHORTCARD                                     RPM_Gradient_100rpmsec_B;
 /*---------------------------------------------------------------------------*/
 
 /*--- WARNING: Geneneric type only ! ---*/
-
-/* TBD->PD Retained the HWIO definition for MicroSec_Type as it is not used in Application */
-/*         Also , the HWIO defn. of MicroSec_Type is a little diffferent than CARDINAL */
-//typedef CARDINAL                                                 MicroSec_Type;
-//#define Prec_MicroSec_Type                 (MicroSec_Generic_Type_In_Use_Error)
-//#define Min_MicroSec_Type                  (MicroSec_Generic_Type_In_Use_Error)
-//#define Max_MicroSec_Type                  (MicroSec_Generic_Type_In_Use_Error)
+typedef CARDINAL                                                 MicroSec_Type;
+#define Prec_MicroSec_Type                 (MicroSec_Generic_Type_In_Use_Error)
+#define Min_MicroSec_Type                  (MicroSec_Generic_Type_In_Use_Error)
+#define Max_MicroSec_Type                  (MicroSec_Generic_Type_In_Use_Error)
 
 typedef CARDINAL                                                  MicroSeconds;
 #define Prec_MicroSeconds                                   (1000000.0 / 65536)
@@ -1833,7 +1936,17 @@ typedef SHORTCARD                                             Every_Loop_Sec_B;
 *|      types.Every_Loop_Sec_Prec
 *|      {
 *|         : kind = constant;
+*/
+#if OS_SCHEDULER_10ms == CeSYST_AVAILABLE
+/*
+*|         : value = (0.010000);
+*/
+#else
+/*
 *|         : value = (0.015625);
+*/
+#endif
+/*
 *|      }
 *|      types.Every_Loop_Sec_W
 *|      {
@@ -1913,12 +2026,6 @@ typedef SHORTCARD                                         Every_8th_Loop_Sec_B;
 #define Prec_Every_8th_Loop_Sec_B                            (8 * Prec_Seconds)
 #define Min_Every_8th_Loop_Sec_B                                          (0.0)
 #define Max_Every_8th_Loop_Sec_B                       (255 * 8 * Prec_Seconds)
-
-typedef SHORTCARD                                         EOBD_8th_Loop_Sec_B;
-#define Prec_EOBD_8th_Loop_Sec_B                            (8 * EOBD_LOOPTIME_SEC)
-#define Min_EOBD_8th_Loop_Sec_B                                          (0.0)
-#define Max_EOBD_8th_Loop_Sec_B                       (255 * 8 * EOBD_LOOPTIME_SEC)
-
 /*      CALDEF
 *|      types.Every_8th_Loop_Sec_Prec
 *|      {
@@ -1936,34 +2043,6 @@ typedef SHORTCARD                                         EOBD_8th_Loop_Sec_B;
 *|         : kind = fixed;
 *|         : precision = (types.Every_8th_Loop_Sec_Prec);
 *|         : range = (0.000000) TO (255 * types.Every_8th_Loop_Sec_Prec);
-*|      }
-*/
-
-typedef CARDINAL                                          Every_10th_Loop_Sec_W;
-#define Prec_Every_10th_Loop_Sec_W                            (10 * Prec_Seconds)
-#define Min_Every_10th_Loop_Sec_W                                          (0.0)
-#define Max_Every_10th_Loop_Sec_W                     (65535 * 10 * Prec_Seconds)
-typedef SHORTCARD                                         Every_10th_Loop_Sec_B;
-#define Prec_Every_10th_Loop_Sec_B                            (10 * Prec_Seconds)
-#define Min_Every_10th_Loop_Sec_B                                          (0.0)
-#define Max_Every_10th_Loop_Sec_B                       (255 * 10 * Prec_Seconds)
-/*      CALDEF
-*|      types.Every_10th_Loop_Sec_Prec
-*|      {
-*|         : kind = constant;
-*|         : value = (10 * types.Every_Loop_Sec_Prec);
-*|      }
-*|      types.Every_10th_Loop_Sec_W
-*|      {
-*|         : kind = fixed;
-*|         : precision = (types.Every_10th_Loop_Sec_Prec);
-*|         : range = (0.000000) TO (65535 * types.Every_10th_Loop_Sec_Prec);
-*|      }
-*|      types.Every_10th_Loop_Sec_B
-*|      {
-*|         : kind = fixed;
-*|         : precision = (types.Every_10th_Loop_Sec_Prec);
-*|         : range = (0.000000) TO (255 * types.Every_10th_Loop_Sec_Prec);
 *|      }
 */
 
@@ -2208,6 +2287,14 @@ typedef CARDINAL                                     AcPresInKPa_Plus_Fraction;
 #define Min_AcPresInKPa_Plus_Fraction                 (Min_AcPressureTypeInKPa)
 #define Max_AcPresInKPa_Plus_Fraction \
                                      (65535.0 * Prec_AcPresInKPa_Plus_Fraction)
+/*      CALDEF
+*|      types.AcPresInKPa_Plus_Fraction
+*|      {
+*|         : kind = fixed;
+*|         : precision = (20.0 / 256);
+*|         : range = (0.000000) TO (65535 * 20.0 / 256);
+*|      }
+*/
 
 /*---------------------------------------------------------------------*/
 /*--- MANIFOLD / ATMOSPHERIC PRESSURES                              ---*/
@@ -2249,7 +2336,7 @@ typedef CARDINAL                                                         kPa_W;
 #define Prec_kPa_W                                                  (5.0 / 256)
 #define Min_kPa_W                                                         (0.0)
 #define Max_kPa_W                                                       (105.0)
-#define RFactor_Fixed_Shortcard_kPa_W                          (1.0 / Prec_kPa_W)
+
 typedef CARDINAL                                                      kPa_Base;
 #define Prec_kPa_Base                                             (kPaBasePrec)
 #define Min_kPa_Base                                                      (0.0)
@@ -2259,8 +2346,6 @@ typedef SHORTCARD                                                        kPa_B;
 #define Prec_kPa_B                                                (kPaBasePrec)
 #define Min_kPa_B                                                     (kPaBias)
 #define Max_kPa_B                                 (255 * kPaBasePrec + kPaBias)
-#define RFactor_Fixed_Shortcard_kPa_B         (1 / Prec_kPa_B)
-
 
 typedef CARDINAL                                                     kPa_HiRes;
 #define Prec_kPa_HiRes                                              (1.0 / 256)
@@ -2407,6 +2492,11 @@ typedef CARDINAL                                                    kPa_IMEP_W;
 *|      }
 */
 
+typedef LONGCARD                                                 kPa_IMEP_Base;
+#define Prec_kPa_IMEP_Base                                    (Prec_kPa_IMEP_W)
+#define Min_kPa_IMEP_Base                                                 (0.0)
+#define Max_kPa_IMEP_Base (4294967295 * Prec_kPa_IMEP_Base + Min_kPa_IMEP_Base)
+
 typedef CARDINAL                                       kPa_IMEP_B_PlusFraction;
 #define Prec_kPa_IMEP_B_PlusFraction                      (Prec_kPa_IMEP_B/256)
 #define Min_kPa_IMEP_B_PlusFraction                                       (0.0)
@@ -2493,6 +2583,15 @@ typedef CARDINAL                                       kPa_IMEP_B_PlusFraction;
 *|         : table = (0 TO 95 BY 5);
 *|      }
 */
+#define kPaIMEP_0to800by50_Steps                                           (17)
+/*      CALDEF
+*|      types.kPaIMEP_0to800by50_Steps
+*|      {
+*|         : kind = define_annotation;
+*|         : units = "kPa_IMEP_W";
+*|         : table = (0 TO 800 BY 50);
+*|      }
+*/
 #define kPaIMEP_0to1600by100_Steps                                         (17)
 /*      CALDEF
 *|      types.kPaIMEP_0to1600by100_Steps
@@ -2550,6 +2649,8 @@ typedef CARDINAL                                       kPa_IMEP_B_PlusFraction;
                                                (1/Prec_kPa_IMEP_B_PlusFraction)
 #define RFactor_kPa_IMEP_B_kPa_IMEP_B_PlusFraction \
                                                (1/Prec_kPa_IMEP_B_PlusFraction)
+#define RFactor_kPa_IMEP_W_kPa_IMEP_Base                                  (128)
+#define RFactor_kPa_IMEP_Base_kPa_IMEP_W                                  (128)
 #define RFactor_kPa_Base_kPa_B                                (256.0 * 0.01059)
 #define RFactor_kPa_Base_kPa_Delta                            (256.0 * 0.01059)
 #define RFactor_kPa_W_kPa_B                                             (512.0)
@@ -2611,6 +2712,24 @@ typedef CARDINAL                                       kPa_IMEP_B_PlusFraction;
 /*--- Degrees_Filtered    -40.0 .. 150.75  0.75/256   Coolant Temperature ---*/
 /*--- HotDegreeC            0.0 .. 255.0   1          Hybrid Temperature  ---*/
 /*---------------------------------------------------------------------------*/
+
+typedef CARDINAL                                              DegreesC_HiRes_W;
+#define Prec_DegreesC_HiRes_W                                        (1.0 / 16)
+#define Min_DegreesC_HiRes_W                                          (-2048.0)
+#define Max_DegreesC_HiRes_W \
+                         (65535 * Prec_DegreesC_HiRes_W + Min_DegreesC_HiRes_W)
+
+typedef LONGCARD                                              DegreesC_HiRes_L;
+#define Prec_DegreesC_HiRes_L                              (1.0 / (16 * 65536))
+#define Min_DegreesC_HiRes_L                                          (-2048.0)
+#define Max_DegreesC_HiRes_L \
+                         (65535 * Prec_DegreesC_HiRes_L + Min_DegreesC_HiRes_L)
+
+typedef CARDINAL                                    DegreesC_HiRes_W_NonBiased;
+#define Prec_DegreesC_HiRes_W_NonBiased                              (1.0 / 16)
+#define Min_DegreesC_HiRes_W_NonBiased                                    (0.0)
+#define Max_DegreesC_HiRes_W_NonBiased \
+                                      (65535 * Prec_DegreesC_HiRes_W_NonBiased)
 
 typedef CARDINAL                                            OutsideDegrees_C_W;
 #define Prec_OutsideDegrees_C_W                                       (1.0 / 8)
@@ -2686,12 +2805,62 @@ typedef SHORTCARD                                                   HotDegreeC;
 
 /*---  Axis Enumerations for Temperature Types  ---*/
 
+#define Degrees_C_m40to128By12_Steps                                       (15)
+/*      CALDEF INFORMATION
+*|      t_types.Degrees_C_m40to128By12_Steps
+*|      {
+*|         : kind = define_annotation;
+*|         : units = "Degrees_C";
+*|         : table = (-40 TO 128 BY 12);
+*|      }
+*/
+
+#define Degrees_C_m40to120By20_Steps                                       (9)
+/*      CALDEF INFORMATION
+*|      t_types.Degrees_C_m40to120By20_Steps
+*|      {
+*|         : kind = define_annotation;
+*|         : units = "Degrees_C";
+*|         : table = (-40 TO 120 BY 20);
+*|      }
+*/
+
 #define Deg_C_m40to152by12_Steps                                           (17)
-/*      CALDEF      */
+/*      CALDEF
+*|      types.Deg_C_m40to152by12_Steps
+*|      {
+*|         : kind = define_annotation;
+*|         : units = "Deg C";
+*|         : table = (-40 TO 152 BY 12);
+*|      }
+*/
 #define Deg_C_m40to104by12_Steps                                           (13)
-/*      CALDEF      */
+/*      CALDEF
+*|      types.Deg_C_m40to104by12_Steps
+*|      {
+*|       :kind = define_annotation;
+*|       :units = "Deg C";
+*|       :table = (-40 TO 104 BY 12);
+*|      }
+*/
 #define Deg_C_m40to116by12_Steps                                           (14)
-/*      CALDEF      */
+/*      CALDEF
+*|      types.Deg_C_m40to116by12_Steps
+*|      {
+*|         : kind = define_annotation;
+*|         : units = "Deg_C";
+*|         : table = (-40 TO 116 BY 12);
+*|      }
+*/
+#define Deg_C_m40to128by24_Steps                                            (8)
+/*      CALDEF
+*|      types.Deg_C_m40to128by24_Steps
+*|      {
+*|         : kind = define_annotation;
+*|         : units = "Deg_C";
+*|         : table = (-40 TO 128 BY 24);
+*|      }
+*/
 #define Deg_C_m28to116by12_Steps                                           (13)
 /*      CALDEF      */
 #define Deg_C_m28to116by48_Steps                                            (4)
@@ -2741,6 +2910,10 @@ typedef SHORTCARD                                                   HotDegreeC;
 
 /*---  RFactors for Temperature Types  ---*/
 
+#define RFactor_DegreesC_HiRes_L_DegreesC_HiRes_W                (16.0 * 65536)
+#define RFactor_DegreesC_HiRes_W_DegreesC_HiRes_L                (16.0 * 65536)
+#define RFactor_DegreesC_HiRes_W_DegreesC_HiRes_W_NonBiased              (16.0)
+#define RFactor_DegreesC_HiRes_W_NonBiased_DegreesC_HiRes_W              (16.0)
 #define RFactor_OutsideDegrees_C_B_Degrees_C_B                              (4)
 #define RFactor_Degrees_C_B_Degrees_C_BUpTo215                              (4)
 #define RFactor_Degrees_C_W_Degrees_C_BUpTo215                             (64)
@@ -2787,12 +2960,10 @@ typedef SHORTCARD                                            Degrees_C_Per_Sec;
 /*---                      ---*/
 /*----------------------------*/
 
-/* TBD->PD Retained the HWIO definition for CrankAngleInDeg_W as it is not used in Application */
-/*         Also , the HWIO defn. of CrankAngleInDeg_W is a little diffferent than CARDINAL */
-//typedef CARDINAL                                             CrankAngleInDeg_W;
-//#define Prec_CrankAngleInDeg_W                                     (90.0 / 256)
-//#define Min_CrankAngleInDeg_W                                             (0.0)
-//#define Max_CrankAngleInDeg_W                              (65535 * 90.0 / 256)
+typedef CARDINAL                                             CrankAngleInDeg_W;
+#define Prec_CrankAngleInDeg_W                                     (90.0 / 256)
+#define Min_CrankAngleInDeg_W                                             (0.0)
+#define Max_CrankAngleInDeg_W                              (65535 * 90.0 / 256)
 
 typedef SHORTCARD                                            CrankAngleInDeg_B;
 #define Prec_CrankAngleInDeg_B                                     (90.0 / 256)
@@ -2856,8 +3027,6 @@ typedef SHORTCARD                                        KnockSparkRetard_Type;
 #define Min_KnockSparkRetard_Type                                         (0.0)
 #define Max_KnockSparkRetard_Type            (255 * Prec_KnockSparkRetard_Type)
 
-
-
 /*---  Axis Enumerations for Angle Types  ---*/
 
 #define SpkRtd_0to40by4_Steps                                              (11)
@@ -2889,7 +3058,7 @@ typedef SHORTCARD                                        KnockSparkRetard_Type;
 #define RFactor_CrankAngleInDeg_W_CrankAngleInDegSignedW         (256.0 / 90.0)
 #define RFactor_CrankAngleInDegSignedW_CrankAngleInDeg_W \
                              (RFactor_CrankAngleInDeg_W_CrankAngleInDegSignedW)
-#define RFactor_SparkAdvance_Delta_Deg_B_SparkAdvance_Deg_B    (256.0 / 90.0)
+
 /*------------------------------*/
 /*---                        ---*/
 /*---   Volume Fixed Types   ---*/
@@ -2997,6 +3166,24 @@ typedef SHORTCARD                                                      Grams_B;
 #define Min_Grams_B                                                       (0.0)
 #define Max_Grams_B                                           (255 * 1.0 / 256)
 
+typedef CARDINAL                                               Grams_0to255g_W;
+#define Prec_Grams_0to255g_W                                        (1.0 / 256)
+#define Min_Grams_0to255g_W                                               (0.0)
+#define Max_Grams_0to255g_W                    (65535.0 * Prec_Grams_0to255g_W)
+/*      CALDEF
+*|      types.Grams_0to255g_W
+*|      {
+*|         : kind = fixed;
+*|         : precision = (1.0 / 256);
+*|         : range = (0.000000) TO (65535 / 256);
+*|      }
+*/
+
+typedef LONGCARD                                               Grams_0to65Kg_L;
+#define Prec_Grams_0to65Kg_L                                      (1.0 / 65536)
+#define Min_Grams_0to65Kg_L                                               (0.0)
+#define Max_Grams_0to65Kg_L               (4294967295.0 * Prec_Grams_0to65Kg_L)
+
 typedef SHORTCARD                                   MilligramsToGramsRatioType;
 #define Prec_MilligramsToGramsRatioType                            (1.0 / 1000)
 #define Min_MilligramsToGramsRatioType                                    (0.0)
@@ -3029,6 +3216,8 @@ typedef LONGCARD                                                  Milligrams_L;
 #define RFactor_Grams_Signed_W_Grams_W                                (65536.0)
 #define RFactor_Grams_W_Base_Grams_Signed_W                           (65536.0)
 #define RFactor_Grams_Signed_W_Grams_W_Base                           (65536.0)
+#define RFactor_Grams_0to255g_W_Grams_0to65Kg_L                       (65536.0)
+#define RFactor_Grams_0to65Kg_L_Grams_0to255g_W                       (65536.0)
 
 /*--------------------------------*/
 /*---                          ---*/
@@ -3541,8 +3730,7 @@ typedef CARDINAL                                 AirFuel_Ratio_Plus_Fract_Type;
 *|      {
 *|         : kind = define_annotation;
 *|         : units = "A/F";
-*|         : table = (9.8,  10.2, 10.6, 11.0, 11.4, 11.8, 12.2, 12.6, 
-*|                    13.0, 13.4, 13.8, 14.2, 14.6, 15.0, 15.4);
+*|         : table = (9.8 TO 15.4 BY 0.4);
 *|      }
 */
 
@@ -3586,6 +3774,8 @@ typedef SHORTCARD                                              Meter_Med_Res_B;
 #define Min_Meter_Med_Res_B                                               (0.0)
 #define Max_Meter_Med_Res_B                      (Prec_Meter_Med_Res_B * 255.0)
 
+/* end of t_types.h */
+
 typedef
   enum
     {
@@ -3610,16 +3800,6 @@ typedef Percent_Plus_Fraction                                        Airflow_W;
 #define Max_Airflow_W                                   (65535 * 100.0 / 65536)
 
 /* #include "t_types.h"  */ /* for table axis types                  */
-#define Degrees_C_m40to128By12_Steps                                       (15)
-/*      CALDEF INFORMATION
-*|      t_types.Degrees_C_m40to128By12_Steps
-*|      {
-*|         : kind = define_annotation;
-*|         : units = "Degrees_C";
-*|         : table = (-40 TO 128 BY 12);
-*|      }
-*/
-
 #define AF_Ratio_1to20p5By0p75_Steps                                       (27)
 /*      CALDEF INFORMATION
 *|      t_types.AF_Ratio_1to20p5By0p75_Steps
@@ -3674,6 +3854,88 @@ typedef Percent_Plus_Fraction                                        Airflow_W;
 *|      }
 */
 
+#define CBT_RPM_W_17            (17)
+/*  CALDS information
+*|t_types.CBT_RPM_W_17{
+*|    :kind = define_annotation;
+*|    :units = "Rpm";
+*|    :table =
+*|    ("Rpm_0","Rpm_1","Rpm_2","Rpm_3","Rpm_4","Rpm_5","Rpm_6","Rpm_7","Rpm_8","Rpm_9","Rpm_10","Rpm_11","Rpm_12","Rpm_13","Rpm_14","Rpm_15","Rpm_16");
+*|    }
+*/
+
+#define CBT_RPM_W_19            (19)
+/*  CALDS information
+*|t_types.CBT_RPM_W_19{
+*|    :kind = define_annotation;
+*|    :units = "Rpm";
+*|    :table =
+*|    ("Rpm_0","Rpm_1","Rpm_2","Rpm_3","Rpm_4","Rpm_5","Rpm_6","Rpm_7","Rpm_8","Rpm_9","Rpm_10","Rpm_11","Rpm_12","Rpm_13","Rpm_14","Rpm_15","Rpm_16","Rpm_17","Rpm_18");
+*|    }
+*/
+
+#define CBT_RPM_W_20            (20)
+/*  CALDS information
+*|t_types.CBT_RPM_W_20{
+*|    :kind = define_annotation;
+*|    :units = "Rpm";
+*|    :table =
+*|    ("Rpm_0","Rpm_1","Rpm_2","Rpm_3","Rpm_4","Rpm_5","Rpm_6","Rpm_7","Rpm_8","Rpm_9","Rpm_10","Rpm_11","Rpm_12","Rpm_13","Rpm_14","Rpm_15","Rpm_16","Rpm_17","Rpm_18","Rpm_19");
+*|    }
+*/
+
+#define CBT_RPM_W_21              (21)
+/*  CALDS information
+*|t_types.CBT_RPM_W_21{
+*|    :kind = define_annotation;
+*|    :units = "Rpm";
+*|    :table =
+*|    ("Rpm0","Rpm1","Rpm2","Rpm3","Rpm4","Rpm5","Rpm6","Rpm7","Rpm8","Rpm9","Rpm10","Rpm11","Rpm12","Rpm13","Rpm14","Rpm15","Rpm16","Rpm17","Rpm18","Rpm19","Rpm20");
+*|    }
+*/
+
+#define CBT_RPM_W_S_19            (19)
+/*  CALDS information
+*|t_types.CBT_RPM_W_S_19{
+*|    :kind = define_annotation;
+*|    :units = "Rpm";
+*|    :table =
+*|    ("Rpm_0","Rpm_1","Rpm_2","Rpm_3","Rpm_4","Rpm_5","Rpm_6","Rpm_7","Rpm_8","Rpm_9","Rpm_10","Rpm_11","Rpm_12","Rpm_13","Rpm_14","Rpm_15","Rpm_16","Rpm_17","Rpm_18");
+*|    }
+*/
+
+#define CBT_Grams_W_11            (11)
+/*  CALDS information
+*|t_types.CBT_Grams_W_11{
+*|    :kind = define_annotation;
+*|    :units = "gr";
+*|    :table =
+*|    ("gr_0","gr_1","gr_2","gr_3","gr_4","gr_5","gr_6","gr_7","gr_8","gr_9","gr_10");
+*|    }
+*/
+
+#define CBT_Newton_Meter_B_8     (8)
+/*  CALDS information
+*|t_types.CBT_Newton_Meter_B_8{
+*|    :kind = define_annotation;
+*|    :units = "Nm";
+*|    :table =
+*|    ("Nm_0", "Nm_1", "Nm_2", "Nm_3", "Nm_4", "Nm_5", "Nm_6", "Nm_7");
+*|    }
+*/
+
+#define CBT_Percent_W_21            (21)
+/*  CALDS information
+*|t_types.CBT_Percent_W_21{
+*|    :kind = define_annotation;
+*|    :units = "%";
+*|    :table =
+*|    ("Pct_0","Pct_1","Pct_2","Pct_3","Pct_4","Pct_5","Pct_6","Pct_7","Pct_8","Pct_9","Pct_10","Pct_11","Pct_12","Pct_13","Pct_14","Pct_15","Pct_16","Pct_17","Pct_18","Pct_19","Pct_20");
+*|    }
+*/
+
+/* end of t_types.h */
+
 /* #include "fl_types.h"  */ /* for AirFuel_Ratio_Type               */
 
 /* #include "v_transm.h"  */ /* for GearStates                       */
@@ -3718,28 +3980,6 @@ typedef
 typedef LONGCARD StatusRegisterType;
 
 /* #include "cfg_app.h"  */ /* for PhysicalCylinder                  */
-
-#if CcSYST_NUM_OF_CYLINDERS == 3
-typedef
-  enum
-    {
-    CylA = 0,
-    CylB = 1,
-    CylC = 2,
-    NUMBER_OF_CYLINDERS,
-    AllCyl
-    } CylinderType;
-
-typedef
-  enum
-    {
-    Cyl1 = 0,
-    Cyl2 = 1,
-    Cyl3 = 2,
-    NUMBEROFCYLINDERS = 3,
-    CylAll = 4
-    } PhysicalCylinder;
-#else
 typedef
   enum
     {
@@ -3761,16 +4001,35 @@ typedef
     NUMBEROFCYLINDERS = 4,
     CylAll = 5
     } PhysicalCylinder;
-#endif
+
 /* #include "veh_cfg.h"  */ /* for CcAC_NbOfAcTypes                  */
+
+#if CLUTCHLESS_AC_ON == CbSUBS_ON
+
+#if CcAC_NbOfAcTypes == 2
+typedef
+  enum
+    {
+    CcAC_Conventionnal,
+    CcAC_Clutchless,
+    CcAC_NoAcProgrammed
+    } TeAC_AcTypesType;
+
+/* CALDEF INFORMATION
+*| veh_cal.TeAC_AcTypesType
+*|   {
+*|   : kind = define_annotation;
+*|   : units = "Type AC";
+*|   : table = ("Conventional", "Clutchless");
+*|   }
+*/
+#else
 typedef
   enum
     {
     CcAC_Conventionnal,
     CcAC_Clutchless
     } TeAC_AcTypesType;
-#define CcAC_NbOfAcTypes 1  /* override CcAC_NbOfAcTypes,    */
-                            /* but keep CcAC_Clutchless enum */
 /*      CALDEF INFORMATION
 *|      veh_cal.TeAC_AcTypesType
 *|      {
@@ -3779,6 +4038,48 @@ typedef
 *|         : table = ("Conventional");
 *|      }
 */
+#endif
+
+typedef
+  enum
+    {
+    CcAC_ClutchlessAC,
+    CcAC_NoClutchlessAcProg
+    } TeAC_ClutchlessAcTypesType;
+
+/* CALDEF INFORMATION
+*| veh_cal.TeAC_ClutchLessAcTypesType
+*|   {
+*|   : kind = define_annotation;
+*|   : units = "Type Clutchless AC";
+*|   : table = ("Clutchless");
+*|   }
+*/
+
+#else /* ! CLUTCHLESS_AC_ON */
+
+typedef
+  enum
+    {
+    CcAC_Conventionnal,
+    CcAC_NoAcProgrammed
+    } TeAC_AcTypesType;
+
+/*      CALDEF INFORMATION
+*|      veh_cal.TeAC_AcTypesType
+*|      {
+*|         : kind = define_annotation;
+*|         : units = "Type AC";
+*|         : table = ("Conventional");
+*|      }
+*/
+typedef
+  enum
+    {
+    CcAC_NoClutchlessAcProg
+    } TeAC_ClutchlessAcTypesType;
+
+#endif /* CLUTCHLESS_AC_ON */
 
 #define NbOfFanSpeed                                                        (4)
 /*      CALDEF INFORMATION
@@ -3792,12 +4093,13 @@ typedef
 
 #define AtMtSelect                                                          (1)
 
-//typedef enum {dtcTorqueSupervisionRationality} DtcNamesType;
+typedef enum {dtcTorqueSupervisionRationality} DtcNamesType;
 
 /*********************************************************************/
 /*  TCB Global (Generic/Application) Data Type Include File          */
 /*********************************************************************/
 /* #include "t_gentypes.h"                                           */
+// #include "idleptyp.h"
 
 /*********************************************************************/
 /*  TCB Data Type parameters for use with TCL Fixed Point Math       */
@@ -3805,7 +4107,7 @@ typedef
 /*********************************************************************/
 
 /*      typedef FIXED_UW_11                                           T_AFR; */
-#define Prec_T_AFR                                         (1.0 / (1 << S_AFR))
+#define Prec_T_AFR                                         (1.0 / (1UL << S_AFR))
 #define Min_T_AFR                                                         (0.0)
 #define Max_T_AFR                                          (65535 * Prec_T_AFR)
 #define RFactor_T_AFR_AirFuel_Ratio_Type                              (10240.0)
@@ -3814,60 +4116,60 @@ typedef
 #define RFactor_T_AFR_AirFuel_Ratio_Plus_Fract_Type                   (10240.0)
 
 /*      typedef FIXED_SW_07                                        T_ANGLEa; */
-#define Prec_T_ANGLEa                                   (1.0 / (1 << S_ANGLEa))
+#define Prec_T_ANGLEa                                   (1.0 / (1UL << S_ANGLEa))
 #define Min_T_ANGLEa                                                      (0.0)
 #define Max_T_ANGLEa                                    (32767 * Prec_T_ANGLEa)
 #define RFactor_SparkAdvance_Deg_B_T_ANGLEa                             (128.0)
 #define RFactor_T_ANGLEa_SparkAdvance_Deg_B                             (128.0)
 
 /*      typedef FIXED_SW_07                                        T_DEG_Ca; */
-#define Prec_T_DEG_Ca                                   (1.0 / (1 << S_DEG_Ca))
+#define Prec_T_DEG_Ca                                   (1.0 / (1UL << S_DEG_Ca))
 #define Min_T_DEG_Ca                                                      (0.0)
 #define Max_T_DEG_Ca                                    (32767 * Prec_T_DEG_Ca)
 #define RFactor_T_DEG_Ca_Degrees_C_W                                    (128.0)
-#define RFactor_T_DEG_Ca_Degrees_C_B                                    (256.0)
-#define RFactor_Degrees_C_B_T_DEG_Ca                                    (256.0)
+#define RFactor_T_DEG_Ca_Degrees_C_B                                    (128.0)
+#define RFactor_Degrees_C_B_T_DEG_Ca                                    (128.0)
 
 /*      typedef FIXED_SW_04                                        T_DEG_Cb; */
-#define Prec_T_DEG_Cb                                   (1.0 / (1 << S_DEG_Cb))
+#define Prec_T_DEG_Cb                                   (1.0 / (1UL << S_DEG_Cb))
 #define Min_T_DEG_Cb                                                      (0.0)
 #define RFactor_T_DEG_Cb_DegreeConvTempFiltType                          (64.0)
 #define RFactor_DegreeConvTempFiltType_T_DEG_Cb                          (64.0)
 
 /*      typedef FIXED_UW_05                                        T_DEG_Kb; */
-#define Prec_T_DEG_Kb                                   (1.0 / (1 << S_DEG_Kb))
+#define Prec_T_DEG_Kb                                   (1.0 / (1UL << S_DEG_Kb))
 #define Min_T_DEG_Kb                                                      (0.0)
 #define Max_T_DEG_Kb                                    (65535 * Prec_T_DEG_Kb)
 #define RFactor_T_DEG_Kb_Degrees_C_W                                    (128.0)
 
-/*      typedef FIXED_UW_15                                 T_GRAMS_CYL_0_1; */
-#define Prec_T_GRAMS_CYL_0_1                     (1.0 / (1 << S_GRAMS_CYL_0_1))
-#define Min_T_GRAMS_CYL_0_1                                               (0.0)
-#define Max_T_GRAMS_CYL_0_1                      (65535 * Prec_T_GRAMS_CYL_0_1)
-#define RFactor_T_GRAMS_CYL_0_1_Grams_W                               (65536.0)
+/*      typedef FIXED_UW_15                                 T_GRAMS_CYL_0_2; */
+#define Prec_T_GRAMS_CYL_0_2                     (1.0 / (1UL << S_GRAMS_CYL_0_2))
+#define Min_T_GRAMS_CYL_0_2                                               (0.0)
+#define Max_T_GRAMS_CYL_0_2                      (65535 * Prec_T_GRAMS_CYL_0_2)
+#define RFactor_T_GRAMS_CYL_0_2_Grams_W                               (65536.0)
 
 /*      typedef FIXED_UW_07                                 T_GRAMS_PER_SEC; */
-#define Prec_T_GRAMS_PER_SEC                     (1.0 / (1 << S_GRAMS_PER_SEC))
+#define Prec_T_GRAMS_PER_SEC                     (1.0 / (1UL << S_GRAMS_PER_SEC))
 #define Min_T_GRAMS_PER_SEC                                               (0.0)
 #define RFactor_T_GRAMS_PER_SEC_Grams_Per_Second_W                    (32768.0)
 #define RFactor_Grams_Per_Second_W_T_GRAMS_PER_SEC                    (32768.0)
 
 /*      typedef FIXED_UW_07                                         T_KPAf; */
-#define Prec_T_KPAf                                       (1.0 / (1 << S_KPAf))
+#define Prec_T_KPAf                                       (1.0 / (1UL << S_KPAf))
 #define Min_T_KPAf                                                       (0.0)
 #define Max_T_KPAf                                        (65535 * Prec_T_KPAf)
 #define RFactor_T_KPAf_kPa_Base                                      (271104.0)
 
 
 /*      typedef FIXED_UW_08                                T_GRAMS_PER_SECb; */
-#define Prec_T_GRAMS_PER_SECb                   (1.0 / (1 << S_GRAMS_PER_SECb))
+#define Prec_T_GRAMS_PER_SECb                   (1.0 / (1UL << S_GRAMS_PER_SECb))
 #define Min_T_GRAMS_PER_SECb                                              (0.0)
 #define Max_T_GRAMS_PER_SECb                    (65535 * Prec_T_GRAMS_PER_SECb)
 #define RFactor_T_GRAMS_PER_SECb_Grams_Per_Second_W                     (256.0)
 #define RFactor_Grams_Per_Second_W_T_GRAMS_PER_SECb                     (256.0)
 
 /*      typedef FIXED_UW_08                                          T_KPAa; */
-#define Prec_T_KPAa                                       (1.0 / (1 << S_KPAa))
+#define Prec_T_KPAa                                       (1.0 / (1UL << S_KPAa))
 #define Min_T_KPAa                                                        (0.0)
 #define Max_T_KPAa                                        (65535 * Prec_T_KPAa)
 #define RFactor_T_KPAa_kPa_Base                                      (271104.0)
@@ -3878,14 +4180,14 @@ typedef
 #define RFactor_kPa_W_T_KPAa                                            (256.0)
 
 /*      typedef FIXED_SW_08                                  T_KPA_N128_128; */
-#define Prec_T_KPA_0_128                             (1.0 / (1 << S_KPA_0_128))
+#define Prec_T_KPA_0_128                             (1.0 / (1UL << S_KPA_0_128))
 #define Min_T_KPA_0_128                                                   (0.0)
 #define Max_T_KPA_0_128                              (65535 * Prec_T_KPA_0_128)
 #define RFactor_T_KPA_0_128_kPa_Boost_LoRes                             (512.0)
 #define RFactor_kPa_Boost_LoRes_T_KPA_0_128                             (512.0)
 
 /*      typedef FIXED_UW_04                                          T_KPAb; */
-#define Prec_T_KPAb                                       (1.0 / (1 << S_KPAb))
+#define Prec_T_KPAb                                       (1.0 / (1UL << S_KPAb))
 #define Min_T_KPAb                                                        (0.0)
 #define Max_T_KPAb                                        (65535 * Prec_T_KPAb)
 #define RFactor_T_KPAb_kPa_IMEP_W                                       (16.0)
@@ -3893,41 +4195,55 @@ typedef
 #define RFactor_T_KPAb_Newton_Meter_W                                   (128.0)
 
 /*      typedef FIXED_SW_03                                          T_KPAd; */
-#define Prec_T_KPAd                                       (1.0 / (1 << S_KPAd))
+#define Prec_T_KPAd                                       (1.0 / (1UL << S_KPAd))
 #define Min_T_KPAd                                                        (0.0)
 #define Max_T_KPAd                                        (32767 * Prec_T_KPAd)
 #define RFactor_T_KPAd_AcPresInKPa_Plus_Fraction                        (128.0)
 
 /*      typedef FIXED_UW_07                                           T_KPH; */
-#define Prec_T_KPH                                         (1.0 / (1 << S_KPH))
+#define Prec_T_KPH                                         (1.0 / (1UL << S_KPH))
 #define Min_T_KPH                                                         (0.0)
 #define Max_T_KPH                                          (65535 * Prec_T_KPH)
 #define RFactor_T_KPH_KPH                                               (128.0)
 #define RFactor_KPH_T_KPH                                               (128.0)
 
 /*      typedef FIXED_UW_06                                   T_MILLIGRAMSb; */
-#define Prec_T_MILLIGRAMSb                         (1.0 / (1 << S_MILLIGRAMSb))
+#define Prec_T_MILLIGRAMSb                         (1.0 / (1UL << S_MILLIGRAMSb))
 #define Min_T_MILLIGRAMSb                                                 (0.0)
 #define Max_T_MILLIGRAMSb                          (65535 * Prec_T_MILLIGRAMSb)
 #define RFactor_T_MILLIGRAMSb_Milligrams_1_64                            (64.0)
 #define RFactor_Milligrams_1_64_T_MILLIGRAMSb                            (64.0)
 
 /*      typedef FIXED_SW_04                                  T_NEWTON_METER; */
-#define Prec_T_NEWTON_METER                       (1.0 / (1 << S_NEWTON_METER))
+#define Prec_T_NEWTON_METER                       (1.0 / (1UL << S_NEWTON_METER))
 #define Min_T_NEWTON_METER                                                (0.0)
 #define Max_T_NEWTON_METER                        (32767 * Prec_T_NEWTON_METER)
 #define RFactor_Newton_Meter_W_T_NEWTON_METER                           (128.0)
 #define RFactor_T_NEWTON_METER_Newton_Meter_W                           (128.0)
 
+/*      typedef FIXED_SW_05                       T_NEWTON_METER_N1024_1024; */
+#define Prec_T_NEWTON_METER_N1024_1024                 (1.0/ (1 << S_NEWTON_METER_N1024_1024))
+#define Min_T_NEWTON_METER_N1024_1024                                     (0.0)
+#define Max_T_NEWTON_METER_N1024_1024                 (32767 * Prec_T_NEWTON_METER_N1024_1024)
+#define RFactor_T_NEWTON_METER_N1024_1024_Newton_Meter_W                 (32.0)
+#define RFactor_Newton_Meter_W_T_NEWTON_METER_N1024_1024                 (32.0)
+
 /*      typedef FIXED_SW_07                                  T_NEWTON_METER_N256_256; */
-#define Prec_T_NEWTON_METER_N256_256                       (1.0 / (1 << S_NEWTON_METER_N256_256))
+#define Prec_T_NEWTON_METER_N256_256                       (1.0 / (1UL << S_NEWTON_METER_N256_256))
 #define Min_T_NEWTON_METER_N256_256                                                (0.0)
 #define Max_T_NEWTON_METER_N256_256                        (32767 * Prec_T_NEWTON_METER_N256_256)
 #define RFactor_Newton_Meter_W_T_NEWTON_METER_N256_256                           (128.0)
 #define RFactor_T_NEWTON_METER_N256_256_Newton_Meter_W                           (128.0)
 
+/*      typedef FIXED_SL_18                                  T_NEWTON_METER_N8192_8192; */
+#define Prec_T_NEWTON_METER_N8192_8192                     (1.0 / (1UL << S_NEWTON_METER_N8192_8192))
+#define Min_T_NEWTON_METER_N8192_8192                                             (0.0)
+#define Max_T_NEWTON_METER_N8192_8192                      (LongMax * Prec_T_NEWTON_METER_N8192_8192)
+#define RFactor_Newton_Meter_W_T_NEWTON_METER_N8192_8192                        (262144L)
+#define RFactor_T_NEWTON_METER_N8192_8192_Newton_Meter_W                        (262144L)
+
 /*      typedef FIXED_UW_15                                      T_PERCENTa; */
-#define Prec_T_PERCENTa                             (100.0 / (1 << S_PERCENTa))
+#define Prec_T_PERCENTa                               (1.0 / (1UL << S_PERCENTa))
 #define Min_T_PERCENTa                                                    (0.0)
 #define Max_T_PERCENTa                                (65535 * Prec_T_PERCENTa)
 #define RFactor_T_PERCENTa_ETC_Percent_Type                           (32768.0)
@@ -3936,14 +4252,31 @@ typedef
 #define RFactor_T_PERCENTa_Percent_W                                  (32768.0)
 #define RFactor_T_PERCENTa_Percent_Plus_Fraction                      (65536.0)
 #define RFactor_Percent_Plus_Fraction_T_PERCENTa                      (65536.0)
+#define RFactor_T_PERCENTa_Multiplier_0_to_1_W                        (65536.0)
+#define RFactor_Multiplier_0_to_1_W_T_PERCENTa                        (65536.0)
+#define RFactor_Multiplier_0_to_2_W_T_PERCENTa                        (32768.0)
+#define RFactor_T_PERCENTa_Multiplier_0_to_2_W                        (32768.0)
+
+/*      typedef FIXED_UW_15                                 T_PERCENT_MULTa; */
+#define Prec_T_PERCENT_MULTa                     (1.0 / (1UL << S_PERCENT_MULTa))
+#define Min_T_PERCENT_MULTa                                               (0.0)
+#define Max_T_PERCENT_MULTa                      (65535 * Prec_T_PERCENT_MULTa)
+#define RFactor_T_PERCENT_MULTa_ETC_Percent_Type                      (32768.0)
+#define RFactor_ETC_Percent_Type_T_PERCENT_MULTa                      (32768.0)
+#define RFactor_Percent_B_T_PERCENT_MULTa                             (32768.0)
+#define RFactor_T_PERCENT_MULTa_Percent_W                             (32768.0)
+#define RFactor_T_PERCENT_MULTa_Percent_Plus_Fraction                 (65536.0)
+#define RFactor_Percent_Plus_Fraction_T_PERCENT_MULTa                 (65536.0)
+#define RFactor_T_PERCENT_MULTa_Multiplier_0_to_1_W                   (65536.0)
+#define RFactor_Multiplier_0_to_1_W_T_PERCENT_MULTa                   (65536.0)
 
 /*      typedef FIXED_UW_16                                      T_PERCENTb; */
-#define Prec_T_PERCENTb                             (100.0 / (1 << S_PERCENTb))
+#define Prec_T_PERCENTb                               (1.0 / (1UL << S_PERCENTb))
 #define Min_T_PERCENTb                                                    (0.0)
 #define Max_T_PERCENTb                                (65535 * Prec_T_PERCENTb)
 
 /*      typedef FIXED_UW_09                                      T_PERCENTh; */
-#define Prec_T_PERCENTh                               (1.0 / (1 << S_PERCENTh))
+#define Prec_T_PERCENTh                               (1.0 / (1UL << S_PERCENTh))
 #define Min_T_PERCENTh                                                    (0.0)
 #define Max_T_PERCENTh                                (65535 * Prec_T_PERCENTh)
 #define RFactor_T_PERCENTh_ETC_Percent_Type                             (512.0)
@@ -3951,29 +4284,56 @@ typedef
 #define RFactor_T_PERCENTh_Percent_B                                    (512.0)
 #define RFactor_Percent_B_T_PERCENTh                                    (512.0)
 
+/*      typedef FIXED_UW_10                            T_JOULE_PER_MILLIGRAM; */
+#define Prec_T_JOULE_PER_MILLIGRAM          (1.0 / (1UL << S_JOULE_PER_MILLIGRAM))
+#define Min_T_JOULE_PER_MILLIGRAM                                          (0.0)
+#define Max_T_JOULE_PER_MILLIGRAM           (65535 * Prec_T_JOULE_PER_MILLIGRAM)
+#define RFactor_T_JOULE_PER_MILLIGRAM_JoulePerMg_B                      (1024.0)
+#define RFactor_JoulePerMg_B_T_JOULE_PER_MILLIGRAM                      (1024.0)
+
 /*      typedef FIXED_UW_16                                     T_RATIO_0_1; */
-#define Prec_T_RATIO_0_1                             (1.0 / (1 << S_RATIO_0_1))
+#define Prec_T_RATIO_0_1                             (1.0 / (1UL << S_RATIO_0_1))
 #define Min_T_RATIO_0_1                                                   (0.0)
 #define Max_T_RATIO_0_1                              (65535 * Prec_T_RATIO_0_1)
 #define RFactor_T_RATIO_0_1_Multiplier_0_to_1_W                       (65536.0)
 #define RFactor_Multiplier_0_to_1_W_T_RATIO_0_1                       (65536.0)
 
+/*      typedef FIXED_UW_16                                        T_FILTER; */
+#define Prec_T_FILTER                                  (1.0 / (1UL << S_FILTER))
+#define Min_T_FILTER                                                     (0.0)
+#define Max_T_FILTER                                (65535 * Prec_T_RATIO_0_1)
+#define RFactor_T_FILTER_Filter_Coefficient                          (65536.0)
+#define RFactor_Filter_Coefficient_T_FILTER                          (65536.0)
+
 /*      typedef FIXED_UW_15                                     T_RATIO_0_2; */
-#define Prec_T_RATIO_0_2                             (1.0 / (1 << S_RATIO_0_2))
+#define Prec_T_RATIO_0_2                             (1.0 / (1UL << S_RATIO_0_2))
 #define Min_T_RATIO_0_2                                                   (0.0)
 #define Max_T_RATIO_0_2                              (65535 * Prec_T_RATIO_0_2)
 #define RFactor_T_RATIO_0_2_Multiplier_0_to_2_W                       (32768.0)
 #define RFactor_Multiplier_0_to_2_W_T_RATIO_0_2                       (32768.0)
+#define RFactor_T_RATIO_0_2_Lambda_0to8_W                             (32768.0)
+#define RFactor_Lambda_0to8_W_T_RATIO_0_2                             (32768.0)
+#define RFactor_T_RATIO_0_2_Multiplier_0_to_1p275_B                  (819200.0)
+#define RFactor_Multiplier_0_to_1p275_B_T_RATIO_0_2                  (819200.0)
 
 /*      typedef FIXED_UW_13                                     T_RATIO_0_8; */
-#define Prec_T_RATIO_0_8                             (1.0 / (1 << S_RATIO_0_8))
+#define Prec_T_RATIO_0_8                             (1.0 / (1UL << S_RATIO_0_8))
 #define Min_T_RATIO_0_8                                                   (0.0)
 #define Max_T_RATIO_0_8                              (65535 * Prec_T_RATIO_0_8)
 #define RFactor_T_RATIO_0_8_Multiplier_0_to_4_W                       (16384.0)
 #define RFactor_Multiplier_0_to_4_W_T_RATIO_0_8                       (16384.0)
+#define RFactor_T_RATIO_0_8_Multiplier_0_to_8_W                       (8192.0)
+#define RFactor_Multiplier_0_to_8_W_T_RATIO_0_8                       (8192.0)
+
+/*      typedef FIXED_UW_12                                    T_RATIO_0_16; */
+#define Prec_T_RATIO_0_16                           (1.0 / (1UL << S_RATIO_0_16))
+#define Min_T_RATIO_0_16                                                  (0.0)
+#define Max_T_RATIO_0_16                            (65535 * Prec_T_RATIO_0_16)
+#define RFactor_T_RATIO_0_16_Multiplier_0_to_16_W                      (4096.0)
+#define RFactor_Multiplier_0_to_16_W_T_RATIO_0_16                      (4096.0)
 
 /*      typedef FIXED_UW_03                                          T_RPMa; */
-#define Prec_T_RPMa                                       (1.0 / (1 << S_RPMa))
+#define Prec_T_RPMa                                       (1.0 / (1UL << S_RPMa))
 #define Min_T_RPMa                                                        (0.0)
 #define Max_T_RPMa                                        (65535 * Prec_T_RPMa)
 #define RFactor_T_RPMa_RPM_W                                            (128.0)
@@ -3981,21 +4341,30 @@ typedef
 #define RFactor_T_RPMa_RPM_Med_Res_B                                      (8.0)
 #define RFactor_T_RPMa_RPM_Hi_Res_W                                       (8.0)
 
+/*      typedef FIXED_SW_03                                     T_RPM_DIFFa; */
+#define Prec_T_RPM_DIFFa                                 (1.0 / (1UL << S_RPM_DIFFa))
+#define Min_T_RPM_DIFFa                                                   (0.0)
+#define Max_T_RPM_DIFFa                                  (32767 * Prec_T_RPM_DIFFa)
+#define RFactor_T_RPM_DIFFa_RPM_W_S                                     (128.0)
+
 /*      typedef FIXED_UW_11                                         T_VOLTb; */
-#define Prec_T_VOLTb                                     (1.0 / (1 << S_VOLTb))
+#define Prec_T_VOLTb                                     (1.0 / (1UL << S_VOLTb))
 #define Min_T_VOLTb                                                       (0.0)
 #define Max_T_VOLTb                                      (65535 * Prec_T_VOLTb)
 #define RFactor_T_VOLTb_Volts_B                                        (2048.0)
 
-
 /*      typedef FIXED_SW_06                                  T_KPA_N512_512; */
-#define Prec_T_KPA_N512_512                       (1.0 / (1 << S_KPA_N512_512))
+#define Prec_T_KPA_N512_512                       (1.0 / (1UL << S_KPA_N512_512))
 #define Min_T_KPA_N512_512                                                (0.0)
 #define Max_T_KPA_N512_512                        (32767 * Prec_T_KPA_N512_512)
 #define RFactor_Newton_Meter_W_T_KPA_N512_512                           (128.0)
 #define RFactor_T_KPA_N512_512_Newton_Meter_W                           (128.0)
 
-#define RFactor_Fixed_Shortcard_Percent_B          (256)
+/*      typedef FIXED_UW_02                                  T_RATIO_0_16384; */
+#define Prec_T_RATIO_0_16384                                 (16384.0 / 65536.0)
+#define Min_T_RATIO_0_16384                                                (0.0)
+#define Max_T_RATIO_0_16384                                           (16383.75)
+
 /*----------------------------------*/
 /*---                            ---*/
 /*---      General macros        ---*/
@@ -4079,6 +4448,7 @@ typedef
 /* !!! This MUST be at the end of types.h as long as the include  */
 /* !!! of fix_math.h has not yet been added after types.h  in     */
 /* !!! the include list of all the application files.             */
+#include "lux_math.h"   /* for compatibility with t3000 files */
 
 #endif
 
@@ -4125,9 +4495,103 @@ typedef
 * 8.0   060522 PVD 5639 Added RFactor_Newton_Meter_W_T_KPA_N512_512
 *                             RFactor_T_KPA_N512_512_Newton_Meter_W
 *                             GramsPerCyl_GPCLoad_Steps
+* 7.1.1 060602 gps CIII Added CTORQ3 updates.
+* 9     060828 cjk -BM- Merged 'lux_type.h-8' with 'lux_type.h-7.1.1'
 * 8.1.1 060908 PVD 5834 Added RFactor_T_KPAb_Newton_Meter_W
-* 8.1.2 061027 PVD 5747 Added RFactors for T_KPA_0_128 to kPa_Boost_LoRes 
-*			conversion and vice versa.
-* ctc_mt22 revision log
-* 1.0   061219 Shoujun xxx Changed Prec/Min/Max defintion of type SHORTCARD
+* 8.1.2 061027 PVD 5747 Added RFactors for T_KPA_0_128 to kPa_Boost_LoRes
+*           conversion and vice versa.
+* 10    060901 cjk 5692 Design and Implement TORQ3 Spark Related Changes
+*                       - Added RFactor_T_PERCENTa_Multiplier_0_to_1_W and
+*                               RFactor_Multiplier_0_to_1_W_T_PERCENTa
+*                               (LCD for 1/32768 and 1/65536 is 65536)
+* 11    060921 cjk 5834 Incorporate TORQ3 Functionality
+*                       - Added RFactor_T_NEWTON_METER_N1024_1024_Newton_Meter_W
+*                               (LCD for 8/256 and 1/32 is 32)
+*                       - Added RFactor_T_RPM_DIFFa_RPM_W_S
+*                               (LCD for 1/8 and 50.0 / 256 is 128)
+*                       - Add CALDEF for the following:
+*                         > Multiplier_0_to_0p25_W
+*                         > Multiplier_0_to_32
+*                         > AcPresInKPa_Plus_Fraction
+*                       - Add RFactor_T_RATIO_0_2_Lambda_0to8_W and
+*                             RFactor_Lambda_0to8_W_T_RATIO_0_2
+*                               (LCD for 1/32768 and 1/8192 is 32768)
+* 12    061121 cjk CIII Correct precision for T_PERCENTa and T_PERCENTb
+* 13    061201 cjk CIII Update types.RPM_W_S per Mexico
+* 14    061204 cjk -BM- Merged 'lux_type.h-tci_pt3#8.1.2' with 'lux_type.h-13'
+* 15    061213 cjk CIII Update RFactor_T_DEG_Ca_Degrees_C_B and
+*                              RFactor_Degrees_C_B_T_DEG_Ca to be 128
+*                             (LCD of 1/128 and 192/256 is 128)
+*                       Correct caldef for Multiplier_0_to_0p25_W
+* 16    070122 cjk CIII Move following configurations to torqfcfg.h
+*                       - CcAC_NbOfAcTypes
+*                       - CcAC_NbOfClutchLessAcTypes
+* 16.1.1
+*       070130 cjk 6135 Add T_PERCENT_MULTa and associated RFactors
+* tci_pt3#8.2
+*       070206 rmn 5878 Added RFactors for T_NEWTON_METER_N8192_8192
+* tci_pt3#16.2
+*       070213 rmn xxxx Merged 'lux_type.h-tci_pt3#8.2' with 'lux_type.h-16.1.1'.
+* 16.2.1.1
+*       071004 gps 5196 EXAC: Modifications for Cylinder De-Activation.
+* tcp_pwt2#
+*       070524 epm 5912 Added T_JOULE_PER_MILLIGRAM
+*                             T_FILTER
+*                             RFactor_T_JOULE_PER_MILLIGRAM_JoulePerMg_B
+*                             RFactor_JoulePerMg_B_T_JOULE_PER_MILLIGRAM
+*                             RFactor_T_FILTER_Filter_Coefficient
+*                             RFactor_Filter_Coefficient_T_FILTER
+*                             RFactor_T_RATIO_0_2_Multiplier_0_to_1p275_B
+*                             RFactor_Multiplier_0_to_1p275_B_T_RATIO_0_2
+*
+* 16.3  070524 cjk 6247 Add RFactor_T_RATIO_0_16_Multiplier_0_to_16_W and
+*                           RFactor_Multiplier_0_to_16_W_T_RATIO_0_16
+*                           (LCD for 1/4096 and 1/4096 is 4096)
+* tci_pt3#16.3
+*       070510 raj  5903 Renamed Prec_T_GRAMS_CYL_0_1 to Prec_T_GRAMS_CYL_0_2,
+*                                Min_T_GRAMS_CYL_0_1 to Min_T_GRAMS_CYL_0_2,
+*                                Max_T_GRAMS_CYL_0_1 to Max_T_GRAMS_CYL_0_2,
+*                            and RFactor_T_GRAMS_CYL_0_1_Grams_W  to
+*                                RFactor_T_GRAMS_CYL_0_2_Grams_W
+* 16.4  070607 cjk -BM- Merged 'lux_type.h-tci_pt3#16.3' with 'lux_type.h-16.3'
+* 16.4.1.1
+*       071023 cjk 6363 Torque 3 improvements
+*                       - Add RFactor_T_RATIO_0_8_Multiplier_0_to_8_W and
+*                           RFactor_Multiplier_0_to_8_W_T_RATIO_0_8
+*                           (LCD for 1/8192 and 1/8192 is 8192)
+* 16.3.1.2
+*       071206 cjk -BM- Merged 'lux_type.h~16.4.1.1' with 'lux_type.h~16.3.1.1'
+* 16.3.1.3
+*       071212 cjk -BM- Correct range for types.Multiplier_0_to_32
+* 16.3.1.4
+*       080121 grb 5970 Flare Mode	Added
+*                        RFactor_Multiplier_0_to_2_W_T_PERCENTa
+*                        RFactor_T_PERCENTa_Multiplier_0_to_2_W
+* tci_pt3#16.3.1.5
+*       080320 MBA 6889 Added Degrees_C_m40to120By20_Steps
+* 16.3.2
+*       080128 ejb 6760 Added new Axis Enumerations for Temperature Types
+*                       Deg_C_m40to152by12_Steps
+* 16.7  08xxxx xxx -BM- Merged 'lux_type.h~16.3.1.4' with 'lux_type.h~16.3.2'
+* 16.7.1.1
+*       080812 cjk -BM- Merged 'lux_type.h~tci_pt3#16.3.1.5' with
+*                              'lux_type.h~16.7'
+* 16.8  080512 gps 5196 Merged 'lux_type.h~16.7' with 'lux_type.h~16.2.1.1'.
+* 16.9  081020 gps -BM- Merged 'lux_type.h~16.8' with 'lux_type.h~16.7.1.1'.
+* 16.9.1.1
+*       080903  JP 6597 Added RPM_0to6400by1600_Steps caldef
+* kok_pt2#16.9.1.1.1.1
+*       090728 grb 7825 Added RFactor_Newton_Meter_W_T_NEWTON_METER_N1024_1024
+* kok_pt2#16.9.1.2
+*       090814 gps 6730 Changes associated with 3.9 to 2.5 ms base loop transition.
+*                       Modified Every_Loop_Sec_Prec.
+* kok_pt2#16.9.1.3
+*       090930 gps 6730 Changes associated with 3.9 to 2.5 ms base loop transition.
+*                       Modified RegularRtiPrescaler.
+* kok_pt2#16.9.1.4
+*       091118 gps -BM- Merged 'lux_type.h~kok_pt2#16.9.1.3'
+*                        with 'lux_type.h~kok_pt2#16.9.1.1.1.1'.
+* kok_pt2#16.9.1.4.1.1
+*       110720 as  9635 Made changes to build using 16-bit COSMIC tool set
+*
 ******************************************************************************/
