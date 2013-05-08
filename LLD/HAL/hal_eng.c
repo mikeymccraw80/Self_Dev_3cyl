@@ -231,10 +231,8 @@ void UpdateVIOS_CntrlShutdownLogic (void)
 		VaVIOS_t_PowerdownDelayTimer = 0;
 	}
 
-	if ((VbVIOS_PowerdownDelayTimeExpired)
-	&& (GetVIOS_IAC_ShutdownComplete())
-	&& (GetDGDM_ShutdownComplete())
-	&& (GetEMS_ShutdownComplete()))
+	if ((VbVIOS_PowerdownDelayTimeExpired))
+	// && (GetEMS_ShutdownComplete()))
 	{
 		VbVIOS_ShutdownComplete = CbTRUE;
 	}
