@@ -35,13 +35,12 @@ Include Files
 /******************************************************************************
  *  Global Data Type Include Files
  *****************************************************************************/
-#include "t_gentypes.h" /* For Global Data Type Information */
 
 /******************************************************************************
  *  Diagnostic Execution ID Definitions (used by DDMS)
  *****************************************************************************/
-FAR_COS void MngINJD_125msTasks(void);
-//FAR_COS void InitINJD_RstToKeyOff(void);
+void MngINJD_125msTasks(void);
+//void InitINJD_RstToKeyOff(void);
 
 
 /*****************************************************************************

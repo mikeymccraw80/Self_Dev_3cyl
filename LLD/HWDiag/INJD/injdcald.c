@@ -61,7 +61,7 @@ before a failure is registered. Range: C_R125ms8(0) to C_R125ms8(255) ";
 *|   }
 *| }
 */
-const TyTIME_t_R125ms CAL0ADDR KfINJD_t_InjCircuitFailThrsh = C_R125ms8(3);
+const TyTIME_t_R125ms KfINJD_t_InjCircuitFailThrsh = C_R125ms8(3);
 
 /*****************************************************************************
 *

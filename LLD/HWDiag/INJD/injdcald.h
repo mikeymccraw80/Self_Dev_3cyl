@@ -32,13 +32,14 @@
 /****************************************************************************** 
 *  Include Files 
 *****************************************************************************/ 
-#include "injdfexi.h"   /* For global resources definitions   */
+#include "t_gentypes.h"
+#include "timepcvc.h"
 
 /******************************************************************************
 *  Calibration Variables
 ******************************************************************************/
 extern const T_RPMa           KfINJD_n_EngSpdThrshLo;
-extern const TyTIME_t_R125ms CAL0ADDR KfINJD_t_InjCircuitFailThrsh;
+extern const TyTIME_t_R125ms  KfINJD_t_InjCircuitFailThrsh;
 
 #endif 
 

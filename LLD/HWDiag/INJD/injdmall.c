@@ -22,49 +22,52 @@
 /******************************************************************************
 *  Include Files 
 *****************************************************************************/ 
-#include "injdfexi.h"   /* For global resources definitions   */
+
 #include "injdcald.h"   /* For Definition-Declaration check   */
 #include "injdpapi.h"   /* For Definition-Declaration check   */
-
+#include "mall_lib.h"
+#include "timclib.h"
+#include "intr_ems.h"
+#include "v_power.h"
 
 /***************************************************************************** 
 *  Type declaration
 ******************************************************************************/
-typedef enum
-{
-  CeINJD_InjCircuit1_FaultTimer,
-  CeINJD_InjCircuit2_FaultTimer,
-  CeINJD_InjCircuit3_FaultTimer,
-  CeINJD_InjCircuit4_FaultTimer,
-  CeINJD_125msNmbrOfTimers
+typedef enum {
+	CeINJD_InjCircuit1_FaultTimer,
+	CeINJD_InjCircuit2_FaultTimer,
+	CeINJD_InjCircuit3_FaultTimer,
+	CeINJD_InjCircuit4_FaultTimer,
+	CeINJD_125msNmbrOfTimers
 };
 
+#define CcSYST_NUM_OF_INJECTORS 4
+#define CcSYST_NUM_OF_CYLINDERS 4
 
 /*****************************************************************************
  *  Global Data Define
  *****************************************************************************/
 /* The 125 ms timer calls would be made from the operating system */
 DefTIMC_StopWatches8(VaINJD_t_125TimerArray, 
-                     VaINJD_125TimerEnbl,
-                     R125ms, 
-                     CeINJD_125msNmbrOfTimers);
+					VaINJD_125TimerEnbl,
+					R125ms, 
+					CeINJD_125msNmbrOfTimers);
 
-TbBOOLEAN  VaINJD_FailCriteriaMet[CcSYST_NUM_OF_INJECTORS];
-TbBOOLEAN  VbINJD_CircuitsHW_ResetReq;
-TbBOOLEAN  VbINJD_InjectorsAllFaulted;
-
+TbBOOLEAN     VaINJD_FailCriteriaMet[CcSYST_NUM_OF_INJECTORS];
+TbBOOLEAN     VbINJD_CircuitsHW_ResetReq;
+TbBOOLEAN     VbINJD_InjectorsAllFaulted;
 
 /*****************************************************************************/
 
 /******************************************************************************
 *  Static Data Define
 ******************************************************************************/
- TbBOOLEAN     SbINJD_InjCktEnblCriteriaMet;
- TbBOOLEAN     SaINJD_CktTestComplete[CcSYST_NUM_OF_INJECTORS];
- TbBOOLEAN     SaINJD_CktTestComplete_Internal[CcSYST_NUM_OF_INJECTORS];
- #pragma section [nvram] 
- TbBOOLEAN     SaINJD_CktTestFailed[CcSYST_NUM_OF_INJECTORS];
- #pragma section [] 
+TbBOOLEAN     SbINJD_InjCktEnblCriteriaMet;
+TbBOOLEAN     SaINJD_CktTestComplete[CcSYST_NUM_OF_INJECTORS];
+TbBOOLEAN     SaINJD_CktTestComplete_Internal[CcSYST_NUM_OF_INJECTORS];
+// #pragma section [nvram] 
+TbBOOLEAN     SaINJD_CktTestFailed[CcSYST_NUM_OF_INJECTORS];
+// #pragma section [] 
 /*****************************************************************************/
 
 /******************************************************************************
@@ -124,25 +127,25 @@ FAR_COS void InitINJD_RstToKeyOff(void)
  *****************************************************************************/
 void MngINJD_125msTasks(void)
 {
-  BYTE LcINJD_InjectorCount;
-  UpdateTIMC_StopWatchesUp8(VaINJD_t_125TimerArray,
-                            VaINJD_125TimerEnbl,
-                            CeINJD_125msNmbrOfTimers);
+	BYTE LcINJD_InjectorCount;
+	UpdateTIMC_StopWatchesUp8(VaINJD_t_125TimerArray,
+							VaINJD_125TimerEnbl,
+							CeINJD_125msNmbrOfTimers);
 
-  EvalINJD_EnblCriteria ();
-  /* Execute Injector Circuits Fail Pass Evaluation */
-  CheckINJD_CircuitStatus ();
-  UpdateINJD_CircuitsTimer ();
-  PerfmINJD_CircuitsTimerEval ();
-  DtrmnINJD_IfAllCircuitsAreFltd ();
-  
-  for (LcINJD_InjectorCount = 0;
-       LcINJD_InjectorCount < CcSYST_NUM_OF_CYLINDERS;
-       LcINJD_InjectorCount++)
-  {
-      SaINJD_CktTestComplete[LcINJD_InjectorCount] |=
-	  	SaINJD_CktTestComplete_Internal[LcINJD_InjectorCount] ;
-  }
+	EvalINJD_EnblCriteria ();
+	/* Execute Injector Circuits Fail Pass Evaluation */
+	CheckINJD_CircuitStatus ();
+	UpdateINJD_CircuitsTimer ();
+	PerfmINJD_CircuitsTimerEval ();
+	DtrmnINJD_IfAllCircuitsAreFltd ();
+
+	for (LcINJD_InjectorCount = 0;
+	   LcINJD_InjectorCount < CcSYST_NUM_OF_CYLINDERS;
+	   LcINJD_InjectorCount++)
+	{
+	  SaINJD_CktTestComplete[LcINJD_InjectorCount] |=
+		SaINJD_CktTestComplete_Internal[LcINJD_InjectorCount] ;
+	}
 }
 
 /*****************************************************************************
@@ -157,16 +160,15 @@ void MngINJD_125msTasks(void)
  *****************************************************************************/
 static void EvalINJD_EnblCriteria(void)
 {
-  if ( (GetAPI_InjHW_EnblCondMet() != CbFALSE)
-       && (GetVIOS_IgnSt() == CeIGN_ON )
-       && (GetVIOS_n_EngSpd() >= KfINJD_n_EngSpdThrshLo) )
-  {
-    SbINJD_InjCktEnblCriteriaMet = CbTRUE;
-  }
-  else
-  {
-    SbINJD_InjCktEnblCriteriaMet = CbFALSE;
-  }
+	if ( (GetVIOS_IgnSt() == CeIGN_ON )
+	   && (GetVIOS_n_EngSpd() >= KfINJD_n_EngSpdThrshLo) )
+	{
+		SbINJD_InjCktEnblCriteriaMet = CbTRUE;
+	}
+	else
+	{
+		SbINJD_InjCktEnblCriteriaMet = CbFALSE;
+	}
 }
 
 /*****************************************************************************
@@ -182,24 +184,24 @@ static void EvalINJD_EnblCriteria(void)
  *****************************************************************************/
 static void CheckINJD_CircuitStatus (void)
 {
-  BYTE LcINJD_InjectorCount;
-  TbBOOLEAN LbINJD_HW_ResetRequest = CbFALSE;
-  
-  for (LcINJD_InjectorCount = 0;
-       LcINJD_InjectorCount < CcSYST_NUM_OF_CYLINDERS;
-       LcINJD_InjectorCount++)
-  {
-    if (GetAPI_InjCktState(LcINJD_InjectorCount) == CeINJ_FAILED)
-    {
-      VaINJD_FailCriteriaMet[LcINJD_InjectorCount] = CbTRUE;
-      LbINJD_HW_ResetRequest = CbTRUE;
-    }
-    else
-    {
-      VaINJD_FailCriteriaMet[LcINJD_InjectorCount] = CbFALSE;
-    }
-  }  /* END FOR LOOP */
-  VbINJD_CircuitsHW_ResetReq = LbINJD_HW_ResetRequest;
+	BYTE LcINJD_InjectorCount;
+	TbBOOLEAN LbINJD_HW_ResetRequest = CbFALSE;
+
+	for (LcINJD_InjectorCount = 0;
+	   LcINJD_InjectorCount < CcSYST_NUM_OF_CYLINDERS;
+	   LcINJD_InjectorCount++)
+	{
+		if (GetAPI_InjCktState(LcINJD_InjectorCount) == CeINJ_FAILED)
+		{
+			VaINJD_FailCriteriaMet[LcINJD_InjectorCount] = CbTRUE;
+			LbINJD_HW_ResetRequest = CbTRUE;
+		}
+		else
+		{
+			VaINJD_FailCriteriaMet[LcINJD_InjectorCount] = CbFALSE;
+		}
+	}  /* END FOR LOOP */
+	VbINJD_CircuitsHW_ResetReq = LbINJD_HW_ResetRequest;
 }
 
 /*****************************************************************************
@@ -219,40 +221,40 @@ static void CheckINJD_CircuitStatus (void)
  *****************************************************************************/
 static void UpdateINJD_CircuitsTimer (void)
 {
-  BYTE LcINJD_InjectorCount;
+	BYTE LcINJD_InjectorCount;
 
-  if (SbINJD_InjCktEnblCriteriaMet != CbFALSE)
-  {
-    for (LcINJD_InjectorCount = 0;
-         LcINJD_InjectorCount < CcSYST_NUM_OF_CYLINDERS;
-         LcINJD_InjectorCount++)
-    {
-      if (VaINJD_FailCriteriaMet[LcINJD_InjectorCount] == CbFALSE)
-      {
-        HaltTIMC_StopWatch(VaINJD_125TimerEnbl, LcINJD_InjectorCount);
-        SetTIMC_StopWatch8(VaINJD_t_125TimerArray, LcINJD_InjectorCount, 0);
-      }  /* END Fail Criteria Met = False LOOP */
-      else  /* if Fail Criteria Met = TRUE */
-      {
-        if (SaINJD_CktTestComplete_Internal[LcINJD_InjectorCount] != CbFALSE)
-        {
-          HaltTIMC_StopWatch(VaINJD_125TimerEnbl, LcINJD_InjectorCount);
-          SetTIMC_StopWatch8(VaINJD_t_125TimerArray, LcINJD_InjectorCount, 0);
-        }
-        ResumeTIMC_StopWatch(VaINJD_125TimerEnbl, LcINJD_InjectorCount);
-      }  /* END Fail Criteria Met = True LOOP */
-    }    /* END FOR LOOP */
-  }      /* END Enable Criteria Met = True LOOP */
-  else
-  {
-    for (LcINJD_InjectorCount = 0;
-         LcINJD_InjectorCount < CcSYST_NUM_OF_CYLINDERS;
-         LcINJD_InjectorCount++)
-    {
-      HaltTIMC_StopWatch(VaINJD_125TimerEnbl, LcINJD_InjectorCount);
-      SetTIMC_StopWatch8(VaINJD_t_125TimerArray, LcINJD_InjectorCount, 0);
-    }
-  }    /* END Enable Criteria Met = False LOOP */
+	if (SbINJD_InjCktEnblCriteriaMet != CbFALSE)
+	{
+		for (LcINJD_InjectorCount = 0;
+		LcINJD_InjectorCount < CcSYST_NUM_OF_CYLINDERS;
+		LcINJD_InjectorCount++)
+		{
+			if (VaINJD_FailCriteriaMet[LcINJD_InjectorCount] == CbFALSE)
+			{
+				HaltTIMC_StopWatch(VaINJD_125TimerEnbl, LcINJD_InjectorCount);
+				SetTIMC_StopWatch8(VaINJD_t_125TimerArray, LcINJD_InjectorCount, 0);
+			}  /* END Fail Criteria Met = False LOOP */
+			else  /* if Fail Criteria Met = TRUE */
+			{
+				if (SaINJD_CktTestComplete_Internal[LcINJD_InjectorCount] != CbFALSE)
+				{
+					HaltTIMC_StopWatch(VaINJD_125TimerEnbl, LcINJD_InjectorCount);
+					SetTIMC_StopWatch8(VaINJD_t_125TimerArray, LcINJD_InjectorCount, 0);
+				}
+				ResumeTIMC_StopWatch(VaINJD_125TimerEnbl, LcINJD_InjectorCount);
+			}  /* END Fail Criteria Met = True LOOP */
+		}    /* END FOR LOOP */
+	}      /* END Enable Criteria Met = True LOOP */
+	else
+	{
+		for (LcINJD_InjectorCount = 0;
+		LcINJD_InjectorCount < CcSYST_NUM_OF_CYLINDERS;
+		LcINJD_InjectorCount++)
+		{
+			HaltTIMC_StopWatch(VaINJD_125TimerEnbl, LcINJD_InjectorCount);
+			SetTIMC_StopWatch8(VaINJD_t_125TimerArray, LcINJD_InjectorCount, 0);
+		}
+	}    /* END Enable Criteria Met = False LOOP */
 }
 
 /*****************************************************************************
@@ -271,29 +273,29 @@ static void UpdateINJD_CircuitsTimer (void)
  *****************************************************************************/
 static void PerfmINJD_CircuitsTimerEval (void)
 {
-  BYTE LcINJD_InjectorCount;
+	BYTE LcINJD_InjectorCount;
 
-  if (SbINJD_InjCktEnblCriteriaMet != CbFALSE)
-  {
-    for (LcINJD_InjectorCount = 0;
-         LcINJD_InjectorCount < CcSYST_NUM_OF_CYLINDERS;
-         LcINJD_InjectorCount++)
-    {
-      SaINJD_CktTestComplete_Internal[LcINJD_InjectorCount] = CbFALSE;
+	if (SbINJD_InjCktEnblCriteriaMet != CbFALSE)
+	{
+		for (LcINJD_InjectorCount = 0;
+		LcINJD_InjectorCount < CcSYST_NUM_OF_CYLINDERS;
+		LcINJD_InjectorCount++)
+		{
+			SaINJD_CktTestComplete_Internal[LcINJD_InjectorCount] = CbFALSE;
 
-      if (GetTIMC_t_StopWatch8(VaINJD_t_125TimerArray, LcINJD_InjectorCount)
-                                     > KfINJD_t_InjCircuitFailThrsh)
-      {
-        SaINJD_CktTestFailed[LcINJD_InjectorCount] = CbTRUE;
-        SaINJD_CktTestComplete_Internal[LcINJD_InjectorCount] = CbTRUE;
-      }
-      else if (VaINJD_FailCriteriaMet[LcINJD_InjectorCount] == CbFALSE)
-      {
-        SaINJD_CktTestFailed[LcINJD_InjectorCount] = CbFALSE;
-        SaINJD_CktTestComplete_Internal[LcINJD_InjectorCount] = CbTRUE;
-      }
-    }  /* END FOR LOOP */
-  }    /* END IF Enable Criteria Met = True LOOP */
+			if (GetTIMC_t_StopWatch8(VaINJD_t_125TimerArray, LcINJD_InjectorCount)
+								 > KfINJD_t_InjCircuitFailThrsh)
+			{
+				SaINJD_CktTestFailed[LcINJD_InjectorCount] = CbTRUE;
+				SaINJD_CktTestComplete_Internal[LcINJD_InjectorCount] = CbTRUE;
+			}
+			else if (VaINJD_FailCriteriaMet[LcINJD_InjectorCount] == CbFALSE)
+			{
+				SaINJD_CktTestFailed[LcINJD_InjectorCount] = CbFALSE;
+				SaINJD_CktTestComplete_Internal[LcINJD_InjectorCount] = CbTRUE;
+			}
+		}  /* END FOR LOOP */
+	}    /* END IF Enable Criteria Met = True LOOP */
 }
 
 /*****************************************************************************
@@ -312,20 +314,20 @@ static void PerfmINJD_CircuitsTimerEval (void)
  *****************************************************************************/
 static void DtrmnINJD_IfAllCircuitsAreFltd (void)
 {
-  BYTE LcINJD_InjectorCount;
-  TbBOOLEAN LbINJD_InjectorsAllFaulted = CbTRUE;
+	BYTE LcINJD_InjectorCount;
+	TbBOOLEAN LbINJD_InjectorsAllFaulted = CbTRUE;
 
-  for (LcINJD_InjectorCount = 0;
-       LcINJD_InjectorCount < CcSYST_NUM_OF_CYLINDERS;
-       LcINJD_InjectorCount++)
-  {
-    if (VaINJD_FailCriteriaMet[LcINJD_InjectorCount] == CbFALSE)
-    {
-      LbINJD_InjectorsAllFaulted = CbFALSE;
-      break;
-    }
-  }
-  VbINJD_InjectorsAllFaulted = LbINJD_InjectorsAllFaulted;
+	for (LcINJD_InjectorCount = 0;
+		LcINJD_InjectorCount < CcSYST_NUM_OF_CYLINDERS;
+		LcINJD_InjectorCount++)
+	{
+		if (VaINJD_FailCriteriaMet[LcINJD_InjectorCount] == CbFALSE)
+		{
+			LbINJD_InjectorsAllFaulted = CbFALSE;
+			break;
+		}
+	}
+	VbINJD_InjectorsAllFaulted = LbINJD_InjectorsAllFaulted;
 }
 
 

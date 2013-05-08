@@ -943,34 +943,29 @@ extern int16_t           EOBD_CoolTemp;
 // /******************************************************************************
  // * To test injectors A,B,C,D 
  // ******************************************************************************/
-// #define InjectorAFault()            (GetAnyFault(PULSE_OUT_INJ_CYL_A))
-// #define InjectorAShortHi()          (GetShortFault(PULSE_OUT_INJ_CYL_A))
-// #define InjectorAShortLo()          (GetOpenFault(PULSE_OUT_INJ_CYL_A))
+#define InjectorAFault()            (GetAnyFault(PULSE_OUT_INJ_CYL_A))
+#define InjectorAShortHi()          (GetShortFault(PULSE_OUT_INJ_CYL_A))
+#define InjectorAShortLo()          (GetOpenFault(PULSE_OUT_INJ_CYL_A))
 
-// #define InjectorBFault()            (GetAnyFault(PULSE_OUT_INJ_CYL_B))
-// #define InjectorBShortHi()          (GetShortFault(PULSE_OUT_INJ_CYL_B))
-// #define InjectorBShortLo()          (GetOpenFault(PULSE_OUT_INJ_CYL_B))
+#define InjectorBFault()            (GetAnyFault(PULSE_OUT_INJ_CYL_B))
+#define InjectorBShortHi()          (GetShortFault(PULSE_OUT_INJ_CYL_B))
+#define InjectorBShortLo()          (GetOpenFault(PULSE_OUT_INJ_CYL_B))
 
-// #define InjectorCFault()            (GetAnyFault(PULSE_OUT_INJ_CYL_C))
-// #define InjectorCShortHi()          (GetShortFault(PULSE_OUT_INJ_CYL_C))
-// #define InjectorCShortLo()          (GetOpenFault(PULSE_OUT_INJ_CYL_C))
+#define InjectorCFault()            (GetAnyFault(PULSE_OUT_INJ_CYL_C))
+#define InjectorCShortHi()          (GetShortFault(PULSE_OUT_INJ_CYL_C))
+#define InjectorCShortLo()          (GetOpenFault(PULSE_OUT_INJ_CYL_C))
 
-// #if CcSYST_NUM_OF_CYLINDERS > 3
-// #define InjectorDFault()            (GetAnyFault(PULSE_OUT_INJ_CYL_D))
-// #define InjectorDShortHi()          (GetShortFault(PULSE_OUT_INJ_CYL_D))
-// #define InjectorDShortLo()          (GetOpenFault(PULSE_OUT_INJ_CYL_D))
-// #endif
+#define InjectorDFault()            (GetAnyFault(PULSE_OUT_INJ_CYL_D))
+#define InjectorDShortHi()          (GetShortFault(PULSE_OUT_INJ_CYL_D))
+#define InjectorDShortLo()          (GetOpenFault(PULSE_OUT_INJ_CYL_D))
 
-// #if CcSYST_NUM_OF_CYLINDERS > 3
-// #define GetAPI_InjCktState(x)       ((((x == INJ_CHANNEL_A)&&(InjectorAFault()))||\
-                                     // ((x == INJ_CHANNEL_B)&&(InjectorBFault()))||\
-                                     // ((x == INJ_CHANNEL_C)&&(InjectorCFault()))||\
-                                     // ((x == INJ_CHANNEL_D)&&(InjectorDFault())))?CeINJ_FAILED:CeINJ_NORMAL)
-// #else
-// #define GetAPI_InjCktState(x)       ((((x == INJ_CHANNEL_A)&&(InjectorAFault()))||\
-                                     // ((x == INJ_CHANNEL_B)&&(InjectorBFault()))||\
-                                     // ((x == INJ_CHANNEL_C)&&(InjectorCFault())))?CeINJ_FAILED:CeINJ_NORMAL)
-// #endif
+
+
+#define GetAPI_InjCktState(x)       ((((x == INJ_CHANNEL_A)&&(InjectorAFault()))||\
+                                     ((x == INJ_CHANNEL_B)&&(InjectorBFault()))||\
+                                     ((x == INJ_CHANNEL_C)&&(InjectorCFault()))||\
+                                     ((x == INJ_CHANNEL_D)&&(InjectorDFault())))?CeINJ_FAILED:CeINJ_NORMAL)
+
 // /******************************************************************************
  // * To test EST A,B 
  // ******************************************************************************/
