@@ -32,7 +32,7 @@
 /****************************************************************************** 
 *  Include Files 
 *****************************************************************************/ 
-#include "prgdfexi.h"   /* For global resources definitions   */
+#include "t_gentypes.h"
 
 extern const T_PERCENTa    KfPRGD_HiBandDCThrsh;
 extern const T_PERCENTa    KfPRGD_LoBandDCThrsh;

@@ -68,7 +68,7 @@ int16_t                              EOBD_CoolTemp;
 // EOBD_PERCENTa                        EOBD_TPS_Buffer[NumOfPrevTPEntries];
 // EOBD_PERCENTa                        EOBD_UndefTPS;
 
-// EOBD_PERCENTa                        EOBD_CcpDutyCycle;
+EOBD_PERCENTa                        EOBD_CcpDutyCycle;
 // EOBD_KPAa                            EOBD_MAP_Altitude;
 EOBD_VOLTb                           EOBD_Ignition_Voltage;
 EOBD_VOLTb                           EOBD_IgnVoltageAtKeyOn;

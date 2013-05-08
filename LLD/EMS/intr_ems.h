@@ -645,9 +645,9 @@ extern int16_t           EOBD_CoolTemp;
 /***********************************************************************
  ********************   CCP                       **********************
  ***********************************************************************/
-// extern EOBD_PERCENTa   EOBD_CcpDutyCycle;
-// #define GetEVAP_CCP_DutyCycle()\
-                     // (EOBD_CcpDutyCycle)
+extern EOBD_PERCENTa   EOBD_CcpDutyCycle;
+#define GetEVAP_CCP_DutyCycle()\
+                     (EOBD_CcpDutyCycle)
 // INLINE void ConvertIntrParam_CcpDC(void)
 // {
     // EOBD_CcpDutyCycle = FixConvert(DuCyPgOut, Percent_B, EOBD_PERCENTa);
@@ -750,7 +750,7 @@ extern int16_t           EOBD_CoolTemp;
 // #define GetFILE_NVM_Failure()                             (NvRamTestFailed)
 #define GetVIOS_IgnSt()                                   (Ignition_On())
 #define GetVIOS_t_EngRunTime()                            (NfVIOS_t_EngRunTime)
-// #define GetVIOS_EngSt()                                   (VeVIOS_EngSt)
+#define GetVIOS_EngSt()                                   (VeVIOS_EngSt)
 // #define GetVIOS_CoolTempRange()                           (CLT_Range_High)
 
 // #define GetHVMIVEC_StateTrnstngForMisfire()               (CbFALSE)
@@ -938,7 +938,7 @@ extern int16_t           EOBD_CoolTemp;
 // #define GetVIOS_FANC_PowerOK()                  ( GetPowerOK(FANC) )
 #define GetVIOS_ACCLUTCH_PowerOK()              ( GetPowerOK(ACClutch) )
 // #define GetVIOS_SVS_PowerOK()                   ( GetPowerOK(SVS) )
-// #define GetVIOS_CCP_PowerOK()                   ( GetPowerOK(CCP) )
+#define GetVIOS_CCP_PowerOK()                   ( GetPowerOK(CCP) )
 #define GetVIOS_O2HEATER_PowerOK()              ( GetPowerOK(O2Heater) )
 
 // /******************************************************************************
@@ -1028,9 +1028,9 @@ INLINE TeEST_CIRCUIT_STATE GetAPI_EST_CircuitState(uint8_t active_estline)
  // ******************************************************************************/
 // #define GetEMSD_FileROM_ChecksumState()          ((OS_CpuInfo.F.FlashChksumFail== (bool)true)?CbTRUE : CbFALSE)
 
-// #define GetHWIO_PurgeSolOutputFault()        (GetAnyFault(PULSE_OUT_CANISTER_PURGE))
-// #define GetHWIO_PurgeSolOutputFaultShortLo() (GetOpenFault(PULSE_OUT_CANISTER_PURGE))
-// #define GetHWIO_PurgeSolOutputFaultShortHi() (GetShortFault(PULSE_OUT_CANISTER_PURGE))
+#define GetHWIO_PurgeSolOutputFault()        (GetAnyFault(PULSE_OUT_CANISTER_PURGE))
+#define GetHWIO_PurgeSolOutputFaultShortLo() (GetOpenFault(PULSE_OUT_CANISTER_PURGE))
+#define GetHWIO_PurgeSolOutputFaultShortHi() (GetShortFault(PULSE_OUT_CANISTER_PURGE))
 
 
 // /* ============================================================================ *\

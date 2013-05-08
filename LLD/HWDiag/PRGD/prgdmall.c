@@ -14,9 +14,12 @@
 /******************************************************************************
 *  Include Files
 *****************************************************************************/
-#include "prgdfexi.h"   /* For global resources definitions   */
 #include "prgdcald.h"   /* For Definition-Declaration check   */
 #include "prgdpapi.h"   /* For Definition-Declaration check   */
+#include "mall_lib.h"
+#include "timclib.h"
+#include "intr_ems.h"
+#include "v_power.h"
 
 /*****************************************************************************
  *  Constant Definitions
@@ -32,11 +35,11 @@
  TbBOOLEAN            SbPRGD_Purge_State2Set;
  T_COUNT_WORD         ScPRGD_Purge_FailCntr;
  T_COUNT_WORD         ScPRGD_Purge_SampleCntr;
- #pragma section [nvram] 
+ // #pragma section [nvram] 
  TbBOOLEAN            SbPRGD_Purge_TestFailed;
  TbBOOLEAN            SbPRGD_Purge_TestFailedHi;
  TbBOOLEAN            SbPRGD_Purge_TestFailedLo;
- #pragma section [] 
+ // #pragma section [] 
  TbBOOLEAN            SbPRGD_Purge_TestComplete;
  TbBOOLEAN            SbPRGD_Purge_TestComplete_Internal;
  TbBOOLEAN            SbPRGD_Purge_ShortLoCritMet;
@@ -81,114 +84,112 @@ FAR_COS  void InitPRGD_Purge_RstToKeyOff(void)
  * Parameters:  None
  * Return:      None
  *****************************************************************************/
-FAR_COS void MngPRGD_Purge_125msTasks(void)
+void MngPRGD_Purge_125msTasks(void)
 {
-  /* Determine_Purge_Solenoid_Output_Enable_Criteria_Met */
-  if ( ( SbPRGD_Purge_DisableFltPresent == CbFALSE )
-       && ( GetVIOS_EngSt() == CeENG_RUN )
-       && ( GetVIOS_U_IgnVolt() > KfPRGD_U_SystemThrshLo )
-       && ( ( GetEVAP_CCP_DutyCycle() >= KfPRGD_HiBandDCThrsh )
-            || ( GetEVAP_CCP_DutyCycle() <= KfPRGD_LoBandDCThrsh ) ) )
+	/* Determine_Purge_Solenoid_Output_Enable_Criteria_Met */
+	if ( ( SbPRGD_Purge_DisableFltPresent == CbFALSE )
+		&& ( GetVIOS_EngSt() == CeENG_RUN )
+		&& ( GetVIOS_U_IgnVolt() > KfPRGD_U_SystemThrshLo )
+		&& ( ( GetEVAP_CCP_DutyCycle() >= KfPRGD_HiBandDCThrsh )
+		|| ( GetEVAP_CCP_DutyCycle() <= KfPRGD_LoBandDCThrsh ) ) )
+	{
+		SbPRGD_Purge_EnblCritMet = CbTRUE;
+	}
+	else
+	{
+		SbPRGD_Purge_EnblCritMet = CbFALSE;
+	}
 
-    {
-      SbPRGD_Purge_EnblCritMet = CbTRUE;
-    }
-  else
-    {
-      SbPRGD_Purge_EnblCritMet = CbFALSE;
-    }
+	/* Check_Purge_Solenoid_Output_Status */
+	if ( SbPRGD_Purge_EnblCritMet != CbFALSE )
+	{
+		if ( GetEVAP_CCP_DutyCycle() <= KfPRGD_LoBandDCThrsh )
+		{
+			SbPRGD_Purge_State1Set = CbTRUE;
+		}
+		else if ( GetEVAP_CCP_DutyCycle() >= KfPRGD_HiBandDCThrsh )
+		{
+			SbPRGD_Purge_State2Set = CbTRUE;
+		}
 
-  /* Check_Purge_Solenoid_Output_Status */
-  if ( SbPRGD_Purge_EnblCritMet != CbFALSE )
-    {
-      if ( GetEVAP_CCP_DutyCycle() <= KfPRGD_LoBandDCThrsh )
-        {
-          SbPRGD_Purge_State1Set = CbTRUE;
-        }
-      else if ( GetEVAP_CCP_DutyCycle() >= KfPRGD_HiBandDCThrsh )
-        {
-          SbPRGD_Purge_State2Set = CbTRUE;
-        }
-
-      if ( GetHWIO_PurgeSolOutputFaultShortHi() )
-        {
-          SbPRGD_Purge_ShortHiCritMet = CbTRUE;
-          SbPRGD_Purge_State1Set = CbFALSE;
-          SbPRGD_Purge_State2Set = CbFALSE;
-        }
-      else
-        {
-          SbPRGD_Purge_ShortHiCritMet = CbFALSE;
-        }
+		if ( GetHWIO_PurgeSolOutputFaultShortHi() )
+		{
+			SbPRGD_Purge_ShortHiCritMet = CbTRUE;
+			SbPRGD_Purge_State1Set = CbFALSE;
+			SbPRGD_Purge_State2Set = CbFALSE;
+		}
+		else
+		{
+			SbPRGD_Purge_ShortHiCritMet = CbFALSE;
+		}
         
-      if ( GetHWIO_PurgeSolOutputFaultShortLo() &&
-           GetVIOS_CCP_PowerOK() )
-        {
-          SbPRGD_Purge_ShortLoCritMet = CbTRUE;
-          SbPRGD_Purge_State1Set = CbFALSE;
-          SbPRGD_Purge_State2Set = CbFALSE;
-        }
-      else if ( GetVIOS_CCP_PowerOK() )
-        {
-          SbPRGD_Purge_ShortLoCritMet = CbFALSE;
-        }
-      else
-        {
-          /* do nothing */
-        }
-      if ( SbPRGD_Purge_ShortHiCritMet )
-        {
-          SbPRGD_Purge_FailCritMet = CbTRUE;
-        }
-      else if ( SbPRGD_Purge_ShortLoCritMet )
-        {
-          SbPRGD_Purge_FailCritMet = CbTRUE;
-        }
-      else
-        {
-          SbPRGD_Purge_FailCritMet = CbFALSE;
-        }
-    }
+		if ( GetHWIO_PurgeSolOutputFaultShortLo() &&
+			GetVIOS_CCP_PowerOK() )
+		{
+			SbPRGD_Purge_ShortLoCritMet = CbTRUE;
+			SbPRGD_Purge_State1Set = CbFALSE;
+			SbPRGD_Purge_State2Set = CbFALSE;
+		}
+		else if ( GetVIOS_CCP_PowerOK() )
+		{
+			SbPRGD_Purge_ShortLoCritMet = CbFALSE;
+		}
+		else
+		{
+			/* do nothing */
+		}
+		if ( SbPRGD_Purge_ShortHiCritMet )
+		{
+			SbPRGD_Purge_FailCritMet = CbTRUE;
+		}
+		else if ( SbPRGD_Purge_ShortLoCritMet )
+		{
+			SbPRGD_Purge_FailCritMet = CbTRUE;
+		}
+		else
+		{
+			SbPRGD_Purge_FailCritMet = CbFALSE;
+		}
+	}
 
-  /* Check_Purge_Solenoid_Output_Counters */
-   UpdateOBDU_SingleTestCntrs( SbPRGD_Purge_TestComplete_Internal,
-                               SbPRGD_Purge_EnblCritMet,
-                               SbPRGD_Purge_FailCritMet,
-                               &ScPRGD_Purge_FailCntr,
-                               &ScPRGD_Purge_SampleCntr );
+	/* Check_Purge_Solenoid_Output_Counters */
+	UpdateOBDU_SingleTestCntrs( SbPRGD_Purge_TestComplete_Internal,
+							   SbPRGD_Purge_EnblCritMet,
+							   SbPRGD_Purge_FailCritMet,
+							   &ScPRGD_Purge_FailCntr,
+							   &ScPRGD_Purge_SampleCntr );
 
-  /* Perform_Purge_Solenoid_Output_Cntr_Evaluation */
-  if ( SbPRGD_Purge_TestComplete_Internal != CbFALSE )
-    {
-      SbPRGD_Purge_TestComplete_Internal = CbFALSE;
-    }
+	/* Perform_Purge_Solenoid_Output_Cntr_Evaluation */
+	if ( SbPRGD_Purge_TestComplete_Internal != CbFALSE )
+	{
+		SbPRGD_Purge_TestComplete_Internal = CbFALSE;
+	}
 
-  if ( ScPRGD_Purge_FailCntr >= KcPRGD_PurgeOutFailThrsh )
-    {
-       SbPRGD_Purge_TestFailed = CbTRUE;
-	   if(SbPRGD_Purge_ShortHiCritMet)
-	   	{
-	   	   SbPRGD_Purge_TestFailedHi = CbTRUE;
-	   	}
-	   else
-	   	{
-	   	  SbPRGD_Purge_TestFailedLo = CbTRUE;
-	   	} 
-       SbPRGD_Purge_TestComplete_Internal = CbTRUE;
-    }
-  else if ( ( ScPRGD_Purge_SampleCntr >= KcPRGD_PurgeOutSampleThrsh )
-            && ( (  SbPRGD_Purge_FailCritMet == CbFALSE )
-               || ( ( SbPRGD_Purge_State1Set != CbFALSE )
-                  && ( SbPRGD_Purge_State2Set != CbFALSE ) ) ) )
-    {
-      SbPRGD_Purge_TestFailed = CbFALSE;
-	  SbPRGD_Purge_TestFailedHi = CbFALSE;
-	  SbPRGD_Purge_TestFailedLo = CbFALSE;
-      SbPRGD_Purge_TestComplete_Internal = CbTRUE;
-    }
+	if ( ScPRGD_Purge_FailCntr >= KcPRGD_PurgeOutFailThrsh )
+	{
+		SbPRGD_Purge_TestFailed = CbTRUE;
+		if(SbPRGD_Purge_ShortHiCritMet)
+		{
+			SbPRGD_Purge_TestFailedHi = CbTRUE;
+		}
+		else
+		{
+			SbPRGD_Purge_TestFailedLo = CbTRUE;
+		} 
+	   SbPRGD_Purge_TestComplete_Internal = CbTRUE;
+	}
+	else if ( ( ScPRGD_Purge_SampleCntr >= KcPRGD_PurgeOutSampleThrsh )
+		&& ( (  SbPRGD_Purge_FailCritMet == CbFALSE )
+		|| ( ( SbPRGD_Purge_State1Set != CbFALSE )
+		&& ( SbPRGD_Purge_State2Set != CbFALSE ) ) ) )
+	{
+		SbPRGD_Purge_TestFailed = CbFALSE;
+		SbPRGD_Purge_TestFailedHi = CbFALSE;
+		SbPRGD_Purge_TestFailedLo = CbFALSE;
+		SbPRGD_Purge_TestComplete_Internal = CbTRUE;
+	}
 
-  SbPRGD_Purge_TestComplete |= SbPRGD_Purge_TestComplete_Internal;
-
+	SbPRGD_Purge_TestComplete |= SbPRGD_Purge_TestComplete_Internal;
 }
 
 

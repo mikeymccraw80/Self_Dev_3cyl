@@ -42,8 +42,8 @@ Include Files
 * exported functions
 **********************************************************************/
 
-FAR_COS void MngPRGD_Purge_125msTasks(void);
-FAR_COS  void InitPRGD_Purge_RstToKeyOff(void);
+void MngPRGD_Purge_125msTasks(void);
+void InitPRGD_Purge_RstToKeyOff(void);
 
 
 #endif /*PRGDPAPI_H*/
