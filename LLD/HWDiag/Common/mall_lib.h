@@ -31,14 +31,14 @@
 /******************************************************************************
 *   Include Files
 ******************************************************************************/
-#include "emsdfexi.h" /* For external interfaces              */
-#include "eosdfexi.h"
+#include "intr_ems.h"
+#include "t_gentypes.h"
 
 /*=========================================================================
  *  Function Prototypes for EMSD Diagnostic
  *=========================================================================*/
 
-extern  TbBOOLEAN ChkEMSD_GetPSVIorTPICFault ( 
+TbBOOLEAN ChkEMSD_GetPSVIorTPICFault ( 
               TbBOOLEAN          LbEMSD_xxxxEnblCriteriaMet,
               TbBOOLEAN          LbOBD_PSVI_TPICFault );
 
@@ -47,38 +47,38 @@ extern  TbBOOLEAN ChkEMSD_GetPSVIorTPICFault (
  *           AcClutch Relay
  *=========================================================================*/
 
-extern  void EvaluateEMSD_ACCDEnblCriteria (
+void EvaluateEMSD_ACCDEnblCriteria (
               T_SECONDS        KfEMSD_t_IgnitionOnDelay,
               TbBOOLEAN        *LbEMSD_ACCDEnblCriteriaMet);
               
 /*==========================================================================
  *           Main Power Relay
  *=========================================================================*/
- extern  void EvaluateEMSD_MPRDEnblCriteria (
+void EvaluateEMSD_MPRDEnblCriteria (
               T_SECONDS        KfEMSD_t_MPRDIgnitionOnDelay,
               TbBOOLEAN        *LbEMSD_MPRDEnblCriteriaMet);
                 
 /*==========================================================================
  *           FANx  Diagnostic
  *=========================================================================*/
-extern  void EvaluateEMSD_FANAEnblCriteria (
+void EvaluateEMSD_FANAEnblCriteria (
               T_SECONDS        KfEMSD_t_IgnitionOnDelay,
               TbBOOLEAN        *LbEMSD_FANAEnblCriteriaMet);
-extern  void EvaluateEMSD_FANBEnblCriteria (
+void EvaluateEMSD_FANBEnblCriteria (
               T_SECONDS        KfEMSD_t_IgnitionOnDelay,
               TbBOOLEAN        *LbEMSD_FANBEnblCriteriaMet);
 
 /*==========================================================================
  *           Fuel Pump Relay
  *=========================================================================*/
-extern  void EvaluateEMSD_FPRDEnblCriteria (
+void EvaluateEMSD_FPRDEnblCriteria (
               T_SECONDS        KfEMSD_t_IgnitionOnDelay,
               TbBOOLEAN        *LbEMSD_FPRDEnblCriteriaMet);
      
 /*==========================================================================
  *           MIL  Hardware dianostic
  *=========================================================================*/
-extern  void EvaluateEMSD_MILDEnblCriteria (
+void EvaluateEMSD_MILDEnblCriteria (
               T_SECONDS        KfEMSD_t_IgnitionOnDelay,
               TbBOOLEAN        *LbEMSD_MILDEnblCriteriaMet);
 
@@ -87,16 +87,16 @@ extern  void EvaluateEMSD_MILDEnblCriteria (
  *=========================================================================*/
 
       
-extern TbBOOLEAN ChkEOSD_O2_xx_Htr_GetPSVIFault (
+TbBOOLEAN ChkEOSD_O2_xx_Htr_GetPSVIFault (
             TbBOOLEAN          LbEOSD_O2_xx_HtrEnblCriteriaMet,
             TbBOOLEAN          LbOBD_O2_xx_Htr_PSVIFault
                                           );
 
-extern TbBOOLEAN EvaluateEOSD_O2_xx_HtrEnblCriteria (
+TbBOOLEAN EvaluateEOSD_O2_xx_HtrEnblCriteria (
             T_COUNT_WORD     KfEOSD_t_xx_HtrEngRunThrsh );
 
 
-extern  void EvalOBDU_DoubleXofY(
+void EvalOBDU_DoubleXofY(
          T_COUNT_WORD LcOBDU_TestA_FailCntr,
          T_COUNT_WORD LcOBDU_TestB_FailCntr,
          T_COUNT_WORD LcOBDU_SampleCntr,
@@ -107,7 +107,7 @@ extern  void EvalOBDU_DoubleXofY(
          TbBOOLEAN    *LbOBDU_TestA_Failed,
          TbBOOLEAN    *LbOBDU_TestB_Failed );
 
-extern  void UpdateOBDU_DoubleTestCntrs(
+void UpdateOBDU_DoubleTestCntrs(
          TbBOOLEAN    LbOBDU_TestComplete,
          TbBOOLEAN    LbOBDU_TestEnblCriteriaMet,
          TbBOOLEAN    LbOBDU_TestA_FailCriteriaMet,
@@ -116,7 +116,7 @@ extern  void UpdateOBDU_DoubleTestCntrs(
          T_COUNT_WORD *LcOBDU_TestB_FailCntr,
          T_COUNT_WORD *LcOBDU_SampleCntr );
 
-extern  void EvalOBDU_SingleXofY(
+void EvalOBDU_SingleXofY(
          T_COUNT_WORD LcOBDU_FailCntr,
          T_COUNT_WORD LcOBDU_SampleCntr,
          T_COUNT_WORD KcOBDU_FailThrsh,
@@ -124,7 +124,7 @@ extern  void EvalOBDU_SingleXofY(
          TbBOOLEAN    *LbOBDU_TestComplete,
          TbBOOLEAN    *LbOBDU_TestFailed );
 
-extern  void UpdateOBDU_SingleTestCntrs(
+void UpdateOBDU_SingleTestCntrs(
          TbBOOLEAN    LbOBDU_TestComplete,
          TbBOOLEAN    LbOBDU_TestEnblCriteriaMet,
          TbBOOLEAN    LbOBDU_TestFailCriteriaMet,

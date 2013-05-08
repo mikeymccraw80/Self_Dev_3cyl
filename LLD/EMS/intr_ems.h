@@ -34,6 +34,7 @@
 #include "hwiocald.h"
 #include "hal_gpio.h"
 #include "hal_eng.h"
+#include "hal_diag.h"
 
 /* ============================================================================ *\
  * Other header files.
@@ -893,14 +894,14 @@ extern int16_t           EOBD_CoolTemp;
 
 
 
-// /******************************************************************************
- // * TPIC Fault reading for Fuel Pump Relay diagnostic 
- // ******************************************************************************/
-// #define GetVIOS_FPRD_FaultShortHi()    (DD_GetDiscreteDiagStatus(DISCRETE_OUT_FUEL_PUMP,OUTPUT_SHORT_CKT_FAULT))
-// #define GetVIOS_FPRD_FaultShortLo()    (DD_GetDiscreteDiagStatus(DISCRETE_OUT_FUEL_PUMP,OUTPUT_OPEN_CKT_FAULT))
-// #define GetVIOS_FPRD_FaultAny()        (GetVIOS_FPRD_FaultShortHi() ||\
-                                            // GetVIOS_FPRD_FaultShortLo())
-// #define GetVIOS_FPRD_Presnt()              (CbTRUE)
+/******************************************************************************
+ * TPIC Fault reading for Fuel Pump Relay diagnostic 
+ ******************************************************************************/
+#define GetVIOS_FPRD_FaultShortHi()    (DD_GetDiscreteDiagStatus(DISCRETE_OUT_FUEL_PUMP,OUTPUT_SHORT_CKT_FAULT))
+#define GetVIOS_FPRD_FaultShortLo()    (DD_GetDiscreteDiagStatus(DISCRETE_OUT_FUEL_PUMP,OUTPUT_OPEN_CKT_FAULT))
+#define GetVIOS_FPRD_FaultAny()        (GetVIOS_FPRD_FaultShortHi() ||\
+                                            GetVIOS_FPRD_FaultShortLo())
+#define GetVIOS_FPRD_Presnt()              (CbTRUE)
 
 /******************************************************************************
  * TPIC Fault reading for FAN1 diagnostic 
@@ -930,12 +931,12 @@ extern int16_t           EOBD_CoolTemp;
 // /******************************************************************************
  // * Power OK Check 
  // ******************************************************************************/
-// #define GetPowerOK(APP)                         (GetVIOS_PowerOK_##APP())
-// #define GetVIOS_FPR_PowerOK()                   ( GetPowerOK(FPR) )
-// #define GetVIOS_FANA_PowerOK()                  ( GetPowerOK(FANA) )
-// #define GetVIOS_FANB_PowerOK()                  ( GetPowerOK(FANB) )
+#define GetPowerOK(APP)                         (GetVIOS_PowerOK_##APP())
+#define GetVIOS_FPR_PowerOK()                   ( GetPowerOK(FPR) )
+#define GetVIOS_FANA_PowerOK()                  ( GetPowerOK(FANA) )
+#define GetVIOS_FANB_PowerOK()                  ( GetPowerOK(FANB) )
 // #define GetVIOS_FANC_PowerOK()                  ( GetPowerOK(FANC) )
-// #define GetVIOS_ACCLUTCH_PowerOK()              ( GetPowerOK(ACClutch) )
+#define GetVIOS_ACCLUTCH_PowerOK()              ( GetPowerOK(ACClutch) )
 // #define GetVIOS_SVS_PowerOK()                   ( GetPowerOK(SVS) )
 // #define GetVIOS_CCP_PowerOK()                   ( GetPowerOK(CCP) )
 

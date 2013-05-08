@@ -23,9 +23,11 @@
 /*****************************************************************************
  *   Include Files
  *****************************************************************************/
-#include "emsdfexi.h" /* For external interfaces                 */
 #include "emsdpapi.h" /* For forced declaration definition check */
 #include "emsdcald.h" /* For local calibrations                  */
+#include "mall_lib.h"
+#include "intr_ems.h"
+#include "v_power.h"
 
 /*****************************************************************************
  *  Local Include Files
@@ -51,37 +53,36 @@ TbBOOLEAN        SbEMSD_FANAEnblCriteriaMet ;
 TbBOOLEAN        SbEMSD_FANAShortHiFailCriteriaMet ;
 TbBOOLEAN        SbEMSD_FANAShortLoFailCriteriaMet ;
 
-  TbBOOLEAN        SbEMSD_FANATestComplete ;
-#pragma section [nvram] 
-  TbBOOLEAN        SbEMSD_FANAShortHiTestFailed ;
+TbBOOLEAN        SbEMSD_FANATestComplete ;
+// #pragma section [nvram] 
+TbBOOLEAN        SbEMSD_FANAShortHiTestFailed ;
 
-  TbBOOLEAN        SbEMSD_FANAShortLoTestFailed ;
-#pragma section [] 
-  T_COUNT_WORD     ScEMSD_FANAShortHiFailCntr ;
-  T_COUNT_WORD     ScEMSD_FANAShortLoFailCntr ;
+TbBOOLEAN        SbEMSD_FANAShortLoTestFailed ;
+// #pragma section [] 
+T_COUNT_WORD     ScEMSD_FANAShortHiFailCntr ;
+T_COUNT_WORD     ScEMSD_FANAShortLoFailCntr ;
 
 
 T_COUNT_WORD             VcEMSD_FANASampleCntr ;
 
 
-  TbBOOLEAN        SbEMSD_FANATestComplete_Internal;
+TbBOOLEAN        SbEMSD_FANATestComplete_Internal;
 /*
  *
  * FAN2
  */
-  TbBOOLEAN        SbEMSD_FANBEnblCriteriaMet ;
-  TbBOOLEAN        SbEMSD_FANBShortHiFailCriteriaMet ;
-  TbBOOLEAN        SbEMSD_FANBShortLoFailCriteriaMet ;
+TbBOOLEAN        SbEMSD_FANBEnblCriteriaMet ;
+TbBOOLEAN        SbEMSD_FANBShortHiFailCriteriaMet ;
+TbBOOLEAN        SbEMSD_FANBShortLoFailCriteriaMet ;
 
-  TbBOOLEAN        SbEMSD_FANBTestComplete ;
-#pragma section [nvram] 
-  TbBOOLEAN        SbEMSD_FANBShortHiTestFailed ;
-
-  TbBOOLEAN        SbEMSD_FANBShortLoTestFailed ;
-#pragma section [] 
-  T_COUNT_WORD     ScEMSD_FANBShortHiFailCntr ;
-  T_COUNT_WORD     ScEMSD_FANBShortLoFailCntr ;
-T_COUNT_WORD             VcEMSD_FANBSampleCntr ;
+TbBOOLEAN        SbEMSD_FANBTestComplete ;
+// #pragma section [nvram]
+TbBOOLEAN        SbEMSD_FANBShortHiTestFailed ;
+TbBOOLEAN        SbEMSD_FANBShortLoTestFailed ;
+// #pragma section [] 
+T_COUNT_WORD     ScEMSD_FANBShortHiFailCntr ;
+T_COUNT_WORD     ScEMSD_FANBShortLoFailCntr ;
+T_COUNT_WORD     VcEMSD_FANBSampleCntr ;
 
 
 TbBOOLEAN        SbEMSD_FANBTestComplete_Internal;
@@ -135,45 +136,33 @@ FAR_COS void InitEMSD_FanxRstToKeyOff(void)
  * Parameters:   None
  * Return:       None
  *****************************************************************************/
-FAR_COS void MngEMSD_FanA125msTasks (void)
+void MngEMSD_FanA125msTasks (void)
 {
+	/* Evaluate_Fan1_Enable_Criteria */
+	EvaluateEMSD_FANAEnblCriteria ( KfEMSD_t_IgnitionOnDelay, &SbEMSD_FANAEnblCriteriaMet);
 
- /* Evaluate_Fan1_Enable_Criteria */
-  EvaluateEMSD_FANAEnblCriteria ( KfEMSD_t_IgnitionOnDelay, 
-                                  &SbEMSD_FANAEnblCriteriaMet) ;
+	SbEMSD_FANAShortHiFailCriteriaMet = \
+		 ChkEMSD_GetPSVIorTPICFault (SbEMSD_FANAEnblCriteriaMet, GetVIOS_FANA_FaultShortHi());
 
-  
-
-  SbEMSD_FANAShortHiFailCriteriaMet =
-         ChkEMSD_GetPSVIorTPICFault (SbEMSD_FANAEnblCriteriaMet,
-                                     GetVIOS_FANA_FaultShortHi()
-                                        ) ;
-  if ( GetVIOS_FANA_PowerOK() )
-  {
-  SbEMSD_FANAShortLoFailCriteriaMet =
-         ChkEMSD_GetPSVIorTPICFault (SbEMSD_FANAEnblCriteriaMet,
-                                     GetVIOS_FANA_FaultShortLo()
-                                        ) ;
-  }
-  else
-  {
-  /*  do nothing  */
-  }
-
-
+	if ( GetVIOS_FANA_PowerOK() ) {
+		SbEMSD_FANAShortLoFailCriteriaMet = \
+			ChkEMSD_GetPSVIorTPICFault (SbEMSD_FANAEnblCriteriaMet, GetVIOS_FANA_FaultShortLo());
+	} else {
+		/*  do nothing  */
+	}
 
   /*    Update_FANA_Test_Counters
    *    ========================================
    *    This process updates the fan1 diagnostic
    *    test counters. */
 
-  UpdateOBDU_DoubleTestCntrs (SbEMSD_FANATestComplete_Internal,
-                              SbEMSD_FANAEnblCriteriaMet,
-                              SbEMSD_FANAShortHiFailCriteriaMet,
-                              SbEMSD_FANAShortLoFailCriteriaMet, 
-                              &ScEMSD_FANAShortHiFailCntr,
-                              &ScEMSD_FANAShortLoFailCntr,
-                              &VcEMSD_FANASampleCntr) ;
+	UpdateOBDU_DoubleTestCntrs (SbEMSD_FANATestComplete_Internal,
+							  SbEMSD_FANAEnblCriteriaMet,
+							  SbEMSD_FANAShortHiFailCriteriaMet,
+							  SbEMSD_FANAShortLoFailCriteriaMet, 
+							  &ScEMSD_FANAShortHiFailCntr,
+							  &ScEMSD_FANAShortLoFailCntr,
+							  &VcEMSD_FANASampleCntr) ;
 
 
   /*    Perform_fan1_XofY_Evaluations
@@ -186,17 +175,17 @@ FAR_COS void MngEMSD_FanA125msTasks (void)
    *    reported. Reset the test complete flag if the test
    *    was complete the last loop. */
 
-  EvalOBDU_DoubleXofY (ScEMSD_FANAShortHiFailCntr,
-                       ScEMSD_FANAShortLoFailCntr,
-                       VcEMSD_FANASampleCntr,
-                       KcEMSD_FANAShortHiFailThrsh,
-                       KcEMSD_FANAShortLoFailThrsh,
-                       KcEMSD_FANAShortSmplThrsh,
-                       &SbEMSD_FANATestComplete_Internal,
-                       &SbEMSD_FANAShortHiTestFailed,
-                       &SbEMSD_FANAShortLoTestFailed) ;
-  
-  SbEMSD_FANATestComplete |=SbEMSD_FANATestComplete_Internal;
+	EvalOBDU_DoubleXofY (ScEMSD_FANAShortHiFailCntr,
+					   ScEMSD_FANAShortLoFailCntr,
+					   VcEMSD_FANASampleCntr,
+					   KcEMSD_FANAShortHiFailThrsh,
+					   KcEMSD_FANAShortLoFailThrsh,
+					   KcEMSD_FANAShortSmplThrsh,
+					   &SbEMSD_FANATestComplete_Internal,
+					   &SbEMSD_FANAShortHiTestFailed,
+					   &SbEMSD_FANAShortLoTestFailed) ;
+
+	SbEMSD_FANATestComplete |=SbEMSD_FANATestComplete_Internal;
 }
 
  /*****************************************************************************
@@ -209,45 +198,34 @@ FAR_COS void MngEMSD_FanA125msTasks (void)
  * Parameters:   None
  * Return:       None
  *****************************************************************************/
-FAR_COS void MngEMSD_FanB125msTasks (void)
+void MngEMSD_FanB125msTasks (void)
 {
 
- /* Evaluate_Fan2_Enable_Criteria */
-  EvaluateEMSD_FANBEnblCriteria ( KfEMSD_t_IgnitionOnDelay, 
-                                  &SbEMSD_FANBEnblCriteriaMet) ;
+	/* Evaluate_Fan2_Enable_Criteria */
+	EvaluateEMSD_FANBEnblCriteria ( KfEMSD_t_IgnitionOnDelay, &SbEMSD_FANBEnblCriteriaMet);
 
-  
+	SbEMSD_FANBShortHiFailCriteriaMet = \
+		 ChkEMSD_GetPSVIorTPICFault (SbEMSD_FANBEnblCriteriaMet, GetVIOS_FANB_FaultShortHi());
 
-  SbEMSD_FANBShortHiFailCriteriaMet =
-         ChkEMSD_GetPSVIorTPICFault (SbEMSD_FANBEnblCriteriaMet,
-                                     GetVIOS_FANB_FaultShortHi()
-                                        ) ;
-  if ( GetVIOS_FANB_PowerOK() )
-  {
-  SbEMSD_FANBShortLoFailCriteriaMet =
-         ChkEMSD_GetPSVIorTPICFault (SbEMSD_FANBEnblCriteriaMet,
-                                     GetVIOS_FANB_FaultShortLo()
-                                        ) ;
-  }
-  else
-  {
-  /*  do nothing  */
-  }
-
+	if ( GetVIOS_FANB_PowerOK()) {
+		SbEMSD_FANBShortLoFailCriteriaMet =\
+			ChkEMSD_GetPSVIorTPICFault (SbEMSD_FANBEnblCriteriaMet, GetVIOS_FANB_FaultShortLo());
+	} else {
+	/*  do nothing  */
+	}
 
   /*    Update_FANB_Test_Counters
    *    ========================================
    *    This process updates the fan2 diagnostic
    *    test counters. */
 
-  UpdateOBDU_DoubleTestCntrs (SbEMSD_FANBTestComplete_Internal,
-                              SbEMSD_FANBEnblCriteriaMet,
-                              SbEMSD_FANBShortHiFailCriteriaMet,
-                              SbEMSD_FANBShortLoFailCriteriaMet, 
-                              &ScEMSD_FANBShortHiFailCntr,
-                              &ScEMSD_FANBShortLoFailCntr,
-                              &VcEMSD_FANBSampleCntr) ;
-
+	UpdateOBDU_DoubleTestCntrs (SbEMSD_FANBTestComplete_Internal,
+							  SbEMSD_FANBEnblCriteriaMet,
+							  SbEMSD_FANBShortHiFailCriteriaMet,
+							  SbEMSD_FANBShortLoFailCriteriaMet, 
+							  &ScEMSD_FANBShortHiFailCntr,
+							  &ScEMSD_FANBShortLoFailCntr,
+							  &VcEMSD_FANBSampleCntr) ;
 
   /*    Perform_fan2_XofY_Evaluations
    *    ============================================
@@ -259,18 +237,17 @@ FAR_COS void MngEMSD_FanB125msTasks (void)
    *    reported. Reset the test complete flag if the test
    *    was complete the last loop. */
 
-  EvalOBDU_DoubleXofY (ScEMSD_FANBShortHiFailCntr,
-                       ScEMSD_FANBShortLoFailCntr,
-                       VcEMSD_FANBSampleCntr,
-                       KcEMSD_FANBShortHiFailThrsh,
-                       KcEMSD_FANBShortLoFailThrsh,
-                       KcEMSD_FANBShortSmplThrsh,
-                       &SbEMSD_FANBTestComplete_Internal,
-                       &SbEMSD_FANBShortHiTestFailed,
-                       &SbEMSD_FANBShortLoTestFailed) ;
+	EvalOBDU_DoubleXofY (ScEMSD_FANBShortHiFailCntr,
+					   ScEMSD_FANBShortLoFailCntr,
+					   VcEMSD_FANBSampleCntr,
+					   KcEMSD_FANBShortHiFailThrsh,
+					   KcEMSD_FANBShortLoFailThrsh,
+					   KcEMSD_FANBShortSmplThrsh,
+					   &SbEMSD_FANBTestComplete_Internal,
+					   &SbEMSD_FANBShortHiTestFailed,
+					   &SbEMSD_FANBShortLoTestFailed) ;
 
-  SbEMSD_FANBTestComplete |=SbEMSD_FANBTestComplete_Internal;
-
+	SbEMSD_FANBTestComplete |=SbEMSD_FANBTestComplete_Internal;
 }
 
 

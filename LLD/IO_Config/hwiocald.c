@@ -529,3 +529,134 @@ const T_RPMa        KfVIOS_n_RunToCrankThrsh = V_RPMa(150);
 *|   }
 */
 const TwTIME_t_R7p8125ms   KfVIOS_t_PowerdownDelayTime = C_R7p8125ms16(3);
+
+
+/*
+*|    K_PowerConfig_FPR {
+*|       :is_calconst;
+*|       :units = "type";
+*|       :description = "Select the power source for Fuel Pump Relay \n"
+*|          "0 = Battery_FPR (same as Battery) \n"
+*|          "1 = IgnitionON_FPR (same as IgnitionON) \n"
+*|          "2 = MainPowerRelay_FPR (same as MainPowerRelay) ";
+*|    }
+*/
+const PowerSource_FPR_Type K_PowerConfig_FPR =
+{
+   IgnitionON
+};
+
+/*
+*|    K_PowerConfig_CCP {
+*|       :is_calconst;
+*|       :units = "type";
+*|       :description = "Select the power source for Charcoal Canister Purge \n"
+*|          "0 = Battery \n"
+*|          "1 = IgnitionON \n"
+*|          "2 = MainPowerRelay \n"
+*|          "3 = FuelPumpRelay ";
+*|    }
+*/
+const PowerSourceType K_PowerConfig_CCP =
+{
+   IgnitionON
+};
+
+/*
+*|    K_PowerConfig_FANA {
+*|       :is_calconst;
+*|       :units = "type";
+*|       :description = "Select the power source for Fan A \n"
+*|          "0 = Battery \n"
+*|          "1 = IgnitionON \n"
+*|          "2 = MainPowerRelay \n"
+*|          "3 = FuelPumpRelay ";
+*|    }
+*/
+const PowerSourceType K_PowerConfig_FANA =
+{
+   IgnitionON
+};
+
+/*
+*|    K_PowerConfig_FANB {
+*|       :is_calconst;
+*|       :units = "type";
+*|       :description = "Select the power source for Fan B \n"
+*|          "0 = Battery \n"
+*|          "1 = IgnitionON \n"
+*|          "2 = MainPowerRelay \n"
+*|          "3 = FuelPumpRelay ";
+*|    }
+*/
+const PowerSourceType K_PowerConfig_FANB =
+{
+   IgnitionON
+};
+
+/*
+*|    K_PowerConfig_ACClutch {
+*|       :is_calconst;
+*|       :units = "type";
+*|       :description = "Select the power source for AC Clutch \n"
+*|          "0 = Battery \n"
+*|          "1 = IgnitionON \n"
+*|          "2 = MainPowerRelay \n"
+*|          "3 = FuelPumpRelay ";
+*|    }
+*/
+const PowerSourceType K_PowerConfig_ACClutch =
+{
+   IgnitionON
+};
+
+
+/*
+*|    K_PowerConfig_SparkCoil {
+*|       :is_calconst;
+*|       :units = "type";
+*|       :description = "Select the power source for Spark Coil \n"
+*|          "0 = Battery \n"
+*|          "1 = IgnitionON \n"
+*|          "2 = MainPowerRelay \n"
+*|          "3 = FuelPumpRelay ";
+*|    }
+*/
+const PowerSourceType K_PowerConfig_SparkCoil =
+{
+   IgnitionON
+};
+
+/*
+*|    K_PowerConfig_O2Heater {
+*|       :is_calconst;
+*|       :units = "type";
+*|       :description = "Select the power source for O2 Sensor Heater \n"
+*|          "0 = Battery \n"
+*|          "1 = IgnitionON \n"
+*|          "2 = MainPowerRelay \n"
+*|          "3 = FuelPumpRelay ";
+*|    }
+*/
+const PowerSourceType K_PowerConfig_O2Heater =
+{
+   IgnitionON
+};
+
+/*
+*|    K_PowerConfig_Injector {
+*|       :is_calconst;
+*|       :units = "type";
+*|       :description = "Select the power source for Fuel Injector \n"
+*|          "0 = Battery \n"
+*|          "1 = IgnitionON \n"
+*|          "2 = MainPowerRelay \n"
+*|          "3 = FuelPumpRelay ";
+*|    }
+*/
+const PowerSourceType K_PowerConfig_Injector =
+{
+   IgnitionON
+};
+
+

@@ -15,9 +15,11 @@
 /*****************************************************************************
  *   Include Files
  *****************************************************************************/
-#include "emsdfexi.h" /* For external interfaces                 */
 #include "emsdpapi.h" /* For forced declaration definition check */
 #include "emsdcald.h" /* For local calibrations                  */
+#include "mall_lib.h"
+#include "intr_ems.h"
+#include "v_power.h"
 
 
 /*****************************************************************************
@@ -27,20 +29,20 @@
 /*****************************************************************************
  *  Static Data Define
  *****************************************************************************/
- TbBOOLEAN        SbEMSD_ACCDEnblCriteriaMet ;
- TbBOOLEAN        SbEMSD_ACCDShortHiFailCriteriaMet ;
- TbBOOLEAN        SbEMSD_ACCDShortLoFailCriteriaMet ;
- TbBOOLEAN        SbEMSD_ACCDTestComplete ;
- T_COUNT_WORD     ScEMSD_ACCDShortHiFailCntr ;
- T_COUNT_WORD     ScEMSD_ACCDShortLoFailCntr ;
- T_COUNT_WORD             VcEMSD_ACCDSampleCntr ;
+TbBOOLEAN        SbEMSD_ACCDEnblCriteriaMet ;
+TbBOOLEAN        SbEMSD_ACCDShortHiFailCriteriaMet ;
+TbBOOLEAN        SbEMSD_ACCDShortLoFailCriteriaMet ;
+TbBOOLEAN        SbEMSD_ACCDTestComplete ;
+T_COUNT_WORD     ScEMSD_ACCDShortHiFailCntr ;
+T_COUNT_WORD     ScEMSD_ACCDShortLoFailCntr ;
+T_COUNT_WORD     VcEMSD_ACCDSampleCntr ;
 
-#pragma section [nvram] 
-  TbBOOLEAN        SbEMSD_ACCDShortHiTestFailed ;
-  TbBOOLEAN        SbEMSD_ACCDShortLoTestFailed ;
- #pragma section [] 
+// #pragma section [nvram] 
+TbBOOLEAN        SbEMSD_ACCDShortHiTestFailed ;
+TbBOOLEAN        SbEMSD_ACCDShortLoTestFailed ;
+// #pragma section [] 
 
-  TbBOOLEAN        SbEMSD_ACCDTestComplete_Internal ;
+TbBOOLEAN        SbEMSD_ACCDTestComplete_Internal ;
 /*****************************************************************************
  *  Function definition
  ******************************************************************************/
@@ -56,7 +58,7 @@
  *****************************************************************************/
 
 #if 0
-FAR_COS void InitEMSD_AcClutchRstToKeyOff(void)
+void InitEMSD_AcClutchRstToKeyOff(void)
 {
 
   SbEMSD_ACCDEnblCriteriaMet = CbFALSE ;
@@ -83,7 +85,7 @@ FAR_COS void InitEMSD_AcClutchRstToKeyOff(void)
  * Parameters:   None
  * Return:       None
  *****************************************************************************/
-FAR_COS void MngEMSD_AcClutch125msTasks (void)
+void MngEMSD_AcClutch125msTasks (void)
 {
 
  /* Evaluate_FrontACEVT_Enable_Criteria */

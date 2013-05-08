@@ -10,6 +10,7 @@
 /* Building Blocks group                                                     */
 /*===========================================================================*/
 #include "reuse.h"
+#include "io_config_vsep.h"
 #include "dd_vsep_pwm_interface.h"
 #include "dd_vsep_discrete_interface.h"
 

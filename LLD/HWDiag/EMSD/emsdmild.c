@@ -17,9 +17,12 @@
 /*****************************************************************************
  *   Include Files
  *****************************************************************************/
-#include "emsdfexi.h" /* For external interfaces                 */
 #include "emsdpapi.h" /* For forced declaration definition check */
 #include "emsdcald.h" /* For local calibrations                  */
+#include "mall_lib.h"
+#include "intr_ems.h"
+#include "v_power.h"
+
 
 /*****************************************************************************
  *  Local Include Files
@@ -35,25 +38,18 @@
  *  Static Data Define
  *****************************************************************************/
 
-  TbBOOLEAN        SbEMSD_MILDEnblCriteriaMet ;
-
-
-  TbBOOLEAN        SbEMSD_MILDShortHiFailCriteriaMet ;
-  TbBOOLEAN        SbEMSD_MILDShortLoFailCriteriaMet ;
-
-  TbBOOLEAN        SbEMSD_MILDTestComplete ;
-#pragma section [nvram] 
-  TbBOOLEAN        SbEMSD_MILDShortHiTestFailed ;
-
-  TbBOOLEAN        SbEMSD_MILDShortLoTestFailed ;
-#pragma section [] 
-  T_COUNT_WORD     ScEMSD_MILDShortHiFailCntr ;
-  T_COUNT_WORD     ScEMSD_MILDShortLoFailCntr ;
-
-
+TbBOOLEAN        SbEMSD_MILDEnblCriteriaMet ;
+TbBOOLEAN        SbEMSD_MILDShortHiFailCriteriaMet ;
+TbBOOLEAN        SbEMSD_MILDShortLoFailCriteriaMet ;
+TbBOOLEAN        SbEMSD_MILDTestComplete ;
+// #pragma section [nvram] 
+TbBOOLEAN        SbEMSD_MILDShortHiTestFailed ;
+TbBOOLEAN        SbEMSD_MILDShortLoTestFailed ;
+// #pragma section [] 
+T_COUNT_WORD     ScEMSD_MILDShortHiFailCntr ;
+T_COUNT_WORD     ScEMSD_MILDShortLoFailCntr ;
 T_COUNT_WORD             VcEMSD_MILDSampleCntr ;
 TbBOOLEAN        SbEMSD_MILDTestComplete_Internal ;
-
 
 /*****************************************************************************
  *  Function definition
@@ -94,61 +90,53 @@ FAR_COS void InitEMSD_MILRstToKeyOff(void)
  * Parameters:   None
  * Return:       None
  *****************************************************************************/
-FAR_COS void MngEMSD_MIL125msTasks (void)
+void MngEMSD_MIL125msTasks (void)
 {
 
- /* Evaluate_FrontACEVT_Enable_Criteria */
-  EvaluateEMSD_MILDEnblCriteria ( KfEMSD_t_IgnitionOnDelay, 
-                                  &SbEMSD_MILDEnblCriteriaMet) ;
+	/* Evaluate_FrontACEVT_Enable_Criteria */
+	EvaluateEMSD_MILDEnblCriteria ( KfEMSD_t_IgnitionOnDelay, &SbEMSD_MILDEnblCriteriaMet);
 
-  
-
-  SbEMSD_MILDShortHiFailCriteriaMet =
-         ChkEMSD_GetPSVIorTPICFault (SbEMSD_MILDEnblCriteriaMet,
-                                     GetVIOS_MILD_FaultShortHi()
-                                        ) ;
-  SbEMSD_MILDShortLoFailCriteriaMet =
-         ChkEMSD_GetPSVIorTPICFault (SbEMSD_MILDEnblCriteriaMet,
-                                     GetVIOS_MILD_FaultShortLo()
-                                        ) ;
+	SbEMSD_MILDShortHiFailCriteriaMet = \
+		 ChkEMSD_GetPSVIorTPICFault(SbEMSD_MILDEnblCriteriaMet, GetVIOS_MILD_FaultShortHi());
+	SbEMSD_MILDShortLoFailCriteriaMet = \
+		 ChkEMSD_GetPSVIorTPICFault(SbEMSD_MILDEnblCriteriaMet, GetVIOS_MILD_FaultShortLo());
 
 
-  /*    Update_MILD_Test_Counters
-   *    ========================================
-   *    This process updates the MIL diagnostic
-   *    test counters. */
+	/*    Update_MILD_Test_Counters
+	*    ========================================
+	*    This process updates the MIL diagnostic
+	*    test counters. */
 
-  UpdateOBDU_DoubleTestCntrs (SbEMSD_MILDTestComplete_Internal,
-                              SbEMSD_MILDEnblCriteriaMet,
-                              SbEMSD_MILDShortHiFailCriteriaMet,
-                              SbEMSD_MILDShortLoFailCriteriaMet, 
-                              &ScEMSD_MILDShortHiFailCntr,
-                              &ScEMSD_MILDShortLoFailCntr,
-                              &VcEMSD_MILDSampleCntr) ;
+	UpdateOBDU_DoubleTestCntrs (SbEMSD_MILDTestComplete_Internal,
+							  SbEMSD_MILDEnblCriteriaMet,
+							  SbEMSD_MILDShortHiFailCriteriaMet,
+							  SbEMSD_MILDShortLoFailCriteriaMet, 
+							  &ScEMSD_MILDShortHiFailCntr,
+							  &ScEMSD_MILDShortLoFailCntr,
+							  &VcEMSD_MILDSampleCntr) ;
 
 
-  /*    Perform_MIL_XofY_Evaluations
-   *    ============================================
-   *    If the failure count threshold is reached before the
-   *    sample count threshold is reached then the test is
-   *    complete and a failure is reported. If the sample
-   *    count threshold is reached before the failure count
-   *    threshold then the test is complete and a pass is
-   *    reported. Reset the test complete flag if the test
-   *    was complete the last loop. */
+	/*    Perform_MIL_XofY_Evaluations
+	*    ============================================
+	*    If the failure count threshold is reached before the
+	*    sample count threshold is reached then the test is
+	*    complete and a failure is reported. If the sample
+	*    count threshold is reached before the failure count
+	*    threshold then the test is complete and a pass is
+	*    reported. Reset the test complete flag if the test
+	*    was complete the last loop. */
 
-  EvalOBDU_DoubleXofY (ScEMSD_MILDShortHiFailCntr,
-                       ScEMSD_MILDShortLoFailCntr,
-                       VcEMSD_MILDSampleCntr,
-                       KcEMSD_MILDShortHiFailThrsh,
-                       KcEMSD_MILDShortLoFailThrsh,
-                       KcEMSD_MILDShortSmplThrsh,
-                       &SbEMSD_MILDTestComplete_Internal,
-                       &SbEMSD_MILDShortHiTestFailed,
-                       &SbEMSD_MILDShortLoTestFailed) ;
+	EvalOBDU_DoubleXofY (ScEMSD_MILDShortHiFailCntr,
+					   ScEMSD_MILDShortLoFailCntr,
+					   VcEMSD_MILDSampleCntr,
+					   KcEMSD_MILDShortHiFailThrsh,
+					   KcEMSD_MILDShortLoFailThrsh,
+					   KcEMSD_MILDShortSmplThrsh,
+					   &SbEMSD_MILDTestComplete_Internal,
+					   &SbEMSD_MILDShortHiTestFailed,
+					   &SbEMSD_MILDShortLoTestFailed) ;
 
-  SbEMSD_MILDTestComplete |= SbEMSD_MILDTestComplete_Internal;
-
+	SbEMSD_MILDTestComplete |= SbEMSD_MILDTestComplete_Internal;
 }
 
 /* ============================================================================ *\

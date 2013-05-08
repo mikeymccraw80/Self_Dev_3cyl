@@ -31,6 +31,7 @@
 
 
 #include "fault.h"
+#include "dd_vsep_fault_config.h"
 #include "dd_vsep_pwm_interface.h"
 #include "dd_vsep_est_select.h"
 #include "hal.h"

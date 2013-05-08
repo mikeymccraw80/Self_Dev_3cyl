@@ -17,9 +17,11 @@
 /*****************************************************************************
  *   Include Files
  *****************************************************************************/
-#include "emsdfexi.h" /* For external interfaces                 */
 #include "emsdpapi.h" /* For forced declaration definition check */
 #include "emsdcald.h" /* For local calibrations                  */
+#include "mall_lib.h"
+#include "intr_ems.h"
+#include "v_power.h"
 
 /*****************************************************************************
  *  Local Include Files
@@ -35,25 +37,18 @@
  *  Static Data Define
  *****************************************************************************/
 
-  TbBOOLEAN        SbEMSD_FPRDEnblCriteriaMet ;
-
-
-  TbBOOLEAN        SbEMSD_FPRDShortHiFailCriteriaMet ;
-  TbBOOLEAN        SbEMSD_FPRDShortLoFailCriteriaMet ;
-
-  TbBOOLEAN        SbEMSD_FPRDTestComplete ;
-#pragma section [nvram] 
-  TbBOOLEAN        SbEMSD_FPRDShortHiTestFailed ;
-
-  TbBOOLEAN        SbEMSD_FPRDShortLoTestFailed ;
-#pragma section [] 
-  T_COUNT_WORD     ScEMSD_FPRDShortHiFailCntr ;
-  T_COUNT_WORD     ScEMSD_FPRDShortLoFailCntr ;
-
-
+TbBOOLEAN        SbEMSD_FPRDEnblCriteriaMet ;
+TbBOOLEAN        SbEMSD_FPRDShortHiFailCriteriaMet ;
+TbBOOLEAN        SbEMSD_FPRDShortLoFailCriteriaMet ;
+TbBOOLEAN        SbEMSD_FPRDTestComplete ;
+// #pragma section [nvram] 
+TbBOOLEAN        SbEMSD_FPRDShortHiTestFailed ;
+TbBOOLEAN        SbEMSD_FPRDShortLoTestFailed ;
+// #pragma section [] 
+T_COUNT_WORD     ScEMSD_FPRDShortHiFailCntr ;
+T_COUNT_WORD     ScEMSD_FPRDShortLoFailCntr ;
 T_COUNT_WORD             VcEMSD_FPRDSampleCntr ;
-
-  TbBOOLEAN        SbEMSD_FPRDTestComplete_Internal ;
+TbBOOLEAN        SbEMSD_FPRDTestComplete_Internal ;
 #if 0
 /*****************************************************************************
  *
@@ -91,66 +86,57 @@ FAR_COS void InitEMSD_FuelPumpRstToKeyOff(void)
  * Parameters:   None
  * Return:       None
  *****************************************************************************/
-FAR_COS void MngEMSD_FuelPump125msTasks (void)
+void MngEMSD_FuelPump125msTasks (void)
 {
 
- /* Evaluate_FrontACEVT_Enable_Criteria */
-  EvaluateEMSD_FPRDEnblCriteria ( KfEMSD_t_IgnitionOnDelay, 
-                                  &SbEMSD_FPRDEnblCriteriaMet) ;
+	/* Evaluate_FrontACEVT_Enable_Criteria */
+	EvaluateEMSD_FPRDEnblCriteria(KfEMSD_t_IgnitionOnDelay, &SbEMSD_FPRDEnblCriteriaMet);
 
-  
+	SbEMSD_FPRDShortHiFailCriteriaMet =\
+		ChkEMSD_GetPSVIorTPICFault(SbEMSD_FPRDEnblCriteriaMet, GetVIOS_FPRD_FaultShortHi());
 
-  SbEMSD_FPRDShortHiFailCriteriaMet =
-         ChkEMSD_GetPSVIorTPICFault (SbEMSD_FPRDEnblCriteriaMet,
-                                     GetVIOS_FPRD_FaultShortHi()
-                                        ) ;
-  if ( GetVIOS_FPR_PowerOK() )
-  {
-  SbEMSD_FPRDShortLoFailCriteriaMet =
-         ChkEMSD_GetPSVIorTPICFault (SbEMSD_FPRDEnblCriteriaMet,
-                                     GetVIOS_FPRD_FaultShortLo()
-                                        ) ;
-  }
-  else
-  {
-  /*  do nothing  */
-  }
+	if (GetVIOS_FPR_PowerOK()) {
+		SbEMSD_FPRDShortLoFailCriteriaMet =\
+			ChkEMSD_GetPSVIorTPICFault (SbEMSD_FPRDEnblCriteriaMet, GetVIOS_FPRD_FaultShortLo());
+	} else {
+		/*  do nothing  */
+	}
 
-  /*    Update_FPRD_Test_Counters
-   *    ========================================
-   *    This process updates the FuelPumpRelay diagnostic
-   *    test counters. */
+	/*    Update_FPRD_Test_Counters
+	*    ========================================
+	*    This process updates the FuelPumpRelay diagnostic
+	*    test counters. */
 
-  UpdateOBDU_DoubleTestCntrs (SbEMSD_FPRDTestComplete_Internal,
-                              SbEMSD_FPRDEnblCriteriaMet,
-                              SbEMSD_FPRDShortHiFailCriteriaMet,
-                              SbEMSD_FPRDShortLoFailCriteriaMet, 
-                              &ScEMSD_FPRDShortHiFailCntr,
-                              &ScEMSD_FPRDShortLoFailCntr,
-                              &VcEMSD_FPRDSampleCntr) ;
+	UpdateOBDU_DoubleTestCntrs (SbEMSD_FPRDTestComplete_Internal,
+							  SbEMSD_FPRDEnblCriteriaMet,
+							  SbEMSD_FPRDShortHiFailCriteriaMet,
+							  SbEMSD_FPRDShortLoFailCriteriaMet, 
+							  &ScEMSD_FPRDShortHiFailCntr,
+							  &ScEMSD_FPRDShortLoFailCntr,
+							  &VcEMSD_FPRDSampleCntr) ;
 
 
-  /*    Perform_FuelPumpRelay_XofY_Evaluations
-   *    ============================================
-   *    If the failure count threshold is reached before the
-   *    sample count threshold is reached then the test is
-   *    complete and a failure is reported. If the sample
-   *    count threshold is reached before the failure count
-   *    threshold then the test is complete and a pass is
-   *    reported. Reset the test complete flag if the test
-   *    was complete the last loop. */
+	/*    Perform_FuelPumpRelay_XofY_Evaluations
+	*    ============================================
+	*    If the failure count threshold is reached before the
+	*    sample count threshold is reached then the test is
+	*    complete and a failure is reported. If the sample
+	*    count threshold is reached before the failure count
+	*    threshold then the test is complete and a pass is
+	*    reported. Reset the test complete flag if the test
+	*    was complete the last loop. */
 
-  EvalOBDU_DoubleXofY (ScEMSD_FPRDShortHiFailCntr,
-                       ScEMSD_FPRDShortLoFailCntr,
-                       VcEMSD_FPRDSampleCntr,
-                       KcEMSD_FPRDShortHiFailThrsh,
-                       KcEMSD_FPRDShortLoFailThrsh,
-                       KcEMSD_FPRDShortSmplThrsh,
-                       &SbEMSD_FPRDTestComplete_Internal,
-                       &SbEMSD_FPRDShortHiTestFailed,
-                       &SbEMSD_FPRDShortLoTestFailed) ;
+	EvalOBDU_DoubleXofY (ScEMSD_FPRDShortHiFailCntr,
+					   ScEMSD_FPRDShortLoFailCntr,
+					   VcEMSD_FPRDSampleCntr,
+					   KcEMSD_FPRDShortHiFailThrsh,
+					   KcEMSD_FPRDShortLoFailThrsh,
+					   KcEMSD_FPRDShortSmplThrsh,
+					   &SbEMSD_FPRDTestComplete_Internal,
+					   &SbEMSD_FPRDShortHiTestFailed,
+					   &SbEMSD_FPRDShortLoTestFailed) ;
 
-SbEMSD_FPRDTestComplete |=SbEMSD_FPRDTestComplete_Internal;
+	SbEMSD_FPRDTestComplete |=SbEMSD_FPRDTestComplete_Internal;
 }
 
 /* ============================================================================ *\

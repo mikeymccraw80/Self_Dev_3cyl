@@ -17,9 +17,11 @@
 /*****************************************************************************
  *   Include Files
  *****************************************************************************/
-#include "emsdfexi.h" /* For external interfaces                 */
 #include "emsdpapi.h" /* For forced declaration definition check */
 #include "emsdcald.h" /* For local calibrations                  */
+#include "mall_lib.h"
+#include "intr_ems.h"
+#include "v_power.h"
 
 /*****************************************************************************
  *  Local Include Files
@@ -33,10 +35,10 @@
 /*****************************************************************************
  *  Static Data Define
  *****************************************************************************/
-  TbBOOLEAN        SbEMSD_FileROMTestComplete ;
-#pragma section [nvram] 
-  TbBOOLEAN        SbEMSD_FileROMTestFailed ;
-#pragma section [] 
+TbBOOLEAN        SbEMSD_FileROMTestComplete ;
+// #pragma section [nvram] 
+TbBOOLEAN        SbEMSD_FileROMTestFailed ;
+// #pragma section [] 
 /*****************************************************************************
  *  Function definition
  ******************************************************************************/
@@ -68,38 +70,32 @@
  * Parameters:   None
  * Return:       None
  *****************************************************************************/
-FAR_COS void MngEMSD_FileROM125msTasks (void)
+void MngEMSD_FileROM125msTasks (void)
 {
- if(!SbEMSD_FileROMTestComplete)
- {
-  /*     
- *      ==================================================
- *      This process activates the Data Manager and reports
- *      the FileROM_Checksum fail/pass results
- *      when the test has been completed. The Data Manager is
- *      activated immediately (CALL, JSR, etc.) when
- *      Report_Test_Failed or Report_Test_Passed is set to
- *      "CbTRUE", and reports the test result identified by
- *      DTC_Identifier. Multiple results will be reported
- *      successively. */
+#if 0
+	if(!SbEMSD_FileROMTestComplete) {
+	/*     
+	*      ==================================================
+	*      This process activates the Data Manager and reports
+	*      the FileROM_Checksum fail/pass results
+	*      when the test has been completed. The Data Manager is
+	*      activated immediately (CALL, JSR, etc.) when
+	*      Report_Test_Failed or Report_Test_Passed is set to
+	*      "CbTRUE", and reports the test result identified by
+	*      DTC_Identifier. Multiple results will be reported
+	*      successively. */
 
-    if( (GetVIOS_IgnSt() == CeIGN_ON)
-	&&GetEMSD_FileROM_ChecksumState())
-      {
-       SbEMSD_FileROMTestFailed   = CbTRUE;
-       SbEMSD_FileROMTestComplete = CbTRUE;
-      }
-      else
-      {
-       SbEMSD_FileROMTestFailed   = CbFALSE;
-       SbEMSD_FileROMTestComplete = CbTRUE;
-      }
-
- }
- else
- {
-  /* do nothing*/
- }
+		if( (GetVIOS_IgnSt() == CeIGN_ON) &&GetEMSD_FileROM_ChecksumState()) {
+			SbEMSD_FileROMTestFailed   = CbTRUE;
+			SbEMSD_FileROMTestComplete = CbTRUE;
+		} else {
+			SbEMSD_FileROMTestFailed   = CbFALSE;
+			SbEMSD_FileROMTestComplete = CbTRUE;
+		}
+	} else {
+		/* do nothing*/
+	}
+#endif
 }
 /* ============================================================================ *\
  * File revision history (top to bottom, first revision to last revision

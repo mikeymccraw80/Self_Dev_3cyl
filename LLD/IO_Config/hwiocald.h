@@ -8,6 +8,7 @@
 #include "hal.h"
 // #include "t_gentypes.h"
 #include "timepcvc.h"
+#include "v_power.h"
 
 //=============================================================================
 // type define
@@ -60,5 +61,14 @@ extern const T_COUNT_BYTE  KcVIOS_RunRefHot;
 extern const T_RPMa        KfVIOS_n_CrankToRunThrsh;
 extern const T_RPMa        KfVIOS_n_RunToCrankThrsh;
 extern const TwTIME_t_R7p8125ms   KfVIOS_t_PowerdownDelayTime;
+
+extern const PowerSource_FPR_Type   K_PowerConfig_FPR;
+extern const PowerSourceType        K_PowerConfig_CCP;
+extern const PowerSourceType        K_PowerConfig_FANA;
+extern const PowerSourceType        K_PowerConfig_FANB;
+extern const PowerSourceType        K_PowerConfig_ACClutch;
+extern const PowerSourceType        K_PowerConfig_SparkCoil;
+extern const PowerSourceType        K_PowerConfig_O2Heater;
+extern const PowerSourceType        K_PowerConfig_Injector;
 
 #endif
