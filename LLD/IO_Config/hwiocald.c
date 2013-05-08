@@ -659,4 +659,20 @@ const PowerSourceType K_PowerConfig_Injector =
    IgnitionON
 };
 
+/*
+*| estdcald.{
+*|   KfESTD_U_IgnVoltResetThrsh {
+*|     : is_calconst;
+*|     : description =" Voltage threshold used to prevent false failure "
+*| " indication when the ignition is cycled quickly as the engine is "
+*| " turning. Due to hardware characteristics, the EST failure register "
+*| " bits may set during an ignition transistion (key_0n to Key_off) "
+*| " with RPM > 0 ";
+*|     : type = fixed.estd_t_voltb;
+*|     : units = "volts";
+*|   }
+*| }
+*/
+const T_VOLTb KfESTD_U_IgnVoltResetThrsh = V_VOLTb(11);
+
 

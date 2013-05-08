@@ -18,8 +18,8 @@
 /*****************************************************************************
  *  Global Data Type Include Files                                           *
  *****************************************************************************/
-#include "estdfexi.h" /* For ESTD GLobal Input */
 #include "t_gentypes.h" /* For Global Input */
+#include "timepcvc.h"
 
 /*****************************************************************************
  *  Calibration declarations for AC Detect

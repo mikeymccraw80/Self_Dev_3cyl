@@ -26,10 +26,10 @@
  *  Diagnostic Execution Routine Definitions
  *****************************************************************************/
 
-FAR_COS void MngESTD_RefEventTasks(void);
-FAR_COS void InitESTD_ShutdownInProgToKeyOn (void);
-FAR_COS void MngESTD_7p81msTasks (void);
-//FAR_COS void InitESTD_RstToKeyOff (void);
+void MngESTD_RefEventTasks(void);
+void InitESTD_ShutdownInProgToKeyOn (void);
+void MngESTD_7p81msTasks (void);
+//void InitESTD_RstToKeyOff (void);
 
 #endif /* End of ESTDPAPI_H */
 

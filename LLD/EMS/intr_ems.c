@@ -70,8 +70,8 @@ int16_t                              EOBD_CoolTemp;
 
 // EOBD_PERCENTa                        EOBD_CcpDutyCycle;
 // EOBD_KPAa                            EOBD_MAP_Altitude;
-// EOBD_VOLTb                           EOBD_Ignition_Voltage;
-// EOBD_VOLTb                           EOBD_IgnVoltageAtKeyOn;
+EOBD_VOLTb                           EOBD_Ignition_Voltage;
+EOBD_VOLTb                           EOBD_IgnVoltageAtKeyOn;
 // EOBD_T_PERCENT                       EOBD_Pct_RawIntakeAirTemp;
 // EOBD_T_PERCENT                       EOBD_Pct_RawMAP;
 // EOBD_T_PERCENT                   EOBD_Pct_RawBRPre;

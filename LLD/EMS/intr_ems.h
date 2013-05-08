@@ -315,12 +315,12 @@ typedef enum {
 /***********************************************************************
  ************** Ignition Voltage  **************************************
  ***********************************************************************/
-// extern EOBD_VOLTb        EOBD_Ignition_Voltage;
-// extern EOBD_VOLTb        EOBD_IgnVoltageAtKeyOn;
-// #define	GetVIOS_U_IgnVolt()\
-                        // (EOBD_Ignition_Voltage)
-// #define GetVIOS_U_IgnVoltageAtKeyOn()\
-                        // (EOBD_IgnVoltageAtKeyOn)
+extern EOBD_VOLTb        EOBD_Ignition_Voltage;
+extern EOBD_VOLTb        EOBD_IgnVoltageAtKeyOn;
+#define	GetVIOS_U_IgnVolt()\
+                        (EOBD_Ignition_Voltage)
+#define GetVIOS_U_IgnVoltageAtKeyOn()\
+                        (EOBD_IgnVoltageAtKeyOn)
 // INLINE void ConvertIntrParam_IgnitionVoltage(void)
 // {
     // EOBD_Ignition_Voltage = FixConvert( ATD_buffer[AD_IGNITION_VOLTAGE_TYPE], Volts_Plus_Fraction, EOBD_VOLTb ) ;
@@ -969,46 +969,45 @@ extern int16_t           EOBD_CoolTemp;
 // /******************************************************************************
  // * To test EST A,B 
  // ******************************************************************************/
-// #define GetESTAShortFaultStatus()   false//(GetShortFault(PULSE_OUT_EST_A)||GetEstLine1HighCurrentFlag())        						
-// #define GetESTAOpenFaultStatus()   false// (GetOpenFault(PULSE_OUT_EST_A))			
+#define GetESTAShortFaultStatus()   false//(GetShortFault(PULSE_OUT_EST_A)||GetEstLine1HighCurrentFlag())        						
+#define GetESTAOpenFaultStatus()   false// (GetOpenFault(PULSE_OUT_EST_A))			
 
-// #define GetESTBShortFaultStatus()   false//(GetShortFault(PULSE_OUT_EST_B)||GetEstLine2HighCurrentFlag())			
-// #define GetESTBOpenFaultStatus()   false// (GetOpenFault(PULSE_OUT_EST_B))			
+#define GetESTBShortFaultStatus()   false//(GetShortFault(PULSE_OUT_EST_B)||GetEstLine2HighCurrentFlag())			
+#define GetESTBOpenFaultStatus()   false// (GetOpenFault(PULSE_OUT_EST_B))			
 
-// #if CcSYST_NUM_OF_CYLINDERS ==3
-// #define GetESTCShortFaultStatus()   false//(GetShortFault(PULSE_OUT_EST_C)||GetEstLine3HighCurrentFlag())			
-// #define GetESTCOpenFaultStatus()   false// (GetOpenFault(PULSE_OUT_EST_C))			
-// #endif
+INLINE TeEST_CIRCUIT_STATE GetAPI_EST_CircuitState(uint8_t active_estline)
+{
+	TeEST_CIRCUIT_STATE est_line_fault;
 
-// INLINE TeEST_CIRCUIT_STATE GetAPI_EST_CircuitState(uint8_t active_estline)
-// {
-// TeEST_CIRCUIT_STATE est_line_fault;
+	if ( (active_estline == 0) &&
+		(GetESTAShortFaultStatus()||GetESTAOpenFaultStatus()) )
+	{
+		est_line_fault = CeEST_FAULTED;
+		// ClearEstLine1HighCurrentFlag();
 
-    // if ( (active_estline == 0) &&
-         // (GetESTAShortFaultStatus()||GetESTAOpenFaultStatus()) )
-    // {
-       // est_line_fault = CeEST_FAULTED;
-       // ClearEstLine1HighCurrentFlag();
-	   
-    // }
-    // else if ( (active_estline == 1) &&
-              // (GetESTBShortFaultStatus()||GetESTBOpenFaultStatus()) )
-    // {
-       // est_line_fault = CeEST_FAULTED;
-       // ClearEstLine2HighCurrentFlag();
-    // }
-    // else
-    // {
-       // est_line_fault = CeEST_NOMINAL;
-    // }
+	}
+	else if ( (active_estline == 1) &&
+		(GetESTBShortFaultStatus()||GetESTBOpenFaultStatus()) )
+	{
+		est_line_fault = CeEST_FAULTED;
+		// ClearEstLine2HighCurrentFlag();
+	}
+	else
+	{
+		est_line_fault = CeEST_NOMINAL;
+	}
 
-// return(est_line_fault);
-// }
+	return(est_line_fault);
+}
 
 // INLINE void SetVIOS_MainRlyOff(void)
 // {
   // LLD_do_table[LLD_DO_MAIN_RELAY].value  = CbTRUE;
 // }
+
+// #define GetVIOS_EstActiveLine()         (EstLineActive)
+#define GetVIOS_EstActiveLine()         (TRUE)
+#define GetVIOS_SPARKCOIL_PowerOK()     (GetPowerOK(SparkCoil))
 
 // /******************************************************************************
  // * for Chery Can Meters 
