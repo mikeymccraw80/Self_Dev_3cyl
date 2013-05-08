@@ -32,7 +32,7 @@
 /*****************************************************************************
  *   Include Files
  *****************************************************************************/
-#include "emsdfexi.h" /* For external interfaces              */
+#include "t_gentypes.h"
 
 
 /* ==========================================================================
@@ -41,53 +41,53 @@
 /* ===========================================================================
  * common diagnostic enable criteria : ignition on time
  * ==========================================================================*/
-extern const T_SECONDS        CAL0ADDR    KfEMSD_t_IgnitionOnDelay;
-extern const T_SECONDS        CAL0ADDR    KfEMSD_t_MPRDIgnitionOnDelay;
+extern const T_SECONDS            KfEMSD_t_IgnitionOnDelay;
+extern const T_SECONDS            KfEMSD_t_MPRDIgnitionOnDelay;
 
 /* ===========================================================================
  * AC Clutch Relay sub-subsystem calibrations export 
  * ==========================================================================*/
-extern const T_COUNT_WORD     CAL0ADDR    KcEMSD_ACCDShortHiFailThrsh;
-extern const T_COUNT_WORD     CAL0ADDR    KcEMSD_ACCDShortLoFailThrsh;
+extern const T_COUNT_WORD         KcEMSD_ACCDShortHiFailThrsh;
+extern const T_COUNT_WORD         KcEMSD_ACCDShortLoFailThrsh;
 
-extern const T_COUNT_WORD     CAL0ADDR    KcEMSD_ACCDShortSmplThrsh;
+extern const T_COUNT_WORD         KcEMSD_ACCDShortSmplThrsh;
 
 /* ===========================================================================
  * Main Power Relay sub-subsystem calibrations export 
  * ==========================================================================*/
-extern const T_COUNT_WORD     CAL0ADDR    KcEMSD_MPRDShortHiFailThrsh;
-extern const T_COUNT_WORD     CAL0ADDR    KcEMSD_MPRDShortLoFailThrsh;
+extern const T_COUNT_WORD         KcEMSD_MPRDShortHiFailThrsh;
+extern const T_COUNT_WORD         KcEMSD_MPRDShortLoFailThrsh;
 
-extern const T_COUNT_WORD     CAL0ADDR    KcEMSD_MPRDShortSmplThrsh;
+extern const T_COUNT_WORD         KcEMSD_MPRDShortSmplThrsh;
 /* ===========================================================================
  * Fuel Pump Relay sub-subsystem calibrations export 
  * ==========================================================================*/
-extern const T_COUNT_WORD     CAL0ADDR    KcEMSD_FPRDShortHiFailThrsh;
-extern const T_COUNT_WORD     CAL0ADDR    KcEMSD_FPRDShortLoFailThrsh;
+extern const T_COUNT_WORD         KcEMSD_FPRDShortHiFailThrsh;
+extern const T_COUNT_WORD         KcEMSD_FPRDShortLoFailThrsh;
 
-extern const T_COUNT_WORD     CAL0ADDR    KcEMSD_FPRDShortSmplThrsh;
+extern const T_COUNT_WORD         KcEMSD_FPRDShortSmplThrsh;
 
 /* ===========================================================================
  * MIL sub-subsystem calibrations export 
  * ==========================================================================*/
-extern const T_COUNT_WORD     CAL0ADDR    KcEMSD_MILDShortHiFailThrsh;
-extern const T_COUNT_WORD     CAL0ADDR    KcEMSD_MILDShortLoFailThrsh;
+extern const T_COUNT_WORD         KcEMSD_MILDShortHiFailThrsh;
+extern const T_COUNT_WORD         KcEMSD_MILDShortLoFailThrsh;
 
-extern const T_COUNT_WORD     CAL0ADDR    KcEMSD_MILDShortSmplThrsh;
+extern const T_COUNT_WORD         KcEMSD_MILDShortSmplThrsh;
 
 
 /* ===========================================================================
  * Fanx sub-subsystem calibrations export 
  * ==========================================================================*/
-extern const T_COUNT_WORD     CAL0ADDR    KcEMSD_FANAShortHiFailThrsh;
-extern const T_COUNT_WORD     CAL0ADDR    KcEMSD_FANAShortLoFailThrsh;
+extern const T_COUNT_WORD         KcEMSD_FANAShortHiFailThrsh;
+extern const T_COUNT_WORD         KcEMSD_FANAShortLoFailThrsh;
 
-extern const T_COUNT_WORD     CAL0ADDR    KcEMSD_FANAShortSmplThrsh;
+extern const T_COUNT_WORD         KcEMSD_FANAShortSmplThrsh;
 
-extern const T_COUNT_WORD     CAL0ADDR    KcEMSD_FANBShortHiFailThrsh;
-extern const T_COUNT_WORD     CAL0ADDR    KcEMSD_FANBShortLoFailThrsh;
+extern const T_COUNT_WORD         KcEMSD_FANBShortHiFailThrsh;
+extern const T_COUNT_WORD         KcEMSD_FANBShortLoFailThrsh;
 
-extern const T_COUNT_WORD     CAL0ADDR    KcEMSD_FANBShortSmplThrsh;
+extern const T_COUNT_WORD         KcEMSD_FANBShortSmplThrsh;
 
 /*****************************************************************************
  *  Function Exports

@@ -45,45 +45,45 @@
  *  AC Clutch Function Prototype
  *****************************************************************************/
 
-FAR_COS void MngEMSD_AcClutch125msTasks (void);
+void MngEMSD_AcClutch125msTasks (void);
 
 /******************************************************************************
  *  Main Power Relay  Function Prototype
  *****************************************************************************/
-FAR_COS void MngEMSD_MainRelay125msTasks (void);
+void MngEMSD_MainRelay125msTasks (void);
 
 /******************************************************************************
  *  Fuel Pump Function Prototype
  *****************************************************************************/
 
-FAR_COS void MngEMSD_FuelPump125msTasks (void);
+void MngEMSD_FuelPump125msTasks (void);
 
 /******************************************************************************
  *  MIL Function Prototype
  *****************************************************************************/
-FAR_COS void MngEMSD_MIL125msTasks (void);
+void MngEMSD_MIL125msTasks (void);
 
 /******************************************************************************
  *  Fanx Function Prototype
  *****************************************************************************/
-FAR_COS void MngEMSD_FanA125msTasks (void);
-FAR_COS void MngEMSD_FanB125msTasks (void);
+void MngEMSD_FanA125msTasks (void);
+void MngEMSD_FanB125msTasks (void);
 
 
 /******************************************************************************
  *  FileROM Function Prototype
  *****************************************************************************/
-//FAR_COS void InitEMSD_FileROMRstToKeyOn(void);
-FAR_COS void MngEMSD_FileROM125msTasks (void);
+//void InitEMSD_FileROMRstToKeyOn(void);
+void MngEMSD_FileROM125msTasks (void);
 
 
 
-//FAR_COS void InitEMSD_AcClutchRstToKeyOff(void);
-//FAR_COS void InitEMSD_FanxRstToKeyOff(void);
-//FAR_COS void InitEMSD_FileROMRstToKeyOn(void);
-//FAR_COS void InitEMSD_FuelPumpRstToKeyOff(void);
-//FAR_COS void InitEMSD_MILRstToKeyOff(void);
-//FAR_COS void InitEMSD_MainRelayRstToKeyOff(void);
+//void InitEMSD_AcClutchRstToKeyOff(void);
+//void InitEMSD_FanxRstToKeyOff(void);
+//void InitEMSD_FileROMRstToKeyOn(void);
+//void InitEMSD_FuelPumpRstToKeyOff(void);
+//void InitEMSD_MILRstToKeyOff(void);
+//void InitEMSD_MainRelayRstToKeyOff(void);
 
 
 #endif    /* #define EMSDPAPI_H                       */

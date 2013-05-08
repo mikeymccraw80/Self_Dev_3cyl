@@ -30,7 +30,6 @@
 /*****************************************************************************
  *   Include Files
  *****************************************************************************/
-#include "emsdfexi.h" /* For external interfaces              */
 #include "emsdcald.h" /* Forced declaration definition check  */
 
 
@@ -51,7 +50,7 @@
 *|   }
 *| }
 */
-const T_SECONDS  CAL0ADDR    KfEMSD_t_IgnitionOnDelay = V_SECONDS (10) ;
+const T_SECONDS      KfEMSD_t_IgnitionOnDelay = V_SECONDS (10) ;
 /*===========================================================================*/
 /* This calibration is the ignition on time  required for the main power relay
  * diagnostic. */
@@ -69,7 +68,7 @@ const T_SECONDS  CAL0ADDR    KfEMSD_t_IgnitionOnDelay = V_SECONDS (10) ;
 *|   }
 *| }
 */
-const T_SECONDS  CAL0ADDR    KfEMSD_t_MPRDIgnitionOnDelay = V_SECONDS (10) ;
+const T_SECONDS      KfEMSD_t_MPRDIgnitionOnDelay = V_SECONDS (10) ;
 
 
 /*===============================================================================
@@ -92,7 +91,7 @@ const T_SECONDS  CAL0ADDR    KfEMSD_t_MPRDIgnitionOnDelay = V_SECONDS (10) ;
 *|   }
 *| }
 */
-const T_COUNT_WORD     CAL0ADDR KcEMSD_ACCDShortHiFailThrsh  = V_COUNT_WORD (10) ;
+const T_COUNT_WORD      KcEMSD_ACCDShortHiFailThrsh  = V_COUNT_WORD (10) ;
 /*============================================================================*/
 /* Ac Clutch Relay fault determination counter
  * threshhold equal to or above which a failure is
@@ -109,7 +108,7 @@ const T_COUNT_WORD     CAL0ADDR KcEMSD_ACCDShortHiFailThrsh  = V_COUNT_WORD (10)
 *|   }
 *| }
 */
-const T_COUNT_WORD     CAL0ADDR KcEMSD_ACCDShortLoFailThrsh  = V_COUNT_WORD (10) ;
+const T_COUNT_WORD      KcEMSD_ACCDShortLoFailThrsh  = V_COUNT_WORD (10) ;
 /*===========================================================================*/
 /* Ac Clutch Relay fault sample counter threshhold equal to
  * or above which a pass is reported to the Data Manager */
@@ -124,7 +123,7 @@ const T_COUNT_WORD     CAL0ADDR KcEMSD_ACCDShortLoFailThrsh  = V_COUNT_WORD (10)
 *|   }
 *| }
 */
-const T_COUNT_WORD   CAL0ADDR   KcEMSD_ACCDShortSmplThrsh  = V_COUNT_WORD (20) ;
+const T_COUNT_WORD      KcEMSD_ACCDShortSmplThrsh  = V_COUNT_WORD (20) ;
 
 /*===============================================================================
  *  Main Power Relay
@@ -146,7 +145,7 @@ const T_COUNT_WORD   CAL0ADDR   KcEMSD_ACCDShortSmplThrsh  = V_COUNT_WORD (20) ;
 *|   }
 *| }
 */
-const T_COUNT_WORD     CAL0ADDR KcEMSD_MPRDShortHiFailThrsh  = V_COUNT_WORD (10) ;
+const T_COUNT_WORD      KcEMSD_MPRDShortHiFailThrsh  = V_COUNT_WORD (10) ;
 /*============================================================================*/
 /* Main Power Relay fault determination counter
  * threshhold equal to or above which a failure is
@@ -163,7 +162,7 @@ const T_COUNT_WORD     CAL0ADDR KcEMSD_MPRDShortHiFailThrsh  = V_COUNT_WORD (10)
 *|   }
 *| }
 */
-const T_COUNT_WORD     CAL0ADDR KcEMSD_MPRDShortLoFailThrsh  = V_COUNT_WORD (10) ;
+const T_COUNT_WORD      KcEMSD_MPRDShortLoFailThrsh  = V_COUNT_WORD (10) ;
 /*===========================================================================*/
 /* Main Power Relay fault sample counter threshhold equal to
  * or above which a pass is reported to the Data Manager */
@@ -178,7 +177,7 @@ const T_COUNT_WORD     CAL0ADDR KcEMSD_MPRDShortLoFailThrsh  = V_COUNT_WORD (10)
 *|   }
 *| }
 */
-const T_COUNT_WORD   CAL0ADDR   KcEMSD_MPRDShortSmplThrsh  = V_COUNT_WORD (20) ;
+const T_COUNT_WORD      KcEMSD_MPRDShortSmplThrsh  = V_COUNT_WORD (20) ;
 
 /*===============================================================================
  *  Fuel Pump Relay
@@ -200,7 +199,7 @@ const T_COUNT_WORD   CAL0ADDR   KcEMSD_MPRDShortSmplThrsh  = V_COUNT_WORD (20) ;
 *|   }
 *| }
 */
-const T_COUNT_WORD     CAL0ADDR KcEMSD_FPRDShortHiFailThrsh  = V_COUNT_WORD (10) ;
+const T_COUNT_WORD      KcEMSD_FPRDShortHiFailThrsh  = V_COUNT_WORD (10) ;
 /*============================================================================*/
 /* Fuel Pump Relay fault determination counter
  * threshhold equal to or above which a failure is
@@ -217,7 +216,7 @@ const T_COUNT_WORD     CAL0ADDR KcEMSD_FPRDShortHiFailThrsh  = V_COUNT_WORD (10)
 *|   }
 *| }
 */
-const T_COUNT_WORD     CAL0ADDR KcEMSD_FPRDShortLoFailThrsh  = V_COUNT_WORD (10) ;
+const T_COUNT_WORD      KcEMSD_FPRDShortLoFailThrsh  = V_COUNT_WORD (10) ;
 /*===========================================================================*/
 /* Fuel Pump Relay fault sample counter threshhold equal to
  * or above which a pass is reported to the Data Manager */
@@ -232,7 +231,7 @@ const T_COUNT_WORD     CAL0ADDR KcEMSD_FPRDShortLoFailThrsh  = V_COUNT_WORD (10)
 *|   }
 *| }
 */
-const T_COUNT_WORD   CAL0ADDR   KcEMSD_FPRDShortSmplThrsh  = V_COUNT_WORD (20) ;
+const T_COUNT_WORD      KcEMSD_FPRDShortSmplThrsh  = V_COUNT_WORD (20) ;
 
 /*===============================================================================
  *  MIL
@@ -254,7 +253,7 @@ const T_COUNT_WORD   CAL0ADDR   KcEMSD_FPRDShortSmplThrsh  = V_COUNT_WORD (20) ;
 *|   }
 *| }
 */
-const T_COUNT_WORD     CAL0ADDR KcEMSD_MILDShortHiFailThrsh  = V_COUNT_WORD (10) ;
+const T_COUNT_WORD      KcEMSD_MILDShortHiFailThrsh  = V_COUNT_WORD (10) ;
 /*============================================================================*/
 /* MIL fault determination counter
  * threshhold equal to or above which a failure is
@@ -271,7 +270,7 @@ const T_COUNT_WORD     CAL0ADDR KcEMSD_MILDShortHiFailThrsh  = V_COUNT_WORD (10)
 *|   }
 *| }
 */
-const T_COUNT_WORD     CAL0ADDR KcEMSD_MILDShortLoFailThrsh  = V_COUNT_WORD (10) ;
+const T_COUNT_WORD      KcEMSD_MILDShortLoFailThrsh  = V_COUNT_WORD (10) ;
 /*===========================================================================*/
 /* MIL fault sample counter threshhold equal to
  * or above which a pass is reported to the Data Manager */
@@ -286,7 +285,7 @@ const T_COUNT_WORD     CAL0ADDR KcEMSD_MILDShortLoFailThrsh  = V_COUNT_WORD (10)
 *|   }
 *| }
 */
-const T_COUNT_WORD   CAL0ADDR   KcEMSD_MILDShortSmplThrsh  = V_COUNT_WORD (20) ;
+const T_COUNT_WORD      KcEMSD_MILDShortSmplThrsh  = V_COUNT_WORD (20) ;
 
 
 /*===============================================================================
@@ -309,7 +308,7 @@ const T_COUNT_WORD   CAL0ADDR   KcEMSD_MILDShortSmplThrsh  = V_COUNT_WORD (20) ;
 *|   }
 *| }
 */
-const T_COUNT_WORD     CAL0ADDR KcEMSD_FANAShortHiFailThrsh  = V_COUNT_WORD (10) ;
+const T_COUNT_WORD      KcEMSD_FANAShortHiFailThrsh  = V_COUNT_WORD (10) ;
 /*============================================================================*/
 /* Fan1 fault determination counter
  * threshhold equal to or above which a failure is
@@ -326,7 +325,7 @@ const T_COUNT_WORD     CAL0ADDR KcEMSD_FANAShortHiFailThrsh  = V_COUNT_WORD (10)
 *|   }
 *| }
 */
-const T_COUNT_WORD     CAL0ADDR KcEMSD_FANAShortLoFailThrsh  = V_COUNT_WORD (10) ;
+const T_COUNT_WORD      KcEMSD_FANAShortLoFailThrsh  = V_COUNT_WORD (10) ;
 /*===========================================================================*/
 /* Fan1 fault sample counter threshhold equal to
  * or above which a pass is reported to the Data Manager */
@@ -341,7 +340,7 @@ const T_COUNT_WORD     CAL0ADDR KcEMSD_FANAShortLoFailThrsh  = V_COUNT_WORD (10)
 *|   }
 *| }
 */
-const T_COUNT_WORD   CAL0ADDR   KcEMSD_FANAShortSmplThrsh  = V_COUNT_WORD (20) ;
+const T_COUNT_WORD      KcEMSD_FANAShortSmplThrsh  = V_COUNT_WORD (20) ;
 
 /*===========================================================================*/
 
@@ -360,7 +359,7 @@ const T_COUNT_WORD   CAL0ADDR   KcEMSD_FANAShortSmplThrsh  = V_COUNT_WORD (20) ;
 *|   }
 *| }
 */
-const T_COUNT_WORD     CAL0ADDR KcEMSD_FANBShortHiFailThrsh  = V_COUNT_WORD (10) ;
+const T_COUNT_WORD      KcEMSD_FANBShortHiFailThrsh  = V_COUNT_WORD (10) ;
 /*============================================================================*/
 /* Fan2 fault determination counter
  * threshhold equal to or above which a failure is
@@ -377,7 +376,7 @@ const T_COUNT_WORD     CAL0ADDR KcEMSD_FANBShortHiFailThrsh  = V_COUNT_WORD (10)
 *|   }
 *| }
 */
-const T_COUNT_WORD     CAL0ADDR KcEMSD_FANBShortLoFailThrsh  = V_COUNT_WORD (10) ;
+const T_COUNT_WORD      KcEMSD_FANBShortLoFailThrsh  = V_COUNT_WORD (10) ;
 /*===========================================================================*/
 /* Fan2 fault sample counter threshhold equal to
  * or above which a pass is reported to the Data Manager */
@@ -392,7 +391,7 @@ const T_COUNT_WORD     CAL0ADDR KcEMSD_FANBShortLoFailThrsh  = V_COUNT_WORD (10)
 *|   }
 *| }
 */
-const T_COUNT_WORD   CAL0ADDR   KcEMSD_FANBShortSmplThrsh  = V_COUNT_WORD (20) ;
+const T_COUNT_WORD      KcEMSD_FANBShortSmplThrsh  = V_COUNT_WORD (20) ;
 
 
 
