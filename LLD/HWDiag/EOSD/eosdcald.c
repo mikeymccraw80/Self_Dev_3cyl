@@ -30,11 +30,7 @@
 /*****************************************************************************
  *   Include Files
  *****************************************************************************/
-#include "eosdfexi.h" /* For external interfaces              */
 #include "eosdcald.h" /* Forced declaration definition check  */
-
-
-
 
 /*  =========================================================================
  *  Data for Oxygen Sensor Heater Diagnostic bank1 sensor1
@@ -57,7 +53,7 @@
 *|   }
 *| }
 */
-const T_COUNT_WORD     CAL0ADDR KcEOSD_11_HtrShortLowFailThrsh = V_COUNT_WORD (10) ;
+const T_COUNT_WORD     KcEOSD_11_HtrShortLowFailThrsh = V_COUNT_WORD (10) ;
 
 /*===========================================================================*/
 
@@ -76,7 +72,7 @@ const T_COUNT_WORD     CAL0ADDR KcEOSD_11_HtrShortLowFailThrsh = V_COUNT_WORD (1
 *|   }
 *| }
 */
-const T_COUNT_WORD     CAL0ADDR KcEOSD_11_HtrShortHiFailThrsh = V_COUNT_WORD (10) ;
+const T_COUNT_WORD     KcEOSD_11_HtrShortHiFailThrsh = V_COUNT_WORD (10) ;
 
 
 /*===========================================================================*/
@@ -94,7 +90,7 @@ const T_COUNT_WORD     CAL0ADDR KcEOSD_11_HtrShortHiFailThrsh = V_COUNT_WORD (10
 *|   }
 *| }
 */
-const T_COUNT_WORD   CAL0ADDR   KcEOSD_11_HtrSmplThrsh = V_COUNT_WORD (20) ;
+const T_COUNT_WORD     KcEOSD_11_HtrSmplThrsh = V_COUNT_WORD (20) ;
 
 /*===========================================================================*/
 
@@ -115,7 +111,7 @@ const T_COUNT_WORD   CAL0ADDR   KcEOSD_11_HtrSmplThrsh = V_COUNT_WORD (20) ;
 *|   }
 *| }
 */
-const T_COUNT_WORD  CAL0ADDR    KfEOSD_t_11_HtrEngRunThrsh = V_COUNT_WORD (10) ;
+const T_COUNT_WORD     KfEOSD_t_11_HtrEngRunThrsh = V_COUNT_WORD (10) ;
 
 
 /*  =========================================================================
@@ -138,7 +134,7 @@ const T_COUNT_WORD  CAL0ADDR    KfEOSD_t_11_HtrEngRunThrsh = V_COUNT_WORD (10) ;
 *|   }
 *| }
 */
-const T_COUNT_WORD   CAL0ADDR   KcEOSD_12_HtrShortLowFailThrsh = V_COUNT_WORD (10) ;
+const T_COUNT_WORD     KcEOSD_12_HtrShortLowFailThrsh = V_COUNT_WORD (10) ;
 
 /*===========================================================================*/
 /* O2 Heater Current Fault sample determination counter
@@ -156,7 +152,7 @@ const T_COUNT_WORD   CAL0ADDR   KcEOSD_12_HtrShortLowFailThrsh = V_COUNT_WORD (1
 *|   }
 *| }
 */
-const T_COUNT_WORD   CAL0ADDR   KcEOSD_12_HtrShortHiFailThrsh = V_COUNT_WORD (10) ;
+const T_COUNT_WORD     KcEOSD_12_HtrShortHiFailThrsh = V_COUNT_WORD (10) ;
 /*===========================================================================*/
 
 /* O2 Heater Current sample counter threshhold equal to
@@ -172,7 +168,7 @@ const T_COUNT_WORD   CAL0ADDR   KcEOSD_12_HtrShortHiFailThrsh = V_COUNT_WORD (10
 *|   }
 *| }
 */
-const T_COUNT_WORD  CAL0ADDR    KcEOSD_12_HtrSmplThrsh = V_COUNT_WORD (20) ;
+const T_COUNT_WORD     KcEOSD_12_HtrSmplThrsh = V_COUNT_WORD (20) ;
 /*===========================================================================*/
 
 /* In normal operation, the heater current will decay to a steady
@@ -192,7 +188,7 @@ const T_COUNT_WORD  CAL0ADDR    KcEOSD_12_HtrSmplThrsh = V_COUNT_WORD (20) ;
 *|   }
 *| }
 */
-const T_COUNT_WORD   CAL0ADDR   KfEOSD_t_12_HtrEngRunThrsh = V_COUNT_WORD (10) ;
+const T_COUNT_WORD     KfEOSD_t_12_HtrEngRunThrsh = V_COUNT_WORD (10) ;
 
 
 

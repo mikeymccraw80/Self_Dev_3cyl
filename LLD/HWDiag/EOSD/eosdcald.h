@@ -32,9 +32,7 @@
 /*****************************************************************************
  *   Include Files
  *****************************************************************************/
-#include "eosdfexi.h" /* For external interfaces              */
-
-
+#include "t_gentypes.h"
 
 
 /*****************************************************************************
@@ -44,20 +42,20 @@
 /* ==========================================================================
  * Calibration declarations for Oxygen Sensor Heater Diagnostic bank1 sensor1
  * ==========================================================================*/
-extern const T_COUNT_WORD       CAL0ADDR KcEOSD_11_HtrShortLowFailThrsh;
-extern const T_COUNT_WORD       CAL0ADDR KcEOSD_11_HtrShortHiFailThrsh;
-extern const T_COUNT_WORD       CAL0ADDR KcEOSD_11_HtrSmplThrsh;
-extern const T_COUNT_WORD       CAL0ADDR KfEOSD_t_11_HtrEngRunThrsh;
+extern const T_COUNT_WORD        KcEOSD_11_HtrShortLowFailThrsh;
+extern const T_COUNT_WORD        KcEOSD_11_HtrShortHiFailThrsh;
+extern const T_COUNT_WORD        KcEOSD_11_HtrSmplThrsh;
+extern const T_COUNT_WORD        KfEOSD_t_11_HtrEngRunThrsh;
 
 
 /* ==========================================================================
  * Calibration declarations for Oxygen Sensor Heater Diagnostic bank1 sensor2
  * ==========================================================================*/
 
-extern const T_COUNT_WORD       CAL0ADDR KcEOSD_12_HtrShortLowFailThrsh;
-extern const T_COUNT_WORD       CAL0ADDR KcEOSD_12_HtrShortHiFailThrsh;
-extern const T_COUNT_WORD       CAL0ADDR KcEOSD_12_HtrSmplThrsh;
-extern const T_COUNT_WORD       CAL0ADDR KfEOSD_t_12_HtrEngRunThrsh;
+extern const T_COUNT_WORD        KcEOSD_12_HtrShortLowFailThrsh;
+extern const T_COUNT_WORD        KcEOSD_12_HtrShortHiFailThrsh;
+extern const T_COUNT_WORD        KcEOSD_12_HtrSmplThrsh;
+extern const T_COUNT_WORD        KfEOSD_t_12_HtrEngRunThrsh;
 
 
 /*****************************************************************************

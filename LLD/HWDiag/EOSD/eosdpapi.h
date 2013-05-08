@@ -48,14 +48,14 @@
  *****************************************************************************/
 
 
-FAR_COS void MngEOSD_O2_11_Htr781msTasks (void);
-FAR_COS void MngEOSD_O2_11_Htr125msTasks (void);
+void MngEOSD_O2_11_Htr781msTasks (void);
+void MngEOSD_O2_11_Htr125msTasks (void);
 
-FAR_COS void MngEOSD_O2_12_Htr781msTasks (void);
-FAR_COS void MngEOSD_O2_12_Htr125msTasks (void);
+void MngEOSD_O2_12_Htr781msTasks (void);
+void MngEOSD_O2_12_Htr125msTasks (void);
 
-FAR_COS void InitEOSD_O2_11_HtrRstToKeyOff (void);
-FAR_COS void InitEOSD_O2_12_HtrRstToKeyOff (void);
+void InitEOSD_O2_11_HtrRstToKeyOff (void);
+void InitEOSD_O2_12_HtrRstToKeyOff (void);
 
 
 #endif    /* #define EOSDPAPI_H                       */

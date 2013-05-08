@@ -839,14 +839,14 @@ extern int16_t           EOBD_CoolTemp;
 // #define GetEOSD_O2_12_Ready()             (VbO2_BO2_Ready)
 // #define GetFUEL_B1_DFCO_ExitRichBias()    (fFlRsm > FixDefConst(1.01, Multiplier_0_to_2))
 
-// #define GetVIOS_O2_11_Htr_PSVIFaultShortHi()\
-   // ( DD_GetDiscreteDiagStatus(PULSE_OUT_O2_HEATER_11,OUTPUT_SHORT_CKT_FAULT) )
-// #define GetVIOS_O2_11_Htr_PSVIFaultShortLow()\
-   // ( DD_GetDiscreteDiagStatus(PULSE_OUT_O2_HEATER_11,OUTPUT_OPEN_CKT_FAULT) )
-// #define GetVIOS_O2_12_Htr_PSVIFaultShortHi()\
-   // ( DD_GetDiscreteDiagStatus(PULSE_OUT_O2_HEATER_12,OUTPUT_SHORT_CKT_FAULT) )
-// #define GetVIOS_O2_12_Htr_PSVIFaultShortLow()\
-   // ( DD_GetDiscreteDiagStatus(PULSE_OUT_O2_HEATER_12,OUTPUT_OPEN_CKT_FAULT) )
+#define GetVIOS_O2_11_Htr_PSVIFaultShortHi()\
+   ( DD_GetDiscreteDiagStatus(PULSE_OUT_O2_HEATER_11,OUTPUT_SHORT_CKT_FAULT) )
+#define GetVIOS_O2_11_Htr_PSVIFaultShortLow()\
+   ( DD_GetDiscreteDiagStatus(PULSE_OUT_O2_HEATER_11,OUTPUT_OPEN_CKT_FAULT) )
+#define GetVIOS_O2_12_Htr_PSVIFaultShortHi()\
+   ( DD_GetDiscreteDiagStatus(PULSE_OUT_O2_HEATER_12,OUTPUT_SHORT_CKT_FAULT) )
+#define GetVIOS_O2_12_Htr_PSVIFaultShortLow()\
+   ( DD_GetDiscreteDiagStatus(PULSE_OUT_O2_HEATER_12,OUTPUT_OPEN_CKT_FAULT) )
 
 #define GetOSSP_O2_DiagCntrDsbl()        (CbFALSE)
 
@@ -939,6 +939,7 @@ extern int16_t           EOBD_CoolTemp;
 #define GetVIOS_ACCLUTCH_PowerOK()              ( GetPowerOK(ACClutch) )
 // #define GetVIOS_SVS_PowerOK()                   ( GetPowerOK(SVS) )
 // #define GetVIOS_CCP_PowerOK()                   ( GetPowerOK(CCP) )
+#define GetVIOS_O2HEATER_PowerOK()              ( GetPowerOK(O2Heater) )
 
 // /******************************************************************************
  // * To test injectors A,B,C,D 
