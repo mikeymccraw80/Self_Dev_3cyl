@@ -8,3 +8,4 @@ Build/build.log
 *.mak
 *.err
 HLS/obj_list.txt
+tags
