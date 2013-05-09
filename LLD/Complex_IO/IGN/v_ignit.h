@@ -45,12 +45,12 @@ typedef uint16_t               Seconds_MedPrec ;
 extern Volts_B                Ignition_Voltage_B;
 extern IgnitionOnStatus_Type  IgnitionOnStatus;
 extern Seconds_MedPrec        IgnitionOn_Time;
-extern Every_Loop_Sec_B       Timer_125ms_Mark;
 
 /* ============================================================================ *\
  * Exported Func.
 \* ============================================================================ */
-void UpdateIgnitionState(void);
+/* should be called in 10ms task */
+void UpdateIgnitionState_10MS(void);
 
 /* ============================================================================ *\
  * Exported Macro

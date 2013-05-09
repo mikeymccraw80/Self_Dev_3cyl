@@ -127,11 +127,11 @@
 #define Bit1Position            (1)
 #define Bit0Position            (0)
 
-#if OS_SCHEDULER_10ms == CeSYST_AVAILABLE
-#define RegularRtiPrescaler  (0.010000)
-#else
+//#if OS_SCHEDULER_10ms == CeSYST_AVAILABLE
+//#define RegularRtiPrescaler  (0.010000)
+//#else
 #define RegularRtiPrescaler  (0.015625)
-#endif
+//#endif
 
 /*---------------------------------*/
 /*---                           ---*/
@@ -1730,11 +1730,11 @@ typedef SHORTCARD                                     RPM_Gradient_100rpmsec_B;
 /*---   Time Fixed Types   ---*/
 /*---                      ---*/
 /*----------------------------*/
-#if OS_SCHEDULER_10ms == CeSYST_AVAILABLE
-#define RegularRtiPrescaler                                          (0.010000)
-#else
-#define RegularRtiPrescaler                                          (0.015625)
-#endif
+//#if OS_SCHEDULER_10ms == CeSYST_AVAILABLE
+//#define RegularRtiPrescaler                                          (0.010000)
+//#else
+//#define RegularRtiPrescaler                                          (0.015625)
+//#endif
 
 /*---------------------------------------------------------------------------*/
 /*--- The times that require a lot of precision are based on the timing   ---*/

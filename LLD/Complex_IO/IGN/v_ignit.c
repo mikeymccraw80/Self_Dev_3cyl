@@ -27,6 +27,8 @@
 Volts_B                         Ignition_Voltage_B;
 IgnitionOnStatus_Type           IgnitionOnStatus;
 Seconds_MedPrec                 IgnitionOn_Time;
+
+/******************* Local Variables **************/
 Every_Loop_Sec_B                Timer_125ms_Mark;
 
 
@@ -54,10 +56,10 @@ static void Update_IgnitionOn_Time( void )
 /*                                                                        */
 /* GLOBAL: Nil.                                                           */
 /**************************************************************************/
-void UpdateIgnitionState( void )
+void UpdateIgnitionState_10MS( void )
 {
 	uint16_t v_ign_value;
-	v_ign_value = HAL_Analog_Get_IGNVI_Value();
+	v_ign_value = HAL_Analog_Get_IGNVI_Value() << 2;
 	/* Update ignition voltage */
 	Ignition_Voltage_B = FixConvert(v_ign_value, Volts_Plus_Fraction, Volts_B ) ;
 
