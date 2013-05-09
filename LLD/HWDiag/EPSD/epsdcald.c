@@ -31,7 +31,6 @@
 /*****************************************************************************
  *  Include Files
  *****************************************************************************/
-#include "epsdfexi.h" /* For Global Configuration     */
 #include "epsdcald.h" /* For EPSD Calibration Definition-Declaration check */
 
 /*****************************************************************************
@@ -49,7 +48,7 @@
 *|   }
 *| }
 */
-const T_COUNT_WORD CAL0ADDR KcEPSD_CrankToothErrFailThrsh = V_COUNT_WORD (10);
+const T_COUNT_WORD  KcEPSD_CrankToothErrFailThrsh = V_COUNT_WORD (10);
 
 /*
 *| epsdcald.{
@@ -63,7 +62,7 @@ const T_COUNT_WORD CAL0ADDR KcEPSD_CrankToothErrFailThrsh = V_COUNT_WORD (10);
 *|   }
 *| }
 */
-const T_COUNT_WORD CAL0ADDR KcEPSD_CrankNoisySigFailThrsh = V_COUNT_WORD(10);
+const T_COUNT_WORD  KcEPSD_CrankNoisySigFailThrsh = V_COUNT_WORD(10);
 
 /*
 *| epsdcald.{
@@ -76,7 +75,7 @@ const T_COUNT_WORD CAL0ADDR KcEPSD_CrankNoisySigFailThrsh = V_COUNT_WORD(10);
 *|   }
 *| }
 */
-const T_COUNT_WORD CAL0ADDR KcEPSD_CrankNoisySigSampleThrsh = V_COUNT_WORD(100);
+const T_COUNT_WORD  KcEPSD_CrankNoisySigSampleThrsh = V_COUNT_WORD(100);
 
 /*
 *| epsdcald.{
@@ -90,7 +89,7 @@ const T_COUNT_WORD CAL0ADDR KcEPSD_CrankNoisySigSampleThrsh = V_COUNT_WORD(100);
 *|   }
 *| }
 */
-const T_KPAa CAL0ADDR KfEPSD_p_CrankDeltaMAP_Thrsh = V_KPAa (10);
+const T_KPAa  KfEPSD_p_CrankDeltaMAP_Thrsh = V_KPAa (10);
 
 /*
 *| epsdcald.{
@@ -104,7 +103,7 @@ const T_KPAa CAL0ADDR KfEPSD_p_CrankDeltaMAP_Thrsh = V_KPAa (10);
 *|   }
 *| }
 */
-const TwTIME_t_R7p8125ms  CAL0ADDR KfEPSD_t_CrankNoSignalTmr = C_R7p8125ms16 (0.0625);
+const TwTIME_t_R7p8125ms  KfEPSD_t_CrankNoSignalTmr = C_R7p8125ms16 (0.0625);
 
 /*
 *| epsdcald.{
@@ -120,7 +119,7 @@ const TwTIME_t_R7p8125ms  CAL0ADDR KfEPSD_t_CrankNoSignalTmr = C_R7p8125ms16 (0.
 *|   }
 *| }
 */
-const T_VOLTb CAL0ADDR KfEPSD_U_CrankDeltaIgnThrsh = V_VOLTb (2);
+const T_VOLTb  KfEPSD_U_CrankDeltaIgnThrsh = V_VOLTb (2);
 
 /*****************************************************************************
  *   Cam Calibration module
@@ -137,7 +136,7 @@ const T_VOLTb CAL0ADDR KfEPSD_U_CrankDeltaIgnThrsh = V_VOLTb (2);
 *|   }
 *| }
 */
-const T_COUNT_WORD CAL0ADDR KcEPSD_CamNoSignalCylEvent = V_COUNT_WORD (10);
+const T_COUNT_WORD  KcEPSD_CamNoSignalCylEvent = V_COUNT_WORD (10);
 
 /*
 *| epsdcald.{
@@ -152,7 +151,7 @@ const T_COUNT_WORD CAL0ADDR KcEPSD_CamNoSignalCylEvent = V_COUNT_WORD (10);
 *|   }
 *| }
 */
-const T_COUNT_WORD CAL0ADDR KcEPSD_CamRationalityFailThrsh = V_COUNT_WORD (10);
+const T_COUNT_WORD  KcEPSD_CamRationalityFailThrsh = V_COUNT_WORD (10);
 
 /*
 *| epsdcald.{
@@ -167,7 +166,7 @@ const T_COUNT_WORD CAL0ADDR KcEPSD_CamRationalityFailThrsh = V_COUNT_WORD (10);
 *|   }
 *| }
 */
-const T_COUNT_WORD CAL0ADDR KcEPSD_CamRationalityPassThrsh = V_COUNT_WORD (100);
+const T_COUNT_WORD  KcEPSD_CamRationalityPassThrsh = V_COUNT_WORD (100);
 
 /*
 *| epsdcald.{
@@ -181,7 +180,7 @@ const T_COUNT_WORD CAL0ADDR KcEPSD_CamRationalityPassThrsh = V_COUNT_WORD (100);
 *|   }
 *| }
 */
-const TwTIME_t_R7p8125ms  CAL0ADDR KfEPSD_t_CrankNoSignalResetThrs = C_R7p8125ms16 (2.0);
+const TwTIME_t_R7p8125ms  KfEPSD_t_CrankNoSignalResetThrs = C_R7p8125ms16 (2.0);
 
 
 /******************************************************************************

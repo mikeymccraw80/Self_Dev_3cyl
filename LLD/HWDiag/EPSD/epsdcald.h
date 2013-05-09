@@ -25,12 +25,9 @@
 /*****************************************************************************
  *  Global Data Type Include Files
  *****************************************************************************/
-#include "t_base.h"
-#include "t_fixed.h"
-#include "t_scaled.h"
-#include "t_tables.h"
-#include "t_user.h"
-#include "t_custom.h"
+#include "t_gentypes.h"
+#include "timepcvc.h"
+
 
 /*****************************************************************************
  *  Local Include Files
@@ -55,16 +52,16 @@
 /*****************************************************************************
  *  Variable Exports
  *****************************************************************************/
-extern const T_COUNT_WORD       CAL0ADDR KcEPSD_CamNoSignalCylEvent;
-extern const T_COUNT_WORD       CAL0ADDR KcEPSD_CamRationalityFailThrsh;
-extern const T_COUNT_WORD       CAL0ADDR KcEPSD_CamRationalityPassThrsh;
-extern const T_COUNT_WORD       CAL0ADDR KcEPSD_CrankToothErrFailThrsh;
-extern const T_COUNT_WORD       CAL0ADDR KcEPSD_CrankNoisySigFailThrsh;
-extern const T_COUNT_WORD       CAL0ADDR KcEPSD_CrankNoisySigSampleThrsh;
-extern const T_KPAa             CAL0ADDR KfEPSD_p_CrankDeltaMAP_Thrsh;
-extern const T_VOLTb            CAL0ADDR KfEPSD_U_CrankDeltaIgnThrsh;
-extern const TwTIME_t_R7p8125ms CAL0ADDR KfEPSD_t_CrankNoSignalTmr;
-extern const TwTIME_t_R7p8125ms CAL0ADDR KfEPSD_t_CrankNoSignalResetThrs;
+extern const T_COUNT_WORD        KcEPSD_CamNoSignalCylEvent;
+extern const T_COUNT_WORD        KcEPSD_CamRationalityFailThrsh;
+extern const T_COUNT_WORD        KcEPSD_CamRationalityPassThrsh;
+extern const T_COUNT_WORD        KcEPSD_CrankToothErrFailThrsh;
+extern const T_COUNT_WORD        KcEPSD_CrankNoisySigFailThrsh;
+extern const T_COUNT_WORD        KcEPSD_CrankNoisySigSampleThrsh;
+extern const T_KPAa              KfEPSD_p_CrankDeltaMAP_Thrsh;
+extern const T_VOLTb             KfEPSD_U_CrankDeltaIgnThrsh;
+extern const TwTIME_t_R7p8125ms  KfEPSD_t_CrankNoSignalTmr;
+extern const TwTIME_t_R7p8125ms  KfEPSD_t_CrankNoSignalResetThrs;
 
 /*****************************************************************************
  *  Function Exports

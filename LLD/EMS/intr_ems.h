@@ -758,6 +758,7 @@ extern EOBD_PERCENTa   EOBD_CcpDutyCycle;
 // #define GetVIOS_CrankRefToothErrCnt()                     (ToothErrCnt)
 
 // #define GetVIOS_CylNum()                                  (PhysicalEstCylinder)
+#define GetVIOS_CylNum()                                  (HAL_Eng_Get_Cyl_Number())
 // #define GetVCPC_HW_Avail()                                (CbFALSE)
 // #define GetVIOS_IAT_Range()                               (false)
 
@@ -783,6 +784,7 @@ extern EOBD_PERCENTa   EOBD_CcpDutyCycle;
 // /* for KNOCK */
 // #define GetVIOS_CCESC_Enabled_EMS()           		( EscFlag.EscEnabled )
 // #define GetVIOS_CamOccurred()                           ( CamSensorFlags.CamOccurred )
+#define GetVIOS_CamOccurred()                           (1)
 // #define GetVIOS_CamStuck()                              ( CamSensorFlags.CamStuck )
 
 // /*for PIDs*/
@@ -1033,15 +1035,15 @@ INLINE TeEST_CIRCUIT_STATE GetAPI_EST_CircuitState(uint8_t active_estline)
 #define GetHWIO_PurgeSolOutputFaultShortHi() (GetShortFault(PULSE_OUT_CANISTER_PURGE))
 
 
-// /* ============================================================================ *\
- // * Inline function definition
-// \* ============================================================================ */
-// INLINE void ClrVIOS_CrankRefToothErrCnt( void )
-// {
-    // TooFewTeeth = FixDefConst( 0.0, Fixed_Shortcard );
-    // TooManyTeeth = FixDefConst( 0.0, Fixed_Shortcard );
-    // ToothErrCnt = FixDefConst( 0.0, Fixed_Shortcard );
-// }
+/* ============================================================================ *\
+ * Inline function definition
+\* ============================================================================ */
+INLINE void ClrVIOS_CrankRefToothErrCnt( void )
+{
+	// TooFewTeeth = FixDefConst( 0.0, Fixed_Shortcard );
+	// TooManyTeeth = FixDefConst( 0.0, Fixed_Shortcard );
+	// ToothErrCnt = FixDefConst( 0.0, Fixed_Shortcard );
+}
 
 // #define GetKNKD_Disable_Fault()   \
 	// (LLD_atd_input_table[LLD_ATD_MAP].LLD_atd_status.B_max||\

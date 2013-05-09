@@ -44,18 +44,18 @@
 /******************************************************************************
  *  Diagnostic Execution Routine Definitions
  *****************************************************************************/
-//FAR_COS void InitEPSD_CamRstToKeyOn(void);
-FAR_COS void InitEPSD_CamCrankToStall(void);
-FAR_COS void InitEPSD_CamRunToPowerOffDelay(void);
-FAR_COS void MngEPSD_CamEventTasks(void); 
-FAR_COS void InitEPSD_CrankRstToKeyOn(void);
-FAR_COS void InitEPSD_CrankCrankToStall(void);
-FAR_COS void InitEPSD_CrankRunToPowerOffDelay(void);
-FAR_COS void MngEPSD_CrankEventTasks(void);
-FAR_COS void MngEPSD_Crank7p81msTasks(void);
+//void InitEPSD_CamRstToKeyOn(void);
+void InitEPSD_CamCrankToStall(void);
+void InitEPSD_CamRunToPowerOffDelay(void);
+void MngEPSD_CamEventTasks(void); 
+void InitEPSD_CrankRstToKeyOn(void);
+void InitEPSD_CrankCrankToStall(void);
+void InitEPSD_CrankRunToPowerOffDelay(void);
+void MngEPSD_CrankEventTasks(void);
+void MngEPSD_Crank7p81msTasks(void);
 
-//FAR_COS void InitEPSD_CamRstTo_Keyoff(void);
-//FAR_COS void InitEPSD_CrankRstTo_Keyoff(void);
+// void InitEPSD_CamRstTo_Keyoff(void);
+// void InitEPSD_CrankRstTo_Keyoff(void);
 #endif
 
 /******************************************************************************
