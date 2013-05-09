@@ -38,26 +38,25 @@
 //=============================================================================
 // HAL_OS_Get_Shutdown
 //=============================================================================
-  bool HAL_OS_Get_Shutdown(void)
+bool HAL_OS_Get_Shutdown(void)
 { 
-  bool shutdown_status;
+	bool shutdown_status;
 
-  shutdown_status = IO_OS_Get_Shutdown();
-  return shutdown_status;       
+	shutdown_status = IO_OS_Get_Shutdown();
+	return shutdown_status;
 }
 
 //=============================================================================
 // HAL_OS_1ms_Task
 //=============================================================================
 void  HAL_OS_1ms_Task(void) 
- {
-     IO_Analog_1ms_Update();
-     HLS_Task_1ms();
-     IO_GPIO_DO_Task_1ms();
-     IO_Pulse_Update_Function_1ms();
-     IO_OS_BackGround_1ms_Status_Check();
-
- }
+{
+	IO_Analog_1ms_Update();
+	HLS_Task_1ms();
+	IO_GPIO_DO_Task_1ms();
+	IO_Pulse_Update_Function_1ms();
+	IO_OS_BackGround_1ms_Status_Check();
+}
 
 //=============================================================================
 // HAL_OS_2ms_Task
