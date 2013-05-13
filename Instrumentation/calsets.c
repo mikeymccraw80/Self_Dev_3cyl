@@ -40,6 +40,13 @@
 
 /*
 *|                  hwiocald,
+*|                  emsdcald,
+*|                  injdcald,
+*|                  eosdcald,
+*|                  estdcald,
+*|                  knodcald,
+*|                  prgdcald,
+*|                  epsdcald,
 *|                  vsepcald,
 *|                  vehicle_can_cald;
 */

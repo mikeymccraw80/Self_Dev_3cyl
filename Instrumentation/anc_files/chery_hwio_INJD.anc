@@ -10,7 +10,7 @@
 *-injdmall.VaINJD_FailCriteriaMet[0]{
 *-  OBJECTS_CLASS: parameter_es_class;
 *-  label                    = "INJAFCRM";
-*-  variable_location.symbol = intr_ems.VaINJD_FailCriteriaMet[0];
+*-  variable_location.symbol = injdmall.VaINJD_FailCriteriaMet[0];
 *-  ds_scaling_unit          = "Boolean";
 *-  ds_precision             = "4.0";
 *-  ds_scaling_mode          = "Ax + B";
@@ -22,7 +22,7 @@
 *-injdmall.VaINJD_FailCriteriaMet[1]{
 *-  OBJECTS_CLASS: parameter_es_class;
 *-  label                    = "INJBFCRM";
-*-  variable_location.symbol = intr_ems.VaINJD_FailCriteriaMet[1];
+*-  variable_location.symbol = injdmall.VaINJD_FailCriteriaMet[1];
 *-  ds_scaling_unit          = "Boolean";
 *-  ds_precision             = "4.0";
 *-  ds_scaling_mode          = "Ax + B";
@@ -34,7 +34,7 @@
 *-injdmall.VaINJD_FailCriteriaMet[2]{
 *-  OBJECTS_CLASS: parameter_es_class;
 *-  label                    = "INJCFCRM";
-*-  variable_location.symbol = intr_ems.VaINJD_FailCriteriaMet[2];
+*-  variable_location.symbol = injdmall.VaINJD_FailCriteriaMet[2];
 *-  ds_scaling_unit          = "Boolean";
 *-  ds_precision             = "4.0";
 *-  ds_scaling_mode          = "Ax + B";
@@ -46,7 +46,7 @@
 *-injdmall.VaINJD_FailCriteriaMet[3]{
 *-  OBJECTS_CLASS: parameter_es_class;
 *-  label                    = "INJDFCRM";
-*-  variable_location.symbol = intr_ems.VaINJD_FailCriteriaMet[3];
+*-  variable_location.symbol = injdmall.VaINJD_FailCriteriaMet[3];
 *-  ds_scaling_unit          = "Boolean";
 *-  ds_precision             = "4.0";
 *-  ds_scaling_mode          = "Ax + B";
@@ -58,7 +58,7 @@
 *-injdmall.SbINJD_InjCktEnblCriteriaMet{
 *-  OBJECTS_CLASS: parameter_es_class;
 *-  label                    = "INJENCRM";
-*-  variable_location.symbol = intr_ems.SbINJD_InjCktEnblCriteriaMet;
+*-  variable_location.symbol = injdmall.SbINJD_InjCktEnblCriteriaMet;
 *-  ds_scaling_unit          = "Boolean";
 *-  ds_precision             = "4.0";
 *-  ds_scaling_mode          = "Ax + B";
@@ -70,7 +70,7 @@
 *-injdmall.SaINJD_CktTestComplete[0]{
 *-  OBJECTS_CLASS: parameter_es_class;
 *-  label                    = "INJATSCP";
-*-  variable_location.symbol = intr_ems.SaINJD_CktTestComplete[0];
+*-  variable_location.symbol = injdmall.SaINJD_CktTestComplete[0];
 *-  ds_scaling_unit          = "Boolean";
 *-  ds_precision             = "4.0";
 *-  ds_scaling_mode          = "Ax + B";
@@ -82,7 +82,7 @@
 *-injdmall.SaINJD_CktTestComplete[1]{
 *-  OBJECTS_CLASS: parameter_es_class;
 *-  label                    = "INJBTSCP";
-*-  variable_location.symbol = intr_ems.SaINJD_CktTestComplete[1];
+*-  variable_location.symbol = injdmall.SaINJD_CktTestComplete[1];
 *-  ds_scaling_unit          = "Boolean";
 *-  ds_precision             = "4.0";
 *-  ds_scaling_mode          = "Ax + B";
@@ -94,7 +94,7 @@
 *-injdmall.SaINJD_CktTestComplete[2]{
 *-  OBJECTS_CLASS: parameter_es_class;
 *-  label                    = "INJCTSCP";
-*-  variable_location.symbol = intr_ems.SaINJD_CktTestComplete[2];
+*-  variable_location.symbol = injdmall.SaINJD_CktTestComplete[2];
 *-  ds_scaling_unit          = "Boolean";
 *-  ds_precision             = "4.0";
 *-  ds_scaling_mode          = "Ax + B";
@@ -106,7 +106,7 @@
 *-injdmall.SaINJD_CktTestComplete[3]{
 *-  OBJECTS_CLASS: parameter_es_class;
 *-  label                    = "INJDTSCP";
-*-  variable_location.symbol = intr_ems.SaINJD_CktTestComplete[3];
+*-  variable_location.symbol = injdmall.SaINJD_CktTestComplete[3];
 *-  ds_scaling_unit          = "Boolean";
 *-  ds_precision             = "4.0";
 *-  ds_scaling_mode          = "Ax + B";
@@ -118,7 +118,7 @@
 *-injdmall.SaINJD_CktTestFailed[0]{
 *-  OBJECTS_CLASS: parameter_es_class;
 *-  label                    = "INJATSFL";
-*-  variable_location.symbol = intr_ems.SaINJD_CktTestFailed[0];
+*-  variable_location.symbol = injdmall.SaINJD_CktTestFailed[0];
 *-  ds_scaling_unit          = "Boolean";
 *-  ds_precision             = "4.0";
 *-  ds_scaling_mode          = "Ax + B";
@@ -130,7 +130,7 @@
 *-injdmall.SaINJD_CktTestFailed[1]{
 *-  OBJECTS_CLASS: parameter_es_class;
 *-  label                    = "INJBTSFL";
-*-  variable_location.symbol = intr_ems.SaINJD_CktTestFailed[1];
+*-  variable_location.symbol = injdmall.SaINJD_CktTestFailed[1];
 *-  ds_scaling_unit          = "Boolean";
 *-  ds_precision             = "4.0";
 *-  ds_scaling_mode          = "Ax + B";
@@ -142,7 +142,7 @@
 *-injdmall.SaINJD_CktTestFailed[2]{
 *-  OBJECTS_CLASS: parameter_es_class;
 *-  label                    = "INJCTSFL";
-*-  variable_location.symbol = intr_ems.SaINJD_CktTestFailed[2];
+*-  variable_location.symbol = injdmall.SaINJD_CktTestFailed[2];
 *-  ds_scaling_unit          = "Boolean";
 *-  ds_precision             = "4.0";
 *-  ds_scaling_mode          = "Ax + B";
@@ -154,7 +154,7 @@
 *-injdmall.SaINJD_CktTestFailed[3]{
 *-  OBJECTS_CLASS: parameter_es_class;
 *-  label                    = "INJDTSFL";
-*-  variable_location.symbol = intr_ems.SaINJD_CktTestFailed[3];
+*-  variable_location.symbol = injdmall.SaINJD_CktTestFailed[3];
 *-  ds_scaling_unit          = "Boolean";
 *-  ds_precision             = "4.0";
 *-  ds_scaling_mode          = "Ax + B";
@@ -163,54 +163,6 @@
 *-  description              = "Injector D test failed.";
 *-}
 
-
-*-injdmall.SaINJD_CktTestStatusReported[0]{
-*-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "INJASTUR";
-*-  variable_location.symbol = injdmall.SaINJD_CktTestStatusReported[0];
-*-  ds_scaling_unit          = "count";
-*-  ds_precision             = "4.0";
-*-  ds_scaling_mode          = "Ax + B";
-*-  ds_const_a               = "1.000000000000";
-*-  ds_const_b               = "0.000000000000";
-*-  description              = "Injector A test status report";
-*-}
-
-*-injdmall.SaINJD_CktTestStatusReported[1]{
-*-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "INJBSTUR";
-*-  variable_location.symbol = injdmall.SaINJD_CktTestStatusReported[1];
-*-  ds_scaling_unit          = "count";
-*-  ds_precision             = "4.0";
-*-  ds_scaling_mode          = "Ax + B";
-*-  ds_const_a               = "1.000000000000";
-*-  ds_const_b               = "0.000000000000";
-*-  description              = "Injector B test status report";
-*-}
-
-*-injdmall.SaINJD_CktTestStatusReported[2]{
-*-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "INJCSTUR";
-*-  variable_location.symbol = injdmall.SaINJD_CktTestStatusReported[2];
-*-  ds_scaling_unit          = "count";
-*-  ds_precision             = "4.0";
-*-  ds_scaling_mode          = "Ax + B";
-*-  ds_const_a               = "1.000000000000";
-*-  ds_const_b               = "0.000000000000";
-*-  description              = "Injector C test status report";
-*-}
-
-*-injdmall.SaINJD_CktTestStatusReported[3]{
-*-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "INJDSTUR";
-*-  variable_location.symbol = injdmall.SaINJD_CktTestStatusReported[3];
-*-  ds_scaling_unit          = "count";
-*-  ds_precision             = "4.0";
-*-  ds_scaling_mode          = "Ax + B";
-*-  ds_const_a               = "1.000000000000";
-*-  ds_const_b               = "0.000000000000";
-*-  description              = "Injector D test status report";
-*-}
 /******************************************************************************/
 /*                                                                            */
 /* Revision History:                                                          */
