@@ -88,7 +88,7 @@ FAR_COS void InitEMSD_MainRelayRstToKeyOff(void)
  * Parameters:   None
  * Return:       None
  *****************************************************************************/
-void MngEMSD_MainRelay125msTasks (void)
+void MngEMSD_MainRelay200msTasks (void)
 {
 	/* Evaluate_FrontACEVT_Enable_Criteria */
 	EvaluateEMSD_MPRDEnblCriteria ( KfEMSD_t_IgnitionOnDelay, &SbEMSD_MPRDEnblCriteriaMet);

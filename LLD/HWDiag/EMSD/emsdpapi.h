@@ -45,36 +45,36 @@
  *  AC Clutch Function Prototype
  *****************************************************************************/
 
-void MngEMSD_AcClutch125msTasks (void);
+void MngEMSD_AcClutch200msTasks (void);
 
 /******************************************************************************
  *  Main Power Relay  Function Prototype
  *****************************************************************************/
-void MngEMSD_MainRelay125msTasks (void);
+void MngEMSD_MainRelay200msTasks (void);
 
 /******************************************************************************
  *  Fuel Pump Function Prototype
  *****************************************************************************/
 
-void MngEMSD_FuelPump125msTasks (void);
+void MngEMSD_FuelPump200msTasks (void);
 
 /******************************************************************************
  *  MIL Function Prototype
  *****************************************************************************/
-void MngEMSD_MIL125msTasks (void);
+void MngEMSD_MIL200msTasks (void);
 
 /******************************************************************************
  *  Fanx Function Prototype
  *****************************************************************************/
-void MngEMSD_FanA125msTasks (void);
-void MngEMSD_FanB125msTasks (void);
+void MngEMSD_FanA200msTasks (void);
+void MngEMSD_FanB200msTasks (void);
 
 
 /******************************************************************************
  *  FileROM Function Prototype
  *****************************************************************************/
 //void InitEMSD_FileROMRstToKeyOn(void);
-void MngEMSD_FileROM125msTasks (void);
+void MngEMSD_FileROM200msTasks (void);
 
 
 

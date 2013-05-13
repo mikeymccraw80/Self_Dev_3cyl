@@ -86,7 +86,7 @@ FAR_COS void InitEMSD_FuelPumpRstToKeyOff(void)
  * Parameters:   None
  * Return:       None
  *****************************************************************************/
-void MngEMSD_FuelPump125msTasks (void)
+void MngEMSD_FuelPump200msTasks (void)
 {
 
 	/* Evaluate_FrontACEVT_Enable_Criteria */

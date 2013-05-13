@@ -90,7 +90,7 @@ FAR_COS void InitEMSD_MILRstToKeyOff(void)
  * Parameters:   None
  * Return:       None
  *****************************************************************************/
-void MngEMSD_MIL125msTasks (void)
+void MngEMSD_MIL200msTasks (void)
 {
 
 	/* Evaluate_FrontACEVT_Enable_Criteria */

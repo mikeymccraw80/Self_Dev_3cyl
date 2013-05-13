@@ -85,7 +85,7 @@ void InitEMSD_AcClutchRstToKeyOff(void)
  * Parameters:   None
  * Return:       None
  *****************************************************************************/
-void MngEMSD_AcClutch125msTasks (void)
+void MngEMSD_AcClutch200msTasks (void)
 {
 
  /* Evaluate_FrontACEVT_Enable_Criteria */

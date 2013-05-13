@@ -70,7 +70,7 @@ TbBOOLEAN        SbEMSD_FileROMTestFailed ;
  * Parameters:   None
  * Return:       None
  *****************************************************************************/
-void MngEMSD_FileROM125msTasks (void)
+void MngEMSD_FileROM200msTasks (void)
 {
 #if 0
 	if(!SbEMSD_FileROMTestComplete) {

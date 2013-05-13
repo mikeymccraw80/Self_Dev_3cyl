@@ -136,7 +136,7 @@ FAR_COS void InitEMSD_FanxRstToKeyOff(void)
  * Parameters:   None
  * Return:       None
  *****************************************************************************/
-void MngEMSD_FanA125msTasks (void)
+void MngEMSD_FanA200msTasks (void)
 {
 	/* Evaluate_Fan1_Enable_Criteria */
 	EvaluateEMSD_FANAEnblCriteria ( KfEMSD_t_IgnitionOnDelay, &SbEMSD_FANAEnblCriteriaMet);
@@ -198,7 +198,7 @@ void MngEMSD_FanA125msTasks (void)
  * Parameters:   None
  * Return:       None
  *****************************************************************************/
-void MngEMSD_FanB125msTasks (void)
+void MngEMSD_FanB200msTasks (void)
 {
 
 	/* Evaluate_Fan2_Enable_Criteria */
