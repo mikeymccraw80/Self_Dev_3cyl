@@ -31,7 +31,7 @@ extern T_COUNT_WORD    NfVIOS_t_EngRunTime;
 /*****************************************************************************
  *  Function Declarations
  *****************************************************************************/
-void SinitVIOS_EngSt(void);
+void InitVIOS_EngSt(void);
 void DtrmnVIOS_RunModeCount(void);
 void UpdateVIOS_EngSpdThrsh(void);
 void UpdateVIOS_CntrlShutdownLogic(void);

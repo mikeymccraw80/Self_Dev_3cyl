@@ -3,6 +3,7 @@
 \*===========================================================================*/
 #include "dd_crank_interface.h"
 #include "hal_eng.h"
+#include "hal_os.h"
 #include "hwiocald.h"
 #include "intr_ems.h"
 
@@ -197,7 +198,7 @@ void UpdateVIOS_EngSpdThrsh (void)
 * Parameters:           None                                                 *
 * Return:               None                                                 *
 ******************************************************************************/
-void SinitVIOS_EngSt(void)
+void InitVIOS_EngSt(void)
 {
 	VeVIOS_RunModeTran = CeENG_RunModeTranResetDis;
 	VeVIOS_EngSt       = CeENG_KEYON;
@@ -231,8 +232,7 @@ void UpdateVIOS_CntrlShutdownLogic (void)
 		VaVIOS_t_PowerdownDelayTimer = 0;
 	}
 
-	if ((VbVIOS_PowerdownDelayTimeExpired))
-	// && (GetEMS_ShutdownComplete()))
+	if (VbVIOS_PowerdownDelayTimeExpired && HAL_OS_Get_Shutdown())
 	{
 		VbVIOS_ShutdownComplete = CbTRUE;
 	}
@@ -253,10 +253,10 @@ void UpdateVIOS_EngSt(void)
 	case CeENG_KEYON:
 		if (GetVIOS_IgnSt() == CeIGN_OFF) {
 			VeVIOS_EngSt = CeENG_POWEROFFDELAY;
-			// Sinit_KeyOnToPowerOff();
+			Sinit_KeyOnToPowerOff();
 		} else if (VbVIOS_OnToCrankMet) {
 			VeVIOS_EngSt = CeENG_CRANK;
-			// Sinit_KeyOnToCrank();
+			Sinit_KeyOnToCrank();
 		} else {
 			/* nothing */
 		}
@@ -266,13 +266,13 @@ void UpdateVIOS_EngSt(void)
 		if (VbVIOS_CrankToRunMet)
 		{
 			VeVIOS_EngSt = CeENG_RUN;
-			// Sinit_CrankToRun();
+			Sinit_CrankToRun();
 		}
 		else if ((VbVIOS_CrankToStallMet)
 				|| (GetVIOS_IgnSt() == CeIGN_OFF))
 		{
 			VeVIOS_EngSt = CeENG_STALL;
-			// Sinit_CrankToStall();
+			Sinit_CrankToStall();
 		}
 		else
 		{
@@ -283,10 +283,10 @@ void UpdateVIOS_EngSt(void)
 	case CeENG_RUN:
 		if (GetVIOS_IgnSt() == CeIGN_OFF) {
 			VeVIOS_EngSt = CeENG_POWEROFFDELAY;
-			// Sinit_RunToPowerOffDelay ();
+			Sinit_RunToPowerOffDelay ();
 		} else if (VbVIOS_RunToCrankMet) {
 			VeVIOS_EngSt = CeENG_CRANK;
-			// Sinit_RunToCrank();
+			Sinit_RunToCrank();
 		} else {
 			/* nothing */
 		}
@@ -295,10 +295,10 @@ void UpdateVIOS_EngSt(void)
 	case CeENG_STALL:
 		if (GetVIOS_IgnSt()== CeIGN_OFF) {
 			VeVIOS_EngSt = CeENG_POWEROFFDELAY;
-			// Sinit_StallToPowerOffDelay();
+			Sinit_StallToPowerOffDelay();
 		} else if (VbVIOS_StallToCrankMet) {
 			VeVIOS_EngSt = CeENG_CRANK;
-			// Sinit_StallToCrank();
+			Sinit_StallToCrank();
 		} else {
 			/* nothing */
 		}
@@ -307,21 +307,21 @@ void UpdateVIOS_EngSt(void)
 	case CeENG_POWEROFFDELAY:
 		if (GetVIOS_IgnSt() == CeIGN_ON) {
 			VeVIOS_EngSt = CeENG_KEYON;
-			// Sinit_PowerOffDelayToKeyOn();
+			Sinit_PowerOffDelayToKeyOn();
 		} else if ( VbVIOS_PowerdownDelayTimeExpired) {
 			VeVIOS_EngSt = CeENG_SHUTDOWNINPROCESS;
-			// Sinit_PowerOffDelayToShutDwn();
+			Sinit_PowerOffDelayToShutDwn();
 		}
 		break;
 
 	case CeENG_SHUTDOWNINPROCESS:
 		if (VbVIOS_ShutdownComplete) {
-			// Sinit_ShutdownInProcessToKeyOff();
+			Sinit_ShutdownInProcessToKeyOff();
 			VeVIOS_EngSt = CeENG_OFF;
 			/* do shutdown logic here */
 		} else if (GetVIOS_IgnSt() == CeIGN_ON) {
 			VeVIOS_EngSt = CeENG_KEYON;
-			// Sinit_ShutdownInProcessToKeyOn();
+			Sinit_ShutdownInProcessToKeyOn();
 		}
 		break;
 
@@ -352,6 +352,32 @@ void UpdateVIOS_EngRunTime(void)
 		}
 	} else {
 		NfVIOS_t_EngRunTime = V_COUNT_WORD(0);
+	}
+}
+
+/*****************************************************************************
+ *                                                                           *
+ * Function:            DtrmnVIOS_RunModeCount                               *
+ * Description:         This procedure Update the Engine State Run Mode      *
+ *                      Counter.                                             *
+ *                      Pulse counter of LoRes                               *
+ *                      0 disable and reset                                  *
+ *                      1 disable                                            *
+ *                      2 enable.                                            *
+ *                                                                           *
+ * Parameters:          None                                                 *
+ * Return:              None                                                 *
+ *                                                                           *
+ ****************************************************************************/
+void DtrmnVIOS_RunModeCount(void)
+{
+	if (VeVIOS_RunModeTran == CeENG_RunModeTranResetDis)
+	{
+		VcVIOS_RunModeCount = 0;
+	}
+	else if (VeVIOS_RunModeTran == CeENG_RunModeTranEnb)
+	{
+		VcVIOS_RunModeCount ++;
 	}
 }
 
