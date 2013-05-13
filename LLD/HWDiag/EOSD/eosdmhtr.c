@@ -143,7 +143,7 @@ FAR_COS void InitEOSD_O2_12_HtrRstToKeyOff(void)
  * Parameters:   None
  * Return:       None
  *****************************************************************************/
-void MngEOSD_O2_11_Htr781msTasks (void)
+void MngEOSD_O2_11_Htr10msTasks (void)
 {
 	if ( GetVIOS_O2HEATER_PowerOK() )
 	{
@@ -167,7 +167,7 @@ void MngEOSD_O2_11_Htr781msTasks (void)
  * Parameters:   None
  * Return:       None
  *****************************************************************************/
-void MngEOSD_O2_12_Htr781msTasks (void)
+void MngEOSD_O2_12_Htr10msTasks (void)
 {
 	if ( GetVIOS_O2HEATER_PowerOK() )
 	{

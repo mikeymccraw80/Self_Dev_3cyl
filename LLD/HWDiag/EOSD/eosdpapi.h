@@ -48,10 +48,10 @@
  *****************************************************************************/
 
 
-void MngEOSD_O2_11_Htr781msTasks (void);
+void MngEOSD_O2_11_Htr10msTasks (void);
 void MngEOSD_O2_11_Htr125msTasks (void);
 
-void MngEOSD_O2_12_Htr781msTasks (void);
+void MngEOSD_O2_12_Htr10msTasks (void);
 void MngEOSD_O2_12_Htr125msTasks (void);
 
 void InitEOSD_O2_11_HtrRstToKeyOff (void);
