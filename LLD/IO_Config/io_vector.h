@@ -32,6 +32,7 @@ void HAL_CAN_RX_B12_INT(void);
 void  DMA_DECFIL_DRAIN_BUF_A_Transfer_Complete(void );
 void IO_STM0_20ms_INT(void);
 void IO_SOH_818HZ_INT(void);
+void DD_SCIB_INT(void);
 
 //=============================================================================
 //
@@ -191,7 +192,7 @@ void IO_SOH_818HZ_INT(void);
    #define   INTC_CHANNEL_SCI_A  UNUSED_IRQ
    #define   INTC_CHANNEL_RESERVED_147  UNUSED_IRQ
    #define   INTC_CHANNEL_RESERVED_148  UNUSED_IRQ
-   #define   INTC_CHANNEL_SCI_B  UNUSED_IRQ
+   #define   INTC_CHANNEL_SCI_B  USED_IRQ
    #define   INTC_CHANNEL_RESERVED_150  UNUSED_IRQ
    #define   INTC_CHANNEL_RESERVED_151  UNUSED_IRQ
    #define   INTC_CHANNEL_FLEXCAN_A_BUS_OFF  UNUSED_IRQ
@@ -550,3 +551,9 @@ void IO_SOH_818HZ_INT(void);
 #define INTC_CHANNEL_MIOS_CH4_HANDLER      IO_SOH_818HZ_INT
 #define INTC_CHANNEL_MIOS_CH4_PRIORITY      INTC_PRIORITY_7
 #endif
+
+#if INTC_CHANNEL_SCI_B  == USED_IRQ
+#define INTC_CHANNEL_SCI_B_HANDLER                     DD_SCIB_INT
+#define INTC_CHANNEL_SCI_B_PRIORITY                    INTC_PRIORITY_5
+#endif
+
