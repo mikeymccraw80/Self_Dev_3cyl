@@ -20,21 +20,21 @@
  *   None.
  *
 \* ============================================================================ */
-#include "dd_sci.h"
+// #include "dd_sci.h"
+#incldue "dd_sci_interface.h"
 #include "kw2dllcf.h"
 #include "kw2dll.h"
-#include "immo.h"
 #include "kw2api.h"
 #include "obdlfsrv.h"
-#include "immo_exec.h"
+// #include "immo.h"
+// #include "immo_exec.h"
 
 
 /* local function prototype */
-void BuildKw2000Answer (uint8_t);
-void GoToErrorReadK2State (void);
-void SendKw2000ByteToSerial (void);
-void GoToLoadingDataMRState (void);
-FAR_COS void SetTimingParameterToDefault (void);
+static void BuildKw2000Answer (uint8_t);
+static void GoToErrorReadK2State (void);
+static void SendKw2000ByteToSerial (void);
+static void GoToLoadingDataMRState (void);
 static void UpdateP2MinWaitingLoop (void);
 static void UpdateP2MaxWaitingLoop (void);
 static void UpdateP3MaxWaitingLoop (void);
@@ -54,7 +54,6 @@ static void ScanningHighToLowEdgeSynchKw2000State (void);
 static void Waiting25msLowSynchKw2000State (void);
 static void Waiting25msHighSynchKw2000State (void);
 static void AwaitingMessageKw2000State (void);
-FAR_COS void ReceivingMessageKw2000State (void);
 static void ExecuteServiceKw2000State (void);
 static void WaitingAppLvlServiceExecKw2000State (void);
 static void WaitingP2MinBeforeAnswerKw2000State (void);
@@ -230,20 +229,19 @@ void SetDLLTimingsParameters (Timer0p5msInMs ImmP2MinVal,
                               Timer250msInMs ImmP3MaxVal,
                               Timer0p5msInMs ImmP4MinVal )
 {
-  NewP2Min =  ImmP2MinVal;
-  NewP2Max =  ImmP2MaxVal;
-  NewP3Min =  ImmP3MinVal;
-  NewP3Max =  ImmP3MaxVal;
-  NewP4Min =  ImmP4MinVal;
-  NewTiming = true;
-
+	NewP2Min =  ImmP2MinVal;
+	NewP2Max =  ImmP2MaxVal;
+	NewP3Min =  ImmP3MinVal;
+	NewP3Max =  ImmP3MaxVal;
+	NewP4Min =  ImmP4MinVal;
+	NewTiming = true;
 }
 
 /***********************************************/
 /*** Initialize Kw2000 Timing Parameters.    ***/
 /***********************************************/
 
-FAR_COS void SetTimingParameterToDefault (void)
+void SetTimingParameterToDefault (void)
 {
    if (KW2000CommuState==KW2000_Responder)
    {
@@ -261,7 +259,7 @@ FAR_COS void SetTimingParameterToDefault (void)
       NewP2Max =  TesterP2Max;
       NewP3Min =  TesterP3Min;
       NewP3Max =  TesterP3Max;
-      NewP4Min =  TesterP4Min;	   
+      NewP4Min =  TesterP4Min;
 
    }
    NewTiming = true;
@@ -374,7 +372,7 @@ static void UpdateP4MinWaitingLoop (void)
 /*** Change kw2000 state to waiting P3min.                                    ***/
 /*********************************************************************/
 
-FAR_COS void GoToWaitingP3MinBeforeSendingRequest  (void)
+void GoToWaitingP3MinBeforeSendingRequest  (void)
 
   {
   Kw2000State = k2sWaitingP3MinBeforeSend;
@@ -384,8 +382,8 @@ FAR_COS void GoToWaitingP3MinBeforeSendingRequest  (void)
 /*** Change kw2000 state to waiting P4min.                                    ***/
 /*********************************************************************/
 
-FAR_COS void GoToWaitingP4MinBeforeSendingRequest(void)
-	
+void GoToWaitingP4MinBeforeSendingRequest(void)
+
 {
    Kw2000State=k2sWaitingP4MinBeforeSend;
 }
@@ -394,7 +392,7 @@ FAR_COS void GoToWaitingP4MinBeforeSendingRequest(void)
 /*** Change kw2000 state to lost communication.                                    ***/
 /*********************************************************************/
 
-void FAR_COS GoToLostCommunicationState(void)
+void  GoToLostCommunicationState(void)
 
 {
    Kw2000State=k2sLostCommunication;
@@ -415,10 +413,10 @@ void CopyNewTimingParametersToCurrents (void)
    P3Min = NewP3Min;
    P3Max = NewP3Max;
    P4Min = NewP4Min;
-   UpdateP2MinWaitingLoop ();
-   UpdateP2MaxWaitingLoop ();
+   UpdateP2MinWaitingLoop();
+   UpdateP2MaxWaitingLoop();
    UpdateP3MinWaitingLoop();
-   UpdateP3MaxWaitingLoop ();
+   UpdateP3MaxWaitingLoop();
    UpdateP4MinWaitingLoop();
    NewTiming = false;
 } /*** End of CopyNewTimingParametersToCurrents ***/
@@ -497,46 +495,39 @@ void GoToAwaitingMessageK2State (bool AfterFastSynchro)
 /*** Send Byte To Serial transmitter buffer and add it to checksum ***/
 /*********************************************************************/
 
-void SendKw2000ByteToSerial ( void )
-
-  {
-     /* If the line is busy when transmitting format byte,
-        reset the time and go to the waiting state.
-        If the main keyword is not executing this check is
-        not applied.
-        */
-    if ((Kw2MsgTxState == ktsSendingFormat) &&
-         ( SCI0ReceiverActiveDetected ())    &&
-         ( IfKeywordLogicIsActive ()))
-     {
-        if (KW2000_Responder==KW2000CommuState)
-        	{
-        	P2MinTimer = 0 ;
-        	GoToWaitingP2MinBeforeAnswerK2State () ;
-        	}
-        if (KW2000_Tester==KW2000CommuState)
-        	{
-        	/* If K-line busy, re-send message without counting timer. */
-        	P3MinTimer=0;
-        	GoToWaitingP3MinBeforeSendingRequest () ;
-        	}
-     }
-     else
-     {
-     	 if ((P4Timout<P4MinWL)&&(KW2000_Tester==KW2000CommuState))
-     	 	{
-     	 	GoToWaitingP4MinBeforeSendingRequest();
-     	 	}
-     	 else
-     	 	{
-        	SCI0_WriteSCITransmitterDataBufferRegister (DataByte) ;
-        	/*--- This addition MUST be done after the Write    ---*/
-        	/*--- for the case the checksum is sent itself.     ---*/
-        	TxCalcCheckSum += DataByte ;
-     	 	}
-      }
-     
-  } /*** End of SendKw2000ByteToSCI ***/
+void SendKw2000ByteToSerial(void)
+{
+	/* If the line is busy when transmitting format byte,
+	reset the time and go to the waiting state.
+	If the main keyword is not executing this check is
+	not applied.
+	*/
+	if ((Kw2MsgTxState == ktsSendingFormat) &&
+		(SCI0ReceiverActiveDetected ())    &&
+		(IfKeywordLogicIsActive ()))
+	{
+		if (KW2000CommuState == KW2000_Responder) {
+			P2MinTimer = 0 ;
+			GoToWaitingP2MinBeforeAnswerK2State();
+		}
+		if (KW2000CommuState == KW2000_Tester) {
+			/* If K-line busy, re-send message without counting timer. */
+			P3MinTimer=0;
+			GoToWaitingP3MinBeforeSendingRequest();
+		}
+	}
+	else
+	{
+		if ((P4Timout<P4MinWL)&&(KW2000CommuState == KW2000_Tester)) {
+			GoToWaitingP4MinBeforeSendingRequest();
+		} else {
+			SCI0_WriteSCITransmitterDataBufferRegister(DataByte);
+			/*--- This addition MUST be done after the Write    ---*/
+			/*--- for the case the checksum is sent itself.     ---*/
+			TxCalcCheckSum += DataByte;
+		}
+	}
+} /*** End of SendKw2000ByteToSCI ***/
 
 
 /*********************************************************************/
@@ -544,14 +535,13 @@ void SendKw2000ByteToSerial ( void )
 /*********************************************************************/
 
 void GoToSendingMessageK2State (void)
-
-  {
-  Kw2000State = k2sSendingMessage;
-  Kw2MsgTxState = ktsSendingFormat;
-  TxCalcCheckSum = 0;
-  DataByte = TxFormatByte ;
-  SendKw2000ByteToSerial () ;
-  } /*** End of GoToSendingMessageK2State ***/
+{
+	Kw2000State = k2sSendingMessage;
+	Kw2MsgTxState = ktsSendingFormat;
+	TxCalcCheckSum = 0;
+	DataByte = TxFormatByte ;
+	SendKw2000ByteToSerial() ;
+} /*** End of GoToSendingMessageK2State ***/
 
 
 /*********************************************************************/
@@ -559,12 +549,11 @@ void GoToSendingMessageK2State (void)
 /*********************************************************************/
 
 static void GoToWaiting25msLowSynchK2State (void)
-
-  {
-  SCI0ReceiverReset ();
-  EventCounter = 0;
-  Kw2000State = k2sWaiting25msLowSynch;
-  } /*** End of GoToWaiting25msLowSynchK2State ***/
+{
+	SCI0ReceiverReset();
+	EventCounter = 0;
+	Kw2000State = k2sWaiting25msLowSynch;
+} /*** End of GoToWaiting25msLowSynchK2State ***/
 
 
 /*********************************************************************/
@@ -572,12 +561,11 @@ static void GoToWaiting25msLowSynchK2State (void)
 /*********************************************************************/
 
 static void GoToWaiting25msHighSynchK2State (void)
-
-  {
-  SCI0ReceiverReset ();
-  EventCounter = 0;
-  Kw2000State = k2sWaiting25msHighSynch;
-  } /*** End of GoToWaiting25msHighSynchK2State ***/
+{
+	SCI0ReceiverReset ();
+	EventCounter = 0;
+	Kw2000State = k2sWaiting25msHighSynch;
+} /*** End of GoToWaiting25msHighSynchK2State ***/
 
 
 /*********************************************************************/
@@ -635,43 +623,35 @@ static void GoToWaitingAppLvlServiceExecK2State (void)
 /*********************************************************************/
 
 void BuildKw2000Answer (uint8_t TxMsgSize)
+{
+	if (k2mFmt (RxFormatByte) == mfFunctAddr)
+		/* A received message may use functional addressing, but we use
+		 physical addressing for the response transmitted back. */
+		TxFormatByte = mfPhysAddr;
+	else
+		TxFormatByte = k2mFmt (RxFormatByte);
 
-  {
-  if (k2mFmt (RxFormatByte) == mfFunctAddr)
-      /* A received message may use functional addressing, but we use
-         physical addressing for the response transmitted back. */
-    TxFormatByte = mfPhysAddr;
-  else
-    TxFormatByte = k2mFmt (RxFormatByte);
+	if (k2mLen (TxMsgSize) == TxMsgSize) {
+		/* The size will fit in the length field of the transmit
+		format byte. */
+		TxFormatByte |= TxMsgSize;
+	}
 
-  if (k2mLen (TxMsgSize) == TxMsgSize)
-    {
-    /* The size will fit in the length field of the transmit
-       format byte. */
-    TxFormatByte |= TxMsgSize;
-    }
+	TxMsgDataLength = TxMsgSize;
+	if ((RxFormatByte & mfPhysAddr) || (RxFormatByte & mfFunctAddr)) {
+		TxTargetAddress = RxSourceAddress;
+		TxSourceAddress = MyPhysicalAddr;
+	} else {
+		TxTargetAddress = 0;
+		TxSourceAddress = 0;
+	}
 
-  TxMsgDataLength = TxMsgSize;
-  if ((RxFormatByte & mfPhysAddr) ||
-      (RxFormatByte & mfFunctAddr))
-    {
-    TxTargetAddress = RxSourceAddress;
-    TxSourceAddress = MyPhysicalAddr;
-    }
- else
-      {
-         TxTargetAddress= 0;
-         TxSourceAddress = 0;
-    }
-  if (P2MinTimer < P2MinWL)
-    {
-    GoToWaitingP2MinBeforeAnswerK2State ();
-    }
-  else
-    {
-    GoToSendingMessageK2State ();
-    }
-  } /*** End of BuildKw2000Answer ***/
+	if (P2MinTimer < P2MinWL) {
+		GoToWaitingP2MinBeforeAnswerK2State ();
+	} else {
+		GoToSendingMessageK2State ();
+	}
+} /*** End of BuildKw2000Answer ***/
 
 
 /*********************************************************************/
@@ -679,34 +659,30 @@ void BuildKw2000Answer (uint8_t TxMsgSize)
 /*********************************************************************/
 
 static void SendNowStandardNegativeAnswer (uint8_t NegRespCode)
-
-  {
-  TxServiceData [1] = RxServiceData [0];
-  TxServiceData [0] = NegativeResponse;
-  TxServiceData [2] = NegRespCode;
-  BuildKw2000Answer (3);
-  } /*** End of SendNowStandardNegativeAnswer ***/
+{
+	TxServiceData [1] = RxServiceData [0];
+	TxServiceData [0] = NegativeResponse;
+	TxServiceData [2] = NegRespCode;
+	BuildKw2000Answer (3);
+} /*** End of SendNowStandardNegativeAnswer ***/
 
 
 /*********************************************************************/
 /*** Builds a standard kw2000 negative answer                      ***/
 /*********************************************************************/
 
-FAR_COS void KW2K_SendStandardNegativeAnswer (uint8_t NegRespCode)
-
-  {
-  if ((NegRespCode == nrcServiceNotSupported) ||
-      (NegRespCode == nrcSubFunctionNotSupported_InvalidFormat))
-    {
-    PendingNegativeAnswer = NegRespCode;
-    Kw2000State = k2sWaitingP2MinBeforeAnswer;
-                 /*k2sWaitingAppLvlServiceExec;*/
-    }
-  else
-    {
-    SendNowStandardNegativeAnswer (NegRespCode);
-    }
-  } /*** End of SendStandardNegativeAnswer ***/
+void KW2K_SendStandardNegativeAnswer (uint8_t NegRespCode)
+{
+	if ((NegRespCode == nrcServiceNotSupported) ||
+	  (NegRespCode == nrcSubFunctionNotSupported_InvalidFormat))
+	{
+		PendingNegativeAnswer = NegRespCode;
+		Kw2000State = k2sWaitingP2MinBeforeAnswer;
+		 /*k2sWaitingAppLvlServiceExec;*/
+	} else {
+		SendNowStandardNegativeAnswer (NegRespCode);
+	}
+} /*** End of SendStandardNegativeAnswer ***/
 
 
 /*********************************************************************/
@@ -714,21 +690,18 @@ FAR_COS void KW2K_SendStandardNegativeAnswer (uint8_t NegRespCode)
 /*********************************************************************/
 #define SyZERO_VALUE    (0)
 
-FAR_COS void KW2K_SendStandardPositiveAnswer (uint8_t MsgSize)
+void KW2K_SendStandardPositiveAnswer (uint8_t MsgSize)
 {
-  /* If the message size is zero, change the state to the
-     k2sAwaitingMessage.  This ensures proper control sequence.
-     */
+	/* If the message size is zero, change the state to the
+	k2sAwaitingMessage.  This ensures proper control sequence.
+	*/
 
-  if ( MsgSize != SyZERO_VALUE )
-  {
-     TxServiceData[0] = (RxServiceData [0] + PositiveResponseOffset);
-     BuildKw2000Answer (MsgSize);
-  }
-  else
-  {
-     GoToAwaitingMessageK2State (false);
-  }
+	if ( MsgSize != SyZERO_VALUE ) {
+		TxServiceData[0] = (RxServiceData [0] + PositiveResponseOffset);
+		BuildKw2000Answer (MsgSize);
+	} else {
+		GoToAwaitingMessageK2State (false);
+	}
 } /*** End of SendStandardPositiveAnswer ***/
 
 void SendEscapeCode (uint8_t MsgSize)
@@ -737,15 +710,12 @@ void SendEscapeCode (uint8_t MsgSize)
      k2sAwaitingMessage.  This ensures proper control sequence.
      */
 
-  if ( MsgSize != SyZERO_VALUE )
-  {
-     TxServiceData[0] = (EscapeCode);
-     BuildKw2000Answer (MsgSize);
-  }
-  else
-  {
-     GoToAwaitingMessageK2State (false);
-  }
+	if (MsgSize != SyZERO_VALUE) {
+		TxServiceData[0] = (EscapeCode);
+		BuildKw2000Answer (MsgSize);
+	} else {
+		GoToAwaitingMessageK2State (false);
+	}
 } /*** End of SendStandardPositiveAnswer ***/
 
 
@@ -754,14 +724,12 @@ void SendEscapeCode (uint8_t MsgSize)
 /*********************************************************************/
 
 static void PutDataInKw2000InputBuffer (uint8_t DataIn)
-
-  {
-    KW2000InputBuffer [KW2000InputBufferInPointer++] = DataIn;
-    if (KW2000InputBufferInPointer == KW2000InputBufferSize)
-      {
-      KW2000InputBufferInPointer = 0;
-      }
-  } /*** End of PutDataInKw2000InputBuffer ***/
+{
+	KW2000InputBuffer [KW2000InputBufferInPointer++] = DataIn;
+	if (KW2000InputBufferInPointer == KW2000InputBufferSize) {
+		KW2000InputBufferInPointer = 0;
+	}
+} /*** End of PutDataInKw2000InputBuffer ***/
 
 
 /*********************************************************************/
@@ -769,245 +737,207 @@ static void PutDataInKw2000InputBuffer (uint8_t DataIn)
 /*********************************************************************/
 
 static bool GetDataFromKw2000InputBuffer (uint8_t *DataOutPtr)
-
-  {
-  if (KW2000InputBufferInPointer != KW2000InputBufferOutPointer)
-    {
-    *DataOutPtr = KW2000InputBuffer [KW2000InputBufferOutPointer++];
-    if (KW2000InputBufferOutPointer == KW2000InputBufferSize)
-      {
-      KW2000InputBufferOutPointer = 0;
-      }
-    return true;
-    }
-  else
-    {
-    return false;
-    }
-  } /*** End of GetDataFromKw2000InputBuffer ***/
+{
+	if (KW2000InputBufferInPointer != KW2000InputBufferOutPointer) {
+		*DataOutPtr = KW2000InputBuffer [KW2000InputBufferOutPointer++];
+		if (KW2000InputBufferOutPointer == KW2000InputBufferSize) {
+			KW2000InputBufferOutPointer = 0;
+		}
+		return true;
+	} else {
+		return false;
+	}
+} /*** End of GetDataFromKw2000InputBuffer ***/
 
 
 /********************************************************************/
 /*** Serial communication Receive ISR                             ***/
 /********************************************************************/
 
-FAR_COS void SerialcomReceiveInt (void)
-  {
-  uint8_t EchoByte;
+void SerialcomReceiveInt (void)
+{
+	uint8_t EchoByte;
 
-  switch (Kw2000State)
-    {
-    case k2sAwaitingMessage:
- /*--- Wait for a first byte within P3MaxWL or 16 ms if Fast synchro */
-    case k2sReceivingMessage:
-           if (SCI0ReceiverErrorFlag ())
-             /*--- if error or break: ---*/
-             {
-             GoToErrorReadK2State ();
-             }
-           else
-             /*--- else: ---*/
-             {
-             PutDataInKw2000InputBuffer
-                              (SCI0_ReadSCIReceiverDataRegister ());
-             }
-           if (Kw2000State == k2sAwaitingMessage)
-             {
-             GoToReceivingMessageK2State ();
-             }
-           break;
-     case  k2sSendingMessage:
+	switch (Kw2000State) {
+	case k2sAwaitingMessage:
+		/*--- Wait for a first byte within P3MaxWL or 16 ms if Fast synchro */
+	case k2sReceivingMessage:
+		if (SCI0ReceiverErrorFlag ()) {
+			/*--- if error or break: ---*/
+			GoToErrorReadK2State ();
+		} else {
+			PutDataInKw2000InputBuffer(SCI0_ReadSCIReceiverDataRegister ());
+		}
+		if (Kw2000State == k2sAwaitingMessage) {
+			GoToReceivingMessageK2State ();
+		}
+		break;
+	case  k2sSendingMessage:
        /* Transmit state */
        /* If the received byte is no equal to the sent byte OR
           a collision occurs, go to waiting state.
           */
-        if ( ((!SCI0ReceiverErrorFlag ()) &&
-           ( SCI0_ReadSCIReceiverDataRegister () ==
-                           DataByte ))||
-               (KW2000CommuState==KW2000_Tester))
-        {
-           switch (Kw2MsgTxState)
-           {
-              case ktsSendingFormat:
-                 TxDataIndex = 1;
-                 if (k2mFmt (TxFormatByte) == mfPhysAddr)
-                 {
-                    Kw2MsgTxState = ktsSendingTgtAddr;
-                    DataByte = TxTargetAddress ;
-                    SendKw2000ByteToSerial ();
-                 }
-                 else if ((KW2000CommuState==KW2000_Tester)
-                 	&&(k2mFmt (TxFormatByte) == k2mFmt(0x50)))
-                 	{
-                       Kw2MsgTxState = ktsSendingLength;
-                       DataByte = TxMsgDataLength+3 ;
-                       SendKw2000ByteToSerial ();
-                     }
-                 else /*--- mfNoAddr ---*/
-                 {
-                    if (k2mLen (TxFormatByte))
-                    /*--- length already in format byte ---*/
-                    {
-                       Kw2MsgTxState = ktsSendingData;
-                       DataByte = TxServiceData [0] ;
-                       SendKw2000ByteToSerial ();
-                    }
-                    else
-                     /*--- no: send it ---*/
-                    {
-                       Kw2MsgTxState = ktsSendingLength;
-                       DataByte = TxMsgDataLength ;
-                       SendKw2000ByteToSerial ();
-                    }
-                 }
-                 break;
+		if (((!SCI0ReceiverErrorFlag ()) &&
+			(SCI0_ReadSCIReceiverDataRegister () == DataByte ))||
+			(KW2000CommuState==KW2000_Tester))
+		{
+			switch (Kw2MsgTxState) {
+			case ktsSendingFormat:
+				TxDataIndex = 1;
+				if (k2mFmt (TxFormatByte) == mfPhysAddr) 
+				{
+					Kw2MsgTxState = ktsSendingTgtAddr;
+					DataByte = TxTargetAddress ;
+					SendKw2000ByteToSerial ();
+				} 
+				else if ((KW2000CommuState==KW2000_Tester)
+					&&(k2mFmt (TxFormatByte) == k2mFmt(0x50)))
+				{
+					Kw2MsgTxState = ktsSendingLength;
+					DataByte = TxMsgDataLength+3 ;
+					SendKw2000ByteToSerial ();
+				}
+				else /*--- mfNoAddr ---*/
+				{
+					if (k2mLen (TxFormatByte))
+					/*--- length already in format byte ---*/
+					{
+						Kw2MsgTxState = ktsSendingData;
+						DataByte = TxServiceData [0] ;
+						SendKw2000ByteToSerial ();
+					}
+					else
+					 /*--- no: send it ---*/
+					{
+						Kw2MsgTxState = ktsSendingLength;
+						DataByte = TxMsgDataLength ;
+						SendKw2000ByteToSerial ();
+					}
+				}
+				break;
 
-             case ktsSendingTgtAddr:
-                 Kw2MsgTxState = ktsSendingSrcAddr ;
-                 DataByte = TxSourceAddress ;
-                 SendKw2000ByteToSerial () ;
-                 break;
+			case ktsSendingTgtAddr:
+				Kw2MsgTxState = ktsSendingSrcAddr ;
+				DataByte = TxSourceAddress ;
+				SendKw2000ByteToSerial () ;
+				break;
 
-             case ktsSendingSrcAddr:
-                 if (k2mLen (TxFormatByte))
-                  /*--- length already in format byte ---*/
-                 {
-                    Kw2MsgTxState = ktsSendingData ;
-                    DataByte = TxServiceData [0] ;
-                    SendKw2000ByteToSerial () ;
-                 }
-                 else
-                  /*--- no: send it ---*/
-                 {
-                    Kw2MsgTxState = ktsSendingLength ;
-                    DataByte = TxMsgDataLength ;
-                    SendKw2000ByteToSerial () ;
-                 }
-                 break;
+			case ktsSendingSrcAddr:
+				if (k2mLen (TxFormatByte))
+				/*--- length already in format byte ---*/
+				{
+					Kw2MsgTxState = ktsSendingData ;
+					DataByte = TxServiceData [0] ;
+					SendKw2000ByteToSerial () ;
+				}
+				else
+				/*--- no: send it ---*/
+				{
+					Kw2MsgTxState = ktsSendingLength ;
+					DataByte = TxMsgDataLength ;
+					SendKw2000ByteToSerial () ;
+				}
+				break;
 
-             case ktsSendingLength:
-                 Kw2MsgTxState = ktsSendingData ;
-                 DataByte = TxServiceData [0] ;
-                 SendKw2000ByteToSerial () ;
-                 break;
+			case ktsSendingLength:
+				Kw2MsgTxState = ktsSendingData ;
+				DataByte = TxServiceData [0] ;
+				SendKw2000ByteToSerial () ;
+				break;
 
-             case ktsSendingData:
-                 if (TxDataIndex < TxMsgDataLength)
-                 {
-                    DataByte = TxServiceData [TxDataIndex] ;
-                    SendKw2000ByteToSerial ();
-                    TxDataIndex++;
-                 }
-                 else
-                 {
-                    Kw2MsgTxState = ktsSendingCheckSum ;
-                   /* if((KW2000CommuState==KW2000_Tester)&&(Chk_GenericImmo_Enabled()))
-                    	{
-                    	DataByte = 256-TxCalcCheckSum ;
-                    	}
-                    else*/
-                    	{
-                        DataByte = TxCalcCheckSum ;
-                    	}
-                    SendKw2000ByteToSerial () ;
-                 }
-                 break;
+			case ktsSendingData:
+				if (TxDataIndex < TxMsgDataLength) {
+					DataByte = TxServiceData [TxDataIndex] ;
+					SendKw2000ByteToSerial ();
+					TxDataIndex++;
+				} else {
+					Kw2MsgTxState = ktsSendingCheckSum ;
+					DataByte = TxCalcCheckSum ;
+					SendKw2000ByteToSerial () ;
+				}
+				break;
 
-             case ktsSendingCheckSum:
+			case ktsSendingCheckSum:
+				SCI0ReceiverReset (); /*--- Cancel echo ---*/
+				if (KW2000_Responder==KW2000CommuState) {
+					P2MinTimer = 0;
+					if (GetCommunicationEstablishedState()) {
+						if ( GetMultiRespInProgress()) {
+							SbPosResponsePending = true;
+							GoToExecuteServiceK2State ();
+						} else {
+							/* If the preceeding command was service 10
+							to change the baud rate than, it shoud be
+							done now.  The baud rate is changed after
+							sending the positive response.
+							*/
+							if (BaudRateChangedSrv10) {
+								BaudRateChangedSrv10 = false ;
+								SCI0_SetSCIBaudRate ( BaudRateValueSrv10 ) ;
+							}
+							GoToAwaitingMessageK2State (false);
+							SbPosResponsePending = false;
+						}
+					} else {
+						/*--- was an answer to a stop communication service ---*/
+						GoToWaitingTIdleSynchK2State (TIdleStopCom);
+					}
+				}
 
-                 SCI0ReceiverReset (); /*--- Cancel echo ---*/
-                 if (KW2000_Responder==KW2000CommuState)
-                 {
-                    P2MinTimer = 0;
-                    if (GetCommunicationEstablishedState())
-                    {
-                       if ( GetMultiRespInProgress() )
-                       {
-                          SbPosResponsePending = true;
-                          GoToExecuteServiceK2State ();
-                       }
-                       else
-                       {
-                          /* If the preceeding command was service 10
-                          to change the baud rate than, it shoud be
-                          done now.  The baud rate is changed after
-                          sending the positive response.
-                          */
-                          if ( BaudRateChangedSrv10 )
-                          {
-                             BaudRateChangedSrv10 = false ;
-                             SCI0_SetSCIBaudRate ( BaudRateValueSrv10 ) ;
-                          }
-                       GoToAwaitingMessageK2State (false);
-                       SbPosResponsePending = false;
-                       }
-                    }
-                    else
-                    {
-                       /*--- was an answer to a stop communication service ---*/
-                       GoToWaitingTIdleSynchK2State (TIdleStopCom);
-                    }
-                 }
+				if (KW2000_Tester==KW2000CommuState) {
+					P3MinTimer=0;
+					ImmoServiceState=WaitingResponse;
+					if (ECMImmoRelation==Authentication) AuthenticationCounter++;
+					if (ECMImmoRelation==FeedbackAuthentication) FeedbackAuthCounter++;
+					GoToAwaitingMessageK2State(true);
+				}
+				break;
+			default:
+				break;
+			}
+			if (KW2000_Tester==KW2000CommuState)
+				P4Timout=0;
+		}
+		else
+		{
+			if (KW2000_Responder==KW2000CommuState)
+			{
+			P2MinTimer = 0 ;
+			SCI0ReceiverReset () ;
+			GoToWaitingP2MinBeforeAnswerK2State () ;
+			}
+		}
+		break ;
 
-      	         if (KW2000_Tester==KW2000CommuState) 
-      	         {
-      	            P3MinTimer=0;
-      	            ImmoServiceState=WaitingResponse;
-      	            if (ECMImmoRelation==Authentication) AuthenticationCounter++;
-      	            if (ECMImmoRelation==FeedbackAuthentication) FeedbackAuthCounter++;
-
-      	            GoToAwaitingMessageK2State(true);
-      	         }
-      		   
-                 break;
-             default:
-                 break;
-           }
-           if (KW2000_Tester==KW2000CommuState)
-           	P4Timout=0;
-        }
-        else
-        {
-        	if (KW2000_Responder==KW2000CommuState)
-        		{
-        		P2MinTimer = 0 ;
-           		SCI0ReceiverReset () ;
-           		GoToWaitingP2MinBeforeAnswerK2State () ;
-        		}
-        }
-        break ;
-
-     case k2sWaitingP2MinBeforeAnswer:
-     case k2sWaitingP3MinBeforeSend:
-     case k2sWaitingP4MinBeforeSend:
-     case k2sExecuteService          :
-     case k2sWaitingAppLvlServiceExec:
-     case k2sWaitingInitializing:
-     case k2sLostCommunication:
-     case k2sErrorRead:
-       /* If bus activity during wait, reset the timer */
-        if (KW2000_Responder==KW2000CommuState)  P2MinTimer = 0 ;
-        if (KW2000_Tester==KW2000CommuState) P3MinTimer = 0;
-        SCI0ReceiverReset () ;
-        break ;
-
-    default:
-           break;
-
-    }
-  } /*** End of SerialcomReceiveInt ***/
+	case k2sWaitingP2MinBeforeAnswer:
+	case k2sWaitingP3MinBeforeSend:
+	case k2sWaitingP4MinBeforeSend:
+	case k2sExecuteService          :
+	case k2sWaitingAppLvlServiceExec:
+	case k2sWaitingInitializing:
+	case k2sLostCommunication:
+	case k2sErrorRead:
+		/* If bus activity during wait, reset the timer */
+		if (KW2000_Responder==KW2000CommuState)  P2MinTimer = 0 ;
+		if (KW2000_Tester==KW2000CommuState) P3MinTimer = 0;
+		SCI0ReceiverReset () ;
+		break ;
+	default:
+		break;
+	}
+} /*** End of SerialcomReceiveInt ***/
 
 
 /*********************************************************************/
 /*** Serial communication Transmit ISR                             ***/
 /*********************************************************************/
 
-FAR_COS void SerialcomTransmitInt (void)
-  {
-    /* Rev. 1.18 - Immobilizer interrupt logic added by KPB */
-    /*SendingWakeUpTransmitComplete();*/
+void SerialcomTransmitInt (void)
+{
+	/* Rev. 1.18 - Immobilizer interrupt logic added by KPB */
+	/*SendingWakeUpTransmitComplete();*/
 
-  } /*** End of SerialcomTransmitInt ***/
+} /*** End of SerialcomTransmitInt ***/
 
 
 /*********************************************************************/
@@ -1015,10 +945,9 @@ FAR_COS void SerialcomTransmitInt (void)
 /*********************************************************************/
 
 static bool SerialEventReceived (void)
-
-  {
-  return (bool) (SCI0ReceiverReadyFlag () || SCI0ReceiverErrorFlag ());
-  } /*** End of SerialEventReceived ***/
+{
+	return (bool) (SCI0ReceiverReadyFlag () || SCI0ReceiverErrorFlag ());
+} /*** End of SerialEventReceived ***/
 
 
 /*******************************************************************/
@@ -1027,26 +956,25 @@ static bool SerialEventReceived (void)
 /*******************************************************************/
 
 static void WaitingTIdleSynchKw2000State (void)
-
-  {
-  if (!SerialEventReceived ())
-    /*--- if Idle... ---*/
-    {
-    IdleTimer++;
-    if (IdleTimer >= TIdle)
-      /*--- ...for longer than TIdle: ---*/
-      {
-      GoToScanningHighToLowEdgeSynchK2State ();
-      }
-    }
-  else
-    /*--- if not Idle: ---*/
-    {
-    SCI0ReceiverReset ();
-    IdleTimer = 0;
-    TIdle = 0;
-    }
-  } /*** End of WaitingTIdleSynchKw2000State ***/
+{
+	if (!SerialEventReceived ())
+	/*--- if Idle... ---*/
+	{
+		IdleTimer++;
+		if (IdleTimer >= TIdle)
+		  /*--- ...for longer than TIdle: ---*/
+		  {
+			GoToScanningHighToLowEdgeSynchK2State ();
+		  }
+		}
+	else
+	/*--- if not Idle: ---*/
+	{
+		SCI0ReceiverReset ();
+		IdleTimer = 0;
+		TIdle = 0;
+	}
+} /*** End of WaitingTIdleSynchKw2000State ***/
 
 
 /*******************************************************************/
@@ -1055,23 +983,22 @@ static void WaitingTIdleSynchKw2000State (void)
 /*******************************************************************/
 
 static void ScanningHighToLowEdgeSynchKw2000State (void)
-
-  {
-  if (SerialEventReceived ())
-    /*--- if not Idle: ---*/
-    {
-    if (SCI0ReceiverFramingErrorDetectedFlag () &&
-       (SCI0_ReadSCIReceiverDataRegister () == 0))
-      /*--- if break: ---*/
-      {
-      GoToWaiting25msLowSynchK2State ();
-      }
-    else
-      /*--- if not Idle nor break: ---*/
-      {
-      GoToWaitingTIdleSynchK2State (TIdleTimout);
-      }
-    }
+{
+	if (SerialEventReceived ())
+	/*--- if not Idle: ---*/
+	{
+		if (SCI0ReceiverFramingErrorDetectedFlag () &&
+		(SCI0_ReadSCIReceiverDataRegister () == 0))
+		/*--- if break: ---*/
+		{
+			GoToWaiting25msLowSynchK2State ();
+		}
+		else
+		/*--- if not Idle nor break: ---*/
+		{
+			GoToWaitingTIdleSynchK2State (TIdleTimout);
+		}
+	}
     /* Still in Kw2000 communication mode: Do nothing. */
   } /*** End of ScanningHighToLowEdgeSynchKw2000State ***/
 
@@ -1082,36 +1009,34 @@ static void ScanningHighToLowEdgeSynchKw2000State (void)
 /********************************************************************/
 
 static void Waiting25msLowSynchKw2000State (void)
-
-  {
-  if (SCI0ReceiverActiveDetected ())
-    /*--- if break: ---*/
-    {
-    EventCounter++;
-    }
-  else
-    /*--- if not break: ---*/
-    /* After the break, SCI detected idle line and clear the flag RAF*/
-    {
-    if (EventCounter >= FastInitLogicMin)
-      /*--- if (partial) idle after at least 3 breaks: ---*/
-      {
-      GoToWaiting25msHighSynchK2State ();
-      return; /*--- Optimisation (EventCounter did not increase, so
-                    break) ---*/
-      }
-    else
-      {
-      GoToWaitingTIdleSynchK2State (TIdleTimout);
-      }
-    }
-  if (EventCounter > ( FastInitLogicMax))
-    /*--- if more than 4 breaks occured: ---*/
-    {
-    GoToWaitingTIdleSynchK2State (TIdleTimout);
-    }
-
-  } /*** End of Waiting25msLowSynchKw2000State ***/
+{
+	if (SCI0ReceiverActiveDetected ())
+	/*--- if break: ---*/
+	{
+		EventCounter++;
+	}
+	else
+	/*--- if not break: ---*/
+	/* After the break, SCI detected idle line and clear the flag RAF*/
+	{
+		if (EventCounter >= FastInitLogicMin)
+		/*--- if (partial) idle after at least 3 breaks: ---*/
+		{
+			GoToWaiting25msHighSynchK2State ();
+			return; /*--- Optimisation (EventCounter did not increase, so
+			break) ---*/
+		}
+		else
+		{
+			GoToWaitingTIdleSynchK2State (TIdleTimout);
+		}
+	}
+	if (EventCounter > ( FastInitLogicMax))
+	/*--- if more than 4 breaks occured: ---*/
+	{
+		GoToWaitingTIdleSynchK2State (TIdleTimout);
+	}
+} /*** End of Waiting25msLowSynchKw2000State ***/
 
 /*********************************************************************/
 /*** Keyword 2000 State periodic operation: k2sWaiting25msHighSynch***/
@@ -1119,20 +1044,19 @@ static void Waiting25msLowSynchKw2000State (void)
 /*********************************************************************/
 static void Waiting25msHighSynchKw2000State (void)
 {
-
-  if (!SerialEventReceived ())
-    /*--- if idle: ---*/
-    /*--- when 1 idle occured: ---*/
-    {
-    SetTimingParameterToDefault ();
-    GoToAwaitingMessageK2State (true);
-    }
-  else
-    /*--- if not idle: ---*/
-    {
-    GoToWaitingTIdleSynchK2State (TIdleTimout);
-    }
-  } /*** End of Waiting25msHighSynchKw2000State ***/
+	if (!SerialEventReceived ())
+	/*--- if idle: ---*/
+	/*--- when 1 idle occured: ---*/
+	{
+		SetTimingParameterToDefault ();
+		GoToAwaitingMessageK2State (true);
+	}
+	else
+	/*--- if not idle: ---*/
+	{
+		GoToWaitingTIdleSynchK2State (TIdleTimout);
+	}
+} /*** End of Waiting25msHighSynchKw2000State ***/
 
 
 /*********************************************************************/
@@ -1183,221 +1107,159 @@ void GoToLoadingDataMRState (void)
 /*** Keyword 2000 State periodic operation: k2sReceivingMessage ***/
 /*** ---> Schedule message reception.                           ***/
 /******************************************************************/
-FAR_COS void ReceivingMessageKw2000State (void)
-  {
-  uint8_t DataRead;
+void ReceivingMessageKw2000State (void)
+{
+	uint8_t DataRead;
 
-  if (KW2000_Responder==KW2000CommuState)   P4Timout++;
-  if (KW2000_Tester==KW2000CommuState)      P1Timout++;
-  while (GetDataFromKw2000InputBuffer (&DataRead) &&
-         (Kw2000State == k2sReceivingMessage))
+	if (KW2000_Responder==KW2000CommuState)   P4Timout++;
+	if (KW2000_Tester==KW2000CommuState)      P1Timout++;
+	while (GetDataFromKw2000InputBuffer (&DataRead) && (Kw2000State == k2sReceivingMessage))
     /*--- Data is received and still in Receiving state ---*/
     {
-    if (KW2000_Responder==KW2000CommuState)     P4Timout = 0; /* Reset timout */
-    if (KW2000_Tester==KW2000CommuState)        P1Timout=0;
-    
-    RxCalcCheckSum += DataRead;
-    switch (Kw2MsgRxState)
-      {
-      case mrsWaitingFormat:
-             RxFormatByte = DataRead ;
-             RxCalcCheckSum = RxFormatByte ;
-             FunctionalAddressActive = false ;
-             RxMsgDataLength = k2mLen (RxFormatByte) ;
-            /*--- by default, store length in format byte ---*/
-             switch (k2mFmt (RxFormatByte))
-               {
-               case mfPhysAddr:
-               case mfFunctAddr:
-                      Kw2MsgRxState = mrsWaitingTgtAddr;
-                      break;
-               case mfNoAddr:
-                      if (GetCommunicationEstablishedState()||VbSiemens_StartCommReceived)
-                        {
-                          if (( (Chk_SiemensImmo_Enabled() )
-                                   && (Siemens_KW2_Start_Communication_KB1&0x04) ) 
-                                 || (!Chk_SiemensImmo_Enabled()) 
-                                   && (KB1&0x04))
-                        {
-                          if (RxMsgDataLength)
-                          {   /*--- length already in format byte ---*/
-                              GoToLoadingDataMRState ();
-                          }
-                          else
-                          {   /*--- no: get it ---*/
-                              Kw2MsgRxState = mrsWaitingLength;
-                          }
-                        }
-                      else
-                        {
-                          GoToErrorReadK2State ();
-                          }
-                        }
-                      else
-                        {
-                          GoToErrorReadK2State ();
-                        }
-                      break;
-               case mfCARB:
-                      /*if(Chk_GenericImmo_Enabled())
-                        {
-			      if (RxFormatByte==0x65)
-				{
-					Kw2MsgRxState = mrsWaitingLength;
-				}
-			      else
-				{
+		if (KW2000_Responder==KW2000CommuState)     P4Timout = 0; /* Reset timout */
+		if (KW2000_Tester==KW2000CommuState)        P1Timout=0;
+
+		RxCalcCheckSum += DataRead;
+		switch (Kw2MsgRxState) {
+		case mrsWaitingFormat:
+			RxFormatByte = DataRead ;
+			RxCalcCheckSum = RxFormatByte ;
+			FunctionalAddressActive = false ;
+			RxMsgDataLength = k2mLen (RxFormatByte) ;
+			/*--- by default, store length in format byte ---*/
+			switch (k2mFmt (RxFormatByte)) {
+			case mfPhysAddr:
+			case mfFunctAddr:
+				Kw2MsgRxState = mrsWaitingTgtAddr;
+				break;
+			case mfNoAddr:
+				if (GetCommunicationEstablishedState()||VbSiemens_StartCommReceived) {
+					if (( (Chk_SiemensImmo_Enabled() )
+						&& (Siemens_KW2_Start_Communication_KB1&0x04) ) 
+						|| (!Chk_SiemensImmo_Enabled()) 
+						&& (KB1&0x04))
+					{
+						if (RxMsgDataLength) {   /*--- length already in format byte ---*/
+							GoToLoadingDataMRState ();
+						} else {   /*--- no: get it ---*/
+							Kw2MsgRxState = mrsWaitingLength;
+						}
+					} else {
+						GoToErrorReadK2State ();
+					}
+				} else {
 					GoToErrorReadK2State ();
-
 				}
+				break;
+			case mfCARB:
+				GoToErrorReadK2State ();
+				break;
+			default:
+				break;
+			}
+			break;
 
-                        }	 
-               	      else*/
-               	        {
-               	 	      GoToErrorReadK2State ();
-               	        }
-                      break;
-               default:
-                      break;
-               }
-             break;
+		case mrsWaitingTgtAddr:
+			RxTargetAddress = DataRead ;
+			if (((RxFormatByte & mfPhysAddr) &&
+				(RxTargetAddress == MyPhysicalAddr)) ||
+				((RxFormatByte & mfFunctAddr) &&
+				(RxTargetAddress == MyFunctionalAddr)) ||
+				((RxFormatByte & mfFunctAddr) &&
+				(RxTargetAddress == MyFunctionalAddrNew)) ||
+				((RxFormatByte & mfPhysAddr) &&
+				(RxTargetAddress == MyImmoPhysicalAddr)) )
+			{
+				/* Target address is valid. */
+				Kw2MsgRxState = mrsWaitingSrcAddr ;
+				if ((( RxFormatByte & mfFunctAddr) &&
+					(RxTargetAddress == MyFunctionalAddr)) ||
+					((RxFormatByte & mfFunctAddr) &&
+					(RxTargetAddress == MyFunctionalAddrNew )))
+				FunctionalAddressActive = true ;
+			} else {
+				/* Target address is NOT valid. */
+				GoToErrorReadK2State () ;
+			}
+			break;
 
-      case mrsWaitingTgtAddr:
-             RxTargetAddress = DataRead ;
-             if (((RxFormatByte & mfPhysAddr) &&
-                  (RxTargetAddress == MyPhysicalAddr)) ||
-                 ((RxFormatByte & mfFunctAddr) &&
-                  (RxTargetAddress == MyFunctionalAddr)) ||
-                 ((RxFormatByte & mfFunctAddr) &&
-                  (RxTargetAddress == MyFunctionalAddrNew)) ||
-                 ((RxFormatByte & mfPhysAddr) &&
-                  (RxTargetAddress == MyImmoPhysicalAddr)) )
-               {
-               /* Target address is valid. */
-                  Kw2MsgRxState = mrsWaitingSrcAddr ;
-                  if ((( RxFormatByte & mfFunctAddr) &&
-                     (RxTargetAddress == MyFunctionalAddr)) ||
-                     ((RxFormatByte & mfFunctAddr) &&
-                     (RxTargetAddress == MyFunctionalAddrNew )))
-                        FunctionalAddressActive = true ;
-               }
-             else
-               {
-               /* Target address is NOT valid. */
-               GoToErrorReadK2State () ;
-               }
-             break;
+		case mrsWaitingSrcAddr:
+			RxSourceAddress = DataRead ;
+			if ((RxSourceAddress == MySourceAddr0) ||
+				(RxSourceAddress == MySourceAddr1) ||
+				(RxSourceAddress == KcMyImmoSourceAddr)||
+				(RxSourceAddress == CySiemens_ImmoTargetAddress))
+			{
+				if (RxMsgDataLength) {
+					/*--- length already in format byte ---*/
+					GoToLoadingDataMRState () ;
+				} else {
+					/*--- no: get it ---*/
+					Kw2MsgRxState = mrsWaitingLength ;
+				}
+			} else {
+				/* Source address is NOT valid. */
+				GoToErrorReadK2State () ;
+			}
+			break;
 
-      case mrsWaitingSrcAddr:
-             RxSourceAddress = DataRead ;
-             if ((RxSourceAddress == MySourceAddr0) ||
-                 (RxSourceAddress == MySourceAddr1) ||
-                 (RxSourceAddress == KcMyImmoSourceAddr)||
-                 (RxSourceAddress == CySiemens_ImmoTargetAddress))
-             {
-                  if (RxMsgDataLength)
-                  {  /*--- length already in format byte ---*/
-                     GoToLoadingDataMRState () ;
-                  }
-                  else
-                  {  /*--- no: get it ---*/
-                     Kw2MsgRxState = mrsWaitingLength ;
-                  }
+		case mrsWaitingLength:
+			if ((KW2000CommuState==KW2000_Tester)) {
+				RxMsgDataLength = DataRead ;   
+			} else {
+				RxMsgDataLength = DataRead ;
+			}
+			/*--- length in format byte was null, get it now ---*/
+			GoToLoadingDataMRState () ;
+			break;
 
-             }
-             else
-             {
-                /* Source address is NOT valid. */
-                GoToErrorReadK2State () ;
-             }
-
-             break;
-
-      case mrsWaitingLength:
-      	     if((KW2000CommuState==KW2000_Tester))
-      	     {
-               /* if(Chk_GenericImmo_Enabled()) 
-		{
-                     RxMsgDataLength = DataRead-3 ;
+		case mrsLoadingData:
+		RxServiceData [RxDataIndex] = DataRead;
+		RxDataIndex++;
+		if (RxDataIndex == RxMsgDataLength) {
+			Kw2MsgRxState = mrsWaitingCheckSum;
 		}
-	        else if(Chk_JiChengImmo_Enabled())
-	        {
-                     RxMsgDataLength = DataRead ;   
-	        }*/
-	         RxMsgDataLength = DataRead ;   
-      	     }
-      	     else
-      	     {
-      	        RxMsgDataLength = DataRead ;      	      	
-      	     }
-             /*--- length in format byte was null, get it now ---*/
-             GoToLoadingDataMRState () ;
-             break;
+		break;
 
-      case mrsLoadingData:
-             RxServiceData [RxDataIndex] = DataRead;
-             RxDataIndex++;
-             if (RxDataIndex == RxMsgDataLength)
-               {
-               Kw2MsgRxState = mrsWaitingCheckSum;
-               }		 
-             break;
-
-      case mrsWaitingCheckSum:
-         /*when ECM is in slave mode and (RxCalcCheckSum - DataRead) != DataRead), error read*
-         *  when ECM is in master mode, JiCheng immo is enabled, and (RxCalcCheckSum - DataRead) != DataRead), error read*/
-	     if (((uint8_t) (RxCalcCheckSum - DataRead) != DataRead)
-	       &&((KW2000CommuState==KW2000_Responder) ))
-	       //|| (Chk_JiChengImmo_Enabled())))
-	     {
-	        GoToErrorReadK2State ();
-	     }
-		/*when ECM is in master mode, generic immo is enable, and (RxCalcCheckSum) != 0, error read*/ 
-	     /*else if (((uint8_t) (RxCalcCheckSum) != 0)
-	             &&(KW2000CommuState==KW2000_Tester)&&(Chk_GenericImmo_Enabled()))
-	     {
-	        GoToErrorReadK2State ();
-	     }
-              */
-             else
-             {
+		case mrsWaitingCheckSum:
+			/*when ECM is in slave mode and (RxCalcCheckSum - DataRead) != DataRead), error read*
+				*  when ECM is in master mode, JiCheng immo is enabled, and (RxCalcCheckSum - DataRead) != DataRead), error read*/
+			if (((uint8_t) (RxCalcCheckSum - DataRead) != DataRead)
+				&&((KW2000CommuState==KW2000_Responder) ))
+			{
+				GoToErrorReadK2State ();
+			} else {
                 /* The Receiver interrupt need not be disabled.
                   The response bytes from other servers cause the
                   P2Min timer reset.
                 */
-                if (KW2000_Tester==KW2000CommuState) 
-               	{
-		       /* Set P3MinTimer to 0 when receiving right checksum. */
-		       P3MinTimer =0;
-		       P2MinTimer =0;
-		       SetSCIRespReceivedFlag();
-               	}
-	        GoToExecuteServiceK2State();		
-             }
-             break;
-      default:
-             break;
-
-      }
-   }
-  /*--- check if time out ---*/
-
-  if (KW2000_Responder==KW2000CommuState)
-  	{
-	if (P4Timout > P4Max)
-		{
-		GoToErrorReadK2State ();
+				if (KW2000_Tester==KW2000CommuState) 
+				{
+					/* Set P3MinTimer to 0 when receiving right checksum. */
+					P3MinTimer =0;
+					P2MinTimer =0;
+					SetSCIRespReceivedFlag();
+				}
+				GoToExecuteServiceK2State();		
+			}
+			break;
+		default:
+			break;
 		}
-  	}
-  if (KW2000_Tester==KW2000CommuState)
-  	{
-  	if (P1Timout>P1Max)
-  		{
-  		GoToErrorReadK2State();
-  		}
-  	}
-   
-  } /*** End of ReceivingMessageKw2000State ***/
+	}
+	/*--- check if time out ---*/
+
+	if (KW2000_Responder==KW2000CommuState) {
+		if (P4Timout > P4Max) {
+			GoToErrorReadK2State ();
+		}
+	}
+	if (KW2000_Tester==KW2000CommuState) {
+		if (P1Timout>P1Max) {
+			GoToErrorReadK2State();
+		}
+	}
+} /*** End of ReceivingMessageKw2000State ***/
 
 
 /*********************************************************************/
@@ -1407,178 +1269,131 @@ FAR_COS void ReceivingMessageKw2000State (void)
 
 static void ExecuteServiceKw2000State (void)
 {
+	uint8_t ErrorValue ;
 
-  uint8_t ErrorValue ;
+	if (GetCommunicationEstablishedState() || (RxServiceData [0] == sirStartCommunication)) {
+		if (!SbPosResponsePending) {
+			P2MinTimer = 1; /*--- Already one loop passed ---*/
+		}
+		switch (RxServiceData [0]) {
+		case sirStartCommunication:
+			if (RxMsgDataLength == 1) {
+				if(Chk_SiemensImmo_Enabled()) {
+					TxServiceData [1] = Siemens_KW2_Start_Communication_KB1;
+					TxServiceData [2] = Siemens_KW2_Start_Communication_KB2;
+					VbSiemens_StartCommReceived = CbTRUE;
+					VbSiemens_StopCommReceived = CbFALSE;
+					SetSiemens_DLLStateToSendingResponseMsg();
+				} else {
+					TxServiceData [1] = KB1;
+					TxServiceData [2] = KB2;
+				}
+				SendStandardPositiveAnswer (3);
+				CommunicationEstablishedState = true;
+			} else {
+				if (GetCommunicationEstablishedState()) {
+					SendStandardNegativeAnswer(nrcSubFunctionNotSupported_InvalidFormat);
+				} else {
+					GoToWaitingTIdleSynchK2State (TIdleRestart);
+				}
+			}
+			break;
 
-  if (GetCommunicationEstablishedState() || (RxServiceData [0] ==
-                                           sirStartCommunication))
-    {
-    if (!SbPosResponsePending)
-    {
-        P2MinTimer = 1; /*--- Already one loop passed ---*/
-    }
-    switch (RxServiceData [0])
-      {
-      case sirStartCommunication:
-             if (RxMsgDataLength == 1)
-               {
-               if(Chk_SiemensImmo_Enabled())
-               	{
-               TxServiceData [1] = Siemens_KW2_Start_Communication_KB1;
-               TxServiceData [2] = Siemens_KW2_Start_Communication_KB2;
-               VbSiemens_StartCommReceived = CbTRUE;
-               VbSiemens_StopCommReceived = CbFALSE;
-            //   SendStandardPositiveAnswer (3);	      
-              /* Set IMMO state to SendingRequestMsg */
+		case sirStopCommunication:
+			if (RxMsgDataLength == 1) {
+				SendStandardPositiveAnswer (1) ;
+				CommunicationEstablishedState = false ;
+				if(Chk_SiemensImmo_Enabled()) {
+					VbSiemens_StopCommReceived = CbTRUE;
+					VbSiemens_StartCommReceived = CbFALSE;
+					/* Set IMMO state to SendingRequestMsg */
+					SetSiemens_DLLStateToSendingResponseMsg();
+				}
+			} else {
+				SendStandardNegativeAnswer(nrcSubFunctionNotSupported_InvalidFormat);
+			}
+			break;
 
-               SetSiemens_DLLStateToSendingResponseMsg();
+		case sirAccessCommunicationParameters:
+			switch (RxServiceData [1]) {
+			case ReadComParamLimits:
+				if (RxMsgDataLength == 2) {
+					TxServiceData [1] = RxServiceData [1];
+					TxServiceData [2] = P2MinLimit;
+					TxServiceData [3] = P2MaxLimit;
+					TxServiceData [4] = P3MinLimit;
+					TxServiceData [5] = P3MaxLimit;
+					TxServiceData [6] = P4MinLimit;
+					SendStandardPositiveAnswer (7);
+				} else {
+					SendStandardNegativeAnswer(nrcSubFunctionNotSupported_InvalidFormat);
+				}
+				break;
 
-               	}
-	       else
-	       	{
-               TxServiceData [1] = KB1;
-               TxServiceData [2] = KB2;
-	     	}
-               SendStandardPositiveAnswer (3);
-               CommunicationEstablishedState = true;
-               }
-             else
-               {
-               if (GetCommunicationEstablishedState())
-                 {
-                 SendStandardNegativeAnswer
-                     (nrcSubFunctionNotSupported_InvalidFormat);
-                 }
-               else
-                 {
-                 GoToWaitingTIdleSynchK2State (TIdleRestart);
-                 }
-               }
-             break;
+			case SetComParamToDefaultVals:
+				if (RxMsgDataLength == 2) {
+					/*--- Change default values ---*/
+					NewP2Min = DefaultP2Min;
+					NewP2Max = DefaultP2Max;
+					NewP3Min = DefaultP3Min;
+					NewP3Max = DefaultP3Max;
+					NewP4Min = DefaultP4Min;
+					NewTiming = true;
+					TxServiceData [1] = RxServiceData [1];
+					SendStandardPositiveAnswer (2);
+				} else {
+					SendStandardNegativeAnswer(nrcSubFunctionNotSupported_InvalidFormat);
+				}
+				break;
 
-      case sirStopCommunication:
-             if (RxMsgDataLength == 1)
-               {
-                SendStandardPositiveAnswer (1) ;
-                CommunicationEstablishedState = false ;
-                if(Chk_SiemensImmo_Enabled() )
-                  {
-                   VbSiemens_StopCommReceived = CbTRUE;
-                   VbSiemens_StartCommReceived = CbFALSE;
-                   /* Set IMMO state to SendingRequestMsg */
-                   SetSiemens_DLLStateToSendingResponseMsg();
-                 
-                   }
-			
-               }
-             else
-               {
-               SendStandardNegativeAnswer
-                     (nrcSubFunctionNotSupported_InvalidFormat);
-               }
-             break;
+			case ReadComParamCurrentVals:
+				if (RxMsgDataLength == 2) {
+					TxServiceData [1] = RxServiceData [1];
+					TxServiceData [2] = P2Min;
+					TxServiceData [3] = P2Max;
+					TxServiceData [4] = P3Min;
+					TxServiceData [5] = P3Max;
+					TxServiceData [6] = P4Min;
+					SendStandardPositiveAnswer (7);
+				} else {
+					SendStandardNegativeAnswer(nrcSubFunctionNotSupported_InvalidFormat);
+				}
+				break;
 
-      case sirAccessCommunicationParameters:
-             switch (RxServiceData [1])
-               {
-               case ReadComParamLimits:
-                      if (RxMsgDataLength == 2)
-                        {
-                        TxServiceData [1] = RxServiceData [1];
-                        TxServiceData [2] = P2MinLimit;
-                        TxServiceData [3] = P2MaxLimit;
-                        TxServiceData [4] = P3MinLimit;
-                        TxServiceData [5] = P3MaxLimit;
-                        TxServiceData [6] = P4MinLimit;
-                        SendStandardPositiveAnswer (7);
-                        }
-                      else
-                        {
-                        SendStandardNegativeAnswer
-                          (nrcSubFunctionNotSupported_InvalidFormat);
-                        }
-                      break;
+			case SetComParamToNewVals:
+				if (RxMsgDataLength == 7) {
+					/*--- Change "New" values ---*/
+					NewP2Min = RxServiceData [2];
+					NewP2Max = RxServiceData [3];
+					NewP3Min = RxServiceData [4];
+					NewP3Max = RxServiceData [5];
+					NewP4Min = RxServiceData [6];
+					NewTiming = true;
+					TxServiceData [1] = RxServiceData[1];
+					SendStandardPositiveAnswer (2);
+				} else {
+					if (FunctionalAddressActive)
+						ErrorValue = nrcConditionsNotCorrect_RequestSequenceError;
+					else
+						ErrorValue = nrcSubFunctionNotSupported_InvalidFormat;
+					SendStandardNegativeAnswer (ErrorValue);
+				}
+				break;
 
-               case SetComParamToDefaultVals:
-                      if (RxMsgDataLength == 2)
-                        {
-                        /*--- Change default values ---*/
-                        NewP2Min = DefaultP2Min;
-                        NewP2Max = DefaultP2Max;
-                        NewP3Min = DefaultP3Min;
-                        NewP3Max = DefaultP3Max;
-                        NewP4Min = DefaultP4Min;
-                        NewTiming = true;
-                        TxServiceData [1] = RxServiceData [1];
-                        SendStandardPositiveAnswer (2);
-                        }
-                      else
-                        {
-                        SendStandardNegativeAnswer
-                          (nrcSubFunctionNotSupported_InvalidFormat);
-                        }
-                        break;
+			default:
+				SendStandardNegativeAnswer(nrcSubFunctionNotSupported_InvalidFormat);
+				break;
+			}
+			break;
 
-               case ReadComParamCurrentVals:
-                      if (RxMsgDataLength == 2)
-                        {
-                        TxServiceData [1] = RxServiceData [1];
-                        TxServiceData [2] = P2Min;
-                        TxServiceData [3] = P2Max;
-                        TxServiceData [4] = P3Min;
-                        TxServiceData [5] = P3Max;
-                        TxServiceData [6] = P4Min;
-                        SendStandardPositiveAnswer (7);
-                        }
-                      else
-                        {
-                        SendStandardNegativeAnswer
-                          (nrcSubFunctionNotSupported_InvalidFormat);
-                        }
-                      break;
-
-               case SetComParamToNewVals:
-                      if (RxMsgDataLength == 7)
-                        {
-                        /*--- Change "New" values ---*/
-                        NewP2Min = RxServiceData [2];
-                        NewP2Max = RxServiceData [3];
-                        NewP3Min = RxServiceData [4];
-                        NewP3Max = RxServiceData [5];
-                        NewP4Min = RxServiceData [6];
-                        NewTiming = true;
-                        TxServiceData [1] = RxServiceData [1];
-                        SendStandardPositiveAnswer (2);
-                        }
-                      else
-                        {
-                         if ( FunctionalAddressActive )
-                            ErrorValue =
-                          nrcConditionsNotCorrect_RequestSequenceError ;
-                         else
-                            ErrorValue =
-                              nrcSubFunctionNotSupported_InvalidFormat ;
-                         SendStandardNegativeAnswer ( ErrorValue ) ;
-                        }
-                        break;
-
-               default:
-                      SendStandardNegativeAnswer
-                        (nrcSubFunctionNotSupported_InvalidFormat);
-                      break;
-               }
-             break;
-
-      default:
-             GoToWaitingAppLvlServiceExecK2State ();
-             break;
-      }
-    }
-  else
-    {
-    GoToWaitingTIdleSynchK2State (TIdleRestart);
-    }
-  } /*** End of ExecuteServiceKw2000State ***/
+		default:
+			GoToWaitingAppLvlServiceExecK2State ();
+			break;
+		}
+	} else {
+		GoToWaitingTIdleSynchK2State (TIdleRestart);
+	}
+} /*** End of ExecuteServiceKw2000State ***/
 
 
 /*********************************************************************/
@@ -1587,44 +1402,32 @@ static void ExecuteServiceKw2000State (void)
 /*********************************************************************/
 
 static void WaitingAppLvlServiceExecKw2000State (void)
+{
+	uint16_t  TimeLimit;
 
-  {
-  uint16_t  TimeLimit;
+	/*--- Increment P2 Min Timer to P2MinWL ---*/
+	if (P2MinTimer < P2MinWL) {
+		P2MinTimer++;
+	}
 
-  /*--- Increment P2 Min Timer to P2MinWL ---*/
-  if (P2MinTimer < P2MinWL)
-    {
-    P2MinTimer++;
-    }
+	TimeLimit = P2MaxWL;
+	if (((uint16_t) TimeLimit) == 0xFFFF) /*--- infinite case ---*/
+	{
+		TimeLimit--;
+	}
 
-  TimeLimit = P2MaxWL;
-  if (((uint16_t) TimeLimit) == 0xFFFF) /*--- infinite case ---*/
-    {
-    TimeLimit--;
-    }
+	/*--- Increment P2 Max Timer to P2MaxWL ---*/
+	if (TimerBeforeAnswerTx < TimeLimit) {
+		TimerBeforeAnswerTx++;
+	}
 
-  /*--- Increment P2 Max Timer to P2MaxWL ---*/
-  if (TimerBeforeAnswerTx < TimeLimit)
-    {
-    TimerBeforeAnswerTx++;
-    }
-
-  if (TimerBeforeAnswerTx >= TimeLimit)
-    /*--- Time is nearly out: P2 Max is going to passed, */
-    /*    Service Non Supported ---*/
-    {
-
-    /*if (PendingNegativeAnswer != nrcNone)
-      {
-      SendNowStandardNegativeAnswer (PendingNegativeAnswer);
-      }
-    else   ******/
-      {
-
-      GoToAwaitingMessageK2State (false);
-      }
-    }
-  } /*** End of WaitingAppLvlServiceExecKw2000State ***/
+	if (TimerBeforeAnswerTx >= TimeLimit)
+	/*--- Time is nearly out: P2 Max is going to passed, */
+	/*    Service Non Supported ---*/
+	{
+		GoToAwaitingMessageK2State (false);
+	}
+} /*** End of WaitingAppLvlServiceExecKw2000State ***/
 
 
 /*********************************************************************/
@@ -1658,7 +1461,7 @@ static void WaitingP2MinBeforeAnswerKw2000State (void)
   }
 } /*** End of WaitingP2MinBeforeAnswerKw2000State ***/
 
-FAR_COS void GoToWaitingInitializingK2State (void)
+void GoToWaitingInitializingK2State (void)
 {
    Kw2000State = k2sWaitingInitializing;
 } /*** End of GoToWaitingInitializingK2State ***/
@@ -1666,7 +1469,7 @@ FAR_COS void GoToWaitingInitializingK2State (void)
 /*********************************************************************/
 /*** Change kw2000 state to initial or waiting P3min.                                    ***/
 /*********************************************************************/
-FAR_COS void GoToWaitingInitializingOrP3MinState(void)
+void GoToWaitingInitializingOrP3MinState(void)
 {
    if (P3MinTimer<P3MinWL)
    {
@@ -1684,7 +1487,7 @@ FAR_COS void GoToWaitingInitializingOrP3MinState(void)
 /*** ---> Waiting minimum P3 Time just before sending the request.  ***/
 /*********************************************************************/
 
-FAR_COS void WaitingP3MinBeforeSendRequest (void)
+void WaitingP3MinBeforeSendRequest (void)
 {
      P3MinTimer++;
      /*--- Increment P3 Min Timer to P3MinWL ---*/
@@ -1701,15 +1504,14 @@ FAR_COS void WaitingP3MinBeforeSendRequest (void)
 /*** KW 2000 State periodic operation: WaitingP4MinBeforeSendRequest            ***/
 /*** ---> Waiting minimum P4 Time just before sending the request.                 ***/
 /*********************************************************************/
-void FAR_COS WaitingP4MinBeforeSendRequest(void)
+void WaitingP4MinBeforeSendRequest(void)
 {
-   P4Timout++;
-   if (P4Timout>=P4MinWL)
-   	{
-   	Kw2000State=k2sSendingMessage;
-   	EnableSCI0ReceiverInterrupt(TRUE);
-   	SendKw2000ByteToSerial();
-   	}
+	P4Timout++;
+	if (P4Timout>=P4MinWL) {
+		Kw2000State=k2sSendingMessage;
+		EnableSCI0ReceiverInterrupt(TRUE);
+		SendKw2000ByteToSerial();
+	}
 }/*** End of WaitingP4MinBeforeSendRequest ***/
 
 /****************************************************************/
@@ -1740,58 +1542,56 @@ static void ErrorReadKw2000State (void)
 /*********************************************************************/
 
 void UpdateKeyword2000VIO (void)
-
-  {
-  switch (Kw2000State)
-    {
-    case k2sWaitingTIdleSynch:
-          /*--- Waiting for TIdle idle condition      ---*/
-           WaitingTIdleSynchKw2000State ();
-           break;
-    case k2sScanningHighToLowEdgeSynch:
- /*--- Awaiting idles followed by 1 break    ---*/
-           ScanningHighToLowEdgeSynchKw2000State ();
-           break;
-    case k2sWaiting25msLowSynch:
-        /*--- Waiting 3 or 4 RTI with break         ---*/
-        /*--- followed by one RTI with idle         ---*/
-           Waiting25msLowSynchKw2000State ();
-           break;
-    case k2sWaiting25msHighSynch:
-       /*--- Waiting 1 RTI with idle               ---*/
-           Waiting25msHighSynchKw2000State ();
-           break;
-    case k2sAwaitingMessage:
-            /*--- Scanning a byte within delay          ---*/
-           AwaitingMessageKw2000State ();
-           break;
-    case k2sReceivingMessage:
-     /*--- Schedule message reception            ---*/
-           ReceivingMessageKw2000State ();
-           break;
-    case k2sExecuteService:
-    /*--- Execute or trigger services           ---*/
-           ExecuteServiceKw2000State ();
-           break;
-    case k2sWaitingAppLvlServiceExec:
-   /*--- Waiting for app.level service exec    ---*/
-           WaitingAppLvlServiceExecKw2000State ();
-           break;
-    case k2sWaitingP2MinBeforeAnswer:
-   /*--- Waiting minimum P2 Time before answer ---*/
-           WaitingP2MinBeforeAnswerKw2000State ();
-           break;
-    case k2sSendingMessage:
-      /*--- Schedule message transmission         ---*/
-           SendingMessageKw2000State ();
-           break;
-    case k2sErrorRead:
-           ErrorReadKw2000State ();
-           break;
-    default:
-           break;
-    }
-  } /*** End of UpdateKeyword2000VIO ***/
+{
+	switch (Kw2000State) {
+	case k2sWaitingTIdleSynch:
+		/*--- Waiting for TIdle idle condition      ---*/
+		WaitingTIdleSynchKw2000State ();
+		break;
+	case k2sScanningHighToLowEdgeSynch:
+		/*--- Awaiting idles followed by 1 break    ---*/
+		ScanningHighToLowEdgeSynchKw2000State ();
+		break;
+	case k2sWaiting25msLowSynch:
+		/*--- Waiting 3 or 4 RTI with break         ---*/
+		/*--- followed by one RTI with idle         ---*/
+		Waiting25msLowSynchKw2000State ();
+		break;
+	case k2sWaiting25msHighSynch:
+		/*--- Waiting 1 RTI with idle               ---*/
+		Waiting25msHighSynchKw2000State ();
+		break;
+	case k2sAwaitingMessage:
+		/*--- Scanning a byte within delay          ---*/
+		AwaitingMessageKw2000State ();
+		break;
+	case k2sReceivingMessage:
+		/*--- Schedule message reception            ---*/
+		ReceivingMessageKw2000State ();
+		break;
+	case k2sExecuteService:
+		/*--- Execute or trigger services           ---*/
+		ExecuteServiceKw2000State ();
+		break;
+	case k2sWaitingAppLvlServiceExec:
+		/*--- Waiting for app.level service exec    ---*/
+		WaitingAppLvlServiceExecKw2000State ();
+		break;
+	case k2sWaitingP2MinBeforeAnswer:
+		/*--- Waiting minimum P2 Time before answer ---*/
+		WaitingP2MinBeforeAnswerKw2000State ();
+		break;
+	case k2sSendingMessage:
+		/*--- Schedule message transmission         ---*/
+		SendingMessageKw2000State ();
+		break;
+	case k2sErrorRead:
+		ErrorReadKw2000State ();
+		break;
+	default:
+		break;
+	}
+} /*** End of UpdateKeyword2000VIO ***/
 
 
 
@@ -1799,31 +1599,16 @@ void UpdateKeyword2000VIO (void)
 /*********************************************************************/
 /*** Build Keyword 2000 request (and preset sending process).                         ***/
 /*********************************************************************/
-FAR_COS void BuildKw2000Request (uint8_t TxMsgSize)
+void BuildKw2000Request (uint8_t TxMsgSize)
 {
-    /*if(Chk_GenericImmo_Enabled())
-    {
-        TxFormatByte = (mfAuthenticationImmoAddr)<<4;
-        TxFormatByte |= Authentication_Request_ID;
-        TxMsgDataLength = TxMsgSize;
-    }
-    else if(Chk_JiChengImmo_Enabled())
-    {
-        TxFormatByte = mfPhysAddr;
-        TxFormatByte |= TxMsgSize;
-        TxMsgDataLength = TxMsgSize;
-        TxTargetAddress = KcMyImmoSourceAddr;
-        TxSourceAddress = MyPhysicalAddr;
-    }
-    */
-    if (P3MinTimer<P3MinWL)
-    {
-    	GoToWaitingP3MinBeforeSendingRequest();
-    }
-    else
-    {
-    	GoToSendingMessageK2State ();
-    }
+	if (P3MinTimer<P3MinWL)
+	{
+		GoToWaitingP3MinBeforeSendingRequest();
+	}
+	else
+	{
+		GoToSendingMessageK2State ();
+	}
 } /*** End of BuildKw2000Request ***/
 
 
@@ -1836,7 +1621,7 @@ FAR_COS void BuildKw2000Request (uint8_t TxMsgSize)
  * Return:              None
  *
  *****************************************************************************/
-FAR_COS void CheckKW2000LineState(void)
+void CheckKW2000LineState(void)
 {
    /* When waiting response, check P2. */
    if (P2MinTimer>=P2MaxWL)
@@ -1855,11 +1640,10 @@ FAR_COS void CheckKW2000LineState(void)
 /************************************************/
 
 void InitializeKw2000VIO (void)
-
-  {
-  SCI0_SetSCIBaudRate (Kw2000BaudRate);
-  GoToWaitingTIdleSynchK2State (TIdleInit);
-  } /*** End of InitializeKw2000VIO ***/
+{
+	SCI0_SetSCIBaudRate (Kw2000BaudRate);
+	GoToWaitingTIdleSynchK2State (TIdleInit);
+} /*** End of InitializeKw2000VIO ***/
 
 /*********************************************************************/
 /*** Reset Serial - Cancel current Serial reception and            ***/
@@ -1868,14 +1652,14 @@ void InitializeKw2000VIO (void)
 
 void SCI0ReceiverReset (void)
 {
-   volatile uint8_t TempByte;
-   /* Read the status register and the data register to clear the receive
-    * flags.  Enable the SCI receiver.
-    */
-   ClearSCIRespReceivedFlag();
-   TempByte = SCI0ReceiverErrorFlag ();
-   TempByte = SCI0_ReadSCIReceiverDataRegister ();
-   EnableSCI0Receiver (true);
+	volatile uint8_t TempByte;
+	/* Read the status register and the data register to clear the receive
+	* flags.  Enable the SCI receiver.
+	*/
+	ClearSCIRespReceivedFlag();
+	TempByte = SCI0ReceiverErrorFlag ();
+	TempByte = SCI0_ReadSCIReceiverDataRegister ();
+	EnableSCI0Receiver (true);
 } /*** End of SCIReceiverReset ***/
 
 

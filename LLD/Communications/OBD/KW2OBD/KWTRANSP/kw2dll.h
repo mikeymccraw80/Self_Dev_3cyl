@@ -284,18 +284,17 @@ extern uint8_t              RxTargetAddress;
 /*********************************************************************/
 /*** Serial communication Receive ISR                              ***/
 /*********************************************************************/
-FAR_COS extern void SerialcomReceiveInt (void); /*<<< HANDLER >>>*/
-
+void SerialcomReceiveInt (void); /*<<< HANDLER >>>*/
 
 /*********************************************************************/
 /*** Serial communication Transmit ISR                             ***/
 /*********************************************************************/
-FAR_COS extern void SerialcomTransmitInt (void); /*<<< HANDLER >>>*/
+void SerialcomTransmitInt (void); /*<<< HANDLER >>>*/
 
 /*********************************************************************/
 /*** Periodic Keyword 2000 VIO logic (@ 7.81 ms)                   ***/
 /*********************************************************************/
-extern void UpdateKeyword2000VIO (void);
+void UpdateKeyword2000VIO (void);
 
 /************************************************/
 /*** Initialize Kw2000 Virtual I.O:           ***/
@@ -303,60 +302,57 @@ extern void UpdateKeyword2000VIO (void);
 /*** char.length, Stopbits,...), reset        ***/
 /*** kw2000 serial com. layer state machine.  ***/
 /************************************************/
-extern FAR_COS void InitializeKw2000VIO (void);
-extern FAR_COS void ReceivingMessageKw2000State (void);
-extern FAR_COS void SendKw2000ByteToSerial ( void );
-extern FAR_COS void GoToErrorReadK2State (void);
+void InitializeKw2000VIO (void);
+void ReceivingMessageKw2000State (void);
 
 /*********************************************************************/
 /*** Builds a standard kw2000 negative answer                      ***/
 /*********************************************************************/
-extern FAR_COS  void KW2K_SendStandardNegativeAnswer (uint8_t NegRespCode);
-
+void KW2K_SendStandardNegativeAnswer (uint8_t NegRespCode);
 
 /********************************************************************/
 /*** Builds a standard kw2000 positive answer                     ***/
 /********************************************************************/
-extern FAR_COS void KW2K_SendStandardPositiveAnswer (uint8_t MsgSize);
+void KW2K_SendStandardPositiveAnswer (uint8_t MsgSize);
 
 /********************************************************************/
 /*** Builds a standard kw2000 Escape Code                         ***/
 /********************************************************************/
-extern void SendEscapeCode (uint8_t MsgSize);
+void SendEscapeCode (uint8_t MsgSize);
 
 /***********************************************/
 /*** Copy New Timing parameters to current.  ***/
 /***********************************************/
-extern void CopyNewTimingParametersToCurrents (void);
+void CopyNewTimingParametersToCurrents (void);
 
 /*********************************************************************/
 /*** Set Kw2000 state machine to ExecuteService                    ***/
 /*********************************************************************/
 /* It was changed to gobal for immobilizer */
 
-extern void GoToExecuteServiceK2State (void);
+void GoToExecuteServiceK2State (void);
 
 /*********************************************************************/
 /*** Initialize Kw2000 Timing Parameters to given values.          ***/
 /*********************************************************************/
-extern void SetDLLTimingsParameters (Timer0p5msInMs ,
-                                     Timer25msInMs  ,
-                                     Timer0p5msInMs ,
-                                     Timer250msInMs ,
-                                     Timer0p5msInMs  );
+void SetDLLTimingsParameters (Timer0p5msInMs ,
+                              Timer25msInMs  ,
+                              Timer0p5msInMs ,
+                              Timer250msInMs ,
+                              Timer0p5msInMs  );
 
-extern void SCI0ReceiverReset (void) ;
+void SCI0ReceiverReset (void) ;
 
 /*********************************************************************/
 /*** Sests the P2Max value to the P3Max value.                     ***/
 /*********************************************************************/
-extern void SetP2TimingsForPendingProcess (void) ;
+void SetP2TimingsForPendingProcess (void) ;
 
 /*********************************************************************/
 /*** Set new timing parameter P2Max (at next message reception).   ***/
 /*********************************************************************/
 
-extern void SetNewP2Max (Timer25msInMs NextP2Max) ;
+void SetNewP2Max (Timer25msInMs NextP2Max) ;
 
 /*==================================================================*/
 /*   Exported functions for immobilizer rountines                   */
@@ -365,16 +361,16 @@ extern void SetNewP2Max (Timer25msInMs NextP2Max) ;
 void GoToSendingMessageK2State (void);
 void GoToAwaitingMessageK2State (bool AfterFastSynchro);
 void GoToReceivingMessageK2State (void);
-extern FAR_COS void SetTimingParameterToDefault (void);
+void SetTimingParameterToDefault (void);
 
-extern FAR_COS void WaitingP3MinBeforeSendRequest (void);
-extern FAR_COS void GoToWaitingInitializingOrP3MinState(void);
-extern FAR_COS void WaitingP4MinBeforeSendRequest(void);
-extern FAR_COS void GoToLostCommunicationState(void);
-extern FAR_COS void GoToWaitingP3MinBeforeSendingRequest  (void);
-extern FAR_COS void GoToWaitingP4MinBeforeSendingRequest(void);
-extern FAR_COS void CheckKW2000LineState(void);
-extern FAR_COS void BuildKw2000Request (BYTE TxMsgSize);
+void WaitingP3MinBeforeSendRequest (void);
+void GoToWaitingInitializingOrP3MinState(void);
+void WaitingP4MinBeforeSendRequest(void);
+void GoToLostCommunicationState(void);
+void GoToWaitingP3MinBeforeSendingRequest  (void);
+void GoToWaitingP4MinBeforeSendingRequest(void);
+void CheckKW2000LineState(void);
+void BuildKw2000Request (BYTE TxMsgSize);
 
 /*********************************************************************/
 /*                  INLINE FUNCTION DECLARATIONS                     */

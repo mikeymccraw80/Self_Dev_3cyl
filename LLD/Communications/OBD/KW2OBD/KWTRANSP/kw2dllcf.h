@@ -23,7 +23,7 @@
  *
 \* ============================================================================ */
 
-#include "types.h"
+#include "reuse.h"
 
 /* Keyword Physical and Functional Message ID */
 #define MyImmoPhysicalAddr    (0x17)
