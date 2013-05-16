@@ -93,7 +93,7 @@ extern bool    CommunicationStatus ;
 /*********************************************************************/
 extern void InitializeKw2000Services (void);
 extern void UpdateKeyword2000Services (void);
-extern FAR_COS void UpdateL2SecurityTmrDelay10s(void);
+extern void UpdateL2SecurityTmrDelay10s(void);
 extern bool SecurityAccessStatus ;
 
 extern bool L2SecurityTmrDelay10s;
@@ -105,7 +105,7 @@ extern Every_Loop_Sec_W Level2SecurityTimer;
 extern  TbBOOLEAN  VbCopyAndExecuteKernelPending;
 
 /*********************************************************************/
-/*                  INLINE FUNCTION DECLARATIONS                     */
+/*                  static inline FUNCTION DECLARATIONS                     */
 /*********************************************************************/
 
 /*********************************************************************/
@@ -191,7 +191,7 @@ extern  TbBOOLEAN  VbCopyAndExecuteKernelPending;
 /*********************************************************************/
 /***    Get the ECU Reset Pending flag                             ***/
 /*********************************************************************/
-INLINE TbBOOLEAN GetECUResetPending(void)
+static inline TbBOOLEAN GetECUResetPending(void)
 {
   return VbECUResetPending ; 
 } /*** End of SetECUResetPending ***/
@@ -206,7 +206,7 @@ INLINE TbBOOLEAN GetECUResetPending(void)
 /*********************************************************************/
 /***    Set the ECU Reset Pending flag                             ***/
 /*********************************************************************/
-//INLINE void SetECUResetPending( TbBOOLEAN LyECUReset )
+//static inline void SetECUResetPending( TbBOOLEAN LyECUReset )
 //{
  // VbECUResetPending = LyECUReset ;
 //} /*** End of SetECUResetPending ***/
@@ -214,7 +214,7 @@ INLINE TbBOOLEAN GetECUResetPending(void)
 /*********************************************************************/
 /***    Set the Copy Kernel to Ram and Execute Pending flag                             ***/
 /*********************************************************************/
-INLINE void SetCopyAndExecuteKernelPending(TbBOOLEAN LyCopyKernel)
+static inline void SetCopyAndExecuteKernelPending(TbBOOLEAN LyCopyKernel)
 {
   VbCopyAndExecuteKernelPending = LyCopyKernel ;
 } /*** End of SetCopyAndExecuteKernelPending ***/
@@ -222,7 +222,7 @@ INLINE void SetCopyAndExecuteKernelPending(TbBOOLEAN LyCopyKernel)
 /*********************************************************************/
 /***    Get the Copy Kernel to Ram and Execute Pending flag                             ***/
 /*********************************************************************/
-INLINE TbBOOLEAN GetCopyAndExecuteKernelPending(void)
+static inline TbBOOLEAN GetCopyAndExecuteKernelPending(void)
 {
   return VbCopyAndExecuteKernelPending ;
 } /*** End of SetCopyAndExecuteKernelPending ***/

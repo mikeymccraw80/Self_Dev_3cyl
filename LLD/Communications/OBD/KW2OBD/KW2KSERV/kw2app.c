@@ -37,9 +37,8 @@ uint8_t        Kw2000VulnerabilityFlag;
 uint16_t       SecurityTimer;
 bool           AppResponsePending ;
 
-
 /* Keeps track of change in communication state. */
- bool    CommunicationStatus ;
+bool    CommunicationStatus ;
 bool           SecurityAccessStatus ; /* This flag indicates the ECU lock/unlock status.
                                        *     A FALSE value : ECU locked,
                                              A TRUE  value : ECU unlocked. */
@@ -81,98 +80,76 @@ static void  ExcuteNextRequestedMsg( uint8_t , uint8_t ) ;
 ***********************************************************************/
 void UpdateKeyword2000Services (void)
 {
-  uint16_t *AddPointer ;
-  /* Count down the Security Timer */
-   if (SecurityTimer != 0 )
-   {
-      SecurityTimer--;
-   }
-  /* Count down the level 2 Security Timer */
-  if(Chk_SiemensImmo_Enabled() )
-    {
-        if ((Level2SecurityTimer != 0)&&(L2SecurityTmrDelay10s==true))
-        {
-                       Level2SecurityTimer--;
-                       L2SecurityTmrDelay10s=false;
-                       L2SecurityTmrCoefficient=1250;
-        }
-        else if (Level2SecurityTimer==0)
-        	{
-                        L2SecurityTmrDelay10s=false;
-        	        L2SecurityTmrCoefficient=0;
-                 }
-      }
-  else
-       {
-                if (Level2SecurityTimer != 0)
-                   {
-                       Level2SecurityTimer--;
-                   }
-  	}   
-   /* If there is no Msg on bus */
-   if (!Keyword2000AnswerStillBeingSent ())
-   {
-      /*--- Triggers Programmming Session only after */
-      /*    answer is sent to the tester ---*/
-      /*--- Provoque a hardware Reset ---*/
-      if ( GetECUResetPending())
-      {
-         /* Set the ECU Reset Pending flag to be FALSE. */
-         SetECUResetPending(false) ;
-         /* Do systems and software required necessary actions before
-            reset, for example clear NVRAM etc. */
+	uint16_t *AddPointer ;
+	/* Count down the Security Timer */
+	if (SecurityTimer != 0 ) {
+		SecurityTimer--;
+	}
+	/* Count down the level 2 Security Timer */
+	if (Chk_SiemensImmo_Enabled()) {
+		if ((Level2SecurityTimer != 0)&&(L2SecurityTmrDelay10s==true)) {
+			Level2SecurityTimer--;
+			L2SecurityTmrDelay10s=false;
+			L2SecurityTmrCoefficient=1250;
+		} else if (Level2SecurityTimer==0) {
+			L2SecurityTmrDelay10s=false;
+			L2SecurityTmrCoefficient=0;
+		}
+	} else {
+		if (Level2SecurityTimer != 0) {
+			Level2SecurityTimer--;
+		}
+	}   
+	/* If there is no Msg on bus */
+	if (!Keyword2000AnswerStillBeingSent ())
+	{
+		/*--- Triggers Programmming Session only after */
+		/*    answer is sent to the tester ---*/
+		/*--- Provoque a hardware Reset ---*/
+		if ( GetECUResetPending()) {
+			/* Set the ECU Reset Pending flag to be FALSE. */
+			SetECUResetPending(false) ;
+			/* Do systems and software required necessary actions before
+			reset, for example clear NVRAM etc. */
 
-         DoNecessaryActionsBeforeReset() ;
-         PerformReset() ;
-      }
-   }
-   /* If a new communication session has started, initialize required application variables. */
-   if ( GetCommunicationEstablishedState () )
-   {
-      if ( !CommunicationStatus )
-      {
-         CommunicationStatus = true;
-         InitAppLvlCommVariables ();
-      }
-   }
-   else
-   {
-      CommunicationStatus = false;
-   }
+			DoNecessaryActionsBeforeReset() ;
+			PerformReset() ;
+		}
+	}
+	/* If a new communication session has started, initialize required application variables. */
+	if ( GetCommunicationEstablishedState ()){
+		if ( !CommunicationStatus ) {
+			CommunicationStatus = true;
+			InitAppLvlCommVariables ();
+		}
+	} else {
+		CommunicationStatus = false;
+	}
 
-   /* If there is no Msg on bus and it need to send the multiresponse */
-   if (( GetMultiRespInProgress() ||
-         GetAppResponsePending()) &&
-         (!Keyword2000AnswerStillBeingSent()))
-   {
-      ExcuteNextCurrentMultiMsg( CyServiceRequestTable_Idx ) ;
-   }
-   else
-   {
-      /* Check if the ECU received a message and need to response */
-      if ( ApplicationLevelKeyword2000ServicePending () )
-      {
-         ExcuteNextRequestedMsg( GetKw2000ServiceData( CyMsgReq_ID ) ,
-                               GetMsg_ID_TableMsgLength()) ;
-      } /*** End of UpdateKeyword2000Services ***/
-   }
-  
-
-
+	/* If there is no Msg on bus and it need to send the multiresponse */
+	if (( GetMultiRespInProgress() ||
+		GetAppResponsePending()) &&
+		(!Keyword2000AnswerStillBeingSent()))
+	{
+		ExcuteNextCurrentMultiMsg( CyServiceRequestTable_Idx ) ;
+	}
+	else
+	{
+		/* Check if the ECU received a message and need to response */
+		if (ApplicationLevelKeyword2000ServicePending()) {
+			ExcuteNextRequestedMsg( GetKw2000ServiceData( CyMsgReq_ID ), GetMsg_ID_TableMsgLength()) ;
+		} /*** End of UpdateKeyword2000Services ***/
+	}
 }
 
 
-FAR_COS void UpdateL2SecurityTmrDelay10s (void)
+void UpdateL2SecurityTmrDelay10s (void)
 {
-
-    if(L2SecurityTmrCoefficient!=0)
-   	{
-   	  L2SecurityTmrCoefficient--;
-	 }
-    else if(L2SecurityTmrCoefficient==0)
-    	{
-    	 L2SecurityTmrDelay10s=true;
-    	}
+	if(L2SecurityTmrCoefficient!=0) {
+		L2SecurityTmrCoefficient--;
+	} else if(L2SecurityTmrCoefficient==0) {
+		L2SecurityTmrDelay10s=true;
+	}
 }
 
 /***********************************************************************
@@ -187,8 +164,8 @@ FAR_COS void UpdateL2SecurityTmrDelay10s (void)
 ***********************************************************************/
 static void  ExcuteNextCurrentMultiMsg( uint8_t lyMsgselected )
 {
-   /* Exucute the multiple message select by the request */
-   CaServiceDefinition[ lyMsgselected ].MultiMessageFunction( );
+	/* Exucute the multiple message select by the request */
+	CaServiceDefinition[ lyMsgselected ].MultiMessageFunction( );
 }
 
 
@@ -214,27 +191,27 @@ static void ExcuteNextRequestedMsg( uint8_t lyCurrentRequestedMsg,
     * Search Message Request table for valid ID
     */
 
-   for( CyServiceRequestTable_Idx = 0;
-         CyServiceRequestTable_Idx < lyMsg_ID_TableLength;
-         CyServiceRequestTable_Idx++ )
-   {
-      /*
-       * Test for a valid message ID to Respond to
-       */
-      if( CaServiceDefinition[ CyServiceRequestTable_Idx ].ServiceID == lyCurrentRequestedMsg )
-      {
-         CaServiceDefinition[ CyServiceRequestTable_Idx ].Service_Function() ;
-         lyValidRequestfound = true ;
-         break ;
-      }
-   }
-   /*
-    * If there where no matching Request ? Send invalid format
-    */
-   if( !lyValidRequestfound )
-   {
-      CaServiceDefinition[ CyNoRequestfound ].Service_Function() ;
-   }
+	for( CyServiceRequestTable_Idx = 0;
+		CyServiceRequestTable_Idx < lyMsg_ID_TableLength;
+		CyServiceRequestTable_Idx++ )
+	{
+		/*
+		* Test for a valid message ID to Respond to
+		*/
+		if( CaServiceDefinition[ CyServiceRequestTable_Idx ].ServiceID == lyCurrentRequestedMsg ) 
+		{
+			CaServiceDefinition[ CyServiceRequestTable_Idx ].Service_Function() ;
+			lyValidRequestfound = true ;
+			break ;
+		}
+	}
+	/*
+	* If there where no matching Request ? Send invalid format
+	*/
+	if( !lyValidRequestfound )
+	{
+		CaServiceDefinition[CyNoRequestfound].Service_Function() ;
+	}
 }
 
 
@@ -249,11 +226,11 @@ static void ExcuteNextRequestedMsg( uint8_t lyCurrentRequestedMsg,
 *********************************************************************/
 void InitializeKw2000Services (void)
 {
-   TriggerSecurityTiming () ;
-   TriggerL2SecurityTiming();
-   SetECUResetPending( false ) ;
-   CommunicationStatus = false ;
-   InitAppLvlCommVariablesGlobal();
+	TriggerSecurityTiming () ;
+	TriggerL2SecurityTiming();
+	SetECUResetPending( false ) ;
+	CommunicationStatus = false ;
+	InitAppLvlCommVariablesGlobal();
 } /*** End of InitializeKw2000Services ***/
 
 
