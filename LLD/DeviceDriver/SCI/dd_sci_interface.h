@@ -10,7 +10,8 @@
 
 typedef struct SCI_Interface_Tag {
 	/* basic functions */
-	int (*init)(void);
+	int (*init)(int bd);
+	int (*setbaud)(int bd);
 	int (*read)(void);
 	int (*write)(int ch);
 	int (*poll)(void); //return how many chars left in the rx buffer

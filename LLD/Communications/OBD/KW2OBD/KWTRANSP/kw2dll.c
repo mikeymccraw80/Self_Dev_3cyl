@@ -427,19 +427,20 @@ static void InitializeKW2000InputBuffer (void)
 /*********************************************************************/
 
 static void GoToWaitingTIdleSynchK2State (uint8_t NewTIdle)
+{
+	TIdle = NewTIdle;
+	CommunicationEstablishedState = false;
+	kline->reset();
+	// SCI0ReceiverReset ();
+	IdleTimer = 0;
+	Kw2000State = k2sWaitingTIdleSynch;
+	/* Disable the receive interrupt. Enable it
+	 after fast initialization.
+	 */
+	kline->RxIntDisable();
+	// EnableSCI0ReceiverInterrupt ( false );
 
-  {
-  TIdle = NewTIdle;
-  CommunicationEstablishedState = false;
-  SCI0ReceiverReset ();
-  IdleTimer = 0;
-  Kw2000State = k2sWaitingTIdleSynch;
-  /* Disable the receive interrupt. Enable it
-     after fast initialization.
-     */
-  EnableSCI0ReceiverInterrupt ( false );
-
-  } /*** End of GoToWaitingTIdleSynchK2State ***/
+} /*** End of GoToWaitingTIdleSynchK2State ***/
 
 
 /*********************************************************************/
@@ -447,12 +448,13 @@ static void GoToWaitingTIdleSynchK2State (uint8_t NewTIdle)
 /*********************************************************************/
 
 void GoToErrorReadK2State (void)
-
-  {
-  EnableSCI0ReceiverInterrupt(false);
-  SCI0ReceiverReset ();
-  Kw2000State = k2sErrorRead;
-  } /*** End of GoToErrorReadK2State ***/
+{
+	kline->RxIntDisable();
+	// EnableSCI0ReceiverInterrupt(false);
+	// SCI0ReceiverReset ();
+	kline->reset();
+	Kw2000State = k2sErrorRead;
+} /*** End of GoToErrorReadK2State ***/
 
 
 /*********************************************************************/
@@ -460,28 +462,26 @@ void GoToErrorReadK2State (void)
 /*********************************************************************/
 
 static void GoToWaitingP2MinBeforeAnswerK2State (void)
-
-  {
-  Kw2000State = k2sWaitingP2MinBeforeAnswer;
-  } /*** End of GoToWaitingP2MinBeforeAnswerK2State ***/
+{
+	Kw2000State = k2sWaitingP2MinBeforeAnswer;
+} /*** End of GoToWaitingP2MinBeforeAnswerK2State ***/
 
 /*********************************************************************/
 /*** Set Kw2000 state machine to AwaitingMessage                   ***/
 /*********************************************************************/
 
 void GoToAwaitingMessageK2State (bool AfterFastSynchro)
-
-  {
-  AfterFastSynchroFlag = AfterFastSynchro;
-  TimerBeforeNewMsgRx = 0;
-  if (NewTiming)
-    {
-    CopyNewTimingParametersToCurrents ();
-    }
-  Kw2000State = k2sAwaitingMessage;
-  InitializeKW2000InputBuffer ();
-  EnableSCI0ReceiverInterrupt (true);
-  } /*** End of GoToAwaitingMessageK2State ***/
+{
+	AfterFastSynchroFlag = AfterFastSynchro;
+	TimerBeforeNewMsgRx = 0;
+	if (NewTiming) {
+		CopyNewTimingParametersToCurrents ();
+	}
+	Kw2000State = k2sAwaitingMessage;
+	InitializeKW2000InputBuffer ();
+	// EnableSCI0ReceiverInterrupt (true);
+	kline->RxIntEnable();
+} /*** End of GoToAwaitingMessageK2State ***/
 
 
 /*********************************************************************/
@@ -496,7 +496,8 @@ void SendKw2000ByteToSerial(void)
 	not applied.
 	*/
 	if ((Kw2MsgTxState == ktsSendingFormat) &&
-		(SCI0ReceiverActiveDetected ())    &&
+		// (SCI0ReceiverActiveDetected ())    &&
+		(kline->GetActiveFlag())    &&
 		(IfKeywordLogicIsActive ()))
 	{
 		if (KW2000CommuState == KW2000_Responder) {
@@ -514,7 +515,8 @@ void SendKw2000ByteToSerial(void)
 		if ((P4Timout<P4MinWL)&&(KW2000CommuState == KW2000_Tester)) {
 			GoToWaitingP4MinBeforeSendingRequest();
 		} else {
-			SCI0_WriteSCITransmitterDataBufferRegister(DataByte);
+			kline->write(DataByte);
+			// SCI0_WriteSCITransmitterDataBufferRegister(DataByte);
 			/*--- This addition MUST be done after the Write    ---*/
 			/*--- for the case the checksum is sent itself.     ---*/
 			TxCalcCheckSum += DataByte;
@@ -543,7 +545,8 @@ void GoToSendingMessageK2State (void)
 
 static void GoToWaiting25msLowSynchK2State (void)
 {
-	SCI0ReceiverReset();
+	// SCI0ReceiverReset();
+	kline->reset();
 	EventCounter = 0;
 	Kw2000State = k2sWaiting25msLowSynch;
 } /*** End of GoToWaiting25msLowSynchK2State ***/
@@ -555,7 +558,8 @@ static void GoToWaiting25msLowSynchK2State (void)
 
 static void GoToWaiting25msHighSynchK2State (void)
 {
-	SCI0ReceiverReset ();
+	// SCI0ReceiverReset ();
+	kline->reset();
 	EventCounter = 0;
 	Kw2000State = k2sWaiting25msHighSynch;
 } /*** End of GoToWaiting25msHighSynchK2State ***/
@@ -755,11 +759,13 @@ void SerialcomReceiveInt (void)
 	case k2sAwaitingMessage:
 		/*--- Wait for a first byte within P3MaxWL or 16 ms if Fast synchro */
 	case k2sReceivingMessage:
-		if (SCI0ReceiverErrorFlag ()) {
+		// if (SCI0ReceiverErrorFlag ()) {
+		if (kline->GetAllErrFlag()) {
 			/*--- if error or break: ---*/
 			GoToErrorReadK2State ();
 		} else {
-			PutDataInKw2000InputBuffer(SCI0_ReadSCIReceiverDataRegister ());
+			// PutDataInKw2000InputBuffer(SCI0_ReadSCIReceiverDataRegister ());
+			PutDataInKw2000InputBuffer((uint8_t)kline->read());
 		}
 		if (Kw2000State == k2sAwaitingMessage) {
 			GoToReceivingMessageK2State ();
@@ -771,7 +777,8 @@ void SerialcomReceiveInt (void)
           a collision occurs, go to waiting state.
           */
 		if (((!SCI0ReceiverErrorFlag ()) &&
-			(SCI0_ReadSCIReceiverDataRegister () == DataByte ))||
+			// (SCI0_ReadSCIReceiverDataRegister () == DataByte ))||
+			((uint8_t)kline->read() == DataByte ))||
 			(KW2000CommuState==KW2000_Tester))
 		{
 			switch (Kw2MsgTxState) {
@@ -851,7 +858,8 @@ void SerialcomReceiveInt (void)
 				break;
 
 			case ktsSendingCheckSum:
-				SCI0ReceiverReset (); /*--- Cancel echo ---*/
+				// SCI0ReceiverReset (); /*--- Cancel echo ---*/
+				kline->reset();
 				if (KW2000_Responder==KW2000CommuState) {
 					P2MinTimer = 0;
 					if (GetCommunicationEstablishedState()) {
@@ -896,7 +904,8 @@ void SerialcomReceiveInt (void)
 			if (KW2000_Responder==KW2000CommuState)
 			{
 			P2MinTimer = 0 ;
-			SCI0ReceiverReset () ;
+			// SCI0ReceiverReset () ;
+			kline->reset();
 			GoToWaitingP2MinBeforeAnswerK2State () ;
 			}
 		}
@@ -913,7 +922,8 @@ void SerialcomReceiveInt (void)
 		/* If bus activity during wait, reset the timer */
 		if (KW2000_Responder==KW2000CommuState)  P2MinTimer = 0 ;
 		if (KW2000_Tester==KW2000CommuState) P3MinTimer = 0;
-		SCI0ReceiverReset () ;
+		// SCI0ReceiverReset () ;
+		kline->reset();
 		break ;
 	default:
 		break;
@@ -939,7 +949,8 @@ void SerialcomTransmitInt (void)
 
 static bool SerialEventReceived (void)
 {
-	return (bool) (SCI0ReceiverReadyFlag () || SCI0ReceiverErrorFlag ());
+	// return (bool) (SCI0ReceiverReadyFlag () || SCI0ReceiverErrorFlag ());
+	return (bool) (kline->poll() || kline->GetAllErrFlag());
 } /*** End of SerialEventReceived ***/
 
 
@@ -963,7 +974,8 @@ static void WaitingTIdleSynchKw2000State (void)
 	else
 	/*--- if not Idle: ---*/
 	{
-		SCI0ReceiverReset ();
+		// SCI0ReceiverReset ();
+		kline->reset();
 		IdleTimer = 0;
 		TIdle = 0;
 	}
@@ -980,8 +992,10 @@ static void ScanningHighToLowEdgeSynchKw2000State (void)
 	if (SerialEventReceived ())
 	/*--- if not Idle: ---*/
 	{
-		if (SCI0ReceiverFramingErrorDetectedFlag () &&
-		(SCI0_ReadSCIReceiverDataRegister () == 0))
+		// if (SCI0ReceiverFramingErrorDetectedFlag () &&
+		// (SCI0_ReadSCIReceiverDataRegister () == 0))
+		if (kline->GetFrmErrFlag() &&
+			(kline->read() == 0))
 		/*--- if break: ---*/
 		{
 			GoToWaiting25msLowSynchK2State ();
@@ -1003,7 +1017,8 @@ static void ScanningHighToLowEdgeSynchKw2000State (void)
 
 static void Waiting25msLowSynchKw2000State (void)
 {
-	if (SCI0ReceiverActiveDetected ())
+	// if (SCI0ReceiverActiveDetected ())
+	if (kline->GetActiveFlag())
 	/*--- if break: ---*/
 	{
 		EventCounter++;
@@ -1502,7 +1517,8 @@ void WaitingP4MinBeforeSendRequest(void)
 	P4Timout++;
 	if (P4Timout>=P4MinWL) {
 		Kw2000State=k2sSendingMessage;
-		EnableSCI0ReceiverInterrupt(TRUE);
+		// EnableSCI0ReceiverInterrupt(TRUE);
+		kline->RxIntEnable();
 		SendKw2000ByteToSerial();
 	}
 }/*** End of WaitingP4MinBeforeSendRequest ***/
@@ -1634,7 +1650,8 @@ void CheckKW2000LineState(void)
 
 void InitializeKw2000VIO (void)
 {
-	SCI0_SetSCIBaudRate (Kw2000BaudRate);
+	// SCI0_SetSCIBaudRate (Kw2000BaudRate);
+	kline->setbaud(Kw2000BaudRate);
 	GoToWaitingTIdleSynchK2State (TIdleInit);
 } /*** End of InitializeKw2000VIO ***/
 
@@ -1650,9 +1667,12 @@ void SCI0ReceiverReset (void)
 	* flags.  Enable the SCI receiver.
 	*/
 	ClearSCIRespReceivedFlag();
-	TempByte = SCI0ReceiverErrorFlag ();
-	TempByte = SCI0_ReadSCIReceiverDataRegister ();
-	EnableSCI0Receiver (true);
+	// TempByte = SCI0ReceiverErrorFlag ();
+	// TempByte = SCI0_ReadSCIReceiverDataRegister ();
+	// EnableSCI0Receiver (true);
+	TempByte = kline->GetAllErrFlag();
+	TempByte = kline->read();
+	kline->RxIntEnable();
 } /*** End of SCIReceiverReset ***/
 
 
