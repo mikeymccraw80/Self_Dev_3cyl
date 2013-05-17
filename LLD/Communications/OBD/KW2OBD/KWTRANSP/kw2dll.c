@@ -241,25 +241,11 @@ void SetDLLTimingsParameters (Timer0p5msInMs ImmP2MinVal,
 
 void SetTimingParameterToDefault (void)
 {
-   if (KW2000CommuState==KW2000_Responder)
-   {
       NewP2Min =  DefaultP2Min;
       NewP2Max =  DefaultP2Max;
       NewP3Min =  DefaultP3Min;
       NewP3Max =  DefaultP3Max;
       NewP4Min =  DefaultP4Min;
-   }
-  
-   if (KW2000CommuState==KW2000_Tester)
-   {
-
-      NewP2Min =  TesterP2Min;
-      NewP2Max =  TesterP2Max;
-      NewP3Min =  TesterP3Min;
-      NewP3Max =  TesterP3Max;
-      NewP4Min =  TesterP4Min;
-
-   }
    NewTiming = true;
 } /*** End of SetTimingParameterToDefault ***/
 
@@ -504,23 +490,16 @@ void SendKw2000ByteToSerial(void)
 			P2MinTimer = 0 ;
 			GoToWaitingP2MinBeforeAnswerK2State();
 		}
-		if (KW2000CommuState == KW2000_Tester) {
-			/* If K-line busy, re-send message without counting timer. */
-			P3MinTimer=0;
-			GoToWaitingP3MinBeforeSendingRequest();
-		}
 	}
 	else
 	{
-		if ((P4Timout<P4MinWL)&&(KW2000CommuState == KW2000_Tester)) {
-			GoToWaitingP4MinBeforeSendingRequest();
-		} else {
+
 			kline->write(DataByte);
 			// SCI0_WriteSCITransmitterDataBufferRegister(DataByte);
 			/*--- This addition MUST be done after the Write    ---*/
 			/*--- for the case the checksum is sent itself.     ---*/
 			TxCalcCheckSum += DataByte;
-		}
+		
 	}
 } /*** End of SendKw2000ByteToSCI ***/
 
@@ -573,7 +552,6 @@ void GoToReceivingMessageK2State (void)
 
   {
   if (KW2000_Responder==KW2000CommuState) P4Timout = 0;
-  if (KW2000_Tester==KW2000CommuState) P1Timout=0;
   Kw2MsgRxState = mrsWaitingFormat;
   Kw2000State = k2sReceivingMessage;
   } /*** End of GoToReceivingMessageK2State ***/
@@ -790,13 +768,6 @@ void SerialcomReceiveInt (void)
 					DataByte = TxTargetAddress ;
 					SendKw2000ByteToSerial ();
 				} 
-				else if ((KW2000CommuState==KW2000_Tester)
-					&&(k2mFmt (TxFormatByte) == k2mFmt(0x50)))
-				{
-					Kw2MsgTxState = ktsSendingLength;
-					DataByte = TxMsgDataLength+3 ;
-					SendKw2000ByteToSerial ();
-				}
 				else /*--- mfNoAddr ---*/
 				{
 					if (k2mLen (TxFormatByte))
@@ -885,13 +856,6 @@ void SerialcomReceiveInt (void)
 					}
 				}
 
-				if (KW2000_Tester==KW2000CommuState) {
-					P3MinTimer=0;
-					ImmoServiceState=WaitingResponse;
-					if (ECMImmoRelation==Authentication) AuthenticationCounter++;
-					if (ECMImmoRelation==FeedbackAuthentication) FeedbackAuthCounter++;
-					GoToAwaitingMessageK2State(true);
-				}
 				break;
 			default:
 				break;
@@ -1141,11 +1105,8 @@ void ReceivingMessageKw2000State (void)
 				Kw2MsgRxState = mrsWaitingTgtAddr;
 				break;
 			case mfNoAddr:
-				if (GetCommunicationEstablishedState()||VbSiemens_StartCommReceived) {
-					if (( (Chk_SiemensImmo_Enabled() )
-						&& (Siemens_KW2_Start_Communication_KB1&0x04) ) 
-						|| (!Chk_SiemensImmo_Enabled()) 
-						&& (KB1&0x04))
+				if (GetCommunicationEstablishedState()) {
+					if (1)
 					{
 						if (RxMsgDataLength) {   /*--- length already in format byte ---*/
 							GoToLoadingDataMRState ();
@@ -1241,13 +1202,6 @@ void ReceivingMessageKw2000State (void)
                   The response bytes from other servers cause the
                   P2Min timer reset.
                 */
-				if (KW2000_Tester==KW2000CommuState) 
-				{
-					/* Set P3MinTimer to 0 when receiving right checksum. */
-					P3MinTimer =0;
-					P2MinTimer =0;
-					SetSCIRespReceivedFlag();
-				}
 				GoToExecuteServiceK2State();		
 			}
 			break;
@@ -1260,11 +1214,6 @@ void ReceivingMessageKw2000State (void)
 	if (KW2000_Responder==KW2000CommuState) {
 		if (P4Timout > P4Max) {
 			GoToErrorReadK2State ();
-		}
-	}
-	if (KW2000_Tester==KW2000CommuState) {
-		if (P1Timout>P1Max) {
-			GoToErrorReadK2State();
 		}
 	}
 } /*** End of ReceivingMessageKw2000State ***/
@@ -1286,12 +1235,8 @@ static void ExecuteServiceKw2000State (void)
 		switch (RxServiceData [0]) {
 		case sirStartCommunication:
 			if (RxMsgDataLength == 1) {
-				if(Chk_SiemensImmo_Enabled()) {
-					TxServiceData [1] = Siemens_KW2_Start_Communication_KB1;
-					TxServiceData [2] = Siemens_KW2_Start_Communication_KB2;
-					VbSiemens_StartCommReceived = CbTRUE;
-					VbSiemens_StopCommReceived = CbFALSE;
-					SetSiemens_DLLStateToSendingResponseMsg();
+				if(0) {
+
 				} else {
 					TxServiceData [1] = KB1;
 					TxServiceData [2] = KB2;
@@ -1311,12 +1256,6 @@ static void ExecuteServiceKw2000State (void)
 			if (RxMsgDataLength == 1) {
 				SendStandardPositiveAnswer (1) ;
 				CommunicationEstablishedState = false ;
-				if(Chk_SiemensImmo_Enabled()) {
-					VbSiemens_StopCommReceived = CbTRUE;
-					VbSiemens_StartCommReceived = CbFALSE;
-					/* Set IMMO state to SendingRequestMsg */
-					SetSiemens_DLLStateToSendingResponseMsg();
-				}
 			} else {
 				SendStandardNegativeAnswer(nrcSubFunctionNotSupported_InvalidFormat);
 			}
