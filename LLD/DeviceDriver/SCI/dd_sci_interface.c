@@ -71,8 +71,6 @@ static int scib_reset(void)
 
 	rx_temp = rx_temp;
 
-	scib_init();
-
 	return 0;
 }
 

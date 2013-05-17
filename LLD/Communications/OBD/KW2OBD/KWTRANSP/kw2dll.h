@@ -22,9 +22,9 @@
  *   None.
  *
 \* ============================================================================ */
-#include "kw2type.h"
+// #include "kw2type.h"
 #include "t_base.h"
-#include "obdlfsrv.h"
+// #include "obdlfsrv.h"
 
 /*--- "COMMUNICATION LAYER" Service Id Requests
                               Implemented? --*/
