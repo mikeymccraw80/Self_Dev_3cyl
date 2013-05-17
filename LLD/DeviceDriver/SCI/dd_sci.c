@@ -296,6 +296,18 @@ bool SCI_Get_Status(
    return status;
 }
 
+
+//==============================================================================
+// SCI_Get_Active_Status
+//==============================================================================
+bool SCI_Get_Active_Status(IO_Configuration_T      in_configuration)
+{
+	SCI_T *sci = SCI_Get_Device_Register( in_configuration );
+	bool  status = false;
+	status = (bool)( sci->SR1.F.RACT );
+	return status;
+}
+
 //==============================================================================
 // SCI_Reset_Status
 //==============================================================================

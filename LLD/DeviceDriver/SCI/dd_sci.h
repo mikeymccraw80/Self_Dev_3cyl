@@ -708,6 +708,20 @@ bool SCI_Get_Rx_Error_Flag(
 bool SCI_Get_Status( 
    IO_Configuration_T      in_configuration, 
    SCI_Interrupt_Channel_T in_flag_id );
+   
+//==============================================================================
+// SCI_Get_Active_Status
+//
+// @func Returns status of a flag in SR
+//
+// @parm IO_Configuration_T | in_configuration | [in] SCI port configuration
+//
+// @rdesc bool | status of active flag
+//
+// @end
+//
+//==============================================================================
+bool SCI_Get_Active_Status(IO_Configuration_T      in_configuration);
 
 //==============================================================================
 // SCI_Reset_Status

@@ -20,7 +20,6 @@
  *   None.
  *
 \* ============================================================================ */
-// #include "dd_sci.h"
 #incldue "dd_sci_interface.h"
 #include "kw2dllcf.h"
 #include "kw2dll.h"
@@ -60,6 +59,9 @@ static void WaitingP2MinBeforeAnswerKw2000State (void);
 static void SendingMessageKw2000State (void);
 static void ErrorReadKw2000State (void);
 
+/* local private variables */
+static const sci_bus_t * kline = &scib;
+static uint8_t       EventCounter;
 
 /*--- General Kw2000 communication constants ---*/
 #define Kw2000BaudRate   (10400)
@@ -81,9 +83,6 @@ static void ErrorReadKw2000State (void);
 
 uint32_t             BaudRateValueSrv10 ;
 bool                 BaudRateChangedSrv10 ;
-
-static uint8_t       EventCounter;
-
 Kw2000StateType      Kw2000State;
 Kw2MsgRxStateType    Kw2MsgRxState;
 Kw2MsgTxStateType    Kw2MsgTxState;
@@ -103,7 +102,6 @@ WORD              P4MinWL;
 bool                 NewTiming;
 bool                 AfterFastSynchroFlag;
 uint8_t              PendingNegativeAnswer;
-
 uint8_t              VyMyPhysicalAddr ;
 bool                 VbECUResetPending ;
 
@@ -291,21 +289,19 @@ void SetP2TimingsForPendingProcess (void)
 /*********************************************************************/
 
 void SetNewP2Max (Timer25msInMs NextP2Max)
-
-  {
-  NewP2Max = NextP2Max;
-  NewTiming = true;
-  } /*** End of SetNewP2Max ***/
+{
+	NewP2Max = NextP2Max;
+	NewTiming = true;
+} /*** End of SetNewP2Max ***/
 
 /*********************************************************************/
 /*** Update P2Min Waiting Loop.                                    ***/
 /*********************************************************************/
 
 static void UpdateP2MinWaitingLoop (void)
-
-  {
-  P2MinWL = P2MinLoopCountVal(P2Min) ;
-  } /*** End of UpdateP2MinWaitingLoop ***/
+{
+	P2MinWL = P2MinLoopCountVal(P2Min) ;
+} /*** End of UpdateP2MinWaitingLoop ***/
 
 
 /*********************************************************************/
@@ -313,49 +309,46 @@ static void UpdateP2MinWaitingLoop (void)
 /*********************************************************************/
 
 static void UpdateP2MaxWaitingLoop (void)
-
-  {
-    uint16_t p2max25ms = P2Max;
-    if ( P2MaxBkpt < p2max25ms )
-    {
-      p2max25ms = (p2max25ms - P2MaxBkpt) * 256;
-    }
-    P2MaxWL = p2max25ms * P2MaxLoopCountVal ;
-  } /*** End of UpdateP2MaxWaitingLoop ***/
+{
+	uint16_t p2max25ms = P2Max;
+	if ( P2MaxBkpt < p2max25ms )
+	{
+		p2max25ms = (p2max25ms - P2MaxBkpt) * 256;
+	}
+	P2MaxWL = p2max25ms * P2MaxLoopCountVal ;
+} /*** End of UpdateP2MaxWaitingLoop ***/
 
 /*********************************************************************/
 /*** Update P3Min Waiting Loop.                                    ***/
 /*********************************************************************/
 
 static void UpdateP3MinWaitingLoop (void)
-
-  {
-  /*--- (P3MinWL >= (P3Min + 1ms) /2/ 7.81ms) ---*/
-  P3MinWL = ((P3Min + 15) / 16);
-  } /*** End of UpdateP3MinWaitingLoop ***/
+{
+	/*--- (P3MinWL >= (P3Min + 1ms) /2/ 7.81ms) ---*/
+	P3MinWL = ((P3Min + 15) / 16);
+} /*** End of UpdateP3MinWaitingLoop ***/
 
 /*********************************************************************/
 /*** Update P3Max Waiting Loop.                                    ***/
 /*********************************************************************/
 
 static void UpdateP3MaxWaitingLoop (void)
+{
+	/*--- P3MaxWL >= (P3Max + 1ms / 7.81ms) ---*/
+	Timer250msInMs_W DW;
 
-  {
-  /*--- P3MaxWL >= (P3Max + 1ms / 7.81ms) ---*/
-  Timer250msInMs_W DW;
-
-  if (P3Max == Max_Timer250msInMs)
-    /*--- P3Max infinite ---*/
-    {
-    P3MaxWL = Max_Timer250msInMs_W;
-    }
-  else
-    {
-    DW = (Timer250msInMs_W) P3Max;
-    P3MaxWL = (DW * P3MaxLoopCountVal) ;
-   /* (P3Max) * 32 */
-    }
-  } /*** End of UpdateP3MaxWaitingLoop ***/
+	if (P3Max == Max_Timer250msInMs)
+	/*--- P3Max infinite ---*/
+	{
+		P3MaxWL = Max_Timer250msInMs_W;
+	}
+	else
+	{
+		DW = (Timer250msInMs_W) P3Max;
+		P3MaxWL = (DW * P3MaxLoopCountVal) ;
+		/* (P3Max) * 32 */
+	}
+} /*** End of UpdateP3MaxWaitingLoop ***/
 
 /*********************************************************************/
 /*** Update P4Min Waiting Loop.                                    ***/
