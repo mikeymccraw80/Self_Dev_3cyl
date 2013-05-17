@@ -291,21 +291,18 @@ bool SCI_Get_Status(
       case SCI_INTERRUPT_CHANNEL_PARITY_ERROR:
          status = (bool)( sci->SR1.F.PF );
          break;
+      case SCI_STATUS_FLAG_TACT:
+         status = (bool)( sci->SR1.F.TACT );
+         break;
+      case SCI_STATUS_FLAG_RAF:
+         status = (bool)( sci->SR1.F.RACT );
+         break;         
+      default:
+         break;         
+         
    }
 
    return status;
-}
-
-
-//==============================================================================
-// SCI_Get_Active_Status
-//==============================================================================
-bool SCI_Get_Active_Status(IO_Configuration_T      in_configuration)
-{
-	SCI_T *sci = SCI_Get_Device_Register( in_configuration );
-	bool  status = false;
-	status = (bool)( sci->SR1.F.RACT );
-	return status;
 }
 
 //==============================================================================
@@ -346,6 +343,9 @@ void SCI_Reset_Status(
       case SCI_INTERRUPT_CHANNEL_PARITY_ERROR:
          mask.F.PF = 1;
          break;
+      default:
+         break;
+         
    }
 
    sci->SR1.U32 = mask.U32;
@@ -369,6 +369,19 @@ void SCI_Send_Single_Break(
    sci->CR1.F.SBK = true;
    sci->CR1.F.SBK = false;
    Leave_Critical_Section( save_interrupt_state );
+}
+
+
+//==============================================================================
+// SCI_Set_RxPolarity
+//==============================================================================
+void SCI_Set_RxPolarity( 
+   IO_Configuration_T in_configuration,
+   bool           rx_pin_inverted )
+{
+   SCI_T    *sci = SCI_Get_Device_Register( in_configuration );
+
+   sci->CR2.F.RXPOL = rx_pin_inverted;
 }
 
 //==============================================================================

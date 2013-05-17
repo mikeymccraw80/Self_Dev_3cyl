@@ -26,7 +26,6 @@ typedef struct SCI_Interface_Tag {
 	void (*RxInt)(void);
 	void (*RxIntDisable)(void);
 	void (*RxIntEnable)(void);
-	void (*TxCPInt)(void);
 } sci_bus_t;
 
 extern const sci_bus_t scia;

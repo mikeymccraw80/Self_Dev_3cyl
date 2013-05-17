@@ -25,6 +25,8 @@ typedef enum
    SCI_INTERRUPT_CHANNEL_NOISE_FLAG_ERROR,
    SCI_INTERRUPT_CHANNEL_FRAME_ERROR,
    SCI_INTERRUPT_CHANNEL_PARITY_ERROR,
+   SCI_STATUS_FLAG_TACT,
+   SCI_STATUS_FLAG_RAF,
    SCI_INTERRUPT_CHANNEL_MAX
 
 } SCI_Interrupt_Channel_T;
@@ -613,6 +615,24 @@ SCI_Loopback_Mode_T SCI_Get_Loopback_Mode_Enabled(
 uint16_t SCI_Read( 
    IO_Configuration_T in_configuration );
 
+
+//==============================================================================
+// SCI_Set_RxPolarity
+//
+// @func Returns NULL
+//
+// @parm IO_Configuration_T | in_configuration | [in] SCI port configuration
+//
+// @rdesc uint8_t | command value of RXPOL
+//
+// @end
+//
+//==============================================================================
+void SCI_Set_RxPolarity( 
+   IO_Configuration_T in_configuration,
+   bool              rx_pin_inverted );
+
+
 //==============================================================================
 // SCI_Write
 //
@@ -708,20 +728,6 @@ bool SCI_Get_Rx_Error_Flag(
 bool SCI_Get_Status( 
    IO_Configuration_T      in_configuration, 
    SCI_Interrupt_Channel_T in_flag_id );
-   
-//==============================================================================
-// SCI_Get_Active_Status
-//
-// @func Returns status of a flag in SR
-//
-// @parm IO_Configuration_T | in_configuration | [in] SCI port configuration
-//
-// @rdesc bool | status of active flag
-//
-// @end
-//
-//==============================================================================
-bool SCI_Get_Active_Status(IO_Configuration_T      in_configuration);
 
 //==============================================================================
 // SCI_Reset_Status

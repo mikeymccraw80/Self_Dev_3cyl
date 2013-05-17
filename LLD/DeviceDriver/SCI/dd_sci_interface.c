@@ -86,7 +86,7 @@ static int scib_get_frm_err_flag(void)
 
 static int scib_get_active_flag(void)
 {
-	return SCI_Get_Active_Status(SCI_DEVICE_1);
+	return SCI_Get_Status(SCI_DEVICE_1, SCI_STATUS_FLAG_RAF);
 }
 
 static void scib_rx_disable_int(void)
@@ -101,19 +101,17 @@ static void scib_rx_enable_int(void)
 	SCI_INTERRUPT_Set_Enable(SCI_DEVICE_1, true);
 }
 
+extern void SerialcomReceiveInt(void);
 static void scib_rx_callback(void)
 {
-
-
+	SerialcomReceiveInt();
 }
 
-static uint8_t chch;
 void DD_SCIB_INT(void)
 {
 	scib.RxInt();
-	scib.TxCPInt();
-	chch = scib.read();
-	SCI_INTERRUPT_Clear_Pending(SCI_DEVICE_1 | MTSA_CONFIG_SCI_B_RX_INTERRUPT);
+	SCI_Interrupt_Set_Channel(SCI_DEVICE_1, SCI_INTERRUPT_CHANNEL_RX);
+	SCI_INTERRUPT_Clear_Pending(SCI_DEVICE_1);
 }
 
 const sci_bus_t scib = {
