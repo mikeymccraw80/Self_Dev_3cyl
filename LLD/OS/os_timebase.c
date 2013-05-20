@@ -26,7 +26,7 @@ void OS_RTI_1ms_INT(void)
 {
 	PIT_INTERRUPT_Clear_Pending(PIT_CHANNEL_RTI);
 
-	OS_RTI_1ms_Count = (OS_RTI_1ms_Count > 10)? 1 : OS_RTI_1ms_Count++;
+	OS_RTI_1ms_Count = (OS_RTI_1ms_Count >= 10)? 1 : OS_RTI_1ms_Count++;
 
 	/* 1ms task reference */
 	RTI_Flags.bf.TimeFor1ms = 1;
