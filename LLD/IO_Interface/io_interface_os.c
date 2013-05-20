@@ -94,70 +94,58 @@ INLINE void Init_HLS_Crank_Cam_Status(void)
 //=============================================================================
 // IO_OS_BackGround_1ms_Status_Check
 //=============================================================================
- void  IO_OS_BackGround_1ms_Status_Check(void) 
+void  IO_OS_BackGround_1ms_Status_Check(void) 
 {
-
-         /* HLS power down logic */
-         if (Is_IGN_Off())
-         {
-           IgnitionOffTimeVar=(IgnitionOffTimeVar<UINT16_MAX)? (IgnitionOffTimeVar+1) : UINT16_MAX;
-           HLS_afterrun();
-           B_HLS_afterrun = true;
-           /* Key off and rpm = 0,reset the no sync flag */
-           if( (crank_sig.engine_rpm < MIN_RPM_CHERY) &&
-               (crank_sig.crank_status.B_crank_stall == ( bitfield16_t )true) )
-           {
-             /* Initilize the Chery flag bit */
-             crank_sig.crank_status.B_crank_no_sync = ( bitfield16_t )true ;
-           }
-         }
-	  else
-	  {
-              IgnitionOffTimeVar = 0;
-	  }
-
-	    /* Doing the software reset as the chery requirement */
-         if ((B_HLS_afterrun == true) && 
-             (!Is_IGN_Off()) &&
-             (crank_sig.engine_rpm < MIN_RPM_CHERY) &&
-             (B_KeyOn == true))
-         {           
-           /* Stop the all task containers */
-            Disable_Interrupts( );
-           /* called when the synch is lost/reset */
-           HLS_rstsyn(); 
-           /* Chery requirement: Reset the correspoding flags */
-           Init_HLS_Crank_Cam_Status();
-           /* Chery requirement: Clear the power fail flag if fast key off/key on */
-           sys_status.B_Pwf = false;
-           /* Chery requirement: Clear all the Chery HLS non-initialized variables */
-          // HLS_Clear_Variables();
-             /* clear uninitialized data				*/
-            if (&HWIO_HLSBSS_SIZE) 
-            {
-
-               Clear_Longs(&HWIO_HLSBSS_START[0],(((uint16_t)(&HWIO_HLSBSS_SIZE)+3)/4));
-             }
-           /* Call the chery initialize functions */
-           HLS_ini();
-           HLS_inisyn();
-           HLS_ini2();                      
-           /* Clear the flag */
-           B_HLS_afterrun = false;
-           /* turn on interrupts */
-          Enable_Interrupts();         
-         }
-		  
-        /*chery can requirement:stop communciation after key off 500ms*/
-       if(IgnitionOffTimeVar > 49)
-       {
-          VsCAN_CHERY_EMS_ID_Disable_keyoff500ms = true;
-        }
-	else
-	{
-         VsCAN_CHERY_EMS_ID_Disable_keyoff500ms = false;
+	/* HLS power down logic */
+	if (Is_IGN_Off()) {
+		IgnitionOffTimeVar=(IgnitionOffTimeVar<UINT16_MAX)? (IgnitionOffTimeVar+1) : UINT16_MAX;
+		HLS_afterrun();
+		B_HLS_afterrun = true;
+		/* Key off and rpm = 0,reset the no sync flag */
+		if((crank_sig.engine_rpm < MIN_RPM_CHERY) && (crank_sig.crank_status.B_crank_stall == (bitfield16_t)true)) {
+			/* Initilize the Chery flag bit */
+			crank_sig.crank_status.B_crank_no_sync = ( bitfield16_t )true ;
+		}
+	} else {
+		IgnitionOffTimeVar = 0;
 	}
 
+	/* Doing the software reset as the chery requirement */
+	if ((B_HLS_afterrun == true) && 
+		(!Is_IGN_Off()) &&
+		(crank_sig.engine_rpm < MIN_RPM_CHERY) &&
+		(B_KeyOn == true))
+	{           
+		/* Stop the all task containers */
+		Disable_Interrupts( );
+		/* called when the synch is lost/reset */
+		HLS_rstsyn(); 
+		/* Chery requirement: Reset the correspoding flags */
+		Init_HLS_Crank_Cam_Status();
+		/* Chery requirement: Clear the power fail flag if fast key off/key on */
+		sys_status.B_Pwf = false;
+		/* Chery requirement: Clear all the Chery HLS non-initialized variables */
+		// HLS_Clear_Variables();
+		/* clear uninitialized data				*/
+		if (&HWIO_HLSBSS_SIZE) {
+			Clear_Longs(&HWIO_HLSBSS_START[0],(((uint16_t)(&HWIO_HLSBSS_SIZE)+3)/4));
+		}
+		/* Call the chery initialize functions */
+		HLS_ini();
+		HLS_inisyn();
+		HLS_ini2();                      
+		/* Clear the flag */
+		B_HLS_afterrun = false;
+		/* turn on interrupts */
+		Enable_Interrupts();
+	}
+
+	/*chery can requirement:stop communciation after key off 500ms*/
+	if(IgnitionOffTimeVar > 49) {
+		VsCAN_CHERY_EMS_ID_Disable_keyoff500ms = true;
+	} else {
+		VsCAN_CHERY_EMS_ID_Disable_keyoff500ms = false;
+	}
 }
 
 //=============================================================================

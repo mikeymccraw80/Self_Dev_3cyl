@@ -5,6 +5,7 @@
 #include "hal_eng.h"
 #include "hal_pulse.h"
 #include "vehicle_can_cald.h"
+#include "io_interface_os.h"
 
 
 //=============================================================================
@@ -38,19 +39,21 @@ unsigned char Tooth_Interrupt_Flag;
 //=============================================================================
 // IO_Eng_Engine_Stall_Reset
 //=============================================================================
- void  IO_Eng_Engine_Stall_Reset(void) 
+void  IO_Eng_Engine_Stall_Reset(void) 
 {
+	First_Syn_Flag= 0;
+	Startup_Counter = 0;
+	Tooth_Interrupt_Flag = 0;
 
-  First_Syn_Flag= 0;
-  Startup_Counter = 0;
- Tooth_Interrupt_Flag = 0;
-
-  crank_sig.crank_status.B_crank_stall = ( bitfield16_t )1; 
-  crank_sig.crank_status.B_crank_sync = ( bitfield16_t )0 ;
-  crank_sig.crank_status.B_crank_pre_sync = ( bitfield16_t )0 ;
-  crank_sig.engine_rpm =0;
-  crank_sig.segment_time = 0xFFFFFFFF;
-
+	crank_sig.crank_status.B_crank_stall = ( bitfield16_t )1; 
+	crank_sig.crank_status.B_crank_sync = ( bitfield16_t )0 ;
+	crank_sig.crank_status.B_crank_pre_sync = ( bitfield16_t )0 ;
+	crank_sig.engine_rpm =0;
+	crank_sig.segment_time = 0xFFFFFFFF;
+	if (!Is_IGN_Off()) {
+		/* called when the synch is lost/reset */
+		HLS_rstsyn(); 
+	}
 }
 
 
