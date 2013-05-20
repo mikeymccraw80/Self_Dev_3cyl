@@ -103,7 +103,7 @@ void HAL_OS_100ms_Task(void)
 		MngChery_Can_1000ms();
 		MngChery_Can_2000ms();
 	}
-	if(!(OS_100ms_Cnt&&0x01)) {
+	if(!(OS_100ms_Cnt&0x01)) {
 		HLS_Task_200ms();
 	}
 	MngChery_Can_100ms();
