@@ -977,6 +977,7 @@ static void ScanningHighToLowEdgeSynchKw2000State (void)
 
 static void Waiting25msLowSynchKw2000State (void)
 {
+	uint16_t rx_temp;
 	// if (SCI0ReceiverActiveDetected ())
 	if (kline->GetActiveFlag())
 	/*--- if break: ---*/
@@ -1583,6 +1584,8 @@ void CheckKW2000LineState(void)
 
 void InitializeKw2000VIO (void)
 {
+	KW2000CommuState=KW2000_Responder;
+	SetMyPhysicalAddr ( MyPhysicalAddr ) ;
 	// SCI0_SetSCIBaudRate (Kw2000BaudRate);
 	kline->setbaud(Kw2000BaudRate);
 	GoToWaitingTIdleSynchK2State (TIdleInit);
