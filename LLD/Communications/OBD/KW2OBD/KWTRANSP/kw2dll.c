@@ -744,74 +744,51 @@ void SerialcomReceiveInt (void)
 		}
 		break;
 	case  k2sSendingMessage:
-       /* Transmit state */
-       /* If the received byte is no equal to the sent byte OR
-          a collision occurs, go to waiting state.
-          */
-		// if (((!SCI0ReceiverErrorFlag ()) &&
-		if (((!kline->GetAllErrFlag()) &&
-			// (SCI0_ReadSCIReceiverDataRegister () == DataByte ))||
-			((uint8_t)kline->read() == DataByte ))||
-			(KW2000CommuState==KW2000_Tester))
-		{
-			switch (Kw2MsgTxState) {
-			case ktsSendingFormat:
+		/* Transmit state */
+		// If the received byte is no equal to the sent byte OR 
+		//   a collision occurs, go to waiting state.
+		
+		if ((!kline->GetAllErrFlag()) && ((uint8_t)kline->read() == DataByte )) {
+			if (Kw2MsgTxState == ktsSendingFormat) {
 				TxDataIndex = 1;
-				if (k2mFmt (TxFormatByte) == mfPhysAddr) 
-				{
+				if (k2mFmt(TxFormatByte) == mfPhysAddr) {
 					Kw2MsgTxState = ktsSendingTgtAddr;
-					DataByte = TxTargetAddress ;
-					SendKw2000ByteToSerial ();
-				} 
-				else /*--- mfNoAddr ---*/
-				{
-					if (k2mLen (TxFormatByte))
-					/*--- length already in format byte ---*/
-					{
+					DataByte = TxTargetAddress;
+					SendKw2000ByteToSerial();
+				} else {
+					/*--- mfNoAddr ---*/
+					if (k2mLen(TxFormatByte)) {
+						/*--- length already in format byte ---*/
 						Kw2MsgTxState = ktsSendingData;
-						DataByte = TxServiceData [0] ;
-						SendKw2000ByteToSerial ();
-					}
-					else
-					 /*--- no: send it ---*/
-					{
+						DataByte = TxServiceData[0];
+						SendKw2000ByteToSerial();
+					} else {
 						Kw2MsgTxState = ktsSendingLength;
-						DataByte = TxMsgDataLength ;
-						SendKw2000ByteToSerial ();
+						DataByte = TxMsgDataLength;
+						SendKw2000ByteToSerial();
 					}
 				}
-				break;
-
-			case ktsSendingTgtAddr:
+			} else if (Kw2MsgTxState == ktsSendingTgtAddr) {
 				Kw2MsgTxState = ktsSendingSrcAddr ;
 				DataByte = TxSourceAddress ;
 				SendKw2000ByteToSerial () ;
-				break;
-
-			case ktsSendingSrcAddr:
-				if (k2mLen (TxFormatByte))
-				/*--- length already in format byte ---*/
-				{
+			} else if (Kw2MsgTxState == ktsSendingSrcAddr) {
+				if (k2mLen(TxFormatByte)) {
+					/*--- length already in format byte ---*/
+					DataByte = TxServiceData[0];
 					Kw2MsgTxState = ktsSendingData ;
-					DataByte = TxServiceData [0] ;
-					SendKw2000ByteToSerial () ;
-				}
-				else
-				/*--- no: send it ---*/
-				{
+					SendKw2000ByteToSerial() ;
+				} else {
+					/*--- no: send it ---*/
 					Kw2MsgTxState = ktsSendingLength ;
 					DataByte = TxMsgDataLength ;
 					SendKw2000ByteToSerial () ;
 				}
-				break;
-
-			case ktsSendingLength:
+			} else if (Kw2MsgTxState == ktsSendingLength) {
 				Kw2MsgTxState = ktsSendingData ;
 				DataByte = TxServiceData [0] ;
 				SendKw2000ByteToSerial () ;
-				break;
-
-			case ktsSendingData:
+			} else if (Kw2MsgTxState == ktsSendingData) {
 				if (TxDataIndex < TxMsgDataLength) {
 					DataByte = TxServiceData [TxDataIndex] ;
 					SendKw2000ByteToSerial ();
@@ -821,9 +798,7 @@ void SerialcomReceiveInt (void)
 					DataByte = TxCalcCheckSum ;
 					SendKw2000ByteToSerial () ;
 				}
-				break;
-
-			case ktsSendingCheckSum:
+			} else if (Kw2MsgTxState == ktsSendingCheckSum) {
 				// SCI0ReceiverReset (); /*--- Cancel echo ---*/
 				kline->reset();
 				if (KW2000_Responder==KW2000CommuState) {
@@ -851,25 +826,15 @@ void SerialcomReceiveInt (void)
 						GoToWaitingTIdleSynchK2State (TIdleStopCom);
 					}
 				}
-
-				break;
-			default:
-				break;
 			}
-			if (KW2000_Tester==KW2000CommuState)
-				P4Timout=0;
-		}
-		else
-		{
-			if (KW2000_Responder==KW2000CommuState)
-			{
-			P2MinTimer = 0 ;
-			// SCI0ReceiverReset () ;
-			kline->reset();
-			GoToWaitingP2MinBeforeAnswerK2State () ;
+		} else {
+			if (KW2000_Responder==KW2000CommuState) {
+				P2MinTimer = 0 ;
+				kline->reset();
+				GoToWaitingP2MinBeforeAnswerK2State();
 			}
 		}
-		break ;
+		break;
 
 	case k2sWaitingP2MinBeforeAnswer:
 	case k2sWaitingP3MinBeforeSend:
@@ -880,9 +845,8 @@ void SerialcomReceiveInt (void)
 	case k2sLostCommunication:
 	case k2sErrorRead:
 		/* If bus activity during wait, reset the timer */
-		if (KW2000_Responder==KW2000CommuState)  P2MinTimer = 0 ;
+		if (KW2000_Responder==KW2000CommuState) P2MinTimer = 0 ;
 		if (KW2000_Tester==KW2000CommuState) P3MinTimer = 0;
-		// SCI0ReceiverReset () ;
 		kline->reset();
 		break ;
 	default:
@@ -949,25 +913,17 @@ static void WaitingTIdleSynchKw2000State (void)
 
 static void ScanningHighToLowEdgeSynchKw2000State (void)
 {
-	if (SerialEventReceived ())
-	/*--- if not Idle: ---*/
-	{
-		// if (SCI0ReceiverFramingErrorDetectedFlag () &&
-		// (SCI0_ReadSCIReceiverDataRegister () == 0))
-		if (kline->GetFrmErrFlag() &&
-			(kline->read() == 0))
-		/*--- if break: ---*/
-		{
+	if (SerialEventReceived ()) {
+		if (kline->GetFrmErrFlag() && (kline->read() == 0)) {
+			/*--- if break: ---*/
 			GoToWaiting25msLowSynchK2State ();
-		}
-		else
-		/*--- if not Idle nor break: ---*/
-		{
+		} else {
+			/*--- if not Idle nor break: ---*/
 			GoToWaitingTIdleSynchK2State (TIdleTimout);
 		}
 	}
-    /* Still in Kw2000 communication mode: Do nothing. */
-  } /*** End of ScanningHighToLowEdgeSynchKw2000State ***/
+	/* Still in Kw2000 communication mode: Do nothing. */
+} /*** End of ScanningHighToLowEdgeSynchKw2000State ***/
 
 
 /********************************************************************/
@@ -1499,9 +1455,9 @@ void UpdateKeyword2000VIO (void)
 		/*--- Waiting 3 or 4 RTI with break         ---*/
 		/*--- followed by one RTI with idle         ---*/
 		Waiting25msLowSynchKw2000State ();
-		break;
-	case k2sWaiting25msHighSynch:
-		/*--- Waiting 1 RTI with idle               ---*/
+		// break;
+	// case k2sWaiting25msHighSynch:
+		// /*--- Waiting 1 RTI with idle               ---*/
 		Waiting25msHighSynchKw2000State ();
 		break;
 	case k2sAwaitingMessage:

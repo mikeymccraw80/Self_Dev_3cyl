@@ -71,8 +71,7 @@
              SCI_Device_Set_Break_Length( 0, SCI_BREAK_BIT_MODE_10_11_BITS     ) | \
     SCI_Device_Set_Bit_Error_Sample_Mode( 0, SCI_SAMPLE_RT_CLOCK_9             ) | \
            SCI_Device_Set_Bit_Error_Stop( 0, false                             ) | \
-                   SCI_Device_Set_Parity( 0, SCI_PARITY_NONE                   ) | \
-				   MTSA_CONFIG_SCI_B_RX_INTERRUPT )
+                   SCI_Device_Set_Parity( 0, SCI_PARITY_NONE                   ) )
 
 //=======================================================================================
 // SCI1 TC_INT - MTSA_CONFIG_SCI_B_TC_INTERRUPT

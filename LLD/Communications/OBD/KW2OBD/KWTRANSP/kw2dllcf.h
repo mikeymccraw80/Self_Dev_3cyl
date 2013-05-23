@@ -126,7 +126,7 @@
 * adjusted for some loop rates.                                       *
 **********************************************************************/
 
-#define  FastInitLogicMin    (2)
+#define  FastInitLogicMin    (1)
 #define  FastInitLogicMax    (4)
 #define  FastInitLogicHigh   (FastInitLogicMax - 2)
 

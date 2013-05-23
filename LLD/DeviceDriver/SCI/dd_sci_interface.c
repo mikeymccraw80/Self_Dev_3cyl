@@ -50,8 +50,12 @@ static int scib_reset(void)
 {
 	uint16_t rx_temp;
 
-	SCI_Shutdown_Device(SCI_DEVICE_1);
+	// SCI_Shutdown_Device(SCI_DEVICE_1);
 
+	if (SCI_Get_Status(SCI_DEVICE_1, SCI_INTERRUPT_CHANNEL_RX)) {
+		SCI_Reset_Status(SCI_DEVICE_1, SCI_INTERRUPT_CHANNEL_RX);
+		rx_temp = SCI_Read(SCI_DEVICE_1);
+	}
 	if (SCI_Get_Status(SCI_DEVICE_1, SCI_INTERRUPT_CHANNEL_OVERRUN_ERROR)) {
 		SCI_Reset_Status(SCI_DEVICE_1, SCI_INTERRUPT_CHANNEL_OVERRUN_ERROR);
 		rx_temp = SCI_Read(SCI_DEVICE_1);
@@ -70,6 +74,8 @@ static int scib_reset(void)
 	}
 
 	rx_temp = rx_temp;
+
+	// scib_init(10400);
 
 	return 0;
 }
