@@ -488,19 +488,26 @@ extern const SIU_PCR_T SIU_INITIAL_PCR_202;
 //The SIU_PCR215 register controls the function, direction, and static electrical attributes of the
 //AN[12]_MA[0]_eTPU_A[19]_SDS pin. The AN[12] function is an analog pin on this device. This
 //register allows selection of the MA[0] and SDS functions.
-
+extern const SIU_PCR_T SIU_INITIAL_PCR_215;
 
 //The SIU_PCR216 register controls the function, direction, and static electrical attributes of the
 //AN[13]_MA[1]_eTPU_A[21]_SDO pin. The AN[13] function is not available on this device. This register
 //allows selection of the MA[1] and SDO functions.
 
+extern const SIU_PCR_T SIU_INITIAL_PCR_216;
+
 //The SIU_PCR217 register controls the function, direction, and static electrical attributes of the
 //AN[14]_MA[2]_eTPU_A[27]_SDI pin. The AN[14] function is an analog pin on this device. This register
 //allows selection of the MA[2] and SDI functions.
+extern const SIU_PCR_T SIU_INITIAL_PCR_217;
+
 
 //The SIU_PCR218 register controls the function, direction, and static electrical attributes of the
 //AN[15]_FCK_eTPU_A[29] pin. The AN[15] function is an analog pin on this device. This register allows
 //selection of the FCK function.
+
+extern const SIU_PCR_T SIU_INITIAL_PCR_218;
+
 
 //The SIU_PCR219 register controls the drive strength of the MCKO_GPIO[219] pin.
 //not active

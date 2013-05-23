@@ -1219,19 +1219,71 @@ const SIU_PCR_T SIU_INITIAL_PCR_202 =
 //The SIU_PCR215 register controls the function, direction, and static electrical attributes of the
 //AN[12]_MA[0]_eTPU_A[19]_SDS pin. The AN[12] function is an analog pin on this device. This
 //register allows selection of the MA[0] and SDS functions.
+const SIU_PCR_T SIU_INITIAL_PCR_215 = 
+{
+      SIU_GPIO_PIN_ASSIGNMENT_RESERVED_0,  //PA Pin assignment reserve is AD12
+      SIU_GPIO_BUFFER_OUT_DISABLED, //OBE  Output buffer enable
+      SIU_GPIO_BUFFER_IN_ENABLED,   //IBE    Input buffer enable
+      SIU_GPIO_DRIVE_STRENGTH_10pF, //DSC  Drive strength control
+      SIU_GPIO_OPEN_DRAIN_DISABLED, //ODE  Open drain output enable
+      SIU_GPIO_INPUT_HYSTERESIS_DISABLED, //HYS Input hysteresis
+      SIU_GPIO_SLEW_RATE_MINIMUM,  //SRC  Slew rate control
+      SIU_GPIO_PULL_UP_Down_DISABLED,  //WPE  Weak pullup/down enable
+      SIU_GPIO_PULL_DOWN  //WPS  Weak pullup/down select
+};
 
 
 //The SIU_PCR216 register controls the function, direction, and static electrical attributes of the
 //AN[13]_MA[1]_eTPU_A[21]_SDO pin. The AN[13] function is not available on this device. This register
 //allows selection of the MA[1] and SDO functions.
 
+const SIU_PCR_T SIU_INITIAL_PCR_216 = 
+{
+      SIU_GPIO_PIN_ASSIGNMENT_RESERVED_0,  //PA Pin assignment 
+      SIU_GPIO_BUFFER_OUT_DISABLED, //OBE  Output buffer enable
+      SIU_GPIO_BUFFER_IN_ENABLED,   //IBE    Input buffer enable
+      SIU_GPIO_DRIVE_STRENGTH_10pF, //DSC  Drive strength control
+      SIU_GPIO_OPEN_DRAIN_DISABLED, //ODE  Open drain output enable
+      SIU_GPIO_INPUT_HYSTERESIS_DISABLED, //HYS Input hysteresis
+      SIU_GPIO_SLEW_RATE_MINIMUM,  //SRC  Slew rate control
+      SIU_GPIO_PULL_UP_Down_DISABLED,  //WPE  Weak pullup/down enable
+      SIU_GPIO_PULL_DOWN  //WPS  Weak pullup/down select
+};
+
 //The SIU_PCR217 register controls the function, direction, and static electrical attributes of the
 //AN[14]_MA[2]_eTPU_A[27]_SDI pin. The AN[14] function is an analog pin on this device. This register
 //allows selection of the MA[2] and SDI functions.
+const SIU_PCR_T SIU_INITIAL_PCR_217 = 
+{
+      SIU_GPIO_PIN_ASSIGNMENT_RESERVED_0,  //PA Pin assignment 
+      SIU_GPIO_BUFFER_OUT_DISABLED, //OBE  Output buffer enable
+      SIU_GPIO_BUFFER_IN_ENABLED,   //IBE    Input buffer enable
+      SIU_GPIO_DRIVE_STRENGTH_10pF, //DSC  Drive strength control
+      SIU_GPIO_OPEN_DRAIN_DISABLED, //ODE  Open drain output enable
+      SIU_GPIO_INPUT_HYSTERESIS_DISABLED, //HYS Input hysteresis
+      SIU_GPIO_SLEW_RATE_MINIMUM,  //SRC  Slew rate control
+      SIU_GPIO_PULL_UP_Down_DISABLED,  //WPE  Weak pullup/down enable
+      SIU_GPIO_PULL_DOWN  //WPS  Weak pullup/down select
+};
+
 
 //The SIU_PCR218 register controls the function, direction, and static electrical attributes of the
 //AN[15]_FCK_eTPU_A[29] pin. The AN[15] function is an analog pin on this device. This register allows
 //selection of the FCK function.
+
+const SIU_PCR_T SIU_INITIAL_PCR_218 = 
+{
+      SIU_GPIO_PIN_ASSIGNMENT_RESERVED_0,  //PA Pin assignment 
+      SIU_GPIO_BUFFER_OUT_DISABLED, //OBE  Output buffer enable
+      SIU_GPIO_BUFFER_IN_ENABLED,   //IBE    Input buffer enable
+      SIU_GPIO_DRIVE_STRENGTH_10pF, //DSC  Drive strength control
+      SIU_GPIO_OPEN_DRAIN_DISABLED, //ODE  Open drain output enable
+      SIU_GPIO_INPUT_HYSTERESIS_DISABLED, //HYS Input hysteresis
+      SIU_GPIO_SLEW_RATE_MINIMUM,  //SRC  Slew rate control
+      SIU_GPIO_PULL_UP_Down_DISABLED,  //WPE  Weak pullup/down enable
+      SIU_GPIO_PULL_DOWN  //WPS  Weak pullup/down select
+};
+
 
 //The SIU_PCR219 register controls the drive strength of the MCKO_GPIO[219] pin.
 //not active
