@@ -1455,8 +1455,8 @@ void UpdateKeyword2000VIO (void)
 		/*--- Waiting 3 or 4 RTI with break         ---*/
 		/*--- followed by one RTI with idle         ---*/
 		Waiting25msLowSynchKw2000State ();
-		// break;
-	// case k2sWaiting25msHighSynch:
+		break;
+	case k2sWaiting25msHighSynch:
 		// /*--- Waiting 1 RTI with idle               ---*/
 		Waiting25msHighSynchKw2000State ();
 		break;
