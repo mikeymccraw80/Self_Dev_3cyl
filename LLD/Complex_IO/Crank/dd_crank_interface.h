@@ -63,6 +63,10 @@ bool CRANK_Get_Loss_Of_Sync( void );
 // CRANK_Get_Engine_Tooth
 //=============================================================================
 uCrank_Count_T CRANK_Get_Engine_Tooth( void );
+//=============================================================================
+// CRANK_Get_First_Sync_Set
+//=============================================================================
+bool CRANK_Get_First_Sync_Set( void );
 
 
 #endif // DD_CRANK_INTERFACE_H

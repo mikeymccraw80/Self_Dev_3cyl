@@ -528,13 +528,27 @@ static bool CRANK_Gap_Cofirm( void )
 		       CRANK_Parameters.F.number_of_gaps_detected++;
                   }	   
 	   }	
-	
+
+
+	    CRANK_Current_Event_Tooth = MCD5408_Get_Abs_Edge_Count(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT);
+         
 	    //		
            CRANK_Internal_State.U32 = CRANK_Set_Sync_Occurred( CRANK_Internal_State.U32, true );
            MCD5408_Set_Gap_Count(EPPWMT_TPU_INDEX, TPU_CONFIG_IC_EPPWMT,CRANK_ACTUAL_TEETH_PER_CRANK);
            gap_detected = true;
 
       }
+      else
+      	{
+      	    CRANK_Current_Event_Tooth++;
+
+          if ( CRANK_Current_Event_Tooth > CRANK_VIRTUAL_TEETH_PER_REVOLUTION )
+          {
+             CRANK_Current_Event_Tooth -= ( uCrank_Count_T )CRANK_VIRTUAL_TEETH_PER_REVOLUTION;
+           }
+
+      	}
+	    CRANK_Parameters.F.current_tooth = CRANK_Current_Event_Tooth;
      return gap_detected;
 
 }
@@ -615,8 +629,7 @@ void CRANK_Process_Crank_Event( void )
 
      CRANK_Tooth_Duration =MCD5408_Get_Period(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT);    
      CRANK_Hi_Res_Edge_Time = CRANK_Parameters.F.edge_time;	
-     CRANK_Current_Event_Tooth = MCD5408_Get_Abs_Edge_Count(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT);
-     CRANK_Parameters.F.current_tooth = CRANK_Current_Event_Tooth;
+    
 
      OS_ToothInt_Hook();
 	 
@@ -673,6 +686,8 @@ unsigned int crank_test3;
 //=============================================================================
 void CRANK_High_Priority_Cylinder_Event( void )
 {
+   uint32_t cs;
+      cs = Enter_Critical_Section();
       // crank_test3 ++;
    crank_test3 =CRANK_Current_Event_Tooth;
       // Update Irq tooth count at Cylinder Event
@@ -719,6 +734,8 @@ void CRANK_High_Priority_Cylinder_Event( void )
 
       // Save current hi-res ref event time for next event
      CRANK_Previous_Hi_Res_Reference_Time = CRANK_Hi_Res_Edge_Time;
+
+   Leave_Critical_Section( cs );
 
       // Clear fist cylinder event
       CRANK_Internal_State.U32 = CRANK_Set_First_Cylinder_Event_Occured( CRANK_Internal_State.U32, false );
@@ -1052,6 +1069,15 @@ void CRANK_Set_Cylinder_ID(
 Crank_Cylinder_T CRANK_Get_Next_Cylinder_ID( void )
 {
    return CRANK_Get_Future_Cylinder_ID( 1 );
+}
+
+
+//=============================================================================
+// CRANK_Get_First_Sync_Set
+//=============================================================================
+bool CRANK_Get_First_Sync_Set( void )
+{
+   return CRANK_Get_First_Sync_Occurred(CRANK_Internal_State.U32 );
 }
 
 

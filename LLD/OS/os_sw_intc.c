@@ -32,6 +32,7 @@ void OS_SCHEDULER_Cylinder_Event(void)
 { 
   APPLICATION_CYLINDER_EVENT_TASK = true;
    
+CRANK_High_Priority_Cylinder_Event();  
   INTC_INTERRUPT_Set_Enable(INTC_CHANNEL_SOFTWARE_CH0_CH, true);  
 }
 

@@ -42,8 +42,8 @@ static void CRANK_Scheduler_Initialize( void )
    //   EVENT_ID_PRIORITY                    in_first_event_angle    in_event_angle_offset   in_number_of_events
    CRANK_SCHEDULER_Assign_Handler_To_Event_ID( CRANK_EVENT_ID_CAM, CAM_Update_State    );
    CRANK_SCHEDULER_Assign_Event(  CRANK_EVENT_ID_CAM,                  cam_event,              crank_offset,           2 );
-   CRANK_SCHEDULER_Assign_Handler_To_Event_ID( CRANK_EVENT_ID_PER_CYLINDER_EVENT,CRANK_High_Priority_Cylinder_Event   );
-   CRANK_SCHEDULER_Assign_Event(   CRANK_EVENT_ID_PER_CYLINDER_EVENT,   first_cylinder_event,   cylinder_offset,        cylinders );
+  // CRANK_SCHEDULER_Assign_Handler_To_Event_ID( CRANK_EVENT_ID_PER_CYLINDER_EVENT,CRANK_High_Priority_Cylinder_Event   );
+  // CRANK_SCHEDULER_Assign_Event(   CRANK_EVENT_ID_PER_CYLINDER_EVENT,   first_cylinder_event,   cylinder_offset,        cylinders );
     
    //CRANK_SCHEDULER_Assign_Event(  KNOCK_CYLINDER_EVENT,                first_cylinder_event,   cylinder_offset,        cylinders );
    //CRANK_SCHEDULER_Assign_Event(  VCP_CYLINDER_EVENT,                  first_cylinder_event,   cylinder_offset,        cylinders );
