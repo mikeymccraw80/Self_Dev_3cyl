@@ -808,7 +808,7 @@ static CCP_CRC_T Transmit_Next_ODT( uint8_t DAQ_number )
    interrupt_state_t       interrupt_status;
 
    //Enter critical section
-  // interrupt_status = Enter_Critical_Section();
+   interrupt_status = Enter_Critical_Section();
 
    /*
     * Set DAQ CAN ID
@@ -918,7 +918,7 @@ static CCP_CRC_T Transmit_Next_ODT( uint8_t DAQ_number )
       /*
        * Point to next ODT
        */
-        DAQ_List_Status[ DAQ_number ].current_ODT++;
+      DAQ_List_Status[ DAQ_number ].current_ODT++;
 
       if ( DAQ_List_Status[ DAQ_number ].current_ODT >
            DAQ_List_Status[ DAQ_number ].last_ODT_to_transmit )
@@ -928,7 +928,7 @@ static CCP_CRC_T Transmit_Next_ODT( uint8_t DAQ_number )
    }
 
    // Exit critical section
-   //Leave_Critical_Section( interrupt_status );
+   Leave_Critical_Section( interrupt_status );
    return CRC_NO_ERROR;
 }
 
@@ -949,7 +949,7 @@ void CCP_Trigger_Event_Channel( uint8_t event_channel_number )
 
    if ( (uint8_t)SS_LOGGING & ccp.session_status )
    {
-      while( DAQ_Number_Is_Valid(DAQ_number) )
+      while ( DAQ_Number_Is_Valid(DAQ_number) )
       {
          if ( DAQ_List_Status[ DAQ_number ].started &&
               (event_channel_number == DAQ_List_Status[ DAQ_number ].event_channel_number) )
@@ -1311,9 +1311,6 @@ CCP_CRC_T CCP_Start_Stop( void )
          {
             DAQ_List_Status[ DAQ_number ].last_ODT_to_transmit =
                ccp.command_data.start_stop.last_ODT_number;
-			//test code
-	     //       DAQ_List_Status[ DAQ_number ].last_ODT_to_transmit =
-              // ccp.command_data.DAQ.number_of_ODTs;
          }
 
          if ( CRC_NO_ERROR == error_to_return )

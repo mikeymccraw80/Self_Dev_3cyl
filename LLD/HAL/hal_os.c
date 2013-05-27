@@ -16,7 +16,22 @@
 
 
 //extern void Update_DiagStatus_10ms(void);
+//=============================================================================
+// Disable/Enable HWIO_MasterIRQ
+//=============================================================================
+ interrupt_state_t Enter_Critical_Section( void )
+{
+   uint32_t temp_msr;
+   temp_msr = ESYS_READ_MSR_VALUE();
 
+   Disable_Interrupts();
+   return temp_msr;
+}
+
+ void Leave_Critical_Section( interrupt_state_t in_interrupt_state )
+{
+ Leave_Critical_Section_asm(in_interrupt_state);
+ }
 //=============================================================================
 // HAL_OS_Get_Shutdown
 //=============================================================================

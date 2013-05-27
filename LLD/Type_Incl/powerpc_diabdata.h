@@ -152,13 +152,13 @@ asm uint32_t Insert_Bits( uint32_t old_value, uint32_t value, uint32_t position,
 
 
 
-
+#if 0
 // Function to disable interrupts
 asm void Disable_Interrupts( void )
 {
   !
-    .set noreorder /* needed to prevent DIAB to reorder the asm instructions */
-    wrteei 0  /* force MSR[EE] to 0 */
+   .set noreorder /* needed to prevent DIAB to reorder the asm instructions */
+   // wrteei 0  /* force MSR[EE] to 0 */
     .set reorder /* allow reordering of asm instruction from now on */
 }
 
@@ -170,22 +170,22 @@ asm void Enable_Interrupts( void )
     wrteei 1  /* force MSR[EE] to 1 */
     .set reorder /* allow reordering of asm instruction from now on */
 }
+#endif
 
-//=============================================================================
-//   Inline Functions:
-//=============================================================================
-/* Function to restore previous interrupt state (disabled/enabled) */
-INLINE void Set_Interrupt_State( interrupt_state_t interrupt_state )
+// Function to disable interrupts
+asm void Disable_Interrupts( void )
 {
-   if( interrupt_state )
-   {
-       Enable_Interrupts();
-   }
-   else
-   {
-       Disable_Interrupts(  );
-   }
+!
+   wrteei    0
 }
+
+// Function to enable interrupts
+asm void Enable_Interrupts( void )
+{
+!
+   wrteei    1
+}
+
 
 //=============================================================================
 //   Interrupt Handling:
@@ -205,12 +205,47 @@ asm uint32_t MTMSR( uint32_t in_msr )
 }
 
 
+//=============================================================================
+// ESYS_READ_MSR_VALUE
+//
+// @func read the given value in the MSR special function register.
+//
+// @rdesc <t uint32_t> | contents of MSR register.
+//
+//=============================================================================
+asm uint32_t ESYS_READ_MSR_VALUE(void)
+{
+! "r3"
+   mfmsr   r3
+}
+
+//=============================================================================
+// ESYS_READ_MSR_VALUE
+//
+// @func store the given value in the MSR special function register.
+//
+// @parm <t uint32_t> | msr_value | value to put in MSR register.
+//
+// @rdesc none.
+//
+//=============================================================================
+asm void ESYS_STORE_MSR_VALUE_VAR(uint32_t msr_value)
+{
+% reg msr_value
+! "r3"
+   isync
+   mtmsr   msr_value
+   isync
+}
+
+
+
 // Function to retrieve current interrupt state (disabled/enabled)
 INLINE interrupt_state_t Get_Interrupt_State( void )
 {
    uint32_t msr_copy;
 
-   msr_copy = MFMSR();
+   msr_copy = ESYS_READ_MSR_VALUE();
 
    // The interrupt is bit 16. Test this bit and return the value
    return (( msr_copy >> 15 ) & (uint32_t)0x1);
@@ -228,6 +263,18 @@ INLINE bool Interrupts_Are_Enabled( void )
    return( Get_Interrupt_State() ? true : false );
 }
 
+// Function to restore previous interrupt state (disabled/enabled)
+INLINE void Set_Interrupt_State( interrupt_state_t interrupt_state )
+{
+   if( interrupt_state )
+   {
+      Enable_Interrupts();
+   }
+   else
+   {
+      Disable_Interrupts();
+   }
+}
 
 //=============================================================================
 // Stack Pointer
@@ -308,22 +355,24 @@ asm uint32_t Get_SPR( uint32_t spr )
    mfspr    r3, spr   // write R4 contents to the SPR
 }
 
-static uint32_t ESYS_READ_MSR_VALUE(void)
+
+
+asm void Leave_Critical_Section_asm( interrupt_state_t in_interrupt_state )
 {
+% reg in_interrupt_state
+!
+    isync
+    wrtee in_interrupt_state  ; restore EE bit
+    isync
 }
 
-INLINE interrupt_state_t Enter_Critical_Section( void )
-{
-   uint32_t temp_msr;
-   temp_msr = ESYS_READ_MSR_VALUE();
 
-   Disable_Interrupts();
-   return temp_msr;
-}
+//=============================================================================
+// Disable/Enable HWIO_MasterIRQ
+//=============================================================================
+ interrupt_state_t Enter_Critical_Section( void );
 
-static void Leave_Critical_Section( interrupt_state_t in_interrupt_state )
-{
-}
+ void Leave_Critical_Section( interrupt_state_t in_interrupt_state );
 
 #endif // POWERPC_DIABDATA_H
 
