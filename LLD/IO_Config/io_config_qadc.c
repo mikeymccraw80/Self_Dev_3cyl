@@ -103,7 +103,7 @@ const ADC_CCMF_T  QADC_CMD_Timebase[AD_ANALOG_MAX_SIGNAL_NAMES]=
 {
 
   {
-   0,    //EOQ      
+    1,    //EOQ      
    0,    //PAUSE 
    0,    // REP     
    0,    //EB   
@@ -119,7 +119,7 @@ const ADC_CCMF_T  QADC_CMD_Timebase[AD_ANALOG_MAX_SIGNAL_NAMES]=
 
 //const ADC_CCMF_T  QADC_CMD_ESCLoVI = 
  {
-   0,    //EOQ      
+    1,    //EOQ      
    0,    //PAUSE 
    0,    // REP     
    0,    //EB   
@@ -135,7 +135,7 @@ const ADC_CCMF_T  QADC_CMD_Timebase[AD_ANALOG_MAX_SIGNAL_NAMES]=
 
 //const ADC_CCMF_T  QADC_CMD_MAPSVI  = 
  {
-   0,    //EOQ      
+    1,    //EOQ      
    0,    //PAUSE 
    0,    // REP     
    0,    //EB   
@@ -167,7 +167,7 @@ const ADC_CCMF_T  QADC_CMD_Timebase[AD_ANALOG_MAX_SIGNAL_NAMES]=
 
 //const ADC_CCMF_T  QADC_CMD_EGRFBVI  = 
 {
-   0,    //EOQ      
+   1,    //EOQ      
    0,    //PAUSE 
    0,    // REP     
    0,    //EB   
@@ -183,7 +183,7 @@ const ADC_CCMF_T  QADC_CMD_Timebase[AD_ANALOG_MAX_SIGNAL_NAMES]=
 
 //const ADC_CCMF_T  QADC_CMD_TPS1VI  = 
 {
-   0,    //EOQ      
+   1,    //EOQ      
    0,    //PAUSE 
    0,    // REP     
    0,    //EB   
@@ -199,7 +199,7 @@ const ADC_CCMF_T  QADC_CMD_Timebase[AD_ANALOG_MAX_SIGNAL_NAMES]=
 
 //const ADC_CCMF_T  QADC_CMD_TPS2VI = 
 {
-   0,    //EOQ      
+   1,    //EOQ      
    0,    //PAUSE 
    0,    // REP     
    0,    //EB   
@@ -231,7 +231,7 @@ const ADC_CCMF_T  QADC_CMD_Timebase[AD_ANALOG_MAX_SIGNAL_NAMES]=
 
 //const ADC_CCMF_T  QADC_CMD_PPS2VI = 
 {
-   0,    //EOQ      
+   1,    //EOQ      
    0,    //PAUSE 
    0,    // REP     
    0,    //EB   
@@ -247,7 +247,7 @@ const ADC_CCMF_T  QADC_CMD_Timebase[AD_ANALOG_MAX_SIGNAL_NAMES]=
 
 //const ADC_CCMF_T  QADC_CMD_FLVI = 
 {
-   0,    //EOQ      
+   1,    //EOQ      
    0,    //PAUSE 
    0,    // REP     
    0,    //EB   
@@ -263,7 +263,7 @@ const ADC_CCMF_T  QADC_CMD_Timebase[AD_ANALOG_MAX_SIGNAL_NAMES]=
 
 //const ADC_CCMF_T  QADC_CMD_EOPVI  = 
 {
-   0,    //EOQ      
+   1,    //EOQ      
    0,    //PAUSE 
    0,    // REP     
    0,    //EB   
@@ -294,7 +294,7 @@ const ADC_CCMF_T  QADC_CMD_Timebase[AD_ANALOG_MAX_SIGNAL_NAMES]=
 },
 //const ADC_CCMF_T  QADC_CMD_O2BVI   = 
 {
-   0,    //EOQ      
+   1,    //EOQ      
    0,    //PAUSE 
    0,    // REP     
    0,    //EB   
@@ -310,7 +310,7 @@ const ADC_CCMF_T  QADC_CMD_Timebase[AD_ANALOG_MAX_SIGNAL_NAMES]=
 
 //const ADC_CCMF_T  QADC_CMD_CRUCTLVI   = 
 {
-   0,    //EOQ      
+   1,    //EOQ      
    0,    //PAUSE 
    0,    // REP     
    0,    //EB   
@@ -326,7 +326,7 @@ const ADC_CCMF_T  QADC_CMD_Timebase[AD_ANALOG_MAX_SIGNAL_NAMES]=
 
 //const ADC_CCMF_T  QADC_CMD_CLTVI  = 
 {
-   0,    //EOQ      
+   1,    //EOQ      
    0,    //PAUSE 
    0,    // REP     
    0,    //EB   
@@ -358,7 +358,7 @@ const ADC_CCMF_T  QADC_CMD_Timebase[AD_ANALOG_MAX_SIGNAL_NAMES]=
 
 //const ADC_CCMF_T  QADC_CMD_BSTTVI  = 
 {
-   0,    //EOQ      
+   1,    //EOQ      
    0,    //PAUSE 
    0,    // REP     
    0,    //EB   
@@ -374,7 +374,7 @@ const ADC_CCMF_T  QADC_CMD_Timebase[AD_ANALOG_MAX_SIGNAL_NAMES]=
 
 //const ADC_CCMF_T  QADC_CMD_FETVI  = 
 {
-   0,    //EOQ      
+   1,    //EOQ      
    0,    //PAUSE 
    0,    // REP     
    0,    //EB   
@@ -390,7 +390,7 @@ const ADC_CCMF_T  QADC_CMD_Timebase[AD_ANALOG_MAX_SIGNAL_NAMES]=
 
 //const ADC_CCMF_T  QADC_CMD_BRKPVI  = 
 {
-   0,    //EOQ      
+   1,    //EOQ      
    0,    //PAUSE 
    0,    // REP     
    0,    //EB   
@@ -421,7 +421,7 @@ const ADC_CCMF_T  QADC_CMD_Timebase[AD_ANALOG_MAX_SIGNAL_NAMES]=
 },
 //const ADC_CCMF_T  QADC_CMD_BSTPVI = 
 {
-   0,    //EOQ      
+   1,    //EOQ      
    0,    //PAUSE 
    0,    // REP     
    0,    //EB   
@@ -437,7 +437,7 @@ const ADC_CCMF_T  QADC_CMD_Timebase[AD_ANALOG_MAX_SIGNAL_NAMES]=
 
 //const ADC_CCMF_T  QADC_CMD_SPA1VI = 
 {
-   0,    //EOQ      
+   1,    //EOQ      
    0,    //PAUSE 
    0,    // REP     
    0,    //EB   
@@ -453,7 +453,7 @@ const ADC_CCMF_T  QADC_CMD_Timebase[AD_ANALOG_MAX_SIGNAL_NAMES]=
 
 //const ADC_CCMF_T  QADC_CMD_SPA2VI = 
 {
-   0,    //EOQ      
+   1,    //EOQ      
    0,    //PAUSE 
    0,    // REP     
    0,    //EB   
@@ -486,7 +486,7 @@ const ADC_CCMF_T  QADC_CMD_Timebase[AD_ANALOG_MAX_SIGNAL_NAMES]=
 
 //const ADC_CCMF_T  QADC_CMD_IGNVI = 
 {
-   0,    //EOQ      
+   1,    //EOQ      
    0,    //PAUSE 
    0,    // REP     
    0,    //EB   
@@ -502,7 +502,7 @@ const ADC_CCMF_T  QADC_CMD_Timebase[AD_ANALOG_MAX_SIGNAL_NAMES]=
 
 //const ADC_CCMF_T  QADC_CMD_ACCVI = 
 {
-   0,    //EOQ      
+   1,    //EOQ      
    0,    //PAUSE 
    0,    // REP     
    0,    //EB   
@@ -517,7 +517,7 @@ const ADC_CCMF_T  QADC_CMD_Timebase[AD_ANALOG_MAX_SIGNAL_NAMES]=
 },
 //const ADC_CCMF_T  QADC_CMD_PBATTVI = 
 {
-   0,    //EOQ      
+   1,    //EOQ      
    0,    //PAUSE 
    0,    // REP     
    0,    //EB   
@@ -549,7 +549,7 @@ const ADC_CCMF_T  QADC_CMD_Timebase[AD_ANALOG_MAX_SIGNAL_NAMES]=
 
 //const ADC_CCMF_T  QADC_CMD_PumpVI = 
 {
-   0,    //EOQ      
+   1,    //EOQ      
    0,    //PAUSE 
    0,    // REP     
    0,    //EB   
@@ -565,7 +565,7 @@ const ADC_CCMF_T  QADC_CMD_Timebase[AD_ANALOG_MAX_SIGNAL_NAMES]=
 
 //const ADC_CCMF_T  QADC_CMD_DFSWDI = 
 {
-   0,    //EOQ      
+   1,    //EOQ      
    0,    //PAUSE 
    0,    // REP     
    0,    //EB   
@@ -581,7 +581,7 @@ const ADC_CCMF_T  QADC_CMD_Timebase[AD_ANALOG_MAX_SIGNAL_NAMES]=
 
 //const ADC_CCMF_T  QADC_CMD_HWCFGVI = 
 {
-   0,    //EOQ      
+   1,    //EOQ      
    0,    //PAUSE 
    0,    // REP     
    0,    //EB   

@@ -104,11 +104,14 @@ void InitializeHardwareRegisters(void)
 	CPU_Info =  SIU_Get_CPU_Information();
 	Flash_Info = Get_FLASH_Driver_Mode();
 
-	if (CPU_LCI == CPU_Info) {
-		MPC5644_FLASH_Initialize_Normal();
-		XBAR_MPC5644A_Initialize_Device();
-		// flash_init_sucess = C90FL_Initialize();
-	} else {
+   if(CPU_LCI == CPU_Info)
+   {
+      MPC5644_FLASH_Initialize_Normal();
+       XBAR_MPC5644A_Initialize_Device();
+	//flash_init_sucess = C90FL_Initialize();
+   }
+   else
+   {
 		MPC5634_FLASH_Initialize_Normal();
 		XBAR_MPC5634M_Initialize_Device();
 		// flash_init_sucess =	  C90LC_Initialize();
