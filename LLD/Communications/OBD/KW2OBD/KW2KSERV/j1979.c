@@ -46,14 +46,14 @@
 /*********************************************************************/
 /*** Initialize Kw2000 application level service handler.          ***/
 /*********************************************************************/
-
+#include "lux_type.h"
 #include "j1979.h"
 #include "kw2api.h"    /*  GetServiceDataLength() */
 #include "kw2dll.h"    /* nrcSubFunctionNotSupported_InvalidFormat */
-#include "t_custom.h"  
-#include "dd_nvram.h" 
+// #include "t_custom.h"  
+// #include "dd_nvram.h" 
 #include "HLS.h"
-#include "id_cald.h"
+// #include "id_cald.h"
 /*********************************************************************/
 /*            TYPE DEFS                                              */
 /*********************************************************************/
@@ -110,328 +110,190 @@ BYTE    Vy1979_InfoType ;
 
 void J1979Mode1Handler (void)
 {
-   BYTE LyFound;
-   BYTE Ly1979_MsgIdx ;
-   BYTE Li1979_DataIdx ;
-   Li1979_DataIdx = CyInfoType;
-   LyFound  = 0;
+	BYTE LyFound;
+	BYTE Ly1979_MsgIdx ;
+	BYTE Li1979_DataIdx ;
+	Li1979_DataIdx = CyInfoType;
+	LyFound  = 0;
 
 
-   if ( GetServiceDataLength() == J1979_MODE_01_MSG_LENGTH )
-   {
-     Vy1979_InfoType =  GetServiceData(CyInfoType);
-     WrtServiceData( Vy1979_InfoType , Li1979_DataIdx++ );
-	 
-     if ( Vy1979_InfoType < Cy1979_Mode_01_MaxInfoType )
-     {    
- 
-        LyFound = CbTRUE ;
+	if ( GetServiceDataLength() == J1979_MODE_01_MSG_LENGTH ) {
+		Vy1979_InfoType =  GetServiceData(CyInfoType);
+		WrtServiceData( Vy1979_InfoType , Li1979_DataIdx++ );
 
-        switch(Vy1979_InfoType)
-        {
-           case Cy1979_PID00:  /*PID 00*/
+		if ( Vy1979_InfoType < Cy1979_Mode_01_MaxInfoType ) {
+			LyFound = CbTRUE ;
+			switch(Vy1979_InfoType) {
+			case Cy1979_PID00:  /*PID 00*/
+				// WrtServiceData( Cy1979_PID00 , Li1979_DataIdx++ ) ;
+				/*support PID(01~08) 01, 02,03, 04,05, 06, 07*/
+				WrtServiceData( 0xFE , Li1979_DataIdx++ ) ;
+				/*support PID(09~10) 0B, 0C,0D, 0E,0F*/
+				WrtServiceData( 0x3E , Li1979_DataIdx++ ) ;
+				/*support PID(11~18) 11, 13,14, 15*/
+				WrtServiceData( 0xB8, Li1979_DataIdx++ ) ;
+				/*support PID(19~20) 1C, 1F,20*/
+				WrtServiceData( 0x13 , Li1979_DataIdx++ ) ;
+				break;
 
-               // WrtServiceData( Cy1979_PID00 , Li1979_DataIdx++ ) ;
-               /*support PID(01~08) 01, 02,03, 04,05, 06, 07*/
-                WrtServiceData( 0xFE , Li1979_DataIdx++ ) ;
-               /*support PID(09~10) 0B, 0C,0D, 0E,0F*/
-                WrtServiceData( 0x3E , Li1979_DataIdx++ ) ;
-             /*support PID(11~18) 11, 13,14, 15*/
-                WrtServiceData( 0xB8, Li1979_DataIdx++ ) ;
-             /*support PID(19~20) 1C, 1F,20*/
-                WrtServiceData( 0x13 , Li1979_DataIdx++ ) ;
-                break;
+			case Cy1979_PID01: /*PID 01*/
+				WrtServiceData( telem_data.tele_Monitor_status[0] ,Li1979_DataIdx++);
+				WrtServiceData( telem_data.tele_Monitor_status[1] ,Li1979_DataIdx++);
+				WrtServiceData( telem_data.tele_Monitor_status[2] ,Li1979_DataIdx++);
+				WrtServiceData( telem_data.tele_Monitor_status[3] ,Li1979_DataIdx++);
+				break;
 
-	    case Cy1979_PID01: /*PID 01*/
-		    // WrtServiceData( Cy1979_PID01 , Li1979_DataIdx++ ) ;
-	  	     WrtServiceData( telem_data.tele_Monitor_status[0] ,Li1979_DataIdx++);
-		     WrtServiceData( telem_data.tele_Monitor_status[1] ,Li1979_DataIdx++);
-		     WrtServiceData( telem_data.tele_Monitor_status[2] ,Li1979_DataIdx++);
-		     WrtServiceData( telem_data.tele_Monitor_status[3] ,Li1979_DataIdx++);
-				 
-                     break;
-	
-           case Cy1979_PID02: /*PID 02*/
-                  // WrtServiceData( Cy1979_PID02 , Li1979_DataIdx++ ) ;
-                   WrtKw2000ServiceData( Hi8Of16( telem_data.tele_Cause_Frame_Pcode ), Li1979_DataIdx++);
-                   WrtKw2000ServiceData( Lo8Of16( telem_data.tele_Cause_Frame_Pcode ), Li1979_DataIdx++);
-                   //WrtServiceData( 0x00,Li1979_DataIdx++);
-		    // WrtServiceData( 0x00,Li1979_DataIdx++);
-             
-			 
-                     break;
-					 
-	   case Cy1979_PID03: /*PID 03*/
-	   	  //   WrtServiceData( Cy1979_PID03 , Li1979_DataIdx++ ) ;
-                   WrtServiceData( telem_data.tele_B_FuelStatus,Li1979_DataIdx++);
-		    // WrtServiceData( 0x00,Li1979_DataIdx++); 
-		    // WrtServiceData( 0x00,Li1979_DataIdx++);
-		    // WrtServiceData( 0x00,Li1979_DataIdx++);
-			 
-                     break;
-					 
-	   case Cy1979_PID04: /*PID 04*/
-	   	  //  WrtServiceData( Cy1979_PID04 , Li1979_DataIdx++ ) ;
-	           WrtServiceData( telem_data.tele_CsMaf,Li1979_DataIdx++);
-		   // WrtServiceData( 0x00,Li1979_DataIdx++); 
-		   //  WrtServiceData( 0x00,Li1979_DataIdx++);
-		  //   WrtServiceData( 0x00,Li1979_DataIdx++);
-				 
-                     break;
+			case Cy1979_PID02: /*PID 02*/
+				WrtKw2000ServiceData( Hi8Of16( telem_data.tele_Cause_Frame_Pcode ), Li1979_DataIdx++);
+				WrtKw2000ServiceData( Lo8Of16( telem_data.tele_Cause_Frame_Pcode ), Li1979_DataIdx++);
+				break;
 
-          case Cy1979_PID05: /*PID 05*/
-		   //  WrtServiceData( Cy1979_PID05 , Li1979_DataIdx++ ) ;
-		     WrtServiceData( telem_data.tele_TmLin,Li1979_DataIdx++);
-		    // WrtServiceData( 0x00,Li1979_DataIdx++);
-		    // WrtServiceData( 0x00,Li1979_DataIdx++);
-		   //  WrtServiceData( 0x00,Li1979_DataIdx++);
-				 
-                     break;
+			case Cy1979_PID03: /*PID 03*/
+				WrtServiceData( telem_data.tele_B_FuelStatus,Li1979_DataIdx++);
+				break;
 
-	   case Cy1979_PID06: /*PID 06*/
-	   	  //   WrtServiceData( Cy1979_PID06 , Li1979_DataIdx++ ) ;
-	   	     WrtServiceData( telem_data.tele_fLc,Li1979_DataIdx++);
-		   //  WrtServiceData( 0x00,Li1979_DataIdx++);
-		  //   WrtServiceData( 0x00,Li1979_DataIdx++);
-		  //   WrtServiceData( 0x00,Li1979_DataIdx++);
-			 
-                     break;
+			case Cy1979_PID04: /*PID 04*/
+				WrtServiceData( telem_data.tele_CsMaf,Li1979_DataIdx++);
+				break;
 
-          case Cy1979_PID07: /*PID 07*/
-		   //  WrtServiceData( Cy1979_PID07 , Li1979_DataIdx++ ) ;
-		     WrtServiceData( telem_data.tele_fLcAd,Li1979_DataIdx++);
-		   //  WrtServiceData( 0x00,Li1979_DataIdx++);
-		   //  WrtServiceData( 0x00,Li1979_DataIdx++);
-		   //  WrtServiceData( 0x00,Li1979_DataIdx++);
-				 
-                     break;
+			case Cy1979_PID05: /*PID 05*/
+				WrtServiceData( telem_data.tele_TmLin,Li1979_DataIdx++);
+				break;
 
-           case Cy1979_PID0B:
-		    //  WrtServiceData( Cy1979_PID0B , Li1979_DataIdx++ ) ;
-		     WrtServiceData( telem_data.tele_Pmap,Li1979_DataIdx++);
-		   //  WrtServiceData( 0x00,Li1979_DataIdx++);
-		   //  WrtServiceData( 0x00,Li1979_DataIdx++);
-		   //  WrtServiceData( 0x00,Li1979_DataIdx++);
-			 
-                     break;
+			case Cy1979_PID06: /*PID 06*/
+				WrtServiceData( telem_data.tele_fLc,Li1979_DataIdx++);
+				break;
 
-	    case Cy1979_PID0C:     
-		 //    WrtServiceData( Cy1979_PID0C , Li1979_DataIdx++ ) ;
-	            WrtServiceData( Hi8Of16(telem_data.tele_N),Li1979_DataIdx++);
-		      WrtServiceData( Lo8Of16(telem_data.tele_N),Li1979_DataIdx++);
-		   //   WrtServiceData( 0x00,Li1979_DataIdx++);
-		   //  WrtServiceData( 0x00,Li1979_DataIdx++);
-			 
-                     break;
-					 
-	    case Cy1979_PID0D:
-		  //   WrtServiceData( Cy1979_PID0D , Li1979_DataIdx++ ) ;
-                   WrtServiceData( telem_data.tele_Vsp,Li1979_DataIdx++);
-		   //   WrtServiceData( 0x00,Li1979_DataIdx++);
-		   //   WrtServiceData( 0x00,Li1979_DataIdx++);
-		  //    WrtServiceData( 0x00,Li1979_DataIdx++);
-			 
-                     break;
-					 
-	    case Cy1979_PID0E:
-		    //  WrtServiceData( Cy1979_PID0E , Li1979_DataIdx++ ) ;
-                    WrtServiceData( telem_data.tele_IgaOut,Li1979_DataIdx++);
-		   //   WrtServiceData( 0x00,Li1979_DataIdx++);
-		    //  WrtServiceData( 0x00,Li1979_DataIdx++);
-		    //  WrtServiceData( 0x00,Li1979_DataIdx++);
-			 
-                     break;
-					 
-	   case Cy1979_PID0F:
-	   	   //   WrtServiceData( Cy1979_PID0F , Li1979_DataIdx++ ) ;
-                    WrtServiceData( telem_data.tele_TaLin,Li1979_DataIdx++);
-		   //   WrtServiceData( 0x00,Li1979_DataIdx++);
-		     // WrtServiceData( 0x00,Li1979_DataIdx++);
-		    //  WrtServiceData( 0x00,Li1979_DataIdx++);
-			 
-                     break;
+			case Cy1979_PID07: /*PID 07*/
+				WrtServiceData( telem_data.tele_fLcAd,Li1979_DataIdx++);
+				break;
 
-         case Cy1979_PID11:
-		    //  WrtServiceData( Cy1979_PID11 , Li1979_DataIdx++ ) ;
-                    WrtServiceData( telem_data.tele_TpPos,Li1979_DataIdx++);
-		  //    WrtServiceData( 0x00,Li1979_DataIdx++);
-		    //  WrtServiceData( 0x00,Li1979_DataIdx++);
-		    //  WrtServiceData( 0x00,Li1979_DataIdx++);
-			 
-                     break;
+			case Cy1979_PID0B:
+				WrtServiceData( telem_data.tele_Pmap,Li1979_DataIdx++);
+				break;
 
-         case Cy1979_PID13:
-		   //   WrtServiceData( Cy1979_PID13 , Li1979_DataIdx++ ) ;	
-                    WrtServiceData( telem_data.tele_O2SPos,Li1979_DataIdx++);
-		    //  WrtServiceData( 0x00,Li1979_DataIdx++);
-		     // WrtServiceData( 0x00,Li1979_DataIdx++);
-		     // WrtServiceData( 0x00,Li1979_DataIdx++);
-			 
-                     break;
+			case Cy1979_PID0C:     
+				WrtServiceData( Hi8Of16(telem_data.tele_N),Li1979_DataIdx++);
+				WrtServiceData( Lo8Of16(telem_data.tele_N),Li1979_DataIdx++);
+				break;
 
-	 case Cy1979_PID14:
-	 	 //     WrtServiceData( Cy1979_PID14 , Li1979_DataIdx++ ) ;
-                    WrtServiceData( telem_data.tele_uLsb,Li1979_DataIdx++);
-		      WrtServiceData( telem_data.tele_uLsbfLc,Li1979_DataIdx++);
-		     // WrtServiceData( 0x00,Li1979_DataIdx++);
-		      //WrtServiceData( 0x00,Li1979_DataIdx++);
-			 
-                     break;
+			case Cy1979_PID0D:
+				WrtServiceData( telem_data.tele_Vsp,Li1979_DataIdx++);
+				break;
 
-	case Cy1979_PID15:
-		 //     WrtServiceData( Cy1979_PID15 , Li1979_DataIdx++ ) ;
-                    WrtServiceData( telem_data.tele_uLsa,Li1979_DataIdx++);
-		      WrtServiceData( telem_data.tele_uLsafLc,Li1979_DataIdx++);
-		     // WrtServiceData( 0x00,Li1979_DataIdx++);
-		    //  WrtServiceData( 0x00,Li1979_DataIdx++);
-		 
-                     break;
-					 
-	case Cy1979_PID1C:
-		 //     WrtServiceData( Cy1979_PID1C , Li1979_DataIdx++ ) ;
-                    WrtServiceData( telem_data.tele_obd_Type,Li1979_DataIdx++);
-		     // WrtServiceData( 0x00,Li1979_DataIdx++);
-		     // WrtServiceData( 0x00,Li1979_DataIdx++);
-		     // WrtServiceData( 0x00,Li1979_DataIdx++);
-			 
-                     break;
+			case Cy1979_PID0E:
+				WrtServiceData( telem_data.tele_IgaOut,Li1979_DataIdx++);
+				break;
 
-      case Cy1979_PID1F:
-	  	   //   WrtServiceData( Cy1979_PID1F , Li1979_DataIdx++ ) ;
-                    WrtServiceData( Hi8Of16(telem_data.tele_tStaEnd),Li1979_DataIdx++);
-		      WrtServiceData( Lo8Of16(telem_data.tele_tStaEnd),Li1979_DataIdx++);
-		    //  WrtServiceData( 0x00,Li1979_DataIdx++);
-		    //  WrtServiceData( 0x00,Li1979_DataIdx++);
-			 
-                     break;
+			case Cy1979_PID0F:
+				WrtServiceData( telem_data.tele_TaLin,Li1979_DataIdx++);
+				break;
 
-	case Cy1979_PID20:
-		 //    WrtServiceData( Cy1979_PID20 , Li1979_DataIdx++ ) ;
-		      /*support PID(21~28) 21*/
-                    WrtServiceData( 0x80,Li1979_DataIdx++);
-			/*support PID(29~30) 2E, 2F*/
-		      WrtServiceData( 0x07,Li1979_DataIdx++);
-			/*support PID(31~38) 30,33*/
-		      WrtServiceData( 0x20,Li1979_DataIdx++);
-			 /*support PID(31~40) */
-		      WrtServiceData( 0x11,Li1979_DataIdx++);
-			 
-                     break;
+			case Cy1979_PID11:
+				WrtServiceData( telem_data.tele_TpPos,Li1979_DataIdx++);
+				break;
 
+			case Cy1979_PID13:
+				WrtServiceData( telem_data.tele_O2SPos,Li1979_DataIdx++);
+				break;
 
-     case Cy1979_PID21:
-	 	//      WrtServiceData( Cy1979_PID21 , Li1979_DataIdx++ ) ;
-                    WrtServiceData( Hi8Of16(telem_data.tele_KmQ6Mil),Li1979_DataIdx++);
-		      WrtServiceData( Lo8Of16(telem_data.tele_KmQ6Mil),Li1979_DataIdx++);
-		    //  WrtServiceData( 0x00,Li1979_DataIdx++);
-		   //   WrtServiceData( 0x00,Li1979_DataIdx++);
-				 
-                     break;
+			case Cy1979_PID14:
+				WrtServiceData( telem_data.tele_uLsb,Li1979_DataIdx++);
+				WrtServiceData( telem_data.tele_uLsbfLc,Li1979_DataIdx++);
+				break;
 
+			case Cy1979_PID15:
+				WrtServiceData( telem_data.tele_uLsa,Li1979_DataIdx++);
+				WrtServiceData( telem_data.tele_uLsafLc,Li1979_DataIdx++);
+				break;
 
-					 
-	case Cy1979_PID2E:
-		 //     WrtServiceData( Cy1979_PID2E , Li1979_DataIdx++ ) ;
-                    WrtServiceData( telem_data.tele_DuCyPgOut,Li1979_DataIdx++);
-		   //   WrtServiceData( 0x00,Li1979_DataIdx++);
-		    //  WrtServiceData( 0x00,Li1979_DataIdx++);
-		   //   WrtServiceData( 0x00,Li1979_DataIdx++);
-				 
-                     break;
+			case Cy1979_PID1C:
+				WrtServiceData( telem_data.tele_obd_Type,Li1979_DataIdx++);
+				break;
 
-      case Cy1979_PID2F:
-	  	//      WrtServiceData( Cy1979_PID2F , Li1979_DataIdx++ ) ;
-                    WrtServiceData( telem_data.tele_fuel,Li1979_DataIdx++);
-		   //   WrtServiceData( 0x00,Li1979_DataIdx++);
-		   //   WrtServiceData( 0x00,Li1979_DataIdx++);
-		    //  WrtServiceData( 0x00,Li1979_DataIdx++);
-				 
-                     break;
+			case Cy1979_PID1F:
+				WrtServiceData( Hi8Of16(telem_data.tele_tStaEnd),Li1979_DataIdx++);
+				WrtServiceData( Lo8Of16(telem_data.tele_tStaEnd),Li1979_DataIdx++);
+				break;
 
-      case Cy1979_PID30:
-	  	    //  WrtServiceData( Cy1979_PID30 , Li1979_DataIdx++ ) ;
-                    WrtServiceData( telem_data.tele_WmuCntVal,Li1979_DataIdx++);
-		    //  WrtServiceData( 0x00,Li1979_DataIdx++);
-		    //  WrtServiceData( 0x00,Li1979_DataIdx++);
-		   //   WrtServiceData( 0x00,Li1979_DataIdx++);
-			 
-                     break;
+			case Cy1979_PID20:
+				//    WrtServiceData( Cy1979_PID20 , Li1979_DataIdx++ ) ;
+				/*support PID(21~28) 21*/
+				WrtServiceData( 0x80,Li1979_DataIdx++);
+				/*support PID(29~30) 2E, 2F*/
+				WrtServiceData( 0x07,Li1979_DataIdx++);
+				/*support PID(31~38) 30,33*/
+				WrtServiceData( 0x20,Li1979_DataIdx++);
+				/*support PID(31~40) */
+				WrtServiceData( 0x11,Li1979_DataIdx++);
+				break;
 
-       case Cy1979_PID33:
-	   	   //   WrtServiceData( Cy1979_PID33 , Li1979_DataIdx++ ) ;
-                    WrtServiceData( telem_data.tele_Pam,Li1979_DataIdx++);
-		 //     WrtServiceData( 0x00,Li1979_DataIdx++);
-		  //    WrtServiceData( 0x00,Li1979_DataIdx++);
-		  //    WrtServiceData( 0x00,Li1979_DataIdx++);
-			 
-                     break;
+			case Cy1979_PID21:
+				WrtServiceData( Hi8Of16(telem_data.tele_KmQ6Mil),Li1979_DataIdx++);
+				WrtServiceData( Lo8Of16(telem_data.tele_KmQ6Mil),Li1979_DataIdx++);
+				break;
 
-	case Cy1979_PID3C:
-		  //    WrtServiceData( Cy1979_PID3C , Li1979_DataIdx++ ) ;
-                    WrtServiceData( Hi8Of16(telem_data.tele_TcatMain),Li1979_DataIdx++);
-		      WrtServiceData( Lo8Of16(telem_data.tele_TcatMain),Li1979_DataIdx++);
-		   //   WrtServiceData( 0x00,Li1979_DataIdx++);
-		   //   WrtServiceData( 0x00,Li1979_DataIdx++);
-			 
-                     break;
+			case Cy1979_PID2E:
+				WrtServiceData( telem_data.tele_DuCyPgOut,Li1979_DataIdx++);
+				break;
 
-	case Cy1979_PID40:
-		//      WrtServiceData( Cy1979_PID40 , Li1979_DataIdx++ ) ;
-		      /*support PID(41~48) 42, 46*/
-                    WrtServiceData( 0x44,Li1979_DataIdx++);
-			/*support PID(49~50) */
-		      WrtServiceData( 0x00,Li1979_DataIdx++);
-			/*support PID(51~58) 30,33*/
-		      WrtServiceData( 0x00,Li1979_DataIdx++);
-			 /*support PID(59~60) */
-		      WrtServiceData( 0x00,Li1979_DataIdx++);
-			 
-                     break;
-	case Cy1979_PID42:
-		//      WrtServiceData( Cy1979_PID42 , Li1979_DataIdx++ ) ;
-                    WrtServiceData(  Hi8Of16(telem_data.tele_Ub_b),Li1979_DataIdx++);
-		      WrtServiceData(  Lo8Of16(telem_data.tele_Ub_b),Li1979_DataIdx++);
-		   //   WrtServiceData( 0x00,Li1979_DataIdx++);
-		   //   WrtServiceData( 0x00,Li1979_DataIdx++);
-			 
-                     break;
+			case Cy1979_PID2F:
+				WrtServiceData( telem_data.tele_fuel,Li1979_DataIdx++);
+				break;
 
-	case Cy1979_PID46:
-		//      WrtServiceData( Cy1979_PID46 , Li1979_DataIdx++ ) ;
-                    WrtServiceData( telem_data.tele_Tam,Li1979_DataIdx++);
-		  //    WrtServiceData( 0x00,Li1979_DataIdx++);
-		  //    WrtServiceData( 0x00,Li1979_DataIdx++);
-		  //    WrtServiceData( 0x00,Li1979_DataIdx++);
-			 
-                     break;
-					 
-        default: 
-                  /* Send negative responce if PID not supported */
-                  LyFound = CbFALSE ;                 
-                  break;
-          }
-		
-        if ( LyFound != CbFALSE )
-	   {
-            SendStandardPositiveAnswer( Li1979_DataIdx );
-           }
-           else
-	   {
-             SendStandardNegativeAnswer(nrcSubFunctionNotSupported_InvalidFormat);
-           }
-      
-     }
-     else
-     {
-       /* Send negative responce if PID not supported */
-        SendStandardNegativeAnswer(nrcSubFunctionNotSupported_InvalidFormat);
-     }
-   } 
-  else
-  {
-    /* Send negative responce if PID not supported */
-    SendStandardNegativeAnswer(nrcSubFunctionNotSupported_InvalidFormat);
-  }
+			case Cy1979_PID30:
+				WrtServiceData( telem_data.tele_WmuCntVal,Li1979_DataIdx++);
+				break;
+
+			case Cy1979_PID33:
+				WrtServiceData( telem_data.tele_Pam,Li1979_DataIdx++);
+				break;
+
+			case Cy1979_PID3C:
+				WrtServiceData( Hi8Of16(telem_data.tele_TcatMain),Li1979_DataIdx++);
+				WrtServiceData( Lo8Of16(telem_data.tele_TcatMain),Li1979_DataIdx++);
+				break;
+
+			case Cy1979_PID40:
+				//      WrtServiceData( Cy1979_PID40 , Li1979_DataIdx++ ) ;
+				/*support PID(41~48) 42, 46*/
+				WrtServiceData( 0x44,Li1979_DataIdx++);
+				/*support PID(49~50) */
+				WrtServiceData( 0x00,Li1979_DataIdx++);
+				/*support PID(51~58) 30,33*/
+				WrtServiceData( 0x00,Li1979_DataIdx++);
+				/*support PID(59~60) */
+				WrtServiceData( 0x00,Li1979_DataIdx++);
+				break;
+
+			case Cy1979_PID42:
+				WrtServiceData(  Hi8Of16(telem_data.tele_Ub_b),Li1979_DataIdx++);
+				WrtServiceData(  Lo8Of16(telem_data.tele_Ub_b),Li1979_DataIdx++);
+				break;
+
+			case Cy1979_PID46:
+				WrtServiceData( telem_data.tele_Tam,Li1979_DataIdx++);
+				break;
+
+			default: 
+				/* Send negative responce if PID not supported */
+				LyFound = CbFALSE ;                 
+				break;
+			}
+
+			if ( LyFound != CbFALSE ) {
+				SendStandardPositiveAnswer( Li1979_DataIdx );
+			} else {
+				SendStandardNegativeAnswer(nrcSubFunctionNotSupported_InvalidFormat);
+			}
+		} else {
+			/* Send negative responce if PID not supported */
+			SendStandardNegativeAnswer(nrcSubFunctionNotSupported_InvalidFormat);
+		}
+	} else {
+		/* Send negative responce if PID not supported */
+		SendStandardNegativeAnswer(nrcSubFunctionNotSupported_InvalidFormat);
+	}
 }
 
 
@@ -457,270 +319,171 @@ void J1979Mode1Handler (void)
 
 void J1979Mode2Handler (void)
 {
-   BYTE LyFound;
-   BYTE Ly1979_MsgIdx ;
-   BYTE Li1979_DataIdx ;
-   Li1979_DataIdx = CyInfoType;
-   LyFound  = 0;
+	BYTE LyFound;
+	BYTE Ly1979_MsgIdx ;
+	BYTE Li1979_DataIdx ;
+	Li1979_DataIdx = CyInfoType;
+	LyFound  = 0;
 
-   if ( GetServiceDataLength() == J1979_MODE_02_MSG_LENGTH )
-   {
-     Vy1979_InfoType =  GetServiceData(CyInfoType);
+	if ( GetServiceDataLength() == J1979_MODE_02_MSG_LENGTH ) {
+		Vy1979_InfoType =  GetServiceData(CyInfoType);
 
-     if( ( Vy1979_InfoType < Cy1979_Mode_01_MaxInfoType )&&
-	    (GetKw2000ServiceData ( Cy1979_FramePosition ) == 
-      Cy1979FrameReqZero )	)
-     {
-        Li1979_DataIdx = 1;
-        WrtServiceData( Vy1979_InfoType , Li1979_DataIdx++ );
-	
-        LyFound = CbTRUE ;
+		if( ( Vy1979_InfoType < Cy1979_Mode_01_MaxInfoType )&&
+			(GetKw2000ServiceData ( Cy1979_FramePosition ) == Cy1979FrameReqZero ))
+		{
+			Li1979_DataIdx = 1;
+			WrtServiceData( Vy1979_InfoType , Li1979_DataIdx++ );
 
-        switch(Vy1979_InfoType)
-        {
+			LyFound = CbTRUE ;
 
-            case Cy1979_PID00:  /*PID 00*/
+			switch (Vy1979_InfoType) {
 
-               // WrtServiceData( Cy1979_PID00 , Li1979_DataIdx++ ) ;
-		 /*Freezeframe number*/	
-                WrtServiceData( Cy1979FrameReqZero , Li1979_DataIdx++ ) ;
-               /*support PID(01~08) 01, 02,03, 04,05, 06, 07*/
-                WrtServiceData( 0x7E , Li1979_DataIdx++ ) ;
-               /*support PID(09~10) 0B, 0C,0D, 0E,0F*/
-                WrtServiceData( 0x3E , Li1979_DataIdx++ ) ;
-             /*support PID(11~18) 11, 13,14, 15*/
-                WrtServiceData( 0x80, Li1979_DataIdx++ ) ;
-             /*support PID(19~20) 1C, 1F,20*/
-                WrtServiceData( 0x01 , Li1979_DataIdx++ ) ;
-			           break;
-			 
-           case Cy1979_PID02:
-		  // WrtServiceData( Cy1979_PID02 , Li1979_DataIdx++ ) ;
-		   /*Freezeframe number*/	
-                WrtServiceData( Cy1979FrameReqZero , Li1979_DataIdx++ ) ;
-		   
-                WrtServiceData(  Hi8Of16(DIAG_STATUS_FREEZE_FRAME.Ffm_Frame_Pcode), Li1979_DataIdx++ ) ;
-             
-                WrtServiceData(  Lo8Of16(DIAG_STATUS_FREEZE_FRAME.Ffm_Frame_Pcode) , Li1979_DataIdx++ ) ;
-             
+			case Cy1979_PID00:  /*PID 00*/
+				/*Freezeframe number*/
+				WrtServiceData( Cy1979FrameReqZero , Li1979_DataIdx++ ) ;
+				/*support PID(01~08) 01, 02,03, 04,05, 06, 07*/
+				WrtServiceData( 0x7E , Li1979_DataIdx++ ) ;
+				/*support PID(09~10) 0B, 0C,0D, 0E,0F*/
+				WrtServiceData( 0x3E , Li1979_DataIdx++ ) ;
+				/*support PID(11~18) 11, 13,14, 15*/
+				WrtServiceData( 0x80, Li1979_DataIdx++ ) ;
+				/*support PID(19~20) 1C, 1F,20*/
+				WrtServiceData( 0x01 , Li1979_DataIdx++ ) ;
+				break;
 
-                break;
+			case Cy1979_PID02:
+				/*Freezeframe number*/
+				WrtServiceData( Cy1979FrameReqZero , Li1979_DataIdx++ ) ;
+				WrtServiceData( Hi8Of16(DIAG_STATUS_FREEZE_FRAME.Ffm_Frame_Pcode), Li1979_DataIdx++ ) ;
+				WrtServiceData( Lo8Of16(DIAG_STATUS_FREEZE_FRAME.Ffm_Frame_Pcode) , Li1979_DataIdx++ ) ;
+				break;
 
-           case Cy1979_PID03:
-		   	
-		 // WrtServiceData( Cy1979_PID03 , Li1979_DataIdx++ ) ;
-		   /*Freezeframe number*/	
-                WrtServiceData( Cy1979FrameReqZero , Li1979_DataIdx++ ) ;
-				
-                WrtServiceData( DIAG_STATUS_FREEZE_FRAME.Ffm_B_FuelStatus, Li1979_DataIdx++ ) ;
-             
-              //  WrtServiceData( 0x00 , Li1979_DataIdx++ ) ;
-				 
-                     break;
+			case Cy1979_PID03:
+				/*Freezeframe number*/
+				WrtServiceData( Cy1979FrameReqZero , Li1979_DataIdx++ ) ;
+				WrtServiceData( DIAG_STATUS_FREEZE_FRAME.Ffm_B_FuelStatus, Li1979_DataIdx++ ) ;
+				//  WrtServiceData( 0x00 , Li1979_DataIdx++ ) ;
+				break;
 
-	     case Cy1979_PID04:
-		   	
-		//  WrtServiceData( Cy1979_PID04 , Li1979_DataIdx++ ) ;
-		   /*Freezeframe number*/	
-                WrtServiceData( Cy1979FrameReqZero , Li1979_DataIdx++ ) ;
-				
-                WrtServiceData( DIAG_STATUS_FREEZE_FRAME.Ffm_CsMaf, Li1979_DataIdx++ ) ;
-             
-               // WrtServiceData( 0x00 , Li1979_DataIdx++ ) ;
-				 
-                     break;
+			case Cy1979_PID04:
+				/*Freezeframe number*/
+				WrtServiceData( Cy1979FrameReqZero , Li1979_DataIdx++ ) ;
+				WrtServiceData( DIAG_STATUS_FREEZE_FRAME.Ffm_CsMaf, Li1979_DataIdx++ ) ;
+				break;
 
-		case Cy1979_PID05:
-		   	
-		//  WrtServiceData( Cy1979_PID05 , Li1979_DataIdx++ ) ;
-		   /*Freezeframe number*/	
-                WrtServiceData( Cy1979FrameReqZero , Li1979_DataIdx++ ) ;
-				
-                WrtServiceData( DIAG_STATUS_FREEZE_FRAME.Ffm_TmLin, Li1979_DataIdx++ ) ;
-             
-                //WrtServiceData( 0x00 , Li1979_DataIdx++ ) ;
-			 
-                     break;
-					 
-		  case Cy1979_PID06:
-		   	
-		  //WrtServiceData( Cy1979_PID06 , Li1979_DataIdx++ ) ;
-		   /*Freezeframe number*/	
-                WrtServiceData( Cy1979FrameReqZero , Li1979_DataIdx++ ) ;
-				
-                WrtServiceData( DIAG_STATUS_FREEZE_FRAME.Ffm_fLc, Li1979_DataIdx++ ) ;
-             
-                //WrtServiceData( 0x00 , Li1979_DataIdx++ ) ;
-		 
-                     break;	
+			case Cy1979_PID05:
+				/*Freezeframe number*/
+				WrtServiceData( Cy1979FrameReqZero , Li1979_DataIdx++ ) ;
+				WrtServiceData( DIAG_STATUS_FREEZE_FRAME.Ffm_TmLin, Li1979_DataIdx++ ) ;
+				break;
 
-	     	  case Cy1979_PID07:
-		   	
-		 // WrtServiceData( Cy1979_PID07 , Li1979_DataIdx++ ) ;
-		   /*Freezeframe number*/	
-                WrtServiceData( Cy1979FrameReqZero , Li1979_DataIdx++ ) ;
-				
-                WrtServiceData( DIAG_STATUS_FREEZE_FRAME.Ffm_fLcAd, Li1979_DataIdx++ ) ;
-             
-                //WrtServiceData( 0x00 , Li1979_DataIdx++ ) ;
-			 
-                     break;
+			case Cy1979_PID06:
+				/*Freezeframe number*/
+				WrtServiceData( Cy1979FrameReqZero , Li1979_DataIdx++ ) ;
+				WrtServiceData( DIAG_STATUS_FREEZE_FRAME.Ffm_fLc, Li1979_DataIdx++ ) ;
+				break;
 
-		case Cy1979_PID0B:
-		   	
-		//  WrtServiceData( Cy1979_PID0B , Li1979_DataIdx++ ) ;
-		   /*Freezeframe number*/	
-                WrtServiceData( Cy1979FrameReqZero , Li1979_DataIdx++ ) ;
-				
-                WrtServiceData( DIAG_STATUS_FREEZE_FRAME.Ffm_Pmap, Li1979_DataIdx++ ) ;
-             
-                //WrtServiceData( 0x00 , Li1979_DataIdx++ ) ;
-                     break;
+			case Cy1979_PID07:
+				/*Freezeframe number*/
+				WrtServiceData( Cy1979FrameReqZero , Li1979_DataIdx++ ) ;
+				WrtServiceData( DIAG_STATUS_FREEZE_FRAME.Ffm_fLcAd, Li1979_DataIdx++ ) ;
+				break;
 
- 		case Cy1979_PID0C:
-		   	
-		//  WrtServiceData( Cy1979_PID0C , Li1979_DataIdx++ ) ;
-		   /*Freezeframe number*/	
-                WrtServiceData( Cy1979FrameReqZero , Li1979_DataIdx++ ) ;
-				
-                WrtServiceData(  Hi8Of16(DIAG_STATUS_FREEZE_FRAME.Ffm_N), Li1979_DataIdx++ ) ;
-             
-                WrtServiceData(  Lo8Of16(DIAG_STATUS_FREEZE_FRAME.Ffm_N) , Li1979_DataIdx++ ) ;
-			 
-                     break;
-	  
-		case Cy1979_PID0D:
-		   	
-		//  WrtServiceData( Cy1979_PID0D , Li1979_DataIdx++ ) ;
-		   /*Freezeframe number*/	
-                WrtServiceData( Cy1979FrameReqZero , Li1979_DataIdx++ ) ;
-				
-                WrtServiceData( DIAG_STATUS_FREEZE_FRAME.Ffm_Vsp, Li1979_DataIdx++ ) ;
-             
-                //WrtServiceData( 0x00 , Li1979_DataIdx++ ) ;
-		 
-                     break;
+			case Cy1979_PID0B:
+				/*Freezeframe number*/
+				WrtServiceData( Cy1979FrameReqZero , Li1979_DataIdx++ ) ;
+				WrtServiceData( DIAG_STATUS_FREEZE_FRAME.Ffm_Pmap, Li1979_DataIdx++ ) ;
+				break;
 
-		case Cy1979_PID0E:
-		   	
-		//  WrtServiceData( Cy1979_PID0F , Li1979_DataIdx++ ) ;
-		   /*Freezeframe number*/	
-                WrtServiceData( Cy1979FrameReqZero , Li1979_DataIdx++ ) ;
-				
-                WrtServiceData( DIAG_STATUS_FREEZE_FRAME.Ffm_IgaOut, Li1979_DataIdx++ ) ;
-             
-               // WrtServiceData( 0x00 , Li1979_DataIdx++ ) ;
-				
-			 
-                     break;
-					 
-		case Cy1979_PID0F:
-		   	
-		//  WrtServiceData( Cy1979_PID0F , Li1979_DataIdx++ ) ;
-		   /*Freezeframe number*/	
-                WrtServiceData( Cy1979FrameReqZero , Li1979_DataIdx++ ) ;
-				
-                WrtServiceData( DIAG_STATUS_FREEZE_FRAME.Ffm_TaLin, Li1979_DataIdx++ ) ;
-             
-               // WrtServiceData( 0x00 , Li1979_DataIdx++ ) ;
-				
-			 
-                     break;
-					 
-		case Cy1979_PID11:
-		   	
-		//  WrtServiceData( Cy1979_PID11 , Li1979_DataIdx++ ) ;
-		   /*Freezeframe number*/	
-                WrtServiceData( Cy1979FrameReqZero , Li1979_DataIdx++ ) ;
-				
-                WrtServiceData( DIAG_STATUS_FREEZE_FRAME.Ffm_TpPos, Li1979_DataIdx++ ) ;
-             
-               // WrtServiceData( 0x00 , Li1979_DataIdx++ ) ;
-				
-			 
-                     break;
+			case Cy1979_PID0C:
+				/*Freezeframe number*/
+				WrtServiceData( Cy1979FrameReqZero , Li1979_DataIdx++ ) ;
+				WrtServiceData(  Hi8Of16(DIAG_STATUS_FREEZE_FRAME.Ffm_N), Li1979_DataIdx++ ) ;
+				WrtServiceData(  Lo8Of16(DIAG_STATUS_FREEZE_FRAME.Ffm_N) , Li1979_DataIdx++ ) ;
+				break;
 
-            case Cy1979_PID20:  
+			case Cy1979_PID0D:
+				/*Freezeframe number*/
+				WrtServiceData( Cy1979FrameReqZero , Li1979_DataIdx++ ) ;
+				WrtServiceData( DIAG_STATUS_FREEZE_FRAME.Ffm_Vsp, Li1979_DataIdx++ ) ;
+				break;
 
-               // WrtServiceData( Cy1979_PID20 , Li1979_DataIdx++ ) ;
-		 /*Freezeframe number*/	
-                WrtServiceData( Cy1979FrameReqZero , Li1979_DataIdx++ ) ;
-               /*support PID(21~28) 21*/
-                WrtServiceData( 0x80 , Li1979_DataIdx++ ) ;
-               /*support PID(29~30) */
-                WrtServiceData( 0x00 , Li1979_DataIdx++ ) ;
-             /*support PID(31~38) */
-                WrtServiceData( 0x00, Li1979_DataIdx++ ) ;
-             /*support PID(39~40) 40*/
-                WrtServiceData( 0x01 , Li1979_DataIdx++ ) ;
-			  break;	
-			  
-		case Cy1979_PID21:
-		   	
-		//  WrtServiceData( Cy1979_PID21 , Li1979_DataIdx++ ) ;
-		   /*Freezeframe number*/	
-                WrtServiceData( Cy1979FrameReqZero , Li1979_DataIdx++ ) ;
-				
-                WrtServiceData(  Hi8Of16(DIAG_STATUS_FREEZE_FRAME.Ffm_KmQ6Mil), Li1979_DataIdx++ ) ;
-             
-                WrtServiceData(  Lo8Of16(DIAG_STATUS_FREEZE_FRAME.Ffm_KmQ6Mil) , Li1979_DataIdx++ ) ;
+			case Cy1979_PID0E:
+				/*Freezeframe number*/
+				WrtServiceData( Cy1979FrameReqZero , Li1979_DataIdx++ ) ;
+				WrtServiceData( DIAG_STATUS_FREEZE_FRAME.Ffm_IgaOut, Li1979_DataIdx++ ) ;
+				break;
 
-                     break;	
-					 
-            case Cy1979_PID40: 
+			case Cy1979_PID0F:
+				/*Freezeframe number*/
+				WrtServiceData( Cy1979FrameReqZero , Li1979_DataIdx++ ) ;
+				WrtServiceData( DIAG_STATUS_FREEZE_FRAME.Ffm_TaLin, Li1979_DataIdx++ ) ;
+				break;
 
-              //  WrtServiceData( Cy1979_PID40 , Li1979_DataIdx++ ) ;
-		 /*Freezeframe number*/	
-                WrtServiceData( Cy1979FrameReqZero , Li1979_DataIdx++ ) ;
-               /*support PID(41~48) 42*/
-                WrtServiceData( 0x40 , Li1979_DataIdx++ ) ;
-               /*support PID(49~50) */
-                WrtServiceData( 0x00 , Li1979_DataIdx++ ) ;
-             /*support PID(51~58) */
-                WrtServiceData( 0x00, Li1979_DataIdx++ ) ;
-             /*support PID(59~50) 00*/
-                WrtServiceData( 0x00 , Li1979_DataIdx++ ) ;
-		             break;	
-					 
-	       case Cy1979_PID42:
-		   	
-		 // WrtServiceData( Cy1979_PID42 , Li1979_DataIdx++ ) ;
-		   /*Freezeframe number*/	
-                WrtServiceData( Cy1979FrameReqZero , Li1979_DataIdx++ ) ;
-				
-                WrtServiceData(  Hi8Of16(DIAG_STATUS_FREEZE_FRAME.Ffm_Ub_b), Li1979_DataIdx++ ) ;
-             
-                WrtServiceData(  Lo8Of16(DIAG_STATUS_FREEZE_FRAME.Ffm_Ub_b) , Li1979_DataIdx++ ) ;
-	 
-                     break;	
-						 
-        default: 
-                  /* Send negative responce if PID not supported */
-                  LyFound = CbFALSE ;                 
-                  break;
-          }
-		
-        if ( LyFound != CbFALSE )
-	   {
-            SendStandardPositiveAnswer( Li1979_DataIdx );
-           }
-           else
-	   {
-             SendStandardNegativeAnswer(nrcSubFunctionNotSupported_InvalidFormat);
-           }
-      
-     }
-     else
-     {
-       /* Send negative responce if PID not supported */
-        SendStandardNegativeAnswer(nrcSubFunctionNotSupported_InvalidFormat);
-     }
-   } 
-  else
-  {
-    /* Send negative responce if PID not supported */
-    SendStandardNegativeAnswer(nrcSubFunctionNotSupported_InvalidFormat);
-  }
+			case Cy1979_PID11:
+				/*Freezeframe number*/
+				WrtServiceData( Cy1979FrameReqZero , Li1979_DataIdx++ ) ;
+				WrtServiceData( DIAG_STATUS_FREEZE_FRAME.Ffm_TpPos, Li1979_DataIdx++ ) ;
+				break;
+
+			case Cy1979_PID20:
+				/*Freezeframe number*/
+				WrtServiceData( Cy1979FrameReqZero , Li1979_DataIdx++ ) ;
+				/*support PID(21~28) 21*/
+				WrtServiceData( 0x80 , Li1979_DataIdx++ ) ;
+				/*support PID(29~30) */
+				WrtServiceData( 0x00 , Li1979_DataIdx++ ) ;
+				/*support PID(31~38) */
+				WrtServiceData( 0x00, Li1979_DataIdx++ ) ;
+				/*support PID(39~40) 40*/
+				WrtServiceData( 0x01 , Li1979_DataIdx++ ) ;
+				break;
+
+			case Cy1979_PID21:
+				/*Freezeframe number*/
+				WrtServiceData( Cy1979FrameReqZero , Li1979_DataIdx++ ) ;
+				WrtServiceData(  Hi8Of16(DIAG_STATUS_FREEZE_FRAME.Ffm_KmQ6Mil), Li1979_DataIdx++ ) ;
+				WrtServiceData(  Lo8Of16(DIAG_STATUS_FREEZE_FRAME.Ffm_KmQ6Mil) , Li1979_DataIdx++ ) ;
+				break;
+
+			case Cy1979_PID40:
+				/*Freezeframe number*/
+				WrtServiceData( Cy1979FrameReqZero , Li1979_DataIdx++ ) ;
+				/*support PID(41~48) 42*/
+				WrtServiceData( 0x40 , Li1979_DataIdx++ ) ;
+				/*support PID(49~50) */
+				WrtServiceData( 0x00 , Li1979_DataIdx++ ) ;
+				/*support PID(51~58) */
+				WrtServiceData( 0x00, Li1979_DataIdx++ ) ;
+				/*support PID(59~50) 00*/
+				WrtServiceData( 0x00 , Li1979_DataIdx++ ) ;
+				break;
+
+			case Cy1979_PID42:
+				/*Freezeframe number*/
+				WrtServiceData( Cy1979FrameReqZero , Li1979_DataIdx++ ) ;
+				WrtServiceData(  Hi8Of16(DIAG_STATUS_FREEZE_FRAME.Ffm_Ub_b), Li1979_DataIdx++ ) ;
+				WrtServiceData(  Lo8Of16(DIAG_STATUS_FREEZE_FRAME.Ffm_Ub_b) , Li1979_DataIdx++ ) ;
+				break;
+
+			default: 
+				/* Send negative responce if PID not supported */
+				LyFound = CbFALSE ;                 
+				break;
+			}
+			if ( LyFound != CbFALSE ) {
+				SendStandardPositiveAnswer( Li1979_DataIdx );
+			} else {
+				SendStandardNegativeAnswer(nrcSubFunctionNotSupported_InvalidFormat);
+			}
+		} else {
+			/* Send negative responce if PID not supported */
+			SendStandardNegativeAnswer(nrcSubFunctionNotSupported_InvalidFormat);
+		}
+	} else {
+		/* Send negative responce if PID not supported */
+		SendStandardNegativeAnswer(nrcSubFunctionNotSupported_InvalidFormat);
+	}
 }
 
 /*********************************************************************/
@@ -750,18 +513,14 @@ void J1979Mode2Handler (void)
 
 void J1979Mode3Handler (void)
 {
- /* Test for valid  message length */
- if (( J1979_MODE_03_MSG_LENGTH ) ==
-       GetServiceDataLength() )
- {
-  FormJ1979_Mode_43_Data ();
- }
- else
- {
-  /* Send negative responce if PID not supported */  
-  SendStandardNegativeAnswer(nrcSubFunctionNotSupported_InvalidFormat);
- }
-}       
+	/* Test for valid  message length */
+	if (( J1979_MODE_03_MSG_LENGTH ) == GetServiceDataLength() ) {
+		FormJ1979_Mode_43_Data ();
+	} else {
+		/* Send negative responce if PID not supported */  
+		SendStandardNegativeAnswer(nrcSubFunctionNotSupported_InvalidFormat);
+	}
+}
 
 /*********************************************************************/
 /* FUNCTION:     FormJ1979_Mode_43_Data                              */
@@ -786,69 +545,53 @@ void J1979Mode3Handler (void)
 /*********************************************************************/
 void FormJ1979_Mode_43_Data( void )
 {
-    static WORD          DTCCount ;
-  /* This signifies if at least one DTC was found, for the present
-     packet.  */
-    static TbBOOLEAN     DTCFoundInPacket ;
-  /* This signifies if at least one DTC was found. */
-    static TbBOOLEAN     DTCFound ;
- 
-    BYTE                 TrByteCount ;
- 
-    TrByteCount = RETURN_ID_OFFSET ;
- 
-    while ( DTCCount < count_DTCs_SID03 )
-    {
+	static WORD          DTCCount ;
+	/* This signifies if at least one DTC was found, for the present
+	packet.  */
+	static TbBOOLEAN     DTCFoundInPacket ;
+	/* This signifies if at least one DTC was found. */
+	static TbBOOLEAN     DTCFound ;
 
-       DTCFound = CbTRUE;
-       DTCFoundInPacket = CbTRUE;
- 
-       WrtServiceData(Hi8Of16(DTCs_SID03[DTCCount]),TrByteCount++);
-                      
-       WrtServiceData(Lo8Of16(DTCs_SID03[DTCCount]),TrByteCount++);
-	    DTCCount++;
-    
-     if ( TrByteCount >= J1979_Mode_43_DTC_Length )
-     {
-      break;
-     }
-    }
- 
-    /* if no DTC was found or if the message lenght is less 
-       than maximum append zero's to the message, and send a 
-       positive response. */
+	BYTE                 TrByteCount ;
+	TrByteCount = RETURN_ID_OFFSET ;
 
-    if (( !DTCFound ) || (( DTCFoundInPacket ) && ( DTCFound )))
-    {
-       while ( TrByteCount < J1979_Mode_43_DTC_Length )
-       {
-          WrtKw2000ServiceData( 0, TrByteCount++);
-       }
+	while ( DTCCount < count_DTCs_SID03 ) {
+		DTCFound = CbTRUE;
+		DTCFoundInPacket = CbTRUE;
+		WrtServiceData(Hi8Of16(DTCs_SID03[DTCCount]),TrByteCount++);
+		WrtServiceData(Lo8Of16(DTCs_SID03[DTCCount]),TrByteCount++);
+		DTCCount++;
 
-    }
-    else
-    {
-       TrByteCount = 0;
-    }
-
-    SendStandardPositiveAnswer (TrByteCount);
-       
-    /* set the flag to FALSE, the message is complete */
-    DTCFoundInPacket = CbFALSE;
+		if ( TrByteCount >= J1979_Mode_43_DTC_Length ) {
+			break;
+		}
+	}
  
-    /* If all the list is searched, disable multiple response 
-       message logic.  */
-   // if (( DTCCount >= SY_FCMTSIZE )||(!DTCFound))
-      if ( DTCCount >= count_DTCs_SID03)
-    {
-       DTCFound = CbFALSE;
-       DTCCount = 0;
-       WrtMultiRespInProgress( CbFALSE  ) ;
-    }
-    else
-    {
-       WrtMultiRespInProgress( CbTRUE  ) ;
-    }
+	/* if no DTC was found or if the message lenght is less 
+		than maximum append zero's to the message, and send a 
+		positive response. */
+
+	if (( !DTCFound ) || (( DTCFoundInPacket ) && ( DTCFound ))) {
+		while ( TrByteCount < J1979_Mode_43_DTC_Length ) {
+			WrtKw2000ServiceData( 0, TrByteCount++);
+		}
+	} else {
+		TrByteCount = 0;
+	}
+
+	SendStandardPositiveAnswer (TrByteCount);
+
+	/* set the flag to FALSE, the message is complete */
+	DTCFoundInPacket = CbFALSE;
+ 
+	/* If all the list is searched, disable multiple response message logic.  */
+	if ( DTCCount >= count_DTCs_SID03) {
+		DTCFound = CbFALSE;
+		DTCCount = 0;
+		WrtMultiRespInProgress( CbFALSE  ) ;
+	} else {
+		WrtMultiRespInProgress( CbTRUE  ) ;
+	}
 }
 
 /*********************************************************************/
@@ -890,22 +633,18 @@ void FormJ1979_Mode_43_Data( void )
 
 void J1979Mode4Handler (void)
 {
- if (GetServiceDataLength() ==
-    ( J1979_MODE_04_MSG_LENGTH ))
- {
-  /* It is not required to reply after clearing the DTC's.
-   * The DTC's should be cleared within 1 second of sending
-   * the response.
-   */
-   B_DiagInfoClrReq = true;
-  SendStandardPositiveAnswer ( RETURN_ID_OFFSET );
-  /* imported from CMNDTC module */
- }
- else
- {
-  SendStandardNegativeAnswer(
-            nrcSubFunctionNotSupported_InvalidFormat);
- }
+	if (GetServiceDataLength() == ( J1979_MODE_04_MSG_LENGTH )) {
+		/* It is not required to reply after clearing the DTC's.
+		* The DTC's should be cleared within 1 second of sending
+		* the response.
+		*/
+		B_DiagInfoClrReq = true;
+		SendStandardPositiveAnswer ( RETURN_ID_OFFSET );
+		/* imported from CMNDTC module */
+	} else {
+		SendStandardNegativeAnswer(
+		nrcSubFunctionNotSupported_InvalidFormat);
+	}
 }
 
 /*********************************************************************/
@@ -937,18 +676,14 @@ void J1979Mode4Handler (void)
  
 void J1979Mode7Handler (void)
 {
- 
-    if ( J1979_MODE_07_MSG_LENGTH == GetServiceDataLength() )
-    {
-     /*  WrtMultiRespInProgress( CbTRUE  ) ; */
-       FormJ1979_Mode_47_Data ();
-    }
-    else
-    {
-     /* Send negative responce if message length not valid. */
-     SendStandardNegativeAnswer(
-                nrcSubFunctionNotSupported_InvalidFormat);
-    }
+	if ( J1979_MODE_07_MSG_LENGTH == GetServiceDataLength() ) {
+		/*  WrtMultiRespInProgress( CbTRUE  ) ; */
+		FormJ1979_Mode_47_Data ();
+	} else {
+		/* Send negative responce if message length not valid. */
+		SendStandardNegativeAnswer(
+		nrcSubFunctionNotSupported_InvalidFormat);
+	}
 }
 
 
@@ -975,69 +710,52 @@ void J1979Mode7Handler (void)
 /*********************************************************************/
 void FormJ1979_Mode_47_Data( void )
 {
-static WORD          DTCCount1 ;
-  /* This signifies if at least one DTC was found, for the present
-     packet.  */
-    static TbBOOLEAN     DTCFoundInPacket1 ;
-  /* This signifies if at least one DTC was found. */
-    static TbBOOLEAN     DTCFound1 ;
- 
-    BYTE                 TrByteCount ;
- 
-    TrByteCount = RETURN_ID_OFFSET ;
- 
-    while ( DTCCount1 < count_DTCs_SID07 )
-    {
+	static WORD          DTCCount1 ;
+	/* This signifies if at least one DTC was found, for the present packet.  */
+	static TbBOOLEAN     DTCFoundInPacket1 ;
+	/* This signifies if at least one DTC was found. */
+	static TbBOOLEAN     DTCFound1 ;
 
-       DTCFound1 = CbTRUE;
-       DTCFoundInPacket1 = CbTRUE;
- 
-       WrtServiceData(Hi8Of16(DTCs_SID07[DTCCount1]),TrByteCount++);
-                      
-       WrtServiceData(Lo8Of16(DTCs_SID07[DTCCount1]),TrByteCount++);
-	    DTCCount1++;
-    
-     if ( TrByteCount >= J1979_Mode_43_DTC_Length )
-     {
-      break;
-     }
-    }
- 
+	BYTE                 TrByteCount ;
+	TrByteCount = RETURN_ID_OFFSET ;
+
+	while ( DTCCount1 < count_DTCs_SID07 ) {
+		DTCFound1 = CbTRUE;
+		DTCFoundInPacket1 = CbTRUE;
+		WrtServiceData(Hi8Of16(DTCs_SID07[DTCCount1]),TrByteCount++);
+		WrtServiceData(Lo8Of16(DTCs_SID07[DTCCount1]),TrByteCount++);
+		DTCCount1++;
+
+		if ( TrByteCount >= J1979_Mode_43_DTC_Length ) {
+			break;
+		}
+	}
+
     /* if no DTC was found or if the message lenght is less 
        than maximum append zero's to the message, and send a 
        positive response. */
 
-    if (( !DTCFound1 ) || (( DTCFoundInPacket1 ) && ( DTCFound1 )))
-    {
-       while ( TrByteCount < J1979_Mode_43_DTC_Length )
-       {
-          WrtKw2000ServiceData( 0, TrByteCount++);
-       }
-	    
-    }
-    else
-    {
-       TrByteCount = 0;
-    }
+	if (( !DTCFound1 ) || (( DTCFoundInPacket1 ) && ( DTCFound1 ))) {
+		while ( TrByteCount < J1979_Mode_43_DTC_Length ) {
+			WrtKw2000ServiceData( 0, TrByteCount++);
+		}
+	} else {
+		TrByteCount = 0;
+	}
 
-    SendStandardPositiveAnswer (TrByteCount);
-       
-    /* set the flag to FALSE, the message is complete */
-    DTCFoundInPacket1 = CbFALSE;
+	SendStandardPositiveAnswer (TrByteCount);
+	/* set the flag to FALSE, the message is complete */
+	DTCFoundInPacket1 = CbFALSE;
  
     /* If all the list is searched, disable multiple response 
        message logic.  */
-   // if (( DTCCount1 >= SY_FCMTSIZE )||(!DTCFound1))
-   if ( DTCCount1 >= count_DTCs_SID07)
-    {
-       DTCFound1 = CbFALSE;
-       DTCCount1 = 0;
-       WrtMultiRespInProgress( CbFALSE  ) ;
-    }
-    else
-    {
-       WrtMultiRespInProgress( CbTRUE  ) ;
-    }
+	if ( DTCCount1 >= count_DTCs_SID07) {
+		DTCFound1 = CbFALSE;
+		DTCCount1 = 0;
+		WrtMultiRespInProgress( CbFALSE  ) ;
+	} else {
+		WrtMultiRespInProgress( CbTRUE  ) ;
+	}
 }
 
 
@@ -1061,126 +779,79 @@ static WORD          DTCCount1 ;
 #define J1979_MODE_09_MSG_LENGTH (2)
 void J1979Mode9Handler( void )
 {
-   BYTE Li1979_DataIdx,Ly1979_MsgIdx,LyMultiMode,LyFound;
+	BYTE Li1979_DataIdx,Ly1979_MsgIdx,LyMultiMode,LyFound;
 
-   Vi1979_Mode09_MsgIdx = 0;
-   Vi1979_Mode09_CalIdx = 0;
-   Vi1979_Mode09_CalCharIdx = 0;
-   Vi1979_Mode09_CurrMsgIdx = 0;
-   Li1979_DataIdx = CyInfoType ;
-   LyMultiMode  = 0 ;
-   LyFound  = 0;
+	Vi1979_Mode09_MsgIdx = 0;
+	Vi1979_Mode09_CalIdx = 0;
+	Vi1979_Mode09_CalCharIdx = 0;
+	Vi1979_Mode09_CurrMsgIdx = 0;
+	Li1979_DataIdx = CyInfoType ;
+	LyMultiMode  = 0 ;
+	LyFound  = 0;
 
-   if ( GetServiceDataLength() == J1979_MODE_09_MSG_LENGTH )
-   {
-     Vy1979_InfoType =  GetServiceData(CyInfoType);
-        WrtServiceData( Vy1979_InfoType , Li1979_DataIdx++ );
- 
-        LyFound = CbTRUE ;
+	if ( GetServiceDataLength() == J1979_MODE_09_MSG_LENGTH ) {
+		Vy1979_InfoType =  GetServiceData(CyInfoType);
+		WrtServiceData( Vy1979_InfoType , Li1979_DataIdx++ );
+		LyFound = CbTRUE ;
 
-        switch(Vy1979_InfoType)
-        {
-           case Cy1979_InfoType0:
+		switch(Vy1979_InfoType) {
+		case Cy1979_InfoType0:
+			WrtServiceData( Cy1979_InfoType0_MsgCnt , Li1979_DataIdx++ ) ;
+			/*support infotype 02, 04, 06*/
+			WrtServiceData( 0xF0 , Li1979_DataIdx++ ) ;
+			WrtServiceData( 0x00 , Li1979_DataIdx++ ) ;
+			WrtServiceData( 0x00, Li1979_DataIdx++ ) ;
+			WrtServiceData( 0x00 , Li1979_DataIdx++ ) ;
+			break;
 
-                WrtServiceData( Cy1979_InfoType0_MsgCnt , Li1979_DataIdx++ ) ;
-               /*support infotype 02, 04, 06*/
-                WrtServiceData( 0xF0 , Li1979_DataIdx++ ) ;
+		case Cy1979_InfoType1:
+			WrtServiceData( Cy1979_NumOfMsgsToRptVIN , Li1979_DataIdx++ );
+			break;
 
-                WrtServiceData( 0x00 , Li1979_DataIdx++ ) ;
+		case Cy1979_InfoType2:
+			Vi1979_Mode09_MsgIdx = Cy1979_NumOfMsgsToRptVIN;
+			WrtServiceData(++Vi1979_Mode09_CurrMsgIdx   ,Li1979_DataIdx++) ;
+			WrtServiceData( 0 , Li1979_DataIdx++);
+			WrtServiceData( 0 , Li1979_DataIdx++);
+			WrtServiceData( 0 , Li1979_DataIdx++);
+			WrtServiceData( scnVehInfo.VIN[ Vi1979_Mode09_CalCharIdx++ ], Li1979_DataIdx++ );
+			LyMultiMode = CbTRUE ;
+			break;
 
-                WrtServiceData( 0x00, Li1979_DataIdx++ ) ;
+		case Cy1979_InfoType3:
+			WrtServiceData(Cy1979_NumOfMsgsToRptCalID,Li1979_DataIdx++);
+			break;
 
-                WrtServiceData( 0x00 , Li1979_DataIdx++ ) ;
+		case Cy1979_InfoType4:
+			Vi1979_Mode09_MsgIdx = (Cy1979_NumOfMsgsToRptCalID );
+			WrtServiceData( ++Vi1979_Mode09_CurrMsgIdx,  Li1979_DataIdx++);
+			WrtServiceData( scnVehInfo.CALID[Vi1979_Mode09_CalCharIdx++],Li1979_DataIdx++ );
+			WrtServiceData( scnVehInfo.CALID[Vi1979_Mode09_CalCharIdx++],Li1979_DataIdx++ );
+			WrtServiceData( scnVehInfo.CALID[Vi1979_Mode09_CalCharIdx++],Li1979_DataIdx++ );
+			WrtServiceData( scnVehInfo.CALID[Vi1979_Mode09_CalCharIdx++],Li1979_DataIdx++ );
+			LyMultiMode = CbTRUE ;
+			break;
 
-		   break;
+		default: 
+			/* Send negative responce if PID not supported */
+			LyFound = CbFALSE ;                 
+			break;
+		}
 
-          case Cy1979_InfoType1:
-	 	
-                WrtServiceData( Cy1979_NumOfMsgsToRptVIN , Li1979_DataIdx++ );
-
-            break;
-			
-           case Cy1979_InfoType2:
- 
-                     Vi1979_Mode09_MsgIdx = Cy1979_NumOfMsgsToRptVIN;
-                     WrtServiceData(++Vi1979_Mode09_CurrMsgIdx   ,Li1979_DataIdx++) ;
-
-                     WrtServiceData( 0 , Li1979_DataIdx++);
-                     WrtServiceData( 0 , Li1979_DataIdx++);
-                     WrtServiceData( 0 , Li1979_DataIdx++);
-                     WrtServiceData( scnVehInfo.VIN[ Vi1979_Mode09_CalCharIdx++ ],
-                                                         Li1979_DataIdx++ );
-
-                     LyMultiMode = CbTRUE ;
-                  break;
-
-           case Cy1979_InfoType3:
-	 	
-                    WrtServiceData(Cy1979_NumOfMsgsToRptCalID,Li1979_DataIdx++);
-     
-             break;		
-
-          case Cy1979_InfoType4:
-		  	
-                     Vi1979_Mode09_MsgIdx =
-                      (Cy1979_NumOfMsgsToRptCalID );
-
-                     WrtServiceData( ++Vi1979_Mode09_CurrMsgIdx,  Li1979_DataIdx++);
-
-                     WrtServiceData( scnVehInfo.CALID[Vi1979_Mode09_CalCharIdx++],
-                                                         Li1979_DataIdx++ );
-		       WrtServiceData( scnVehInfo.CALID[Vi1979_Mode09_CalCharIdx++],
-                                                         Li1979_DataIdx++ );
-		       WrtServiceData( scnVehInfo.CALID[Vi1979_Mode09_CalCharIdx++],
-                                                         Li1979_DataIdx++ );
-			WrtServiceData( scnVehInfo.CALID[Vi1979_Mode09_CalCharIdx++],
-                                                         Li1979_DataIdx++ );
- 
-                     LyMultiMode = CbTRUE ;
-                  break;
-
-/*
-            case Cy1979_InfoType6:
-                    for( Ly1979_MsgIdx = 0;
-                          Ly1979_MsgIdx < 4;
-                          Ly1979_MsgIdx++ )		 	
-                     {
-                         WrtServiceData( scnVehInfo.CVN[Ly1979_MsgIdx], Li1979_DataIdx++ );
-                     }
-                  LyFound = CbTRUE;    
-                  break;               
-*/
-         default: 
-                  /* Send negative responce if PID not supported */
-                  LyFound = CbFALSE ;                 
-                  break;
-          }
-          if(( LyMultiMode )   &&
-              ( Vi1979_Mode09_CurrMsgIdx < Vi1979_Mode09_MsgIdx ) &&
-              ( LyFound != CbFALSE ))
-	   {
-             WrtMultiRespInProgress( CbTRUE  ) ;
-             if(Li1979_DataIdx > 0)
-               SendStandardPositiveAnswer( Li1979_DataIdx );
-           }
-           else if ( LyFound != CbFALSE )
-	   {
-            SendStandardPositiveAnswer( Li1979_DataIdx );
-           }
-           else
-	   {
-             SendStandardNegativeAnswer(nrcSubFunctionNotSupported_InvalidFormat);
-           }
-   }
-   else
-   {
-    /* Send negative responce if PID not supported */
-    SendStandardNegativeAnswer(nrcSubFunctionNotSupported_InvalidFormat);
-  }
-
+		if(( LyMultiMode ) && ( Vi1979_Mode09_CurrMsgIdx < Vi1979_Mode09_MsgIdx ) && ( LyFound != CbFALSE )) {
+			WrtMultiRespInProgress( CbTRUE  ) ;
+			if(Li1979_DataIdx > 0)
+				SendStandardPositiveAnswer( Li1979_DataIdx );
+		} else if ( LyFound != CbFALSE ) {
+			SendStandardPositiveAnswer( Li1979_DataIdx );
+		} else {
+			SendStandardNegativeAnswer(nrcSubFunctionNotSupported_InvalidFormat);
+		}
+	} else {
+		/* Send negative responce if PID not supported */
+		SendStandardNegativeAnswer(nrcSubFunctionNotSupported_InvalidFormat);
+	}
 }
-
-
 
 /*********************************************************************/
 /* FUNCTION:     FormJ1979_NextMode49                                */
@@ -1201,43 +872,29 @@ void J1979Mode9Handler( void )
 #define Cy1979_InitVal               0
 void FormJ1979_NextMode49( void )
 {
-   BYTE Ly1979_InfoType ;
-   BYTE Li1979_DataIdx ;
-   BYTE Ly1979_MsgIdx ;
-   /* TbBOOLEAN Lb1979_Mode9_ID_6_Done = CbFALSE; */
+	BYTE Ly1979_InfoType ;
+	BYTE Li1979_DataIdx ;
+	BYTE Ly1979_MsgIdx ;
+	/* TbBOOLEAN Lb1979_Mode9_ID_6_Done = CbFALSE; */
 
-  if( ( Vi1979_Mode09_MsgIdx > Cy1979_InitVal ) &&
-      ( Vi1979_Mode09_CurrMsgIdx < Vi1979_Mode09_MsgIdx ) )
-  {
-    Li1979_DataIdx = Cy1979_Mode09_MsgNumLoc;
+	if( ( Vi1979_Mode09_MsgIdx > Cy1979_InitVal ) && (Vi1979_Mode09_CurrMsgIdx < Vi1979_Mode09_MsgIdx))
+	{
+		Li1979_DataIdx = Cy1979_Mode09_MsgNumLoc;
+		WrtServiceData( Vy1979_InfoType , Li1979_DataIdx++ );
+		WrtServiceData( ++Vi1979_Mode09_CurrMsgIdx, Li1979_DataIdx++ );
 
-    WrtServiceData( Vy1979_InfoType , Li1979_DataIdx++ );
-    WrtServiceData( ++Vi1979_Mode09_CurrMsgIdx, Li1979_DataIdx++ );
+		switch (Vy1979_InfoType) {
+		case Cy1979_InfoType2:
+			for( Ly1979_MsgIdx = 0; Ly1979_MsgIdx < Cy1979_PerRespMaxChar; Ly1979_MsgIdx++ ) {
+				WrtServiceData( scnVehInfo.VIN[ Vi1979_Mode09_CalCharIdx++ ], Li1979_DataIdx++ );
+			}
+			break;
 
-    switch(Vy1979_InfoType)
-    {
-    case Cy1979_InfoType2:
-
-      for( Ly1979_MsgIdx = 0;
-           Ly1979_MsgIdx < Cy1979_PerRespMaxChar;
-           Ly1979_MsgIdx++ )
-      {
-          WrtServiceData( scnVehInfo.VIN[ Vi1979_Mode09_CalCharIdx++ ],
-                                                         Li1979_DataIdx++ );
-      }
-      break;
-
-    case Cy1979_InfoType4:
-
-      for( Ly1979_MsgIdx = 0;
-           Ly1979_MsgIdx < Cy1979_PerRespMaxChar;
-           Ly1979_MsgIdx++ )
-      {
-			WrtServiceData( scnVehInfo.CALID[Vi1979_Mode09_CalCharIdx++],
-                                                         Li1979_DataIdx++ );
-      }
-
-      break;
+		case Cy1979_InfoType4:
+			for( Ly1979_MsgIdx = 0; Ly1979_MsgIdx < Cy1979_PerRespMaxChar; Ly1979_MsgIdx++ ) {
+				WrtServiceData(scnVehInfo.CALID[Vi1979_Mode09_CalCharIdx++], Li1979_DataIdx++ );
+			}
+			break;
 
       /* >>>>> This functionality was removed because the
          calculation of the CVN happens so quickly after
@@ -1246,44 +903,23 @@ void FormJ1979_NextMode49( void )
          back into the code if the S/W as well as the Cal
          are included in the CRC. <<<<<<<<<<<<<<<<<<<<<<<< */
 
-      /*  case Cy1979_InfoType6:    
+		default:
+			--Vi1979_Mode09_CurrMsgIdx;
+			break;
+		}
+	} else {
+		Li1979_DataIdx = Cy1979_InitVal;
+		Vi1979_Mode09_MsgIdx = Cy1979_InitVal;
+		Vi1979_Mode09_CurrMsgIdx = Cy1979_InitVal;
+		WrtMultiRespInProgress( CbFALSE );
+	}
 
-         Returns CRC of calibration area, First two bytes
-         contain zeros(0x00), next two byts contain CRC-16
-
-      if ( NbFILE_CVN_Available )
-      {
-        WrtServiceData( 0 , Li1979_DataIdx++ );
-        WrtServiceData( 0 , Li1979_DataIdx++ );
-        WrtServiceData( (BYTE)(NuFILE_CVN >> 8), Li1979_DataIdx++ );
-        WrtServiceData( (BYTE)(NuFILE_CVN & 0xFF), Li1979_DataIdx++ );
-        Lb1979_Mode9_ID_6_Done = CbTRUE;
-      }
-      break; */
-
-    default:
-      --Vi1979_Mode09_CurrMsgIdx;
-      break;
-    }
-  }
-  else
-  {
-    Li1979_DataIdx = Cy1979_InitVal;
-
-    Vi1979_Mode09_MsgIdx = Cy1979_InitVal;
-    Vi1979_Mode09_CurrMsgIdx = Cy1979_InitVal;
-    WrtMultiRespInProgress( CbFALSE );
-  }
-
-if( Vi1979_Mode09_CurrMsgIdx >= Vi1979_Mode09_MsgIdx )
-  {
-    WrtMultiRespInProgress( CbFALSE ) ;
-    SendStandardPositiveAnswer( Li1979_DataIdx );
-  }
-  else
-  {
-    SendStandardPositiveAnswer( Li1979_DataIdx );
-  }
+	if( Vi1979_Mode09_CurrMsgIdx >= Vi1979_Mode09_MsgIdx ) {
+		WrtMultiRespInProgress( CbFALSE ) ;
+		SendStandardPositiveAnswer( Li1979_DataIdx );
+	} else {
+		SendStandardPositiveAnswer( Li1979_DataIdx );
+	}
 }
 /* ============================================================================ *\
  * File revision history (top to bottom, first revision to last revision

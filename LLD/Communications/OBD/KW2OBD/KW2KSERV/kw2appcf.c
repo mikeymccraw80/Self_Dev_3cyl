@@ -23,36 +23,13 @@
 
 /***********************LOCAL DEFINITIONS:*****************************/
 #include "kw2app.h"
-#include "dd_boot.h"
+// #include "dd_boot.h"
 #include "kw2dll.h"
 #include "kw2appcf.h"
 
 /*  services specific includes */
 #include "j1979.h"
-#include "kw2srv10.h"
-#include "kw2srv11.h"
-#include "kw2srv12.h"
-#include "kw2srv14.h"
-#include "kw2srv18.h"
-#include "kw2srv19.h"
-#include "kw2srv1a.h"
-#include "kw2srv20.h"
-#include "kw2srv21.h"
-#include "kw2srv22.h"
-#include "kw2srv23.h"
-#include "kw2srv27.h"
-#include "kw2srv2c.h"
-#include "kw2srv30.h"
-#include "kw2srv31.h"
-#include "kw2srv34.h"
-#include "kw2srv36.h"
-#include "kw2srv37.h"
-#include "kw2srv38.h"
-#include "kw2srv38m.h"
-#include "kw2srv3b.h"
-#include "kw2srv3d.h"
-#include "kw2srv3e.h"
-#include "obdlfsrv.h"
+// #include "obdlfsrv.h"
 
 void ServiceNotSupported( void )
 {
@@ -144,168 +121,6 @@ const SERVICE_DEFINITION_ARRAY_TYPE CaServiceDefinition[ ]=
       J1979Mode9Handler  ,       /* Mode 9 */
       FormJ1979_NextMode49
     },
-
-  /*
-   * Supported 14230 Services or 2190 Modes
-   */
-
-   /* Service 0x10  */
-   {
-      sirStartDiagnosticSession,
-      KwJ14230StartDiagnosticSession,
-      KwJ14230ExecuteService10NextResponse
-   },
-
-   /* Service 0x11 */
-   {
-      sirEcuReset,
-      KwJ14230EcuReset,
-      KwNoMultiModeAval
-   },
-   /* Service 0x12 */
-/* {
-      sirReadFreezeFrameData,
-      KwJ1423ReadFreezeFrameData,
-      KwNoMultiModeAval
-   }, */
-   /* Service 0x13 */
-/* {
-      sirReadDiagnosticTroubleCodes,
-      KwJ14230ErrorCodeRequest ,
-      KwNoMultiModeAval
-   }, */
-   /* Service 0x14 */
-  // {
-  //    sirClearDiagnosticInformation,
-  //    KwJ14230ErrorCodeClearRequest ,
- //     KwNoMultiModeAval
- //  },
-   /* Service 0x15 */
-/* {
-      sirSetRamOverlay,
-      KwJ2190SetRamOverlay ,
-      KwNoMultiModeAval
-   }, */
-   /* Service 0x16 */
-/* {
-      sirGetRamOverlay,
-      KwJ2190GetRamOverlay ,
-      KwNoMultiModeAval
-   }, */
-   /* Service 0x18  */
-   {
-      sirReadDiagnosticTroubleCodesByStatus,
-      KwJ14230ReadDiagnosticTroubleCodesByStatus,
-      KwNoMultiModeAval
-   },
-   /* Service 0x19  */
- /*  {
-      sirReadStatusOfDiagTroubleCodesByStatus,
-      KwJ14230ReadStatusOfDiagnosticTroubleCodesByStatus,
-      FormAndLoad14230_Mode_59_Data
-   },*/
-   /* Service 0x1A */
-   {
-      sirReadEcuIdentification,
-      KwJ14230ReadEcuIdentification ,
-      KwNoMultiModeAval
-   },
-   /* Service 0x20 */
-   {
-      sirStopDiagnosticSession,
-      KwJ14230StopDiagnosticSession ,
-      KwNoMultiModeAval
-   },
-   /* Service 0x21 */
-   {
-      sirReadDataByLocalIdentifier,
-      KwJ14230ReadDataByLocalIdentifier,
-      KwNoMultiModeAval
-   },
-   /* Service 0x22 */
-/*   {
-      sirReadDataByCommonIdentifier,
-      KwJ14230ReadDataByCommonIdentifier  ,
-      KwNoMultiModeAval
-   }, */
-   /* Service 0x23 */
-   {
-      sirReadMemoryByAddress,
-      KwJ14230ReadDataByAddress,
-      KwNoMultiModeAval
-   },
-   /* Service 0x27 */
-   {
-      sirSecurityAccess,
-      KwJ14230SecurityAccess ,
-      KwNoMultiModeAval
-   },
-   /* Service 0x2C */
-   {
-      sirDynamicallyDefineLocalIdentifier,
-      KwJ14230DynamicallyDefineLocalIdentifier  ,
-      KwNoMultiModeAval
-   },
-   /* Service 0x30 */
-  // {
-   //   sirInputOutputControlByLocalIdentifier,
-   //   KwJ14230InputOutputControlByLocalIdentifier ,
-    //  FormAndSendImmoData
-  // },
-   /* Service 0x31 */
-   {
-      sirStartRoutineByLocalIdentifier,
-      KwJ14230StartRoutineByLocalIdentifier ,
-      KwNoMultiModeAval
-   },
-   /* Service 0x34 */
-   {
-      sirRequestDownload,
-      KwJ14230RequestDownload ,
-      KwNoMultiModeAval
-   },
-   /* Service 0x35 */
-/* {
-      sirRequestUpload,
-      KwJ14230RequestUpload ,
-      KwNoMultiModeAval
-   }, */
-   /* Service 0x36 */
-   {
-      sirTransferData,
-      KwJ14230TransferData ,
-      KwNoMultiModeAval
-   },
-   /* Service 0x37 */
-   {
-      sirRequestTransferExit,
-      KwJ14230RequestTransferExit ,
-      KwNoMultiModeAval
-   },
-   /* Service 0x38 */
-   {
-      sirStartRoutineByAddress,
-      KwJ14230StartRoutineByAddress ,
-      ExecuteStartRoutineByAddressFunction
-   },
-   /* Service 0x3B */
-   {
-      sirWriteDataByLocalIdentifier,
-      KwJ14230WriteDataByLocalIdentifier ,
-     // ModifyEepromData
-   },
-   /* Service 0x3D */
-   {
-      sirWriteMemoryByAddress,
-      KwJ14230WriteMemoryByAddress ,
-      KwNoMultiModeAval
-   },
-   /* Service 0x3E */
-   {
-      sirTesterPresent,
-      KwJ14230TesterPresent ,
-      KwNoMultiModeAval
-   },
 };
 
 /*

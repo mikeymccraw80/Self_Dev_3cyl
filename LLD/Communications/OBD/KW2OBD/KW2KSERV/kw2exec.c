@@ -54,26 +54,24 @@
 #include "kw2exec.h"
 #include "kw2appcf.h"
 
-void FAR_COS KeywordExecutive( KW2000_Status_T LyKW2000_ModeSelect )
+void KeywordExecutive( KW2000_Status_T LyKW2000_ModeSelect )
 {
-
- switch( LyKW2000_ModeSelect )
- {
-   /* Initialize Keyword 2000 software */
-   case CwKW2000_Initializes:
-         /* Normal Keyword Phyical Address */
-         KW2000CommuState=KW2000_Responder;
-         SetMyPhysicalAddr ( MyPhysicalAddr ) ;
-         InitializeKw2000VIO() ;
-         InitializeKw2000Services() ;
-         break ;
-   /* Update Keyword 2000 buffers */
-   case CwKW2000_RunMode:
-         UpdateKeyword2000ServiceTasks();
-         UpdateKeyword2000VIO() ;
-         UpdateKeyword2000Services() ;
-         break ;
- }
+	switch( LyKW2000_ModeSelect) {
+	/* Initialize Keyword 2000 software */
+	case CwKW2000_Initializes:
+		/* Normal Keyword Phyical Address */
+		KW2000CommuState=KW2000_Responder;
+		SetMyPhysicalAddr ( MyPhysicalAddr ) ;
+		InitializeKw2000VIO() ;
+		InitializeKw2000Services() ;
+		break ;
+	/* Update Keyword 2000 buffers */
+	case CwKW2000_RunMode:
+		UpdateKeyword2000ServiceTasks();
+		UpdateKeyword2000VIO() ;
+		UpdateKeyword2000Services() ;
+		break ;
+	}
 }
 
 

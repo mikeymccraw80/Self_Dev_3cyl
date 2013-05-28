@@ -26,14 +26,13 @@
 /***********************LOCAL DEFINITIONS:*****************************/
 #include "kw2dll.h"
 
-typedef enum
-{
-       CwKW2000_Initializes,
-       CwKW2000_RunMode,
-       CwImmoTester_RunMode
+typedef enum {
+	CwKW2000_Initializes,
+	CwKW2000_RunMode,
+	CwImmoTester_RunMode
 } KW2000_Status_T;
 
-extern void FAR_COS KeywordExecutive( KW2000_Status_T ) ;
+void KeywordExecutive(KW2000_Status_T);
 
 
 /* ============================================================================ *\
