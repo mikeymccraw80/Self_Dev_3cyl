@@ -14,9 +14,11 @@
 #include "dd_dma_interface.h"
 #include "io_config_swt.h"
 #include "io_config_dma.h"
+#include "io_config_pit.h"
 #include "dd_mios_interface.h"
 #include "dd_dspi_interface.h"
 #include "hal_emulated_eeprom.h"
+#include "dd_pit_interface.h"
 
 #include "dd_l9958.h"
 #include "dd_vsep_est_select.h"
@@ -129,8 +131,6 @@ void InitializeHardwareRegisters(void)
 
 	INTC_Initialize_Device();
 
-	PIT_Initialize_Device();
-
 	STM_Initialize_Device();
 
 	ECSM_Initialize_Device();
@@ -161,7 +161,17 @@ void InitializeHardwareRegisters(void)
 	DMA_QADC_RFDF_4_Eighth_32Bit);
 
 	QADC_Initialize_Device();
+	PIT_Initialize_Device();
+	//set up os loop time 10ms
+	PIT_TIMER_Set_Value( PIT_CHANNEL_RTI, RTI_LOAD_VALUE_1MS);
+	PIT_INTERRUPT_Set_Enable(PIT_CHANNEL_RTI, true);
 
+	//set up PIT time 5us
+	PIT_TIMER_Set_Value( PIT_CHANNEL_1, PIT_LOAD_VALUE_5US);
+
+	//enable QADC DMA time base scan
+	DMA_Enable_Request(DMA_CHANNEL_QADC_FISR4_RFDF_4);
+	DMA_Enable_Request(DMA_CHANNEL_QADC_FISR4_CFFF_4);
 
 	// Enable_Interrupts();
 	//ECSM_NVM_ChecksumCheck();

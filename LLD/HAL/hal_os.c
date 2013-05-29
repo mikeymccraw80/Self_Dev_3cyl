@@ -130,7 +130,8 @@ void HAL_OS_100ms_Task(void)
 void HAL_OS_Init_Task(void)
 {
 	IO_OS_Power_Status_Init();
-	//chery init	
+
+	//chery init
 	HLS_ini();
 	HLS_inisyn();
 	//app fuel setup
@@ -139,7 +140,8 @@ void HAL_OS_Init_Task(void)
 	IO_Spark_Syn_Init();
 	//app eng status setup
 	IO_Eng_Engine_Init();
-
+	IO_Analog_1ms_Update();
+	IO_Analog_10ms_Update();
 	HLS_ini2();
 }
 
