@@ -2,6 +2,7 @@
 // include files
 //=============================================================================
 #include "hal_os.h"
+#include "dd_pit_interface.h"
 #include "HLS.h"
 #include "io_interface_eng.h"
 #include "io_interface_vcpc.h"
@@ -222,5 +223,28 @@ void HAL_OS_CAM_X_Hook(void)
  bool HAL_OS_Get_Battery_Remove(void) 
 {
   return Get_BatteryRemove_Status();
+}
+
+//=============================================================================
+// interrupt control routines
+//=============================================================================
+void Disable_1ms_interrupt(void)
+{
+	PIT_INTERRUPT_Set_Enable(PIT_CHANNEL_RTI, false);
+}
+
+void Enable_1ms_interrupt(void)
+{
+	PIT_INTERRUPT_Set_Enable(PIT_CHANNEL_RTI, true);
+}
+
+void LLD_disable_interrupt(void)
+{
+	Disable_Interrupts();
+}
+
+void LLD_enable_interrupt(void)
+{
+	Enable_Interrupts();
 }
 

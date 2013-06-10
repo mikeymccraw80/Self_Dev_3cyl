@@ -69,5 +69,11 @@ void HAL_OS_Engine_Stall_Reset(void);
 //=============================================================================
  bool HAL_OS_Get_Battery_Remove(void) ;
 
+// interrupt control routines
+void Disable_1ms_interrupt(void) ;
+void Enable_1ms_interrupt(void) ;
+void LLD_disable_interrupt(void);
+void LLD_enable_interrupt(void);
+
 #endif
 
