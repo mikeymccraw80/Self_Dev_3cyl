@@ -38,8 +38,8 @@
 //=============================================================================
 typedef enum
 {
-  AD_ESC1HI_Channel,
-  AD_ESC1LO_Channel,
+  //AD_ESC1HI_Channel,
+  //AD_ESC1LO_Channel,
   AD_MAPVI_Channel,
   AD_ACPREVI_Channel,
   AD_LEGRFBVI_Channel,
@@ -65,11 +65,11 @@ typedef enum
   AD_IGNVI_Channel,
   AD_58XRAWIN_Channel,
   AD_PBATTVI_Channel,
-  AD_Reserved_1_Channel,
-  AD_Reserved_2_Channel,
-  AD_Reserved_3_Channel,
+  //AD_Reserved_1_Channel,
+  //AD_Reserved_2_Channel,
+  //AD_Reserved_3_Channel,
   AD_HWCFGVI_Channel,
-  AD_Reserved_4_Channel,
+  AD_VCC2_Channel,
   AD_CPUTemp_Channel,
   AD_ANALOG_MAX_SIGNAL_NAMES
 
@@ -109,6 +109,10 @@ extern const QADC_ETDFR_T QADC_INITIAL_ETDFR;
 extern const ADC_ACR_T  QADC_INITIAL_ACR1;
 
 extern const ADC_CCMF_T  QADC_CMD_Timebase[AD_ANALOG_MAX_SIGNAL_NAMES];
+
+
+extern const ADC_CCMF_T  QADC_CALIBRATION_ADC1_REF75[ADC_CONVERTER_MAX];
+extern const ADC_CCMF_T  QADC_CALIBRATION_ADC1_REF25[ADC_CONVERTER_MAX]; 
 
 
 #endif // IO_CONFIG_MMU_H

@@ -99,532 +99,598 @@ const ADC_ACR_T  QADC_INITIAL_ACR1 =
 
 };
 
+const ADC_CCMF_T  QADC_CALIBRATION_ADC1_REF75[ADC_CONVERTER_MAX]=
+{
+
+   {
+    false,    //EOQ      
+   0,    //PAUSE 
+   0,    // REP     
+   0,    //EB   
+   ADC_CONVERTER_0,    //BN    
+   false,   // CAL  
+   QADC_FIFO_0,   //MESSAGE_TAG 
+   QADC_SAMPLE_CYCLES_2,   //LST        
+   0,   //TSR       
+   QADC_CHANNEL_CONVERSION_FORMAT_RIGHT_JUSTIFIED_UNSIGNED,   //FMT         
+   QADC_CHANNEL_AN_75VRH_VRL_DIV_2,    // CHANNEL 
+      0
+   },
+   {
+    false,    //EOQ      
+   0,    //PAUSE 
+   0,    // REP     
+   0,    //EB   
+   ADC_CONVERTER_1,    //BN    
+   false,   // CAL  
+   QADC_FIFO_0,   //MESSAGE_TAG 
+   QADC_SAMPLE_CYCLES_2,   //LST        
+   0,   //TSR       
+   QADC_CHANNEL_CONVERSION_FORMAT_RIGHT_JUSTIFIED_UNSIGNED,   //FMT         
+   QADC_CHANNEL_AN_75VRH_VRL_DIV_2,    // CHANNEL 
+   0
+   }
+};
+
+const ADC_CCMF_T  QADC_CALIBRATION_ADC1_REF25[ADC_CONVERTER_MAX] = 
+{
+ {
+   false,    //EOQ      
+   0,    //PAUSE 
+   0,    // REP     
+   0,    //EB   
+   ADC_CONVERTER_0,    //BN    
+   false,   // CAL  
+   QADC_FIFO_0,   //MESSAGE_TAG 
+   QADC_SAMPLE_CYCLES_64,   //LST        
+   0,   //TSR       
+   QADC_CHANNEL_CONVERSION_FORMAT_RIGHT_JUSTIFIED_UNSIGNED,   //FMT         
+   QADC_CHANNEL_AN_25VRH_VRL_DIV_2,    // CHANNEL 
+      0
+  } ,
+ {
+   false,    //EOQ      
+   0,    //PAUSE 
+   0,    // REP     
+   0,    //EB   
+   ADC_CONVERTER_1,    //BN    
+   false,   // CAL  
+   QADC_FIFO_0,   //MESSAGE_TAG 
+   QADC_SAMPLE_CYCLES_64,   //LST        
+   0,   //TSR       
+   QADC_CHANNEL_CONVERSION_FORMAT_RIGHT_JUSTIFIED_UNSIGNED,   //FMT         
+   QADC_CHANNEL_AN_25VRH_VRL_DIV_2,    // CHANNEL 
+      0
+} 
+};
+
+
 const ADC_CCMF_T  QADC_CMD_Timebase[AD_ANALOG_MAX_SIGNAL_NAMES]=
 {
 
-  {
-    1,    //EOQ      
-   0,    //PAUSE 
-   0,    // REP     
-   0,    //EB   
-   ADC_CONVERTER_1,    //BN    
-   false,   // CAL  
-   QADC_FIFO_4,   //MESSAGE_TAG 
-   QADC_SAMPLE_CYCLES_2,   //LST        
-   0,   //TSR       
-   QADC_CHANNEL_CONVERSION_FORMAT_RIGHT_JUSTIFIED_UNSIGNED,   //FMT         
-   QADC_CHANNEL_AN0_DAN_0_P,    // CHANNEL 
-   QADC_CONFIGURATION_REGISTER_1
-  },
+ // {
+ //   1,    //EOQ      
+ //  0,    //PAUSE 
+//   0,    // REP     
+ //  0,    //EB   
+//   ADC_CONVERTER_1,    //BN    
+ //  true,   // CAL  
+ //  QADC_FIFO_4,   //MESSAGE_TAG 
+ //  QADC_SAMPLE_CYCLES_2,   //LST        
+ //  0,   //TSR       
+ //  QADC_CHANNEL_CONVERSION_FORMAT_RIGHT_JUSTIFIED_UNSIGNED,   //FMT         
+//   QADC_CHANNEL_AN0_DAN_0_P,    // CHANNEL 
+ //  QADC_CONFIGURATION_REGISTER_1
+ // },
 
 //const ADC_CCMF_T  QADC_CMD_ESCLoVI = 
- {
-    1,    //EOQ      
-   0,    //PAUSE 
-   0,    // REP     
-   0,    //EB   
-   ADC_CONVERTER_1,    //BN    
-   false,   // CAL  
-   QADC_FIFO_4,   //MESSAGE_TAG 
-   QADC_SAMPLE_CYCLES_2,   //LST        
-   0,   //TSR       
-   QADC_CHANNEL_CONVERSION_FORMAT_RIGHT_JUSTIFIED_UNSIGNED,   //FMT         
-   QADC_CHANNEL_AN1_DAN_0_N,    // CHANNEL 
-   QADC_CONFIGURATION_REGISTER_1
- },
+ //{
+ //   1,    //EOQ      
+ //  0,    //PAUSE 
+ //  0,    // REP     
+ //  0,    //EB   
+//   ADC_CONVERTER_1,    //BN    
+//   true,   // CAL  
+//   QADC_FIFO_4,   //MESSAGE_TAG 
+ //  QADC_SAMPLE_CYCLES_2,   //LST        
+ //  0,   //TSR       
+ //  QADC_CHANNEL_CONVERSION_FORMAT_RIGHT_JUSTIFIED_UNSIGNED,   //FMT         
+ //  QADC_CHANNEL_AN1_DAN_0_N,    // CHANNEL 
+ //  QADC_CONFIGURATION_REGISTER_1
+// },
 
-//const ADC_CCMF_T  QADC_CMD_MAPSVI  = 
+//AD_MAPVI_Channel
  {
-    1,    //EOQ      
+    true,    //EOQ      
    0,    //PAUSE 
    0,    // REP     
    0,    //EB   
    ADC_CONVERTER_1,    //BN    
-   false,   // CAL  
+   true,   // CAL  
    QADC_FIFO_4,   //MESSAGE_TAG 
-   QADC_SAMPLE_CYCLES_2,   //LST        
+   QADC_SAMPLE_CYCLES_8,   //LST        
    0,   //TSR       
    QADC_CHANNEL_CONVERSION_FORMAT_RIGHT_JUSTIFIED_UNSIGNED,   //FMT         
    QADC_CHANNEL_AN2_DAN_1_P,    // CHANNEL 
-   QADC_CONFIGURATION_REGISTER_1
+   0
 },
 
-//const ADC_CCMF_T  QADC_CMD_ACPVI  = 
+//AD_ACPREVI_Channel 
 {
-   1,    //EOQ      
+   true,    //EOQ      
    0,    //PAUSE 
    0,    // REP     
    0,    //EB   
    ADC_CONVERTER_1,    //BN    
-   false,   // CAL  
+   true,   // CAL  
    QADC_FIFO_4,   //MESSAGE_TAG 
    QADC_SAMPLE_CYCLES_2,   //LST        
    0,   //TSR       
    QADC_CHANNEL_CONVERSION_FORMAT_RIGHT_JUSTIFIED_UNSIGNED,   //FMT         
    QADC_CHANNEL_AN3_DAN_1_N,    // CHANNEL 
-   QADC_CONFIGURATION_REGISTER_1
+   0
 },
 
-//const ADC_CCMF_T  QADC_CMD_EGRFBVI  = 
+// AD_LEGRFBVI_Channel  
 {
    1,    //EOQ      
    0,    //PAUSE 
    0,    // REP     
    0,    //EB   
    ADC_CONVERTER_1,    //BN    
-   false,   // CAL  
+   true,   // CAL  
    QADC_FIFO_4,   //MESSAGE_TAG 
-   QADC_SAMPLE_CYCLES_2,   //LST        
+   QADC_SAMPLE_CYCLES_8,   //LST        
    0,   //TSR       
    QADC_CHANNEL_CONVERSION_FORMAT_RIGHT_JUSTIFIED_UNSIGNED,   //FMT         
    QADC_CHANNEL_AN4_DAN_2_P,    // CHANNEL 
-   QADC_CONFIGURATION_REGISTER_1
+   0
 },
 
-//const ADC_CCMF_T  QADC_CMD_TPS1VI  = 
+// AD_TPS1VI_Channel 
 {
-   1,    //EOQ      
+   true,    //EOQ      
    0,    //PAUSE 
    0,    // REP     
    0,    //EB   
    ADC_CONVERTER_1,    //BN    
-   false,   // CAL  
+   true,   // CAL  
    QADC_FIFO_4,   //MESSAGE_TAG 
-   QADC_SAMPLE_CYCLES_2,   //LST        
+   QADC_SAMPLE_CYCLES_8,   //LST        
    0,   //TSR       
    QADC_CHANNEL_CONVERSION_FORMAT_RIGHT_JUSTIFIED_UNSIGNED,   //FMT         
    QADC_CHANNEL_AN5_DAN_2_N,    // CHANNEL 
-   QADC_CONFIGURATION_REGISTER_1
+   0
 },
 
-//const ADC_CCMF_T  QADC_CMD_TPS2VI = 
+//AD_TPS2VI_Channel 
 {
-   1,    //EOQ      
+   true,    //EOQ      
    0,    //PAUSE 
    0,    // REP     
    0,    //EB   
    ADC_CONVERTER_1,    //BN    
-   false,   // CAL  
+   true,   // CAL  
    QADC_FIFO_4,   //MESSAGE_TAG 
-   QADC_SAMPLE_CYCLES_2,   //LST        
+   QADC_SAMPLE_CYCLES_8,   //LST        
    0,   //TSR       
    QADC_CHANNEL_CONVERSION_FORMAT_RIGHT_JUSTIFIED_UNSIGNED,   //FMT         
    QADC_CHANNEL_AN6_DAN_3_P,    // CHANNEL 
-   QADC_CONFIGURATION_REGISTER_1
+   0
 },
 
-//const ADC_CCMF_T  QADC_CMD_PPS1VI = 
+//AD_PPS1VI_Channel 
 {
-   1,    //EOQ      
+   true,    //EOQ      
    0,    //PAUSE 
    0,    // REP     
    0,    //EB   
    ADC_CONVERTER_1,    //BN    
-   false,   // CAL  
+   true,   // CAL  
    QADC_FIFO_4,   //MESSAGE_TAG 
-   QADC_SAMPLE_CYCLES_2,   //LST        
+   QADC_SAMPLE_CYCLES_8,   //LST        
    0,   //TSR       
    QADC_CHANNEL_CONVERSION_FORMAT_RIGHT_JUSTIFIED_UNSIGNED,   //FMT         
    QADC_CHANNEL_AN7_DAN_3_N,    // CHANNEL 
-   QADC_CONFIGURATION_REGISTER_1
+   0
 },
 
-//const ADC_CCMF_T  QADC_CMD_PPS2VI = 
+// AD_PPS2VI_Channel 
 {
-   1,    //EOQ      
+   true,    //EOQ      
    0,    //PAUSE 
    0,    // REP     
    0,    //EB   
    ADC_CONVERTER_1,    //BN    
-   false,   // CAL  
+   true,   // CAL  
    QADC_FIFO_4,   //MESSAGE_TAG 
-   QADC_SAMPLE_CYCLES_2,   //LST        
+   QADC_SAMPLE_CYCLES_8,   //LST        
    0,   //TSR       
    QADC_CHANNEL_CONVERSION_FORMAT_RIGHT_JUSTIFIED_UNSIGNED,   //FMT         
    QADC_CHANNEL_AN9_ANX,    // CHANNEL 
-   QADC_CONFIGURATION_REGISTER_1
+   0
 },
 
-//const ADC_CCMF_T  QADC_CMD_FLVI = 
+// AD_FLVVI_Channel 
 {
-   1,    //EOQ      
+   true,    //EOQ      
    0,    //PAUSE 
    0,    // REP     
    0,    //EB   
    ADC_CONVERTER_1,    //BN    
-   false,   // CAL  
+   true,   // CAL  
    QADC_FIFO_4,   //MESSAGE_TAG 
-   QADC_SAMPLE_CYCLES_2,   //LST        
+   QADC_SAMPLE_CYCLES_8,   //LST        
    0,   //TSR       
    QADC_CHANNEL_CONVERSION_FORMAT_RIGHT_JUSTIFIED_UNSIGNED,   //FMT         
    QADC_CHANNEL_AN11_ANZ,    // CHANNEL 
-   QADC_CONFIGURATION_REGISTER_1
+   0
 },
 
-//const ADC_CCMF_T  QADC_CMD_EOPVI  = 
+//AD_SPA1VI_Channel  
 {
-   1,    //EOQ      
+   true,    //EOQ      
    0,    //PAUSE 
    0,    // REP     
    0,    //EB   
    ADC_CONVERTER_1,    //BN    
-   false,   // CAL  
+   true,   // CAL  
    QADC_FIFO_4,   //MESSAGE_TAG 
-   QADC_SAMPLE_CYCLES_2,   //LST        
+   QADC_SAMPLE_CYCLES_8,   //LST        
    0,   //TSR       
    QADC_CHANNEL_CONVERSION_FORMAT_RIGHT_JUSTIFIED_UNSIGNED,   //FMT         
    QADC_CHANNEL_AN12_MA0_SDS,    // CHANNEL 
-   QADC_CONFIGURATION_REGISTER_1
+   0
 },
 
-//const ADC_CCMF_T  QADC_CMD_O2AVI  = 
+// AD_O2AVI_Channel 
 {
-   1,    //EOQ      
+   true,    //EOQ      
    0,    //PAUSE 
    0,    // REP     
    0,    //EB   
    ADC_CONVERTER_1,    //BN    
-   false,   // CAL  
+   true,   // CAL  
    QADC_FIFO_4,   //MESSAGE_TAG 
-   QADC_SAMPLE_CYCLES_2,   //LST        
+   QADC_SAMPLE_CYCLES_8,   //LST        
    0,   //TSR       
    QADC_CHANNEL_CONVERSION_FORMAT_RIGHT_JUSTIFIED_UNSIGNED,   //FMT         
    QADC_CHANNEL_AN13_MA1_SDO,    // CHANNEL 
-   QADC_CONFIGURATION_REGISTER_1
+   0
 },
-//const ADC_CCMF_T  QADC_CMD_O2BVI   = 
+// AD_O2BVI_Channel
 {
-   1,    //EOQ      
+   true,    //EOQ      
    0,    //PAUSE 
    0,    // REP     
    0,    //EB   
    ADC_CONVERTER_1,    //BN    
-   false,   // CAL  
+   true,   // CAL  
    QADC_FIFO_4,   //MESSAGE_TAG 
-   QADC_SAMPLE_CYCLES_2,   //LST        
+   QADC_SAMPLE_CYCLES_8,   //LST        
    0,   //TSR       
    QADC_CHANNEL_CONVERSION_FORMAT_RIGHT_JUSTIFIED_UNSIGNED,   //FMT         
    QADC_CHANNEL_AN14_MA2_SDI,    // CHANNEL 
-   QADC_CONFIGURATION_REGISTER_1
+   0
 },
 
-//const ADC_CCMF_T  QADC_CMD_CRUCTLVI   = 
+//AD_CRSVI_Channel 
 {
-   1,    //EOQ      
+   true,    //EOQ      
    0,    //PAUSE 
    0,    // REP     
    0,    //EB   
    ADC_CONVERTER_1,    //BN    
-   false,   // CAL  
+   true,   // CAL  
    QADC_FIFO_4,   //MESSAGE_TAG 
-   QADC_SAMPLE_CYCLES_2,   //LST        
+   QADC_SAMPLE_CYCLES_8,   //LST        
    0,   //TSR       
    QADC_CHANNEL_CONVERSION_FORMAT_RIGHT_JUSTIFIED_UNSIGNED,   //FMT         
    QADC_CHANNEL_AN15_FCK,    // CHANNEL 
-   QADC_CONFIGURATION_REGISTER_1
+   0
 },
 
-//const ADC_CCMF_T  QADC_CMD_CLTVI  = 
+//AD_CLTVI_Channel  
 {
-   1,    //EOQ      
+   true,    //EOQ      
    0,    //PAUSE 
    0,    // REP     
    0,    //EB   
    ADC_CONVERTER_1,    //BN    
-   false,   // CAL  
+   true,   // CAL  
    QADC_FIFO_4,   //MESSAGE_TAG 
-   QADC_SAMPLE_CYCLES_2,   //LST        
+   QADC_SAMPLE_CYCLES_8,   //LST        
    0,   //TSR       
    QADC_CHANNEL_CONVERSION_FORMAT_RIGHT_JUSTIFIED_UNSIGNED,   //FMT         
    QADC_CHANNEL_AN16,    // CHANNEL 
-   QADC_CONFIGURATION_REGISTER_1
+   0
 },
 
-//const ADC_CCMF_T  QADC_CMD_IAT_VI  = 
+//AD_MATVI_Channel 
 {
-   1,    //EOQ      
+   true,    //EOQ      
    0,    //PAUSE 
    0,    // REP     
    0,    //EB   
    ADC_CONVERTER_1,    //BN    
-   false,   // CAL  
+   true,   // CAL  
    QADC_FIFO_4,   //MESSAGE_TAG 
-   QADC_SAMPLE_CYCLES_2,   //LST        
+   QADC_SAMPLE_CYCLES_8,   //LST        
    0,   //TSR       
    QADC_CHANNEL_CONVERSION_FORMAT_RIGHT_JUSTIFIED_UNSIGNED,   //FMT         
    QADC_CHANNEL_AN17,    // CHANNEL 
-   QADC_CONFIGURATION_REGISTER_1
+   0
 },
 
-//const ADC_CCMF_T  QADC_CMD_BSTTVI  = 
+//AD_BSTATVI_Channel 
 {
-   1,    //EOQ      
+   true,    //EOQ      
    0,    //PAUSE 
    0,    // REP     
    0,    //EB   
    ADC_CONVERTER_1,    //BN    
-   false,   // CAL  
+   true,   // CAL  
    QADC_FIFO_4,   //MESSAGE_TAG 
-   QADC_SAMPLE_CYCLES_2,   //LST        
+   QADC_SAMPLE_CYCLES_8,   //LST        
    0,   //TSR       
    QADC_CHANNEL_CONVERSION_FORMAT_RIGHT_JUSTIFIED_UNSIGNED,   //FMT         
    QADC_CHANNEL_AN18,    // CHANNEL 
-   QADC_CONFIGURATION_REGISTER_1
+   0
 },
 
-//const ADC_CCMF_T  QADC_CMD_FETVI  = 
+// AD_FREPVI_Channel  
 {
-   1,    //EOQ      
+   true,    //EOQ      
    0,    //PAUSE 
    0,    // REP     
    0,    //EB   
    ADC_CONVERTER_1,    //BN    
-   false,   // CAL  
+   true,   // CAL  
    QADC_FIFO_4,   //MESSAGE_TAG 
-   QADC_SAMPLE_CYCLES_2,   //LST        
+   QADC_SAMPLE_CYCLES_8,   //LST        
    0,   //TSR       
    QADC_CHANNEL_CONVERSION_FORMAT_RIGHT_JUSTIFIED_UNSIGNED,   //FMT         
    QADC_CHANNEL_AN21,    // CHANNEL 
-   QADC_CONFIGURATION_REGISTER_1
+   0
 },
 
-//const ADC_CCMF_T  QADC_CMD_BRKPVI  = 
+//AD_BKVAVII_Channel  
 {
-   1,    //EOQ      
+   true,    //EOQ      
    0,    //PAUSE 
    0,    // REP     
    0,    //EB   
    ADC_CONVERTER_1,    //BN    
-   false,   // CAL  
+   true,   // CAL  
    QADC_FIFO_4,   //MESSAGE_TAG 
-   QADC_SAMPLE_CYCLES_2,   //LST        
+   QADC_SAMPLE_CYCLES_8,   //LST        
    0,   //TSR       
    QADC_CHANNEL_CONVERSION_FORMAT_RIGHT_JUSTIFIED_UNSIGNED,   //FMT         
    QADC_CHANNEL_AN22,    // CHANNEL 
-   QADC_CONFIGURATION_REGISTER_1
+   0
 },
 
-//const ADC_CCMF_T  QADC_CMD_IHFBVI = 
+//AD_RREPVI_Channel 
 {
-   1,    //EOQ      
+   true,    //EOQ      
    0,    //PAUSE 
    0,    // REP     
    0,    //EB   
    ADC_CONVERTER_1,    //BN    
-   false,   // CAL  
+   true,   // CAL  
    QADC_FIFO_4,   //MESSAGE_TAG 
-   QADC_SAMPLE_CYCLES_2,   //LST        
+   QADC_SAMPLE_CYCLES_8,   //LST        
    0,   //TSR       
    QADC_CHANNEL_CONVERSION_FORMAT_RIGHT_JUSTIFIED_UNSIGNED,   //FMT         
    QADC_CHANNEL_AN23,    // CHANNEL 
-   QADC_CONFIGURATION_REGISTER_1
+   0
 },
-//const ADC_CCMF_T  QADC_CMD_BSTPVI = 
+//AD_BSTPREVI_Channel
 {
-   1,    //EOQ      
+   true,    //EOQ      
    0,    //PAUSE 
    0,    // REP     
    0,    //EB   
    ADC_CONVERTER_1,    //BN    
-   false,   // CAL  
+   true,   // CAL  
    QADC_FIFO_4,   //MESSAGE_TAG 
-   QADC_SAMPLE_CYCLES_2,   //LST        
+   QADC_SAMPLE_CYCLES_8,   //LST        
    0,   //TSR       
    QADC_CHANNEL_CONVERSION_FORMAT_RIGHT_JUSTIFIED_UNSIGNED,   //FMT         
    QADC_CHANNEL_AN24,    // CHANNEL 
-   QADC_CONFIGURATION_REGISTER_1
+   0
 },
 
-//const ADC_CCMF_T  QADC_CMD_SPA1VI = 
+//AD_RRVI_Channel 
 {
-   1,    //EOQ      
+   true,    //EOQ      
    0,    //PAUSE 
    0,    // REP     
    0,    //EB   
    ADC_CONVERTER_1,    //BN    
-   false,   // CAL  
+   true,   // CAL  
    QADC_FIFO_4,   //MESSAGE_TAG 
-   QADC_SAMPLE_CYCLES_2,   //LST        
+   QADC_SAMPLE_CYCLES_8,   //LST        
    0,   //TSR       
    QADC_CHANNEL_CONVERSION_FORMAT_RIGHT_JUSTIFIED_UNSIGNED,   //FMT         
    QADC_CHANNEL_AN25,    // CHANNEL 
-   QADC_CONFIGURATION_REGISTER_1
+   0
 },
 
-//const ADC_CCMF_T  QADC_CMD_SPA2VI = 
+//AD_PSREF1_Channel 
 {
-   1,    //EOQ      
+   true,    //EOQ      
    0,    //PAUSE 
    0,    // REP     
    0,    //EB   
    ADC_CONVERTER_1,    //BN    
-   false,   // CAL  
+   true,   // CAL  
    QADC_FIFO_4,   //MESSAGE_TAG 
-   QADC_SAMPLE_CYCLES_2,   //LST        
+   QADC_SAMPLE_CYCLES_8,   //LST        
    0,   //TSR       
    QADC_CHANNEL_CONVERSION_FORMAT_RIGHT_JUSTIFIED_UNSIGNED,   //FMT         
    QADC_CHANNEL_AN27,    // CHANNEL 
-   QADC_CONFIGURATION_REGISTER_1
+   0
 },
 
 
-//const ADC_CCMF_T  QADC_CMD_SPA3VI = 
+//AD_PSREF2_Channel 
 {
-   1,    //EOQ      
+   true,    //EOQ      
    0,    //PAUSE 
    0,    // REP     
    0,    //EB   
    ADC_CONVERTER_1,    //BN    
-   false,   // CAL  
+   true,   // CAL  
    QADC_FIFO_4,   //MESSAGE_TAG 
-   QADC_SAMPLE_CYCLES_2,   //LST        
+   QADC_SAMPLE_CYCLES_8,   //LST        
    0,   //TSR       
    QADC_CHANNEL_CONVERSION_FORMAT_RIGHT_JUSTIFIED_UNSIGNED,   //FMT         
    QADC_CHANNEL_AN28,    // CHANNEL 
-   QADC_CONFIGURATION_REGISTER_1
+   0
 },
 
-//const ADC_CCMF_T  QADC_CMD_IGNVI = 
+// AD_IGNVI_Channel 
 {
-   1,    //EOQ      
+   true,    //EOQ      
    0,    //PAUSE 
    0,    // REP     
    0,    //EB   
    ADC_CONVERTER_1,    //BN    
-   false,   // CAL  
+   true,   // CAL  
    QADC_FIFO_4,   //MESSAGE_TAG 
-   QADC_SAMPLE_CYCLES_2,   //LST        
+   QADC_SAMPLE_CYCLES_8,   //LST        
    0,   //TSR       
    QADC_CHANNEL_CONVERSION_FORMAT_RIGHT_JUSTIFIED_UNSIGNED,   //FMT         
    QADC_CHANNEL_AN30,    // CHANNEL 
-   QADC_CONFIGURATION_REGISTER_1
+   0
 },
 
-//const ADC_CCMF_T  QADC_CMD_ACCVI = 
+//AD_58XRAWIN_Channel
 {
-   1,    //EOQ      
+   true,    //EOQ      
    0,    //PAUSE 
    0,    // REP     
    0,    //EB   
    ADC_CONVERTER_1,    //BN    
-   false,   // CAL  
+   true,   // CAL  
    QADC_FIFO_4,   //MESSAGE_TAG 
-   QADC_SAMPLE_CYCLES_2,   //LST        
+   QADC_SAMPLE_CYCLES_8,   //LST        
    0,   //TSR       
    QADC_CHANNEL_CONVERSION_FORMAT_RIGHT_JUSTIFIED_UNSIGNED,   //FMT         
    QADC_CHANNEL_AN31,    // CHANNEL 
-   QADC_CONFIGURATION_REGISTER_1
+   0
 },
-//const ADC_CCMF_T  QADC_CMD_PBATTVI = 
+//AD_PBATTVI_Channel
 {
-   1,    //EOQ      
+   true,    //EOQ      
    0,    //PAUSE 
    0,    // REP     
    0,    //EB   
    ADC_CONVERTER_1,    //BN    
-   false,   // CAL  
+   true,   // CAL  
    QADC_FIFO_4,   //MESSAGE_TAG 
-   QADC_SAMPLE_CYCLES_2,   //LST        
+   QADC_SAMPLE_CYCLES_8,   //LST        
    0,   //TSR       
    QADC_CHANNEL_CONVERSION_FORMAT_RIGHT_JUSTIFIED_UNSIGNED,   //FMT         
    QADC_CHANNEL_AN32,    // CHANNEL 
-   QADC_CONFIGURATION_REGISTER_1
+   0
 },
 
-//const ADC_CCMF_T  QADC_CMD_ETCCurVI = 
+//AD_Reserved_1_Channel 
+//{
+ //  1,    //EOQ      
+//   0,    //PAUSE 
+//   0,    // REP     
+ //  0,    //EB   
+ //  ADC_CONVERTER_1,    //BN    
+ //  false,   // CAL  
+//   QADC_FIFO_4,   //MESSAGE_TAG 
+ //  QADC_SAMPLE_CYCLES_2,   //LST        
+//   0,   //TSR       
+ //  QADC_CHANNEL_CONVERSION_FORMAT_RIGHT_JUSTIFIED_UNSIGNED,   //FMT         
+ //  QADC_CHANNEL_AN33,    // CHANNEL 
+ //  QADC_CONFIGURATION_REGISTER_1
+//},
+
+//AD_Reserved_2_Channel 
+//{
+ //  1,    //EOQ      
+ //  0,    //PAUSE 
+  // 0,    // REP     
+ //  0,    //EB   
+ //  ADC_CONVERTER_1,    //BN    
+   //true,   // CAL  
+  // QADC_FIFO_4,   //MESSAGE_TAG 
+  // QADC_SAMPLE_CYCLES_2,   //LST        
+  // 0,   //TSR       
+ //  QADC_CHANNEL_CONVERSION_FORMAT_RIGHT_JUSTIFIED_UNSIGNED,   //FMT         
+   //QADC_CHANNEL_AN34,    // CHANNEL 
+  // QADC_CONFIGURATION_REGISTER_1
+//},
+
+//AD_Reserved_3_Channel 
+//{
+  // 1,    //EOQ      
+   //0,    //PAUSE 
+   //0,    // REP     
+   //0,    //EB   
+   //ADC_CONVERTER_1,    //BN    
+  // true,   // CAL  
+   //QADC_FIFO_4,   //MESSAGE_TAG 
+   //QADC_SAMPLE_CYCLES_2,   //LST        
+   //0,   //TSR       
+   //QADC_CHANNEL_CONVERSION_FORMAT_RIGHT_JUSTIFIED_UNSIGNED,   //FMT         
+   //QADC_CHANNEL_AN35,    // CHANNEL 
+   //QADC_CONFIGURATION_REGISTER_1
+//},
+
+//AD_HWCFGVI_Channel  
 {
-   1,    //EOQ      
+   true,    //EOQ      
    0,    //PAUSE 
    0,    // REP     
    0,    //EB   
    ADC_CONVERTER_1,    //BN    
-   false,   // CAL  
+   true,   // CAL  
    QADC_FIFO_4,   //MESSAGE_TAG 
-   QADC_SAMPLE_CYCLES_2,   //LST        
-   0,   //TSR       
-   QADC_CHANNEL_CONVERSION_FORMAT_RIGHT_JUSTIFIED_UNSIGNED,   //FMT         
-   QADC_CHANNEL_AN33,    // CHANNEL 
-   QADC_CONFIGURATION_REGISTER_1
-},
-
-//const ADC_CCMF_T  QADC_CMD_PumpVI = 
-{
-   1,    //EOQ      
-   0,    //PAUSE 
-   0,    // REP     
-   0,    //EB   
-   ADC_CONVERTER_1,    //BN    
-   false,   // CAL  
-   QADC_FIFO_4,   //MESSAGE_TAG 
-   QADC_SAMPLE_CYCLES_2,   //LST        
-   0,   //TSR       
-   QADC_CHANNEL_CONVERSION_FORMAT_RIGHT_JUSTIFIED_UNSIGNED,   //FMT         
-   QADC_CHANNEL_AN34,    // CHANNEL 
-   QADC_CONFIGURATION_REGISTER_1
-},
-
-//const ADC_CCMF_T  QADC_CMD_DFSWDI = 
-{
-   1,    //EOQ      
-   0,    //PAUSE 
-   0,    // REP     
-   0,    //EB   
-   ADC_CONVERTER_1,    //BN    
-   false,   // CAL  
-   QADC_FIFO_4,   //MESSAGE_TAG 
-   QADC_SAMPLE_CYCLES_2,   //LST        
-   0,   //TSR       
-   QADC_CHANNEL_CONVERSION_FORMAT_RIGHT_JUSTIFIED_UNSIGNED,   //FMT         
-   QADC_CHANNEL_AN35,    // CHANNEL 
-   QADC_CONFIGURATION_REGISTER_1
-},
-
-//const ADC_CCMF_T  QADC_CMD_HWCFGVI = 
-{
-   1,    //EOQ      
-   0,    //PAUSE 
-   0,    // REP     
-   0,    //EB   
-   ADC_CONVERTER_1,    //BN    
-   false,   // CAL  
-   QADC_FIFO_4,   //MESSAGE_TAG 
-   QADC_SAMPLE_CYCLES_2,   //LST        
+   QADC_SAMPLE_CYCLES_8,   //LST        
    0,   //TSR       
    QADC_CHANNEL_CONVERSION_FORMAT_RIGHT_JUSTIFIED_UNSIGNED,   //FMT         
    QADC_CHANNEL_AN38,    // CHANNEL 
-   QADC_CONFIGURATION_REGISTER_1
+   0
 },
 
-//const ADC_CCMF_T  QADC_CMD_DACVI = 
+//AD_VCC2_Channel 
 {
-   1,    //EOQ      
+   true,    //EOQ      
    0,    //PAUSE 
    0,    // REP     
    0,    //EB   
    ADC_CONVERTER_1,    //BN    
-   false,   // CAL  
+   true,   // CAL  
    QADC_FIFO_4,   //MESSAGE_TAG 
-   QADC_SAMPLE_CYCLES_2,   //LST        
+   QADC_SAMPLE_CYCLES_8,   //LST        
    0,   //TSR       
    QADC_CHANNEL_CONVERSION_FORMAT_RIGHT_JUSTIFIED_UNSIGNED,   //FMT         
    QADC_CHANNEL_AN39,    // CHANNEL 
-   QADC_CONFIGURATION_REGISTER_1
+   0
 },
 
-//const ADC_CCMF_T  QADC_CMD_TEMP_SENSOR= 
+// AD_CPUTemp_Channel
 {
-   1,    //EOQ      
+   true,    //EOQ      
    0,    //PAUSE 
    0,    // REP     
    0,    //EB   
    ADC_CONVERTER_1,    //BN    
-   false,   // CAL  
+   true,   // CAL  
    QADC_FIFO_4,   //MESSAGE_TAG 
-   QADC_SAMPLE_CYCLES_2,   //LST        
+   QADC_SAMPLE_CYCLES_8,   //LST        
    0,   //TSR       
    QADC_CHANNEL_CONVERSION_FORMAT_RIGHT_JUSTIFIED_UNSIGNED,   //FMT         
    QADC_CHANNEL_AN128_TEMP_SENSOR,    // CHANNEL 
-   QADC_CONFIGURATION_REGISTER_1
+   0
 }
 
  };

@@ -25,13 +25,6 @@
   // PIT_TIMER_Set_Value( PIT_CHANNEL_RTI, RTI_LOAD_VALUE_1MS);
   // PIT_INTERRUPT_Set_Enable(PIT_CHANNEL_RTI, true);
 
-    // set up PIT time 5us
-  // PIT_TIMER_Set_Value( PIT_CHANNEL_1, PIT_LOAD_VALUE_5US);
-
-    // enable QADC DMA time base scan
-  // DMA_Enable_Request(DMA_CHANNEL_QADC_FISR4_RFDF_4);
-  // DMA_Enable_Request(DMA_CHANNEL_QADC_FISR4_CFFF_4);
-
    // turn on Time Off Delay signal 
    //Activate_TimeOffDelay
    HAL_GPIO_SET_TODO_Enable(true);
