@@ -12,10 +12,13 @@
 #include "dd_flash_memory_interface.h"
 #include "dd_intc_interface.h"
 #include "dd_dma_interface.h"
-#include "io_config_swt.h"
-#include "io_config_dma.h"
 #include "dd_mios_interface.h"
 #include "dd_dspi_interface.h"
+#include "dd_pit_interface.h"
+#include "io_config_swt.h"
+#include "io_config_dma.h"
+#include "io_config_pit.h"
+
 #include "hal_emulated_eeprom.h"
 
 #include "dd_l9958.h"
@@ -162,6 +165,13 @@ void InitializeHardwareRegisters(void)
 
 	QADC_Initialize_Device();
 
+	    //set up PIT time 5us
+       PIT_TIMER_Set_Value( PIT_CHANNEL_1, PIT_LOAD_VALUE_20US);
+
+      //enable QADC DMA time base scan
+      DMA_Enable_Request(DMA_CHANNEL_QADC_FISR4_RFDF_4);
+      DMA_Enable_Request(DMA_CHANNEL_QADC_FISR4_CFFF_4);
+
 
 	// Enable_Interrupts();
 	//ECSM_NVM_ChecksumCheck();
@@ -207,6 +217,9 @@ void InitializeHardwareRegisters(void)
 	FlexCAN_A_Initialize_Device();
 
 	// FlexCAN_C_Initialize_Device( )
+
+	QADC_ANALOG_Calibrate_Converter(ADC_CONVERTER_0);
+       QADC_ANALOG_Calibrate_Converter(ADC_CONVERTER_1); 
 
 	/* init ccp can id and channel */
 	HAL_CAN_Initialize();

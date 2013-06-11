@@ -6,18 +6,18 @@
 //=============================================================================
 // HAL_Analog_Get_ESC1HI_Value
 //=============================================================================
-  uint16_t HAL_Analog_Get_ESC1HI_Value(void) 
- {
-     return  QADC_Analog_Get_Value(AD_ESC1HI_Channel);
- }
+  //uint16_t HAL_Analog_Get_ESC1HI_Value(void) 
+ //{
+   //  return  QADC_Analog_Get_Value(AD_ESC1HI_Channel);
+ //}
 
 //=============================================================================
 // HAL_Analog_Get_ESC1LO_Value
 //=============================================================================
-  uint16_t HAL_Analog_Get_ESC1LO_Value(void) 
- {
-     return  QADC_Analog_Get_Value(AD_ESC1LO_Channel);
- }
+ // uint16_t HAL_Analog_Get_ESC1LO_Value(void) 
+ //{
+  //   return  QADC_Analog_Get_Value(AD_ESC1LO_Channel);
+ //}
 
 //=============================================================================
 // HAL_Analog_Get_MAPVI_Value
