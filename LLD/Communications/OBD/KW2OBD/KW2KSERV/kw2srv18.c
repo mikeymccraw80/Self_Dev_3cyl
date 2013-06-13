@@ -20,7 +20,7 @@
  *
 \* ============================================================================ */
 
-
+#if 0
 
 #include "kw2type.h"
 #include "kw2dll.h"
@@ -90,7 +90,7 @@ void KwJ14230ReadDiagnosticTroubleCodesByStatus( void )
    }
 */
 }
-
+#endif
 
 
 

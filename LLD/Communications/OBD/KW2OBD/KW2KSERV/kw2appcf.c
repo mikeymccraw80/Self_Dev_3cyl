@@ -141,6 +141,7 @@ const SERVICE_DEFINITION_ARRAY_TYPE CaServiceDefinition[ ]=
       KwJ14230EcuReset,
       KwNoMultiModeAval
    },
+
 };
 
 /*

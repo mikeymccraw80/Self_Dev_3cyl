@@ -24,8 +24,8 @@
 
 #include "t_base.h"
 
-extern BYTE NumberOfDTC;
-extern void KwJ14230ReadDiagnosticTroubleCodesByStatus( void ) ;
+BYTE NumberOfDTC;
+void KwJ14230ReadDiagnosticTroubleCodesByStatus( void ) ;
 
 
 /* ============================================================================ *\
