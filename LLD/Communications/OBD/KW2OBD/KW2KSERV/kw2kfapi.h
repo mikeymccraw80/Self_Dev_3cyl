@@ -48,11 +48,11 @@
 ************************************************************************
 *                                                                      *
 ***********************************************************************/
- 
+#include "reuse.h"
 //bool KW2K_GetCommunicationActiveState( void );
 //uint8_t* KW2K_GetServiceData(void );
-FAR_COS void KW2K_SendStandardNegativeAnswer( uint8_t  in_location);
-FAR_COS void KW2K_SendStandardPositiveAnswer(uint8_t  in_location);
+void KW2K_SendStandardNegativeAnswer( uint8_t  in_location);
+void KW2K_SendStandardPositiveAnswer(uint8_t  in_location);
 void PostOFVC_KWResponseToRequest (void) ;
 #endif
 

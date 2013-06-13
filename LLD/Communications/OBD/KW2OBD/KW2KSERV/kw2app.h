@@ -23,10 +23,11 @@
  *
 \* ============================================================================ */
 
-#include "types.h"
 #include "kw2type.h"
-#include "kw2appcf.h"
-#include "dd_nvram.h"
+#include "reuse.h"
+#include "lux_type.h"
+// #include "kw2appcf.h"
+// #include "dd_nvram.h"
 
 /***********************Global DEFINITIONS:****************************/
 /* (1280 * .00781) = 10 Sec. */
@@ -191,10 +192,10 @@ extern  TbBOOLEAN  VbCopyAndExecuteKernelPending;
 /*********************************************************************/
 /***    Get the ECU Reset Pending flag                             ***/
 /*********************************************************************/
-static inline TbBOOLEAN GetECUResetPending(void)
-{
-  return VbECUResetPending ; 
-} /*** End of SetECUResetPending ***/
+// static inline TbBOOLEAN GetECUResetPending(void)
+// {
+  // return VbECUResetPending ; 
+// } /*** End of SetECUResetPending ***/
 
 
 /**********************************************************************/
@@ -214,7 +215,7 @@ static inline TbBOOLEAN GetECUResetPending(void)
 /*********************************************************************/
 /***    Set the Copy Kernel to Ram and Execute Pending flag                             ***/
 /*********************************************************************/
-static inline void SetCopyAndExecuteKernelPending(TbBOOLEAN LyCopyKernel)
+static INLINE void SetCopyAndExecuteKernelPending(bool LyCopyKernel)
 {
   VbCopyAndExecuteKernelPending = LyCopyKernel ;
 } /*** End of SetCopyAndExecuteKernelPending ***/
@@ -222,7 +223,7 @@ static inline void SetCopyAndExecuteKernelPending(TbBOOLEAN LyCopyKernel)
 /*********************************************************************/
 /***    Get the Copy Kernel to Ram and Execute Pending flag                             ***/
 /*********************************************************************/
-static inline TbBOOLEAN GetCopyAndExecuteKernelPending(void)
+static INLINE bool GetCopyAndExecuteKernelPending(void)
 {
   return VbCopyAndExecuteKernelPending ;
 } /*** End of SetCopyAndExecuteKernelPending ***/

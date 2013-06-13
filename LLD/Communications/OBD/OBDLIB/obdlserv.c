@@ -108,25 +108,19 @@
 /******************************************************************************
 * CAN OBD Service Include Files
 ******************************************************************************/
-#include "dcanfapi.h" /* DCAN_GetCommunicationActiveState */
+// #include "dcanfapi.h" /* DCAN_GetCommunicationActiveState */
 /******************************************************************************
 * KW2K Service Include Files
 ******************************************************************************/
 #include "kw2kfapi.h" /*KW2K_GetCommunicationActiveState */
 #include "kw2dll.h"/*For GetKw2000ServiceData(),*/
-#include "kw2dll.h" /*PerformReset()*/
-#include "kw2srv10.h" /*Init2CCommVariables*/
-#include "kw2srv10m.h"
-/******************************************************************************
-/* For Hal Interface*/
-/******************************************************************************/
-#include "obdssvio.h" 
+// #include "kw2srv10.h" /*Init2CCommVariables*/
+// #include "kw2srv10m.h"
+#include "obdssvio.h"
+
 /*********************************************************************/
 /*            Global  Variable                                             */
 /*********************************************************************/
-/******************************************************************************
-/* For Reset and RunKernelOnRam Only*/
-/******************************************************************************/
 //TbBOOLEAN  VbECUResetPending ;
 TbBOOLEAN  VbCopyAndExecuteKernelPending;
 //Kw2000DiagStateType  Kw2000DiagSt ;
@@ -149,13 +143,13 @@ void InitAppLvlCommVariables(void);
 /*********************************************************************/
 /*** Get Communication Established Status.                         ***/
 /*********************************************************************/
-FAR_COS TbBOOLEAN GetCommunicationEstablishedState( void )
+TbBOOLEAN GetCommunicationEstablishedState( void )
 {
    bool LyRtnVal;
    LyRtnVal = false;
    if ( VbCAN_OBD_Enabled )
    {
-      LyRtnVal = DCAN_GetCommunicationActiveState();
+      // LyRtnVal = DCAN_GetCommunicationActiveState();
    }
    else if ( VbKW2K_OBD_Enabled )
    {
@@ -164,7 +158,7 @@ FAR_COS TbBOOLEAN GetCommunicationEstablishedState( void )
    return (LyRtnVal);  
 } /*** End of GetCommunicationEstablishedState ***/
 
-FAR_COS void OBD_ByKW2000( void )
+void OBD_ByKW2000( void )
 {
    VbKW2K_OBD_Enabled = CbTRUE; 
    VbCAN_OBD_Enabled = CbFALSE;
@@ -179,11 +173,11 @@ void OBD_ByCAN( void )
 /*********************************************************************/
 /*** Builds a standard OBD negative answer                      ***/
 /*********************************************************************/
-FAR_COS void SendStandardNegativeAnswer(  uint8_t  in_code )
+void SendStandardNegativeAnswer(  uint8_t  in_code )
 {
    if ( VbCAN_OBD_Enabled )
    {
-      DCAN_SendStandardNegativeAnswer( in_code );
+      // DCAN_SendStandardNegativeAnswer( in_code );
    }
    else if ( VbKW2K_OBD_Enabled )
    {
@@ -193,11 +187,11 @@ FAR_COS void SendStandardNegativeAnswer(  uint8_t  in_code )
 /*********************************************************************/
 /*** Builds a standard kw2000 positive answer                      ***/
 /*********************************************************************/
-FAR_COS void SendStandardPositiveAnswer( BYTE in_msg_size )
+void SendStandardPositiveAnswer( BYTE in_msg_size )
 {
    if (VbCAN_OBD_Enabled )
    {
-      DCAN_SendStandardPositiveAnswer( in_msg_size );
+      // DCAN_SendStandardPositiveAnswer( in_msg_size );
    }
    else if ( VbKW2K_OBD_Enabled )
    {
@@ -205,18 +199,17 @@ FAR_COS void SendStandardPositiveAnswer( BYTE in_msg_size )
    }
 }
 
-
- void InitAppLvlCommVariables(void)
+void InitAppLvlCommVariables(void)
 { 
    if ( VbCAN_OBD_Enabled )
    {
     /* Set standard diagnostic mode as default */
-      SetStandardDiagnosticState() ;
+      //SetStandardDiagnosticState() ;
    }
    else if ( VbKW2K_OBD_Enabled )
    {
     /* Invoke application functions. */
-   InitKwJ14230StartDiagnosticSession();
+   //InitKwJ14230StartDiagnosticSession();
    }
 }
 /***********************************************************************
@@ -228,9 +221,10 @@ FAR_COS void SendStandardPositiveAnswer( BYTE in_msg_size )
 *              operation system to check the recieved Msg.             *
 *                                                                      *
 ***********************************************************************/   
-FAR_COS void UpdateOBD_Services(void)
+#if 0
+ void UpdateOBD_Services(void)
 { 
-   Can8DataBytesArrayType *Can8_DataBytesArrayPtr;
+   // Can8DataBytesArrayType *Can8_DataBytesArrayPtr;
    if ((!DCAN_AnswerStillBeingSent ())&&
            (!Keyword2000AnswerStillBeingSent ()))
    { 
@@ -251,7 +245,7 @@ FAR_COS void UpdateOBD_Services(void)
 	  
       if ( GetCopyAndExecuteKernelPending())
       {
-         KW2KCAN_Received_Message (*Can8_DataBytesArrayPtr);
+         // KW2KCAN_Received_Message (*Can8_DataBytesArrayPtr);
       }
   
    }
@@ -272,7 +266,7 @@ FAR_COS void UpdateOBD_Services(void)
        CommunicationStatus = CbFALSE;
    }
 }
-
+#endif
 
 /*********************************************************************/
 /***   Returns the start address of the Calibration                ***/

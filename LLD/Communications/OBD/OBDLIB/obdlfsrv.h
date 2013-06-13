@@ -500,41 +500,7 @@
 extern TbBOOLEAN VbCAN_OBD_Enabled;
 extern TbBOOLEAN VbKW2K_OBD_Enabled;
 //extern BYTE KW2CrankShaftAdaptiveCylinder[];/*CrankShaftAdaptiveCylinderSize*/
-#if 0
-extern const BYTE ECUIDScalingTable[] ;
-extern const LINEAR_UW CsC2SC_MAP256_Pct_ThrotPstn_PERCENTb;
-extern const LINEAR_SW CsC2SC_MAP256_Phi_IndSparkAdvFinal;
-extern const LINEAR_UW CsC2SC_MAP256_Pct_ThrotPstn_PERCENTa;
-extern const LINEAR_UW CsC2SC_MAP256_U_O2_VOLT;
-extern const LINEAR_UW CsC2SC_MAP256_U_IGN_VOLT;
-extern const LINEAR_UW CsC2SC_MAP256_Pct_EGR_DutyCycle_PERCENTa;
-extern const LINEAR_UW CsC2SC_MAP256_t_FinalBPW_T_MILLISECONDS;
-extern const LINEAR_UW CsC2SC_MAP256_Pct_DsrdEGR_PERCENTa;
-extern const LINEAR_UW CsC2SC_MAP256_p_BARO;
-extern const LINEAR_UW CsC2SC_MAP256_AIRFUELRATIO;
-extern const LINEAR_SW CsC2SC_MAP256_T_CatTempEst_V_DEG_Cb;
-extern const LINEAR_UW CsC2SC_Trans_PERCENTa;
-extern const LINEAR_UW CsC2SC_MAP256_p_BARO_Pres;
-extern const LINEAR_SW CsC2SC_MAP256_T_Temp_T_DEG_Ca;
-extern const LINEAR_UW CsC2SC_MAP256_CCP_DutyCycle_PERCENTa;
-extern const LINEAR_UW CsC2SC_MAP256_U_Sensor_O2_VOLT;
-extern const LINEAR_UW CsC2SC_MAP256_n_DsrdRPM_T_RPMa;
-extern const LINEAR_UW CsC2SC_MAP256_v_Spd_KPH;
-extern const LINEAR_SW CsC2SC_MAP256_T_KnockRetard;
-extern const LINEAR_UW CsC2SC_MAP256_AT_MainRelay_Volt;
-extern const LINEAR_UW CsDCAN_ETCI_Pct_PERCENTa;
-extern const LINEAR_UW CsDCAN_ETCI_Pct_PERCENT_MULTb;
-extern const LINEAR_UW CsDCAN_MAP256_AIRFUELRATIO;
-extern const LINEAR_UW CsC2SC_MAP256_g_RR_WSS;
-extern const LINEAR_UW CsC2SC_MAP256_U_O2_VOLTf;
-extern const LINEAR_SW CsC2SC_p_V_KPA_DIFF_WORD;
-extern const BYTE CeDIAG_MIN_PID_INDEX ; 
-#endif
 
-//#define GetRequestedFrame()              (VyRequestedFrameNumber)
-//#define SetRequestedFrame( Count )       (VyRequestedFrameNumber = (Count) )
-//#define GetECUResetPending()             (VbECUResetPending)
-//#define SetECUResetPending(LyECUReset)   (VbECUResetPending = (LyECUReset) )
 
 /*********************************************************************/
 /*                  EXTERN FUNCTION DECLARATIONS                     */
@@ -561,48 +527,5 @@ void OBD_ByCAN( void );
 //TbBOOLEAN IsDevelopmentOrManfModeActive ( void );
 FAR_COS void UpdateOBD_Services(void);
 FAR_COS void InitAppLvlCommVariables(void);
-/*********************************************************************/
-/*                  INLINE FUNCTION DECLARATIONS                     */
-/*********************************************************************/
-#if 0
-/*********************************************************************/
-/*** Check the current mode of StandardDiagnosticModeState         ***/
-/*********************************************************************/
-INLINE TbBOOLEAN CheckStandardDiagnosticState (void)
-{
- return (Kw2000DiagSt == StandardDiagnosticModeState);
-}
 
-/*********************************************************************/
-/*** Check the current mode of ECUDelvelopmentState                ***/
-/*********************************************************************/
-INLINE TbBOOLEAN CheckECUDevelopmentState (void)
-{
- return (Kw2000DiagSt == ECUDevelopmentState);
-}
-
-/*********************************************************************/
-/*** Set the current mode to be ECUProgrammingSessionState         ***/
-/*********************************************************************/
-INLINE void SetECUProgrammingSessionState(void)
-{
-   Kw2000DiagSt = ECUProgrammingSessionState;
-}
-
-/*********************************************************************/
-/*** Set the current mode to be StandardDiagnosticModeState        ***/
-/*********************************************************************/
-INLINE void SetStandardDiagnosticState ( void)
-{
-   Kw2000DiagSt = StandardDiagnosticModeState;
-}
-
-/*********************************************************************/
-/*** Set the current mode to be ECUDevelopmentState                ***/
-/*********************************************************************/
-INLINE void SetECUDevelopmentState ( void)
-{
-   Kw2000DiagSt = ECUDevelopmentState;
-}
-#endif
 #endif

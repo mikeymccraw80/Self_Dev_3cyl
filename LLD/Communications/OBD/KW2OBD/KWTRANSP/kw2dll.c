@@ -572,7 +572,7 @@ void GoToExecuteServiceK2State (void)
 {
 	Kw2000State = k2sExecuteService;
 	TimerBeforeAnswerTx = init_Tx_Timer;
-	// OBD_ByKW2000();
+	OBD_ByKW2000();
 } /*** End of GoToExecuteServiceK2State ***/
 
 
@@ -1540,8 +1540,8 @@ void CheckKW2000LineState(void)
 
 void InitializeKw2000VIO (void)
 {
-	KW2000CommuState=KW2000_Responder;
-	SetMyPhysicalAddr ( MyPhysicalAddr ) ;
+	// KW2000CommuState=KW2000_Responder;
+	// SetMyPhysicalAddr ( MyPhysicalAddr ) ;
 	// SCI0_SetSCIBaudRate (Kw2000BaudRate);
 	kline->setbaud(Kw2000BaudRate);
 	GoToWaitingTIdleSynchK2State (TIdleInit);

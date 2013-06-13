@@ -22,8 +22,8 @@
 \* ============================================================================ */
 
 /***********************LOCAL DEFINITIONS:*****************************/
+#include "kw2api.h"
 #include "kw2app.h"
-// #include "dd_boot.h"
 #include "kw2dll.h"
 #include "kw2appcf.h"
 
@@ -141,7 +141,7 @@ const uint8_t  CyMaxServiceDefTableEntrys  =
 void InitAppLvlCommVariables_KW ( void )
 {
    /* Invoke application functions. */
-    InitKwJ14230StartDiagnosticSession();
+   // InitKwJ14230StartDiagnosticSession();
 }
 
 /**********************************************************************/
@@ -151,7 +151,7 @@ void InitAppLvlCommVariables_KW ( void )
 void InitAppLvlCommVariablesGlobal ( void )
 {
    /* Invoke application initialisations. */
-    InitKwJ14230DynamicallyDefineLocalIdentifier();
+    //InitKwJ14230DynamicallyDefineLocalIdentifier();
 }
 
 

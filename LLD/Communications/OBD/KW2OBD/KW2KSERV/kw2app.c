@@ -51,14 +51,14 @@ bool L2SecurityTmrDelay10s=false;
 
 
 /***********************************************************************************/
-#pragma section [nvram]                    /* NVRAM Variables                      */
+// #pragma section [nvram]                    /* NVRAM Variables                      */
 /***********************************************************************************/
 
 /* used to save supported Keyword protocol 2000 Service request table index. */
 uint8_t CyServiceRequestTable_Idx ;   /* --- NVMEM --- */
 
 /***********************************************************************************/
-#pragma section []                         /* Normal Variables                     */
+// #pragma section []                         /* Normal Variables                     */
 /***********************************************************************************/
 
 /* Local functions used to parse Multi/Requested messages */
@@ -86,14 +86,14 @@ void UpdateKeyword2000Services (void)
 		SecurityTimer--;
 	}
 	/* Count down the level 2 Security Timer */
-	if (Chk_SiemensImmo_Enabled()) {
+	if (0) {
 		if ((Level2SecurityTimer != 0)&&(L2SecurityTmrDelay10s==true)) {
 			Level2SecurityTimer--;
 			L2SecurityTmrDelay10s=false;
-			L2SecurityTmrCoefficient=1250;
+			// L2SecurityTmrCoefficient=1250;
 		} else if (Level2SecurityTimer==0) {
 			L2SecurityTmrDelay10s=false;
-			L2SecurityTmrCoefficient=0;
+			// L2SecurityTmrCoefficient=0;
 		}
 	} else {
 		if (Level2SecurityTimer != 0) {
@@ -145,11 +145,11 @@ void UpdateKeyword2000Services (void)
 
 void UpdateL2SecurityTmrDelay10s (void)
 {
-	if(L2SecurityTmrCoefficient!=0) {
-		L2SecurityTmrCoefficient--;
-	} else if(L2SecurityTmrCoefficient==0) {
-		L2SecurityTmrDelay10s=true;
-	}
+	// if(L2SecurityTmrCoefficient!=0) {
+		// L2SecurityTmrCoefficient--;
+	// } else if(L2SecurityTmrCoefficient==0) {
+		// L2SecurityTmrDelay10s=true;
+	// }
 }
 
 /***********************************************************************

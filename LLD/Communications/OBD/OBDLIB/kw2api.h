@@ -29,8 +29,7 @@
 /*********************************************************************/
 #include "kw2type.h"
 #include "kw2dll.h"
-#include "kw2cfg.h"
-#include "dd_c58x.h"
+//#include "kw2cfg.h"
 #include "intr_ems.h"
 
 /*  application specific functions */
