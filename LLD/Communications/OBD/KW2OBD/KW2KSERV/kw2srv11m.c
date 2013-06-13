@@ -25,10 +25,7 @@
 #include "kw2type.h"
 #include "kw2dll.h"
 #include "kw2srv11m.h"
-//#include "kw2app.h"
-//#include "kw2srv10.h"
-//#include "kw2srv20.h"
-//#include "kw2api.h"
+
 
 #define MODE_11_MSG_LENGTH       (2)
 #define MODE_11_RESP_MSG_LENGTH  (1)
@@ -49,7 +46,7 @@
 * RETURN VALUES:     NONE                                              *
 ***********************************************************************/
 
-FAR_COS void KwJ14230MiniEcuReset( void )
+void KwJ14230MiniEcuReset( void )
 {
    if ( MODE_11_MSG_LENGTH != GetKeyword2000ServiceDataLength () )
    {

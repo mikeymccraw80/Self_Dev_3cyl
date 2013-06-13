@@ -209,7 +209,7 @@ void InitAppLvlCommVariables(void)
    else if ( VbKW2K_OBD_Enabled )
    {
     /* Invoke application functions. */
-   //InitKwJ14230StartDiagnosticSession();
+   InitKwJ14230StartDiagnosticSession();
    }
 }
 /***********************************************************************

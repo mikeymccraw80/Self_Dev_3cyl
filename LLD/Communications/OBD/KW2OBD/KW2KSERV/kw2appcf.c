@@ -30,6 +30,7 @@
 /*  services specific includes */
 #include "j1979.h"
 #include "kw2srv10.h"
+#include "kw2srv11.h"
 // #include "obdlfsrv.h"
 
 void ServiceNotSupported( void )
@@ -133,6 +134,13 @@ const SERVICE_DEFINITION_ARRAY_TYPE CaServiceDefinition[ ]=
       KwJ14230StartDiagnosticSession,
       KwJ14230ExecuteService10NextResponse
    },
+
+   /* Service 0x11 */
+   {
+      sirEcuReset,
+      KwJ14230EcuReset,
+      KwNoMultiModeAval
+   },
 };
 
 /*
@@ -153,7 +161,7 @@ const uint8_t  CyMaxServiceDefTableEntrys  =
 void InitAppLvlCommVariables_KW ( void )
 {
    /* Invoke application functions. */
-   // InitKwJ14230StartDiagnosticSession();
+   InitKwJ14230StartDiagnosticSession();
 }
 
 /**********************************************************************/

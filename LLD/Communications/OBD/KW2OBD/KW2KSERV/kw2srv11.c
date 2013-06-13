@@ -26,7 +26,7 @@
 #include "kw2dll.h"
 #include "kw2app.h"
 #include "kw2srv10.h"
-#include "kw2srv20.h"
+// #include "kw2srv20.h"
 #include "kw2api.h"
 
 #define MODE_11_MSG_LENGTH       (2)

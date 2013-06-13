@@ -22,7 +22,7 @@
  *
 \* ============================================================================ */
 
-extern FAR_COS void KwJ14230MiniEcuReset( void ) ;
+void KwJ14230MiniEcuReset( void ) ;
 
 
 

@@ -53,6 +53,6 @@
 /*                  EXTERN FUNCTION DECLARATIONS                     */
 /*********************************************************************/
 
-extern void KwJ14230EcuReset( void ) ;
+void KwJ14230EcuReset( void ) ;
 
 #endif
