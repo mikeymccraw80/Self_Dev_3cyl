@@ -19,6 +19,7 @@
  *   None.
  *
 \* ============================================================================ */
+#if 0
 #include "kw2srv30.h"
 
 #include "kw2dll.h"
@@ -515,7 +516,7 @@ void FormAndSendImmoData (void)
 {
    LearnSKandPINService();
 }
-
+#endif
 /* ============================================================================ *\
  * File revision history (top to bottom, first revision to last revision
  * ============================================================================

@@ -46,6 +46,7 @@
 * extern:                                                              *
 *        void KwJ14230ReadDataByCommonIdentifier( void );              *
 ***********************************************************************/
+#if 0
 #include "kw2dll.h"
 #include "kw2api.h" 
 //#include "cmnpid.h"
@@ -83,4 +84,4 @@ void KwJ14230ReadDataByCommonIdentifier( void )
  * + Baseline - Created from  kw2000 core software package.
  *
 \* ============================================================================ */
-
+#endif
