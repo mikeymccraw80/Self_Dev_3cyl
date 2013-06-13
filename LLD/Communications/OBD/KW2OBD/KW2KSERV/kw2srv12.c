@@ -47,6 +47,7 @@
 *         void KwJ1423ReadFreezeFrameData( void );                     *
 *         void FormAndSendFreezeFrameData (void);                      * 
 ***********************************************************************/
+#if 0
 #include "kw2dll.h"
 #include "kw2api.h"
 #include "kw2srv12.h"
@@ -56,7 +57,7 @@
 /*********************************************************************/
 /*           CONSTANT and ENUMERATION DECLARATIONS                   */
 /*********************************************************************/
-#if 0
+
 /*Define the Msg length, the record access method, the received
  *Frame number position and accsess mothed position in the Msg.
  */
