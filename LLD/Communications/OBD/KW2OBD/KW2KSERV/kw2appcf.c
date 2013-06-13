@@ -31,6 +31,7 @@
 #include "j1979.h"
 #include "kw2srv10.h"
 #include "kw2srv11.h"
+#include "kw2srv1a.h"
 // #include "obdlfsrv.h"
 
 void ServiceNotSupported( void )
@@ -142,6 +143,12 @@ const SERVICE_DEFINITION_ARRAY_TYPE CaServiceDefinition[ ]=
       KwNoMultiModeAval
    },
 
+   /* Service 0x1A */
+   {
+      sirReadEcuIdentification,
+      KwJ14230ReadEcuIdentification ,
+      KwNoMultiModeAval
+   },
 };
 
 /*

@@ -19,7 +19,8 @@
  *   None.
  *
 \* ============================================================================ */
-
+#include "kw2api.h"
+#include "kw2app.h"
 #include "kw2dll.h"
 #include "kw2app.h"
 #include "kw2cfg.h"
@@ -45,53 +46,6 @@ void KwJ14230ReadEcuIdentification( void )
    {
       switch ( GetKw2000ServiceData (CyId) )
       {
-      #if 0
-      case ioReportECUIdentificationTable:
-         TrBytes = 1 ;
-         WrtKw2000ServiceData( GetKw2000ServiceData (CyId), TrBytes++ );
-
-         /* VehicleIdentificationNumber */
-         for ( idx = 0 ; idx < VehicleIdentificationNumberSize ; idx++ )
-         {
-            WrtKw2000ServiceData( ReadNvmEeprom( &NV_VINNumber[idx] ), TrBytes++);
-         }
-         /* fill in VehicleManufacturerECUHardwareNumber - KCustPartNumber */
-         for ( idx = 0 ; idx < sizeof( KCustPartNumber ) ; idx++ )
-         {
-            WrtKw2000ServiceData( KCustPartNumber[idx], TrBytes++);
-         }
-         /* fill in SystemSupplierECUHardwareNumber - KSystemSupplierECUHardwareNumber */
-         for ( idx = 0 ; idx < sizeof( KSystemSupplierECUHardwareNumber ) ; idx++ )
-         {
-            WrtKw2000ServiceData( KSystemSupplierECUHardwareNumber[idx], TrBytes++);
-         }
-         /* fill in SystemSupplierECUSoftwareNumber - DEBroadcastCode */ 
-         for ( idx = 0 ; idx < sizeof( SoftwareName ) ; idx++ )
-         {
-            WrtKw2000ServiceData( SoftwareName[idx], TrBytes++);
-         }
-         /* fill in EngineType - CustomerEngineName - only low 6 bit according to spec*/
-         for ( idx = 0 ; idx < ( sizeof( CustomerEngineName ) - 4 ) ; idx++ )
-         {
-            WrtKw2000ServiceData( CustomerEngineName[idx], TrBytes++);
-         }
-         /* RepairShopCode */
-         for ( idx = 0 ; idx < RepairShopCodeSize ; idx++ )
-         {
-            WrtKw2000ServiceData( ReadNvmEeprom( &NV_RepairShopCode[idx] ), TrBytes++);
-         }
-
-         /* fill in ProgrammingDate */
-         for ( idx = 0 ; idx < ProgrammingDateSize ; idx++ )
-         {
-            WrtKw2000ServiceData( ReadNvmEeprom( &NV_ProgrammingDate[idx] ), TrBytes++);
-         }
-
-         /* Build answer */
-         SendStandardPositiveAnswer( TrBytes ) ;
-         break ;
-
-		 #endif
       case ioReportCheryECUIdentificationSWname:
 	   TrBytes = 1 ;
 	    WrtKw2000ServiceData( GetKw2000ServiceData (CyId), TrBytes++ );
@@ -175,65 +129,6 @@ void KwJ14230ReadEcuIdentification( void )
          }
          SendStandardPositiveAnswer( TrBytes ) ;
          break ;
-#if 0
-	   case ioReportECUIdentificationScalingTable:
-         TrBytes = 1 ;
-         //WrtKw2000ServiceData( GetKw2000ServiceData (CyId), TrBytes++ );
-
-         /*--- Move ECUIdScalingTable [0..n-1] to (GetKeyword2000ServiceData ()) [1..n] ---*/
-         for ( idx = 0 ; idx < sizeof( ECUIdScalingTable ) ; idx++ )
-         {
-            WrtKw2000ServiceData( ECUIdScalingTable[idx], TrBytes++);
-         }
-         SendStandardPositiveAnswer( TrBytes ) ;
-         break ;
-        
-      case ioReportVIN:
-         TrBytes = 1 ;
-         WrtKw2000ServiceData( GetKw2000ServiceData (CyId), TrBytes++ );
-
-         /* VehicleIdentificationNumber */
-         for ( idx = 0 ; idx < VehicleIdentificationNumberSize ; idx++ )
-         {
-            WrtKw2000ServiceData( ReadNvmEeprom( &NV_VINNumber[idx] ), TrBytes++);
-         }
-         SendStandardPositiveAnswer( TrBytes ) ;
-         break ;
-      case ioSystemSupplierECUSoftwareName:
-         TrBytes = 1 ;
-         WrtKw2000ServiceData( GetKw2000ServiceData (CyId), TrBytes++ );
-
-         /* fill in table with SystemSupplierECUSoftwareNumber
-           - DEBroadcastCode */
-         /* fill in SystemSupplierECUSoftwareNumber - DEBroadcastCode */
-	 for ( idx = 0 ; idx < sizeof( SoftwareName ) ; idx++ )
-         {
-            WrtKw2000ServiceData( SoftwareName[idx], TrBytes++);
-         }
-         SendStandardPositiveAnswer( TrBytes ) ;
-         break ;
-      case ioRepairShopCodeOrTesterSerialNumber:       /* (0x98) */
-         TrBytes = 1 ;
-         WrtKw2000ServiceData( GetKw2000ServiceData (CyId), TrBytes++ );
-         /* fill with shop code or tester number */
-         for ( idx = 0 ; idx < RepairShopCodeSize ; idx++ )
-         {
-            WrtKw2000ServiceData( ReadNvmEeprom( &NV_RepairShopCode[idx] ), TrBytes++);
-         }     
-     	 SendStandardPositiveAnswer( TrBytes ) ;
-         break ;
-      case ioProgrammingDate:                          /* (0x99) */
-         TrBytes = 1 ;
-         WrtKw2000ServiceData( GetKw2000ServiceData (CyId), TrBytes++ );
-         /* fill with program date */
-         for ( idx = 0 ; idx < ProgrammingDateSize ; idx++ )
-         {
-            WrtKw2000ServiceData( ReadNvmEeprom( &NV_ProgrammingDate[idx] ), TrBytes++);
-         }      
-      	 SendStandardPositiveAnswer( TrBytes ) ;
-         break ;
-	#endif
-		
       default :
          SendStandardNegativeAnswer( nrcSubFunctionNotSupported_InvalidFormat ) ;
          break ;

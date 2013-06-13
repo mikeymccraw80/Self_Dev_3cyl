@@ -23,7 +23,7 @@
 \* ============================================================================ */
 
 
-extern void KwJ14230ReadEcuIdentification( void );
+void KwJ14230ReadEcuIdentification( void );
 
 
 
