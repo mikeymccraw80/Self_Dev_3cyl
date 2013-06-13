@@ -20,12 +20,12 @@
  *
 \* ============================================================================ */
 
-
 #include "kw2app.h"
+#include "kw2cfg.h"
 #include "kw2srv10m.h"
 #include "kw2srv10.h"
-#include "kw2srv36.h"
 #include "kw2api.h"
+#include "id_cald.h"
 
 bool      Utility_Download_Flag;
 /***********************************************************************
@@ -117,7 +117,7 @@ void KwJ14230StartDiagnosticSession( void )
                    * Clear responce pending
                    */
                   SetECUProgrammingSessionState();
-                  SetTransferStateToNotTransfering();
+                  //SetTransferStateToNotTransfering();
                   ClrAppResponsePending() ;
                   SendStandardPositiveAnswer( CyPositiveAnswer_WithoutBaud);
                }
@@ -162,7 +162,7 @@ void KwJ14230StartDiagnosticSession( void )
           * Clear responce pending
           */
          SetECUProgrammingSessionState();
-         SetTransferStateToNotTransfering();
+         //SetTransferStateToNotTransfering();
          ClrAppResponsePending() ;
          Kw2BaudRate = GetKw2000ServiceData(CyBaudRateSelect);
          ProcessRequest () ;
@@ -184,7 +184,7 @@ void KwJ14230StartDiagnosticSession( void )
 * DESCRIPTION:  Same as the above file description.                    *
 *                                                                      *
 ***********************************************************************/
-void  KwJ14230ExecuteService10NextResponse( void )
+void KwJ14230ExecuteService10NextResponse( void )
 {
 
    ClrAppResponsePending () ;
@@ -207,7 +207,7 @@ void  KwJ14230ExecuteService10NextResponse( void )
    }
 }
 
-FAR_COS void InitKwJ14230StartDiagnosticSession(void )
+void InitKwJ14230StartDiagnosticSession(void )
 {
    if ( IsDevelopmentOrManfModeActive() )
    {

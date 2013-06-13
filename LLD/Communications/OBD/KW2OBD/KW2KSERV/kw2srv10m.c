@@ -19,10 +19,9 @@
  *   None.
  *
 \* ============================================================================ */
-
+#include "kw2api.h"
 #include "kw2dll.h"
 #include "kw2srv10m.h"
-#include "kw2srv36.h"
 
 
 /* ============================================================================ *\
@@ -191,7 +190,7 @@ FAR_COS void KwJ14230MiniStartDiagSession( void )
          case CyECUProgrammingMode:      /* Mode: 85 */
             /* Set Keyword to ECU Programing state */
             SetECUProgrammingSessionState();
-            SetTransferStateToNotTransfering();
+            //SetTransferStateToNotTransfering();
             SendStandardPositiveAnswer( CyPositiveAnswer_WithoutBaud);
             break;
 
@@ -212,7 +211,7 @@ FAR_COS void KwJ14230MiniStartDiagSession( void )
        * Tell other services we are ready for programing
        */
       SetECUProgrammingSessionState();
-      SetTransferStateToNotTransfering();
+      //SetTransferStateToNotTransfering();
       Kw2BaudRate = GetKw2000ServiceData(CyBaudRateSelect);
       ProcessRequest () ;
    }

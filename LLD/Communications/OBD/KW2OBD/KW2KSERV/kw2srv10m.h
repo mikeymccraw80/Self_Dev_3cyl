@@ -25,7 +25,7 @@
 /* ============================================================================ *\
  * Standard header files.
 \* ============================================================================ */
-#include "types.h"
+#include "reuse.h"
 
 /* Enumeration of the Keyword 2000 State Type                      */
 
@@ -83,8 +83,8 @@ extern bool                 BaudRateChangeRequest ;
 /*********************************************************************/
 /*                  EXTERN FUNCTION DECLARATIONS                     */
 /*********************************************************************/
-extern FAR_COS void KwJ14230MiniStartDiagSession( void );
-extern FAR_COS void ProcessRequest ( void );
+extern void KwJ14230MiniStartDiagSession( void );
+extern void ProcessRequest ( void );
 
 /*********************************************************************/
 /*  This function returns baud rate value. The input arguement is an */

@@ -21,14 +21,15 @@
  *   None.
  *
 \* ============================================================================ */
-extern bool   Utility_Download_Flag;
+#include "reuse.h"
+bool   Utility_Download_Flag;
 
 /*********************************************************************/
 /*                  EXTERN FUNCTION DECLARATIONS                     */
 /*********************************************************************/
-extern void KwJ14230StartDiagnosticSession( void );
-extern void KwJ14230ExecuteService10NextResponse( void );
-extern  FAR_COS void InitKwJ14230StartDiagnosticSession( void );
+void KwJ14230StartDiagnosticSession( void );
+void KwJ14230ExecuteService10NextResponse( void );
+void InitKwJ14230StartDiagnosticSession( void );
 
 /* ============================================================================ *\
  * File revision history (top to bottom, first revision to last revision

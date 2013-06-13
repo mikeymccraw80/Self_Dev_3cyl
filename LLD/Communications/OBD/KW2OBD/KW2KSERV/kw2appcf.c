@@ -29,6 +29,7 @@
 
 /*  services specific includes */
 #include "j1979.h"
+#include "kw2srv10.h"
 // #include "obdlfsrv.h"
 
 void ServiceNotSupported( void )
@@ -121,6 +122,17 @@ const SERVICE_DEFINITION_ARRAY_TYPE CaServiceDefinition[ ]=
       J1979Mode9Handler  ,       /* Mode 9 */
       FormJ1979_NextMode49
     },
+
+  /*
+   * Supported 14230 Services or 2190 Modes
+   */
+
+   /* Service 0x10  */
+   {
+      sirStartDiagnosticSession,
+      KwJ14230StartDiagnosticSession,
+      KwJ14230ExecuteService10NextResponse
+   },
 };
 
 /*
