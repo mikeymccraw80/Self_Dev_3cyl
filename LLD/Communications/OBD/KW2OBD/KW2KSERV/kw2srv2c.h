@@ -23,9 +23,9 @@
 \* ============================================================================ */
 
 
-extern void KwJ14230DynamicallyDefineLocalIdentifier( void );
+void KwJ14230DynamicallyDefineLocalIdentifier( void );
 
-extern void InitKwJ14230DynamicallyDefineLocalIdentifier(void );
+void InitKwJ14230DynamicallyDefineLocalIdentifier(void );
 
 
 

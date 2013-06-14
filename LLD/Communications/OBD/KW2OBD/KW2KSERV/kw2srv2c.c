@@ -19,7 +19,7 @@
  *   None.
  *
 \* ============================================================================ */
-
+#if 0
 #include "kw2dll.h"
 #include "kw2srv2c.h"
 #include "kw2dynsh.h"
@@ -96,7 +96,7 @@ void InitKwJ14230DynamicallyDefineLocalIdentifier(void )
     dynamic_snapshot.id = DynSnapshotInvalid ;
 }
 
-
+#endif
 
 
 /* ============================================================================ *\
