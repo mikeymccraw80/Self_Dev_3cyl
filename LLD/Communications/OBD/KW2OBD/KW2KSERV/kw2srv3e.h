@@ -25,7 +25,7 @@
 extern uint16_t            TimerBeforeNewMsgRx; /* 0xFFFF == infinite */
 
 
-extern void KwJ14230TesterPresent( void );
+void KwJ14230TesterPresent( void );
 
 
 

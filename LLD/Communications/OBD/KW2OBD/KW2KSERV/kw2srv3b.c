@@ -19,14 +19,13 @@
  *   None.
  *
 \* ============================================================================ */
-
-
-
-#include "kw2type.h"
-#include "kw2dll.h"
-#include "kw2app.h"
 #include "kw2api.h"
+#include "kw2app.h"
+#include "kw2dll.h"
+#include "kw2cfg.h"
+#include "kw2type.h"
 #include "kw2srv18.h"
+#include "id_cald.h"
 
 
 #define MODE_3B_MSG_LENGTH       (2)
@@ -56,7 +55,8 @@ void KwJ14230WriteDataByLocalIdentifier( void )
    uint8_t *dataprt;
    LONGWORD Temp_Long;
    
-   if ( Get_EngineTurning() )
+   // if ( Get_EngineTurning() )
+   if (0)
    {
       SendStandardNegativeAnswer( nrcConditionsNotCorrect_RequestSequenceError ) ;
    }

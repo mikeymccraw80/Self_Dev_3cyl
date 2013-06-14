@@ -43,6 +43,9 @@
 #include "kw2srv37.h"
 #include "kw2srv38.h"
 #include "kw2srv38m.h"
+#include "kw2srv3b.h"
+#include "kw2srv3d.h"
+#include "kw2srv3e.h"
 // #include "obdlfsrv.h"
 
 void ServiceNotSupported( void )
@@ -214,6 +217,24 @@ const SERVICE_DEFINITION_ARRAY_TYPE CaServiceDefinition[ ]=
       sirStartRoutineByAddress,
       KwJ14230StartRoutineByAddress ,
       ExecuteStartRoutineByAddressFunction
+   },
+   /* Service 0x3B */
+   {
+      sirWriteDataByLocalIdentifier,
+      KwJ14230WriteDataByLocalIdentifier ,
+     // ModifyEepromData
+   },
+   /* Service 0x3D */
+   {
+      sirWriteMemoryByAddress,
+      KwJ14230WriteMemoryByAddress ,
+      KwNoMultiModeAval
+   },
+   /* Service 0x3E */
+   {
+      sirTesterPresent,
+      KwJ14230TesterPresent ,
+      KwNoMultiModeAval
    },
 };
 

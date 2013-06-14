@@ -19,13 +19,13 @@
  *   None.
  *
 \* ============================================================================ */
-
-#include "kw2dll.h"
+#include "kw2api.h"
 #include "kw2app.h"
+#include "kw2dll.h"
 #include "kw2cfg.h"
 #include "kw2srv3d.h"
-#include "dd_port.h"
-#include "instmem.h"
+// #include "dd_port.h"
+// #include "instmem.h"
 
 #define SyTesterPresentDataLength           1
 #define SyTesterPresentDataLengthWithResp   2
@@ -43,6 +43,7 @@
 
 void KwJ14230WriteMemoryByAddress( void )
 {
+#if 0
    uint8_t     *pucMemStart ;
    uint8_t*    pucServiceData ;
    uint8_t     ucLength ;
@@ -142,6 +143,7 @@ void KwJ14230WriteMemoryByAddress( void )
          SendStandardNegativeAnswer( nrcRequestOutOfRange ) ;
       }
    }
+#endif
 } /*** End of KwJ14230TesterPresent ***/
 
 

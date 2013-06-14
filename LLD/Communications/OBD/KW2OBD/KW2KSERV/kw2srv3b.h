@@ -22,7 +22,7 @@
  *
 \* ============================================================================ */
 
-extern void KwJ14230WriteDataByLocalIdentifier( void ) ;
+void KwJ14230WriteDataByLocalIdentifier( void ) ;
 //extern void ModifyEepromData( void );
 
 

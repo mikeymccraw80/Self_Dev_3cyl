@@ -23,7 +23,7 @@
 \* ============================================================================ */
 
 
-extern void KwJ14230WriteMemoryByAddress( void );
+void KwJ14230WriteMemoryByAddress( void );
 
 
 
