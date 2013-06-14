@@ -19,16 +19,14 @@
  *   None.
  *
 \* ============================================================================ */
-
-
-
-#include "kw2dll.h"
 #include "kw2api.h"
+#include "kw2app.h"
+#include "kw2dll.h"
 #include "kw2srv10m.h"
 #include "kw2srv34.h"
 #include "kw2srv36.h"
-#include "hal_can.h"
-#include "dd_can.h"
+// #include "hal_can.h"
+// #include "dd_can.h"
 
 #define      Cy14230_SERVICE_34_MSG_LENGTH        (8)
 #define      CyTRANSMIT_MSG_BUFF_OFFSET_BYTE1     (1)
@@ -146,7 +144,7 @@ void KwJ14230RequestDownload( void )
     if(transfer_error_code == nrcNone)
     {
         /* Disable the Chery EMS Can data transmit */
-        VsCAN_CHERY_EMS_ID_Disable = true;
+        // VsCAN_CHERY_EMS_ID_Disable = true;
 	/*disable all can 0 interrupt when refalsh*/
        // Hw_Turn_Off_CAN0_All_Interrupt();	
         /*  We have now passed all the tests  */

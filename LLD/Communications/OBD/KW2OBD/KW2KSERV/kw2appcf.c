@@ -38,6 +38,7 @@
 #include "kw2srv23.h"
 #include "kw2srv27.h"
 #include "kw2srv31.h"
+#include "kw2srv34.h"
 // #include "obdlfsrv.h"
 
 void ServiceNotSupported( void )
@@ -183,6 +184,12 @@ const SERVICE_DEFINITION_ARRAY_TYPE CaServiceDefinition[ ]=
    {
       sirStartRoutineByLocalIdentifier,
       KwJ14230StartRoutineByLocalIdentifier ,
+      KwNoMultiModeAval
+   },
+   /* Service 0x34 */
+   {
+      sirRequestDownload,
+      KwJ14230RequestDownload ,
       KwNoMultiModeAval
    },
 };

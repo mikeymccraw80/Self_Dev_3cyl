@@ -48,6 +48,6 @@
 *         KwJ14230RequestDownload                                      *
 ***********************************************************************/
  
-extern void  KwJ14230RequestDownload ( void );
+void  KwJ14230RequestDownload ( void );
 
 #endif
