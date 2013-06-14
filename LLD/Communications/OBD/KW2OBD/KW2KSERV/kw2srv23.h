@@ -23,7 +23,7 @@
 \* ============================================================================ */
 
 
-extern void KwJ14230ReadDataByAddress( void );
+void KwJ14230ReadDataByAddress( void );
 
 
 

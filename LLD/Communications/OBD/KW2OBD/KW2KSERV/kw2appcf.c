@@ -34,6 +34,7 @@
 #include "kw2srv1a.h"
 #include "kw2srv20.h"
 #include "kw2srv21.h"
+#include "kw2srv23.h"
 // #include "obdlfsrv.h"
 
 void ServiceNotSupported( void )

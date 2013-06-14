@@ -20,11 +20,11 @@
  *
 \* ============================================================================ */
 
-#include "kw2dll.h"
+// #include "kw2dll.h"
 #include "kw2app.h"
 #include "kw2cfg.h"
 #include "kw2srv23.h"
-#include "instmem.h"
+// #include "instmem.h"
 
 
 #define SyTesterPresentDataLength           1
@@ -39,6 +39,7 @@
 
 void KwJ14230ReadDataByAddress( void )
 {
+#if 0
    uint8_t     *pucMemStart ;
    uint8_t     ucLength ;
    uint8_t     idx, TrBytes ;
@@ -85,6 +86,7 @@ void KwJ14230ReadDataByAddress( void )
       Enable_Interrupts();	  
       SendStandardPositiveAnswer( TrBytes ) ;
    }
+#endif
 } /*** End of KwJ14230TesterPresent ***/
 
 
