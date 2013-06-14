@@ -20,7 +20,7 @@
  *   None.
  *
 \* ============================================================================ */
-
+#if 0
 #include "mod_cals.h" /* for Modes4BaudRateType,
                              Modes4HeaderType,
                              Modes4TableNumber,
@@ -50,8 +50,8 @@
                              MaximumATSnapshot7Size,
                              MaximumATSnapshot8Size,
                              MaximumATSnapshot9Size */
-#include "types.h"    /* for uint8_t, bool, uint16_t */
-// #include "v_kw2000.h" /* for RxFormatByte */
+#include "reuse.h"    /* for uint8_t, bool, uint16_t */
+
 extern uint8_t RxFormatByte;
 
 /*- AddressTableSnapshot_ should be  table of constant pointer to uint8_t, -*/
@@ -70,7 +70,7 @@ const uint16_t AddressTableSnapshot1[MaximumATSnapshot1Size] =
     ( uint16_t )&RxFormatByte,        /*--- 02 ---*/
     ( uint16_t )&RxFormatByte,        /*--- 03 ---*/
     ( uint16_t )&RxFormatByte         /*--- 04 ---*/
-} ;
+};
 /*
 *| mod_cals. {
 *|         AddressTableSnapshot1
@@ -507,7 +507,7 @@ const uint16_t AddressTableSnapshot9[MaximumATSnapshot9Size] =
 */
 
 
-
+#endif
 
 
 /* ============================================================================ *\

@@ -19,15 +19,11 @@
  *   None.
  *
 \* ============================================================================ */
-
-
-
-//#include "kw2type.h"
+#include "kw2api.h"
+#include "kw2app.h"
 #include "kw2dll.h"
-//#include "kw2app.h"
-//#include "kw2srv2c.h"
 #include "kw2dynsh.h"
-//#include "hw_mem.h"
+
 
 /* ============================================================================ *\
  * Global variables.

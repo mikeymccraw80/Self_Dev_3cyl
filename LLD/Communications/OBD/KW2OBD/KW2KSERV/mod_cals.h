@@ -23,7 +23,7 @@
  *
 \* ============================================================================ */
 
-#include "types.h"    /* for uint8_t, bool, uint16_t */
+#include "reuse.h"    /* for uint8_t, bool, uint16_t */
 
 typedef uint16_t                          Modes4BaudRateType ;
 #define Prec_Modes4BaudRateType (4.0)

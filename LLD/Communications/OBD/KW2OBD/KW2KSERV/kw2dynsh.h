@@ -22,7 +22,7 @@
  *
 \* ============================================================================ */
 
-#include "types.h"
+#include "reuse.h"
 #include "kw2type.h"
 
 /* dynamic snapshot IDs */
