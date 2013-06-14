@@ -19,9 +19,9 @@
  *   None.
  *
 \* ============================================================================ */
-
-#include "kw2dll.h"
 #include "kw2api.h"
+#include "kw2app.h"
+#include "kw2dll.h"
 #include "kw2srv38.h"
 #include "kw2srv38m.h"
 
@@ -39,7 +39,8 @@
 ***********************************************************************/
 void KwJ14230StartRoutineByAddress( void )
 {
-   if ( Get_EngineTurning() )
+   // if ( Get_EngineTurning() )
+   if (0)
    {
       SendStandardNegativeAnswer( nrcConditionsNotCorrect_RequestSequenceError );
    }

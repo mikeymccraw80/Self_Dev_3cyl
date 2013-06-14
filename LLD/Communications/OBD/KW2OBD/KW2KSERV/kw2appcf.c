@@ -41,6 +41,8 @@
 #include "kw2srv34.h"
 #include "kw2srv36.h"
 #include "kw2srv37.h"
+#include "kw2srv38.h"
+#include "kw2srv38m.h"
 // #include "obdlfsrv.h"
 
 void ServiceNotSupported( void )
@@ -207,6 +209,12 @@ const SERVICE_DEFINITION_ARRAY_TYPE CaServiceDefinition[ ]=
       KwNoMultiModeAval
    },
 
+   /* Service 0x38 */
+   {
+      sirStartRoutineByAddress,
+      KwJ14230StartRoutineByAddress ,
+      ExecuteStartRoutineByAddressFunction
+   },
 };
 
 /*

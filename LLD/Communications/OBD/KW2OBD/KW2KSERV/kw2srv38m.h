@@ -22,8 +22,8 @@
  *
 \* ============================================================================ */
 
-extern void KwJ14230MiniStartRoutineByAddr( void ) ;
-extern void ExecuteStartRoutineByAddressFunction ( void ) ;
+void KwJ14230MiniStartRoutineByAddr( void ) ;
+void ExecuteStartRoutineByAddressFunction ( void ) ;
 
 
 /* ============================================================================ *\
