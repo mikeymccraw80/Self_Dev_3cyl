@@ -24,7 +24,7 @@
 
 extern uint8_t L2_WrongAttemptTry;
 
-extern void KwJ14230SecurityAccess( void );
+void KwJ14230SecurityAccess( void );
 
 
 

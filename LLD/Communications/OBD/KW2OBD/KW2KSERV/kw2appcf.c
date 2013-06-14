@@ -24,6 +24,7 @@
 /***********************LOCAL DEFINITIONS:*****************************/
 #include "kw2api.h"
 #include "kw2app.h"
+
 #include "kw2dll.h"
 #include "kw2appcf.h"
 
@@ -31,10 +32,27 @@
 #include "j1979.h"
 #include "kw2srv10.h"
 #include "kw2srv11.h"
+
+
+
+
 #include "kw2srv1a.h"
 #include "kw2srv20.h"
 #include "kw2srv21.h"
+#include "kw2srv22.h"
 #include "kw2srv23.h"
+#include "kw2srv27.h"
+
+
+
+
+
+
+
+
+
+
+
 // #include "obdlfsrv.h"
 
 void ServiceNotSupported( void )
@@ -146,6 +164,48 @@ const SERVICE_DEFINITION_ARRAY_TYPE CaServiceDefinition[ ]=
       KwNoMultiModeAval
    },
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
    /* Service 0x1A */
    {
       sirReadEcuIdentification,
@@ -164,6 +224,95 @@ const SERVICE_DEFINITION_ARRAY_TYPE CaServiceDefinition[ ]=
       KwJ14230ReadDataByLocalIdentifier,
       KwNoMultiModeAval
    },
+
+
+
+
+
+
+   /* Service 0x23 */
+   {
+      sirReadMemoryByAddress,
+      KwJ14230ReadDataByAddress,
+      KwNoMultiModeAval
+   },
+
+
+   /* Service 0x27 */
+   {
+      sirSecurityAccess,
+      KwJ14230SecurityAccess ,
+      KwNoMultiModeAval
+   },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 };
 
 /*

@@ -19,15 +19,15 @@
  *   None.
  *
 \* ============================================================================ */
-
-#include "kw2dll.h"
 #include "kw2api.h"
 #include "kw2app.h"
+#include "kw2dll.h"
+#include "kw2cfg.h"
 #include "kw2srv10.h"
 #include "kw2srv27.h"
-#include "immo_cal.h"
-#include "immo.h"
-#include "immo_exec.h"
+// #include "immo_cal.h"
+// #include "immo.h"
+// #include "immo_exec.h"
 
 #define SyRequestForSeed                    (0x01)
 #define SySendKey                           (0x02)
@@ -51,9 +51,9 @@ static bool Level2_Sec_Key_Allowed;        /* indicates that the client */
 static uint8_t WrongAttemptTry;
 //static uint8_t L2_WrongAttemptTry;
 
-#pragma section [nvram]
+// #pragma section [nvram]
  uint8_t L2_WrongAttemptTry;
-#pragma section []
+// #pragma section []
 /***********************************************************************
 *                                                                      *
 * FUNCTION:          KwJ14230SecurityAccess.                           *
@@ -186,8 +186,9 @@ void KwJ14230SecurityAccess( void )
       }
       case SyRequestForL2Seed:
       {
-         if (( K_Immo_option == CeImmo_Off) )//|| (K_Immo_option == CeImmo_JiCheng)
+         // if (( K_Immo_option == CeImmo_Off) )//|| (K_Immo_option == CeImmo_JiCheng)
             //||(Chk_GenericImmo_Disabled()))
+          if (0)
          {
             SendStandardNegativeAnswer(nrcServiceNotSupported);
          }
@@ -231,7 +232,8 @@ void KwJ14230SecurityAccess( void )
       }
       case SySendL2Key:
       {
-         if ( (K_Immo_option == CeImmo_Off) /*||(K_Immo_option == CeImmo_JiCheng)*/)
+         // if ( (K_Immo_option == CeImmo_Off) /*||(K_Immo_option == CeImmo_JiCheng)*/)@
+		 if (0)
          {
             SendStandardNegativeAnswer(nrcServiceNotSupported);
          }
@@ -272,7 +274,8 @@ void KwJ14230SecurityAccess( void )
                   }
                   else /* Lu2190_M27_ReceivedKey.Word_Acces */
                   {
-                      if (Chk_SiemensImmo_Enabled())
+                      // if (Chk_SiemensImmo_Enabled())
+					  if (1)
                       	{
                            if(L2_WrongAttemptTry < 1)
                              {    
