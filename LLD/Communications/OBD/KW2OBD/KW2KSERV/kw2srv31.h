@@ -24,7 +24,7 @@
 extern bool   NbFILE_NVM_Reset_RequestFromSerial;
 
 
-extern void KwJ14230StartRoutineByLocalIdentifier( void );
+void KwJ14230StartRoutineByLocalIdentifier( void );
 
 
 

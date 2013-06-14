@@ -19,10 +19,9 @@
  *   None.
  *
 \* ============================================================================ */
-
-#include "kw2dll.h"
-#include "kw2app.h"
 #include "kw2api.h"
+#include "kw2app.h"
+#include "kw2dll.h"
 #include "kw2cfg.h"
 #include "kw2srv1a.h"
 #include "id.h"
@@ -46,17 +45,17 @@
 /******************************************************************************
  *  Global NVM Definitions
  *****************************************************************************/
-#pragma section [nvram]
+// #pragma section [nvram]
 bool   NbFILE_NVM_Reset_RequestFromSerial;
-#pragma section []
+// #pragma section []
 
 void KwJ14230StartRoutineByLocalIdentifier( void )
 {
    uint8_t  local_id ;
    uint8_t  new_flag;
 
-   if ( Get_EngineTurning()||
-   	Get_VehicleMoving())   	
+   // if (Get_EngineTurning() || Get_VehicleMoving())
+   if (0)
    {
       SendStandardNegativeAnswer( nrcConditionsNotCorrect_RequestSequenceError ) ;
    }

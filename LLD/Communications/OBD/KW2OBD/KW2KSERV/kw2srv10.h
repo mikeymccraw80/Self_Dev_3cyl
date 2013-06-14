@@ -22,7 +22,7 @@
  *
 \* ============================================================================ */
 #include "reuse.h"
-bool   Utility_Download_Flag;
+extern bool   Utility_Download_Flag;
 
 /*********************************************************************/
 /*                  EXTERN FUNCTION DECLARATIONS                     */
