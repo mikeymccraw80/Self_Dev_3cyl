@@ -42,6 +42,6 @@
 *         KwJ14230RequestTransferExit                                  *
 ***********************************************************************/
  
-extern void  KwJ14230RequestTransferExit ( void );
+void  KwJ14230RequestTransferExit ( void );
 
 #endif

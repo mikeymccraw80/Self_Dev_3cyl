@@ -39,6 +39,8 @@
 #include "kw2srv27.h"
 #include "kw2srv31.h"
 #include "kw2srv34.h"
+#include "kw2srv36.h"
+#include "kw2srv37.h"
 // #include "obdlfsrv.h"
 
 void ServiceNotSupported( void )
@@ -192,6 +194,19 @@ const SERVICE_DEFINITION_ARRAY_TYPE CaServiceDefinition[ ]=
       KwJ14230RequestDownload ,
       KwNoMultiModeAval
    },
+   /* Service 0x36 */
+   {
+      sirTransferData,
+      KwJ14230TransferData ,
+      KwNoMultiModeAval
+   },
+   /* Service 0x37 */
+   {
+      sirRequestTransferExit,
+      KwJ14230RequestTransferExit ,
+      KwNoMultiModeAval
+   },
+
 };
 
 /*

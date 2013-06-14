@@ -19,13 +19,9 @@
  *   None.
  *
 \* ============================================================================ */
-
-
-
-
-
-#include "kw2dll.h"
 #include "kw2api.h"
+#include "kw2app.h"
+#include "kw2dll.h"
 #include "kw2srv37.h"
 #include "kw2srv36.h"
 #include "kw2srv10m.h"
