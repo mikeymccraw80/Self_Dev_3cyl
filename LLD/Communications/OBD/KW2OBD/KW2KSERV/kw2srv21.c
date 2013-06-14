@@ -26,12 +26,12 @@
 #include "kw2dll.h"
 #include "kw2app.h"
 #include "kw2api.h"
-#include "kw2dynsh.h"
+// #include "kw2dynsh.h"
 #include "kw2srv21.h"
 #include "HLS.h"
 #include "id_cald.h"
-#include "hal_esc.h"
-#include "hal_mileage.h"
+// #include "hal_esc.h"
+// #include "hal_mileage.h"
 
 
 
@@ -123,7 +123,6 @@ void KwJ14230ReadDataByLocalIdentifier( void )
 
          WrtKw2000ServiceData( IgaOut, TrByteCount++);
 
-         WrtKw2000ServiceData( TaLin, TrByteCount++);
 
 
         WrtKw2000ServiceData( Hi8Of16(Tpp), TrByteCount++);
@@ -185,33 +184,6 @@ void KwJ14230ReadDataByLocalIdentifier( void )
         WrtKw2000ServiceData( Hi8Of16(dTqIdcI), TrByteCount++);
        WrtKw2000ServiceData( Lo8Of16(dTqIdcI), TrByteCount++);
 
-
-	   	
-        WrtKw2000ServiceData( dIgaKnc[0], TrByteCount++);
-
-			
-        WrtKw2000ServiceData( dIgaKnc[1], TrByteCount++);
-
-			
-        WrtKw2000ServiceData( dIgaKnc[2], TrByteCount++);
-
-			
-   
-        WrtKw2000ServiceData( Hi8Of16( FtCntEmisCyl[0]), TrByteCount++);
-        WrtKw2000ServiceData( Lo8Of16( FtCntEmisCyl[0]), TrByteCount++);
-
-        WrtKw2000ServiceData( Hi8Of16(FtCntEmisCyl[1]), TrByteCount++);
-        WrtKw2000ServiceData( Lo8Of16( FtCntEmisCyl[1]), TrByteCount++);
-
-         WrtKw2000ServiceData( Hi8Of16(FtCntEmisCyl[2]), TrByteCount++);
-        WrtKw2000ServiceData( Lo8Of16( FtCntEmisCyl[2]), TrByteCount++);
-
-
-
-        WrtKw2000ServiceData( StepPos, TrByteCount++);
-		
-        WrtKw2000ServiceData( StepPosDsr, TrByteCount++);
-
 	 WrtKw2000ServiceData( B_Fan1, TrByteCount++);
 
 	 WrtKw2000ServiceData( B_Fan2, TrByteCount++);
@@ -251,7 +223,7 @@ void KwJ14230ReadDataByLocalIdentifier( void )
                {
                   TempDataLong = TempDataLong * 10;
                }
-               TempDataForWrite += TempDataLong;              																				
+               TempDataForWrite += TempDataLong;
             }
        	    for(Idx = 0 ; Idx < (EndModelSize/2) ; Idx++ )
        	    {
@@ -280,7 +252,7 @@ void KwJ14230ReadDataByLocalIdentifier( void )
                {
                   TempDataLong = TempDataLong * 10;
                }
-               TempDataForWrite += TempDataLong;                																			
+               TempDataForWrite += TempDataLong;
             }
        	    for(Idx = 0 ; Idx < ((sizeof(BaseModelNumber))/2) ; Idx++ )
        	    {
@@ -297,7 +269,7 @@ void KwJ14230ReadDataByLocalIdentifier( void )
             }
        	    SendStandardPositiveAnswer( TrByteCount ) ;
        	    break ;
-			
+#if 0
        case rdliMileage:
             WrtKw2000ServiceData( GetKw2000ServiceData(IdxLocalIdentifier), TrByteCount++);
 
@@ -308,7 +280,7 @@ void KwJ14230ReadDataByLocalIdentifier( void )
             WrtKw2000ServiceData( Lo8Of16( Lo16Of32( Mileage ) ), TrByteCount++);
             SendStandardPositiveAnswer( TrByteCount ) ;
             break ;           
-          
+#endif
         default :
             SendStandardNegativeAnswer( nrcSubFunctionNotSupported_InvalidFormat ) ;
             break ;

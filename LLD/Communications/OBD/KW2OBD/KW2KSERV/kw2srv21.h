@@ -24,7 +24,7 @@
 //extern WORD      NaDGDM_DiagTestData_Status;
 //extern WORD      FailRecord_DTC_ID;
 
-extern void KwJ14230ReadDataByLocalIdentifier( void ) ;
+void KwJ14230ReadDataByLocalIdentifier( void ) ;
 
 
 
