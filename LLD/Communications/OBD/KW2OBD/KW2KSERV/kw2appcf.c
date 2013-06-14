@@ -32,6 +32,7 @@
 #include "kw2srv10.h"
 #include "kw2srv11.h"
 #include "kw2srv1a.h"
+#include "kw2srv20.h"
 #include "kw2srv21.h"
 // #include "obdlfsrv.h"
 
@@ -148,6 +149,12 @@ const SERVICE_DEFINITION_ARRAY_TYPE CaServiceDefinition[ ]=
    {
       sirReadEcuIdentification,
       KwJ14230ReadEcuIdentification ,
+      KwNoMultiModeAval
+   },
+   /* Service 0x20 */
+   {
+      sirStopDiagnosticSession,
+      KwJ14230StopDiagnosticSession ,
       KwNoMultiModeAval
    },
    /* Service 0x21 */

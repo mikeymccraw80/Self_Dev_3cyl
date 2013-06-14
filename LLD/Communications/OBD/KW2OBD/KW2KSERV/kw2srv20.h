@@ -22,7 +22,7 @@
  *
 \* ============================================================================ */
 
-extern void KwJ14230StopDiagnosticSession( void ) ;
+void KwJ14230StopDiagnosticSession( void ) ;
 
 
 
