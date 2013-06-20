@@ -99,7 +99,7 @@ void  IO_Eng_ToothInt(void)
   // Set the tooth interrupt flag to avoid the background update the system time 
  Tooth_Interrupt_Flag = 1;
  crank_sig.engine_position_tc = HAL_Eng_Get_Engine_Tooth()%60;
-  Sys_time = HAL_Eng_Get_Sys_Timer()/80;
+  Sys_time = HAL_Eng_Get_Sys_Timer();
 //Chery requirement: Call the HLS tooth task at every falling edge of crank tooth 
    HLS_tooth_interrupt();   
 }
@@ -111,7 +111,7 @@ void  IO_Eng_ToothInt(void)
 {
    if ( Tooth_Interrupt_Flag == false )
   {
-    Sys_time = HAL_Eng_Get_Sys_Timer()/80;
+    Sys_time = HAL_Eng_Get_Sys_Timer();
   }
 
    if(crank_sig.crank_status.B_crank_pre_sync )
