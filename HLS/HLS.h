@@ -64,7 +64,7 @@ typedef struct {
 	uint8_t B_crank_stall : 1; /* crank was synched but now no movement */
 	uint8_t B_crank_loss_of_sync : 1; /* lost synchronization */
 	uint8_t B_crank_limp_home : 1; /* running limphome on CAM sensor */
-	uint8_t B_rsv : 1; /* reserved bits */
+	uint8_t B_RefMrk : 1; /* reserved bits */
 } crank_status_bits;
 
 typedef struct {

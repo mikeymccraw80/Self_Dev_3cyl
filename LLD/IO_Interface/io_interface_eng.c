@@ -29,6 +29,11 @@ unsigned char Tooth_Interrupt_Flag;
    crank_sig.engine_rpm = HAL_Eng_Get_Engine_Speed()/2;//rpm scale 0.125 to 0.25(chery) 
    crank_sig.segment_time = (HAL_Eng_Get_Engine_Reference_Time()*5)/16;// time base is 4M, convert to 0.8us
    crank_sig.crank_status.B_crank_loss_of_sync =  HAL_Eng_Get_Loss_Of_Sync();
+   if (crank_sig.crank_status.B_crank_loss_of_sync || crank_sig.crank_status.B_crank_no_sync) {
+        crank_sig.crank_status.B_RefMrk = 0;
+   } else {
+         crank_sig.crank_status.B_RefMrk = 1;
+   }
 
    if(!First_Syn_Flag)
    {
