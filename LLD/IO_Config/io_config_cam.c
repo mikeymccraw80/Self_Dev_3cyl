@@ -5,7 +5,7 @@
 //=============================================================================
 // cam const config
 //=============================================================================
-const d  CAM_INIT = {
+const MCD5411_Channel_Init_T  CAM_INIT = {
 	1, // critical edge IRQ disabled
 	0, // non critical edge IRQ disabled
 	MCD5411_CAME_REPLICATE_DISABLE,

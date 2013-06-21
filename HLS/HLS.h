@@ -21,139 +21,125 @@
  * Exported Type Declarations
 \*===========================================================================*/
 typedef struct {
-uint8_t B_failed : 1; /*signal failed * comprehending min, max and sig*/
-uint8_t B_fail_pending : 1; /*signal failure pending */
-uint8_t B_max : 1; /* signal value high or short to battery */
-uint8_t B_min : 1; /* signal value low or short to ground */
-uint8_t B_sig : 1; /* signal open load */
-uint8_t B_npl : 1; /* reserved position for HLS signal value non-plausible ( for EOBD) */
-uint8_t B_substitute: 1; /* substitute value is being passed by LLD */
-uint8_t B_clrerr : 1; /* reserved position for HLS */
+	uint8_t B_failed : 1; /*signal failed * comprehending min, max and sig*/
+	uint8_t B_fail_pending : 1; /*signal failure pending */
+	uint8_t B_max : 1; /* signal value high or short to battery */
+	uint8_t B_min : 1; /* signal value low or short to ground */
+	uint8_t B_sig : 1; /* signal open load */
+	uint8_t B_npl : 1; /* reserved position for HLS signal value non-plausible ( for EOBD) */
+	uint8_t B_substitute: 1; /* substitute value is being passed by LLD */
+	uint8_t B_clrerr : 1; /* reserved position for HLS */
 } status_bits;
 
 /*ATD input module*/
 typedef struct{
-uint16_t     LLD_atd_val; /* raw value from register(10bit width) */
-status_bits  LLD_atd_status; /* Status Code */
+	uint16_t     LLD_atd_val; /* raw value from register(10bit width) */
+	status_bits  LLD_atd_status; /* Status Code */
 } LLD_atd_input_item;
 
 /* DI data structure */
 typedef struct{
-uint8_t DebounceTimes; // HLS can set it in initialization, other wise it¡¯s 0
-uint8_t value ; /* Input level to return,1 or 0 */
-status_bits status ; /* Status when electrical diagnostics are available, otherwise no use */
+	uint8_t DebounceTimes; // HLS can set it in initialization, other wise it¡¯s 0
+	uint8_t value ; /* Input level to return,1 or 0 */
+	status_bits status ; /* Status when electrical diagnostics are available, otherwise no use */
 }LLD_di_item;
 
 typedef struct{
-uint8_t value; /* Value to be output 0-low; 1-high */
-status_bits status; /* Status code - Reserved */
+	uint8_t value; /* Value to be output 0-low; 1-high */
+	status_bits status; /* Status code - Reserved */
 }LLD_do_item;
 
 typedef struct{
-uint8_t B_enable; /* enable the PWM channel, only writable by HLS */
-uint8_t period; /* PWM period */
-uint8_t duty; /* PWM duty cycle */
-status_bits status; /* Status Code */
+	uint8_t B_enable; /* enable the PWM channel, only writable by HLS */
+	uint8_t period; /* PWM period */
+	uint8_t duty; /* PWM duty cycle */
+	status_bits status; /* Status Code */
 }LLD_pwm_out_item;
 
 typedef struct {
-uint8_t B_crank_failed : 1; /*signal failed */
-uint8_t B_crank_no_sync : 1; /*crank no movement */
-uint8_t B_crank_sync : 1; /*crank synchronizedy */
-uint8_t B_crank_pre_sync : 1; /* crank moving but not synchronized, 3 or less teeth */
-uint8_t B_crank_stall : 1; /* crank was synched but now no movement */
-uint8_t B_crank_loss_of_sync : 1; /* lost synchronization */
-uint8_t B_crank_limp_home : 1; /* running limphome on CAM sensor */
-uint8_t B_rsv : 1; /* reserved bits */
+	uint8_t B_crank_failed : 1; /*signal failed */
+	uint8_t B_crank_no_sync : 1; /*crank no movement */
+	uint8_t B_crank_sync : 1; /*crank synchronizedy */
+	uint8_t B_crank_pre_sync : 1; /* crank moving but not synchronized, 3 or less teeth */
+	uint8_t B_crank_stall : 1; /* crank was synched but now no movement */
+	uint8_t B_crank_loss_of_sync : 1; /* lost synchronization */
+	uint8_t B_crank_limp_home : 1; /* running limphome on CAM sensor */
+	uint8_t B_rsv : 1; /* reserved bits */
 } crank_status_bits;
 
 typedef struct {
-uint32_t segment_time; // Segement time
-uint16_t engine_rpm; // Engine revolution per minute
-uint8_t  engine_position_tc; // Engine position tooth count
-crank_status_bits crank_status; // Crank status
+	uint32_t segment_time; // Segement time
+	uint16_t engine_rpm; // Engine revolution per minute
+	uint8_t  engine_position_tc; // Engine position tooth count
+	crank_status_bits crank_status; // Crank status
 } crank_signals;
 
 typedef struct {
-uint8_t B_cam_failed : 1; /*signal failed */
-uint8_t B_cam_loss_of_sync : 1; /* cam level is wrong at the crank GAP */
-uint8_t B_cam_limp_home : 1; /* running limphome on crank sensor */
-uint8_t B_rsv : 5; /* reserved bits */
+	uint8_t B_cam_failed : 1; /*signal failed */
+	uint8_t B_cam_loss_of_sync : 1; /* cam level is wrong at the crank GAP */
+	uint8_t B_cam_limp_home : 1; /* running limphome on crank sensor */
+	uint8_t B_rsv : 5; /* reserved bits */
 } cam_status_bits;
 
 typedef struct {
-uint32_t period; // between falling edges
-uint8_t edge_count; // cam edge counter, from 1 to 8
-uint8_t level; // current cam sensor level
-cam_status_bits status;
+	uint32_t period; // between falling edges
+	uint8_t edge_count; // cam edge counter, from 1 to 8
+	uint8_t level; // current cam sensor level
+	cam_status_bits status;
 } cam_signals;
 
 typedef struct {
-uint16_t period; // Vehicle Speed Period
-status_bits status;
+	uint16_t period; // Vehicle Speed Period
+	status_bits status;
 } veh_spd_signals;
 
 
 /*ignition channels, A,B,C,D are corresponding to the firing order: 1,3,4,2 for example*/
 typedef struct {
-uint8_t B_ign_A : 1; /*enable igntion channel A */
-uint8_t B_ign_B : 1; /*enable igntion channel B */
-uint8_t B_ign_C : 1; /*enable igntion channel C */
-uint8_t B_ign_D : 1; /*enable igntion channel D */
-uint8_t B_ign_rsv : 4; /*reserved */
+	uint8_t B_ign_A : 1; /*enable igntion channel A */
+	uint8_t B_ign_B : 1; /*enable igntion channel B */
+	uint8_t B_ign_C : 1; /*enable igntion channel C */
+	uint8_t B_ign_D : 1; /*enable igntion channel D */
+	uint8_t B_ign_rsv : 4; /*reserved */
 } ign_enable_bits;
 
-
 typedef struct {
-int8_t ign_angle;
-uint16_t dwell_time;
-uint8_t   follow_up_sparks;
-uint16_t dwell_time_of_follow_up_sparks;
-uint16_t break_time_of_follow_up_sparks;
-status_bits status; /* Status Code */
+	int8_t ign_angle;
+	uint16_t dwell_time;
+	uint8_t   follow_up_sparks;
+	uint16_t dwell_time_of_follow_up_sparks;
+	uint16_t break_time_of_follow_up_sparks;
+	status_bits status; /* Status Code */
 } ign_signals;
-
 
 /*injection channels, A,B,C,D are corresponding to the firing order: 1,3,4,2 for example*/
 typedef struct {
-uint8_t B_inj_A : 1; /*enable injection channel A */
-uint8_t B_inj_B : 1; /*enable injection channel B */
-uint8_t B_inj_C : 1; /*enable injection channel C */
-uint8_t B_inj_D : 1; /*enable injection channel D */
-uint8_t B_inj_rsv : 4; /* reserved */
+	uint8_t B_inj_A : 1; /*enable injection channel A */
+	uint8_t B_inj_B : 1; /*enable injection channel B */
+	uint8_t B_inj_C : 1; /*enable injection channel C */
+	uint8_t B_inj_D : 1; /*enable injection channel D */
+	uint8_t B_inj_rsv : 4; /* reserved */
 } inj_enable_bits;
 
-
 typedef struct {
-uint8_t inj_end_angle;
-uint32_t inj_time;
-uint8_t B_post_inj; /*boundary conditions, HLS to set this bit and let LLD to handle the latency.*/
-uint16_t post_inj_time;
-uint8_t abort_angle;
-status_bits status; /* Status Code */
+	uint8_t inj_end_angle;
+	uint32_t inj_time;
+	uint8_t B_post_inj; /*boundary conditions, HLS to set this bit and let LLD to handle the latency.*/
+	uint16_t post_inj_time;
+	uint8_t abort_angle;
+	status_bits status; /* Status Code */
 } inj_signals;
 
 typedef struct {
-uint8_t desired_position; /* HLS commanded position */
-uint8_t current_position; /* LLD calculated position, LLD updates this every 5 ms */
-uint8_t correct_position; /* The real current position calculated by HLS during idle status */
-bool B_correct_position; /* Conditon to correct variable ¡®current_position¡¯ by variable
-                            correct_position */
-bool B_zero_position_learning; /* HLS commands LLD to learn the zero position */
-status_bits status1; /* Status Code */
-//step_status_bits status2; /* stepper specific status bits */
-} Step_signals;
-
-typedef struct {
-uint8_t B_Pwf : 1; /*ECU power fail happened */
-uint8_t B_after_run_end_abnormal: 1; /* ECU after run end abnormally */
-uint8_t B_rsv : 6; /*reserved bits */
+	uint8_t B_Pwf : 1; /*ECU power fail happened */
+	uint8_t B_after_run_end_abnormal: 1; /* ECU after run end abnormally */
+	uint8_t B_rsv : 6; /*reserved bits */
 } sys_status_bits;
 
 typedef struct {
-uint8_t B_SW_Pwf : 1; /*HLS commanded power fail */
-uint8_t B_after_run_end: 1; /* HLS after-run end */
-uint8_t B_rsv : 6; /* reserved bits */
+	uint8_t B_SW_Pwf : 1; /*HLS commanded power fail */
+	uint8_t B_after_run_end: 1; /* HLS after-run end */
+	uint8_t B_rsv : 6; /* reserved bits */
 } sys_cmmd_bits;
 
 /* ETC interface */
@@ -315,11 +301,10 @@ typedef struct {
 extern tele_type telem_data;
 
 
-/*the flowing is SAEJ1979 service 0x02 */		 
-typedef struct										
-{	
-       uint16_t Ffm_Frame_Pcode;   /* 0x02  indicates no freeze frame data)  */
-       uint8_t  Ffm_B_FuelStatus; /* 0x03fuel supply system status*/                        
+/*the flowing is SAEJ1979 service 0x02 */
+typedef struct {
+	uint16_t Ffm_Frame_Pcode;   /* 0x02  indicates no freeze frame data)  */
+	uint8_t  Ffm_B_FuelStatus; /* 0x03fuel supply system status*/                        
 	uint8_t	Ffm_CsMaf;	  /* 0x04	Calculated LOAD Value!	*/
 	uint8_t	Ffm_TmLin;     /* 0x05	Engine Coolant Temperature	*/
 	uint8_t	Ffm_fLc;	      /* 0x06	Short Term Fuel Trim Bank	*/
@@ -332,14 +317,14 @@ typedef struct
 	uint8_t	Ffm_TpPos;     /* 0x11	Absolute Throttle Position	*/
 	uint16_t Ffm_KmQ6Mil;  /* 0x21	Distance Travelled While MIL is Activated	*/
 	uint16_t Ffm_Ub_b;	  /* 0x42	System voltage	*/
-}Freeze_Frame_Elem;										
+} Freeze_Frame_Elem;
 extern Freeze_Frame_Elem  DIAG_STATUS_FREEZE_FRAME;
 
 
-typedef struct									
-{	uint8_t   VIN[17];				/*Vehicle Identification Number*/				
-	uint8_t   CALID[16];				/*Calibration Identifications*/				
-	uint8_t   CVN[4];				/*Calibration Verification Numbers*/				
+typedef struct {
+	uint8_t   VIN[17];				/*Vehicle Identification Number*/
+	uint8_t   CALID[16];			/*Calibration Identifications*/
+	uint8_t   CVN[4];				/*Calibration Verification Numbers*/
 }VehicleInformation;
 
 
@@ -451,7 +436,7 @@ extern LLD_di_item LLD_di_table[LLD_DI_MAX_CHANNEL];
 extern LLD_do_item LLD_do_table[LLD_DO_MAX_CHANNEL]; /* Digital output value*/
 extern LLD_pwm_out_item LLD_pwm_out_table[LLD_PWM_MAX_CHANNEL]; /* The index means the channel no of the PWM output module */
 extern crank_signals crank_sig;
-extern  cam_signals cam_sig;
+extern cam_signals cam1_sig, cam2_sig;
 extern veh_spd_signals veh_spd_sig;
 extern current_channel_num LLD_cyl_num;
 extern ign_enable_bits ign_enable;

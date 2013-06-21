@@ -22,7 +22,7 @@ LLD_pwm_out_item LLD_pwm_out_table[LLD_PWM_MAX_CHANNEL]; /* The index means the 
 uint16_t instant_fuel_consumption; 
 
  current_channel_num LLD_cyl_num;
- cam_signals cam_sig; 
+ cam_signals cam1_sig, cam2_sig; 
 crank_signals crank_sig;
 inj_signals inj_sig[MAX_INJ_CHANNEL];
 inj_enable_bits inj_enable;
