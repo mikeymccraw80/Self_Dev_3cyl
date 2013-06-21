@@ -12,7 +12,7 @@
 //=============================================================================
 void IO_CAMW_Update(void)
 {
-	cam1_sig.period = (HAL_Get_CAM_Period(CAM1) * 25) / 80;
+	cam1_sig.period = ((HAL_Get_CAM_Period(CAM1) * 25) / 80 );
 	cam1_sig.edge_count = HAL_Get_CAM_Edge_Count(CAM1);
 }
 
@@ -22,7 +22,7 @@ void IO_CAMW_Update(void)
 void IO_CAMX_Update(void)
 {
 	/* convert 0.25us -> 0.8us */
-	cam2_sig.period = (HAL_Get_CAM_Period(CAM2) * 25) / 80;
+	cam1_sig.period = ((HAL_Get_CAM_Period(CAM2) * 25) / 80 );
 	cam2_sig.edge_count = HAL_Get_CAM_Edge_Count(CAM2);
 }
 

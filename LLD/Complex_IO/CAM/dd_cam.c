@@ -366,7 +366,7 @@ uint8_t CAM_Get_Total_Edge(CAM_Sensors_T     in_sensor)
 //=============================================================================
 // uint8_t CAM_Get_Current_Edge_Period
 //=============================================================================
-uint8_t CAM_Get_Current_Edge_Period(CAM_Sensors_T     in_sensor)
+uint32_t CAM_Get_Current_Edge_Period(CAM_Sensors_T     in_sensor)
 {
 	return CAM_Current_Edge_Period[in_sensor];
 }
@@ -399,13 +399,15 @@ static uint8_t CAM_Increment_Cam_Edge_Counter(uint8_t in_cam_edge)
 void CAM_Edge_Process( uint32_t in_cam_sensor )
 {
 	CAM_Sensors_T   cam_sensor = (CAM_Sensors_T)in_cam_sensor;
-	uint32_t        cam_event_time;
 
 	uint8_t         current_edge_index;
 	uCrank_Count_T  pa_tooth_count;
 	uCrank_Count_T  whole_angle_in_teeth;
 	uCrank_Angle_T  cam_event_angle_fraction;
+
 	uint32_t        delta_time;
+	uint32_t        cam_event_time;
+	uint32_t        cam_previou_event_time;
 	uint32_t        tooth_period;
 	uint32_t        previous_time;
 	uint32_t        current_time;
@@ -443,7 +445,17 @@ void CAM_Edge_Process( uint32_t in_cam_sensor )
 	CAM_Edge_Data[( cam_sensor * CAM_Number_Of_Pulses ) + current_edge_index].Count = CRANK_Convert_Teeth_To_uCrank_Angle( whole_angle_in_teeth ) + cam_event_angle_fraction;
 	CAM_Edge_Data[( cam_sensor * CAM_Number_Of_Pulses ) + current_edge_index].Time = cam_event_time;
 	CAM_Edge_Data[( cam_sensor * CAM_Number_Of_Pulses ) + current_edge_index].Edge_Period = tooth_period;
-	CAM_Current_Edge_Period[cam_sensor] = tooth_period;
+	if (current_edge_index == 0) {
+		current_edge_index = 3;
+	} else {
+		current_edge_index --;
+	}
+	cam_previou_event_time = CAM_Edge_Data[( cam_sensor * CAM_Number_Of_Pulses ) + current_edge_index].Time;
+	if (cam_event_time > cam_previou_event_time) {
+		CAM_Current_Edge_Period[cam_sensor] = cam_event_time - cam_previou_event_time;
+	} else {
+		CAM_Current_Edge_Period[cam_sensor] = cam_event_time + (UINT24_MAX - cam_previou_event_time);
+	}
 	// Increment CAM edge if edges are valid (we know where we are) else we have an issue.
 	CAM_Current_Edge[cam_sensor] = CAM_Increment_Cam_Edge_Counter( CAM_Current_Edge[cam_sensor] );
 }
