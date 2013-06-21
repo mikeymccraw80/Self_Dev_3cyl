@@ -216,7 +216,7 @@ void CAM_Update_State( void )
 			CAM_State_Change_Occurred          = Insert_Bits( CAM_State_Change_Occurred,          true, CAM_Sensor_In_Use, 1 );
 			CAM_State_Change_Occurred_This_Rev = Insert_Bits( CAM_State_Change_Occurred_This_Rev, true, CAM_Sensor_In_Use, 1 );
 
-			for (counter = 0; counter < CAM_Number_Of_Sensors; counter++ ) {
+			for (counter = 0; counter < CAM_NUMBER_OF_SENSORS; counter++ ) {
 				CAM_Current_Edge[counter] = CAM_Initialization_Parameters->cam_edge_before_gap;
 			}
 		} else {
@@ -246,7 +246,7 @@ void CAM_Update_State( void )
 				CAM_State_Change_Occurred          = Insert_Bits( CAM_State_Change_Occurred,          true, CAM_Sensor_In_Use, 1 );
 				CAM_State_Change_Occurred_This_Rev = Insert_Bits( CAM_State_Change_Occurred_This_Rev, true, CAM_Sensor_In_Use, 1 );
 
-				for (counter = 0; counter < CAM_Number_Of_Sensors; counter++ ) {
+				for (counter = 0; counter < CAM_NUMBER_OF_SENSORS; counter++ ) {
 					CAM_Current_Edge[counter] = CAM_Initialization_Parameters->cam_edge_before_gap;
 				}
 			} else {

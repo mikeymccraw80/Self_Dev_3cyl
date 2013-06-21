@@ -23,8 +23,6 @@ typedef enum Cam_Parameter_Tag {
 typedef enum {
 	CAM1,
 	CAM2,
-	CAM3,
-	CAM4,
 	NUMBER_OF_CAM_SENSORS
 } CAM_Sensors_T;
 
