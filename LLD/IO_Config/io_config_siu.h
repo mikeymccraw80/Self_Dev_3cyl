@@ -161,6 +161,7 @@ extern const SIU_PCR_T SIU_INITIAL_PCR_114;
 //are connected to pins. Both the input and output channels of eTPU_A[1:4] are connected to pins.
 //CAM1FIVO
 extern const SIU_PCR_T SIU_INITIAL_PCR_115;
+#define  HAL_GPIO_CAM1_CHANNEL         SIU_GPIO_CHANNEL_115
 //etpu02
 //ETCDIR
 extern const SIU_PCR_T SIU_INITIAL_PCR_116;
@@ -264,6 +265,7 @@ extern const SIU_PCR_T SIU_INITIAL_PCR_129 ;
 //of the eTPU_A[16:19]_GPIO[130:133] pins. This registers allow selection of the eTPU_A and GPIO
 //functions.
 extern const SIU_PCR_T SIU_INITIAL_PCR_130 ;
+#define  HAL_GPIO_CAM2_CHANNEL         SIU_GPIO_CHANNEL_130
 
 //etpu17
 //EST1

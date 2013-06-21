@@ -1,8 +1,11 @@
 //=============================================================================
 // include files
 //=============================================================================
- #include "dd_cam_interface.h"
- #include "dd_crank_interface.h"
+#include "dd_cam_interface.h"
+#include "dd_crank_interface.h"
+#include "io_config_siu.h"
+#include "dd_siu_interface.h"
+
 
 //=============================================================================
 // HAL_Get_CAM_Period
@@ -28,11 +31,9 @@ uint8_t HAL_Get_CAM_Level(uint32_t cam_sensor)
 {
 	uint32_t          cam_history;
 	if (cam_sensor == CAM1) {
-		cam_history  = CRANK_Get_Parameter( CRANK_PARAMETER_CAM_HISTORY, 0, 0);
-		return (uint8_t)(cam_history & 0x01);
+		return (uint8_t)(SIU_GPIO_DISCRETE_Get_State(HAL_GPIO_CAM1_CHANNEL));
 	} else {
-		cam_history  = CRANK_Get_Parameter( CRANK_PARAMETER_CAM_HISTORY, 0, 0);
-		return (uint8_t)(cam_history & 0x01);
+		return (uint8_t)(SIU_GPIO_DISCRETE_Get_State(HAL_GPIO_CAM2_CHANNEL));
 	}
 }
 
