@@ -34,6 +34,8 @@ del ..\tools\delphilib\outputlib\mt22p3_chery_4cyl.a
 call get_lib.bat
 del get_lib.bat
 
+copy ..\HLS\HLS.h ..\tools\delphilib\outputlib\HLS.h
+
 echo +============================================================================+ >> build.log
 echo .                                                                            .
 echo .                          B U I L D  C O M P L E T E                        . >> build.log
