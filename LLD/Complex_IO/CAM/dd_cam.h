@@ -117,11 +117,11 @@ typedef struct Cam_Sensor_Coherent_Tag {
 }  Cam_Sensor_Coherent_T;
 
 typedef struct {
-	uint32_t          Count;          // Edge count
+	uint32_t          Count;          // Edge count, this member seems to be angle, not count
 	uint32_t          Time;           // Edge time
+	uint32_t          Edge_Period;    // two valid edge period
 	bool              Valid_Edge;     // Set first time a valid edge is seen
-	uint16_t          Zero_Edge_Count;// Background counter incremented
-									 // in a periodic loop and cleared on each edge.
+	uint16_t          Zero_Edge_Count;// Background counter incremented, in a periodic loop and cleared on each edge.
 }  CAM_Edge_Data_T;
 
 #endif // DD_CAM_H

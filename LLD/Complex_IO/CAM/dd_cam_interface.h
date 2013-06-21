@@ -175,7 +175,16 @@ uint32_t CAM_Get_CAM_Angle( uint32_t in_cam_sensor ,uint8_t index );
 //=============================================================================
 // uint8_t CAM_Get_Current_Edge
 //=============================================================================
-void CAM_Set_Current_Edge(
-   CAM_Sensors_T     in_sensor );
+uint8_t CAM_Get_Total_Edge(CAM_Sensors_T     in_sensor);
+
+//=============================================================================
+// CAM_Get_Edge_Data
+//=============================================================================
+void CAM_Get_Edge_Data(CAM_Sensors_T in_sensor, uint8_t in_cam_edge, Edge_Data_T* in_cam_edge_data);
+
+//=============================================================================
+// uint8_t CAM_Get_Current_Edge
+//=============================================================================
+void CAM_Set_Current_Edge(CAM_Sensors_T     in_sensor );
 
 #endif // DD_CAM_INTERFACE_H
