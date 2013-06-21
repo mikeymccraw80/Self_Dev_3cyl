@@ -46,8 +46,10 @@ INLINE void Init_HLS_Crank_Cam_Status(void)
     crank_sig.crank_status.B_crank_stall= ( bitfield16_t )false ;
     crank_sig.crank_status.B_crank_sync = ( bitfield16_t )false;
     /* Initilize the Cam parameters */
-    cam_sig.edge_count = 0;
-    cam_sig.period = 0xFFFFFFFF;    
+    cam1_sig.edge_count = 0;
+    cam1_sig.period = 0xFFFFFFFF;
+    cam2_sig.edge_count = 0;
+    cam2_sig.period = 0xFFFFFFFF;
 }
 //=============================================================================
 // IO_OS_Get_Shutdown
