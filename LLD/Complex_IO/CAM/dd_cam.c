@@ -393,6 +393,9 @@ static uint8_t CAM_Increment_Cam_Edge_Counter(uint8_t in_cam_edge)
 	return in_cam_edge;
 }
 
+ uCrank_Count_T  pa_tooth_count;
+	uCrank_Count_T  whole_angle_in_teeth;
+	uCrank_Angle_T  cam_event_angle_fraction;
 //=============================================================================
 // CAM_Edge_Interrupt_Handler
 //=============================================================================
@@ -401,10 +404,9 @@ void CAM_Edge_Process( uint32_t in_cam_sensor )
 	CAM_Sensors_T   cam_sensor = (CAM_Sensors_T)in_cam_sensor;
 
 	uint8_t         current_edge_index;
-	uCrank_Count_T  pa_tooth_count;
-	uCrank_Count_T  whole_angle_in_teeth;
-	uCrank_Angle_T  cam_event_angle_fraction;
-
+	// uCrank_Count_T  pa_tooth_count;
+	// uCrank_Count_T  whole_angle_in_teeth;
+	// uCrank_Angle_T  cam_event_angle_fraction;
 	uint32_t        delta_time;
 	uint32_t        cam_event_time;
 	uint32_t        cam_previou_event_time;
@@ -429,6 +431,7 @@ void CAM_Edge_Process( uint32_t in_cam_sensor )
 	whole_angle_in_teeth  = CRANK_Get_Parameter(CRANK_PARAMETER_CURRENT_TOOTH,0,0) -
                           ( (CRANK_Get_Parameter(CRANK_PARAMETER_CURRENT_EDGE_COUNT,0,0) -
                                      pa_tooth_count));
+	whole_angle_in_teeth = (current_edge_index > 1) ? (whole_angle_in_teeth + 60) : (whole_angle_in_teeth);
 
 	current_time = CRANK_Get_Edge_Time_From_Count( pa_tooth_count);
 
@@ -442,7 +445,7 @@ void CAM_Edge_Process( uint32_t in_cam_sensor )
 
 	// convert to delta angle from time
 	cam_event_angle_fraction = IO_Convert_uTime_To_uAngle(delta_time, uCRANK_ANGLE_PRECISION, tooth_period, 1);
-	CAM_Edge_Data[( cam_sensor * CAM_Number_Of_Pulses ) + current_edge_index].Count = CRANK_Convert_Teeth_To_uCrank_Angle( whole_angle_in_teeth ) + cam_event_angle_fraction;
+	CAM_Edge_Data[( cam_sensor * CAM_Number_Of_Pulses ) + current_edge_index].Count = CRANK_Convert_Teeth_To_uCrank_Angle(whole_angle_in_teeth) + cam_event_angle_fraction;
 	CAM_Edge_Data[( cam_sensor * CAM_Number_Of_Pulses ) + current_edge_index].Time = cam_event_time;
 	CAM_Edge_Data[( cam_sensor * CAM_Number_Of_Pulses ) + current_edge_index].Edge_Period = tooth_period;
 	if (current_edge_index == 0) {
