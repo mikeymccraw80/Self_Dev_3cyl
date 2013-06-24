@@ -22,7 +22,7 @@ void IO_CAMW_Update(void)
 void IO_CAMX_Update(void)
 {
 	/* convert 0.25us -> 0.8us */
-	cam1_sig.period = ((HAL_Get_CAM_Period(CAM2) * 25) / 80 );
+	cam2_sig.period = ((HAL_Get_CAM_Period(CAM2) * 25) / 80 );
 	cam2_sig.edge_count = HAL_Get_CAM_Edge_Count(CAM2);
 }
 
