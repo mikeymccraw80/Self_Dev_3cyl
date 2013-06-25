@@ -45,4 +45,17 @@ bool HAL_GET_CAM_Stuck_State(void)
 	return CAM_Get_Stuck_State();
 }
 
+//=============================================================================
+// HAL_Diag_Crank_Signal, called on the falling edge of cam inlet
+//=============================================================================
+bool HAL_Diag_Crank_Signal(void)
+{
+	bool result;
+
+	result = (CRANK_Get_Diag_Tooth_Cnt() == 0) ? 1 : 0;
+	CRANK_Set_Diag_Tooth_Cnt(0);
+	return result;
+}
+
+
 

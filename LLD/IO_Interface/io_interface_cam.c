@@ -51,3 +51,20 @@ void IO_CAM_Status_Update (void)
 		cam1_sig.status.B_cam_limp_home = 0;
 	}
 }
+
+//=============================================================================
+//  IO_Crank_Status_Update, should be called on cam falling edge
+//=============================================================================
+void IO_Crank_Status_Update(void)
+{
+	/* Check if crank failed */
+	if ( HAL_Diag_Crank_Signal()) {
+		crank_sig.crank_status.B_crank_failed = ( bitfield8_t )true;
+		crank_sig.crank_status.B_crank_limp_home = ( bitfield8_t )true;
+		crank_sig.crank_status.B_crank_sync = ( bitfield16_t )false ;
+	} else {
+		crank_sig.crank_status.B_crank_failed = ( bitfield8_t )false;
+		crank_sig.crank_status.B_crank_limp_home = ( bitfield8_t )false;
+	}
+}
+

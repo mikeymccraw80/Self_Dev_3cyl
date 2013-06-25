@@ -122,6 +122,8 @@ static CRANK_Parameters_T  CRANK_Parameters;
 static IO_Crank_Initialization_Parameters_T *CRANK_Initialization_Parameters;
 static Crank_Cylinder_T    CRANK_Cylinder_ID_Even;
 
+static uint8_t crank_diag_tooth_cnt;
+
 
 //=============================================================================
 //   Local Variable Definitions
@@ -581,71 +583,62 @@ static void CRANK_Search_For_First_Gap( void )
 //=============================================================================
 void CRANK_Process_Crank_Event( void )  
 {
-    bool             sync_conditions_met;
-    EPPwMT_Coherent_Edge_Time_And_Count_T edgeTimeAndCount;
-     uint32_t  temp_count;
-	   uCrank_Count_T actual_irq_count;
-   
-    // Clear the interrupt flag: false == clear
-    MCD5408_Set_Host_Interrupt_Status(EPPWMT_TPU_INDEX,&TPU,TPU_CONFIG_IC_EPPWMT,false);
+	bool                                  sync_conditions_met;
+	uint32_t                              temp_count;
+	uCrank_Count_T                        actual_irq_count;
+	EPPwMT_Coherent_Edge_Time_And_Count_T edgeTimeAndCount;
 
-   // Read the actual interrupt counter to see when we are being interrupted:
-   actual_irq_count = MCD5408_Get_IRQ_Count_At_Last_Interrupt(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT, CRANK_EPPE_IRQ_Select );
+	// Clear the interrupt flag: false == clear
+	MCD5408_Set_Host_Interrupt_Status(EPPWMT_TPU_INDEX,&TPU,TPU_CONFIG_IC_EPPWMT,false);
 
-  
-     // Read the current edge time and period from the PCP:
-     CRANK_Parameters.F.edge_time  =  MCD5408_Get_Buffered_Edge_Time(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT,CRANK_EPPE_IRQ_Select);
-     CRANK_Parameters.F.edge_angle = CRANK_Convert_Teeth_To_uCrank_Angle( actual_irq_count );
+	// Read the actual interrupt counter to see when we are being interrupted:
+	actual_irq_count = MCD5408_Get_IRQ_Count_At_Last_Interrupt(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT, CRANK_EPPE_IRQ_Select );
 
-     CRANK_Tooth_Duration =MCD5408_Get_Period(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT);    
-     CRANK_Hi_Res_Edge_Time = CRANK_Parameters.F.edge_time;	
-    
 
-     OS_ToothInt_Hook();
-	 
-      // Check if first synchronization took place:
-      if( !CRANK_Get_First_Sync_Occurred( CRANK_Internal_State.U32 ) )
-      {
-         // Look for the first synchronization:
-         CRANK_Search_For_First_Gap();
-      }
-      else
-      {
-          if( !CRANK_Gap_Cofirm( ))
-           {
-	      CRANK_Manage_Execute_Event();  
-            }
-      }		  
-		  
-     temp_count =   CRANK_Next_Event_PA_Content;
-     CRANK_Next_Event_PA_Content++;
-	   
-     // Set IRQ_Cnt to match Pulse_Cnt at the next sched. event
-     // If the tooth at which the next interrupt should take
-     // place is already passed, the EPPwMT Primitive mechanism will automa-
-      // tically retrigger an interrupt to handle the passed
-      // event.
-     //We would not miss any tooth since there are a time buffer in etpu
-     MCD5408_Set_New_IRQ_Count(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT, CRANK_EPPE_IRQ_Select, CRANK_Next_Event_PA_Content );
-     // get current count value   
-    MCD5408_Get_Coherent_Edge_Time_And_Count( EPPWMT_TPU_INDEX, TPU_CONFIG_IC_EPPWMT, &edgeTimeAndCount );
-     CRANK_Current_Event_PA_Content = edgeTimeAndCount.Count;   	 
-     if(temp_count!=CRANK_Current_Event_PA_Content)
-	 		 	
-     {
-        if(CRANK_Current_Event_PA_Content - temp_count <0x0f)
-        {
-           // triger a HSR update if a tooth miss excuted 
-           MCD5408_Update_IRQ_Count(EPPWMT_TPU_INDEX,&TPU, TPU_CONFIG_IC_EPPWMT);
-        }
-	else
-	{
-	  // error status
-           CRANK_Process_Stall_Event();
-	}  
-     }
-      	 
+	// Read the current edge time and period from the PCP:
+	CRANK_Parameters.F.edge_time  =  MCD5408_Get_Buffered_Edge_Time(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT,CRANK_EPPE_IRQ_Select);
+	CRANK_Parameters.F.edge_angle = CRANK_Convert_Teeth_To_uCrank_Angle( actual_irq_count );
 
+	CRANK_Tooth_Duration =MCD5408_Get_Period(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT);    
+	CRANK_Hi_Res_Edge_Time = CRANK_Parameters.F.edge_time;	
+
+
+	OS_ToothInt_Hook();
+
+	// Check if first synchronization took place:
+	if( !CRANK_Get_First_Sync_Occurred( CRANK_Internal_State.U32 ) ) {
+		// Look for the first synchronization:
+		CRANK_Search_For_First_Gap();
+	} else {
+		if( !CRANK_Gap_Cofirm( )) {
+			CRANK_Manage_Execute_Event();  
+		}
+	}
+
+	temp_count =   CRANK_Next_Event_PA_Content;
+	CRANK_Next_Event_PA_Content++;
+
+	// Set IRQ_Cnt to match Pulse_Cnt at the next sched. event
+	// If the tooth at which the next interrupt should take
+	// place is already passed, the EPPwMT Primitive mechanism will automa-
+	// tically retrigger an interrupt to handle the passed
+	// event.
+	//We would not miss any tooth since there are a time buffer in etpu
+	MCD5408_Set_New_IRQ_Count(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT, CRANK_EPPE_IRQ_Select, CRANK_Next_Event_PA_Content );
+	// get current count value   
+	MCD5408_Get_Coherent_Edge_Time_And_Count( EPPWMT_TPU_INDEX, TPU_CONFIG_IC_EPPWMT, &edgeTimeAndCount );
+	CRANK_Current_Event_PA_Content = edgeTimeAndCount.Count;
+	if(temp_count!=CRANK_Current_Event_PA_Content) {
+		if(CRANK_Current_Event_PA_Content - temp_count <0x0f) {
+			// triger a HSR update if a tooth miss excuted 
+			MCD5408_Update_IRQ_Count(EPPWMT_TPU_INDEX,&TPU, TPU_CONFIG_IC_EPPWMT);
+		} else {
+			// error status
+			CRANK_Process_Stall_Event();
+		}
+	}
+
+	crank_diag_tooth_cnt++;
 }
 
 unsigned int crank_test3;
@@ -1348,6 +1341,23 @@ void CRANK_EngineStall_PerioCheck(void)
       }
      
    }
+}
+
+
+//=============================================================================
+// CRANK_Get_Diag_Tooth_Cnt, for crank status diagnose
+//=============================================================================
+uint8_t CRANK_Get_Diag_Tooth_Cnt(void)
+{
+	return crank_diag_tooth_cnt;
+}
+
+//=============================================================================
+// CRANK_Set_Diag_Tooth_Cnt, for crank status diagnose
+//=============================================================================
+void CRANK_Set_Diag_Tooth_Cnt(uint8_t cnt)
+{
+	crank_diag_tooth_cnt = cnt;
 }
 
 

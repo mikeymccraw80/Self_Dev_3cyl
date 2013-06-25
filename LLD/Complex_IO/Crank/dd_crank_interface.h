@@ -68,5 +68,15 @@ uCrank_Count_T CRANK_Get_Engine_Tooth( void );
 //=============================================================================
 bool CRANK_Get_First_Sync_Set( void );
 
+//=============================================================================
+// CRANK_Get_Diag_Tooth_Cnt, for crank status diagnose
+//=============================================================================
+uint8_t CRANK_Get_Diag_Tooth_Cnt(void);
+
+//=============================================================================
+// CRANK_Set_Diag_Tooth_Cnt, for crank status diagnose
+//=============================================================================
+void CRANK_Set_Diag_Tooth_Cnt(uint8_t cnt);
+
 
 #endif // DD_CRANK_INTERFACE_H

@@ -181,6 +181,7 @@ void HAL_OS_CAM_W_Hook(void)
 	IO_VCPC_Convert_CAMW();
 	IO_CAMW_Update();
 	HLS_ph1();
+	IO_Crank_Status_Update();
 }
 
 
