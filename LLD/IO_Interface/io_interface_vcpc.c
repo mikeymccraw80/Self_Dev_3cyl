@@ -20,10 +20,13 @@
 void IO_VCPC_Convert_CAMW(void)
 {
 	uint8_t edge_index;
+	uint32_t angle_temp;
+
 	edge_index = HAL_VCPC_Get_CAM_Current_Index(0);
 	edge_index = (edge_index == 0) ? 3 : edge_index --;
-	/* 6/256 => 1/1024 */
-	angle_crank_cam_inlet = ((HAL_VCPC_Get_CAM_Angle(0,edge_index) - (KyHWIO_ToothOfFirstLoResEvent << 8)) * 6) >> 8;
+	/* unit: 6/256 => 1024/65536(1/64) */
+	angle_temp =  ((HAL_VCPC_Get_CAM_Angle(0,edge_index) - (KyHWIO_ToothOfFirstLoResEvent << 8)) * 3) / 2;
+	angle_crank_cam_inlet = (uint16_t)angle_temp;
 }
 
 //=============================================================================
@@ -32,8 +35,12 @@ void IO_VCPC_Convert_CAMW(void)
 void IO_VCPC_Convert_CAMX(void)
 {
 	uint8_t edge_index;
+	uint32_t angle_temp;
+
 	edge_index = HAL_VCPC_Get_CAM_Current_Index(1);
 	edge_index = (edge_index == 0) ? 3 : edge_index --;
-	angle_crank_cam_outlet =  ((HAL_VCPC_Get_CAM_Angle(1,edge_index) - (KyHWIO_ToothOfFirstLoResEvent << 8)) * 6) >> 8;
+	/* unit: 6/256 => 1024/65536(1/64) */
+	angle_temp =  ((HAL_VCPC_Get_CAM_Angle(1,edge_index) - (KyHWIO_ToothOfFirstLoResEvent << 8)) * 3) / 2;
+	angle_crank_cam_outlet = (uint16_t)angle_temp;
 }
 
