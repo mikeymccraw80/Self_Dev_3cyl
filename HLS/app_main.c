@@ -87,8 +87,8 @@ bool                 B_Fof;
 
 
 /*VCPC*/
-unsigned int angle_crank_cam_inlet;
-unsigned int angle_crank_cam_outlet;
+uint16_t angle_crank_cam_inlet;
+uint16_t angle_crank_cam_outlet;
 
 //ETC
 etc_signals etc_sig;

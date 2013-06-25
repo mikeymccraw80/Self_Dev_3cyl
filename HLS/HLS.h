@@ -531,8 +531,8 @@ extern bool knock_flag_c;
 extern bool knock_flag_d;
 
 /*VCPC*/
-extern unsigned int angle_crank_cam_inlet;
-extern unsigned int angle_crank_cam_outlet;
+extern uint16_t angle_crank_cam_inlet;
+extern uint16_t angle_crank_cam_outlet;
 
 
 /* Data for transmit */
