@@ -34,3 +34,20 @@ void IO_CAM_Level_Update(void)
 	cam1_sig.level = HAL_Get_CAM_Level(CAM1);
 	cam2_sig.level = HAL_Get_CAM_Level(CAM2);
 }
+
+//=============================================================================
+//  IO_CAM_Status_Update, should be called on CAM read reference
+//  remark, there's no meaning to update cam2 status
+//=============================================================================
+void IO_CAM_Status_Update (void)
+{
+	if (HAL_GET_CAM_Stuck_State()) {
+		cam1_sig.status.B_cam_failed = 1;
+		cam1_sig.status.B_cam_loss_of_sync = 1;
+		cam1_sig.status.B_cam_limp_home = 1;
+	} else {
+		cam1_sig.status.B_cam_failed = 0;
+		cam1_sig.status.B_cam_loss_of_sync = 0;
+		cam1_sig.status.B_cam_limp_home = 0;
+	}
+}

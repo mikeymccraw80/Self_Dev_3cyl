@@ -51,6 +51,7 @@ uint8_t                  CAM_Total_Edge[CAM_NUMBER_OF_SENSORS];
 //=============================================================================
 void OS_CAM_W_Hook(void);
 void OS_CAM_X_Hook(void);
+void OS_CAM_READ_Hook(void);
 //=============================================================================
 // Local Function Prototypes
 //=============================================================================
@@ -270,7 +271,16 @@ void CAM_Update_State( void )
 			CAM_Stuck = Insert_Bits( CAM_Stuck, true, CAM_Sensor_In_Use, 1 );
 		}
 	}
-} 
+	OS_CAM_READ_Hook();
+}
+
+//=============================================================================
+// CAM_Get_Stuck_State
+//=============================================================================
+bool CAM_Get_Stuck_State(void)
+{
+	return CAM_Stuck;
+}
 
 //=============================================================================
 // CAM_Get_Sensor_State

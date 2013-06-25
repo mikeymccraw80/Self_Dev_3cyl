@@ -37,4 +37,12 @@ uint8_t HAL_Get_CAM_Level(uint32_t cam_sensor)
 	}
 }
 
+//=============================================================================
+// HAL_GET_CAM_Stuck_State
+//=============================================================================
+bool HAL_GET_CAM_Stuck_State(void)
+{
+	return CAM_Get_Stuck_State();
+}
+
 
