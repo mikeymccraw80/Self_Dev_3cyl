@@ -112,32 +112,26 @@ void  IO_Eng_ToothInt(void)
 //=============================================================================
 // IO_Eng_Update_System_Time_Background
 //=============================================================================
- void IO_Eng_Update_System_Time_Background(void)
+void IO_Eng_Update_System_Time_Background(void)
 {
-   if ( Tooth_Interrupt_Flag == false )
-  {
-    Sys_time = HAL_Eng_Get_Sys_Timer();
-  }
+	if ( crank_sig.engine_rpm == 0) {
+		Sys_time = HAL_Eng_Get_Sys_Timer();
+	}
 
-   if(crank_sig.crank_status.B_crank_pre_sync )
-   {
-     crank_sig.engine_rpm = 400; //100rpm
-     crank_sig.segment_time = 300000;//100rpm,300ms
-   }
+	if (crank_sig.crank_status.B_crank_pre_sync ) {
+		crank_sig.engine_rpm = 400; //100rpm
+		crank_sig.segment_time = 300000;//100rpm,300ms
+	}
 
-  //TACH output 
-  if(!K_Can_Meter_TACH_Disable)
-  {
-     if(crank_sig.engine_rpm >0)
-       {
-         //vsep pwm period scale is 1/64ms, duty scale is 1/32768
-         HAL_Pulse_TACH_Set_Period_Duty((uint32_t)(crank_sig.segment_time*2*64)/1000, 32768/2 );
-       }
-      else
-      {
-         //vsep pwm period scale is 1/64ms, duty scale is 1/32768
-        HAL_Pulse_TACH_Set_Period_Duty((uint32_t)(crank_sig.segment_time*2*64)/1000, 0 );
-      }	
-   }	  
+	//TACH output 
+	if(!K_Can_Meter_TACH_Disable) {
+		if(crank_sig.engine_rpm >0) {
+			//vsep pwm period scale is 1/64ms, duty scale is 1/32768
+			HAL_Pulse_TACH_Set_Period_Duty((uint32_t)(crank_sig.segment_time*2*64)/1000, 32768/2 );
+		} else {
+			//vsep pwm period scale is 1/64ms, duty scale is 1/32768
+			HAL_Pulse_TACH_Set_Period_Duty((uint32_t)(crank_sig.segment_time*2*64)/1000, 0 );
+		}
+	}
 }
 
