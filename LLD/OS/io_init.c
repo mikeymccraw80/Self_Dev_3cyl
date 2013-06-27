@@ -164,9 +164,6 @@ void InitializeHardwareRegisters(void)
 
 	QADC_Initialize_Device();
 	PIT_Initialize_Device();
-	//set up os loop time 10ms
-	PIT_TIMER_Set_Value( PIT_CHANNEL_RTI, RTI_LOAD_VALUE_1MS);
-	PIT_INTERRUPT_Set_Enable(PIT_CHANNEL_RTI, true);
 
 	//set up PIT time 20us
 	PIT_TIMER_Set_Value( PIT_CHANNEL_1, PIT_LOAD_VALUE_20US);
