@@ -40,16 +40,16 @@ const uint16_t CAL_FORMID_INCAL = Cw_CalFORM_ID;
 //=============================================================================
 // function define
 //=============================================================================
- void OS_Startup_Hook(void);
- void MngOSTK_1msTasks(void);
- void MngOSTK_5msTasks(void);
- void MngOSTK_10msTasks(void);
-  void MngOSTK_100msTasks(void);
- void OS_Free_Time_Tasks_Hook(void);
+void OS_Startup_Hook(void);
+void MngOSTK_1msTasks(void);
+void MngOSTK_5msTasks(void);
+void MngOSTK_10msTasks(void);
+void MngOSTK_100msTasks(void);
+void OS_Free_Time_Tasks_Hook(void);
 //=============================================================================
 // Local variable
 //=============================================================================
-uint8_t  Normal_10ms_CNT;
+static uint8_t  Normal_10ms_CNT;
 
 
 //=============================================================================
@@ -57,65 +57,60 @@ uint8_t  Normal_10ms_CNT;
 //=============================================================================
 void StartOS_Task_Normal(void)
 {
+	OS_Startup_Hook();
+	/* turn on interrupts */
+	Enable_Interrupts();
 
-   OS_Startup_Hook();
-   /* turn on interrupts */
-   Enable_Interrupts();
+	// Set watchdog timeout to 62ms during normal operation
+	SWT_Set_Timeout_Value(SWT_TIMEOUT_VALUE_NORMAL) ;
+	SWT_Service_WatchDog();
 
-   // Set watchdog timeout to 62ms during normal operation
-   SWT_Set_Timeout_Value(SWT_TIMEOUT_VALUE_NORMAL) ;
-   SWT_Service_WatchDog();
+	/* do until application indicates shutdown */
+	while (!HAL_OS_Get_Shutdown()) {
 
-   /* do until application indicates shutdown */
-  while(!HAL_OS_Get_Shutdown())
-   {
+		/* os background 1ms schedule */
+		if (1 == RTI_Flags.bf.TimeFor1ms) {
+			MngOSTK_1msTasks();
+			RTI_Flags.bf.TimeFor1ms = 0x00;
+		}
 
-      if (1 == RTI_Flags.bf.TimeFor1ms)
-      	{
-     	    MngOSTK_1msTasks();
-	    RTI_Flags.bf.TimeFor1ms = 0x00;
-      	}
+		/* os background 2ms schedule */
+		if (1 == RTI_Flags.bf.TimeFor2ms) {
+			MngOSTK_2msTasks();
+			RTI_Flags.bf.TimeFor2ms = 0x00;
+		}
 
-	if (1 == RTI_Flags.bf.TimeFor2ms)
-      	{
-     	    MngOSTK_2msTasks();
-	    RTI_Flags.bf.TimeFor2ms = 0x00;
-      	}
-	  
-       if(1 == RTI_Flags.bf.TimeFor5ms)
-      {
-      
-         MngOSTK_5msTasks();
-	   RTI_Flags.bf.TimeFor5ms = 0x00;
-      }
-	   
-       if (1 == RTI_Flags.bf.TimeFor10ms)
-      {
-         MngOSTK_10msTasks();
-	  RTI_Flags.bf.TimeFor10ms = 0x00;
-	  Normal_10ms_CNT++;
-      }
+		/* os background 5ms schedule */
+		if (1 == RTI_Flags.bf.TimeFor5ms) {
+			MngOSTK_5msTasks();
+			RTI_Flags.bf.TimeFor5ms = 0x00;
+		}
 
-      if(10 == Normal_10ms_CNT)
-      {
-	   MngOSTK_100msTasks();
-	   Normal_10ms_CNT = 0;
+		/* os background 10ms schedule */
+		if (1 == RTI_Flags.bf.TimeFor10ms) {
+			MngOSTK_10msTasks();
+			RTI_Flags.bf.TimeFor10ms = 0x00;
+			Normal_10ms_CNT++;
+		}
+
+		/* os background 100ms schedule */
+		if (10 == Normal_10ms_CNT) {
+			MngOSTK_100msTasks();
+			Normal_10ms_CNT = 0;
+		}
+
+		OS_Free_Time_Tasks_Hook();
 	}
-	  
-       OS_Free_Time_Tasks_Hook();
-     	 
-   }
 
-   //Turn off power supply and return to OSEK
-   /* disable interrupts */
-   Disable_Interrupts();
+	//Turn off power supply and return to OSEK
+	/* disable interrupts */
+	Disable_Interrupts();
 
-   // Set watchdog timeout to 62ms during normal operation
-    SWT_Set_Timeout_Value(SWT_TIMEOUT_VALUE_INIT) ;
-    SWT_Service_WatchDog();
+	// Set watchdog timeout to 62ms during normal operation
+	SWT_Set_Timeout_Value(SWT_TIMEOUT_VALUE_INIT) ;
+	SWT_Service_WatchDog();
 
-   //OS_Powerdown_Callback();
-  
+	//OS_Powerdown_Callback();
 }
 
 
