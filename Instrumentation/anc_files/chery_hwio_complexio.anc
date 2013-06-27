@@ -1,0 +1,78 @@
+/******************************************************************************/
+/*                                                                            */
+/* Filename:          chery_hwio_interface.anc                                */
+/*                                                                            */
+/* Description:       Private ancillary definitions file                      */
+/*                    for dd_atd.                                             */
+/*                                                                            */
+/* Global Functions Defined:                                                  */
+/*                    None                                                    */
+/* Static Functions Defined:                                                  */
+/*                    None                                                    */
+/* Inline Functions Defined:                                                  */
+/*                    None                                                    */
+/*                                                                            */
+/* Forward Engine Management Systems                                          */
+/*                                                                            */
+/* Copyright 2004, Delphi Technologies, Inc.                                  */
+/* All rights reserved.                                                       */
+/*                                                                            */
+/******************************************************************************/
+
+*-dd_cam.CAM_Edge_Data[0]{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "haha1";
+*-  variable_location.symbol = dd_cam.CAM_Edge_Data[0];
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.023437500000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "cam inlet phase";
+*-}
+
+*-dd_cam.CAM_Edge_Data[1]{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "haha2";
+*-  variable_location.symbol = dd_cam.CAM_Edge_Data[1];
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.023437500000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "cam inlet phase";
+*-}
+
+*-dd_cam.CAM_Edge_Data[2]{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "haha3";
+*-  variable_location.symbol = dd_cam.CAM_Edge_Data[2];
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.023437500000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "cam inlet phase";
+*-}
+
+*-dd_cam.CAM_Edge_Data[3]{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "haha4";
+*-  variable_location.symbol = dd_cam.CAM_Edge_Data[3];
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.023437500000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "cam inlet phase";
+*-}
+
+
+/******************************************************************************/
+/*                                                                            */
+/* Revision History:                                                          */
+/*                                                                            */
+/* Rev.   DDMMYY  user id      Description                                    */
+/* ------ ------  -------      ---------------------------------------------- */
+/*                                                                            */
+/******************************************************************************/
