@@ -69,32 +69,32 @@ void StartOS_Task_Normal(void)
 	while (!HAL_OS_Get_Shutdown()) {
 
 		/* os background 1ms schedule */
-		if (1 == RTI_Flags.bf.TimeFor1ms) {
+		if (RTI_Flags.bf.TimeFor1ms == 1) {
 			MngOSTK_1msTasks();
 			RTI_Flags.bf.TimeFor1ms = 0x00;
 		}
 
 		/* os background 2ms schedule */
-		if (1 == RTI_Flags.bf.TimeFor2ms) {
+		if (RTI_Flags.bf.TimeFor2ms == 1) {
 			MngOSTK_2msTasks();
 			RTI_Flags.bf.TimeFor2ms = 0x00;
 		}
 
 		/* os background 5ms schedule */
-		if (1 == RTI_Flags.bf.TimeFor5ms) {
+		if (RTI_Flags.bf.TimeFor5ms == 1) {
 			MngOSTK_5msTasks();
 			RTI_Flags.bf.TimeFor5ms = 0x00;
 		}
 
 		/* os background 10ms schedule */
-		if (1 == RTI_Flags.bf.TimeFor10ms) {
+		if (RTI_Flags.bf.TimeFor10ms == 1) {
 			MngOSTK_10msTasks();
 			RTI_Flags.bf.TimeFor10ms = 0x00;
 			Normal_10ms_CNT++;
 		}
 
 		/* os background 100ms schedule */
-		if (10 == Normal_10ms_CNT) {
+		if (Normal_10ms_CNT == 10) {
 			MngOSTK_100msTasks();
 			Normal_10ms_CNT = 0;
 		}

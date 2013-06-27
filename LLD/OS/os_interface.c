@@ -41,30 +41,27 @@
 //MngOSTK_1msTasks
 //=============================================================================
 
- void MngOSTK_1msTasks(void)
+void MngOSTK_1msTasks(void)
 {
 
-  HAL_OS_1ms_Task();
-    
 }
 
 //=============================================================================
 //MngOSTK_2msTasks
 //=============================================================================
-
- void MngOSTK_2msTasks(void)
+void MngOSTK_2msTasks(void)
 {
-
-  HAL_OS_2ms_Task();
-    
+	HAL_OS_2ms_Task();
 }
+
 //=============================================================================
 //MngOSTK_5msTasks
 //=============================================================================
 void MngOSTK_5msTasks(void)
 {
-  HAL_OS_5ms_Task();
+	HAL_OS_5ms_Task();
 }
+
 //=============================================================================
 //MngOSTK_10msTasks
 //=============================================================================
@@ -95,36 +92,31 @@ void MngOSTK_10msTasks(void)
 uint16_t test_cnt_500ms;
 void MngOSTK_100msTasks(void)
 {
-
- FI_Update_Count_Time();
- HAL_OS_100ms_Task();
-  /* CCP 125ms Task 0 Trigger */
-  CCP_Trigger_Event_Channel( 11 );
-   test_cnt_500ms++;
-  if (test_cnt_500ms == 5)
-  {
-     test_cnt_500ms=0;
-         /* CCP 500ms Task 0 Trigger */
-    CCP_Trigger_Event_Channel( 25 );
-  }
-
-
+	FI_Update_Count_Time();
+	HAL_OS_100ms_Task();
+	/* CCP 125ms Task 0 Trigger */
+	CCP_Trigger_Event_Channel( 11 );
+	test_cnt_500ms++;
+	if (test_cnt_500ms == 5) {
+		test_cnt_500ms=0;
+		/* CCP 500ms Task 0 Trigger */
+		CCP_Trigger_Event_Channel( 25 );
+	}
 }
 //=============================================================================
 // OS_Free_Time_Tasks_Hook
 //=============================================================================
 void OS_Free_Time_Tasks_Hook(void)
 {
- CCP_Periodic_Task();
-
+	CCP_Periodic_Task();
 }
 
 //=============================================================================
 // OS_TimeBasedTask1ms
 //=============================================================================
- void OS_TimeBasedTask1ms(void) 
+void OS_TimeBasedTask1ms(void) 
 {
-
+	HAL_OS_1ms_Task();
 }
 
 //=============================================================================
