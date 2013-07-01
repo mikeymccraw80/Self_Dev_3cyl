@@ -8,6 +8,8 @@ def gen_objs_lib():
 	rootdir = ".\\"
 	for parent, dirnames, filenames in os.walk(rootdir):
 		for filename in filenames:
+			if os.path.splitext(filename)[1] != '.o':
+				continue
 			name = os.path.join(parent, filename)
 			if name.find("gen_chery_lib") >= 0:
 				continue
