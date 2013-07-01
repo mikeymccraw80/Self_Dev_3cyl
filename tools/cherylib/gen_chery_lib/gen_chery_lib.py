@@ -9,6 +9,8 @@ def gen_objs_lib():
 	for parent, dirnames, filenames in os.walk(rootdir):
 		for filename in filenames:
 			name = os.path.join(parent, filename)
+			if name.find("gen_chery_lib") >= 0:
+				continue
 			obj_str = name + " "
 			print obj_str
 			bat_file.write(obj_str)

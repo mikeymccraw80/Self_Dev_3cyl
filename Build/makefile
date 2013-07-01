@@ -12,7 +12,7 @@ SUBPROJECT_MAK= submake
 
 OUTFILE= mt22p3_chery_4cyl
 PROG_NAME = mt22p3_chery_4cyl
-CHERY_HLS_LIB_NAME = chery_etc_hls
+CHERY_HLS_LIB_NAME = chery_hls_lib
 ifeq ($(TARGET),HWIO)
 LINKFILE= mt22p3_chery_4cyl
 else
