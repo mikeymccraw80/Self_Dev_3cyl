@@ -8,6 +8,8 @@ echo +==========================================================================
 
 
 del obj_list.txt
+del ..\objs\app_main.o
+del ..\objs\intr_var.o
 
 rem The real thing
 set TARGET=HWIO_LIB
