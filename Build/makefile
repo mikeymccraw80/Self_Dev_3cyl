@@ -34,7 +34,7 @@ ifeq ($(TARGET), INTEGRATION)
 +LIB_DIR = $(HOME_DIR)/tools/cherylib/
 else
 LIB_DIR = $(HOME_DIR)/tools/delphilib/outputlib
-+endif
+endif
 
 VERSION = 1.1
 LAST_UPDATE = April 2013
@@ -325,7 +325,7 @@ DIAB_PPC_LINKER_LIB	+=\
                      -A $(LIB_DIR)/$(PROG_NAME).a
 
 endif
-+ifeq ($(TARGET),INTEGRATION)
+ifeq ($(TARGET),INTEGRATION)
 +DIAB_PPC_LINKER_LIB	+=\
 		     -L$(OBJ_DIR)\
                      -L$(DIABLIBS_DIR)\
