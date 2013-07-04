@@ -21,9 +21,9 @@
 //=============================================================================
  void OS_Startup_Hook(void)
 {
-  // set up os loop time 10ms
-  // PIT_TIMER_Set_Value( PIT_CHANNEL_RTI, RTI_LOAD_VALUE_1MS);
-  // PIT_INTERRUPT_Set_Enable(PIT_CHANNEL_RTI, true);
+	// set up os loop time 10ms
+	PIT_TIMER_Set_Value( PIT_CHANNEL_RTI, RTI_LOAD_VALUE_1MS);
+	PIT_INTERRUPT_Set_Enable(PIT_CHANNEL_RTI, true);
 
    // turn on Time Off Delay signal 
    //Activate_TimeOffDelay
