@@ -14,6 +14,8 @@
 #include "io_interface_gpio.h"
 //#include "hal_diag.h"
 #include "io_interface_can.h"
+#include "io_interface_cam.h"
+#include "hal_cam.h"
 
 
 //extern void Update_DiagStatus_10ms(void);
@@ -167,6 +169,7 @@ void HAL_OS_Init_Task(void)
 void HAL_OS_ToothInt_Hook(void)
 {
  //Chery requirement
+ IO_CAM_Level_Update();
  IO_Eng_ToothInt(); 
 }
 //=============================================================================
@@ -174,9 +177,10 @@ void HAL_OS_ToothInt_Hook(void)
 //=============================================================================
 void HAL_OS_CAM_W_Hook(void)
 {
-   //syn of chery
-   IO_VCPC_Convert_CAMW();
-   HLS_ph1();	 
+	//syn of chery
+	IO_VCPC_Convert_CAMW();
+	IO_CAMW_Update();
+	HLS_ph1();
 }
 
 
@@ -185,9 +189,10 @@ void HAL_OS_CAM_W_Hook(void)
 //=============================================================================
 void HAL_OS_CAM_X_Hook(void)
 {
-   //syn of chery
-   IO_VCPC_Convert_CAMX();
-   HLS_ph2();	 
+	//syn of chery
+	IO_VCPC_Convert_CAMX();
+	IO_CAMX_Update();
+	HLS_ph2();
 }
 
 //=============================================================================
