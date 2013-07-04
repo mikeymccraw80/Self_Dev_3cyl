@@ -13,6 +13,7 @@ SUBPROJECT_MAK= submake
 OUTFILE= mt22p3_chery_4cyl
 PROG_NAME = mt22p3_chery_4cyl
 CHERY_HLS_LIB_NAME = chery_hls_lib
+DELPHI_HWIO_LIB_NAME = mt22p3_chery_4cyl
 ifeq ($(TARGET),HWIO)
 LINKFILE= mt22p3_chery_4cyl
 else
@@ -31,9 +32,9 @@ COMP_DIR     = $(subst /,\,$(COMPILER_DIR))
 TOOLS_PATH   = $(subst /,\,$(TOOLS_DIR))
 PROJECT_ROOT = $(HOME_DIR)
 # ifeq ($(TARGET), INTEGRATION)
-+CHERY_LIB_DIR = $(HOME_DIR)/tools/cherylib/
+CHERY_LIB_DIR = $(HOME_DIR)/tools/cherylib
 # else
-+DELPHI_LIB_DIR = $(HOME_DIR)/tools/delphilib/outputlib
+DELPHI_LIB_DIR = $(HOME_DIR)/tools/delphilib/outputlib
 # endif
 
 VERSION = 1.1
@@ -191,7 +192,6 @@ endif
 # Section 4
 ###############################################################################
 ifneq ($(TARGET),HWIO_HLS_INTEGRATION)
-ifneq ($(TARGET),HWIO_LIB)
 INCDIRS += LLD/IO_Config
 INCDIRS += LLD/DeviceDriver/SWT
 INCDIRS += LLD/DeviceDriver/FMPLL
@@ -233,7 +233,6 @@ INCDIRS += LLD/EEPROM
 INCDIRS += LLD/Communications/CCP
 INCDIRS += LLD/IO_Interface
 INCDIRS += LLD/Type_Incl
-endif
 
 # ifneq ($(TARGET),INTEGRATION)
 INCDIRS += HLS
@@ -318,31 +317,31 @@ DIAB_PPC_MAPFILE  = $(OUTPUT_DIR)/$(PROG_NAME).map
 DIAB_PPC_LINKER_FLAGS +=\
                      -m6
 ifeq ($(TARGET),HWIO)
-DIAB_PPC_LINKER_LIB	+=\
-		     -L$(OBJ_DIR)\
+DIAB_PPC_LINKER_LIB +=\
+                     -L$(OBJ_DIR)\
                      -L$(DIABLIBS_DIR)\
                      -lc
 endif
 ifeq ($(TARGET),HWIO_LIB)
-DIAB_PPC_LINKER_LIB	+=\
-		     -L$(OBJ_DIR)\
+DIAB_PPC_LINKER_LIB +=\
+                     -L$(OBJ_DIR)\
                      -L$(DIABLIBS_DIR)\
                      -lc\
                      -A $(DELPHI_LIB_DIR)/$(PROG_NAME).a
 
 endif
 ifeq ($(TARGET),INTEGRATION)
-+DIAB_PPC_LINKER_LIB	+=\
-		     -L$(OBJ_DIR)\
++DIAB_PPC_LINKER_LIB +=\
+                     -L$(OBJ_DIR)\
                      -L$(DIABLIBS_DIR)\
                      -lc\
                      -A $(CHERY_LIB_DIR)/$(CHERY_HLS_LIB_NAME).a
 endif
 ifeq ($(TARGET),HWIO_HLS_INTEGRATION)
-DIAB_PPC_LINKER_LIB	+=\
+DIAB_PPC_LINKER_LIB +=\
                      -L$(DIABLIBS_DIR)\
                      -lc\
-                     -A $(CHERY_LIB_DIR)/$(CHERY_HLS_LIB_NAME).a $(DELPHI_LIB_DIR)/$(PROG_NAME).a
+                     -A $(CHERY_LIB_DIR)/$(CHERY_HLS_LIB_NAME).a $(DELPHI_LIB_DIR)/$(DELPHI_HWIO_LIB_NAME).a
 endif
 
 DIAB_PPC_LINKER_COMMANDLINE =\
@@ -357,6 +356,12 @@ ifeq ($(TARGET),HWIO_HLS_INTEGRATION)
 LINK = $(COMP_DIR)\dld $(DIAB_PPC_LINKER_COMMANDLINE)
 else
 LINK = $(COMP_DIR)\dld $(DIAB_PPC_LINKER_COMMANDLINE) $(BUILD_DIR)/obj_list.txt 
+endif
+
+ifeq ($(TARGET),HWIO_HLS_INTEGRATION)
+LINK_COMMAND = $(LINK) $(HOME_DIR)/Build/$(LINKFILE).dld
+else
+LINK_COMMAND = cd ../objs && $(LINK) $(HOME_DIR)/Build/$(LINKFILE).dld
 endif
 
 ###############################################################################
@@ -546,11 +551,8 @@ build_target:	;
 # Linking objects file and generating *.h12 
 ###############################################################################
 	@$(ECHO) Linking...
-ifeq ($(TARGET),HWIO_HLS_INTEGRATION)
-	@$(LINK) $(HOME_DIR)\Build\$(LINKFILE).dld
-else
-	@cd ..\objs && $(LINK) $(HOME_DIR)\Build\$(LINKFILE).dld
-endif
+	@$(LINK_COMMAND)
+
 ###############################################################################
 # Generating *.ptp
 ###############################################################################
