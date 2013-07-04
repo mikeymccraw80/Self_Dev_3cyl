@@ -30,11 +30,11 @@ COMPILER_DIR = $(HOME_DIR)/tools/diab/WIN32/bin
 COMP_DIR     = $(subst /,\,$(COMPILER_DIR))
 TOOLS_PATH   = $(subst /,\,$(TOOLS_DIR))
 PROJECT_ROOT = $(HOME_DIR)
-ifeq ($(TARGET), INTEGRATION)
-+LIB_DIR = $(HOME_DIR)/tools/cherylib/
-else
-LIB_DIR = $(HOME_DIR)/tools/delphilib/outputlib
-endif
+# ifeq ($(TARGET), INTEGRATION)
++CHERY_LIB_DIR = $(HOME_DIR)/tools/cherylib/
+# else
++DELPHI_LIB_DIR = $(HOME_DIR)/tools/delphilib/outputlib
+# endif
 
 VERSION = 1.1
 LAST_UPDATE = April 2013
@@ -129,6 +129,7 @@ INSTRUMT_DIR = $(HOME_DIR)/Instrumentation
 # Include sub-project directories here
 # Section 3
 ###############################################################################
+ifneq ($(TARGET),HWIO_HLS_INTEGRATION)
 ifneq ($(TARGET),HWIO_LIB)
 SUBDIRS += LLD/IO_Config
 SUBDIRS += LLD/DeviceDriver/SWT
@@ -182,11 +183,14 @@ ifneq ($(TARGET),INTEGRATION)
 SUBDIRS += HLS
 endif
 
+endif
+
 
 ###############################################################################
 # Directories included for compiling.
 # Section 4
 ###############################################################################
+ifneq ($(TARGET),HWIO_HLS_INTEGRATION)
 ifneq ($(TARGET),HWIO_LIB)
 INCDIRS += LLD/IO_Config
 INCDIRS += LLD/DeviceDriver/SWT
@@ -234,6 +238,8 @@ endif
 # ifneq ($(TARGET),INTEGRATION)
 INCDIRS += HLS
 # endif
+
+endif
 
 export INCLUDE_DIR += $(patsubst %,-I$(HOME_DIR)/%,$(INCDIRS))
 ###############################################################################
@@ -322,7 +328,7 @@ DIAB_PPC_LINKER_LIB	+=\
 		     -L$(OBJ_DIR)\
                      -L$(DIABLIBS_DIR)\
                      -lc\
-                     -A $(LIB_DIR)/$(PROG_NAME).a
+                     -A $(DELPHI_LIB_DIR)/$(PROG_NAME).a
 
 endif
 ifeq ($(TARGET),INTEGRATION)
@@ -330,7 +336,13 @@ ifeq ($(TARGET),INTEGRATION)
 		     -L$(OBJ_DIR)\
                      -L$(DIABLIBS_DIR)\
                      -lc\
-                     -A $(LIB_DIR)/$(CHERY_HLS_LIB_NAME).a
+                     -A $(CHERY_LIB_DIR)/$(CHERY_HLS_LIB_NAME).a
+endif
+ifeq ($(TARGET),HWIO_HLS_INTEGRATION)
+DIAB_PPC_LINKER_LIB	+=\
+                     -L$(DIABLIBS_DIR)\
+                     -lc\
+                     -A $(CHERY_LIB_DIR)/$(CHERY_HLS_LIB_NAME).a $(DELPHI_LIB_DIR)/$(PROG_NAME).a
 endif
 
 DIAB_PPC_LINKER_COMMANDLINE =\
@@ -341,9 +353,11 @@ DIAB_PPC_LINKER_COMMANDLINE =\
 		$(DIAB_PPC_LINKER_LIB)\
 		> $(DIAB_PPC_MAPFILE)
 
-		
-LINK= $(COMP_DIR)\dld $(DIAB_PPC_LINKER_COMMANDLINE) $(BUILD_DIR)/obj_list.txt 
-
+ifeq ($(TARGET),HWIO_HLS_INTEGRATION)
+LINK = $(COMP_DIR)\dld $(DIAB_PPC_LINKER_COMMANDLINE)
+else
+LINK = $(COMP_DIR)\dld $(DIAB_PPC_LINKER_COMMANDLINE) $(BUILD_DIR)/obj_list.txt 
+endif
 
 ###############################################################################
 # Command to generate listing file
@@ -532,9 +546,11 @@ build_target:	;
 # Linking objects file and generating *.h12 
 ###############################################################################
 	@$(ECHO) Linking...
+ifeq ($(TARGET),HWIO_HLS_INTEGRATION)
+	@$(LINK) $(HOME_DIR)\Build\$(LINKFILE).dld
+else
 	@cd ..\objs && $(LINK) $(HOME_DIR)\Build\$(LINKFILE).dld
-
-
+endif
 ###############################################################################
 # Generating *.ptp
 ###############################################################################
