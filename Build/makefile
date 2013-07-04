@@ -12,6 +12,7 @@ SUBPROJECT_MAK= submake
 
 OUTFILE= mt22p3_chery_4cyl
 PROG_NAME = mt22p3_chery_4cyl
+CHERY_HLS_LIB_NAME = chery_etc_hls
 ifeq ($(TARGET),HWIO)
 LINKFILE= mt22p3_chery_4cyl
 else
@@ -29,7 +30,11 @@ COMPILER_DIR = $(HOME_DIR)/tools/diab/WIN32/bin
 COMP_DIR     = $(subst /,\,$(COMPILER_DIR))
 TOOLS_PATH   = $(subst /,\,$(TOOLS_DIR))
 PROJECT_ROOT = $(HOME_DIR)
+ifeq ($(TARGET), INTEGRATION)
++LIB_DIR = $(HOME_DIR)/tools/cherylib/
+else
 LIB_DIR = $(HOME_DIR)/tools/delphilib/outputlib
++endif
 
 VERSION = 1.1
 LAST_UPDATE = April 2013
@@ -124,7 +129,7 @@ INSTRUMT_DIR = $(HOME_DIR)/Instrumentation
 # Include sub-project directories here
 # Section 3
 ###############################################################################
-ifeq ($(TARGET),HWIO)
+ifneq ($(TARGET),HWIO_LIB)
 SUBDIRS += LLD/IO_Config
 SUBDIRS += LLD/DeviceDriver/SWT
 SUBDIRS += LLD/DeviceDriver/FMPLL
@@ -172,14 +177,17 @@ SUBDIRS += LLD/HAL
 SUBDIRS += LLD/IO_Interface
 SUBDIRS += LLD/Type_Incl
 endif
+
+ifneq ($(TARGET),INTEGRATION)
 SUBDIRS += HLS
+endif
 
 
 ###############################################################################
 # Directories included for compiling.
 # Section 4
 ###############################################################################
-ifeq ($(TARGET),HWIO)
+ifneq ($(TARGET),HWIO_LIB)
 INCDIRS += LLD/IO_Config
 INCDIRS += LLD/DeviceDriver/SWT
 INCDIRS += LLD/DeviceDriver/FMPLL
@@ -222,7 +230,10 @@ INCDIRS += LLD/Communications/CCP
 INCDIRS += LLD/IO_Interface
 INCDIRS += LLD/Type_Incl
 endif
+
+# ifneq ($(TARGET),INTEGRATION)
 INCDIRS += HLS
+# endif
 
 export INCLUDE_DIR += $(patsubst %,-I$(HOME_DIR)/%,$(INCDIRS))
 ###############################################################################
@@ -305,13 +316,21 @@ DIAB_PPC_LINKER_LIB	+=\
 		     -L$(OBJ_DIR)\
                      -L$(DIABLIBS_DIR)\
                      -lc
-else                    
+endif
+ifeq ($(TARGET),HWIO_LIB)
 DIAB_PPC_LINKER_LIB	+=\
 		     -L$(OBJ_DIR)\
                      -L$(DIABLIBS_DIR)\
                      -lc\
                      -A $(LIB_DIR)/$(PROG_NAME).a
 
+endif
++ifeq ($(TARGET),INTEGRATION)
++DIAB_PPC_LINKER_LIB	+=\
+		     -L$(OBJ_DIR)\
+                     -L$(DIABLIBS_DIR)\
+                     -lc\
+                     -A $(LIB_DIR)/$(CHERY_HLS_LIB_NAME).a
 endif
 
 DIAB_PPC_LINKER_COMMANDLINE =\
