@@ -109,6 +109,7 @@ void SetHWIO_DualEST_AlternatingMode( void )
 void SetHWIO_DwellTime(T_MILLISECONDSb in_dwell_time )
 {
    SPARK_Set_Duration(  in_dwell_time, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
+
 }
 
 //=============================================================================

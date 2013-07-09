@@ -124,7 +124,8 @@ void OS_SCHEDULER_KNOCK_WINDOW_CLOSED_Event(void)
 if(APPLICATION_CYLINDER_EVENT_TASK)
 {
   OS_LoResTasks_Hook();
-
+  SPARK_Process_Cylinder_Event();
+  PFI_Process_Cylinder_Event();
   APPLICATION_CYLINDER_EVENT_TASK = false;
 }
 if(CAM_CYLINDER_EVENT_TASK)

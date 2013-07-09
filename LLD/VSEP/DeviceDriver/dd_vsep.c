@@ -251,6 +251,9 @@ void  VSEP_SPI_Port_Transfer(SPI_Message_Definition_T  const *def)
 	uint16_t  transmit_size;
 	uint8_t   index_transmint,idex_receive;
 	bool      end;
+	uint32_t cs;
+
+	   cs = Enter_Critical_Section();
 
 	for (index_transmint = 0,idex_receive =0; index_transmint < def->length_of_transmit_message; index_transmint++,idex_receive++) {
 		//for word transfer algorithem
@@ -280,6 +283,8 @@ void  VSEP_SPI_Port_Transfer(SPI_Message_Definition_T  const *def)
 					end);
 		}
 	}
+
+	Leave_Critical_Section(cs);
 }
 
 

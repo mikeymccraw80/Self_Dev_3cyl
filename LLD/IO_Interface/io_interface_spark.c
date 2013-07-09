@@ -18,9 +18,10 @@
 //=============================================================================
  void  IO_Spark_Syn_Init(void) 
 {
-
+   T_MILLISECONDSb dwell_time;
    SetHWIO_MinDwell(KfSPRK_t_CrankMinDwellInit);
    SetHWIO_MaxDwell(KfSPRK_t_CrankMaxDwellInit); 
+   SetHWIO_DwellTime(V_MILLISECONDSb(4));
    VSEP_EST_Set_PF_Mode(VSEP_INDEX_0,VSEP_EST_SELECT_PAIRED_FIRE_MODE_ENABLED);
    SPARK_Set_Enable( true);
     
@@ -52,4 +53,6 @@ void  IO_Spark_Syn_Update(void)
     { 
            SetHWIO_DwellTime(0);
     }	 
+
+
 }

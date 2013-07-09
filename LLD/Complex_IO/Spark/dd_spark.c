@@ -163,18 +163,20 @@ void SPARK_Initialize(
 
       // Disable interrupts until ready
       MCD5412_Set_Host_Interrupt_Enable(MPTAC_TPU_INDEX,&TPU,  SPARK_Mptac[ counter ], false );
-
+	  
       // Write the duration values to MPTAC:
       SPARK_Update_Duration_Values( counter );
    }
 
    //C2MIO_EST_Select_Initialize_Device
   // EST_Select_Initialize_Device( &MTSA_EST_SELECT_DEVICE );
+  VSEP_EST_Select_Initialize_Device(MTSA_CONFIG_VSEP_DEVICE_0);
 
    SPARK_Set_Mode( SPARK_Initial_Est_Mode );
 
    //C2MIO_EST_Select_Set_Number_Of_Cylinders
    //EST_Select_Set_Number_Of_Cylinders( &MTSA_EST_SELECT_DEVICE, SPARK_Number_Of_Cylinders );
+   VSEP_EST_Select_Set_Number_Of_Cylinders(SPARK_Number_Of_Cylinders);
 
    //JPE Enable all spark channels at init.  This functionality should be handled by the algorithm
    // in a later release.  This is part of the temporary HWIO disabling of shorted EST channels.
@@ -218,6 +220,7 @@ void SPARK_Set_Enable(
       }
 
       //EST_Select_Enable( &MTSA_EST_SELECT_DEVICE );
+      VSEP_EST_Select_Enable();
       //C2MIO_EST_Select_Enable
    }
    else
@@ -244,6 +247,7 @@ void SPARK_Set_Enable(
 
       //C2MIO_EST_Select_Disable
       //EST_Select_Disable( &MTSA_EST_SELECT_DEVICE );
+      VSEP_EST_Select_Disable();
 	  
 
    }
@@ -373,6 +377,7 @@ void SPARK_Set_Duration(
    {
       SPARK_Duration[0][SPARK_DWELL_INDEX_MAIN_PULSE].on_time = INT24_MAX;
    }
+
 }
 
 //=============================================================================
@@ -443,7 +448,7 @@ void SPARK_Set_Mode(Spark_Mode_T   in_spark_mode )
       switch( in_spark_mode )
       {
       case SPARK_SIMULTANEOUS_MODE:
-        // EST_Select_Set_Mode( &MTSA_EST_SELECT_DEVICE, EST_MODE_SIMULTANEOUS_MULTIPLE_ENABLE );
+         VSEP_EST_Select_Set_Mode( MTSA_CONFIG_VSEP_DEVICE_0, EST_MODE_SIMULTANEOUS_MULTIPLE_ENABLE );
             //C2MIO_EST_Select_Set_Mode
          break;
 
@@ -455,10 +460,12 @@ void SPARK_Set_Mode(Spark_Mode_T   in_spark_mode )
 
       case SPARK_DUAL_ALTERNATING_MODE:
      //    EST_Select_Set_Mode( &MTSA_EST_SELECT_DEVICE, EST_MODE_PAIRED_MULTIPLE_ENABLE );
+          VSEP_EST_Select_Set_Mode(MTSA_CONFIG_VSEP_DEVICE_0,EST_MODE_PAIRED_MULTIPLE_ENABLE);
          break;
 
       case SPARK_SEQUENTIAL_MODE:
       //   EST_Select_Set_Mode( &MTSA_EST_SELECT_DEVICE, EST_MODE_SEQUENTIAL_MULTIPLE_ENABLE );
+      VSEP_EST_Select_Set_Mode(MTSA_CONFIG_VSEP_DEVICE_0,EST_MODE_SEQUENTIAL_MULTIPLE_ENABLE);
          break;
 
       default:
@@ -472,19 +479,19 @@ void SPARK_Set_Mode(Spark_Mode_T   in_spark_mode )
       switch( in_spark_mode )
       {
       case SPARK_SIMULTANEOUS_MODE:
-        // EST_Select_Set_Mode( &MTSA_EST_SELECT_DEVICE, EST_MODE_SIMULTANEOUS_SINGLE_ENABLE );
+         VSEP_EST_Select_Set_Mode( MTSA_CONFIG_VSEP_DEVICE_0, EST_MODE_SIMULTANEOUS_SINGLE_ENABLE );
          break;
 
       case SPARK_SINGLE_CHANNEL_MODE:
-         //EST_Select_Set_Mode( &MTSA_EST_SELECT_DEVICE, EST_MODE_SINGLE_CHANNEL );
+         VSEP_EST_Select_Set_Mode( MTSA_CONFIG_VSEP_DEVICE_0, EST_MODE_SINGLE_CHANNEL );
          break;
 
       case SPARK_DUAL_ALTERNATING_MODE:
-         // Only for multiple Spark Channels
+        VSEP_EST_Select_Set_Mode(MTSA_CONFIG_VSEP_DEVICE_0,EST_MODE_PAIRED_MULTIPLE_ENABLE);
          break;
 
       case SPARK_SEQUENTIAL_MODE:
-       //  EST_Select_Set_Mode( &MTSA_EST_SELECT_DEVICE, EST_MODE_SEQUENTIAL_SINGLE_ENABLE );
+         VSEP_EST_Select_Set_Mode(MTSA_CONFIG_VSEP_DEVICE_0,EST_MODE_SEQUENTIAL_MULTIPLE_ENABLE);
          break;
 
       default:
@@ -593,6 +600,7 @@ void SPARK_Force_Pulse(
    // Setup EST channel Select lines
    //C2MIO_EST_Select_Set_Channel
    //EST_Select_Set_Channel(&MTSA_EST_SELECT_DEVICE, (EST_Select_Cylinder_T)in_cylinder);
+   VSEP_EST_Select_Set_Channel( MTSA_CONFIG_VSEP_DEVICE_0, (EST_Select_Cylinder_T)in_cylinder );
 
    // Setup pulse width and 0 duration for start now
    SPARK_Set_Duration( in_duration, in_time_precision, in_time_resolution);
@@ -859,48 +867,16 @@ void SPARK_Process_Interrupt(
          SPARK_Cylinder_Event_ID,
          scheduled_cylinder_events_compensated );
 
-      //
-      // Cyl:  A         B          C          D
-      // TDC:         |          |          |          |
-      //              :
-      // C E   |      :  |          |          |
-      //       0      :  1          0          1
-      //            (schedule)
-      //            (B mptac1)
-      //
-      while ( ( !SPARK_Get_Channel_Enable( cylinder ) )
-         &&   ( faults < SPARK_Number_Of_Cylinders ) )
-      {
-
-         if ( SPARK_Get_Channel_Pending( cylinder ) == true )
-         {
-            SPARK_Channel_Enabled = SPARK_Enable_Channel( cylinder );
-            break;
-         }
-
-         cylinder = CRANK_Increment_Cylinder_ID( cylinder, 1 );
-
-         faults++;
-      }
 
       control_select = SPARK_Control_Select_Map[cylinder];
 
       // If there is a channel without a fault, update its values and set it up:
       if( SPARK_Get_Channel_Enable( cylinder ) )
       {
-         if ( faults > 0 )
-         {
-            // Set the channel number in the selected EST Select Device
-            //C2MIO_EST_Select_Set_Channel
-            //EST_Select_Set_Channel( &MTSA_EST_SELECT_DEVICE, (EST_Select_Cylinder_T)cylinder );
-         }
-         else
-         {
-            // Drive the proper control signals to prepare to deliver that spark:
-            //C2MIO_EST_Select_Increment_Channel
-           // EST_Select_Increment_Channel( &MTSA_EST_SELECT_DEVICE, (EST_Select_Cylinder_T)cylinder );
-           VSEP_EST_Select_Increment_Channel((EST_Select_Cylinder_T)cylinder );
-         }
+
+         // Set the channel number in the selected EST Select Device
+         //EST_Select_Set_Channel( &MTSA_EST_SELECT_DEVICE, (EST_Select_Cylinder_T)cylinder );
+         VSEP_EST_Select_Set_Channel(MTSA_CONFIG_VSEP_DEVICE_0,(EST_Select_Cylinder_T)cylinder  );
 
          // Setup the pulse to be delivered:
          end_angle = SPARK_Calculate_End_Angle_In_Counts( cylinder, (uint8_t)control_select, SPARK_CALC_POSITION_Isr );
@@ -938,6 +914,7 @@ void SPARK_Process_Cylinder_Event( void )
    Crank_Cylinder_T  channel;
     uint32_t          cylinder_event_id;
    uCrank_Angle_T    end_angle;
+    Spark_Control_Select_T spark_select  ;
    
    cs = Enter_Critical_Section();
 
@@ -959,6 +936,7 @@ void SPARK_Process_Cylinder_Event( void )
    if( SPARK_Enable )
    {
 
+ 
       if( SPARK_Get_Channel_Enable( SPARK_Cylinder_Event_ID ) )
       {
         
@@ -968,6 +946,9 @@ void SPARK_Process_Cylinder_Event( void )
          if ( SPARK_ISR_PulseRequested )
          {
             SPARK_ISR_PulseRequested = false;
+	      // Update the dwell values:
+	      spark_select =  SPARK_Control_Select_Map[SPARK_Cylinder_Event_ID];
+            SPARK_Update_Duration_Values( spark_select );
             MCD5412_Set_Host_Interrupt_Enable(MPTAC_TPU_INDEX,&TPU,  SPARK_Mptac[0], true );
             // Update current spark:
             SPARK_Update_Current_Pulse( SPARK_Cylinder_Event_ID, 0 );
@@ -979,18 +960,18 @@ void SPARK_Process_Cylinder_Event( void )
             {
                // Enable interrupts:
                channel = CRANK_Get_Future_Cylinder_ID( (uint8_t)counter );
-               MCD5412_Set_Host_Interrupt_Enable(MPTAC_TPU_INDEX,&TPU, SPARK_Mptac[counter], true );
-
+    	       MCD5412_Set_Host_Interrupt_Enable(MPTAC_TPU_INDEX,&TPU, SPARK_Mptac[counter], true );
+               spark_select =  SPARK_Control_Select_Map[channel];
+	       SPARK_Update_Duration_Values(spark_select);
                // Setup the initial cylinders for normal operation:
-               // Put the EST control lines, if applicable, in the correct state.
-               //C2MIO_EST_Select_Increment_Channel
-              // EST_Select_Increment_Channel( &MTSA_EST_SELECT_DEVICE, (EST_Select_Cylinder_T)channel );
                // Put the cylinder ID for this est control to the correct value
                //C2MIO_EST_Select_Set_Channel
                //EST_Select_Set_Channel( &MTSA_EST_SELECT_DEVICE, (EST_Select_Cylinder_T)channel );
+               VSEP_EST_Select_Set_Channel(MTSA_CONFIG_VSEP_DEVICE_0,(EST_Select_Cylinder_T)cylinder  );
                end_angle = SPARK_Calculate_End_Angle_In_Counts( channel, (uint8_t)counter, SPARK_CALC_POSITION_Ref );
+		  // Update the end angle information:(
                SPARK_Schedule_Next_Event( channel, end_angle );
-               
+
             }
 
          }
@@ -1021,7 +1002,7 @@ void SPARK_Process_Cylinder_Event( void )
       {
          channel = CRANK_Get_Future_Cylinder_ID( (uint8_t)counter );
 		 //C2MIO_EST_Select_Set_Channel
-         //EST_Select_Set_Channel( &MTSA_EST_SELECT_DEVICE, (EST_Select_Cylinder_T)channel );
+         VSEP_EST_Select_Set_Channel( MTSA_CONFIG_VSEP_DEVICE_0, (EST_Select_Cylinder_T)channel );
       }
    }
 
