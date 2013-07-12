@@ -17,6 +17,7 @@
 //=============================================================================
 //crank
 extern const uint8_t     KyHWIO_ToothOfFirstLoResEvent;
+extern const uint8_t     KyHWIO_ToothOfCAMRefEvent;
 extern const T_CRANK_ANGLE    KyHWIO_phi_ToothAngleForCamRead;
 extern const uint8_t     KyHWIO_CrankSyncStartTooth;
 extern const uint8_t     KyHWIO_Num_58X_Teeth_Before_Sync;

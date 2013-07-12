@@ -30,6 +30,18 @@ const   uint8_t  KyHWIO_ToothOfFirstLoResEvent = 3;
 
 /*
 *| hwiocald.{
+*|   KyHWIO_ToothOfCAMRefEvent {
+*|     : is_calconst;
+*|     : description = "Outlet cam phase and inlet cam phase calculate reference";
+*|     : type = types.t_count_byte;
+*|     : units = "count";
+*|   }
+*| }
+*/
+const   uint8_t  KyHWIO_ToothOfCAMRefEvent = 2;
+
+/*
+*| hwiocald.{
 *|   KyHWIO_phi_ToothAngleForCamRead {
 *|     : is_calconst;
 *|     : description = "Crank angle for CAM read";
