@@ -223,7 +223,7 @@ void InitializeHardwareRegisters(void)
 	/* init ccp can id and channel */
 	HAL_CAN_Initialize();
 
-	L9958_Device_Initialize(MTSA_CONFIG_L9958_DEVICE_0);
+	L9958_Device_Initialize();
 
 	InitializeComplexIO();
 
