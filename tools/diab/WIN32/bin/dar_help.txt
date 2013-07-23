@@ -1,0 +1,54 @@
+D-AR Archiver
+Create and maintain an archive of files of any type, with special features
+for object files
+Usage: dar [drqtpmxV] [vclsuabifRjD] [position-name] archive-file [file-name]...
+		where, position-name is the name of a file in the archive
+		used for relative positioning, file-name is a name of a file
+		in the archive
+Options:
+   -Modifiers for commands are indicated in square braces
+   -? -h --help               Display this information
+   -d [lv]                    Delete named files from archive
+   -m [abiv]                  Move named files
+   -p [sv]                    Print contents of named files on standard output
+   -q [cflv]                  Quickly append named files at the end of the
+                              archive without checking whether the files
+                              already exists
+   -r [abciluv]               Replace named files in archive
+   -s [lR]                    Update symbol table file in archive. Used when
+                              archive is created with the -qf command
+   -t [sva                    List table of contents for archive on standard
+                              output
+   -V                         Print version number of dar
+   -x [lsv]                   Extract named files from archive and place
+                              current directory without changing the archive
+   -Modifiers for different commands: 
+   -a                         Use with: -m -r     Insert named files in archive
+                              after the file position-name
+   -b/i                       Use with: -m -r     Insert named files in archive
+                              before the file position-name
+   -c                         Use with: -q -r     Does not display any message
+                              when new archive archive-file is created
+   -D pathname                Use with: -q -r     Prefix pathname of each file
+                              when adding to/replacing files in archive
+   -f                         Use with: -q        Append files to archive,
+                              without updating the symbol table file
+   -j                         Use with:  -q -r    Store a path prefix if given
+                              with an object file in the archive symbol table
+                              instead of just the base filename
+   -l                         Use with: -d -q -r -s -x  Place temporary files
+                              in current directory
+   -s                         Use with: -p -t -x   Same as the -s command
+   -u                         Use with: -r         Replace files that have a
+                              modification date later than the files in the
+                              archive.
+   -v                         Use with: -d -m -p -q -r -t -x  Verbose output.
+   -R                         Use with: -s         Sort object files in archive
+                              so that the linker does not have to scan the
+                              symbol table in multiple passes.
+
+The Users Guide contains more detailed information about these options
+
+For problems/bug reports, please send mail to support@windriver.com or
+visit http://www.windriver.com
+
