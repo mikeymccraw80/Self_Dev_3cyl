@@ -331,7 +331,7 @@ DIAB_PPC_LINKER_LIB +=\
 
 endif
 ifeq ($(TARGET),INTEGRATION)
-+DIAB_PPC_LINKER_LIB +=\
+DIAB_PPC_LINKER_LIB +=\
                      -L$(OBJ_DIR)\
                      -L$(DIABLIBS_DIR)\
                      -lc\
