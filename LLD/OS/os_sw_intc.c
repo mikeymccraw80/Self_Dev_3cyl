@@ -5,7 +5,6 @@
 #include "dd_intc.h"
 #include "dd_pit_interface.h"
 #include "os_type.h"
-///
 #include "dd_pfi_interface.h"
 #include "io_conversion.h"
 
@@ -31,7 +30,7 @@ bool CAM_CYLINDER_EVENT_TASK;
 void OS_SCHEDULER_Cylinder_Event(void)
 { 
   APPLICATION_CYLINDER_EVENT_TASK = true;
-   
+
 CRANK_High_Priority_Cylinder_Event();  
   INTC_INTERRUPT_Set_Enable(INTC_CHANNEL_SOFTWARE_CH0_CH, true);  
 }
@@ -103,63 +102,53 @@ void OS_SCHEDULER_KNOCK_WINDOW_CLOSED_Event(void)
 
 
 //=============================================================================
-// OS_SW_INTC_Control
+// OS_SW_INTC_Control, software interrupt trigered by Event
 //=============================================================================
- void OS_SW_INTC_Control( void)
+void OS_SW_INTC_Control( void)
 {
+	INTC_INTERRUPT_Clear_Pending(INTC_CHANNEL_SOFTWARE_CH0_CH );
 
- INTC_INTERRUPT_Clear_Pending(INTC_CHANNEL_SOFTWARE_CH0_CH );
- 
- if(APPLICATION_KNOCK_WINDOW_CLOSED_TASK)
- {
-  //OS_WinGateTasks_Hook();
- 
-  APPLICATION_KNOCK_WINDOW_CLOSED_TASK = false;
- }
- if(APPLICATION_TDC_EVENT_TASK)
- {
-  //OS_KnockEvntTasks_Hook();
-  APPLICATION_TDC_EVENT_TASK = false;
- }
-if(APPLICATION_CYLINDER_EVENT_TASK)
-{
-  OS_LoResTasks_Hook();
-  SPARK_Process_Cylinder_Event();
-  PFI_Process_Cylinder_Event();
-  APPLICATION_CYLINDER_EVENT_TASK = false;
-}
-if(CAM_CYLINDER_EVENT_TASK)
-{
- //CAM_Lo_Res_Event_Tasks();
-  CAM_CYLINDER_EVENT_TASK = false;
-}
+	if (APPLICATION_KNOCK_WINDOW_CLOSED_TASK) {
+		//OS_WinGateTasks_Hook();
+		APPLICATION_KNOCK_WINDOW_CLOSED_TASK = false;
+	}
 
-if(APPLICATION_6X_EVENT_TASK)
-{
- //OS_6X_Tasks_Hook();
-  APPLICATION_6X_EVENT_TASK = false;
-}
+	if (APPLICATION_TDC_EVENT_TASK) {
+		//OS_KnockEvntTasks_Hook();
+		APPLICATION_TDC_EVENT_TASK = false;
+	}
 
+	if (APPLICATION_CYLINDER_EVENT_TASK) {
+		OS_LoResTasks_Hook();
+		SPARK_Process_Cylinder_Event();
+		// PFI_Process_Cylinder_Event();
+		APPLICATION_CYLINDER_EVENT_TASK = false;
+	}
 
-if(APPLICATION_VCP_TASK)
-{
-//OS_VCPC_58X_Event_Hook();
-  APPLICATION_VCP_TASK = false;
-}
+	if (CAM_CYLINDER_EVENT_TASK) {
+		//CAM_Lo_Res_Event_Tasks();
+		CAM_CYLINDER_EVENT_TASK = false;
+	}
 
-if(APPLICATION_VCP1_TASK)
-{
- //OS_VCPC_camX_Task02_Hook();
-  APPLICATION_VCP1_TASK = false;
-}
+	if (APPLICATION_6X_EVENT_TASK) {
+		//OS_6X_Tasks_Hook();
+		APPLICATION_6X_EVENT_TASK = false;
+	}
 
-if(APPLICATION_VCP0_TASK)
-{
- //  OS_VCPC_camX_Task00_Hook();
-  APPLICATION_VCP0_TASK = false;
-}
+	if (APPLICATION_VCP_TASK) {
+		//OS_VCPC_58X_Event_Hook();
+		APPLICATION_VCP_TASK = false;
+	}
 
+	if (APPLICATION_VCP1_TASK) {
+		//OS_VCPC_camX_Task02_Hook();
+		APPLICATION_VCP1_TASK = false;
+	}
 
+	if (APPLICATION_VCP0_TASK) {
+		//  OS_VCPC_camX_Task00_Hook();
+		APPLICATION_VCP0_TASK = false;
+	}
 }
 
 
