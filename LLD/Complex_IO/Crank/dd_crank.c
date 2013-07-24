@@ -8,10 +8,11 @@
 #include "io_conversion.h"
 #include "io_config_tpu.h"
 #include "io_config_crank.h"
-
-
 #include "dd_pfi_interface.h"
 #include "dd_spark_interface.h"
+
+uint8_t crank_b_syn;
+uint16_t crank_rpm;
 
 
 //=============================================================================
@@ -104,9 +105,15 @@ typedef union
 //=============================================================================
 uCrank_Count_T    CRANK_Current_Event_Tooth; //[1, 120]
 uCrank_Count_T    CRANK_Current_Event_PA_Content;
+uCrank_Count_T     CRANK_Current_Event_Edge_Content;
 uCrank_Count_T    CRANK_Next_Event_PA_Content;
 uCrank_Count_T    CRANK_First_Cylinder_Event_Tooth;
 uCrank_Count_T    CRANK_Synchronization_Start_Tooth;
+uCrank_Count_T    CRANK_Error_Count_More;
+uCrank_Count_T    CRANK_Error_Count_Less;
+uCrank_Count_T    CRANK_Error_Count_More_Max;
+uCrank_Count_T    CRANK_Error_Count_Less_Max;
+
 
 //=============================================================================
 // Local Variable Definitions
@@ -123,7 +130,7 @@ static IO_Crank_Initialization_Parameters_T *CRANK_Initialization_Parameters;
 static Crank_Cylinder_T    CRANK_Cylinder_ID_Even;
 
 static uint8_t crank_diag_tooth_cnt;
-
+Crank_State_T       CRANK_State;
 
 //=============================================================================
 //   Local Variable Definitions
@@ -427,7 +434,7 @@ static bool CRANK_Gap_Cofirm( void )
 
    uCrank_Count_T previous_n_1;
    uCrank_Count_T previous_1_n;
-   uCrank_Count_T tooth_count_at_Gap;
+   uCrank_Count_T tooth_count;
    bool           gap_detected = 0;
 
    previous_n_1 = MCD5408_Get_Previous_n_1(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT);
@@ -449,9 +456,8 @@ static bool CRANK_Gap_Cofirm( void )
                  CRANK_Internal_State.U32 = CRANK_Set_Sync_Second_Revolution( CRANK_Internal_State.U32, false );
 
 		  // MCD5408_Set_Gap_Count(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT, CRANK_ACTUAL_TEETH_PER_CRANK );
-		   // tooth_count_at_Gap = MCD5408_Get_Abs_Edge_Count(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT);
+		   CRANK_Current_Event_Tooth = 2;
 		   MCD5408_Set_Abs_Edge_Count(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT,2);
-		   CRANK_Current_Event_Tooth = MCD5408_Get_Abs_Edge_Count(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT);
       
 		   // Estimate when previous CylinderEvent would have occurred
 		   CRANK_Parameters.F.cylinder_event_reference_time = ( CRANK_Parameters.F.edge_time -
@@ -466,16 +472,23 @@ static bool CRANK_Gap_Cofirm( void )
 	     }
 	   else
 	    {
- 		    tooth_count_at_Gap = MCD5408_Get_Abs_Edge_Count(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT);
-		   MCD5408_Set_Abs_Edge_Count(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT,2);
-		   CRANK_Current_Event_Tooth = MCD5408_Get_Abs_Edge_Count(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT);
-		   
+                //eliminate  the tooth count  difference in each loop
+		  if (CRANK_Current_Event_Tooth>CRANK_VIRTUAL_TEETH_PER_CRANK)
+		  {
+		     tooth_count = CRANK_Current_Event_Tooth - CRANK_VIRTUAL_TEETH_PER_CRANK;
+		  }	
+		  else
+		  {
+		     tooth_count = CRANK_Current_Event_Tooth;
+		  }	 
                 // Tooth count error calculation
-	         if((	tooth_count_at_Gap == 2)||(tooth_count_at_Gap == CRANK_VIRTUAL_TEETH_PER_CRANK+2))
+	         if(	tooth_count == 2)
 	         {
                     // Indicate that the synchronization not missed
-                     CRANK_Internal_State.U32 = CRANK_Set_Sync_Error_In_Progress( CRANK_Internal_State.U32, false );
-                     CRANK_Internal_State.U32 = CRANK_Set_Resync_Attempt_In_Prog( CRANK_Internal_State.U32, false );
+                      CRANK_Internal_State.U32 = CRANK_Set_Sync_Error_In_Progress( CRANK_Internal_State.U32, false );
+                      CRANK_Internal_State.U32 = CRANK_Set_Resync_Attempt_In_Prog( CRANK_Internal_State.U32, false );
+			CRANK_Error_Count_More = 0;	
+		       CRANK_Error_Count_Less = 0;
 					  
 	          }
 		   else
@@ -483,18 +496,39 @@ static bool CRANK_Gap_Cofirm( void )
 		        // Indicate that the synchronization has been missed
                       CRANK_Internal_State.U32 = CRANK_Set_Sync_Error_In_Progress( CRANK_Internal_State.U32, true );
                       CRANK_Internal_State.U32 = CRANK_Set_Resync_Attempt_In_Prog( CRANK_Internal_State.U32, true );
-
+			#if 0		  
+                     if(tooth_count > 2)
+                      {
+                         CRANK_Error_Count_More = tooth_count - CRANK_TEETH_PER_GAP;
+				   
+		          if(CRANK_Error_Count_More>CRANK_Error_Count_More_Max)
+		           {
+		               CRANK_Error_Count_More_Max = CRANK_Error_Count_More;
+		            }	 
+                      }
+		       else
+		       {
+		          CRANK_Error_Count_Less =  CRANK_TEETH_PER_GAP -tooth_count;
+			  
+		          if(CRANK_Error_Count_Less>CRANK_Error_Count_Less_Max)
+		            {
+		              CRANK_Error_Count_Less_Max = CRANK_Error_Count_Less;
+		           }
+		       }
+			   #endif
 		   }
 	          if(CRANK_Get_Sync_First_Revolution( CRANK_Internal_State.U32 ))
                  {
 		       CRANK_Internal_State.U32 = CRANK_Set_Sync_First_Revolution( CRANK_Internal_State.U32, false );
                      CRANK_Internal_State.U32 = CRANK_Set_Sync_Second_Revolution( CRANK_Internal_State.U32, true );
+			CRANK_Current_Event_Tooth = 2;		 
                  }
 	         else
 	         {
 		       MCD5408_Set_Abs_Edge_Count(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT,2);
 		       CRANK_Internal_State.U32 = CRANK_Set_Sync_First_Revolution( CRANK_Internal_State.U32, true );
                      CRANK_Internal_State.U32 = CRANK_Set_Sync_Second_Revolution( CRANK_Internal_State.U32, false );
+		       CRANK_Current_Event_Tooth = 62;	
 	          }
 
                  if(CRANK_Parameters.F.number_of_gaps_detected<0xFF)
@@ -502,25 +536,14 @@ static bool CRANK_Gap_Cofirm( void )
 		       CRANK_Parameters.F.number_of_gaps_detected++;
                   }	   
 	   }	
-
-        
+	
 	    //		
            CRANK_Internal_State.U32 = CRANK_Set_Sync_Occurred( CRANK_Internal_State.U32, true );
            MCD5408_Set_Gap_Count(EPPWMT_TPU_INDEX, TPU_CONFIG_IC_EPPWMT,CRANK_ACTUAL_TEETH_PER_CRANK);
            gap_detected = true;
 
       }
-      else
-      	{
-      	    CRANK_Current_Event_Tooth++;
-
-          if ( CRANK_Current_Event_Tooth > CRANK_VIRTUAL_TEETH_PER_REVOLUTION )
-          {
-             CRANK_Current_Event_Tooth -= ( uCrank_Count_T )CRANK_VIRTUAL_TEETH_PER_REVOLUTION;
-           }
-
-      	}
-	    CRANK_Parameters.F.current_tooth = CRANK_Current_Event_Tooth;
+      CRANK_Parameters.F.current_tooth = CRANK_Current_Event_Tooth;
      return gap_detected;
 
 }
@@ -583,60 +606,110 @@ static void CRANK_Search_For_First_Gap( void )
 //=============================================================================
 void CRANK_Process_Crank_Event( void )  
 {
-	bool                                  sync_conditions_met;
-	uint32_t                              temp_count;
-	uCrank_Count_T                        actual_irq_count;
-	EPPwMT_Coherent_Edge_Time_And_Count_T edgeTimeAndCount;
+    bool             sync_conditions_met;
+    EPPwMT_Coherent_Edge_Time_And_Count_T edgeTimeAndCount;
+     uint32_t  temp_count;
+	   uCrank_Count_T actual_irq_count;
+	      uCrank_Count_T number_of_teeth_missed;
+   
+   do{
+   	
+        // Read the actual interrupt counter to see when we are being interrupted:
+         actual_irq_count = MCD5408_Get_IRQ_Count_At_Last_Interrupt(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT, CRANK_EPPE_IRQ_Select );
 
-	// Clear the interrupt flag: false == clear
-	MCD5408_Set_Host_Interrupt_Status(EPPWMT_TPU_INDEX,&TPU,TPU_CONFIG_IC_EPPWMT,false);
+    //MCD5408_Get_Coherent_Edge_Time_And_Count( EPPWMT_TPU_INDEX, TPU_CONFIG_IC_EPPWMT, &edgeTimeAndCount );
 
-	// Read the actual interrupt counter to see when we are being interrupted:
-	actual_irq_count = MCD5408_Get_IRQ_Count_At_Last_Interrupt(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT, CRANK_EPPE_IRQ_Select );
+       // get current count value   
+    //MCD5408_Get_Coherent_Edge_Time_And_Count( EPPWMT_TPU_INDEX, TPU_CONFIG_IC_EPPWMT, &edgeTimeAndCount );
+
+    //CRANK_Parameters.F.edge_time  =   edgeTimeAndCount.Time;
+     // Read the current edge time and period from the PCP:
+    // CRANK_Parameters.F.edge_time  =  MCD5408_Get_Buffered_Edge_Time(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT,CRANK_EPPE_IRQ_Select);
+    //CRANK_Parameters.F.edge_time  =  edgeTimeAndCount.Time;
+     CRANK_Parameters.F.edge_time = CRANK_Get_Edge_Time_From_Count(CRANK_Next_Event_PA_Content);
+     CRANK_Parameters.F.edge_angle = CRANK_Convert_Teeth_To_uCrank_Angle( actual_irq_count );
+
+     CRANK_Tooth_Duration =MCD5408_Get_Period(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT);    
+     CRANK_Hi_Res_Edge_Time = CRANK_Parameters.F.edge_time;	
 
 
-	// Read the current edge time and period from the PCP:
-	CRANK_Parameters.F.edge_time  =  MCD5408_Get_Buffered_Edge_Time(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT,CRANK_EPPE_IRQ_Select);
-	CRANK_Parameters.F.edge_angle = CRANK_Convert_Teeth_To_uCrank_Angle( actual_irq_count );
+   // if( edgeTimeAndCount.Time!=CRANK_Next_Event_PA_Content)
+  //  {
+    //   number_of_teeth_missed = edgeTimeAndCount.Count - CRANK_Next_Event_PA_Content;
+	//CRANK_Parameters.F.edge_time -= ( CRANK_Tooth_Duration * number_of_teeth_missed );	   
 
-	CRANK_Tooth_Duration =MCD5408_Get_Period(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT);    
-	CRANK_Hi_Res_Edge_Time = CRANK_Parameters.F.edge_time;	
+  // }	//NK_Current_Event_PA_Content!= CRANK_Next_Event_PA_Content )&&
+   //	((CRANK_Current_Event_PA_Content-0x8000)!=CRANK_Next_Event_PA_Content))
+  // {
+   
+   //    number_of_teeth_missed =   CRANK_Next_Event_PA_Content -CRANK_Current_Event_PA_Content;
+	 
+	// if(  number_of_teeth_missed>0x8000)
+	// {
+     //     number_of_teeth_missed -= 0x8000;
+	// }
+       //CRANK_Parameters.F.edge_time += ( CRANK_Tooth_Duration * number_of_teeth_missed );
+   //}
+
+     OS_ToothInt_Hook();
 
 
-	OS_ToothInt_Hook();
+       CRANK_Current_Event_Tooth++;
 
-	// Check if first synchronization took place:
-	if( !CRANK_Get_First_Sync_Occurred( CRANK_Internal_State.U32 ) ) {
-		// Look for the first synchronization:
-		CRANK_Search_For_First_Gap();
-	} else {
-		if( !CRANK_Gap_Cofirm( )) {
-			CRANK_Manage_Execute_Event();  
-		}
-	}
+      if ( CRANK_Current_Event_Tooth > CRANK_VIRTUAL_TEETH_PER_REVOLUTION )
+      {
+          CRANK_Current_Event_Tooth -= ( uCrank_Count_T )CRANK_VIRTUAL_TEETH_PER_REVOLUTION;
+      }
+  
+      // Check if first synchronization took place:
+      if( !CRANK_Get_First_Sync_Occurred( CRANK_Internal_State.U32 ) )
+      {
+         // Look for the first synchronization:
+         CRANK_Search_For_First_Gap();
+      }
+      else
+      {
+          if( !CRANK_Gap_Cofirm( ))
+           {
+	      CRANK_Manage_Execute_Event();  
+            }
+      }		  
 
-	temp_count =   CRANK_Next_Event_PA_Content;
-	CRANK_Next_Event_PA_Content++;
+      temp_count =   CRANK_Next_Event_PA_Content;
+     CRANK_Next_Event_PA_Content++;
+   // CRANK_Next_Event_PA_Content =  actual_irq_count++;
+	   
 
-	// Set IRQ_Cnt to match Pulse_Cnt at the next sched. event
-	// If the tooth at which the next interrupt should take
-	// place is already passed, the EPPwMT Primitive mechanism will automa-
-	// tically retrigger an interrupt to handle the passed
-	// event.
-	//We would not miss any tooth since there are a time buffer in etpu
-	MCD5408_Set_New_IRQ_Count(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT, CRANK_EPPE_IRQ_Select, CRANK_Next_Event_PA_Content );
-	// get current count value   
-	MCD5408_Get_Coherent_Edge_Time_And_Count( EPPWMT_TPU_INDEX, TPU_CONFIG_IC_EPPWMT, &edgeTimeAndCount );
-	CRANK_Current_Event_PA_Content = edgeTimeAndCount.Count;
-	if(temp_count!=CRANK_Current_Event_PA_Content) {
-		if(CRANK_Current_Event_PA_Content - temp_count <0x0f) {
-			// triger a HSR update if a tooth miss excuted 
-			MCD5408_Update_IRQ_Count(EPPWMT_TPU_INDEX,&TPU, TPU_CONFIG_IC_EPPWMT);
-		} else {
-			// error status
-			CRANK_Process_Stall_Event();
-		}
-	}
+    // get current count value   
+    MCD5408_Get_Coherent_Edge_Time_And_Count( EPPWMT_TPU_INDEX, TPU_CONFIG_IC_EPPWMT, &edgeTimeAndCount );
+    CRANK_Current_Event_Edge_Content = edgeTimeAndCount.Count;
+   	}while(CRANK_Current_Event_Edge_Content !=temp_count);
+	
+   //  if((temp_count!=edgeTimeAndCount.Count)
+//	 	&&(!(MCD5408_Get_Host_Interrupt_Status(EPPWMT_TPU_INDEX,&TPU,TPU_CONFIG_IC_EPPWMT))))
+    //if( (CRANK_Next_Event_PA_Content - edgeTimeAndCount.Count  ) <0x8000) 	 		 	
+   //  {
+       // if(CRANK_Current_Event_PA_Content - temp_count <0x0f)
+  //      {
+           // triger a HSR update if a tooth miss excuted            
+     //      MCD5408_Update_IRQ_Count(EPPWMT_TPU_INDEX,&TPU, TPU_CONFIG_IC_EPPWMT);
+    //    }
+	//else
+	///{
+	  // error status
+        //  CRANK_Process_Stall_Event();
+	//}  
+  //   }
+
+ 	     // Set IRQ_Cnt to match Pulse_Cnt at the next sched. event
+     // If the tooth at which the next interrupt should take
+     // place is already passed, the EPPwMT Primitive mechanism will automa-
+      // tically retrigger an interrupt to handle the passed
+      // event.
+     //We would not miss any tooth since there are a time buffer in etpu
+     MCD5408_Set_New_IRQ_Count(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT, CRANK_EPPE_IRQ_Select, CRANK_Next_Event_PA_Content );
+    // Clear the interrupt flag: false == clear
+    MCD5408_Set_Host_Interrupt_Status(EPPWMT_TPU_INDEX,&TPU,TPU_CONFIG_IC_EPPWMT,false);
 
 	crank_diag_tooth_cnt++;
 }
@@ -654,7 +727,7 @@ void CRANK_High_Priority_Cylinder_Event( void )
       // crank_test3 ++;
    crank_test3 =CRANK_Current_Event_Tooth;
       // Update Irq tooth count at Cylinder Event
-      CRANK_Parameters.F.angle_at_cylinder_event = (CRANK_Current_Event_PA_Content+1) << uCRANK_ANGLE_PRECISION;
+      CRANK_Parameters.F.angle_at_cylinder_event = (CRANK_Current_Event_Edge_Content+1) << uCRANK_ANGLE_PRECISION;
 
       // Update CylinderEvent event period and time
       CRANK_Parameters.F.lo_res_reference_period =
@@ -1138,6 +1211,13 @@ uCrank_Count_T CRANK_Get_Engine_Tooth( void )
    return (CRANK_Current_Event_Tooth);
 }
 
+//=============================================================================
+// CRANK_Get_Tooth_Period
+//=============================================================================
+uint32_t  CRANK_Get_Tooth_Period( void )
+{
+   return MCD5408_Get_Period(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT);
+}
 //=============================================================================
 // IO_PULSE_Convert_Counts_To_Time
 // This function may return a value greater than the timer you are using can 
