@@ -328,7 +328,6 @@ DIAB_PPC_LINKER_LIB +=\
                      -L$(DIABLIBS_DIR)\
                      -lc\
                      -A $(DELPHI_LIB_DIR)/$(PROG_NAME).a
-
 endif
 ifeq ($(TARGET),INTEGRATION)
 DIAB_PPC_LINKER_LIB +=\
@@ -341,7 +340,8 @@ ifeq ($(TARGET),HWIO_HLS_INTEGRATION)
 DIAB_PPC_LINKER_LIB +=\
                      -L$(DIABLIBS_DIR)\
                      -lc\
-                     -A $(CHERY_LIB_DIR)/$(CHERY_HLS_LIB_NAME).a $(DELPHI_LIB_DIR)/$(DELPHI_HWIO_LIB_NAME).a
+                     -A $(DELPHI_LIB_DIR)/$(DELPHI_HWIO_LIB_NAME).a\
+                     -A $(CHERY_LIB_DIR)/$(CHERY_HLS_LIB_NAME).a
 endif
 
 DIAB_PPC_LINKER_COMMANDLINE =\
