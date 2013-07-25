@@ -425,7 +425,6 @@ void CAM_Edge_Process( uint32_t in_cam_sensor )
 	uint32_t        current_time;
 
 	CAM_EdgeDetected = Insert_Bits( CAM_EdgeDetected, true, cam_sensor, 1 );
-	current_edge_index = CAM_Current_Edge[cam_sensor];
 	CAM_Total_Edge[cam_sensor] ++;
 
 	cam_event_time = MCD5411_Get_Parameter(CAME_TPU_INDEX ,CAM_CAME[cam_sensor], CAM_SENSOR_PARAMETER_CRITICAL_EDGE_TIME );
@@ -438,10 +437,23 @@ void CAM_Edge_Process( uint32_t in_cam_sensor )
 
 	// add the distance for the current cylinder event
 	// we are subtracting 1 from the value to go from [1:120] to [0.00:119.FF]
-	whole_angle_in_teeth  = CRANK_Get_Parameter(CRANK_PARAMETER_CURRENT_TOOTH,0,0) -
-                          ( (CRANK_Get_Parameter(CRANK_PARAMETER_CURRENT_EDGE_COUNT,0,0) -
-                                     pa_tooth_count));
-	whole_angle_in_teeth = (current_edge_index > 1) ? (whole_angle_in_teeth + 60) : (whole_angle_in_teeth);
+	whole_angle_in_teeth  = CRANK_Get_Parameter(CRANK_PARAMETER_CURRENT_TOOTH,0,0);
+	switch(CRANK_Get_Cylinder_ID()) {
+	case CRANK_CYLINDER_A:
+		CAM_Set_Current_Edge(CAM1);
+		CAM_Set_Current_Edge(CAM2);
+	case CRANK_CYLINDER_B:
+		whole_angle_in_teeth = (whole_angle_in_teeth > 60) ? (whole_angle_in_teeth - 60) : (whole_angle_in_teeth);
+		break;
+	case CRANK_CYLINDER_C:
+	case CRANK_CYLINDER_D:
+		whole_angle_in_teeth = (whole_angle_in_teeth < 60) ? (whole_angle_in_teeth + 60) : (whole_angle_in_teeth);
+		break;
+	default:
+		break;
+	}
+
+	current_edge_index = CAM_Current_Edge[cam_sensor];
 
 	current_time = CRANK_Get_Edge_Time_From_Count( pa_tooth_count);
 
