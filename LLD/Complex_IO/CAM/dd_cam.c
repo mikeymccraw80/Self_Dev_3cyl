@@ -440,8 +440,7 @@ void CAM_Edge_Process( uint32_t in_cam_sensor )
 	whole_angle_in_teeth  = CRANK_Get_Parameter(CRANK_PARAMETER_CURRENT_TOOTH,0,0);
 	switch(CRANK_Get_Cylinder_ID()) {
 	case CRANK_CYLINDER_A:
-		CAM_Set_Current_Edge(CAM1);
-		CAM_Set_Current_Edge(CAM2);
+		CAM_Set_Current_Edge(in_cam_sensor);
 	case CRANK_CYLINDER_B:
 		whole_angle_in_teeth = (whole_angle_in_teeth > 60) ? (whole_angle_in_teeth - 60) : (whole_angle_in_teeth);
 		break;
