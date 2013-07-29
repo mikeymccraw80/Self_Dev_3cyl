@@ -251,7 +251,6 @@ typedef enum {
 	LLD_PWM06,
 	LLD_PWM07,
 	LLD_PWM08,
-	LLD_PWM09,
 	LLD_PWM_MAX_CHANNEL 
 }  LLD_PWM_T;
 
@@ -405,15 +404,15 @@ extern uint16_t	DTCs_SID07[SY_FCMTSIZE];		/* DTCs for service 07*/
 #define LLD_DO_START_MOTR_RLY LLD_DO08 //index of digital output channel 8
 #define LLD_DO_VIS_SWITCH LLD_DO09 //index of digital output channel 9
 
-#define LLD_PWM_O2_HEATER_1 LLD_PWM00 //index of digital output channel 0
-#define LLD_PWM_FUEL_CONSUMPTION LLD_PWM01 //index of digital output channel 6
-#define LLD_PWM_PURGE LLD_PWM02 //index of digital output channel 2
-#define LLD_PWM_ECT LLD_PWM03//index of digital output channel 5
-#define LLD_PWM_EGR LLD_PWM04 //index of digital output channel 3
-#define LLD_PWM_TACHO LLD_PWM05
-#define LLD_PWM_O2_HEATER_2 LLD_PWM06
-#define LLD_PWM_VVT1 LLD_PWM07
-#define LLD_PWM_VVT2 LLD_PWM08
+#define LLD_PWM_O2_HEATER_1      LLD_PWM00      //VSEP,  PWM OUTPUT CH00
+#define LLD_PWM_O2_HEATER_2      LLD_PWM06      //VSEP,  PWM OUTPUT CH01
+#define LLD_PWM_PURGE            LLD_PWM02      //VSEP,  PWM OUTPUT CH02
+#define LLD_PWM_ECT              LLD_PWM03      //VSEP,  PWM OUTPUT CH03
+#define LLD_PWM_EGR              LLD_PWM04      //not implemented
+#define LLD_PWM_TACHO            LLD_PWM05      //not implemented
+#define LLD_PWM_FUEL_CONSUMPTION LLD_PWM01      //not implemented
+#define LLD_PWM_VVT1             LLD_PWM07      //eMIOS, PWM OUTPUT CH07
+#define LLD_PWM_VVT2             LLD_PWM08      //eMIOS, PWM OUTPUT CH08
 
 #define LLD_IGN_CHANNEL_A 0
 #define LLD_IGN_CHANNEL_B 1
