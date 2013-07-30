@@ -99,7 +99,6 @@ void  IO_Pulse_Update_Function(void)
 void  IO_Pulse_VSEP_CLK_Enable(void)
 {
 	HAL_Pulse_VSEP_CLK_Enable(true);
-	HAL_Pulse_ETC_Enable((bool)etc_sig.etc_enable);
 }
 
 uint32_t  Pulse_VSS_Count_Previous;
