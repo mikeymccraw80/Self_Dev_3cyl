@@ -147,9 +147,9 @@ void L9958_Clear_Device(void)
 //=============================================================================
 void L9958_SPI_Immediate_Transfer(void)
 {
-	Disable_Interrupts();
+	// Disable_Interrupts();
 	L9958_Rxd.Value = DSPI_B_Exchange_Data1(ETC_CHIP_SELECT, ETC_CTAR_SELECT, DSPI_CTAR_FMSZ_16, L9958_Txd.Value, 1);
-	Enable_Interrupts();
+	// Enable_Interrupts();
 }
 
 
