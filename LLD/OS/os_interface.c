@@ -9,7 +9,7 @@
 #include "dd_mios_interface.h"
 #include "dd_dspi_interface.h"
 #include "dd_fi_interface.h"
-
+#include "dd_l9958_interface.h"
 
 //tempoary
 #include "soh.h"
@@ -19,23 +19,21 @@
 //=============================================================================
 // OS_Startup_Hook
 //=============================================================================
- void OS_Startup_Hook(void)
+void OS_Startup_Hook(void)
 {
-	// set up os loop time 10ms
-	PIT_TIMER_Set_Value( PIT_CHANNEL_RTI, RTI_LOAD_VALUE_1MS);
-	PIT_INTERRUPT_Set_Enable(PIT_CHANNEL_RTI, true);
+    // set up os loop time 10ms
+    PIT_TIMER_Set_Value( PIT_CHANNEL_RTI, RTI_LOAD_VALUE_1MS);
+    PIT_INTERRUPT_Set_Enable(PIT_CHANNEL_RTI, true);
 
-   // turn on Time Off Delay signal 
-   //Activate_TimeOffDelay
-   HAL_GPIO_SET_TODO_Enable(true);
+    // turn on Time Off Delay signal 
+    //Activate_TimeOffDelay
+    HAL_GPIO_SET_TODO_Enable(true);
 
-  HAL_OS_Init_Task();   
+    HAL_OS_Init_Task();   
 
-   FI_Initialize();
-   
-   CCP_Initialize();
+    FI_Initialize();
 
-
+    CCP_Initialize();
 }
 //=============================================================================
 //MngOSTK_1msTasks
@@ -51,7 +49,7 @@ void MngOSTK_1msTasks(void)
 //=============================================================================
 void MngOSTK_2msTasks(void)
 {
-	HAL_OS_2ms_Task();
+    HAL_OS_2ms_Task();
 }
 
 //=============================================================================
@@ -59,70 +57,71 @@ void MngOSTK_2msTasks(void)
 //=============================================================================
 void MngOSTK_5msTasks(void)
 {
-	HAL_OS_5ms_Task();
+    HAL_OS_5ms_Task();
 }
 
 //=============================================================================
 //MngOSTK_10msTasks
 //=============================================================================
-uint16_t test_cnt_30ms;
+static uint16_t test_cnt_30ms;
 void MngOSTK_10msTasks(void)
 {
+    /* call device driver layer functions */
+    SWT_Service_WatchDog();
+    VSEP_SPI_Scheduler_Manage_Periodic();
+    L9958_FAULT_Diagnose_Update();
 
-  SWT_Service_WatchDog();
-  VSEP_SPI_Scheduler_Manage_Periodic();
+    /* call hal layer callback functions */
+    HAL_OS_10ms_Task(); 
 
-  HAL_OS_10ms_Task(); 
+    /* call soh service */
+    test_cnt_30ms++;
+    if (test_cnt_30ms == 3) {
+        test_cnt_30ms=0;
+        SOH_VSEP_CR_Service();
+    }
 
-  test_cnt_30ms++;
-  if (test_cnt_30ms == 3)
-  {
-     test_cnt_30ms=0;
-     SOH_VSEP_CR_Service();
-  } 
-
-   /* CCP 10ms Trigger */
-   CCP_Trigger_Event_Channel( 10 );
-  
+    /* CCP 10ms Trigger */
+    CCP_Trigger_Event_Channel( 10 );
 }
 
 //=============================================================================
 // MngOSTK_100msTasks
 //=============================================================================	
-uint16_t test_cnt_500ms;
+static uint16_t test_cnt_500ms;
 void MngOSTK_100msTasks(void)
 {
-	FI_Update_Count_Time();
-	HAL_OS_100ms_Task();
-	/* CCP 125ms Task 0 Trigger */
-	CCP_Trigger_Event_Channel( 11 );
-	test_cnt_500ms++;
-	if (test_cnt_500ms == 5) {
-		test_cnt_500ms=0;
-		/* CCP 500ms Task 0 Trigger */
-		CCP_Trigger_Event_Channel( 25 );
-	}
+    FI_Update_Count_Time();
+    HAL_OS_100ms_Task();
+    /* CCP 125ms Task 0 Trigger */
+    CCP_Trigger_Event_Channel( 11 );
+    test_cnt_500ms++;
+    if (test_cnt_500ms == 5) {
+        test_cnt_500ms=0;
+        /* CCP 500ms Task 0 Trigger */
+        CCP_Trigger_Event_Channel( 25 );
+    }
 }
 //=============================================================================
 // OS_Free_Time_Tasks_Hook
 //=============================================================================
 void OS_Free_Time_Tasks_Hook(void)
 {
-	CCP_Periodic_Task();
+    CCP_Periodic_Task();
 }
 
 //=============================================================================
 // OS_TimeBasedTask1ms
 //=============================================================================
-void OS_TimeBasedTask1ms(void) 
+void OS_TimeBasedTask1ms(void)
 {
-	HAL_OS_1ms_Task();
+    HAL_OS_1ms_Task();
 }
 
 //=============================================================================
 // OS_TimeBasedTask2ms
 //=============================================================================
- void OS_TimeBasedTask2ms(void) 
+void OS_TimeBasedTask2ms(void)
 {
 
 }
@@ -131,7 +130,7 @@ void OS_TimeBasedTask1ms(void)
 //=============================================================================
 // OS_TimeBasedTask5ms
 //=============================================================================
- void OS_TimeBasedTask5ms(void) 
+void OS_TimeBasedTask5ms(void)
 {
     CRANK_EngineStall_PerioCheck();   
 }
@@ -140,11 +139,10 @@ void OS_TimeBasedTask1ms(void)
 //=============================================================================
 //OS_TimeBasedTask10ms
 //=============================================================================
-void OS_TimeBasedTask10ms(void) 
+void OS_TimeBasedTask10ms(void)
 {
     //wait for update   
-     VSEP_Fault_Task_7_8ms();
-
+    VSEP_Fault_Task_7_8ms();
 }
 
 //=============================================================================
@@ -152,12 +150,10 @@ void OS_TimeBasedTask10ms(void)
 //=============================================================================
 void OS_LoResTasks_Hook(void)
 {
-
-
-   //syn of chery
-   HAL_OS_SYN_Task();
-   /* CCP LoRes Trigger */
-   CCP_Trigger_Event_Channel( 0 );
+    //syn of chery
+    HAL_OS_SYN_Task();
+    /* CCP LoRes Trigger */
+    CCP_Trigger_Event_Channel( 0 );
 }
 
 //=============================================================================
@@ -165,14 +161,14 @@ void OS_LoResTasks_Hook(void)
 //=============================================================================
 void OS_ToothInt_Hook(void)
 {
-   HAL_OS_ToothInt_Hook(); 
+    HAL_OS_ToothInt_Hook(); 
 }
 //=============================================================================
 // OS_CAM_W_Hook
 //=============================================================================
 void OS_CAM_W_Hook(void)
 {
-   HAL_OS_CAM_W_Hook();
+    HAL_OS_CAM_W_Hook();
 }
 
 
@@ -180,38 +176,38 @@ void OS_CAM_W_Hook(void)
 // OS_CAM_X_Hook
 //=============================================================================
 void OS_CAM_X_Hook(void)
-{  
-   HAL_OS_CAM_X_Hook();
+{
+    HAL_OS_CAM_X_Hook();
 }
 
 //=============================================================================
 // OS_CAM_READ_Hook
 //=============================================================================
 void OS_CAM_READ_Hook(void)
-{  
-   HAL_OS_CAM_READ_Hook();
+{
+    HAL_OS_CAM_READ_Hook();
 }
 
 //=============================================================================
 // OS_TimeBasedTask5ms
 //=============================================================================
- void OS_Engine_Stall_Reset(void) 
+void OS_Engine_Stall_Reset(void)
 {
-  HAL_OS_Engine_Stall_Reset();
+    HAL_OS_Engine_Stall_Reset();
 }
 
 //=============================================================================
 // OS_Engine_Start_Crank
 //=============================================================================
- void OS_Engine_Start_Crank(void) 
+void OS_Engine_Start_Crank(void)
 {
-   HAL_OS_Engine_Start_Crank();
+    HAL_OS_Engine_Start_Crank();
 }
 
 //=============================================================================
 // OS_Engine_First_Gap
 //=============================================================================
- void OS_Engine_First_Gap(void) 
+void OS_Engine_First_Gap(void)
 {
     HAL_OS_Engine_First_Gap();
 }

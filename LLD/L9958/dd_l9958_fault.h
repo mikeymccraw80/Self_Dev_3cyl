@@ -122,25 +122,6 @@ bool L9958_FAULT_Get_Device_Fault(void);
 //=============================================================================
 void L9958_FAULT_Clear_Device_Fault(void);
 
-//=============================================================================
-// L9958_FAULT_Diagnose_Update
-//
-// @func Diagnose the output pins for the specified L9958.  Diagnostics collected
-//       are based on the state of the output pin.  Fault data returned by the
-//       SPI message.  This function is called in the ExecuteAfter 
-//       function of the SPI message.
-//
-// @parm IO_Configuration_T | in_configuration | Specifies which output on which
-//       L9958 in the system to diagnose
-//
-// @parm bool      | in_parallel | Specifies the state of the parallel input
-//       associated with the specified output to be diagnosed.
-//
-// @rdesc none
-//
-// @end
-//=============================================================================
-uint16_t L9958_FAULT_Diagnose_Update(void);
 
 extern Fault_Log_T L9958_Fault_Log;
 

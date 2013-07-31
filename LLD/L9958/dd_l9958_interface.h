@@ -64,4 +64,26 @@
 	(OUTPUT_OPEN_CKT_TESTED == value? \
 	L9958_Fault_Log=L9958_FAULT_Clear_OUTPUT_OPEN_CKT_TESTED(L9958_Fault_Log):0))))
 
+//=============================================================================
+// L9958_FAULT_Diagnose_Update
+//
+// @func Diagnose the output pins for the specified L9958.  Diagnostics collected
+//       are based on the state of the output pin.  Fault data returned by the
+//       SPI message.  This function is called in the ExecuteAfter 
+//       function of the SPI message.
+//
+// @parm IO_Configuration_T | in_configuration | Specifies which output on which
+//       L9958 in the system to diagnose
+//
+// @parm bool      | in_parallel | Specifies the state of the parallel input
+//       associated with the specified output to be diagnosed.
+//
+// @rdesc none
+//
+// @end
+//=============================================================================
+void L9958_FAULT_Diagnose_Update(void);
+
+uint16_t L9958_FAULT_Get_HWDiag_Status(void);
+
 #endif // DD_L9958_FAULT_INTERFACE_H
