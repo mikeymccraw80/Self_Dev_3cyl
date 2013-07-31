@@ -30,7 +30,6 @@
 #include "hal.h"
 #include "dd_vsep_fault_config.h"
 #include "dd_vsep_fault.h"
-#include "dd_l9958_interface.h"
 
 
 /******************************************************************************
@@ -245,4 +244,6 @@
 				DD_ClearDiscreteDiagStatus(DISCRETE_OUT_SS_CLUSTER_TT_DISABLE,diagnostic)
  
 
+uint16_t HAL_Diag_Get_L9958_HWDiag_Status(void);
+ 
 #endif

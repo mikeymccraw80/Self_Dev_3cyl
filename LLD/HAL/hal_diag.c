@@ -26,6 +26,12 @@
 \*===========================================================================*/
 #include "reuse.h"
 #include "hal_diag.h"
+#include "dd_l9958_interface.h"
+
+uint16_t HAL_Diag_Get_L9958_HWDiag_Status(void)
+{
+    return L9958_FAULT_Get_HWDiag_Status();
+}
 
 
 /*===========================================================================*\
