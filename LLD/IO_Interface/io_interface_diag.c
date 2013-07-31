@@ -352,7 +352,7 @@ static void Diag_Digital_Output_Faults(void)
 
 static void Diag_ETC_Driver_Faults(void)
 {
-	etc_sig.status3.ETC_Fault = L9958_FAULT_Diagnose_Update();
+	etc_sig.status3.ETC_Fault = L9958_FAULT_Get_HWDiag_Status();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////	 
