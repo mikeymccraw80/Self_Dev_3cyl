@@ -37,12 +37,12 @@
 
 // L9958 diagnostic interface
 // EMS_DIAGNOSTIC_T : value
-#define L9958_SPIDiag(action,value)\
-	L9958_SPIFault ## action ## (value)
+#define L9958_Diag(action,value)\
+	L9958_Fault ## action ## (value)
 
 // Extract L9958 fault flag
 // EMS_DIAGNOSTIC_T : value
-#define L9958_SPIFaultGet(value) \
+#define L9958_FaultGet(value) \
 	(OUTPUT_SHORT_CKT_FAULT == value? \
 	L9958_FAULT_Get_OUTPUT_SHORT_CKT_FAULT(L9958_Fault_Log):\
 	(OUTPUT_SHORT_CKT_TESTED == value? \
@@ -54,7 +54,7 @@
 
 // Reset L9958 fault flag
 // EMS_DIAGNOSTIC_T : value
-#define L9958_SPIFaultClear(value) \
+#define L9958_FaultClear(value) \
 	(OUTPUT_SHORT_CKT_FAULT == value? \
 	L9958_Fault_Log=L9958_FAULT_Clear_OUTPUT_SHORT_CKT_FAULT(L9958_Fault_Log):\
 	(OUTPUT_SHORT_CKT_TESTED == value? \

@@ -64,33 +64,61 @@ void L9958_FAULT_Clear_Device_Fault(void)
 void L9958_FAULT_Diagnose_Update(void)
 {
     static int diag_cnt = 0;
-    diag_cnt ++;
-    if (diag_cnt >= L9958_MAX_DIAGTIMER) {
-        L9958_FAULT_Initialize_Device();
-        diag_cnt = 0;
-    }
+    uint16_t fault_temp = 0;
 
     /* get the fault reg value from l9958, and then pick up information to Fault_log*/
     L9958_Diag_Rst_Disable_Set(L9958_DIAG_RST_DISABLE_FALSE);
     L9958_SPI_Immediate_Transfer();
 
-    if(L9958_Msg_Get_Temp_Warning(L9958_HWDIAG_STATUS) || L9958_Msg_Get_OverTemp_Shutdown (L9958_HWDIAG_STATUS))
-    {
-        L9958_Fault_Log |= FAULT_Set_Occured_Thermal(L9958_Fault_Log, true);
+    if (FAULT_Get_Supported_Thermal(L9958_Fault_Log)) {
+        if(L9958_Msg_Get_Temp_Warning(L9958_HWDIAG_STATUS) || L9958_Msg_Get_OverTemp_Shutdown (L9958_HWDIAG_STATUS))
+        {
+            fault_temp |= FAULT_Set_Occured_Thermal(fault_temp, true);
+        }
+        FAULT_Set_Tested_Thermal(L9958_Fault_Log, true);
     }
 
-    if(L9958_Msg_Get_OL_OFF(L9958_HWDIAG_STATUS) || L9958_Msg_Get_OL_ON (L9958_HWDIAG_STATUS) )
-    {
-        L9958_Fault_Log |= FAULT_Set_Occured_Open_Circuit(L9958_Fault_Log, true);
+    if (FAULT_Get_Supported_Open_Circuit(L9958_Fault_Log)) {
+        if(L9958_Msg_Get_OL_OFF(L9958_HWDIAG_STATUS) || L9958_Msg_Get_OL_ON (L9958_HWDIAG_STATUS) )
+        {
+            fault_temp |= FAULT_Set_Occured_Open_Circuit(fault_temp, true);
+        }
+        FAULT_Set_Tested_Open_Circuit(L9958_Fault_Log, true);
     }
 
-    if(L9958_Msg_Get_Vdd_OverVolt(L9958_HWDIAG_STATUS) || L9958_Msg_Get_VS_UnderVolt(L9958_HWDIAG_STATUS))
-    {
-        L9958_Fault_Log |= FAULT_Set_Occured_Voltage_Regulation(L9958_Fault_Log, true);
+    if (FAULT_Get_Supported_Voltage_Regulation(L9958_Fault_Log)) {
+        if(L9958_Msg_Get_Vdd_OverVolt(L9958_HWDIAG_STATUS) || L9958_Msg_Get_VS_UnderVolt(L9958_HWDIAG_STATUS))
+        {
+            fault_temp |= FAULT_Set_Occured_Voltage_Regulation(fault_temp, true);
+        }
+        FAULT_Set_Tested_Voltage_Regulation(L9958_Fault_Log, true);
     }
 
-    L9958_Fault_Log |= FAULT_Set_Occured_Short_To_Battery(L9958_Fault_Log, L9958_Msg_Get_Short_to_BAT_in_OFF(L9958_HWDIAG_STATUS));
-    L9958_Fault_Log |= FAULT_Set_Occured_Short_To_Ground(L9958_Fault_Log, L9958_Msg_Get_Short_to_GND_in_OFF(L9958_HWDIAG_STATUS));
+    if (FAULT_Get_Supported_Short_To_Battery(L9958_Fault_Log)) {
+        if (L9958_Msg_Get_Short_to_BAT_in_OFF(L9958_HWDIAG_STATUS))
+        {
+            fault_temp |= FAULT_Set_Occured_Short_To_Battery(fault_temp, true);
+        }
+        FAULT_Set_Tested_Short_To_Battery(L9958_Fault_Log, true);
+    }
+
+    if (FAULT_Get_Supported_Short_To_Ground(L9958_Fault_Log)) {
+        if (L9958_Msg_Get_Short_to_GND_in_OFF(L9958_HWDIAG_STATUS))
+        {
+            fault_temp |= FAULT_Set_Occured_Short_To_Ground(fault_temp, true);
+        }
+        FAULT_Set_Tested_Short_To_Ground(L9958_Fault_Log, true);
+    }
+
+    diag_cnt ++;
+    if (diag_cnt >= L9958_MAX_DIAGTIMER) {
+        Disable_Interrupts();
+        L9958_FAULT_Initialize_Device();
+        L9958_Fault_Log |= fault_temp;
+        Enable_Interrupts();
+        diag_cnt = 0;
+    }
+    L9958_Fault_Log |= fault_temp;
 }
 
 //=============================================================================
