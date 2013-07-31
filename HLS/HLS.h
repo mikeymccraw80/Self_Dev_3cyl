@@ -146,19 +146,21 @@ typedef struct {
 typedef union {
 	uint16_t ETC_Fault;
 	struct {
-		uint16_t B_reserverd13 : 4;
-		uint16_t OC_HS2 : 1;		// Over-Current on How Side 2
-		uint16_t OC_HS1 : 1;		// Over-Current on How Side 1
-		uint16_t OC_LS2 : 1;		// Over-Current on Low Side 2
-		uint16_t OC_LS1 : 1;		// Over-Current on Low Side 1
-		uint16_t ACT : 1;			// Bridge enable,Ture after reset
-		uint16_t TSD : 1;			// Over-temperature Shutdown
-		uint16_t TWARN : 1;			// Temperature warning
-		uint16_t ILIM : 1;			// Current Limitation reached
-		uint16_t VDD_OV : 1;		// Power supply for ECT Dirver overvoltage
-		uint16_t VS_UV : 1;			// 12 Vs undervoltage
-		uint16_t OL_ON : 1;			// Open Load in ON condition
-		uint16_t B_reserverd0 : 1;
+		uint16_t SBAT_OFF : 1;      // Short to Battery in OFF condition
+		uint16_t SGND_OFF : 1;      // Short to GND in OFF condition
+		uint16_t RES13_12 : 2;      // Reserved
+		uint16_t OC_HS2 :   1;      // Over-Current on How Side 2
+		uint16_t OC_HS1 :   1;      // Over-Current on How Side 1
+		uint16_t OC_LS2 :   1;      // Over-Current on Low Side 2
+		uint16_t OC_LS1 :   1;      // Over-Current on Low Side 1
+		uint16_t ACT :      1;      // Bridge enable,Ture after reset
+		uint16_t TSD :      1;      // Over-temperature Shutdown
+		uint16_t TWARN :    1;      // Temperature warning
+		uint16_t ILIM :     1;      // Current Limitation reached
+		uint16_t VDD_OV :   1;      // Vdd overvoltage
+		uint16_t VS_UV :    1;      // Vs undervoltage
+		uint16_t OL_ON :    1;      // Open Load in ON condition
+		uint16_t OL_OFF :   1;      // Open Load in OFF condition
 	}etc_status_bits;
 } ETC_Fault_type;
 
