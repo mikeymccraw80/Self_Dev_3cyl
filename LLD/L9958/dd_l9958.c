@@ -15,9 +15,9 @@
 #include "dd_l9958.h"
 #include "dd_l9958_txd.h"
 #include "dd_l9958_rxd.h"
-#include "dd_l9958_config.h"
 #include "io_config_dspi.h"
 #include "dd_dspi_interface.h"
+#include "io_config_l9958.h"
 
 l9958_diag_t L9958_Rxd;
 l9958_conf_t L9958_Txd;

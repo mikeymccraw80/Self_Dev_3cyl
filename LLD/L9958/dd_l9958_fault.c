@@ -9,8 +9,9 @@
 #include "dd_l9958_txd.h"
 #include "dd_l9958_rxd.h"
 #include "dd_l9958.h"
+#include "io_config_l9958.h"
 
-#define L9958_HWDIAG_STATUS (L9958_HWDIAG_STATUS)
+#define L9958_HWDIAG_STATUS (L9958_Rxd.Value)
 
 Fault_Log_T L9958_Fault_Log;
 
@@ -19,13 +20,7 @@ Fault_Log_T L9958_Fault_Log;
 //=============================================================================
 void L9958_FAULT_Initialize_Device(void)
 {
-	L9958_Fault_Log = 0;
-
-	L9958_Fault_Log = FAULT_Set_Supported_Open_Circuit( L9958_Fault_Log, true );
-	L9958_Fault_Log = FAULT_Set_Supported_Short_To_Battery( L9958_Fault_Log, true );
-	L9958_Fault_Log = FAULT_Set_Supported_Short_To_Ground( L9958_Fault_Log, true );
-	L9958_Fault_Log = FAULT_Set_Supported_Voltage_Regulation( L9958_Fault_Log, true );
-	L9958_Fault_Log = FAULT_Set_Supported_Thermal( L9958_Fault_Log, true );
+	L9958_Fault_Log = L9958_FAULT_LOG_INITIAL;
 }
 
 //=============================================================================
