@@ -14,21 +14,21 @@
 typedef union {
 	uint16_t Value;
 	struct {
-		uint16_t SBAT_OFF : 1;		//Short to Battery in OFF condition
-		uint16_t SGND_OFF : 1;		//Short to GND in OFF condition
-		uint16_t RES13_12 : 2;
-		uint16_t OC_HS2 : 1;		// Over-Current on How Side 2
-		uint16_t OC_HS1 : 1;		// Over-Current on How Side 1
-		uint16_t OC_LS2 : 1;		// Over-Current on Low Side 2
-		uint16_t OC_LS1 : 1;		// Over-Current on Low Side 1
-		uint16_t ACT : 1;			// Bridge enable,Ture after reset
-		uint16_t TSD : 1;			// Over-temperature Shutdown
-		uint16_t TWARN : 1;			// Temperature warning
-		uint16_t ILIM : 1;			// Current Limitation reached
-		uint16_t VDD_OV : 1;		// Power supply for ECT Dirver overvoltage
-		uint16_t VS_UV : 1;			// 12 Vs undervoltage
-		uint16_t OL_ON : 1;			// Open Load in ON condition
-		uint16_t OL_OFF : 1;		// Open Load in OFF condition
+		uint16_t SBAT_OFF : 1;      // Short to Battery in OFF condition
+		uint16_t SGND_OFF : 1;      // Short to GND in OFF condition
+		uint16_t RES13_12 : 2;      // Reserved
+		uint16_t OC_HS2 :   1;      // Over-Current on How Side 2
+		uint16_t OC_HS1 :   1;      // Over-Current on How Side 1
+		uint16_t OC_LS2 :   1;      // Over-Current on Low Side 2
+		uint16_t OC_LS1 :   1;      // Over-Current on Low Side 1
+		uint16_t ACT :      1;      // Bridge enable,Ture after reset
+		uint16_t TSD :      1;      // Over-temperature Shutdown
+		uint16_t TWARN :    1;      // Temperature warning
+		uint16_t ILIM :     1;      // Current Limitation reached
+		uint16_t VDD_OV :   1;      // Vdd overvoltage
+		uint16_t VS_UV :    1;      // Vs undervoltage
+		uint16_t OL_ON :    1;      // Open Load in ON condition
+		uint16_t OL_OFF :   1;      // Open Load in OFF condition
 	} Bits;
 } l9958_diag_t;
 
@@ -36,16 +36,16 @@ typedef union {
 typedef union {
 	uint16_t Value;
 	struct {
-		uint16_t RES15_12: 4;
-		uint16_t OL_ON : 1;		// Open Load in ON state Enable
-		uint16_t ISR_DIS : 1;		// Current Slew Rate Control Disable
-		uint16_t ISR : 1;		// Over-Current on Low Side 2
-		uint16_t VSR : 1;		// Over-Current on Low Side 1
-		uint16_t RES7_4 : 4;			// Bridge enable,Ture after reset
-		uint16_t CL_2 : 1;			// Over-temperature Shutdown
-		uint16_t CL_1 : 1;			// Temperature warning
-		uint16_t DR : 1;			// Current Limitation reached
-		uint16_t RES0 : 1;		// Power supply for ECT Dirver overvoltage
+		uint16_t RES15_12:  4;      // Reserved
+		uint16_t OL_ON :    1;      // Open Load in ON state Enable
+		uint16_t ISR_DIS :  1;      // Current Slew Rate Control Disable
+		uint16_t ISR :      1;      // Current Slew Rate Control Value
+		uint16_t VSR :      1;      // Voltage Slew Rate Control Value
+		uint16_t RES7_4 :   4;      // Reserved
+		uint16_t CL_2 :     1;      // Bit2 for Regulation Current Level
+		uint16_t CL_1 :     1;      // Bit1 for Regulation Current Level
+		uint16_t DR :       1;      // Diagnostic Reset Bit
+		uint16_t RES0 :     1;      // Reserved
 	} Bits;
 } l9958_conf_t;
 
@@ -91,7 +91,7 @@ void L9958_Diag_Rst_Disable_Set(L9958_DIAG_RST_DISABLE_T in_diag_rst_disable);
 //
 // @end
 //===========================================================================
-void L9958_Diag_Rst_Disable_Set_Immediate(L9958_DIAG_RST_DISABLE_T   in_diag_rst_disable);
+void L9958_Diag_Rst_Disable_Set_Immediate(L9958_DIAG_RST_DISABLE_T in_diag_rst_disable);
 
 
 //===========================================================================

@@ -7,7 +7,7 @@
 //       Delphi Confidential
 //=============================================================================
 
-#define L9958_TXD_INITIAL  (L9958_Msg_Set_Diag_Reset_Disable(         0, L9958_DIAG_RST_DISABLE_FALSE) | \
+#define L9958_TXD_INITIAL  (L9958_Msg_Set_Diag_Reset_Disable(          0, L9958_DIAG_RST_DISABLE_FALSE) | \
 							L9958_Msg_Set_Regulation_Curr_Level(       0, L9958_CURRENT_LEVEL_8P6     ) | \
 							L9958_Msg_Set_Voltage_Slew_Control(        0, L9958_VSR_LO                ) | \
 							L9958_Msg_Set_Current_Slew_Control(        0, L9958_ISR_LO                ) | \
