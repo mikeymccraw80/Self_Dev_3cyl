@@ -34,6 +34,9 @@ void OS_Startup_Hook(void)
     FI_Initialize();
 
     CCP_Initialize();
+
+    /* init power source status */
+    InitializePowerSource();
 }
 //=============================================================================
 //MngOSTK_1msTasks
@@ -87,6 +90,9 @@ void MngOSTK_10msTasks(void)
 
     /* update ignition status */
     UpdateIgnitionState_10MS();
+
+    /* update power source status */
+    PowerSourceStatus_EveryLoop();
 }
 
 //=============================================================================
