@@ -12,11 +12,10 @@
 #include "io_interface_spark.h"
 #include "io_interface_os.h"
 #include "io_interface_gpio.h"
-//#include "hal_diag.h"
 #include "io_interface_can.h"
 #include "io_interface_cam.h"
 #include "hal_cam.h"
-
+#include "hal_eng.h"
 
 //extern void Update_DiagStatus_10ms(void);
 //=============================================================================
@@ -62,17 +61,17 @@ void  HAL_OS_1ms_Task(void)
 // HAL_OS_2ms_Task
 //=============================================================================
 void  HAL_OS_2ms_Task(void) 
- {
-     HLS_Task_2ms();
- }
+{
+    HLS_Task_2ms();
+}
 
 //=============================================================================
 // HAL_OS_5ms_Task
 //=============================================================================
-  void  HAL_OS_5ms_Task(void) 
- {
-     HLS_Task_5ms();
- }
+void  HAL_OS_5ms_Task(void) 
+{
+    HLS_Task_5ms();
+}
 //=============================================================================
 //  HAL_OS_10ms_Task
 //=============================================================================
@@ -99,6 +98,11 @@ void  HAL_OS_10ms_Task(void)
 	}
 	MngChery_Can_10ms();
 	Update_DiagStatus_10ms();
+
+    /* update engine state machine */
+    VIOS_EngSpdThrsh();
+    VIOS_CntrlShutdownLogic();
+    VIOS_EngSt();
 }
 
 //=============================================================================
@@ -119,6 +123,9 @@ void HAL_OS_100ms_Task(void)
 		OS_100ms_Cnt = 0;
 		MngChery_Can_1000ms();
 		MngChery_Can_2000ms();
+
+		/* update engine running time in 1s loop*/
+		UpdateVIOS_EngRunTime();
 	}
 	if(!(OS_100ms_Cnt&0x01)) {
 		HLS_Task_200ms();
@@ -145,22 +152,27 @@ void HAL_OS_Init_Task(void)
 	IO_Analog_1ms_Update();
 	IO_Analog_10ms_Update();
 	HLS_ini2();
+
+	/*Initialize the Engine State value at power up. */
+	InitVIOS_EngSt();
 }
 
 
 //=============================================================================
 //  HAL_OS_SYN_Task
 //=============================================================================
- void HAL_OS_SYN_Task(void)
- {
-     IO_Eng_Cyl_Update();
-     HLS_syn();
-     //app fuel update
-     IO_Fuel_Syn_Update();    
-     //  app spark update
-     IO_Spark_Syn_Update();	
-    
- }
+void HAL_OS_SYN_Task(void)
+{
+    IO_Eng_Cyl_Update();
+    HLS_syn();
+    //app fuel update
+    IO_Fuel_Syn_Update();
+    //  app spark update
+    IO_Spark_Syn_Update();
+
+    /* update engine state machine */
+    DtrmnVIOS_RunModeCount();
+}
 
 //=============================================================================
 // HAL_OS_ToothInt_Hook
@@ -262,3 +274,196 @@ void LLD_enable_interrupt(void)
 	Enable_Interrupts();
 }
 
+
+
+
+void Sinit_KeyOffDelay(void)
+{
+	//InitEMSD_AcClutchRstToKeyOff();
+	//InitEMSD_FanxRstToKeyOff();
+	//InitEMSD_FileROMRstToKeyOn();
+	//InitEMSD_FuelPumpRstToKeyOff();
+	//InitEMSD_MILRstToKeyOff();
+	//InitEMSD_MainRelayRstToKeyOff();
+	//InitEOSD_O2_11_HtrRstToKeyOff();
+	//InitEOSD_O2_12_HtrRstToKeyOff();
+	//InitEPSD_CamRstTo_Keyoff();
+	// InitEPSD_CrankRstTo_Keyoff();
+	//InitESTD_RstToKeyOff();
+	//InitKNKD_RstToKeyOff();
+	//InitPRGD_Purge_RstToKeyOff();
+	// InitINJD_RstToKeyOff();
+}
+
+
+
+/*****************************************************************************
+*                                                                            *
+* Function:             Sinit_KeyOnToPowerOff                                *
+* Description:          This procedure will Initialize all routines need to  *
+*                       re-initialize from Key On to Power off.              *
+*                                                                            *
+* Parameters:           None                                                 *
+* Return:               None                                                 *
+******************************************************************************/
+void Sinit_KeyOnToPowerOff(void)
+{
+	//Sinit_KeyOffDelay();
+}
+
+/*****************************************************************************
+*                                                                            *
+* Function:             Sinit_KeyOnToCrank                                   *
+* Description:          This procedure will Initialize all routines need to  *
+*                       re-initialize from Key On to Crank.                  *
+*                                                                            *
+* Parameters:           None                                                 *
+* Return:               None                                                 *
+******************************************************************************/
+void Sinit_KeyOnToCrank(void)
+{
+}
+
+/*****************************************************************************
+*                                                                            *
+* Function:             Sinit_CrankToRun                                     *
+* Description:          This procedure will Initialize all routines need to  *
+*                       re-initialize from Crank To Run.                     *
+*                                                                            *
+* Parameters:           None                                                 *
+* Return:               None                                                 *
+******************************************************************************/
+void Sinit_CrankToRun(void)
+{
+    
+}
+
+/*****************************************************************************
+*                                                                            *
+* Function:             Sinit_CrankToStall                                   *
+* Description:          This procedure will Initialize all routines need to  *
+*                       re-initialize from crank to Stall.                   *
+*                                                                            *
+* Parameters:           None                                                 *
+* Return:               None                                                 *
+******************************************************************************/
+void Sinit_CrankToStall (void)
+{
+    // InitEPSD_CamCrankToStall();
+    // InitEPSD_CrankCrankToStall();
+}
+
+/*****************************************************************************
+*                                                                            *
+* Function:             Sinit_RunToPowerOffDelay                             *
+* Description:          This procedure will Initialize all routines need to  *
+*                       re-initialize from Run to Power off Delay.           *
+*                                                                            *
+* Parameters:           None                                                 *
+* Return:               None                                                 *
+******************************************************************************/
+void Sinit_RunToPowerOffDelay(void)
+{
+	// InitEPSD_CamRunToPowerOffDelay();
+	// InitEPSD_CrankRunToPowerOffDelay();
+	// Sinit_KeyOffDelay();
+}
+
+
+/*****************************************************************************
+*                                                                            *
+* Function:             Sinit_RunToCrank                                     *
+* Description:          This procedure will Initialize all routines need to  *
+*                       re-initialize from Run To Crank.                     *
+*                                                                            *
+* Parameters:           None                                                 *
+* Return:               None                                                 *
+******************************************************************************/
+void Sinit_RunToCrank(void)
+{
+  
+}
+
+/*****************************************************************************
+*                                                                            *
+* Function:             Sinit_StallToPowerOffDelay                           *
+* Description:          This procedure will Initialize all routines need to  *
+*                       re-initialize from Stall to Power off Delay.         *
+*                                                                            *
+* Parameters:           None                                                 *
+* Return:               None                                                 *
+******************************************************************************/
+void Sinit_StallToPowerOffDelay(void)
+{
+	// Sinit_KeyOffDelay();
+}
+
+/*****************************************************************************
+*                                                                            *
+* Function:             Sinit_StallToCrank                                   *
+* Description:          This procedure will Initialize all routines need to  *
+*                       re-initialize from Stall to Crank.                   *
+*                                                                            *
+* Parameters:           None                                                 *
+* Return:               None                                                 *
+******************************************************************************/
+void Sinit_StallToCrank(void)
+{
+
+}
+
+/*****************************************************************************
+*                                                                            *
+* Function:             Sinit_PowerOffDelayToKeyOn                           *
+* Description:          This procedure will Initialize all routines need to  *
+*                       re-initialize from Power off delay to Key on.        *
+*                                                                            *
+* Parameters:           None                                                 *
+* Return:               None                                                 *
+******************************************************************************/
+void Sinit_PowerOffDelayToKeyOn(void)
+{
+    
+}
+
+/*****************************************************************************
+*                                                                            *
+* Function:             Sinit_PowerOffDelayToShutDwn                         *
+* Description:          This procedure will Initialize all routines need to  *
+*                       re-initialize from Power off Delay to Shut down.     *
+*                                                                            *
+* Parameters:           None                                                 *
+* Return:               None                                                 *
+******************************************************************************/
+void Sinit_PowerOffDelayToShutDwn(void)
+{
+   
+}
+
+/*****************************************************************************
+*                                                                            *
+* Function:             Sinit_ShutdownInProcessToKeyOff                      *
+* Description:          This procedure will spawn all routines that need to  *
+*                       be executed on a Shut down In Process To Key Off.    *
+*                                                                            *
+* Parameters:           None                                                 *
+* Return:               None                                                 *
+******************************************************************************/
+void Sinit_ShutdownInProcessToKeyOff(void)
+{
+	// InitESTD_ShutdownInProgToKeyOn();
+}
+
+/*****************************************************************************
+*                                                                            *
+* Function:             Sinit_ShutdownInProcessToKeyOn                       *
+* Description:          This procedure will Initialize all routines need to  *
+*                       re-initialize from Shut down In Process To Key On.   *
+*                                                                            *
+* Parameters:           None                                                 *
+* Return:               None                                                 *
+******************************************************************************/
+void Sinit_ShutdownInProcessToKeyOn(void)
+{
+ 
+}

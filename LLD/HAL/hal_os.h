@@ -75,5 +75,19 @@ void Enable_1ms_interrupt(void) ;
 void LLD_disable_interrupt(void);
 void LLD_enable_interrupt(void);
 
+/* The following functions are called in Hal Engine module */
+void Sinit_CrankToRun(void);
+void Sinit_CrankToStall(void);
+void Sinit_KeyOnToCrank(void);
+void Sinit_KeyOnToPowerOff(void);
+void Sinit_PowerOffDelayToKeyOn(void);
+void Sinit_PowerOffDelayToShutDwn(void);
+void Sinit_RunToCrank(void);
+void Sinit_RunToPowerOffDelay(void);
+void Sinit_ShutdownInProcessToKeyOff(void);
+void Sinit_ShutdownInProcessToKeyOn(void);
+void Sinit_StallToCrank(void);
+void Sinit_StallToPowerOffDelay(void);
+
 #endif
 
