@@ -63,16 +63,17 @@ void MngOSTK_5msTasks(void)
 //=============================================================================
 //MngOSTK_10msTasks
 //=============================================================================
-static uint16_t test_cnt_30ms;
 void MngOSTK_10msTasks(void)
 {
+    static uint16_t test_cnt_30ms;
+
+    /* call hal layer callback functions */
+    HAL_OS_10ms_Task(); 
+
     /* call device driver layer functions */
     SWT_Service_WatchDog();
     VSEP_SPI_Scheduler_Manage_Periodic();
     L9958_FAULT_Diagnose_Update();
-
-    /* call hal layer callback functions */
-    HAL_OS_10ms_Task(); 
 
     /* call soh service */
     test_cnt_30ms++;
@@ -85,7 +86,7 @@ void MngOSTK_10msTasks(void)
     CCP_Trigger_Event_Channel( 10 );
 
     /* update ignition status */
-    UpdateIgnitionState();
+    UpdateIgnitionState_10MS();
 }
 
 //=============================================================================
