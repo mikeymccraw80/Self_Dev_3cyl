@@ -18,6 +18,9 @@
 #include "hal_eng.h"
 #include "emsdpapi.h"
 #include "eosdpapi.h"
+#include "prgdpapi.h"
+#include "estdpapi.h"
+#include "epsdpapi.h"
 
 //extern void Update_DiagStatus_10ms(void);
 //=============================================================================
@@ -82,6 +85,7 @@ void  HAL_OS_5ms_Task(void)
 		MngINJD_125msTasks();
 		MngEOSD_O2_11_Htr125msTasks();
 		MngEOSD_O2_12_Htr125msTasks();
+		MngPRGD_Purge_125msTasks();
 		OS_5ms_CNT = 0;
 	}
 }
@@ -120,6 +124,7 @@ void  HAL_OS_10ms_Task(void)
 	/* hardware diagnosis update functions */
 	MngEOSD_O2_11_Htr10msTasks();
 	MngEOSD_O2_12_Htr10msTasks();
+	MngESTD_7p81msTasks();
 }
 
 //=============================================================================
@@ -196,8 +201,11 @@ void HAL_OS_SYN_Task(void)
     //  app spark update
     IO_Spark_Syn_Update();
 
-    /* update engine state machine */
-    DtrmnVIOS_RunModeCount();
+	/* update engine state machine */
+	DtrmnVIOS_RunModeCount();
+
+	/* hardware diagnosis */
+	MngESTD_RefEventTasks();
 }
 
 //=============================================================================
