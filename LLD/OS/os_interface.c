@@ -10,7 +10,7 @@
 #include "dd_dspi_interface.h"
 #include "dd_fi_interface.h"
 #include "dd_l9958_interface.h"
-
+#include "v_ignit.h"
 //tempoary
 #include "soh.h"
 #include "dd_vsep_est_select.h"
@@ -83,6 +83,9 @@ void MngOSTK_10msTasks(void)
 
     /* CCP 10ms Trigger */
     CCP_Trigger_Event_Channel( 10 );
+
+    /* update ignition status */
+    UpdateIgnitionState();
 }
 
 //=============================================================================
