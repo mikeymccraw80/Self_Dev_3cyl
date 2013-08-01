@@ -16,6 +16,7 @@
 #include "io_interface_cam.h"
 #include "hal_cam.h"
 #include "hal_eng.h"
+#include "emsdpapi.h"
 
 //extern void Update_DiagStatus_10ms(void);
 //=============================================================================
@@ -129,6 +130,15 @@ void HAL_OS_100ms_Task(void)
 	}
 	if(!(OS_100ms_Cnt&0x01)) {
 		HLS_Task_200ms();
+
+		/* hw diagnosis update functions */
+		MngEMSD_AcClutch200msTasks();
+		MngEMSD_MainRelay200msTasks();
+		MngEMSD_FuelPump200msTasks();
+		MngEMSD_MIL200msTasks();
+		MngEMSD_FanA200msTasks();
+		MngEMSD_FanB200msTasks();
+		MngEMSD_FileROM200msTasks();
 	}
 	MngChery_Can_100ms();
 }
