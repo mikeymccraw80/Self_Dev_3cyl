@@ -17,6 +17,7 @@
 #include "hal_cam.h"
 #include "hal_eng.h"
 #include "emsdpapi.h"
+#include "eosdpapi.h"
 
 //extern void Update_DiagStatus_10ms(void);
 //=============================================================================
@@ -71,7 +72,18 @@ void  HAL_OS_2ms_Task(void)
 //=============================================================================
 void  HAL_OS_5ms_Task(void) 
 {
-    HLS_Task_5ms();
+	static uint32_t OS_5ms_CNT = 0;
+
+	HLS_Task_5ms();
+
+	/* hw diagnosis update functions */
+	OS_5ms_CNT++;
+	if (OS_5ms_CNT == 25) {
+		MngINJD_125msTasks();
+		MngEOSD_O2_11_Htr125msTasks();
+		MngEOSD_O2_12_Htr125msTasks();
+		OS_5ms_CNT = 0;
+	}
 }
 //=============================================================================
 //  HAL_OS_10ms_Task
@@ -100,10 +112,14 @@ void  HAL_OS_10ms_Task(void)
 	MngChery_Can_10ms();
 	Update_DiagStatus_10ms();
 
-    /* update engine state machine */
-    VIOS_EngSpdThrsh();
-    VIOS_CntrlShutdownLogic();
-    VIOS_EngSt();
+	/* update engine state machine */
+	UpdateVIOS_EngSpdThrsh();
+	UpdateVIOS_CntrlShutdownLogic();
+	UpdateVIOS_EngSt();
+
+	/* hardware diagnosis update functions */
+	MngEOSD_O2_11_Htr10msTasks();
+	MngEOSD_O2_12_Htr10msTasks();
 }
 
 //=============================================================================
