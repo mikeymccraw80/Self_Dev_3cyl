@@ -463,6 +463,8 @@ static bool CRANK_Gap_Cofirm( void )
 			OS_Engine_First_Gap();
 			CAM_Set_Current_Edge(CAM1);
 			CAM_Set_Current_Edge(CAM2);
+			CAM_Set_Total_Edge(CAM1);
+			CAM_Set_Total_Edge(CAM2);
 		} else {
 			//eliminate  the tooth count  difference in each loop
 			if (CRANK_Current_Event_Tooth>CRANK_VIRTUAL_TEETH_PER_CRANK) {

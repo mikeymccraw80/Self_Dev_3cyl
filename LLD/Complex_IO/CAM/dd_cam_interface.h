@@ -188,6 +188,11 @@ void CAM_Get_Edge_Data(CAM_Sensors_T in_sensor, uint8_t in_cam_edge, Edge_Data_T
 void CAM_Set_Current_Edge(CAM_Sensors_T     in_sensor );
 
 //=============================================================================
+// uint8_t CAM_Set_Total_Edge
+//=============================================================================
+void CAM_Set_Total_Edge(CAM_Sensors_T     in_sensor );
+
+//=============================================================================
 // CAM_Get_Stuck_State
 //=============================================================================
 bool CAM_Get_Stuck_State(void);

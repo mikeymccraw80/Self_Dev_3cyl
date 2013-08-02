@@ -387,8 +387,16 @@ uint32_t CAM_Get_Current_Edge_Period(CAM_Sensors_T     in_sensor)
 void CAM_Set_Current_Edge(CAM_Sensors_T     in_sensor )
 {
 	CAM_Current_Edge[in_sensor]  = 0;
+}
+
+//=============================================================================
+// uint8_t CAM_Get_Current_Edge
+//=============================================================================
+void CAM_Set_Total_Edge(CAM_Sensors_T     in_sensor )
+{
 	CAM_Total_Edge[in_sensor] = 255;
 }
+
 //=============================================================================
 //  FUNCTION: CAM_Increment_Cam_Edge_Counter
 //=============================================================================
