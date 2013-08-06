@@ -55,7 +55,10 @@ if len(sys.argv) >= 5 and len(sys.argv) <= 6:
    for line in process_lines:
       if bool(re.match('^\s+\.(?!debug)',line)):
          s_module = True
-         ModuleName  = os.path.split(line.split()[-1])[-1].split('.')[0]
+         if line.find(".a["):
+            ModuleName  = os.path.split(line.split()[-1])[-1].split('.a[')[-1].split('.o')[0]
+         else :
+            ModuleName  = os.path.split(line.split()[-1])[-1].split('.')[0]
          continue
       if bool(re.match('^\s$',line)):
          s_module = False
