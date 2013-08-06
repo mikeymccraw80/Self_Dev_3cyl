@@ -19,10 +19,10 @@
 /*                                                                            */
 /******************************************************************************/
 
-*-app_main.angle_crank_cam_inlet{
+*-angle_crank_cam_inlet{
 *-  OBJECTS_CLASS: parameter_es_class;
 *-  label                    = "CAMPH_IN";
-*-  variable_location.symbol = app_main.angle_crank_cam_inlet;
+*-  variable_location.symbol = angle_crank_cam_inlet;
 *-  ds_scaling_unit          = "count";
 *-  ds_precision             = "2.0";
 *-  ds_scaling_mode          = "Ax + B";
@@ -31,10 +31,10 @@
 *-  description              = "cam inlet phase";
 *-}
 
-*-app_main.angle_crank_cam_outlet{
+*-angle_crank_cam_outlet{
 *-  OBJECTS_CLASS: parameter_es_class;
 *-  label                    = "CAMPH_OUT";
-*-  variable_location.symbol = app_main.angle_crank_cam_outlet;
+*-  variable_location.symbol = angle_crank_cam_outlet;
 *-  ds_scaling_unit          = "count";
 *-  ds_precision             = "2.0";
 *-  ds_scaling_mode          = "Ax + B";
@@ -43,23 +43,22 @@
 *-  description              = "cam outlet phase";
 *-}
 
-*-intr_var.crank_sig{
+*-crank_sig{
 *-  OBJECTS_CLASS: parameter_es_class;
 *-  label                    = "CRANK_PRD";
-*-  variable_location.symbol = intr_var.crank_sig;
+*-  variable_location.symbol = crank_sig.segment_time;
 *-  ds_scaling_unit          = "count";
-*-  ds_precision             = "8.0";
+*-  ds_precision             = "4.0";
 *-  ds_scaling_mode          = "Ax + B";
 *-  ds_const_a               = "1.000000000000";
 *-  ds_const_b               = "0.000000000000";
 *-  description              = "crank signal reference period";
 *-}
 
-*-intr_var.crank_sig_plus_0x04{
+*-crank_sig_plus_0x04{
 *-  OBJECTS_CLASS: parameter_es_class;
 *-  label                    = "CRANK_RPM";
-*-  variable_location.symbol = intr_var.crank_sig;
-*-  variable_location.offset = 0x04;
+*-  variable_location.symbol = crank_sig.engine_rpm;
 *-  ds_scaling_unit          = "count";
 *-  ds_precision             = "2.0";
 *-  ds_scaling_mode          = "Ax + B";
@@ -68,11 +67,10 @@
 *-  description              = "crank engine speed";
 *-}
 
-*-intr_var.crank_sig_plus_0x05{
+*-crank_sig_plus_0x05{
 *-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "CRANK_RPM";
-*-  variable_location.symbol = intr_var.crank_sig;
-*-  variable_location.offset = 0x06;
+*-  label                    = "CRANK_TCNT";
+*-  variable_location.symbol = crank_sig.engine_position_tc;
 *-  ds_scaling_unit          = "count";
 *-  ds_precision             = "1.0";
 *-  ds_scaling_mode          = "Ax + B";
