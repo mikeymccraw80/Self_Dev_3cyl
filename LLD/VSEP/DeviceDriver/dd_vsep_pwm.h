@@ -576,8 +576,8 @@ typedef enum
 }VSEP_PWM_Rxd_Message_T;
 
 /* global vsep pwm messagge buffer declare */
-extern uint16_t VSEP_PWM_Txd[NUMBER_OF_VSEP][VSEP_PWM_CHANNEL_MAX][VSEP_PWM_TXD_MESSAGE_MAX];
-extern uint16_t VSEP_PWM_Rxd[NUMBER_OF_VSEP][VSEP_PWM_RXD_MESSAGE_MAX];
+extern uint16_t VSEP_PWM_Txd[VSEP_PWM_CHANNEL_MAX][VSEP_PWM_TXD_MESSAGE_MAX];
+extern uint16_t VSEP_PWM_Rxd[VSEP_PWM_RXD_MESSAGE_MAX];
 
 
 //=============================================================================

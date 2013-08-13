@@ -51,8 +51,8 @@ CDIV_PWM[x] Bit	 Valid Frequency Range (Hz) Step Size
 #define VSEP_PWM_PERIOD_Limit	0xFFF
 
 /* vsep pwm global message buffer definition */
-uint16_t VSEP_PWM_Txd[NUMBER_OF_VSEP][VSEP_PWM_CHANNEL_MAX][VSEP_PWM_TXD_MESSAGE_MAX];
-uint16_t VSEP_PWM_Rxd[NUMBER_OF_VSEP][VSEP_PWM_RXD_MESSAGE_MAX];
+uint16_t VSEP_PWM_Txd[VSEP_PWM_CHANNEL_MAX][VSEP_PWM_TXD_MESSAGE_MAX];
+uint16_t VSEP_PWM_Rxd[VSEP_PWM_RXD_MESSAGE_MAX];
 
 
 static const uint8_t VSEP_PWM_CHANNEL_MAP[VSEP_CHANNEL_MAX] =
@@ -105,13 +105,12 @@ static const uint8_t VSEP_PWM_CHANNEL_MAP[VSEP_CHANNEL_MAX] =
 static uint16_t* VSEP_PWM_Get_PWM_Buffer(
    IO_Configuration_T   in_configuration)
 {
-   VSEP_Index_T               device = VSEP_Get_Device_Index(in_configuration);
    uint16_t                  *pwm_buf = NULL;
    VSEP_PWM_Channel_T        channel = VSEP_PWM_Get_Channel( in_configuration);
    
    if( channel < VSEP_PWM_CHANNEL_MAX )
    {
-      pwm_buf = VSEP_PWM_Txd[device][channel];
+      pwm_buf = VSEP_PWM_Txd[channel];
    }
 
    return pwm_buf;
@@ -123,20 +122,19 @@ static uint16_t* VSEP_PWM_Get_PWM_Buffer(
 void VSEP_PWM_Device_Initialize(
    IO_Configuration_T in_configuration)
 {
-   VSEP_Index_T device = VSEP_Get_Device_Index( in_configuration );
    VSEP_PWM_Channel_T channel;
 
    for( channel = VSEP_PWM_CHANNEL_1; channel < VSEP_PWM_CHANNEL_MAX; channel++ )
    {
 #ifdef VSEP_PWM_STATIC_INITIALIZATION
-      VSEP_PWM_Txd[ device ][ channel ][ VSEP_PWM_TXD_MESSAGE_CTRL   ] = VSEP_PWM_TXD_INITIAL[ device ][ channel ][ VSEP_PWM_TXD_MESSAGE_CTRL   ];
-      VSEP_PWM_Txd[ device ][ channel ][ VSEP_PWM_TXD_MESSAGE_ONTIME ] = VSEP_PWM_TXD_INITIAL[ device ][ channel ][ VSEP_PWM_TXD_MESSAGE_ONTIME ]; 
-      VSEP_PWM_Txd[ device ][ channel ][ VSEP_PWM_TXD_MESSAGE_PERIOD ] = VSEP_PWM_TXD_INITIAL[ device ][ channel ][ VSEP_PWM_TXD_MESSAGE_PERIOD ]; 
+      VSEP_PWM_Txd[channel][ VSEP_PWM_TXD_MESSAGE_CTRL   ] = VSEP_PWM_TXD_INITIAL[ channel ][ VSEP_PWM_TXD_MESSAGE_CTRL   ];
+      VSEP_PWM_Txd[channel][ VSEP_PWM_TXD_MESSAGE_ONTIME ] = VSEP_PWM_TXD_INITIAL[ channel ][ VSEP_PWM_TXD_MESSAGE_ONTIME ]; 
+      VSEP_PWM_Txd[channel][ VSEP_PWM_TXD_MESSAGE_PERIOD ] = VSEP_PWM_TXD_INITIAL[ channel ][ VSEP_PWM_TXD_MESSAGE_PERIOD ]; 
 #else
-      VSEP_PWM_Txd[ device ][ channel ][ VSEP_PWM_TXD_MESSAGE_CTRL ] = VSEP_Msg_Set_SDOA( VSEP_PWM_Txd[ device ][ channel ][ VSEP_PWM_TXD_MESSAGE_CTRL ], VSEP_RXD_SDOA_NOT_USED );
-      VSEP_PWM_Txd[ device ][ channel ][ VSEP_PWM_TXD_MESSAGE_CTRL ] = VSEP_Msg_Set_SDIA( VSEP_PWM_Txd[ device ][ channel ][ VSEP_PWM_TXD_MESSAGE_CTRL ], VSEP_TXD_SDIA_PWM_ONT_1 + ( channel * 4) );
-      VSEP_PWM_Txd[ device ][ channel ][ VSEP_PWM_TXD_MESSAGE_ONTIME ] = 0;
-      VSEP_PWM_Txd[ device ][ channel ][ VSEP_PWM_TXD_MESSAGE_PERIOD ] = 0;
+      VSEP_PWM_Txd[channel][ VSEP_PWM_TXD_MESSAGE_CTRL ] = VSEP_Msg_Set_SDOA( VSEP_PWM_Txd[ channel ][ VSEP_PWM_TXD_MESSAGE_CTRL ], VSEP_RXD_SDOA_NOT_USED );
+      VSEP_PWM_Txd[channel][ VSEP_PWM_TXD_MESSAGE_CTRL ] = VSEP_Msg_Set_SDIA( VSEP_PWM_Txd[ channel ][ VSEP_PWM_TXD_MESSAGE_CTRL ], VSEP_TXD_SDIA_PWM_ONT_1 + ( channel * 4) );
+      VSEP_PWM_Txd[channel][ VSEP_PWM_TXD_MESSAGE_ONTIME ] = 0;
+      VSEP_PWM_Txd[channel][ VSEP_PWM_TXD_MESSAGE_PERIOD ] = 0;
 
 #endif
    }
@@ -148,15 +146,14 @@ void VSEP_PWM_Device_Initialize(
 void VSEP_PWM_Device_Clear(
    IO_Configuration_T in_configuration)
 {
-   VSEP_Index_T device = VSEP_Get_Device_Index( in_configuration );
    VSEP_PWM_Channel_T channel;
 
    for( channel = VSEP_PWM_CHANNEL_1; channel < VSEP_PWM_CHANNEL_MAX; channel++ )
    {
-      VSEP_PWM_Txd[ device ][ channel ][ VSEP_PWM_TXD_MESSAGE_CTRL ] = VSEP_Msg_Set_SDOA( VSEP_PWM_Txd[ device ][ channel ][ VSEP_PWM_TXD_MESSAGE_CTRL ], VSEP_RXD_SDOA_NOT_USED );
-      VSEP_PWM_Txd[ device ][ channel ][ VSEP_PWM_TXD_MESSAGE_CTRL ] = VSEP_Msg_Set_SDIA( VSEP_PWM_Txd[ device ][ channel ][ VSEP_PWM_TXD_MESSAGE_CTRL ], VSEP_TXD_SDIA_PWM_ONT_1 + ( channel * 4) );
-      VSEP_PWM_Txd[ device ][ channel ][ VSEP_PWM_TXD_MESSAGE_ONTIME ] = 0;
-      VSEP_PWM_Txd[ device ][ channel ][ VSEP_PWM_TXD_MESSAGE_PERIOD ] = 0;
+      VSEP_PWM_Txd[ channel ][ VSEP_PWM_TXD_MESSAGE_CTRL ] = VSEP_Msg_Set_SDOA( VSEP_PWM_Txd[ channel ][ VSEP_PWM_TXD_MESSAGE_CTRL ], VSEP_RXD_SDOA_NOT_USED );
+      VSEP_PWM_Txd[ channel ][ VSEP_PWM_TXD_MESSAGE_CTRL ] = VSEP_Msg_Set_SDIA( VSEP_PWM_Txd[ channel ][ VSEP_PWM_TXD_MESSAGE_CTRL ], VSEP_TXD_SDIA_PWM_ONT_1 + ( channel * 4) );
+      VSEP_PWM_Txd[ channel ][ VSEP_PWM_TXD_MESSAGE_ONTIME ] = 0;
+      VSEP_PWM_Txd[ channel ][ VSEP_PWM_TXD_MESSAGE_PERIOD ] = 0;
 
    }
 }
@@ -492,12 +489,11 @@ uint32_t VSEP_PWM_Timer_Get_Base_Frequency_HZ(
    uint32_t base_frequency_hz = 0;
 
 //   uint16_t    *pwm_buf = VSEP_PWM_Get_PWM_Buffer( in_configuration );
-   VSEP_Index_T            index = VSEP_Get_Device_Index( in_configuration );
    VSEP_PWM_Channel_T    channel = VSEP_PWM_Get_Channel( in_configuration);
 
    if( channel < VSEP_PWM_CHANNEL_MAX )
    {
-      VSEP_PWM_CDIV_T cdiv = VSEP_Msg_PWM_Get_Divider(  VSEP_PWM_Txd[ index][channel][VSEP_PWM_TXD_MESSAGE_PERIOD] );
+      VSEP_PWM_CDIV_T cdiv = VSEP_Msg_PWM_Get_Divider(  VSEP_PWM_Txd[channel][VSEP_PWM_TXD_MESSAGE_PERIOD] );
 
       if( cdiv == VSEP_PWM_CDIV_32 )
       {
