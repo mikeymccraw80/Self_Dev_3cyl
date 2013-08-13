@@ -36,8 +36,8 @@
 #include "dd_spark_interface.h"
 
 
-uint16_t VSEP_EST_Select_Txd[NUMBER_OF_VSEP][VSEP_EST_SELECT_TXD_MESSAGE_MAX];
-uint16_t VSEP_EST_Select_Rxd[NUMBER_OF_VSEP][VSEP_EST_SELECT_RXD_MESSAGE_MAX];
+uint16_t VSEP_EST_Select_Txd[VSEP_EST_SELECT_TXD_MESSAGE_MAX];
+uint16_t VSEP_EST_Select_Rxd[VSEP_EST_SELECT_RXD_MESSAGE_MAX];
 
 //=============================================================================
 // This variable defines our current mode of operation.
@@ -63,16 +63,15 @@ static VSEP_EST_Select_State_T VSEP_EST_Select_State;
  FAR_COS void VSEP_EST_Select_Initialize_Device(
    IO_Configuration_T in_configuration )//MTSA_CONFIG_VSEP_DEVICE_0
 {
-   VSEP_Index_T index = VSEP_Get_Device_Index( in_configuration );
 
 #ifdef VSEP_EST_SELECT_STATIC_INITIALIZATION
 
-   VSEP_EST_Select_Txd[ index ][ VSEP_EST_SELECT_TXD_MESSAGE_CTRL ]      = VSEP_EST_SELECT_INITIAL[ index ][ VSEP_EST_SELECT_TXD_MESSAGE_CTRL ];
-   VSEP_EST_Select_Txd[ index ][ VSEP_EST_SELECT_TXD_MESSAGE_EST_CTRL ]  = VSEP_EST_SELECT_INITIAL[ index ][ VSEP_EST_SELECT_TXD_MESSAGE_EST_CTRL];
+   VSEP_EST_Select_Txd[ VSEP_EST_SELECT_TXD_MESSAGE_CTRL ]      = VSEP_EST_SELECT_INITIAL[ VSEP_EST_SELECT_TXD_MESSAGE_CTRL ];
+   VSEP_EST_Select_Txd[ VSEP_EST_SELECT_TXD_MESSAGE_EST_CTRL ]  = VSEP_EST_SELECT_INITIAL[ VSEP_EST_SELECT_TXD_MESSAGE_EST_CTRL];
 
 #else
-   VSEP_EST_Select_Txd[ index ][ VSEP_EST_SELECT_TXD_MESSAGE_CTRL ] = VSEP_Msg_Set_SDOA( VSEP_EST_Select_Txd[ index ][ VSEP_EST_SELECT_TXD_MESSAGE_CTRL ], VSEP_RXD_SDOA_EST_STAT );
-   VSEP_EST_Select_Txd[ index ][ VSEP_EST_SELECT_TXD_MESSAGE_CTRL ] = VSEP_Msg_Set_SDIA( VSEP_EST_Select_Txd[ index ][ VSEP_EST_SELECT_TXD_MESSAGE_CTRL ], VSEP_TXD_SDIA_EST_CTRL );
+   VSEP_EST_Select_Txd[ VSEP_EST_SELECT_TXD_MESSAGE_CTRL ] = VSEP_Msg_Set_SDOA( VSEP_EST_Select_Txd[ VSEP_EST_SELECT_TXD_MESSAGE_CTRL ], VSEP_RXD_SDOA_EST_STAT );
+   VSEP_EST_Select_Txd[ VSEP_EST_SELECT_TXD_MESSAGE_CTRL ] = VSEP_Msg_Set_SDIA( VSEP_EST_Select_Txd[ VSEP_EST_SELECT_TXD_MESSAGE_CTRL ], VSEP_TXD_SDIA_EST_CTRL );
 #endif
 }
 
@@ -93,15 +92,14 @@ static void VSEP_EST_Select_Manage_Transition( void );
 FAR_COS void VSEP_EST_Select_Initialize_Device(
    IO_Configuration_T  in_configuration )//MTSA_CONFIG_VSEP_DEVICE_0
 {
-   VSEP_Index_T index = VSEP_Get_Device_Index(in_configuration );
 #ifdef VSEP_EST_SELECT_STATIC_INITIALIZATION
 
-   VSEP_EST_Select_Txd[ index ][ VSEP_EST_SELECT_TXD_MESSAGE_CTRL ]      = VSEP_EST_SELECT_INITIAL[ index ][ VSEP_EST_SELECT_TXD_MESSAGE_CTRL ];
-   VSEP_EST_Select_Txd[ index ][ VSEP_EST_SELECT_TXD_MESSAGE_EST_CTRL ]  = VSEP_EST_SELECT_INITIAL[ index ][ VSEP_EST_SELECT_TXD_MESSAGE_EST_CTRL];
+   VSEP_EST_Select_Txd[ VSEP_EST_SELECT_TXD_MESSAGE_CTRL ]      = VSEP_EST_SELECT_INITIAL[ VSEP_EST_SELECT_TXD_MESSAGE_CTRL ];
+   VSEP_EST_Select_Txd[ VSEP_EST_SELECT_TXD_MESSAGE_EST_CTRL ]  = VSEP_EST_SELECT_INITIAL[ VSEP_EST_SELECT_TXD_MESSAGE_EST_CTRL];
 
 #else
-   VSEP_EST_Select_Txd[ index ][ VSEP_EST_SELECT_TXD_MESSAGE_CTRL ] = VSEP_Msg_Set_SDOA( VSEP_EST_Select_Txd[ index ][ VSEP_EST_SELECT_TXD_MESSAGE_CTRL ], VSEP_RXD_SDOA_EST_STAT );
-   VSEP_EST_Select_Txd[ index ][ VSEP_EST_SELECT_TXD_MESSAGE_CTRL ] = VSEP_Msg_Set_SDIA( VSEP_EST_Select_Txd[ index ][ VSEP_EST_SELECT_TXD_MESSAGE_CTRL ], VSEP_TXD_SDIA_EST_CTRL );
+   VSEP_EST_Select_Txd[ VSEP_EST_SELECT_TXD_MESSAGE_CTRL ] = VSEP_Msg_Set_SDOA( VSEP_EST_Select_Txd[ VSEP_EST_SELECT_TXD_MESSAGE_CTRL ], VSEP_RXD_SDOA_EST_STAT );
+   VSEP_EST_Select_Txd[ VSEP_EST_SELECT_TXD_MESSAGE_CTRL ] = VSEP_Msg_Set_SDIA( VSEP_EST_Select_Txd[ VSEP_EST_SELECT_TXD_MESSAGE_CTRL ], VSEP_TXD_SDIA_EST_CTRL );
 #endif
 }
 
@@ -131,11 +129,10 @@ FAR_COS void VSEP_EST_Select_Set_Index(
    bool						 in_index )//Crank_Cylinder_T
 {
    bool             index_est  = (bool)in_index;
-   VSEP_Index_T         index   = VSEP_Get_Device_Index(in_configuration );
  
   //VSEP_EST_Select_Txd[index][VSEP_EST_SELECT_TXD_MESSAGE_EST_CTRL] = VSEP_Msg_EST_Set_EST1CEN( VSEP_EST_Select_Txd[index][VSEP_EST_SELECT_TXD_MESSAGE_EST_CTRL], true );
   // VSEP_EST_Select_Txd[index][VSEP_EST_SELECT_TXD_MESSAGE_EST_CTRL] = VSEP_Msg_EST_Set_EST1C( VSEP_EST_Select_Txd[index][VSEP_EST_SELECT_TXD_MESSAGE_EST_CTRL], channel );
-   VSEP_EST_Select_Txd[index][VSEP_EST_SELECT_TXD_MESSAGE_EST_CTRL] = VSEP_Msg_EST_Set_INDEX( VSEP_EST_Select_Txd[index][VSEP_EST_SELECT_TXD_MESSAGE_EST_CTRL], index_est ); 
+   VSEP_EST_Select_Txd[VSEP_EST_SELECT_TXD_MESSAGE_EST_CTRL] = VSEP_Msg_EST_Set_INDEX( VSEP_EST_Select_Txd[VSEP_EST_SELECT_TXD_MESSAGE_EST_CTRL], index_est ); 
 
    // send the message
    //VSEP_SPI_Immediate_Transfer( in_est_select->Configuration, VSEP_MESSAGE_EST_SELECT );
@@ -155,10 +152,9 @@ FAR_COS void VSEP_EST_Select_Set_Channel(
    EST_Select_Cylinder_T   in_channel )//Crank_Cylinder_T
 {
    uint32_t             channel  = (uint32_t)in_channel;
-   VSEP_Index_T         index   = VSEP_Get_Device_Index(in_configuration );
  
-   VSEP_EST_Select_Txd[index][VSEP_EST_SELECT_TXD_MESSAGE_EST_CTRL] = VSEP_Msg_EST_Set_EST1CEN( VSEP_EST_Select_Txd[index][VSEP_EST_SELECT_TXD_MESSAGE_EST_CTRL], true );
-   VSEP_EST_Select_Txd[index][VSEP_EST_SELECT_TXD_MESSAGE_EST_CTRL] = VSEP_Msg_EST_Set_EST1C( VSEP_EST_Select_Txd[index][VSEP_EST_SELECT_TXD_MESSAGE_EST_CTRL], channel );
+   VSEP_EST_Select_Txd[VSEP_EST_SELECT_TXD_MESSAGE_EST_CTRL] = VSEP_Msg_EST_Set_EST1CEN( VSEP_EST_Select_Txd[VSEP_EST_SELECT_TXD_MESSAGE_EST_CTRL], true );
+   VSEP_EST_Select_Txd[VSEP_EST_SELECT_TXD_MESSAGE_EST_CTRL] = VSEP_Msg_EST_Set_EST1C( VSEP_EST_Select_Txd[VSEP_EST_SELECT_TXD_MESSAGE_EST_CTRL], channel );
      
 
    // send the message
@@ -166,75 +162,12 @@ FAR_COS void VSEP_EST_Select_Set_Channel(
    VSEP_SPI_Immediate_Transfer( in_configuration, VSEP_MESSAGE_EST_SELECT );
 
    // disable the counter value
-   VSEP_EST_Select_Txd[index][VSEP_EST_SELECT_TXD_MESSAGE_EST_CTRL] = VSEP_Msg_EST_Set_EST1CEN( VSEP_EST_Select_Txd[index][VSEP_EST_SELECT_TXD_MESSAGE_EST_CTRL], false );
-   VSEP_EST_Select_Txd[index][VSEP_EST_SELECT_TXD_MESSAGE_EST_CTRL] = VSEP_Msg_EST_Set_EST2CEN( VSEP_EST_Select_Txd[index][VSEP_EST_SELECT_TXD_MESSAGE_EST_CTRL], false );
+   VSEP_EST_Select_Txd[VSEP_EST_SELECT_TXD_MESSAGE_EST_CTRL] = VSEP_Msg_EST_Set_EST1CEN( VSEP_EST_Select_Txd[VSEP_EST_SELECT_TXD_MESSAGE_EST_CTRL], false );
+   VSEP_EST_Select_Txd[VSEP_EST_SELECT_TXD_MESSAGE_EST_CTRL] = VSEP_Msg_EST_Set_EST2CEN( VSEP_EST_Select_Txd[VSEP_EST_SELECT_TXD_MESSAGE_EST_CTRL], false );
 
 }
 
 
-
-/*
-
-
-{
-   uint32_t             channel  = (uint32_t)in_channel;
-   VSEP_Index_T         index   = VSEP_Get_Device_Index(in_configuration );
-
-//   VSEP_EST_Select_Manage_Transition();
-
-#ifdef LA_VSEP_EST_SELECT_ENABLE
-   if ( LA_EST_Select_Counter < 120 )
-   {
-      LA_EST_Select[LA_EST_Select_Counter].channel = in_channel;
-      LA_EST_Select[LA_EST_Select_Counter].mode = VSEP_EST_Select_Mode;
-      LA_EST_Select[LA_EST_Select_Counter].type = 0; 
-      LA_EST_Select_Counter++;
-   }
-#endif
-   //
-   // Test if we are using a single est (true) or double.
-   //
-   switch( VSEP_EST_Select_Mode )
-   {
-   case EST_MODE_SINGLE_CHANNEL:
-//   case EST_MODE_MULTIPLE_CHANNEL: Need to add this to the list !!!
-      // send a spy resync request (counter)
-      break;
-
-   case EST_MODE_PAIRED_SINGLE_ENABLE:
-   case EST_MODE_SEQUENTIAL_SINGLE_ENABLE:
-   case EST_MODE_SIMULTANEOUS_SINGLE_ENABLE:
-         VSEP_EST_Select_Txd[index][VSEP_EST_SELECT_TXD_MESSAGE_EST_CTRL] = VSEP_Msg_EST_Set_EST1CEN( VSEP_EST_Select_Txd[index][VSEP_EST_SELECT_TXD_MESSAGE_EST_CTRL], true );
-         VSEP_EST_Select_Txd[index][VSEP_EST_SELECT_TXD_MESSAGE_EST_CTRL] = VSEP_Msg_EST_Set_EST1C( VSEP_EST_Select_Txd[index][VSEP_EST_SELECT_TXD_MESSAGE_EST_CTRL], channel );
-      break;
-   case EST_MODE_PAIRED_MULTIPLE_ENABLE:
-   case EST_MODE_SEQUENTIAL_MULTIPLE_ENABLE:
-   case EST_MODE_SIMULTANEOUS_MULTIPLE_ENABLE:
-   default:
-      // If setting up spark: A, C, E or G
-      if ( ( channel & 0x01 ) == 0x00 )
-      {
-         VSEP_EST_Select_Txd[index][VSEP_EST_SELECT_TXD_MESSAGE_EST_CTRL] = VSEP_Msg_EST_Set_EST1CEN( VSEP_EST_Select_Txd[index][VSEP_EST_SELECT_TXD_MESSAGE_EST_CTRL], true );
-         VSEP_EST_Select_Txd[index][VSEP_EST_SELECT_TXD_MESSAGE_EST_CTRL] = VSEP_Msg_EST_Set_EST1C( VSEP_EST_Select_Txd[index][VSEP_EST_SELECT_TXD_MESSAGE_EST_CTRL], channel );
-      }
-      else // setting up spark: B, D, F or H
-      {
-         VSEP_EST_Select_Txd[index][VSEP_EST_SELECT_TXD_MESSAGE_EST_CTRL] = VSEP_Msg_EST_Set_EST2CEN( VSEP_EST_Select_Txd[index][VSEP_EST_SELECT_TXD_MESSAGE_EST_CTRL], true );
-         VSEP_EST_Select_Txd[index][VSEP_EST_SELECT_TXD_MESSAGE_EST_CTRL] = VSEP_Msg_EST_Set_EST2C( VSEP_EST_Select_Txd[index][VSEP_EST_SELECT_TXD_MESSAGE_EST_CTRL], channel );
-      }
-
-      break;
-   }
-
-   // send the message
-   //VSEP_SPI_Immediate_Transfer( in_est_select->Configuration, VSEP_MESSAGE_EST_SELECT );
- VSEP_SPI_Immediate_Transfer( in_configuration, VSEP_MESSAGE_EST_SELECT );
-
-   // disable the counter value
-   VSEP_EST_Select_Txd[index][VSEP_EST_SELECT_TXD_MESSAGE_EST_CTRL] = VSEP_Msg_EST_Set_EST1CEN( VSEP_EST_Select_Txd[index][VSEP_EST_SELECT_TXD_MESSAGE_EST_CTRL], false );
-   VSEP_EST_Select_Txd[index][VSEP_EST_SELECT_TXD_MESSAGE_EST_CTRL] = VSEP_Msg_EST_Set_EST2CEN( VSEP_EST_Select_Txd[index][VSEP_EST_SELECT_TXD_MESSAGE_EST_CTRL], false );
-
-}*/
 //=============================================================================
 // VSEP_EST_Select_Set_Channel
 //=============================================================================
@@ -355,10 +288,6 @@ FAR_COS void VSEP_EST_Select_Set_Mode(
    IO_Configuration_T        in_configuration,//MTSA_EST_SELECT_DEVICE/	VSEP_INDEX_0
    EST_Mode_T        in_mode )
 {
-// no one will use this valuse. and this value not be set also
-   //VSEP_EST_Select_Index_Pin_Select_T  edge     = VSEP_EST_Select_Get_Index_Pin_Select(in_configuration);
-
-   VSEP_Index_T                        index   = VSEP_Get_Device_Index(in_configuration);
    switch( in_mode )
    {
    case EST_MODE_SINGLE_CHANNEL:
@@ -514,7 +443,7 @@ FAR_COS void VSEP_EST_Select_Set_Mode(
       est_ctrl = VSEP_Msg_EST_Set_EDGE( est_ctrl, ( VSEP_EST_Select_State.index_pin_select ? 1 : 0 ) );
       est_ctrl = VSEP_Msg_EST_Set_INDEX( est_ctrl, ( VSEP_EST_Select_State.index_mode ? 1 : 0 ) );
 
-      VSEP_EST_Select_Txd[index][VSEP_EST_SELECT_TXD_MESSAGE_EST_CTRL] = est_ctrl;
+      VSEP_EST_Select_Txd[VSEP_EST_SELECT_TXD_MESSAGE_EST_CTRL] = est_ctrl;
    }
    // send the message
    
@@ -529,11 +458,9 @@ FAR_COS void VSEP_EST_Set_PF_Mode(
    IO_Configuration_T        in_configuration,//MTSA_EST_SELECT_DEVICE/	VSEP_INDEX_0
    VSEP_EST_Select_Paired_Fire_Mode_T        in_mode )
 {
- VSEP_Index_T                        index   = VSEP_Get_Device_Index(in_configuration);
-
- 	VSEP_EST_Select_State.paired_fire_mode = in_mode;
-	VSEP_EST_Select_Txd[index][VSEP_EST_SELECT_TXD_MESSAGE_EST_CTRL] =            
-      VSEP_Msg_EST_Set_PFMODE( VSEP_EST_Select_Txd[index][VSEP_EST_SELECT_TXD_MESSAGE_EST_CTRL],    in_mode) ;
+	VSEP_EST_Select_State.paired_fire_mode = in_mode;
+	VSEP_EST_Select_Txd[VSEP_EST_SELECT_TXD_MESSAGE_EST_CTRL] =            
+      VSEP_Msg_EST_Set_PFMODE( VSEP_EST_Select_Txd[VSEP_EST_SELECT_TXD_MESSAGE_EST_CTRL],    in_mode) ;
       VSEP_SPI_Immediate_Transfer(in_configuration, VSEP_MESSAGE_EST_SELECT );
 	
 }
