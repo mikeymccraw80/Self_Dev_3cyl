@@ -79,7 +79,7 @@ typedef enum
    VSEP_LEDMODE_TXD_MESSAGE_MAX
 }VSEP_LEDMODE_Txd_Message_T;
 
-extern uint16_t VSEP_LEDMODE_Txd[NUMBER_OF_VSEP][VSEP_LEDMODE_TXD_MESSAGE_MAX];
+extern uint16_t VSEP_LEDMODE_Txd[VSEP_LEDMODE_TXD_MESSAGE_MAX];
 
 //=============================================================================
 // VSEP_LEDMODE_Initialize_Device
