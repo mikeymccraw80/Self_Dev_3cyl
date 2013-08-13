@@ -92,11 +92,11 @@ typedef enum
    VSEP_DEPS_RXD_MESSAGE_MAX
 }VSEP_DEPS_Rxd_Message_T;
 
-extern uint16_t VSEP_DEPS_Txd[NUMBER_OF_VSEP][VSEP_DEPS_TXD_MESSAGE_MAX];
-extern uint16_t VSEP_DEPS_Rxd[NUMBER_OF_VSEP][VSEP_DEPS_RXD_MESSAGE_MAX];
+extern uint16_t VSEP_DEPS_Txd[VSEP_DEPS_TXD_MESSAGE_MAX];
+extern uint16_t VSEP_DEPS_Rxd[VSEP_DEPS_RXD_MESSAGE_MAX];
 
 extern const uint32_t VSEP_TIMER_DEPS_Base_Frequency;
-extern const uint16_t VSEP_DEPS_TXD_INITIAL[NUMBER_OF_VSEP][VSEP_DEPS_TXD_MESSAGE_MAX];
+extern const uint16_t VSEP_DEPS_TXD_INITIAL[VSEP_DEPS_TXD_MESSAGE_MAX];
 
 //=============================================================================
 // VSEP_PULSE_Initialize_Device

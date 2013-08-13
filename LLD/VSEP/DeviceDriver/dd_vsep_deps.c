@@ -33,8 +33,8 @@
 #include "dd_vsep.h"
 
 
-uint16_t VSEP_DEPS_Txd[NUMBER_OF_VSEP][VSEP_DEPS_TXD_MESSAGE_MAX];
-uint16_t VSEP_DEPS_Rxd[NUMBER_OF_VSEP][VSEP_DEPS_RXD_MESSAGE_MAX];
+uint16_t VSEP_DEPS_Txd[VSEP_DEPS_TXD_MESSAGE_MAX];
+uint16_t VSEP_DEPS_Rxd[VSEP_DEPS_RXD_MESSAGE_MAX];
 
 //=============================================================================
 // VSEP_PULSE_DEPS_Initialize_Device
@@ -42,16 +42,13 @@ uint16_t VSEP_DEPS_Rxd[NUMBER_OF_VSEP][VSEP_DEPS_RXD_MESSAGE_MAX];
 void VSEP_PULSE_DEPS_Initialize_Device(
    IO_Configuration_T   in_configuration )
 {
-   VSEP_Index_T device = VSEP_Get_Device_Index(in_configuration);
-
 #ifdef VSEP_DEPS_STATIC_INITIALIZATION
-
-   VSEP_DEPS_Txd[ device ][ VSEP_DEPS_TXD_MESSAGE_CTRL  ] = VSEP_DEPS_TXD_INITIAL[ device ][ VSEP_DEPS_TXD_MESSAGE_CTRL ];
-   VSEP_DEPS_Txd[ device ][ VSEP_DEPS_TXD_MESSAGE_DELAY ] = VSEP_DEPS_TXD_INITIAL[ device ][ VSEP_DEPS_TXD_MESSAGE_DELAY ]; 
+   VSEP_DEPS_Txd[ VSEP_DEPS_TXD_MESSAGE_CTRL  ] = VSEP_DEPS_TXD_INITIAL[ VSEP_DEPS_TXD_MESSAGE_CTRL ];
+   VSEP_DEPS_Txd[ VSEP_DEPS_TXD_MESSAGE_DELAY ] = VSEP_DEPS_TXD_INITIAL[ VSEP_DEPS_TXD_MESSAGE_DELAY ]; 
 #else
 
-   VSEP_DEPS_Txd[ device ][ VSEP_DEPS_TXD_MESSAGE_CTRL ] = VSEP_Msg_Set_SDOA( VSEP_DEPS_Txd[ device ][ VSEP_DEPS_TXD_MESSAGE_CTRL ], VSEP_RXD_SDOA_NOT_USED );
-   VSEP_DEPS_Txd[ device ][ VSEP_DEPS_TXD_MESSAGE_CTRL ] = VSEP_Msg_Set_SDIA( VSEP_DEPS_Txd[ device ][ VSEP_DEPS_TXD_MESSAGE_CTRL ], VSEP_TXD_SDIA_DEPS_CTRL );
+   VSEP_DEPS_Txd[ VSEP_DEPS_TXD_MESSAGE_CTRL ] = VSEP_Msg_Set_SDOA( VSEP_DEPS_Txd[ VSEP_DEPS_TXD_MESSAGE_CTRL ], VSEP_RXD_SDOA_NOT_USED );
+   VSEP_DEPS_Txd[ VSEP_DEPS_TXD_MESSAGE_CTRL ] = VSEP_Msg_Set_SDIA( VSEP_DEPS_Txd[ VSEP_DEPS_TXD_MESSAGE_CTRL ], VSEP_TXD_SDIA_DEPS_CTRL );
 #endif
 }
 
@@ -80,11 +77,8 @@ void VSEP_TIMER_DEPS_Set_Value(
    IO_Configuration_T   in_configuration,
    uint32_t             in_time )
 {
-   VSEP_Index_T      device = VSEP_Get_Device_Index(in_configuration);
-
-   
-   VSEP_DEPS_Txd[ device ][ VSEP_DEPS_TXD_MESSAGE_DELAY ] = 
-      VSEP_Msg_DEPS_Set_Delay( VSEP_DEPS_Txd[ device ][ VSEP_DEPS_TXD_MESSAGE_DELAY ], (in_time >> VSEP_TXD_DEPS_FIXED_BITS ) );
+    VSEP_DEPS_Txd[ VSEP_DEPS_TXD_MESSAGE_DELAY ] = 
+      VSEP_Msg_DEPS_Set_Delay( VSEP_DEPS_Txd[ VSEP_DEPS_TXD_MESSAGE_DELAY ], (in_time >> VSEP_TXD_DEPS_FIXED_BITS ) );
 }
 
 //=============================================================================
@@ -95,7 +89,6 @@ void VSEP_TIMER_DEPS_Set_Value_Immediate(
    uint32_t             in_time )
 {
    VSEP_TIMER_DEPS_Set_Value( in_configuration, in_time );
-   //VSEP_SPI_Immediate_Transfer( in_configuration, VSEP_MESSAGE_DEPS );
    VSEP_SPI_Immediate_Transfer( in_configuration, VSEP_MESSAGE_DEPS );
 }
 
@@ -105,10 +98,9 @@ void VSEP_TIMER_DEPS_Set_Value_Immediate(
 uint32_t VSEP_TIMER_DEPS_Get_Value(
    IO_Configuration_T   in_configuration)
 {
-   VSEP_Index_T device = VSEP_Get_Device_Index(in_configuration);
    uint32_t value;
 
-   value = VSEP_Msg_DEPS_Get_Delay( VSEP_DEPS_Txd[ device ][ VSEP_DEPS_TXD_MESSAGE_DELAY ] );
+   value = VSEP_Msg_DEPS_Get_Delay( VSEP_DEPS_Txd[ VSEP_DEPS_TXD_MESSAGE_DELAY ] );
 
    value <<= VSEP_TXD_DEPS_FIXED_BITS;
    value |= VSEP_TXD_DEPS_MIN_TIME;
