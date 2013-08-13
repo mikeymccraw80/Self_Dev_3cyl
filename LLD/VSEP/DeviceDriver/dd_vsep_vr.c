@@ -39,8 +39,8 @@
 #include "dd_vsep_config.h"
 #include "dd_vsep_init_config.h"
 
-uint16_t VSEP_VR_Txd[NUMBER_OF_VSEP][VSEP_VR_TXD_MESSAGE_MAX];
-uint16_t VSEP_VR_Rxd[NUMBER_OF_VSEP][VSEP_VR_RXD_MESSAGE_MAX];
+uint16_t VSEP_VR_Txd[VSEP_VR_TXD_MESSAGE_MAX];
+uint16_t VSEP_VR_Rxd[VSEP_VR_RXD_MESSAGE_MAX];
 
 //=============================================================================
 // VSEP_VR_Get_Channel
@@ -63,17 +63,13 @@ static VSEP_VR_Channel_T VSEP_VR_Get_Channel(
 void VSEP_PULSE_VR_Initialize_Device(
    IO_Configuration_T   in_configuration )
 {
-   VSEP_Index_T device = VSEP_Get_Device_Index(in_configuration);
-
 #ifdef VSEP_VR_STATIC_INITIALIZATION
-
-   VSEP_VR_Txd[ device ][ VSEP_VR_TXD_MESSAGE_CTRL ] = VSEP_VR_TXD_INITIAL[ device ][ VSEP_VR_TXD_MESSAGE_CTRL ];
-   VSEP_VR_Txd[ device ][ VSEP_VR_TXD_MESSAGE_VR1 ]  = VSEP_VR_TXD_INITIAL[ device ][ VSEP_VR_TXD_MESSAGE_VR1 ]; 
-   VSEP_VR_Txd[ device ][ VSEP_VR_TXD_MESSAGE_VR2 ]  = VSEP_VR_TXD_INITIAL[ device ][ VSEP_VR_TXD_MESSAGE_VR2 ]; 
+   VSEP_VR_Txd[ VSEP_VR_TXD_MESSAGE_CTRL ] = VSEP_VR_TXD_INITIAL[ VSEP_VR_TXD_MESSAGE_CTRL ];
+   VSEP_VR_Txd[ VSEP_VR_TXD_MESSAGE_VR1 ]  = VSEP_VR_TXD_INITIAL[ VSEP_VR_TXD_MESSAGE_VR1 ]; 
+   VSEP_VR_Txd[ VSEP_VR_TXD_MESSAGE_VR2 ]  = VSEP_VR_TXD_INITIAL[ VSEP_VR_TXD_MESSAGE_VR2 ]; 
 #else
-
-   VSEP_VR_Txd[ device ][ VSEP_VR_TXD_MESSAGE_CTRL ] = VSEP_Msg_Set_SDOA( VSEP_VR_Txd[ device ][ VSEP_VR_TXD_MESSAGE_CTRL ], VSEP_RXD_SDOA_VR_FLT );
-   VSEP_VR_Txd[ device ][ VSEP_VR_TXD_MESSAGE_CTRL ] = VSEP_Msg_Set_SDIA( VSEP_VR_Txd[ device ][ VSEP_VR_TXD_MESSAGE_CTRL ], VSEP_TXD_SDIA_VR1_CTRL );
+   VSEP_VR_Txd[ VSEP_VR_TXD_MESSAGE_CTRL ] = VSEP_Msg_Set_SDOA( VSEP_VR_Txd[ VSEP_VR_TXD_MESSAGE_CTRL ], VSEP_RXD_SDOA_VR_FLT );
+   VSEP_VR_Txd[ VSEP_VR_TXD_MESSAGE_CTRL ] = VSEP_Msg_Set_SDIA( VSEP_VR_Txd[ VSEP_VR_TXD_MESSAGE_CTRL ], VSEP_TXD_SDIA_VR1_CTRL );
 #endif
 }
 
@@ -92,14 +88,13 @@ void VSEP_PULSE_VR_Clear_Device(
 void VSEP_PULSE_VR_Initialize_Channel(
    IO_Configuration_T   in_configuration )
 {
-   VSEP_Index_T device = VSEP_Get_Device_Index(in_configuration);
    VSEP_VR_Channel_T channel = VSEP_VR_Get_Channel( in_configuration);
    
    if( channel !=  VSEP_VR_CHANNEL_MAX )
    {
       VSEP_TIMER_VR_Set_Value( in_configuration, VSEP_VR_Get_Initial_Delay( in_configuration) );
 
-      VSEP_VR_Txd[ device ][ VSEP_VR_TXD_MESSAGE_VR1 + channel ] = VSEP_Msg_VR_Set_AT( VSEP_VR_Txd[ device ][ VSEP_VR_TXD_MESSAGE_VR1 + channel ], 
+      VSEP_VR_Txd[ VSEP_VR_TXD_MESSAGE_VR1 + channel ] = VSEP_Msg_VR_Set_AT( VSEP_VR_Txd[ VSEP_VR_TXD_MESSAGE_VR1 + channel ], 
                                                                                             VSEP_VR_Get_Adaptive_Threshold( in_configuration ) );
    }
 }
@@ -120,13 +115,12 @@ void VSEP_TIMER_VR_Set_Value(
    IO_Configuration_T   in_configuration,
    uint32_t             in_time )
 {
-   VSEP_Index_T       device = VSEP_Get_Device_Index(in_configuration);
    VSEP_VR_Channel_T channel = VSEP_VR_Get_Channel( in_configuration);
 
    if( channel != VSEP_VR_CHANNEL_MAX )
    {
-      VSEP_VR_Txd[device][VSEP_VR_TXD_MESSAGE_VR1 + channel ] = 
-            VSEP_Msg_VR_Set_Delay(  VSEP_VR_Txd[device][VSEP_VR_TXD_MESSAGE_VR1 + channel ], 
+      VSEP_VR_Txd[VSEP_VR_TXD_MESSAGE_VR1 + channel ] = 
+            VSEP_Msg_VR_Set_Delay(VSEP_VR_Txd[VSEP_VR_TXD_MESSAGE_VR1 + channel],
                                     ( in_time >> VSEP_TXD_VR_DLY_FIXED_BITS ) );
    }
 }
@@ -148,13 +142,12 @@ FAR_COS void VSEP_TIMER_VR_Set_Value_Immediate(
 uint32_t VSEP_TIMER_VR_Get_Value(
    IO_Configuration_T   in_configuration)
 {
-   VSEP_Index_T  device      = VSEP_Get_Device_Index(in_configuration);
    VSEP_VR_Channel_T channel = VSEP_VR_Get_Channel( in_configuration);
    uint32_t value = 0xffffffffU;//need pay attention again
 
    if( channel != VSEP_VR_CHANNEL_MAX )
    {
-      value = VSEP_Msg_VR_Get_Delay( VSEP_VR_Txd[device][VSEP_VR_TXD_MESSAGE_VR1 + channel ] );
+      value = VSEP_Msg_VR_Get_Delay(VSEP_VR_Txd[VSEP_VR_TXD_MESSAGE_VR1 + channel]);
       value <<= VSEP_TXD_VR_DLY_FIXED_BITS;
       value |= VSEP_TXD_VR_DLY_MIN_TIME;
    }
@@ -168,14 +161,13 @@ uint32_t VSEP_TIMER_VR_Get_Value(
 IO_Timer_State_T VSEP_TIMER_VR_Get_State(
    IO_Configuration_T   in_configuration)
 {
-   VSEP_Index_T      device  = VSEP_Get_Device_Index(in_configuration);
    VSEP_VR_Channel_T channel = VSEP_VR_Get_Channel( in_configuration);
    IO_Timer_State_T   state  = IO_TIMER_STATE_RESET;
 
    if( channel != VSEP_VR_CHANNEL_MAX )
    {
 
-      if( VSEP_VR_Rxd[device][ VSEP_VR_RXD_MESSAGE_VR_FLT ] & ( 0x08 << channel ) )
+      if( VSEP_VR_Rxd[ VSEP_VR_RXD_MESSAGE_VR_FLT ] & ( 0x08 << channel ) )
       {
          state = IO_TIMER_STATE_OVERFLOW;
       }
@@ -213,10 +205,9 @@ IO_Timer_Size_T VSEP_TIMER_VR_Get_Size(
 //=============================================================================
 void VSEP_VR_Set_AT( IO_Configuration_T in_configuration, VSEP_VR_Adaptive_Threshold_T in_AT )
 {
-   VSEP_Index_T      device  = VSEP_Get_Device_Index(in_configuration);
    VSEP_VR_Channel_T channel = VSEP_VR_Get_Channel( in_configuration);
    
-   VSEP_VR_Txd[device][VSEP_VR_TXD_MESSAGE_VR1 + channel ] = VSEP_Msg_VR_Set_AT( VSEP_VR_Txd[device][VSEP_VR_TXD_MESSAGE_VR1 + channel ], in_AT );
+   VSEP_VR_Txd[VSEP_VR_TXD_MESSAGE_VR1 + channel ] = VSEP_Msg_VR_Set_AT(VSEP_VR_Txd[VSEP_VR_TXD_MESSAGE_VR1 + channel ], in_AT);
 }
 
 //=============================================================================
@@ -224,10 +215,9 @@ void VSEP_VR_Set_AT( IO_Configuration_T in_configuration, VSEP_VR_Adaptive_Thres
 //=============================================================================
 VSEP_VR_Adaptive_Threshold_T VSEP_VR_Get_AT( IO_Configuration_T in_configuration )
 {
-   VSEP_Index_T      device  = VSEP_Get_Device_Index(in_configuration);
-   VSEP_VR_Channel_T channel = VSEP_VR_Get_Channel( in_configuration);
+   VSEP_VR_Channel_T channel = VSEP_VR_Get_Channel(in_configuration);
 
-   return VSEP_Msg_VR_Get_AT( VSEP_VR_Txd[device][VSEP_VR_TXD_MESSAGE_VR1 + channel ] );
+   return VSEP_Msg_VR_Get_AT( VSEP_VR_Txd[VSEP_VR_TXD_MESSAGE_VR1 + channel ] );
 }
 
 
@@ -236,10 +226,9 @@ VSEP_VR_Adaptive_Threshold_T VSEP_VR_Get_AT( IO_Configuration_T in_configuration
 //=============================================================================
 void VSEP_VR_Set_MT( IO_Configuration_T in_configuration, VSEP_VR_Adaptive_Threshold_T in_AT )
 {
-   VSEP_Index_T      device  = VSEP_Get_Device_Index(in_configuration);
    VSEP_VR_Channel_T channel = VSEP_VR_Get_Channel( in_configuration);
    
-   VSEP_VR_Txd[device][VSEP_VR_TXD_MESSAGE_VR1 + channel ] = VSEP_Msg_VR_Set_MT( VSEP_VR_Txd[device][VSEP_VR_TXD_MESSAGE_VR1 + channel ], in_AT );
+   VSEP_VR_Txd[VSEP_VR_TXD_MESSAGE_VR1 + channel] = VSEP_Msg_VR_Set_MT(VSEP_VR_Txd[VSEP_VR_TXD_MESSAGE_VR1 + channel ], in_AT);
 }
 
 //=============================================================================
@@ -247,10 +236,9 @@ void VSEP_VR_Set_MT( IO_Configuration_T in_configuration, VSEP_VR_Adaptive_Thres
 //=============================================================================
 VSEP_VR_Min_Threshold_T VSEP_VR_Get_MT( IO_Configuration_T in_configuration )
 {
-   VSEP_Index_T      device  = VSEP_Get_Device_Index(in_configuration);
    VSEP_VR_Channel_T channel = VSEP_VR_Get_Channel( in_configuration);
 
-   return VSEP_Msg_VR_Get_MT( VSEP_VR_Txd[device][VSEP_VR_TXD_MESSAGE_VR1 + channel ] );
+   return VSEP_Msg_VR_Get_MT( VSEP_VR_Txd[VSEP_VR_TXD_MESSAGE_VR1 + channel]);
 }
 /*===========================================================================*\
  * Revision Log                                                              *
