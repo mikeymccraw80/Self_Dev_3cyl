@@ -360,16 +360,16 @@ typedef struct
 
 #define Number_of_EST_Channel  VSEP_EST_Select_Get_Cylinder_Count( VSEP_INIT_TXD_INITIAL[ 0 ][ VSEP_INIT_TXD_MESSAGE_EST_SELECT_INIT ])
 
-extern uint16_t VSEP_EST_Fault_Txd[NUMBER_OF_VSEP][VSEP_EST_FAULT_RXD_MESSAGE_MAX];
-extern uint16_t VSEP_EST_Fault_Rxd[NUMBER_OF_VSEP][VSEP_EST_FAULT_RXD_MESSAGE_MAX];
-extern uint8_t  VSEP_EST_Fault_SYNC_Txd[NUMBER_OF_VSEP][VSEP_EST_FAULT_SYNC_TXD_MESSAGE_MAX_BYTE];
-extern uint8_t  VSEP_EST_Fault_SYNC_Rxd[NUMBER_OF_VSEP][VSEP_EST_FAULT_SYNC_RXD_MESSAGE_MAX_BYTE];
-extern uint16_t VSEP_Fault_Rxd[NUMBER_OF_VSEP][VSEP_FAULT_RXD_MESSAGE_MAX];
-extern Fault_Log_T VSEP_Fault_Log[NUMBER_OF_VSEP][VSEP_CHANNEL_MAX];
+extern uint16_t VSEP_EST_Fault_Txd[VSEP_EST_FAULT_RXD_MESSAGE_MAX];
+extern uint16_t VSEP_EST_Fault_Rxd[VSEP_EST_FAULT_RXD_MESSAGE_MAX];
+extern uint8_t  VSEP_EST_Fault_SYNC_Txd[VSEP_EST_FAULT_SYNC_TXD_MESSAGE_MAX_BYTE];
+extern uint8_t  VSEP_EST_Fault_SYNC_Rxd[VSEP_EST_FAULT_SYNC_RXD_MESSAGE_MAX_BYTE];
+extern uint16_t VSEP_Fault_Rxd[VSEP_FAULT_RXD_MESSAGE_MAX];
+extern Fault_Log_T VSEP_Fault_Log[VSEP_CHANNEL_MAX];
 
-extern const VSEP_Fault_Channel_Data_T VSEP_Fault_Logging[NUMBER_OF_VSEP][VSEP_CHANNEL_PCH_30_FLT_LVL_7+1];
+extern const VSEP_Fault_Channel_Data_T VSEP_Fault_Logging[VSEP_CHANNEL_PCH_30_FLT_LVL_7+1];
 
-extern uint16_t VSEP_Fault_Counter[NUMBER_OF_VSEP][VSEP_CHANNEL_PCH_30_FLT_LVL_7+1];
+extern uint16_t VSEP_Fault_Counter[VSEP_CHANNEL_PCH_30_FLT_LVL_7+1];
 extern uint16_t VSEP_Fault_Counter_Decrement_Counter;
 extern uint32_t VSEP_DIS_ON_OFF_state ;
 
