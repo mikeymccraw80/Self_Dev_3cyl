@@ -40,9 +40,9 @@
 #include "dd_vsep_init_config.h"
 
 /* PCH spi tx and rx message buffer definiton */
-uint16_t VSEP_PCH_Txd[NUMBER_OF_VSEP][VSEP_PCH_TXD_MESSAGE_MAX];
-uint16_t VSEP_PCH_Rxd[NUMBER_OF_VSEP][VSEP_PCH_RXD_MESSAGE_MAX];
-uint16_t VSEP_MPIO_MODE_Txd[NUMBER_OF_VSEP][VSEP_MPIO_MODE_TXD_MESSAGE_MAX];
+uint16_t VSEP_PCH_Txd[VSEP_PCH_TXD_MESSAGE_MAX];
+uint16_t VSEP_PCH_Rxd[VSEP_PCH_RXD_MESSAGE_MAX];
+uint16_t VSEP_MPIO_MODE_Txd[VSEP_MPIO_MODE_TXD_MESSAGE_MAX];
 
 static const uint8_t VSEP_DISCRETE_PCH_CHANNEL_MAP[VSEP_CHANNEL_MAX] =
 {
@@ -111,14 +111,12 @@ static const uint8_t VSEP_DISCRETE_PCH_CHANNEL_MAP[VSEP_CHANNEL_MAX] =
 FAR_COS void VSEP_DISCRETE_Device_Initialize(
    IO_Configuration_T in_configuration)
 {
-   VSEP_Index_T device = VSEP_Get_Device_Index( in_configuration );
 #ifdef VSEP_DISCRETE_STATIC_INITIALIZATION
-
-   VSEP_PCH_Txd[ device ][ VSEP_PCH_TXD_MESSAGE_CTRL ] = VSEP_PCH_TXD_INITIAL[ device ][ VSEP_PCH_TXD_MESSAGE_CTRL ];
-   VSEP_PCH_Txd[ device ][ VSEP_PCH_TXD_MESSAGE_PCH  ] = VSEP_PCH_TXD_INITIAL[ device ][ VSEP_PCH_TXD_MESSAGE_PCH  ]; 
-#else
-   VSEP_PCH_Txd[ device ][ VSEP_PCH_TXD_MESSAGE_CTRL ] = VSEP_Msg_Set_SDOA( VSEP_PCH_Txd[ device ][ VSEP_PCH_TXD_MESSAGE_CTRL ], VSEP_RXD_SDOA_NOT_USED );
-   VSEP_PCH_Txd[ device ][ VSEP_PCH_TXD_MESSAGE_CTRL ] = VSEP_Msg_Set_SDIA( VSEP_PCH_Txd[ device ][ VSEP_PCH_TXD_MESSAGE_CTRL ], VSEP_TXD_SDIA_PCH );
+   VSEP_PCH_Txd[ VSEP_PCH_TXD_MESSAGE_CTRL ] = VSEP_PCH_TXD_INITIAL[ VSEP_PCH_TXD_MESSAGE_CTRL ];
+   VSEP_PCH_Txd[ VSEP_PCH_TXD_MESSAGE_PCH  ] = VSEP_PCH_TXD_INITIAL[ VSEP_PCH_TXD_MESSAGE_PCH  ]; 
+#else          
+   VSEP_PCH_Txd[ VSEP_PCH_TXD_MESSAGE_CTRL ] = VSEP_Msg_Set_SDOA( VSEP_PCH_Txd[ VSEP_PCH_TXD_MESSAGE_CTRL ], VSEP_RXD_SDOA_NOT_USED );
+   VSEP_PCH_Txd[ VSEP_PCH_TXD_MESSAGE_CTRL ] = VSEP_Msg_Set_SDIA( VSEP_PCH_Txd[ VSEP_PCH_TXD_MESSAGE_CTRL ], VSEP_TXD_SDIA_PCH );
 #endif
 }
 
@@ -128,11 +126,9 @@ FAR_COS void VSEP_DISCRETE_Device_Initialize(
 void VSEP_DISCRETE_Device_Clear(
    IO_Configuration_T in_configuration)
 {
-   VSEP_Index_T device = VSEP_Get_Device_Index( in_configuration );
-
-   VSEP_PCH_Txd[ device ][ VSEP_PCH_TXD_MESSAGE_CTRL ] = VSEP_Msg_Set_SDOA( VSEP_PCH_Txd[ device ][ VSEP_PCH_TXD_MESSAGE_CTRL ], VSEP_RXD_SDOA_NOT_USED );
-   VSEP_PCH_Txd[ device ][ VSEP_PCH_TXD_MESSAGE_CTRL ] = VSEP_Msg_Set_SDIA( VSEP_PCH_Txd[ device ][ VSEP_PCH_TXD_MESSAGE_CTRL ], VSEP_TXD_SDIA_PCH );
-   VSEP_PCH_Txd[ device ][ VSEP_PCH_TXD_MESSAGE_PCH  ]  = 0; 
+   VSEP_PCH_Txd[ VSEP_PCH_TXD_MESSAGE_CTRL ] = VSEP_Msg_Set_SDOA( VSEP_PCH_Txd[ VSEP_PCH_TXD_MESSAGE_CTRL ], VSEP_RXD_SDOA_NOT_USED );
+   VSEP_PCH_Txd[ VSEP_PCH_TXD_MESSAGE_CTRL ] = VSEP_Msg_Set_SDIA( VSEP_PCH_Txd[ VSEP_PCH_TXD_MESSAGE_CTRL ], VSEP_TXD_SDIA_PCH );
+   VSEP_PCH_Txd[ VSEP_PCH_TXD_MESSAGE_PCH  ]  = 0; 
 }
 
 //=============================================================================
@@ -161,7 +157,6 @@ FAR_COS bool VSEP_DISCRETE_Get_State(
    IO_Configuration_T in_configuration)
 {
    bool                        state = false;
-   VSEP_Index_T               device = VSEP_Get_Device_Index( in_configuration );
    VSEP_Channel_T       vsep_channel = VSEP_Get_Channel( in_configuration );
    IO_Polarity_T            polarity = VSEP_PCH_Get_Polarity( in_configuration );
    VSEP_PCH_Channel_T        channel = ( vsep_channel < VSEP_CHANNEL_MAX ) ? 
@@ -171,19 +166,19 @@ FAR_COS bool VSEP_DISCRETE_Get_State(
 
    if( channel < VSEP_PCH_CHANNEL_MPIO_1 )
    { 
-      state = VSEP_Msg_PCHx_Get_State( VSEP_PCH_Txd[ device ][ VSEP_PCH_TXD_MESSAGE_PCH ], channel );
+      state = VSEP_Msg_PCHx_Get_State( VSEP_PCH_Txd[ VSEP_PCH_TXD_MESSAGE_PCH ], channel );
       // we only get the state information from the TXD what we have set. no state information out.
    }
    else if( channel <= VSEP_PCH_CHANNEL_MPIO_3 )
    {
       channel -= VSEP_PCH_CHANNEL_MPIO_1;
-      state = (bool)Extract_Bits( VSEP_PCH_Rxd[ device ][ VSEP_PCH_RXD_MESSAGE_MPIO ], channel , BIT_1 );
+      state = (bool)Extract_Bits( VSEP_PCH_Rxd[ VSEP_PCH_RXD_MESSAGE_MPIO ], channel , BIT_1 );
    }
    else
    {
       if( channel == VSEP_PCH_CHANNEL_SOHRSTEN_STAT )
       {
-         state = VSEP_Msg_Get_SOHRSTEN_STAT( VSEP_SOH_Status_Rxd[ device ][ VSEP_SOH_STATUS_RXD_MESSAGE_STATUS ]);
+         state = VSEP_Msg_Get_SOHRSTEN_STAT( VSEP_SOH_Status_Rxd[ VSEP_SOH_STATUS_RXD_MESSAGE_STATUS ]);
       }
    }
 
@@ -228,7 +223,6 @@ FAR_COS void VSEP_DISCRETE_Set_State(
    IO_Configuration_T in_configuration,
    bool               in_state)
 {
-   VSEP_Index_T           device = VSEP_Get_Device_Index( in_configuration );
    VSEP_Channel_T   vsep_channel = VSEP_Get_Channel(in_configuration);
    IO_Polarity_T        polarity = VSEP_PCH_Get_Polarity( in_configuration );
    VSEP_PCH_Channel_T    channel = ( vsep_channel < VSEP_CHANNEL_MAX ) ? 
@@ -247,8 +241,8 @@ FAR_COS void VSEP_DISCRETE_Set_State(
    if( channel < VSEP_PCH_CHANNEL_MPIO_1 )
    { 
 
-      VSEP_PCH_Txd[ device ][ VSEP_PCH_TXD_MESSAGE_PCH ] = 
-         VSEP_Msg_PCHx_Set_State( VSEP_PCH_Txd[ device ][ VSEP_PCH_TXD_MESSAGE_PCH ], channel, in_state );
+      VSEP_PCH_Txd[ VSEP_PCH_TXD_MESSAGE_PCH ] = 
+         VSEP_Msg_PCHx_Set_State( VSEP_PCH_Txd[ VSEP_PCH_TXD_MESSAGE_PCH ], channel, in_state );
 
    }
    else 
@@ -317,16 +311,13 @@ FAR_COS void VSEP_DISCRETE_Toggle_Immediate_State(//question: why not get the st
 void VSEP_MPIO_MODE_Initialize_Device(
    IO_Configuration_T in_configuration )
 {
-   VSEP_Index_T index = VSEP_Get_Device_Index( in_configuration );
-
 #ifdef VSEP_MPIO_MODE_STATIC_INITIALIZATION
-
-   VSEP_MPIO_MODE_Txd[ index ][ VSEP_MPIO_MODE_TXD_MESSAGE_CTRL ] = VSEP_MPIO_MODE_TXD_INITIAL[ index ][ VSEP_MPIO_MODE_TXD_MESSAGE_CTRL ];
-   VSEP_MPIO_MODE_Txd[ index ][ VSEP_MPIO_MODE_TXD_MESSAGE_MODE ] = VSEP_MPIO_MODE_TXD_INITIAL[ index ][ VSEP_MPIO_MODE_TXD_MESSAGE_MODE ];
+   VSEP_MPIO_MODE_Txd[ VSEP_MPIO_MODE_TXD_MESSAGE_CTRL ] = VSEP_MPIO_MODE_TXD_INITIAL[ VSEP_MPIO_MODE_TXD_MESSAGE_CTRL ];
+   VSEP_MPIO_MODE_Txd[ VSEP_MPIO_MODE_TXD_MESSAGE_MODE ] = VSEP_MPIO_MODE_TXD_INITIAL[ VSEP_MPIO_MODE_TXD_MESSAGE_MODE ];
 #else
 
-   VSEP_MPIO_MODE_Txd[ index ][ VSEP_MPIO_MODE_TXD_MESSAGE_CTRL ] = VSEP_Msg_Set_SDIA ( VSEP_MPIO_MODE_Txd[ index ][ VSEP_MPIO_MODE_TXD_MESSAGE_CTRL ], VSEP_RXD_SDOA_NOT_USED ); 
-   VSEP_MPIO_MODE_Txd[ index ][ VSEP_MPIO_MODE_TXD_MESSAGE_CTRL ] = VSEP_Msg_Set_SDOA ( VSEP_MPIO_MODE_Txd[ index ][ VSEP_MPIO_MODE_TXD_MESSAGE_CTRL ], VSEP_TXD_SDIA_SETUP ); 
+   VSEP_MPIO_MODE_Txd[ VSEP_MPIO_MODE_TXD_MESSAGE_CTRL ] = VSEP_Msg_Set_SDIA ( VSEP_MPIO_MODE_Txd[ VSEP_MPIO_MODE_TXD_MESSAGE_CTRL ], VSEP_RXD_SDOA_NOT_USED ); 
+   VSEP_MPIO_MODE_Txd[ VSEP_MPIO_MODE_TXD_MESSAGE_CTRL ] = VSEP_Msg_Set_SDOA ( VSEP_MPIO_MODE_Txd[ VSEP_MPIO_MODE_TXD_MESSAGE_CTRL ], VSEP_TXD_SDIA_SETUP ); 
 
 #endif
 }
@@ -339,10 +330,7 @@ void VSEP_MPIO_Set_Mode(
 {
    VSEP_Channel_T  mpio_channel = VSEP_Get_Channel( configuration );
 
-   VSEP_Index_T    index = VSEP_Get_Device_Index( configuration );
-
-   uint16_t* txd_mode = &VSEP_MPIO_MODE_Txd[ index ][ VSEP_MPIO_MODE_TXD_MESSAGE_MODE ];
-
+   uint16_t* txd_mode = &VSEP_MPIO_MODE_Txd[ VSEP_MPIO_MODE_TXD_MESSAGE_MODE ];
    *txd_mode = VSEP_Msg_MPIO_Set_Mx_OHILOB_OEN( *txd_mode, (mpio_channel-VSEP_CHANNEL_MPIO_1), mpio_input_mode );
 }
 

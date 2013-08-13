@@ -203,8 +203,8 @@ typedef enum
    VSEP_PCH_RXD_MESSAGE_MAX
 }VSEP_PCH_Rxd_Message_T;
 
-extern uint16_t VSEP_PCH_Txd[NUMBER_OF_VSEP][VSEP_PCH_TXD_MESSAGE_MAX];
-extern uint16_t VSEP_PCH_Rxd[NUMBER_OF_VSEP][VSEP_PCH_RXD_MESSAGE_MAX];
+extern uint16_t VSEP_PCH_Txd[VSEP_PCH_TXD_MESSAGE_MAX];
+extern uint16_t VSEP_PCH_Rxd[VSEP_PCH_RXD_MESSAGE_MAX];
 
 //=============================================================================
 // VSEP_DISCRETE_Device_Initialize
