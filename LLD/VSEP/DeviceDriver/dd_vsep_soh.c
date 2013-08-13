@@ -42,25 +42,23 @@
 #include "dd_vsep_init_config.h"
 
 /* global message buffer definition */
-uint16_t VSEP_SOH_Txd[NUMBER_OF_VSEP][VSEP_SOH_TXD_MESSAGE_MAX];
-uint16_t VSEP_SOH_Rxd[NUMBER_OF_VSEP][VSEP_SOH_RXD_MESSAGE_MAX];
-uint16_t VSEP_SOH_Status_Rxd[ NUMBER_OF_VSEP ][VSEP_SOH_STATUS_RXD_MESSAGE_MAX];
+uint16_t VSEP_SOH_Txd[VSEP_SOH_TXD_MESSAGE_MAX];
+uint16_t VSEP_SOH_Rxd[VSEP_SOH_RXD_MESSAGE_MAX];
+uint16_t VSEP_SOH_Status_Rxd[VSEP_SOH_STATUS_RXD_MESSAGE_MAX];
 
 /* local variable definition */
-uint16_t VSEP_SOH_Challenge_Rxd[NUMBER_OF_VSEP][VSEP_SOH_RXD_MESSAGE_MAX];
-uint16_t VSEP_SOH_Challenge_Txd[NUMBER_OF_VSEP][VSEP_SOH_TXD_MESSAGE_MAX];
-uint16_t VSEP_SOH_Response_Rxd[NUMBER_OF_VSEP][VSEP_SOH_RXD_MESSAGE_MAX];
-uint16_t VSEP_SOH_Response_Txd[NUMBER_OF_VSEP][VSEP_SOH_TXD_MESSAGE_MAX];
+uint16_t VSEP_SOH_Challenge_Rxd[VSEP_SOH_RXD_MESSAGE_MAX];
+uint16_t VSEP_SOH_Challenge_Txd[VSEP_SOH_TXD_MESSAGE_MAX];
+uint16_t VSEP_SOH_Response_Rxd[VSEP_SOH_RXD_MESSAGE_MAX];
+uint16_t VSEP_SOH_Response_Txd[VSEP_SOH_TXD_MESSAGE_MAX];
 
 ///////////////////////////////////////////////////////////////////////////////
 // VSEP PCH VSEP_SOH_Initialize_Device
 ///////////////////////////////////////////////////////////////////////////////
 FAR_COS void VSEP_SOH_Initialize_Device( IO_Configuration_T in_configuration )
 {
-   VSEP_Index_T device = VSEP_Get_Device_Index( in_configuration );
-   
-   VSEP_SOH_Txd[ device ][VSEP_SOH_TXD_MESSAGE_CTRL] = VSEP_Msg_Set_SDOA( VSEP_SOH_Txd[ device ][VSEP_SOH_TXD_MESSAGE_CTRL], VSEP_RXD_SDOA_CHALLENGE );
-   VSEP_SOH_Txd[ device ][VSEP_SOH_TXD_MESSAGE_CTRL] = VSEP_Msg_Set_SDIA( VSEP_SOH_Txd[ device ][VSEP_SOH_TXD_MESSAGE_CTRL], VSEP_TXD_SDIA_NOT_USED );
+   VSEP_SOH_Txd[VSEP_SOH_TXD_MESSAGE_CTRL] = VSEP_Msg_Set_SDOA( VSEP_SOH_Txd[VSEP_SOH_TXD_MESSAGE_CTRL], VSEP_RXD_SDOA_CHALLENGE );
+   VSEP_SOH_Txd[VSEP_SOH_TXD_MESSAGE_CTRL] = VSEP_Msg_Set_SDIA( VSEP_SOH_Txd[VSEP_SOH_TXD_MESSAGE_CTRL], VSEP_TXD_SDIA_NOT_USED );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -69,14 +67,13 @@ FAR_COS void VSEP_SOH_Initialize_Device( IO_Configuration_T in_configuration )
 FAR_COS uint32_t VSEP_SOH_Get_Challenge( IO_Configuration_T in_configuration  )
 {
    uint32_t challenge;
-   VSEP_Index_T device = VSEP_Get_Device_Index( in_configuration );
 
-   VSEP_SOH_Txd[device][VSEP_SOH_TXD_MESSAGE_CTRL] = VSEP_Msg_Set_SDOA( VSEP_SOH_Txd[device][VSEP_SOH_TXD_MESSAGE_CTRL], VSEP_RXD_SDOA_CHALLENGE );
-   VSEP_SOH_Txd[device][VSEP_SOH_TXD_MESSAGE_CTRL] = VSEP_Msg_Set_SDIA( VSEP_SOH_Txd[device][VSEP_SOH_TXD_MESSAGE_CTRL], VSEP_TXD_SDIA_NOT_USED  );
+   VSEP_SOH_Txd[VSEP_SOH_TXD_MESSAGE_CTRL] = VSEP_Msg_Set_SDOA( VSEP_SOH_Txd[VSEP_SOH_TXD_MESSAGE_CTRL], VSEP_RXD_SDOA_CHALLENGE );
+   VSEP_SOH_Txd[VSEP_SOH_TXD_MESSAGE_CTRL] = VSEP_Msg_Set_SDIA( VSEP_SOH_Txd[VSEP_SOH_TXD_MESSAGE_CTRL], VSEP_TXD_SDIA_NOT_USED  );
 
   VSEP_SPI_Immediate_Transfer( in_configuration, VSEP_MESSAGE_SOH );
 
-   challenge = VSEP_Msg_Get_Challenge( VSEP_SOH_Rxd[ device ][VSEP_SOH_RXD_MESSAGE_CHALLENGE]);
+   challenge = VSEP_Msg_Get_Challenge( VSEP_SOH_Rxd[VSEP_SOH_RXD_MESSAGE_CHALLENGE]);
 
    return challenge;
 }
@@ -99,13 +96,10 @@ FAR_COS void Update_VSEP_SOH_Status_Immediate( IO_Configuration_T in_configurati
 ///////////////////////////////////////////////////////////////////////////////
 FAR_COS void VSEP_SOH_Set_SOHRSTEN_Request( IO_Configuration_T in_configuration, bool sohrsten  )
 {
-
-   VSEP_Index_T device = VSEP_Get_Device_Index( in_configuration );
-
-   VSEP_SOH_Txd[device][VSEP_SOH_TXD_MESSAGE_CTRL] = VSEP_Msg_Set_SDOA( VSEP_SOH_Txd[device][VSEP_SOH_TXD_MESSAGE_CTRL], VSEP_RXD_SDOA_NOT_USED );
-   VSEP_SOH_Txd[device][VSEP_SOH_TXD_MESSAGE_CTRL] = VSEP_Msg_Set_SDIA( VSEP_SOH_Txd[device][VSEP_SOH_TXD_MESSAGE_CTRL], VSEP_TXD_SDIA_SETUP  );
+   VSEP_SOH_Txd[VSEP_SOH_TXD_MESSAGE_CTRL] = VSEP_Msg_Set_SDOA( VSEP_SOH_Txd[VSEP_SOH_TXD_MESSAGE_CTRL], VSEP_RXD_SDOA_NOT_USED );
+   VSEP_SOH_Txd[VSEP_SOH_TXD_MESSAGE_CTRL] = VSEP_Msg_Set_SDIA( VSEP_SOH_Txd[VSEP_SOH_TXD_MESSAGE_CTRL], VSEP_TXD_SDIA_SETUP  );
    
-   VSEP_SOH_Txd[device][VSEP_SOH_TXD_MESSAGE_RESPONSE] = 	VSEP_Msg_Set_SOHRSTEN( VSEP_INIT_TXD_INITIAL[device][VSEP_INIT_TXD_MESSAGE_EST_SELECT_INIT],  sohrsten );
+   VSEP_SOH_Txd[VSEP_SOH_TXD_MESSAGE_RESPONSE] = VSEP_Msg_Set_SOHRSTEN( VSEP_INIT_TXD_INITIAL[VSEP_INIT_TXD_MESSAGE_EST_SELECT_INIT],  sohrsten );
    
    VSEP_SPI_Immediate_Transfer( in_configuration, VSEP_MESSAGE_SOH );
 }
@@ -113,15 +107,11 @@ FAR_COS void VSEP_SOH_Set_SOHRSTEN_Request( IO_Configuration_T in_configuration,
 
 FAR_COS void VSEP_SOH_DisableSOH_Request( IO_Configuration_T in_configuration  )
 {
-
-   VSEP_Index_T device = VSEP_Get_Device_Index( in_configuration );
-
-   VSEP_SOH_Txd[device][VSEP_SOH_TXD_MESSAGE_CTRL] = VSEP_Msg_Set_SDOA( VSEP_SOH_Txd[device][VSEP_SOH_TXD_MESSAGE_CTRL], VSEP_RXD_SDOA_NOT_USED );
-   VSEP_SOH_Txd[device][VSEP_SOH_TXD_MESSAGE_CTRL] = VSEP_Msg_Set_SDIA( VSEP_SOH_Txd[device][VSEP_SOH_TXD_MESSAGE_CTRL], VSEP_TXD_SDIA_SETUP  );
-   VSEP_SOH_Txd[device][VSEP_SOH_TXD_MESSAGE_RESPONSE] = 	VSEP_Msg_SOH_Set_CRDISARM( VSEP_INIT_TXD_INITIAL[device][VSEP_INIT_TXD_MESSAGE_EST_SELECT_INIT],  VSEP_SOH_DISABLE   );
+   VSEP_SOH_Txd[VSEP_SOH_TXD_MESSAGE_CTRL] = VSEP_Msg_Set_SDOA( VSEP_SOH_Txd[VSEP_SOH_TXD_MESSAGE_CTRL], VSEP_RXD_SDOA_NOT_USED );
+   VSEP_SOH_Txd[VSEP_SOH_TXD_MESSAGE_CTRL] = VSEP_Msg_Set_SDIA( VSEP_SOH_Txd[VSEP_SOH_TXD_MESSAGE_CTRL], VSEP_TXD_SDIA_SETUP  );
+   VSEP_SOH_Txd[VSEP_SOH_TXD_MESSAGE_RESPONSE] = VSEP_Msg_SOH_Set_CRDISARM( VSEP_INIT_TXD_INITIAL[VSEP_INIT_TXD_MESSAGE_EST_SELECT_INIT],  VSEP_SOH_DISABLE   );
    
    VSEP_SPI_Immediate_Transfer( in_configuration, VSEP_MESSAGE_SOH );
-
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -129,12 +119,10 @@ FAR_COS void VSEP_SOH_DisableSOH_Request( IO_Configuration_T in_configuration  )
 ///////////////////////////////////////////////////////////////////////////////
 FAR_COS void VSEP_SOH_Set_Response( IO_Configuration_T in_configuration, uint32_t response  )
 {
-   VSEP_Index_T device = VSEP_Get_Device_Index( in_configuration );
+   VSEP_SOH_Txd[VSEP_SOH_TXD_MESSAGE_CTRL] = VSEP_Msg_Set_SDOA( VSEP_SOH_Txd[VSEP_SOH_TXD_MESSAGE_CTRL], VSEP_RXD_SDOA_NOT_USED  );
+   VSEP_SOH_Txd[VSEP_SOH_TXD_MESSAGE_CTRL] = VSEP_Msg_Set_SDIA( VSEP_SOH_Txd[VSEP_SOH_TXD_MESSAGE_CTRL], VSEP_TXD_SDIA_RESPONSE  );
 
-   VSEP_SOH_Txd[device][VSEP_SOH_TXD_MESSAGE_CTRL] = VSEP_Msg_Set_SDOA( VSEP_SOH_Txd[device][VSEP_SOH_TXD_MESSAGE_CTRL], VSEP_RXD_SDOA_NOT_USED  );
-   VSEP_SOH_Txd[device][VSEP_SOH_TXD_MESSAGE_CTRL] = VSEP_Msg_Set_SDIA( VSEP_SOH_Txd[device][VSEP_SOH_TXD_MESSAGE_CTRL], VSEP_TXD_SDIA_RESPONSE  );
-
-   VSEP_SOH_Txd[ device ][VSEP_SOH_TXD_MESSAGE_RESPONSE] = VSEP_Msg_Set_RESPONSE( VSEP_SOH_Txd[ device ][VSEP_SOH_TXD_MESSAGE_RESPONSE], response );
+   VSEP_SOH_Txd[VSEP_SOH_TXD_MESSAGE_RESPONSE] = VSEP_Msg_Set_RESPONSE( VSEP_SOH_Txd[VSEP_SOH_TXD_MESSAGE_RESPONSE], response );
    VSEP_SPI_Immediate_Transfer( in_configuration, VSEP_MESSAGE_SOH );
 }
 
@@ -142,25 +130,21 @@ FAR_COS void VSEP_SOH_Set_DisableFSE_Request( IO_Configuration_T in_configuratio
 {
    VSEP_Index_T device = VSEP_Get_Device_Index( in_configuration );
 
-   VSEP_SOH_Txd[device][VSEP_SOH_TXD_MESSAGE_CTRL] = VSEP_Msg_Set_SDOA( VSEP_SOH_Txd[device][VSEP_SOH_TXD_MESSAGE_CTRL], VSEP_RXD_SDOA_NOT_USED  );
-   VSEP_SOH_Txd[device][VSEP_SOH_TXD_MESSAGE_CTRL] = VSEP_Msg_Set_SDIA( VSEP_SOH_Txd[device][VSEP_SOH_TXD_MESSAGE_CTRL], VSEP_TXD_SDIA_RESPONSE  );
+   VSEP_SOH_Txd[VSEP_SOH_TXD_MESSAGE_CTRL] = VSEP_Msg_Set_SDOA( VSEP_SOH_Txd[VSEP_SOH_TXD_MESSAGE_CTRL], VSEP_RXD_SDOA_NOT_USED  );
+   VSEP_SOH_Txd[VSEP_SOH_TXD_MESSAGE_CTRL] = VSEP_Msg_Set_SDIA( VSEP_SOH_Txd[VSEP_SOH_TXD_MESSAGE_CTRL], VSEP_TXD_SDIA_RESPONSE  );
 
-   VSEP_SOH_Txd[ device ][VSEP_SOH_TXD_MESSAGE_RESPONSE] = VSEP_Msg_Set_FSE_DISABLE( VSEP_SOH_Txd[ device ][VSEP_SOH_TXD_MESSAGE_RESPONSE], fse_disreq );
+   VSEP_SOH_Txd[VSEP_SOH_TXD_MESSAGE_RESPONSE] = VSEP_Msg_Set_FSE_DISABLE( VSEP_SOH_Txd[VSEP_SOH_TXD_MESSAGE_RESPONSE], fse_disreq );
 }
 
 FAR_COS void VSEP_SOH_Set_Timeout_Fault( IO_Configuration_T in_configuration, bool cr_timeout )
 {
-   VSEP_Index_T device = VSEP_Get_Device_Index( in_configuration );
-
-   VSEP_SOH_Txd[ device ][VSEP_SOH_TXD_MESSAGE_CTRL] = VSEP_Msg_Set_CRTOCLR( VSEP_SOH_Txd[ device ][VSEP_SOH_TXD_MESSAGE_CTRL], cr_timeout );
+   VSEP_SOH_Txd[VSEP_SOH_TXD_MESSAGE_CTRL] = VSEP_Msg_Set_CRTOCLR( VSEP_SOH_Txd[VSEP_SOH_TXD_MESSAGE_CTRL], cr_timeout );
 }
 
 FAR_COS void VSEP_SOH_Set_DisableFSE_Request_Immediate( IO_Configuration_T in_configuration, bool fse_disreq )
 {
    VSEP_SOH_Set_DisableFSE_Request( in_configuration, fse_disreq );
    VSEP_SPI_Immediate_Transfer( in_configuration, VSEP_MESSAGE_SOH );
-
-
 }
 ///////////////////////////////////////////////////////////////////////////////
 // VSEP_SOH_Calculate_Response
@@ -199,14 +183,14 @@ uint32_t VSEP_SOH_Calculate_Response( uint32_t challenge )//not sure
 void VSEP_Calculate_Response( SPI_HClient_T in_hclient )
 {
    uint32_t device = (uint32_t)in_hclient;
-   uint8_t challenge = VSEP_Msg_Get_Challenge( VSEP_SOH_Rxd[device][VSEP_SOH_RXD_MESSAGE_CHALLENGE] );
+   uint8_t challenge = VSEP_Msg_Get_Challenge( VSEP_SOH_Rxd[VSEP_SOH_RXD_MESSAGE_CHALLENGE]);
 
    uint8_t response = ( challenge << 1 ) & 0x3F;
    uint8_t soh_algo_0 = 1;
    uint8_t soh_algo_1 = 1;
    uint8_t x;
 
-   if( VSEP_Msg_Get_SDOA( VSEP_SOH_Txd[ device ][ VSEP_SOH_TXD_MESSAGE_CTRL ] ) == 4 )
+   if( VSEP_Msg_Get_SDOA( VSEP_SOH_Txd[ VSEP_SOH_TXD_MESSAGE_CTRL ] ) == 4 )
    {
       for( x = 0; x < 5; x++ )
       {
@@ -223,34 +207,34 @@ void VSEP_Calculate_Response( SPI_HClient_T in_hclient )
 
       for( x = 0; x < VSEP_SOH_RXD_MESSAGE_MAX; x++ )
       {
-         VSEP_SOH_Challenge_Rxd[device][x] = VSEP_SOH_Rxd[device][x];
+         VSEP_SOH_Challenge_Rxd[x] = VSEP_SOH_Rxd[x];
       }
 
       for( x = 0; x < VSEP_SOH_TXD_MESSAGE_MAX; x++ )
       {
-         VSEP_SOH_Challenge_Txd[device][x] = VSEP_SOH_Txd[device][x];
+         VSEP_SOH_Challenge_Txd[x] = VSEP_SOH_Txd[x];
       }
 
-      VSEP_SOH_Txd[device][VSEP_SOH_TXD_MESSAGE_RESPONSE] = VSEP_Msg_Set_RESPONSE( VSEP_SOH_Txd[device][VSEP_SOH_TXD_MESSAGE_RESPONSE], response );
+      VSEP_SOH_Txd[VSEP_SOH_TXD_MESSAGE_RESPONSE] = VSEP_Msg_Set_RESPONSE( VSEP_SOH_Txd[VSEP_SOH_TXD_MESSAGE_RESPONSE], response );
 
-      VSEP_SOH_Txd[device][VSEP_SOH_TXD_MESSAGE_CTRL] = VSEP_Msg_Set_SDOA( VSEP_SOH_Txd[device][VSEP_SOH_TXD_MESSAGE_CTRL], VSEP_RXD_SDOA_NOT_USED  );
-      VSEP_SOH_Txd[device][VSEP_SOH_TXD_MESSAGE_CTRL] = VSEP_Msg_Set_SDIA( VSEP_SOH_Txd[device][VSEP_SOH_TXD_MESSAGE_CTRL], VSEP_TXD_SDIA_RESPONSE  );
+      VSEP_SOH_Txd[VSEP_SOH_TXD_MESSAGE_CTRL] = VSEP_Msg_Set_SDOA( VSEP_SOH_Txd[VSEP_SOH_TXD_MESSAGE_CTRL], VSEP_RXD_SDOA_NOT_USED  );
+      VSEP_SOH_Txd[VSEP_SOH_TXD_MESSAGE_CTRL] = VSEP_Msg_Set_SDIA( VSEP_SOH_Txd[VSEP_SOH_TXD_MESSAGE_CTRL], VSEP_TXD_SDIA_RESPONSE  );
 
    }
    else
    {
       for( x = 0; x < VSEP_SOH_RXD_MESSAGE_MAX; x++ )
       {
-         VSEP_SOH_Response_Rxd[device][x] = VSEP_SOH_Rxd[device][x];
+         VSEP_SOH_Response_Rxd[x] = VSEP_SOH_Rxd[x];
       }
 
       for( x = 0; x < VSEP_SOH_TXD_MESSAGE_MAX; x++ )
       {
-         VSEP_SOH_Response_Txd[device][x] = VSEP_SOH_Txd[device][x];
+         VSEP_SOH_Response_Txd[x] = VSEP_SOH_Txd[x];
       }
 
-      VSEP_SOH_Txd[device][VSEP_SOH_TXD_MESSAGE_CTRL] = VSEP_Msg_Set_SDOA( VSEP_SOH_Txd[device][VSEP_SOH_TXD_MESSAGE_CTRL], VSEP_RXD_SDOA_CHALLENGE );
-      VSEP_SOH_Txd[device][VSEP_SOH_TXD_MESSAGE_CTRL] = VSEP_Msg_Set_SDIA( VSEP_SOH_Txd[device][VSEP_SOH_TXD_MESSAGE_CTRL], VSEP_TXD_SDIA_NOT_USED  );
+      VSEP_SOH_Txd[VSEP_SOH_TXD_MESSAGE_CTRL] = VSEP_Msg_Set_SDOA( VSEP_SOH_Txd[VSEP_SOH_TXD_MESSAGE_CTRL], VSEP_RXD_SDOA_CHALLENGE );
+      VSEP_SOH_Txd[VSEP_SOH_TXD_MESSAGE_CTRL] = VSEP_Msg_Set_SDIA( VSEP_SOH_Txd[VSEP_SOH_TXD_MESSAGE_CTRL], VSEP_TXD_SDIA_NOT_USED  );
 
    }
 }
