@@ -46,7 +46,7 @@
 #include "dd_vsep_init_config.h"
 
 uint32_t     VSEP_Channel_Enabled;
-extern const SPI_Message_T VSEP_MESSAGE[ NUMBER_OF_VSEP ][VSEP_MESSAGE_MAX+7];
+extern const SPI_Message_T VSEP_MESSAGE[VSEP_MESSAGE_MAX+7];
 
 
 #ifdef  VSEP_CALIBRATION_ENABLE
@@ -56,25 +56,25 @@ static void  VSEP_INIT_TXD_Buffer_Initialize(void)
 	VSEP_FAULT_FILTER_T   filter_type = VSEP_FAULT_FILTER_MAX;
 	uint32_t              filter_time;
 
-	VSEP_INIT_TXD_INITIAL[0][0] = VSEP_Msg_Set_FLTCLR( 0, true                   ) |
+	VSEP_INIT_TXD_INITIAL[0] = VSEP_Msg_Set_FLTCLR( 0, true                   ) |
 								VSEP_Msg_Set_CRTOCLR( 0, true                   ) |
 								VSEP_Msg_Set_SDOA( 0, VSEP_RXD_SDOA_NOT_USED ) | 
 								VSEP_Msg_Set_SDIA( 0, VSEP_TXD_SDIA_VR1_CTRL );
 
-	VSEP_INIT_TXD_INITIAL[0][1] = 
+	VSEP_INIT_TXD_INITIAL[1] = 
 							VSEP_Msg_VR_Set_Delay( 0, (uint16_t)KsVSEP_VR1_Setting_Initial.KeVSEP_VR1_DLY) |        
 							VSEP_Msg_VR_Set_AT( 0, (uint16_t)KsVSEP_VR1_Setting_Initial.KbVSEP_VR1_PERC50) |
 							VSEP_Msg_VR_Set_MT( 0, (uint16_t)KsVSEP_VR1_Setting_Initial.KeVSEP_VR1_MT);
 
-	VSEP_INIT_TXD_INITIAL[0][2] =     
+	VSEP_INIT_TXD_INITIAL[2] =     
           VSEP_Msg_VR_Set_Delay( 0, (uint16_t)KsVSEP_VR2_Setting_Initial.KeVSEP_VR2_DLY) |        
              VSEP_Msg_VR_Set_AT( 0, (uint16_t)KsVSEP_VR2_Setting_Initial.KbVSEP_VR2_PERC50) |
              VSEP_Msg_VR_Set_MT( 0, (uint16_t)KsVSEP_VR2_Setting_Initial.KeVSEP_VR2_MT) 
       ;
-	VSEP_INIT_TXD_INITIAL[0][3] =          
+	VSEP_INIT_TXD_INITIAL[3] =          
           VSEP_Msg_DEPS_Set_Delay( 0, (uint16_t)KsVSEP_DEPSDLY_Setting_Initial.KeVSEP_DEPSDLY) 
       ;
-	VSEP_INIT_TXD_INITIAL[0][4] =       
+	VSEP_INIT_TXD_INITIAL[4] =       
           VSEP_Msg_SLEW_Set_Group_1( 0, (uint16_t)KsVSEP_SLEW_Initialization.KeVSEP_SLEW1) |
           VSEP_Msg_SLEW_Set_Group_2( 0,(uint16_t)KsVSEP_SLEW_Initialization.KeVSEP_SLEW2) |
           VSEP_Msg_SLEW_Set_Group_3( 0, (uint16_t)KsVSEP_SLEW_Initialization.KeVSEP_SLEW3) |
@@ -82,19 +82,19 @@ static void  VSEP_INIT_TXD_Buffer_Initialize(void)
           VSEP_Msg_SLEW_Set_Group_5( 0,(uint16_t)KsVSEP_SLEW_Initialization.KeVSEP_SLEW5) |
         VSEP_Msg_SLEW_Set_Group_CAN( 0,(uint16_t)KsVSEP_SLEW_Initialization.KeVSEP_SLEWCAN)
       ;
- 	VSEP_INIT_TXD_INITIAL[0][5] =     
+ 	VSEP_INIT_TXD_INITIAL[5] =     
          VSEP_Msg_FAULT_Set_Level_1( 0, (uint16_t)KsVSEP_Fault_Level_Initial1.KeVSEP_FLTLVL1) |
          VSEP_Msg_FAULT_Set_Level_2( 0, (uint16_t)KsVSEP_Fault_Level_Initial1.KeVSEP_FLTLVL2) |
          VSEP_Msg_FAULT_Set_Level_3( 0, (uint16_t)KsVSEP_Fault_Level_Initial1.KeVSEP_FLTLVL3) |
          VSEP_Msg_FAULT_Set_Level_4( 0, (uint16_t)KsVSEP_Fault_Level_Initial1.KeVSEP_FLTLVL4) 
         
       ;
-	VSEP_INIT_TXD_INITIAL[0][6] =      
+	VSEP_INIT_TXD_INITIAL[6] =      
          VSEP_Msg_FAULT_Set_Level_5( 0, (uint16_t)KsVSEP_Fault_Level_Initial2.KeVSEP_FLTLVL5) |
          VSEP_Msg_FAULT_Set_Level_6( 0,(uint16_t)KsVSEP_Fault_Level_Initial2.KeVSEP_FLTLVL6) |
          VSEP_Msg_FAULT_Set_Level_7( 0, (uint16_t)KsVSEP_Fault_Level_Initial2.KeVSEP_FLTLVL7) 
       ;
-  	VSEP_INIT_TXD_INITIAL[0][7] =    
+  	VSEP_INIT_TXD_INITIAL[7] =    
           ( VSEP_Msg_FAULT_Filter_Set_Non_Spark_Channels_1_To_8( 0, (uint16_t)KsVSEP_Fault_Filter_Initial.KeVSEP_FILT_1TO8NS) |
                 VSEP_Msg_FAULT_Filter_Set_Spark_Channels_1_To_8( 0,  (uint16_t)KsVSEP_Fault_Filter_Initial.KeVSEP_FILT_1TO8SP) |
                      VSEP_Msg_FAULT_Filter_Set_Channels_9_To_12( 0,  (uint16_t)KsVSEP_Fault_Filter_Initial.KeVSEP_FILT_9TO12) |
@@ -104,21 +104,21 @@ static void  VSEP_INIT_TXD_Buffer_Initialize(void)
                     VSEP_Msg_FAULT_Filter_Set_Channels_21_To_24( 0,  (uint16_t)KsVSEP_Fault_Filter_Initial.KeVSEP_FILT_21TO24) |
                     VSEP_Msg_FAULT_Filter_Set_Channels_25_To_30( 0,  (uint16_t)KsVSEP_Fault_Filter_Initial.KeVSEP_FILT_25TO30))
       ;
-	VSEP_INIT_TXD_INITIAL[0][8] =      
+	VSEP_INIT_TXD_INITIAL[8] =      
           ( VSEP_Msg_LEDMODE_Set_Channel_25( 0, (uint16_t)KsVSEP_LEDMODE_Initial.KbVSEP_LEDMODE_25) |
             VSEP_Msg_LEDMODE_Set_Channel_26( 0, (uint16_t)KsVSEP_LEDMODE_Initial.KbVSEP_LEDMODE_26) |
             VSEP_Msg_LEDMODE_Set_Channel_30( 0, (uint16_t)KsVSEP_LEDMODE_Initial.KbVSEP_LEDMODE_30) )
       ;
-  	VSEP_INIT_TXD_INITIAL[0][9] =     
+  	VSEP_INIT_TXD_INITIAL[9] =     
           VSEP_Msg_IGBT_Set_GRADFILT( 0, (uint16_t)KsVSEP_GRAD_Initialization.KbVSEP_GRADFILT) |
          VSEP_Msg_IGBT_Set_GRADTHR( 0,  (uint16_t)KsVSEP_GRAD_Initialization.KbVSEP_GRADTHR) 
       ;
-  	VSEP_INIT_TXD_INITIAL[0][10] =     
+  	VSEP_INIT_TXD_INITIAL[10] =     
             VSEP_Msg_EST_Set_EDGE( 0,     (uint16_t)KsVSEP_Spark_Mode_Initialization.KbVSEP_Spark_EDGE   ) |
            VSEP_Msg_EST_Set_INDEX( 0,     (uint16_t)KsVSEP_Spark_Mode_Initialization.KbVSEP_Spark_INDEX   ) |
           VSEP_Msg_EST_Set_PFMODE( 0,     (uint16_t)KsVSEP_Spark_Mode_Initialization.KeVSEP_Spark_PFMODE   ) 
       ;
-   	VSEP_INIT_TXD_INITIAL[0][11] =  
+   	VSEP_INIT_TXD_INITIAL[11] =  
          VSEP_Msg_Set_SOHRSTEN( 0, VSEP_SOH_Get_SOHRSTEN( VSEP_0_SOHRSTEN_INIT )                                              ) |
          VSEP_Msg_MPIO_Set_Mx_OHILOB_OEN( 0, (VSEP_CHANNEL_MPIO_1-VSEP_CHANNEL_MPIO_1), (uint16_t)KeVSEP_ACReq_pin79_Status) |
          VSEP_Msg_MPIO_Set_Mx_OHILOB_OEN( 0, (VSEP_CHANNEL_MPIO_2-VSEP_CHANNEL_MPIO_1), (uint16_t)KeVSEP_PSPS_pin60_Status) |
@@ -129,11 +129,11 @@ static void  VSEP_INIT_TXD_Buffer_Initialize(void)
 		VSEP_Msg_SOH_Set_CRDISARM( 0,     VSEP_SOH_Get_ENABLE_STATE( VSEP_0_SOH_ENABLE_INIT )        )
 	;
 	
-  VSEP_EST_SELECT_INITIAL[0][0] =      
+  VSEP_EST_SELECT_INITIAL[0] =      
          VSEP_Msg_Set_SDOA( 0, VSEP_RXD_SDOA_EST_STAT  ) |
          VSEP_Msg_Set_SDIA(0,VSEP_TXD_SDIA_EST_CTRL)  
        ;
-    VSEP_EST_SELECT_INITIAL[0][1] =      
+    VSEP_EST_SELECT_INITIAL[1] =      
            VSEP_Msg_EST_Set_EDGE( 0,     (uint16_t)KsVSEP_Spark_Mode_Initialization.KbVSEP_Spark_EDGE   ) |
           VSEP_Msg_EST_Set_INDEX( 0,     (uint16_t)KsVSEP_Spark_Mode_Initialization.KbVSEP_Spark_INDEX   ) |
           VSEP_Msg_EST_Set_PFMODE( 0,     (uint16_t)KsVSEP_Spark_Mode_Initialization.KeVSEP_Spark_PFMODE   ) 
@@ -307,12 +307,12 @@ void VSEP_SPI_Immediate_Transfer(IO_Configuration_T in_configuration, VSEP_Messa
 	case VSEP_MESSAGE_EST_FAULT:
 	case VSEP_MESSAGE_SOH:
 	case VSEP_MESSAGE_SOH_STATUS:
-		VSEP_SPI_Port_Transfer(VSEP_MESSAGE[VSEP_Get_Device_Index(in_configuration)][in_message].def);
+		VSEP_SPI_Port_Transfer(VSEP_MESSAGE[in_message].def);
 		break;
 	case VSEP_MESSAGE_PWM:
-		pwm_channel = VSEP_PWM_Get_Channel( in_configuration);
+		pwm_channel = VSEP_PWM_Get_Channel(in_configuration);
 		if(pwm_channel != VSEP_PWM_CHANNEL_MAX)
-			VSEP_SPI_Port_Transfer(VSEP_MESSAGE[ VSEP_Get_Device_Index( in_configuration ) ][VSEP_MESSAGE_PWM + pwm_channel ].def);
+			VSEP_SPI_Port_Transfer(VSEP_MESSAGE[VSEP_MESSAGE_PWM + pwm_channel ].def);
 		break;
 	default:
 		break;
@@ -329,31 +329,24 @@ void VSEP_Initialize_Device(void)
 	VSEP_INIT_TXD_Buffer_Initialize();
 #endif
 
-	VSEP_EST_Select_Initialize_Device(MTSA_CONFIG_VSEP_DEVICE_0);
+	VSEP_EST_Select_Initialize_Device();
 	VSEP_Fault_Initialize();
-	VSEP_MPIO_MODE_Initialize_Device(MTSA_CONFIG_VSEP_DEVICE_0);
-	VSEP_PWM_Device_Initialize( VSEP_Set_Device_Index( 0, VSEP_INDEX_0 ) );
-	VSEP_DISCRETE_Device_Initialize( VSEP_Set_Device_Index( 0, VSEP_INDEX_0 ) );
-	VSEP_FAULT_EST_Initialize_Device( MTSA_CONFIG_GRADIENT_COUNT );
-	VSEP_SPI_SCHEDULER_Initialize();   
-	VSEP_LEDMODE_Initialize_Device( MTSA_CONFIG_VSEP_DEVICE_0);
-	VSEP_PULSE_VR_Initialize_Device(MTSA_CONFIG_VSEP_DEVICE_0);
+	VSEP_MPIO_MODE_Initialize_Device();
+	VSEP_PWM_Device_Initialize();
+	VSEP_DISCRETE_Device_Initialize();
+	VSEP_FAULT_EST_Initialize_Device(MTSA_CONFIG_GRADIENT_COUNT );
+	VSEP_SPI_SCHEDULER_Initialize();
+	VSEP_LEDMODE_Initialize_Device();
+	VSEP_PULSE_VR_Initialize_Device();
 
 	// Hardware Test uses its own method to initialize the VSEP
 	// Send the Init message to the VSEP. This will setup all the faults/slews/est select information/
 	// along with all the locked bit information.
-	VSEP_SPI_Immediate_Transfer( VSEP_Set_Device_Index( 0, VSEP_INDEX_0 ), VSEP_MESSAGE_INIT );
+	VSEP_SPI_Immediate_Transfer(VSEP_MESSAGE_INIT );
 	// Need to check why redundant operation is needed, without it, no spark injection
-	VSEP_SPI_Immediate_Transfer( VSEP_Set_Device_Index( 0, VSEP_INDEX_0 ), VSEP_MESSAGE_INIT );
-	//#ifdef HW_SOH_DISABLE
+	VSEP_SPI_Immediate_Transfer(VSEP_MESSAGE_INIT );
 	VSEP_Disable_SOH();
-	//#endif
 
-	#if COIL == COIL_AT_PLUG
-	//  VSEP_EST_Select_Set_Mode(VSEP_INDEX_0,EST_MODE_SEQUENTIAL_SINGLE_ENABLE);
-	#elif COIL == DUAL_COIL_PACK
-	//VSEP_EST_Select_Set_Mode(VSEP_INDEX_0,EST_MODE_SIMULTANEOUS_SINGLE_ENABLE);
-	#endif
 	VSEP_EST_Select_Set_Mode(VSEP_INDEX_0,EST_MODE_SIMULTANEOUS_SINGLE_ENABLE); 
 	VSEP_EST_Select_Set_Channel(VSEP_INDEX_0,EST_SELECT_CYLINDER_A);
 }

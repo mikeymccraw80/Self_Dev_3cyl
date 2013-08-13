@@ -861,14 +861,14 @@ extern const uint8_t  VSEP_GRADCOUNT_FAULT_WINDOW;
 
 #ifdef  VSEP_CALIBRATION_ENABLE
 
-extern  uint16_t VSEP_INIT_TXD_INITIAL[NUMBER_OF_VSEP][VSEP_INIT_TXD_MESSAGE_MAX];
+extern  uint16_t VSEP_INIT_TXD_INITIAL[VSEP_INIT_TXD_MESSAGE_MAX];
 #else
-extern const uint16_t VSEP_INIT_TXD_INITIAL[NUMBER_OF_VSEP][VSEP_INIT_TXD_MESSAGE_MAX];
+extern const uint16_t VSEP_INIT_TXD_INITIAL[VSEP_INIT_TXD_MESSAGE_MAX];
 #endif
 
 #ifdef VSEP_EST_DIAGNOSTIC_DEBUG
-extern uint8_t VSEP_EST_Select_Dwell_Current_Time[NUMBER_OF_VSEP][8];
-extern uint8_t VSEP_EST_Select_GRADCOUNT_Current_Time[NUMBER_OF_VSEP][8];
+extern uint8_t VSEP_EST_Select_Dwell_Current_Time[8];
+extern uint8_t VSEP_EST_Select_GRADCOUNT_Current_Time[8];
 #endif
 
 
