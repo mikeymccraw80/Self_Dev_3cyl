@@ -24,6 +24,7 @@
 #include "io_type.h"
 #include "spi_message.h"
 
+/* global vsep config */
 #define VSEP_DEPS_STATIC_INITIALIZATION
 #define VSEP_DISCRETE_STATIC_INITIALIZATION
 #define VSEP_EST_DIAGNOSTIC_DEBUG
@@ -35,10 +36,6 @@
 
 
 #define NUMBER_OF_VSEP (1)
-
-
-extern const SPI_Message_Definition_T VSEP_HWTEST_INIT_MESSAGE_DEFINITION[ NUMBER_OF_VSEP ];
-
 
 
 #endif // DD_VSEP_CONFIG_H
