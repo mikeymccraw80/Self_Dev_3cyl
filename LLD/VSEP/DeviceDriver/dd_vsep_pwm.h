@@ -608,8 +608,7 @@ VSEP_PWM_Channel_T VSEP_PWM_Get_Channel(
 //
 // @end
 //=============================================================================
-void VSEP_PWM_Device_Initialize(
-   IO_Configuration_T in_configuration);
+void VSEP_PWM_Device_Initialize(void);
 
 //=============================================================================
 // VSEP_PWM_Device_Clear
@@ -624,8 +623,7 @@ void VSEP_PWM_Device_Initialize(
 //
 // @end
 //=============================================================================
-void VSEP_PWM_Device_Clear(
-   IO_Configuration_T in_configuration);
+void VSEP_PWM_Device_Clear(void);
 
 //=============================================================================
 // VSEP_PWM_Channel_Initialize
@@ -659,56 +657,6 @@ void VSEP_PWM_Channel_Initialize(
 void VSEP_PWM_Channel_Clear(
    IO_Configuration_T in_configuration );
 
-//=============================================================================
-// VSEP_PWM_Enable_Channel
-//
-// @func Enables the channel for the specific device requested.
-//
-// @parm IO_Configuration_T | in_configuration | A configurable value set in
-//          io_config.h that specifies the device type, device number,
-//          pin output, and device specific information.
-//
-// @rdesc None
-//
-// @end
-//
-//=============================================================================
-void VSEP_PWM_Enable_Channel(
-   IO_Configuration_T in_configuration );
-
-//=============================================================================
-// VSEP_PWM_Disable_Channel
-//
-// @func Disables the channel for the specific device requested.
-//
-// @parm IO_Configuration_T | in_configuration | A configurable value set in
-//          io_config.h that specifies the device type, device number,
-//          pin output, and device specific information.
-//
-// @rdesc None
-//
-// @end
-//
-//=============================================================================
-void VSEP_PWM_Disable_Channel( 
-   IO_Configuration_T in_configuration );
-
-//=============================================================================
-// VSEP_PWM_Get_Channel_Status
-//
-// @func Returns the enable status of the requested channel.
-//
-// @parm IO_Configuration_T | in_configuration | A configurable value set in
-//          io_config.h that specifies the device type, device number,
-//          pin output, and device specific information.
-//
-// @rdesc the enable state of the channel
-// @flag  true | channel enabled
-// @flag  false | channel disabled
-//
-// @end
-//=============================================================================
-bool VSEP_PWM_Get_Channel_Status( IO_Configuration_T in_configuration );
 //=============================================================================
 // VSEP_PWM_Set_Period
 //

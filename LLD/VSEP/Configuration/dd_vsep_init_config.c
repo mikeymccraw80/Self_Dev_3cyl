@@ -193,112 +193,110 @@ const uint8_t VSEP_GRADCOUNT_FAULT_WINDOW = (uint8_t)((VSEP_GRADCOUNT_BASE_FREQU
 
 const uint16_t VSEP_PWM_TXD_INITIAL[VSEP_PWM_CHANNEL_MAX][VSEP_PWM_TXD_MESSAGE_MAX]=
 {
-   {
-      { //PWM Channel 1
-         {
+    { //PWM Channel 1
+        {
             VSEP_Msg_Set_SDOA( 0, VSEP_RXD_SDOA_FAULT_GRP_8 ) |
             VSEP_Msg_Set_SDIA( 0, VSEP_TXD_SDIA_PWM_ONT_1   )   
-         },
-         {
+        },
+        {
             VSEP_Msg_PWM_Set_OnTime( 0, VSEP_PWM_Get_Initial_Duty_Cycle( VSEP_0_PWM_1_PWM_INIT ) )   
-         },
-         {
-             VSEP_Msg_PWM_Set_Period( 0, VSEP_PWM_Get_Initial_Period( VSEP_0_PWM_1_PWM_INIT         ) ) |
+        },
+        {
+            VSEP_Msg_PWM_Set_Period( 0, VSEP_PWM_Get_Initial_Period( VSEP_0_PWM_1_PWM_INIT         ) ) |
             VSEP_Msg_PWM_Set_Divider( 0, VSEP_PWM_Get_Base_Frequency_Divider( VSEP_0_PWM_1_PWM_INIT ) )
-         } 
-      },
-      { //PWM Channel 2
-         {      
+        }
+    },
+    { //PWM Channel 2
+        {      
             VSEP_Msg_Set_SDOA( 0, VSEP_RXD_SDOA_FAULT_GRP_8 ) |
             VSEP_Msg_Set_SDIA( 0, VSEP_TXD_SDIA_PWM_ONT_2   )
-         },
-         {
+        },
+        {
             VSEP_Msg_PWM_Set_OnTime( 0, VSEP_PWM_Get_Initial_Duty_Cycle( VSEP_0_PWM_2_PWM_INIT ) )   
-         },
-         {
-             VSEP_Msg_PWM_Set_Period( 0, VSEP_PWM_Get_Initial_Period( VSEP_0_PWM_2_PWM_INIT         ) ) |
+        },
+        {
+            VSEP_Msg_PWM_Set_Period( 0, VSEP_PWM_Get_Initial_Period( VSEP_0_PWM_2_PWM_INIT         ) ) |
             VSEP_Msg_PWM_Set_Divider( 0, VSEP_PWM_Get_Base_Frequency_Divider( VSEP_0_PWM_2_PWM_INIT ) )
-         }
-      },
-      { //PWM Channel 3
-         {      
+        }
+    },
+    { //PWM Channel 3
+        {
             VSEP_Msg_Set_SDOA( 0, VSEP_RXD_SDOA_FAULT_GRP_8 ) |
             VSEP_Msg_Set_SDIA( 0, VSEP_TXD_SDIA_PWM_ONT_3   )   
-         },
-         {
+        },
+        {
             VSEP_Msg_PWM_Set_OnTime( 0, VSEP_PWM_Get_Initial_Duty_Cycle( VSEP_0_PWM_3_PWM_INIT ) )   
-         },
-         {
-             VSEP_Msg_PWM_Set_Period( 0, VSEP_PWM_Get_Initial_Period( VSEP_0_PWM_3_PWM_INIT         ) ) |
+        },
+        {
+            VSEP_Msg_PWM_Set_Period( 0, VSEP_PWM_Get_Initial_Period( VSEP_0_PWM_3_PWM_INIT         ) ) |
             VSEP_Msg_PWM_Set_Divider( 0, VSEP_PWM_Get_Base_Frequency_Divider( VSEP_0_PWM_3_PWM_INIT ) )
-         }
-      },
-      { //PWM Channel 4
-         {
+        }
+    },
+    { //PWM Channel 4
+        {
             VSEP_Msg_Set_SDOA( 0, VSEP_RXD_SDOA_FAULT_GRP_8 ) |
             VSEP_Msg_Set_SDIA( 0, VSEP_TXD_SDIA_PWM_ONT_4   )   
-         },
-         {
+        },
+        {
             VSEP_Msg_PWM_Set_OnTime( 0, VSEP_PWM_Get_Initial_Duty_Cycle( VSEP_0_PWM_4_PWM_INIT ) )   
-         },
-         {
-             VSEP_Msg_PWM_Set_Period( 0, VSEP_PWM_Get_Initial_Period( VSEP_0_PWM_4_PWM_INIT         ) ) |
+        },
+        {
+            VSEP_Msg_PWM_Set_Period( 0, VSEP_PWM_Get_Initial_Period( VSEP_0_PWM_4_PWM_INIT         ) ) |
             VSEP_Msg_PWM_Set_Divider( 0, VSEP_PWM_Get_Base_Frequency_Divider( VSEP_0_PWM_4_PWM_INIT ) )
-         }
-      },
-      { //PWM Channel 5
-         {
+        }
+    },
+    { //PWM Channel 5
+        {
             VSEP_Msg_Set_SDOA( 0, VSEP_RXD_SDOA_FAULT_GRP_8 ) |
             VSEP_Msg_Set_SDIA( 0, VSEP_TXD_SDIA_PWM_ONT_5   )   
-         },
-         {
+        },
+        {
             VSEP_Msg_PWM_Set_OnTime( 0, VSEP_PWM_Get_Initial_Duty_Cycle( VSEP_0_PWM_5_PWM_INIT ) )   
-         },
-         {
-             VSEP_Msg_PWM_Set_Period( 0, VSEP_PWM_Get_Initial_Period( VSEP_0_PWM_5_PWM_INIT         ) ) |
+        },
+        {
+            VSEP_Msg_PWM_Set_Period( 0, VSEP_PWM_Get_Initial_Period( VSEP_0_PWM_5_PWM_INIT         ) ) |
             VSEP_Msg_PWM_Set_Divider( 0, VSEP_PWM_Get_Base_Frequency_Divider( VSEP_0_PWM_5_PWM_INIT ) )
-         }
-      },
-      { //PWM Channel 6
-         {      
+        }
+    },
+    { //PWM Channel 6
+        {      
             VSEP_Msg_Set_SDOA( 0, VSEP_RXD_SDOA_FAULT_GRP_8 ) |
             VSEP_Msg_Set_SDIA( 0, VSEP_TXD_SDIA_PWM_ONT_6   )   
-         },
-         {
+        },
+        {
             VSEP_Msg_PWM_Set_OnTime( 0, VSEP_PWM_Get_Initial_Duty_Cycle( VSEP_0_PWM_6_PWM_INIT ) )   
-         },
-         {
-             VSEP_Msg_PWM_Set_Period( 0, VSEP_PWM_Get_Initial_Period( VSEP_0_PWM_6_PWM_INIT         ) ) |
+        },
+        {
+            VSEP_Msg_PWM_Set_Period( 0, VSEP_PWM_Get_Initial_Period( VSEP_0_PWM_6_PWM_INIT         ) ) |
             VSEP_Msg_PWM_Set_Divider( 0, VSEP_PWM_Get_Base_Frequency_Divider( VSEP_0_PWM_6_PWM_INIT ) )
-         }
-      },
-      { //PWM Channel 7
-         {      
+        }
+    },
+    { //PWM Channel 7
+        {
             VSEP_Msg_Set_SDOA( 0, VSEP_RXD_SDOA_FAULT_GRP_8 ) |
             VSEP_Msg_Set_SDIA( 0, VSEP_TXD_SDIA_PWM_ONT_7   )   
-         },
-         {
+        },
+        {
             VSEP_Msg_PWM_Set_OnTime( 0, VSEP_PWM_Get_Initial_Duty_Cycle( VSEP_0_PWM_7_PWM_INIT ) )   
-         },
-         {
-             VSEP_Msg_PWM_Set_Period( 0, VSEP_PWM_Get_Initial_Period( VSEP_0_PWM_7_PWM_INIT         ) ) |
+        },
+        {
+            VSEP_Msg_PWM_Set_Period( 0, VSEP_PWM_Get_Initial_Period( VSEP_0_PWM_7_PWM_INIT         ) ) |
             VSEP_Msg_PWM_Set_Divider( 0, VSEP_PWM_Get_Base_Frequency_Divider( VSEP_0_PWM_7_PWM_INIT ) )
-         }
-      },
-      { //PWM Channel 8
-         {
+        }
+    },
+    { //PWM Channel 8
+        {
             VSEP_Msg_Set_SDOA( 0, VSEP_RXD_SDOA_FAULT_GRP_8 ) |
             VSEP_Msg_Set_SDIA( 0, VSEP_TXD_SDIA_PWM_ONT_8   )   
-         },
-         {
+        },
+        {
             VSEP_Msg_PWM_Set_OnTime( 0, VSEP_PWM_Get_Initial_Duty_Cycle( VSEP_0_PWM_8_PWM_INIT ) )   
-         },
-         {
-             VSEP_Msg_PWM_Set_Period( 0, VSEP_PWM_Get_Initial_Period( VSEP_0_PWM_8_PWM_INIT         ) ) |
+        },
+        {
+            VSEP_Msg_PWM_Set_Period( 0, VSEP_PWM_Get_Initial_Period( VSEP_0_PWM_8_PWM_INIT         ) ) |
             VSEP_Msg_PWM_Set_Divider( 0, VSEP_PWM_Get_Base_Frequency_Divider( VSEP_0_PWM_8_PWM_INIT ) )
-         }
-      }
-   }
+        }
+    }
 };
 
 /* VSEP PCH Init Value */
