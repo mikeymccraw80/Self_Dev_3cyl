@@ -33,10 +33,7 @@
 #define VSEP_VR_STATIC_INITIALIZATION
 //#define VSEP_CALIBRATION_ENABLE
 
-
-
 #define NUMBER_OF_VSEP (1)
-
 
 #endif // DD_VSEP_CONFIG_H
 /*===========================================================================*\
