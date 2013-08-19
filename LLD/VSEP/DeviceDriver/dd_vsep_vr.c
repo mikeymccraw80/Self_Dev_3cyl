@@ -50,8 +50,7 @@ static VSEP_VR_Channel_T VSEP_VR_Get_Channel(
 {
    VSEP_Channel_T    vsep_channel = VSEP_Get_Channel( in_configuration );
    VSEP_VR_Channel_T      channel = (vsep_channel >= VSEP_CHANNEL_VR1) && (vsep_channel <= VSEP_CHANNEL_VR2) ? 
-                                    (vsep_channel - VSEP_CHANNEL_VR1) : 
-                                    VSEP_CHANNEL_MAX;
+                                    (vsep_channel - VSEP_CHANNEL_VR1) : VSEP_CHANNEL_MAX;
 
    return channel;
    
@@ -60,26 +59,16 @@ static VSEP_VR_Channel_T VSEP_VR_Get_Channel(
 //=============================================================================
 // VSEP_PULSE_VR_Initialize_Device
 //=============================================================================
-void VSEP_PULSE_VR_Initialize_Device(
-   IO_Configuration_T   in_configuration )
+void VSEP_PULSE_VR_Initialize_Device(void)
 {
 #ifdef VSEP_VR_STATIC_INITIALIZATION
-   VSEP_VR_Txd[ VSEP_VR_TXD_MESSAGE_CTRL ] = VSEP_VR_TXD_INITIAL[ VSEP_VR_TXD_MESSAGE_CTRL ];
-   VSEP_VR_Txd[ VSEP_VR_TXD_MESSAGE_VR1 ]  = VSEP_VR_TXD_INITIAL[ VSEP_VR_TXD_MESSAGE_VR1 ]; 
-   VSEP_VR_Txd[ VSEP_VR_TXD_MESSAGE_VR2 ]  = VSEP_VR_TXD_INITIAL[ VSEP_VR_TXD_MESSAGE_VR2 ]; 
+    VSEP_VR_Txd[ VSEP_VR_TXD_MESSAGE_CTRL ] = VSEP_VR_TXD_INITIAL[ VSEP_VR_TXD_MESSAGE_CTRL ];
+    VSEP_VR_Txd[ VSEP_VR_TXD_MESSAGE_VR1 ]  = VSEP_VR_TXD_INITIAL[ VSEP_VR_TXD_MESSAGE_VR1 ]; 
+    VSEP_VR_Txd[ VSEP_VR_TXD_MESSAGE_VR2 ]  = VSEP_VR_TXD_INITIAL[ VSEP_VR_TXD_MESSAGE_VR2 ]; 
 #else
-   VSEP_VR_Txd[ VSEP_VR_TXD_MESSAGE_CTRL ] = VSEP_Msg_Set_SDOA( VSEP_VR_Txd[ VSEP_VR_TXD_MESSAGE_CTRL ], VSEP_RXD_SDOA_VR_FLT );
-   VSEP_VR_Txd[ VSEP_VR_TXD_MESSAGE_CTRL ] = VSEP_Msg_Set_SDIA( VSEP_VR_Txd[ VSEP_VR_TXD_MESSAGE_CTRL ], VSEP_TXD_SDIA_VR1_CTRL );
+    VSEP_VR_Txd[ VSEP_VR_TXD_MESSAGE_CTRL ] = VSEP_Msg_Set_SDOA( VSEP_VR_Txd[ VSEP_VR_TXD_MESSAGE_CTRL ], VSEP_RXD_SDOA_VR_FLT );
+    VSEP_VR_Txd[ VSEP_VR_TXD_MESSAGE_CTRL ] = VSEP_Msg_Set_SDIA( VSEP_VR_Txd[ VSEP_VR_TXD_MESSAGE_CTRL ], VSEP_TXD_SDIA_VR1_CTRL );
 #endif
-}
-
-//=============================================================================
-// VSEP_PULSE_VR_Clear_Device
-//=============================================================================
-void VSEP_PULSE_VR_Clear_Device(
-   IO_Configuration_T   in_configuration )
-{
-   Parameter_Not_Used( in_configuration );
 }
 
 //=============================================================================
@@ -97,15 +86,6 @@ void VSEP_PULSE_VR_Initialize_Channel(
       VSEP_VR_Txd[ VSEP_VR_TXD_MESSAGE_VR1 + channel ] = VSEP_Msg_VR_Set_AT( VSEP_VR_Txd[ VSEP_VR_TXD_MESSAGE_VR1 + channel ], 
                                                                                             VSEP_VR_Get_Adaptive_Threshold( in_configuration ) );
    }
-}
-
-//=============================================================================
-// VSEP_PULSE_VR_Clear_Channel
-//=============================================================================
-void VSEP_PULSE_VR_Clear_Channel(
-   IO_Configuration_T   in_configuration )
-{
-   Parameter_Not_Used( in_configuration );
 }
 
 //=============================================================================
@@ -128,7 +108,7 @@ void VSEP_TIMER_VR_Set_Value(
 //=============================================================================
 // VSEP_TIMER_VR_Set_Value_Immediate
 //=============================================================================
-FAR_COS void VSEP_TIMER_VR_Set_Value_Immediate(
+void VSEP_TIMER_VR_Set_Value_Immediate(
    IO_Configuration_T   in_configuration,
    uint32_t             in_time )
 {
@@ -186,7 +166,6 @@ IO_Timer_State_T VSEP_TIMER_VR_Get_State(
 uint32_t VSEP_TIMER_VR_Get_Base_Frequency(
    IO_Configuration_T   in_configuration)
 {
-   Parameter_Not_Used( in_configuration );
    return VSEP_TIMER_VR_Base_Frequency;
 }
 
@@ -196,7 +175,6 @@ uint32_t VSEP_TIMER_VR_Get_Base_Frequency(
 IO_Timer_Size_T VSEP_TIMER_VR_Get_Size(
    IO_Configuration_T   in_configuration )
 {
-   Parameter_Not_Used( in_configuration );
    return IO_TIMER_12_BIT;
 }
 

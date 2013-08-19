@@ -241,24 +241,7 @@ extern uint16_t VSEP_VR_Rxd[VSEP_VR_RXD_MESSAGE_MAX];
 //
 // @end
 //=============================================================================
-void VSEP_PULSE_VR_Initialize_Device(
-   IO_Configuration_T   in_configuration );
-
-//=============================================================================
-// VSEP_PULSE_Clear_Device
-//
-// @func Clear a device's global registers to its reset state.
-//
-// @parm IO_Configuration_T | in_configuration | A configurable value set in
-//          io_config.h that specifies the device type, device number,
-//          pin output, and device specific information.
-//
-// @rdesc None
-//
-// @end
-//=============================================================================
-void VSEP_PULSE_VR_Clear_Device(
-   IO_Configuration_T   in_configuration );
+void VSEP_PULSE_VR_Initialize_Device(void);
 
 //=============================================================================
 //  Used for mutilple types
@@ -280,24 +263,6 @@ void VSEP_PULSE_VR_Clear_Device(
 //=============================================================================
 void VSEP_PULSE_VR_Initialize_Channel(
    IO_Configuration_T   in_configuration );
-
-//=============================================================================
-// VSEP_PULSE_Clear_Channel
-//
-// @func Clear an input capture by calling the appropriate
-// device function based on the configuration passed in.
-//
-// @parm IO_Configuration_T | in_configuration | A configurable value set in
-//          io_config.h that specifies the device type, device number,
-//          pin output, and device specific information.
-//
-// @rdesc None
-//
-// @end
-//=============================================================================
-void VSEP_PULSE_VR_Clear_Channel(
-   IO_Configuration_T   in_configuration );
-
 
 //=============================================================================
 // VSEP_PULSE_Update_Overflow_Counters

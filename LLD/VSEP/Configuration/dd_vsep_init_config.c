@@ -165,21 +165,20 @@ const uint16_t VSEP_DEPS_TXD_INITIAL[VSEP_DEPS_TXD_MESSAGE_MAX] =
 const uint32_t VSEP_TIMER_VR_Base_Frequency = 0;
 const uint16_t VSEP_VR_TXD_INITIAL[VSEP_VR_TXD_MESSAGE_MAX] = 
 {
-   {
-      {     VSEP_Msg_Set_SDOA( 0, VSEP_RXD_SDOA_NOT_USED  ) |
-            VSEP_Msg_Set_SDIA( 0, VSEP_TXD_SDIA_VR1_CTRL  )   
-      },
-      { 
-         VSEP_Msg_VR_Set_Delay( 0, VSEP_VR_Get_Initial_Delay( VSEP_0_VR_1_INIT )      ) |
-            VSEP_Msg_VR_Set_AT( 0, VSEP_VR_Get_Adaptive_Threshold( VSEP_0_VR_1_INIT ) ) |
-            VSEP_Msg_VR_Set_MT( 0, VSEP_VR_Get_Adaptive_Threshold( VSEP_0_VR_1_INIT ) )
-      },
-      { 
-         VSEP_Msg_VR_Set_Delay( 0, VSEP_VR_Get_Initial_Delay( VSEP_0_VR_2_INIT )      ) |
-            VSEP_Msg_VR_Set_AT( 0, VSEP_VR_Get_Adaptive_Threshold( VSEP_0_VR_2_INIT ) ) |
-            VSEP_Msg_VR_Set_MT( 0, VSEP_VR_Get_Adaptive_Threshold( VSEP_0_VR_2_INIT ) ) 
-      }
-   }
+    {
+        VSEP_Msg_Set_SDOA( 0, VSEP_RXD_SDOA_NOT_USED  ) |
+        VSEP_Msg_Set_SDIA( 0, VSEP_TXD_SDIA_VR1_CTRL  )
+    },
+    { 
+        VSEP_Msg_VR_Set_Delay( 0, VSEP_VR_Get_Initial_Delay( VSEP_0_VR_1_INIT )      ) |
+        VSEP_Msg_VR_Set_AT( 0, VSEP_VR_Get_Adaptive_Threshold( VSEP_0_VR_1_INIT ) ) |
+        VSEP_Msg_VR_Set_MT( 0, VSEP_VR_Get_Adaptive_Threshold( VSEP_0_VR_1_INIT ) )
+    },
+    { 
+        VSEP_Msg_VR_Set_Delay( 0, VSEP_VR_Get_Initial_Delay( VSEP_0_VR_2_INIT )      ) |
+        VSEP_Msg_VR_Set_AT( 0, VSEP_VR_Get_Adaptive_Threshold( VSEP_0_VR_2_INIT ) ) |
+        VSEP_Msg_VR_Set_MT( 0, VSEP_VR_Get_Adaptive_Threshold( VSEP_0_VR_2_INIT ) ) 
+    }
 };
 
 const uint32_t VSEP_BASE_FREQUENCY = VSEP_EXTERNAL_CLOCK_BASE_FREQUENCY;
