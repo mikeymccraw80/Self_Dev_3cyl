@@ -1,88 +1,38 @@
-#ifndef IO_SPI_SCHEDULER_H
-#define IO_SPI_SCHEDULER_H
-//=============================================================================
-//
-//       COPYRIGHT, 2002, Delphi Technologies, Inc. All Rights reserved
-//
-//       Delphi Confidential
-//
-//===========================================================================*
-// %name:            io_spi_scheduler.h %
-//
-// created_by:       jwyrick
-//
-// date_created:     Tue Oct  1 11:02:11 2002
-//
-// %derived_by:      dzhrz4 %
-//
-// %date_modified:   Mon Aug  7 10:21:52 2006 %
-//
-// %version:         2 %
-//
-//===========================================================================*
-// @doc
-//
-// @module io_spi_scheduler.h | Name of Module
-//
-// The purpose of this module is to Schedule Spi Messages
-//
-// <nl> Put a brief description here 
-// brief description continued
-// brief description continued
-//
-// @normal Copyright <cp> 2001 Delco Electronics , All Rights Reserved
-//
-// @topic SPI API Overview |  add some kind of overview here
-//
-// @head3 SPI Schedule  Configuration Definition |
-// @index | SPI Schedule & CONFIG
-//
-// @head3 SPI Schedule API Definition
-// @index | SPI Schedule & API
-//
-// @end
-//
-// SPECIFICATION REVISION:
-//
-//===========================================================================*
-// REUSE:
-// DO NOT MODIFY THIS FILE. It contains no configurable parameters.
-//
-//=============================================================================
+#ifndef VSEP_SPI_SCHEDULER_H
+#define VSEP_SPI_SCHEDULER_H
 
-#include "spi_message.h"
+
 #include "dd_vsep.h"
+#include "list.h"
 
-typedef struct SPI_Message_Definition_Tag
-{
+typedef struct {
     void        *receive_data;
     void        *transmit_data;
     uint16_t    length_of_receive_message;
     uint16_t    length_of_transmit_message;
 } SPI_Message_Definition_T;
 
-typedef struct SPI_Message_Control_Block_Tag
-{
-    uint32_t             interval;
-    uint32_t             time;
-    SPI_Message_Status_T status;
-} SPI_Message_Control_Block_T;
+typedef struct {
+    SPI_Message_Definition_T * spi_msg;
+    uint32_t                  interval;
+    uint32_t                  time;
+    struct list_head          list;
+} SPI_Message_Queue_T;
 
+#define VSEP_SOH_OFFSET          SEC_TO_CLOCK( 0.00000000 )
+#define VSEP_SOH_INTERVAL        SEC_TO_CLOCK( 0.02000000 )
 
-//=============================================================================
-// SPI_SCHEDULER_QUEUE_SIZE_MAX
-//=============================================================================
-extern const uint8_t SPI_SCHEDULER_QUEUE_SIZE_MAX;
+#define VSEP_SOH_STATUS_OFFSET   SEC_TO_CLOCK( 0.03500000 )
+#define VSEP_SOH_STATUS_INTERVAL SEC_TO_CLOCK( 0.16000000 )
 
-//=============================================================================
-// SPI_SCHEDULER_START_DELAY
-//=============================================================================
-extern const uint8_t SPI_SCHEDULER_START_DELAY;
+#define VSEP_PWM_OFFSET(x)       SEC_TO_CLOCK( 0.01000000*x )
+#define VSEP_PWM_INTERVAL        SEC_TO_CLOCK( 0.01000000 )
 
-//=============================================================================
-// SPI_SCHEDULER_Priority_Queue
-//=============================================================================
-extern const SPI_Message_T *SPI_SCHEDULER_Priority_Queue[];
+#define VSEP_PCH_OFFSET          SEC_TO_CLOCK( 0.01500000 )
+#define VSEP_PCH_INTERVAL        SEC_TO_CLOCK( 0.01000000 )
+
+#define VSEP_FAULT_OFFSET        SEC_TO_CLOCK( 0.00500000 )
+#define VSEP_FAULT_INTERVAL      SEC_TO_CLOCK( 0.01000000 )
 
 //=============================================================================
 // SPI_SCHEDULER_Initialize
