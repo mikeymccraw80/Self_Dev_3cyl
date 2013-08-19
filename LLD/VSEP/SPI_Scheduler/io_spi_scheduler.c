@@ -27,12 +27,12 @@
 #include "io_spi_scheduler.h"
 #include "dd_vsep.h"
 #include "reuse.h"
-#include "io_spi_config.h"
+
 
 typedef struct
 {
-   bitfield8_t Number_Of_Periodical_Messages : 7;
-   bitfield8_t Running                       : 1;
+       bitfield8_t Number_Of_Periodical_Messages : 7;
+       bitfield8_t Running                       : 1;
 }SPI_SCHEDULER_DATA_T;
 
 //=============================================================================
@@ -43,8 +43,7 @@ static SPI_SCHEDULER_DATA_T SPI_SCHEDULER_Data = { 0, 0 };
 //=============================================================================
 // SPI_SCHEDULER_Initialize
 //=============================================================================
- SPI_Scheduler_Status_T VSEP_SPI_SCHEDULER_Buffer_Initialize( 
-   const SPI_SCHEDULER_Message_T   *in_messages, 
+ SPI_Scheduler_Status_T VSEP_SPI_SCHEDULER_Buffer_Initialize(const SPI_SCHEDULER_Message_T   *in_messages, 
    uint32_t                         in_number_of_messages )
 {
 	SPI_SCHEDULER_Data.Number_Of_Periodical_Messages     = 0;

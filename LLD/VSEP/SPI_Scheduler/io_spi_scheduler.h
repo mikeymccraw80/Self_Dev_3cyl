@@ -53,23 +53,21 @@
 #include "spi_message.h"
 #include "dd_vsep.h"
 
-
-typedef enum 
+typedef struct SPI_Message_Definition_Tag
 {
-   SPI_SCHEDULER_STATUS_OK,
-   SPI_SCHEDULER_STATUS_IDLE,
-   SPI_SCHEDULER_STATUS_QUEUE_FULL
-}SPI_Scheduler_Status_T;
+    void        *receive_data;
+    void        *transmit_data;
+    uint16_t    length_of_receive_message;
+    uint16_t    length_of_transmit_message;
+} SPI_Message_Definition_T;
 
-typedef uint32_t SPI_Scheduler_Time_T;
-
-typedef struct SPI_SCHEDULER_Message_Tag
+typedef struct SPI_Message_Control_Block_Tag
 {
-   const SPI_Message_T     *message; 
-   SPI_Scheduler_Time_T     offset; 
-   SPI_Scheduler_Time_T     interval;
-   
-} SPI_SCHEDULER_Message_T;
+    uint32_t             interval;
+    uint32_t             time;
+    SPI_Message_Status_T status;
+} SPI_Message_Control_Block_T;
+
 
 //=============================================================================
 // SPI_SCHEDULER_QUEUE_SIZE_MAX
