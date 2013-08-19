@@ -380,8 +380,7 @@ extern const uint16_t VSEP_EST_SELECT_INITIAL[VSEP_EST_SELECT_TXD_MESSAGE_MAX];
 //
 // @end
 //=============================================================================
-FAR_COS void VSEP_EST_Select_Initialize_Device(
-   IO_Configuration_T  in_configuration );
+FAR_COS void VSEP_EST_Select_Initialize_Device(void);
 
 #else
 //=============================================================================
@@ -395,8 +394,7 @@ FAR_COS void VSEP_EST_Select_Initialize_Device(
 //
 // @end
 //=============================================================================
-FAR_COS void VSEP_EST_Select_Initialize_Device(
-  IO_Configuration_T  in_configuration );
+FAR_COS void VSEP_EST_Select_Initialize_Device(void);
 
 
 //=============================================================================

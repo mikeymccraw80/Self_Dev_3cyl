@@ -170,7 +170,7 @@ void SPARK_Initialize(
 
    //C2MIO_EST_Select_Initialize_Device
   // EST_Select_Initialize_Device( &MTSA_EST_SELECT_DEVICE );
-  VSEP_EST_Select_Initialize_Device(MTSA_CONFIG_VSEP_DEVICE_0);
+  VSEP_EST_Select_Initialize_Device();
 
    SPARK_Set_Mode( SPARK_Initial_Est_Mode );
 

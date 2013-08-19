@@ -60,8 +60,7 @@ static VSEP_EST_Select_State_T VSEP_EST_Select_State;
 //=============================================================================
 // VSEP_PWM_Device_Initialize
 //=============================================================================
- FAR_COS void VSEP_EST_Select_Initialize_Device(
-   IO_Configuration_T in_configuration )//MTSA_CONFIG_VSEP_DEVICE_0
+FAR_COS void VSEP_EST_Select_Initialize_Device(void)
 {
 
 #ifdef VSEP_EST_SELECT_STATIC_INITIALIZATION
@@ -89,8 +88,7 @@ static void VSEP_EST_Select_Manage_Transition( void );
 //=============================================================================
 // VSEP_PWM_Device_Initialize
 //=============================================================================
-FAR_COS void VSEP_EST_Select_Initialize_Device(
-   IO_Configuration_T  in_configuration )//MTSA_CONFIG_VSEP_DEVICE_0
+FAR_COS void VSEP_EST_Select_Initialize_Device(void)
 {
 #ifdef VSEP_EST_SELECT_STATIC_INITIALIZATION
 
