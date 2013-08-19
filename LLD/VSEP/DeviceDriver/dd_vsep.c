@@ -31,7 +31,6 @@
 // Include interface for the device driver
 //=============================================================================
 #include "dd_vsep_fault.h"
-#include "io_spi_config.h"
 #include "io_config_spi.h"
 #include "dd_vsep_discrete.h"
 #include "dd_vsep_discrete_interface.h"
@@ -44,9 +43,10 @@
 #include "io_config_dma.h"
 #include "io_config_dspi.h"
 #include "dd_vsep_init_config.h"
+#include "vsep_spi_scheduler.h"
 
 uint32_t     VSEP_Channel_Enabled;
-extern const SPI_Message_T VSEP_MESSAGE[VSEP_MESSAGE_MAX+7];
+extern const SPI_Message_Definition_T VSEP_MESSAGE[VSEP_MESSAGE_MAX+7];
 
 
 #ifdef  VSEP_CALIBRATION_ENABLE
@@ -307,12 +307,12 @@ void VSEP_SPI_Immediate_Transfer(IO_Configuration_T in_configuration, VSEP_Messa
 	case VSEP_MESSAGE_EST_FAULT:
 	case VSEP_MESSAGE_SOH:
 	case VSEP_MESSAGE_SOH_STATUS:
-		VSEP_SPI_Port_Transfer(VSEP_MESSAGE[in_message].def);
+		VSEP_SPI_Port_Transfer(&VSEP_MESSAGE[in_message]);
 		break;
 	case VSEP_MESSAGE_PWM:
 		pwm_channel = VSEP_PWM_Get_Channel(in_configuration);
 		if(pwm_channel != VSEP_PWM_CHANNEL_MAX)
-			VSEP_SPI_Port_Transfer(VSEP_MESSAGE[VSEP_MESSAGE_PWM + pwm_channel ].def);
+			VSEP_SPI_Port_Transfer(&VSEP_MESSAGE[VSEP_MESSAGE_PWM + pwm_channel]);
 		break;
 	default:
 		break;
@@ -342,9 +342,9 @@ void VSEP_Initialize_Device(void)
 	// Hardware Test uses its own method to initialize the VSEP
 	// Send the Init message to the VSEP. This will setup all the faults/slews/est select information/
 	// along with all the locked bit information.
-	VSEP_SPI_Immediate_Transfer(VSEP_MESSAGE_INIT );
+	VSEP_SPI_Immediate_Transfer(VSEP_Set_Device_Index(0, VSEP_INDEX_0 ), VSEP_MESSAGE_INIT );
 	// Need to check why redundant operation is needed, without it, no spark injection
-	VSEP_SPI_Immediate_Transfer(VSEP_MESSAGE_INIT );
+	VSEP_SPI_Immediate_Transfer(VSEP_Set_Device_Index(0, VSEP_INDEX_0 ), VSEP_MESSAGE_INIT );
 	VSEP_Disable_SOH();
 
 	VSEP_EST_Select_Set_Mode(VSEP_INDEX_0,EST_MODE_SIMULTANEOUS_SINGLE_ENABLE); 

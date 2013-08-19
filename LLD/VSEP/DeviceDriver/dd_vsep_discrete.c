@@ -108,8 +108,7 @@ static const uint8_t VSEP_DISCRETE_PCH_CHANNEL_MAP[VSEP_CHANNEL_MAX] =
 #define VSEP_0_PCH4_INIT MTSA_CONFIG_VSEP_PCH_04
 */
 
-FAR_COS void VSEP_DISCRETE_Device_Initialize(
-   IO_Configuration_T in_configuration)
+void VSEP_DISCRETE_Device_Initialize(void)
 {
 #ifdef VSEP_DISCRETE_STATIC_INITIALIZATION
    VSEP_PCH_Txd[ VSEP_PCH_TXD_MESSAGE_CTRL ] = VSEP_PCH_TXD_INITIAL[ VSEP_PCH_TXD_MESSAGE_CTRL ];
@@ -308,8 +307,7 @@ FAR_COS void VSEP_DISCRETE_Toggle_Immediate_State(//question: why not get the st
 //===================================================================
 // VSEP_MPIO_MODE_Initialize_Device
 //===================================================================
-void VSEP_MPIO_MODE_Initialize_Device(
-   IO_Configuration_T in_configuration )
+void VSEP_MPIO_MODE_Initialize_Device(void)
 {
 #ifdef VSEP_MPIO_MODE_STATIC_INITIALIZATION
    VSEP_MPIO_MODE_Txd[ VSEP_MPIO_MODE_TXD_MESSAGE_CTRL ] = VSEP_MPIO_MODE_TXD_INITIAL[ VSEP_MPIO_MODE_TXD_MESSAGE_CTRL ];

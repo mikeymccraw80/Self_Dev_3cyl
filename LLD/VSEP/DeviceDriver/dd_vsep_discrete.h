@@ -219,8 +219,7 @@ extern uint16_t VSEP_PCH_Rxd[VSEP_PCH_RXD_MESSAGE_MAX];
 //
 // @end
 //=============================================================================
-FAR_COS void VSEP_DISCRETE_Device_Initialize(
-   IO_Configuration_T in_configuration);
+void VSEP_DISCRETE_Device_Initialize(void);
 
 //=============================================================================
 // VSEP_DISCRETE_Device_Clear
@@ -414,7 +413,7 @@ extern uint16_t VSEP_MPIO_MODE_Txd[NUMBER_OF_VSEP][VSEP_MPIO_MODE_TXD_MESSAGE_MA
 //
 // @end
 //=============================================================================
-void VSEP_MPIO_MODE_Initialize_Device( IO_Configuration_T in_configuration );
+void VSEP_MPIO_MODE_Initialize_Device(void);
 
 
 //=============================================================================

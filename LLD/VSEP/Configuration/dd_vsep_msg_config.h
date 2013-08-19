@@ -22,7 +22,6 @@
 //=============================================================================
 #include "reuse.h"
 #include "io_type.h"
-#include "spi_message.h"
 
 /* global vsep config */
 #define VSEP_DEPS_STATIC_INITIALIZATION

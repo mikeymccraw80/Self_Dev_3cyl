@@ -35,8 +35,8 @@
 //=============================================================================
 #include "dd_vsep_txd.h"
 #include "dd_vsep_rxd.h"
-//#include "dd_vsep_init_config.h"
 #include "dd_vsep_msg_config.h"
+#include "vsep_spi_scheduler.h"
 
 extern uint32_t            VSEP_Channel_Enabled;
 
@@ -936,10 +936,9 @@ FAR_COS void VSEP_HWTEST_SPI_Immediate_Transfer(
 /*
 transmit the corresponding message, input VSEP_MESSAGE
 */
- void  VSEP_SPI_Port_Transfer(
-					SPI_Message_Definition_T const *def);
-FAR_COS void VSEP_Initialize_Device(void);
-FAR_COS void VSEP_HWTEST_INIT_TXD_Initialize(uint16_t*	in_buffer,uint8_t device);
+void VSEP_SPI_Port_Transfer(SPI_Message_Definition_T const *def);
+void VSEP_Initialize_Device(void);
+void VSEP_HWTEST_INIT_TXD_Initialize(uint16_t* in_buffer,uint8_t device);
 #endif // DD_VSEP_H
 /*===========================================================================*\
  * Revision Log                                                              *
