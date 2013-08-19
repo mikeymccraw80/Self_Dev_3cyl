@@ -351,14 +351,13 @@ typedef enum
 
 typedef struct 
 {
-   IO_Configuration_T            fault_configuration;
-   IO_Configuration_T            io_configuration;
-   VSEP_Fault_IO_Kind_T kind;
-   IO_mask_T				io_mask;
-   
+    IO_Configuration_T          fault_configuration;
+    IO_Configuration_T          io_configuration;
+    VSEP_Fault_IO_Kind_T        kind;
+    IO_mask_T                   io_mask;
 }VSEP_Fault_Channel_Data_T;
 
-#define Number_of_EST_Channel  VSEP_EST_Select_Get_Cylinder_Count( VSEP_INIT_TXD_INITIAL[ 0 ][ VSEP_INIT_TXD_MESSAGE_EST_SELECT_INIT ])
+#define Number_of_EST_Channel  VSEP_EST_Select_Get_Cylinder_Count( VSEP_INIT_TXD_INITIAL[ VSEP_INIT_TXD_MESSAGE_EST_SELECT_INIT ])
 
 extern uint16_t VSEP_EST_Fault_Txd[VSEP_EST_FAULT_RXD_MESSAGE_MAX];
 extern uint16_t VSEP_EST_Fault_Rxd[VSEP_EST_FAULT_RXD_MESSAGE_MAX];
@@ -378,37 +377,6 @@ extern uint32_t VSEP_PWM_ontime_us[30];
 extern uint32_t Channel_Protect_Enable;
 extern uint8_t  Filter_Time_Array[30];
 
-//=============================================================================
-// VSEP_FAULT_Get_Device_Fault
-//
-// @func Get the status of any fault on the requested device.
-//
-// @parm IO_Configuration_T | in_configuration | A configurable value set in
-//          io_config.h that specifies the device type, device number,
-//          pin output, and device specific information.
-//
-// @rdesc Return true if there is any fault on the device.
-//
-// @end
-//=============================================================================
-bool VSEP_FAULT_Get_Device_Fault(
-   IO_Configuration_T in_configuration );
-
-//=============================================================================
-// FAULT_Clear_Device_Fault_T
-//
-// @func Clears all faults on a requested device.
-//
-// @parm IO_Configuration_T | in_configuration | A configurable value set in
-//          io_config.h that specifies the device type, device number,
-//          pin output, and device specific information.
-//
-// @rdesc none
-//
-// @end
-//=============================================================================
-void VSEP_FAULT_Clear_Device_Fault(
-   IO_Configuration_T in_configuration );
 
 //=============================================================================
 // VSEP_FAULT_Is_Message_Valid
