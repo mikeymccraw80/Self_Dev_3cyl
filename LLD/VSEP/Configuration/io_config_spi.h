@@ -153,16 +153,6 @@
 	   VSEP_SOH_Set_ENABLE( 0, VSEP_SOH_ENABLE) )
 #endif
 
-//=============================================================================
-//                 VSEP
-//=============================================================================
-#define VSEP_0_SPBR  ( SPI_Convert_Baud_To_SPBR( 6250000 ) )
-#define VSEP_0_XFER  ( 16 )
-#define VSEP_0_DSCKL ( 0 )
-#define VSEP_0_DTL   ( 0 )
-#define VSEP_0_POL   ( SPI_MESSAGE_CLOCK_POLARITY_ACTIVE_LOW )
-#define VSEP_0_PHASE ( SPI_MESSAGE_CLOCK_PHASE_TRAILING_EDGE )
-
 
 #endif // IO_CONFIG_SPI_H
 /*===========================================================================*\
