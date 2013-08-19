@@ -84,8 +84,7 @@ extern uint16_t VSEP_LEDMODE_Txd[VSEP_LEDMODE_TXD_MESSAGE_MAX];
 //=============================================================================
 // VSEP_LEDMODE_Initialize_Device
 //=============================================================================
-void VSEP_LEDMODE_Initialize_Device( 
-   IO_Configuration_T in_configuration );
+void VSEP_LEDMODE_Initialize_Device(void);
 
 //=============================================================================
 // VSEP_LEDMODE_Set_Channel
