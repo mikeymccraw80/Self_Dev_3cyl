@@ -1,7 +1,5 @@
 #include "io_type.h"
 #include "vsep_spi_scheduler.h"
-#include "dd_vsep.h"
-#include "reuse.h"
 
 
 typedef struct
