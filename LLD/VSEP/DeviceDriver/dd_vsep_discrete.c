@@ -36,7 +36,7 @@
 #include "dd_vsep_est_select.h"
 #include "dd_vsep_pwm.h"
 #include "dd_vsep_vr.h"
-#include "dd_vsep_config.h"
+#include "dd_vsep_msg_config.h"
 #include "dd_vsep_init_config.h"
 
 /* PCH spi tx and rx message buffer definiton */

@@ -49,7 +49,7 @@
 #include "dd_vsep_soh.h"
 #include "dd_vsep_fault.h"
 #include "dd_vsep.h"
-#include "dd_vsep_config.h"
+#include "dd_vsep_msg_config.h"
 
 /*===========================================================================*\
  * Local Preprocessor #define Constants

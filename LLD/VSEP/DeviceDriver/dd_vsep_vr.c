@@ -36,7 +36,7 @@
 #include "dd_vsep_pwm.h"
 #include "dd_vsep_soh.h"
 #include "dd_vsep_vr.h"
-#include "dd_vsep_config.h"
+#include "dd_vsep_msg_config.h"
 #include "dd_vsep_init_config.h"
 
 uint16_t VSEP_VR_Txd[VSEP_VR_TXD_MESSAGE_MAX];

@@ -38,7 +38,7 @@
 #include "dd_vsep_soh.h"
 #include "io_config_vsep.h"
 #include "dd_vsep_est_select.h"
-#include "dd_vsep_config.h"
+#include "dd_vsep_msg_config.h"
 #include "dd_vsep_vr.h"
 #include "dd_dspi_interface.h"
 #include "io_config_dma.h"
