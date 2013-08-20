@@ -234,8 +234,7 @@ void VSEP_DISCRETE_Device_Initialize(void);
 //
 // @end
 //=============================================================================
-void VSEP_DISCRETE_Device_Clear(
-   IO_Configuration_T in_configuration);
+void VSEP_DISCRETE_Device_Clear(void);
 
 //=============================================================================
 // VSEP_DISCRETE_Channel_Initialize
@@ -396,9 +395,9 @@ typedef enum
    VSEP_MPIO_MODE_TXD_MESSAGE_MAX
 }VSEP_MPIO_MODE_Txd_Message_T;
 
-extern const uint16_t VSEP_MPIO_MODE_TXD_INITIAL[NUMBER_OF_VSEP][VSEP_MPIO_MODE_TXD_MESSAGE_MAX];
+extern const uint16_t VSEP_MPIO_MODE_TXD_INITIAL[VSEP_MPIO_MODE_TXD_MESSAGE_MAX];
 
-extern uint16_t VSEP_MPIO_MODE_Txd[NUMBER_OF_VSEP][VSEP_MPIO_MODE_TXD_MESSAGE_MAX];
+extern uint16_t VSEP_MPIO_MODE_Txd[VSEP_MPIO_MODE_TXD_MESSAGE_MAX];
 
 //=============================================================================
 // VSEP_MPIO_MODE_Initialize_Device

@@ -46,50 +46,50 @@ uint16_t VSEP_MPIO_MODE_Txd[VSEP_MPIO_MODE_TXD_MESSAGE_MAX];
 
 static const uint8_t VSEP_DISCRETE_PCH_CHANNEL_MAP[VSEP_CHANNEL_MAX] =
 {
-   VSEP_PCH_CHANNEL_MAX,
-   VSEP_PCH_CHANNEL_MAX,
-   VSEP_PCH_CHANNEL_MAX,
-   VSEP_PCH_CHANNEL_OUT_4,
-   VSEP_PCH_CHANNEL_OUT_5,
-   VSEP_PCH_CHANNEL_OUT_6,
-   VSEP_PCH_CHANNEL_OUT_7,
-   VSEP_PCH_CHANNEL_OUT_8,
-   VSEP_PCH_CHANNEL_MAX,
-   VSEP_PCH_CHANNEL_MAX,
-   VSEP_PCH_CHANNEL_MAX,
-   VSEP_PCH_CHANNEL_MAX,
-   VSEP_PCH_CHANNEL_OUT_13,
-   VSEP_PCH_CHANNEL_OUT_14,
-   VSEP_PCH_CHANNEL_MAX,
-   VSEP_PCH_CHANNEL_MAX,
-   VSEP_PCH_CHANNEL_OUT_17,
-   VSEP_PCH_CHANNEL_OUT_18,
-   VSEP_PCH_CHANNEL_OUT_19,
-   VSEP_PCH_CHANNEL_OUT_20,
-   VSEP_PCH_CHANNEL_MAX,
-   VSEP_PCH_CHANNEL_MAX,
-   VSEP_PCH_CHANNEL_OUT_23,
-   VSEP_PCH_CHANNEL_MAX,
-   VSEP_PCH_CHANNEL_OUT_25,
-   VSEP_PCH_CHANNEL_OUT_26,
-   VSEP_PCH_CHANNEL_MAX,
-   VSEP_PCH_CHANNEL_MAX,
-   VSEP_PCH_CHANNEL_MAX,
-   VSEP_PCH_CHANNEL_OUT_30,
-   VSEP_PCH_CHANNEL_MPIO_1,
-   VSEP_PCH_CHANNEL_MPIO_2,
-   VSEP_PCH_CHANNEL_MPIO_3,
-   VSEP_PCH_CHANNEL_MAX,
-   VSEP_PCH_CHANNEL_MAX,
-   VSEP_PCH_CHANNEL_MAX,
-   VSEP_PCH_CHANNEL_MAX,
-   VSEP_PCH_CHANNEL_MAX,
-   VSEP_PCH_CHANNEL_MAX,
-   VSEP_PCH_CHANNEL_MAX,
-   VSEP_PCH_CHANNEL_MAX,
-   VSEP_PCH_CHANNEL_MAX,
-   VSEP_PCH_CHANNEL_MAX,
-   VSEP_PCH_CHANNEL_SOHRSTEN_STAT
+    VSEP_PCH_CHANNEL_MAX,
+    VSEP_PCH_CHANNEL_MAX,
+    VSEP_PCH_CHANNEL_MAX,
+    VSEP_PCH_CHANNEL_OUT_4,
+    VSEP_PCH_CHANNEL_OUT_5,
+    VSEP_PCH_CHANNEL_OUT_6,
+    VSEP_PCH_CHANNEL_OUT_7,
+    VSEP_PCH_CHANNEL_OUT_8,
+    VSEP_PCH_CHANNEL_MAX,
+    VSEP_PCH_CHANNEL_MAX,
+    VSEP_PCH_CHANNEL_MAX,
+    VSEP_PCH_CHANNEL_MAX,
+    VSEP_PCH_CHANNEL_OUT_13,
+    VSEP_PCH_CHANNEL_OUT_14,
+    VSEP_PCH_CHANNEL_MAX,
+    VSEP_PCH_CHANNEL_MAX,
+    VSEP_PCH_CHANNEL_OUT_17,
+    VSEP_PCH_CHANNEL_OUT_18,
+    VSEP_PCH_CHANNEL_OUT_19,
+    VSEP_PCH_CHANNEL_OUT_20,
+    VSEP_PCH_CHANNEL_MAX,
+    VSEP_PCH_CHANNEL_MAX,
+    VSEP_PCH_CHANNEL_OUT_23,
+    VSEP_PCH_CHANNEL_MAX,
+    VSEP_PCH_CHANNEL_OUT_25,
+    VSEP_PCH_CHANNEL_OUT_26,
+    VSEP_PCH_CHANNEL_MAX,
+    VSEP_PCH_CHANNEL_MAX,
+    VSEP_PCH_CHANNEL_MAX,
+    VSEP_PCH_CHANNEL_OUT_30,
+    VSEP_PCH_CHANNEL_MPIO_1,
+    VSEP_PCH_CHANNEL_MPIO_2,
+    VSEP_PCH_CHANNEL_MPIO_3,
+    VSEP_PCH_CHANNEL_MAX,
+    VSEP_PCH_CHANNEL_MAX,
+    VSEP_PCH_CHANNEL_MAX,
+    VSEP_PCH_CHANNEL_MAX,
+    VSEP_PCH_CHANNEL_MAX,
+    VSEP_PCH_CHANNEL_MAX,
+    VSEP_PCH_CHANNEL_MAX,
+    VSEP_PCH_CHANNEL_MAX,
+    VSEP_PCH_CHANNEL_MAX,
+    VSEP_PCH_CHANNEL_MAX,
+    VSEP_PCH_CHANNEL_SOHRSTEN_STAT
 };
 
 //=============================================================================
@@ -122,8 +122,7 @@ void VSEP_DISCRETE_Device_Initialize(void)
 //=============================================================================
 // VSEP_DISCRETE_Device_Clear
 //=============================================================================
-void VSEP_DISCRETE_Device_Clear(
-   IO_Configuration_T in_configuration)
+void VSEP_DISCRETE_Device_Clear(void)
 {
    VSEP_PCH_Txd[ VSEP_PCH_TXD_MESSAGE_CTRL ] = VSEP_Msg_Set_SDOA( VSEP_PCH_Txd[ VSEP_PCH_TXD_MESSAGE_CTRL ], VSEP_RXD_SDOA_NOT_USED );
    VSEP_PCH_Txd[ VSEP_PCH_TXD_MESSAGE_CTRL ] = VSEP_Msg_Set_SDIA( VSEP_PCH_Txd[ VSEP_PCH_TXD_MESSAGE_CTRL ], VSEP_TXD_SDIA_PCH );
@@ -133,27 +132,24 @@ void VSEP_DISCRETE_Device_Clear(
 //=============================================================================
 // VSEP_DISCRETE_Initialize_Channel
 //=============================================================================
-void VSEP_DISCRETE_Channel_Initialize(
-   IO_Configuration_T in_configuration)
+void VSEP_DISCRETE_Channel_Initialize(IO_Configuration_T in_configuration)
 {
-   VSEP_DISCRETE_Set_State( in_configuration, 
-      VSEP_PCH_Get_Initial_State( in_configuration ) == IO_ACTIVE ? true : false );
+    VSEP_DISCRETE_Set_State( in_configuration, 
+        VSEP_PCH_Get_Initial_State( in_configuration ) == IO_ACTIVE ? true : false );
 }
 
 //=============================================================================
 // VSEP_DISCRETE_Clear_Channel
 //=============================================================================
-FAR_COS void VSEP_DISCRETE_Channel_Clear(
-   IO_Configuration_T in_configuration)
+void VSEP_DISCRETE_Channel_Clear(IO_Configuration_T in_configuration)
 {
-   VSEP_DISCRETE_Set_State( in_configuration, false );
+    VSEP_DISCRETE_Set_State( in_configuration, false );
 }
 
 //=============================================================================
 // VSEP_DISCRETE_Get_State
 //=============================================================================
-FAR_COS bool VSEP_DISCRETE_Get_State( 
-   IO_Configuration_T in_configuration)
+bool VSEP_DISCRETE_Get_State(IO_Configuration_T in_configuration)
 {
    bool                        state = false;
    VSEP_Channel_T       vsep_channel = VSEP_Get_Channel( in_configuration );
@@ -163,64 +159,49 @@ FAR_COS bool VSEP_DISCRETE_Get_State(
                                        VSEP_PCH_CHANNEL_MAX;
 
 
-   if( channel < VSEP_PCH_CHANNEL_MPIO_1 )
-   { 
-      state = VSEP_Msg_PCHx_Get_State( VSEP_PCH_Txd[ VSEP_PCH_TXD_MESSAGE_PCH ], channel );
-      // we only get the state information from the TXD what we have set. no state information out.
-   }
-   else if( channel <= VSEP_PCH_CHANNEL_MPIO_3 )
-   {
-      channel -= VSEP_PCH_CHANNEL_MPIO_1;
-      state = (bool)Extract_Bits( VSEP_PCH_Rxd[ VSEP_PCH_RXD_MESSAGE_MPIO ], channel , BIT_1 );
-   }
-   else
-   {
-      if( channel == VSEP_PCH_CHANNEL_SOHRSTEN_STAT )
-      {
-         state = VSEP_Msg_Get_SOHRSTEN_STAT( VSEP_SOH_Status_Rxd[ VSEP_SOH_STATUS_RXD_MESSAGE_STATUS ]);
-      }
-   }
+    if( channel < VSEP_PCH_CHANNEL_MPIO_1 ) { 
+        state = VSEP_Msg_PCHx_Get_State( VSEP_PCH_Txd[ VSEP_PCH_TXD_MESSAGE_PCH ], channel );
+        // we only get the state information from the TXD what we have set. no state information out. 
+    } else if( channel <= VSEP_PCH_CHANNEL_MPIO_3 ) {
+        channel -= VSEP_PCH_CHANNEL_MPIO_1;
+        state = (bool)Extract_Bits( VSEP_PCH_Rxd[ VSEP_PCH_RXD_MESSAGE_MPIO ], channel , BIT_1 );
+    } else {
+        if( channel == VSEP_PCH_CHANNEL_SOHRSTEN_STAT ) {
+            state = VSEP_Msg_Get_SOHRSTEN_STAT( VSEP_SOH_Status_Rxd[ VSEP_SOH_STATUS_RXD_MESSAGE_STATUS ]);
+        }
+    }
 
-
-   if(polarity != IO_ACTIVE_HIGH)
-   {
-      state = (state == true) ? false : true;
-   }
+    if(polarity != IO_ACTIVE_HIGH) {
+        state = (state == true) ? false : true;
+    }
    
-   return state;
+    return state;
 }
 
 //=============================================================================
 // VSEP_DISCRETE_Get_Immediate_State
 //=============================================================================
-FAR_COS bool VSEP_DISCRETE_Get_Immediate_State( 
-   IO_Configuration_T in_configuration)
+bool VSEP_DISCRETE_Get_Immediate_State(IO_Configuration_T in_configuration)
 {
-   VSEP_Channel_T channel = VSEP_Get_Channel( in_configuration );
+    VSEP_Channel_T channel = VSEP_Get_Channel( in_configuration );
 
-   if((channel >= VSEP_CHANNEL_MPIO_1) && (channel <= VSEP_CHANNEL_MPIO_3))
-   {
-      //VSEP_SPI_Immediate_Transfer( in_configuration, VSEP_MESSAGE_PCH_MPIO );  
-     VSEP_SPI_Immediate_Transfer( in_configuration, VSEP_MESSAGE_PCH_MPIO );  
-   }
-   else
-   {
-      if((channel == VSEP_CHANNEL_SOHRSTEN_STAT))
-      {
-         //VSEP_SPI_Immediate_Transfer( in_configuration, VSEP_MESSAGE_SOH_STATUS );  
-         VSEP_SPI_Immediate_Transfer( in_configuration, VSEP_MESSAGE_SOH_STATUS );  
-      }
-   }
-   // for PCH0~30, did not set the state immediately, are there any risk?
-   return VSEP_DISCRETE_Get_State( in_configuration );
+    if((channel >= VSEP_CHANNEL_MPIO_1) && (channel <= VSEP_CHANNEL_MPIO_3)) {
+        //VSEP_SPI_Immediate_Transfer( in_configuration, VSEP_MESSAGE_PCH_MPIO );  
+        VSEP_SPI_Immediate_Transfer( in_configuration, VSEP_MESSAGE_PCH_MPIO );  
+    } else {
+        if((channel == VSEP_CHANNEL_SOHRSTEN_STAT)) {
+            //VSEP_SPI_Immediate_Transfer( in_configuration, VSEP_MESSAGE_SOH_STATUS );  
+            VSEP_SPI_Immediate_Transfer( in_configuration, VSEP_MESSAGE_SOH_STATUS );  
+        }
+    }
+    // for PCH0~30, did not set the state immediately, are there any risk?
+    return VSEP_DISCRETE_Get_State( in_configuration );
 }
 
 //=============================================================================
 // VSEP_DISCRETE_Set_State
 //=============================================================================
-FAR_COS void VSEP_DISCRETE_Set_State(
-   IO_Configuration_T in_configuration,
-   bool               in_state)
+void VSEP_DISCRETE_Set_State(IO_Configuration_T in_configuration, bool in_state)
 {
    VSEP_Channel_T   vsep_channel = VSEP_Get_Channel(in_configuration);
    IO_Polarity_T        polarity = VSEP_PCH_Get_Polarity( in_configuration );
@@ -228,40 +209,34 @@ FAR_COS void VSEP_DISCRETE_Set_State(
                                     VSEP_DISCRETE_PCH_CHANNEL_MAP[ vsep_channel ] : 
                                     VSEP_PCH_CHANNEL_MAX;
 
-   if(polarity != IO_ACTIVE_HIGH)// check the polarity
-   {
-      in_state = (in_state == true) ? false : true;
-   }
-   if(in_state){
-   	VSEP_DIS_ON_OFF_state |=(Mask32(vsep_channel,1));
-   }else{
-   	VSEP_DIS_ON_OFF_state &=~(Mask32(vsep_channel,1));
-   }
-   if( channel < VSEP_PCH_CHANNEL_MPIO_1 )
-   { 
+    if(polarity != IO_ACTIVE_HIGH)// check the polarity
+    {
+        in_state = (in_state == true) ? false : true;
+    }
+    if(in_state){
+        VSEP_DIS_ON_OFF_state |=(Mask32(vsep_channel,1));
+    } else {
+        VSEP_DIS_ON_OFF_state &=~(Mask32(vsep_channel,1));
+    }
+    if( channel < VSEP_PCH_CHANNEL_MPIO_1 ) { 
 
-      VSEP_PCH_Txd[ VSEP_PCH_TXD_MESSAGE_PCH ] = 
-         VSEP_Msg_PCHx_Set_State( VSEP_PCH_Txd[ VSEP_PCH_TXD_MESSAGE_PCH ], channel, in_state );
+        VSEP_PCH_Txd[ VSEP_PCH_TXD_MESSAGE_PCH ] = 
+            VSEP_Msg_PCHx_Set_State( VSEP_PCH_Txd[ VSEP_PCH_TXD_MESSAGE_PCH ], channel, in_state );
 
-   }
-   else 
-   {
-      if( channel == VSEP_PCH_CHANNEL_SOHRSTEN_STAT )
-      {
-         VSEP_Msg_Set_SOHRSTEN_STAT( VSEP_SOH_Status_Rxd[ device ][ VSEP_SOH_STATUS_RXD_MESSAGE_STATUS ], in_state);
-      }
-   }
+    } else  {
+        if( channel == VSEP_PCH_CHANNEL_SOHRSTEN_STAT ) {
+            VSEP_Msg_Set_SOHRSTEN_STAT( VSEP_SOH_Status_Rxd[ VSEP_SOH_STATUS_RXD_MESSAGE_STATUS ], in_state);
+        }
+    }
 }
 
 //=============================================================================
 // VSEP_DISCRETE_Set_Immediate_State
 //=============================================================================
-FAR_COS void VSEP_DISCRETE_Set_Immediate_State(
-   IO_Configuration_T in_configuration,
-   bool               in_state)
+void VSEP_DISCRETE_Set_Immediate_State(IO_Configuration_T in_configuration, bool in_state)
 {
-   VSEP_DISCRETE_Set_State( in_configuration, in_state );
-  VSEP_SPI_Immediate_Transfer( in_configuration, VSEP_MESSAGE_PCH_MPIO );
+    VSEP_DISCRETE_Set_State( in_configuration, in_state );
+    VSEP_SPI_Immediate_Transfer( in_configuration, VSEP_MESSAGE_PCH_MPIO );
 }
 
 //=============================================================================
@@ -277,11 +252,10 @@ FAR_COS void VSEP_DISCRETE_Set_Immediate_State(
 //
 // @end
 //=============================================================================
-FAR_COS void VSEP_DISCRETE_Toggle_State(
-   IO_Configuration_T in_configuration)
+void VSEP_DISCRETE_Toggle_State(IO_Configuration_T in_configuration)
 {
-   VSEP_DISCRETE_Set_State(in_configuration, 
-         VSEP_DISCRETE_Get_State( in_configuration ) == true ? false : true );
+    VSEP_DISCRETE_Set_State(in_configuration, 
+            VSEP_DISCRETE_Get_State( in_configuration ) == true ? false : true );
 }
 
 //=============================================================================
@@ -297,7 +271,7 @@ FAR_COS void VSEP_DISCRETE_Toggle_State(
 //
 // @end
 //=============================================================================
-FAR_COS void VSEP_DISCRETE_Toggle_Immediate_State(//question: why not get the state first?
+void VSEP_DISCRETE_Toggle_Immediate_State(//question: why not get the state first?
    IO_Configuration_T in_configuration)
 {
    VSEP_DISCRETE_Toggle_State( in_configuration );
@@ -323,8 +297,7 @@ void VSEP_MPIO_MODE_Initialize_Device(void)
 //=============================================================================
 // VSEP_MPIO_Set_Mode
 //=============================================================================
-void VSEP_MPIO_Set_Mode(
-   IO_Configuration_T configuration, VSEP_MPIO_Input_Mode_T mpio_input_mode )
+void VSEP_MPIO_Set_Mode(IO_Configuration_T configuration, VSEP_MPIO_Input_Mode_T mpio_input_mode )
 {
    VSEP_Channel_T  mpio_channel = VSEP_Get_Channel( configuration );
 
