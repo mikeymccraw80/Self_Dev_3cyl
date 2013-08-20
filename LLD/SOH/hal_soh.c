@@ -74,8 +74,8 @@
 #define MTSA_CONFIG_VSEP_DEVICE_0			( VSEP_Set_Device_Index( 0, VSEP_INDEX_0 ) )
 
 //extern const SPI_Message_T VSEP_STATUS_MESSAGE[ NUMBER_OF_VSEP ];
-extern const SPI_Message_T VSEP_MESSAGE[ NUMBER_OF_VSEP ][VSEP_MESSAGE_MAX+8];
-extern uint16_t VSEP_SOH_Status_Rxd[ NUMBER_OF_VSEP][VSEP_SOH_STATUS_RXD_MESSAGE_MAX];
+//extern const SPI_Message_T VSEP_MESSAGE[VSEP_MESSAGE_MAX+8];
+extern uint16_t VSEP_SOH_Status_Rxd[VSEP_SOH_STATUS_RXD_MESSAGE_MAX];
 
 /*===========================================================================*\
  * Local Object Definitions

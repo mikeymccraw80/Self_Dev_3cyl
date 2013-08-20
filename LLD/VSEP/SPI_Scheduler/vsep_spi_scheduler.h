@@ -1,8 +1,8 @@
 #ifndef VSEP_SPI_SCHEDULER_H
 #define VSEP_SPI_SCHEDULER_H
 
-#include "dd_vsep.h"
-// #include "list.h"
+#include "io_type.h"
+#include "list.h"
 
 typedef struct {
     void        *receive_data;
@@ -12,10 +12,10 @@ typedef struct {
 } SPI_Message_Definition_T;
 
 typedef struct {
-    SPI_Message_Definition_T * spi_msg;
+    SPI_Message_Definition_T const * spi_msg;
     uint32_t                  interval;
     uint32_t                  time;
-    // struct list_head          list;
+    struct list_head          list;
 } SPI_Message_Queue_T;
 
 #define VSEP_SOH_OFFSET          SEC_TO_CLOCK( 0.00000000 )

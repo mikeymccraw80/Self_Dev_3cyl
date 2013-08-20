@@ -909,7 +909,7 @@ void VSEP_SPI_Immediate_Transfer(
    VSEP_Message_T       in_message );
 
 #ifdef HW_TEST_SW
-FAR_COS void VSEP_HWTEST_SPI_Immediate_Transfer( 
+void VSEP_HWTEST_SPI_Immediate_Transfer( 
    IO_Configuration_T   in_configuration, 
    VSEP_Message_T       in_message );
 #endif
