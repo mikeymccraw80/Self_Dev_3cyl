@@ -92,6 +92,8 @@ typedef enum
    VSEP_SOH_NORMAL_MODE,
    VSEP_SOH_HARDWARE_RESET_MODE
 }VSEP_SOH_SOHRSTEN_Setting_T;
+
+typedef void* SPI_HClient_T;
 //=============================================================================
 // VSEP_SOH_Set_SOHRSTEN
 //
