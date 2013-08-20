@@ -127,11 +127,11 @@ static bool HAL_SOH_VsepSPI_High_Low_Error(bool unbuffered)
 	
 	if (unbuffered)
 	{
-		inbuffer = (uint16_t) (VSEP_SOH_Status_Rxd[VSEP_INDEX_0][VSEP_SOH_STATUS_RXD_MESSAGE_FLT]);
+		inbuffer = (uint16_t) (VSEP_SOH_Status_Rxd[VSEP_SOH_STATUS_RXD_MESSAGE_FLT]);
 	}
 	else
 	{
-		inbuffer = (uint16_t) (VSEP_SOH_Rxd[VSEP_INDEX_0][VSEP_SOH_RXD_MESSAGE_FLT]);
+		inbuffer = (uint16_t) (VSEP_SOH_Rxd[VSEP_SOH_RXD_MESSAGE_FLT]);
 	}
 
 	
@@ -294,11 +294,11 @@ uint16_t HAL_SOH_CnR_Get_Status(bool unbuffered)
 		}
 		else 
 		{
-			vsep_status.Bits.FSE_En_Stat   = VSEP_Msg_CMD_Get_FSE_Enable_Status(VSEP_SOH_Status_Rxd[VSEP_INDEX_0][VSEP_SOH_STATUS_RXD_MESSAGE_FLT]);
-			vsep_status.Bits.CRTimeout     = VSEP_Msg_CMD_Get_Challenge_Response_Timeout(VSEP_SOH_Status_Rxd[VSEP_INDEX_0][VSEP_SOH_STATUS_RXD_MESSAGE_FLT]);
-			vsep_status.Bits.Respcount     = VSEP_Msg_CMD_Get_Challenge_Response_Count(VSEP_SOH_Status_Rxd[VSEP_INDEX_0][VSEP_SOH_STATUS_RXD_MESSAGE_FLT]);
-			vsep_status.Bits.CRDisarm_Stat = VSEP_Msg_CMD_Get_Challenge_Response_Disarm(VSEP_SOH_Status_Rxd[VSEP_INDEX_0][VSEP_SOH_STATUS_RXD_MESSAGE_FLT]);
-			vsep_status.Bits.GEN_Stat      = VSEP_Msg_CMD_Get_Global_Enable_Status(VSEP_SOH_Status_Rxd[VSEP_INDEX_0][VSEP_SOH_STATUS_RXD_MESSAGE_FLT]);
+			vsep_status.Bits.FSE_En_Stat   = VSEP_Msg_CMD_Get_FSE_Enable_Status(VSEP_SOH_Status_Rxd[VSEP_SOH_STATUS_RXD_MESSAGE_FLT]);
+			vsep_status.Bits.CRTimeout     = VSEP_Msg_CMD_Get_Challenge_Response_Timeout(VSEP_SOH_Status_Rxd[VSEP_SOH_STATUS_RXD_MESSAGE_FLT]);
+			vsep_status.Bits.Respcount     = VSEP_Msg_CMD_Get_Challenge_Response_Count(VSEP_SOH_Status_Rxd[VSEP_SOH_STATUS_RXD_MESSAGE_FLT]);
+			vsep_status.Bits.CRDisarm_Stat = VSEP_Msg_CMD_Get_Challenge_Response_Disarm(VSEP_SOH_Status_Rxd[VSEP_SOH_STATUS_RXD_MESSAGE_FLT]);
+			vsep_status.Bits.GEN_Stat      = VSEP_Msg_CMD_Get_Global_Enable_Status(VSEP_SOH_Status_Rxd[VSEP_SOH_STATUS_RXD_MESSAGE_FLT]);
 		}
    }
    else
@@ -311,11 +311,11 @@ uint16_t HAL_SOH_CnR_Get_Status(bool unbuffered)
 		}
 		else 
 		{
-			vsep_status.Bits.FSE_En_Stat   = VSEP_Msg_CMD_Get_FSE_Enable_Status(VSEP_SOH_Rxd[VSEP_INDEX_0][VSEP_SOH_RXD_MESSAGE_FLT]);
-		   	vsep_status.Bits.CRTimeout     = VSEP_Msg_CMD_Get_Challenge_Response_Timeout(VSEP_SOH_Rxd[VSEP_INDEX_0][VSEP_SOH_RXD_MESSAGE_FLT]);
-	   		vsep_status.Bits.Respcount     = VSEP_Msg_CMD_Get_Challenge_Response_Count(VSEP_SOH_Rxd[VSEP_INDEX_0][VSEP_SOH_RXD_MESSAGE_FLT]);
-		   	vsep_status.Bits.CRDisarm_Stat = VSEP_Msg_CMD_Get_Challenge_Response_Disarm(VSEP_SOH_Rxd[VSEP_INDEX_0][VSEP_SOH_RXD_MESSAGE_FLT]);
-	   		vsep_status.Bits.GEN_Stat      = VSEP_Msg_CMD_Get_Global_Enable_Status(VSEP_SOH_Rxd[VSEP_INDEX_0][VSEP_SOH_RXD_MESSAGE_FLT]);
+			vsep_status.Bits.FSE_En_Stat   = VSEP_Msg_CMD_Get_FSE_Enable_Status(VSEP_SOH_Rxd[VSEP_SOH_RXD_MESSAGE_FLT]);
+		   	vsep_status.Bits.CRTimeout     = VSEP_Msg_CMD_Get_Challenge_Response_Timeout(VSEP_SOH_Rxd[VSEP_SOH_RXD_MESSAGE_FLT]);
+	   		vsep_status.Bits.Respcount     = VSEP_Msg_CMD_Get_Challenge_Response_Count(VSEP_SOH_Rxd[VSEP_SOH_RXD_MESSAGE_FLT]);
+		   	vsep_status.Bits.CRDisarm_Stat = VSEP_Msg_CMD_Get_Challenge_Response_Disarm(VSEP_SOH_Rxd[VSEP_SOH_RXD_MESSAGE_FLT]);
+	   		vsep_status.Bits.GEN_Stat      = VSEP_Msg_CMD_Get_Global_Enable_Status(VSEP_SOH_Rxd[VSEP_SOH_RXD_MESSAGE_FLT]);
 		}
    }
 
