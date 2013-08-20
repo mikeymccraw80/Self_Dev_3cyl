@@ -3,7 +3,11 @@
 #include "dd_vsep_msg_config.h"
 #include "dd_vsep.h"
 
-extern const SPI_Message_Definition_T VSEP_MESSAGE[VSEP_MESSAGE_MAX+8];
+extern const SPI_Message_Definition_T * VSEP_MESSAGE[VSEP_MESSAGE_MAX+7];
+extern const SPI_Message_Definition_T VSEP_SOH_STATUS_MESSAGE_DEFINITION;
+extern const SPI_Message_Definition_T VSEP_PWM_MESSAGE_DEFINITION[8];
+extern const SPI_Message_Definition_T VSEP_PCH_MESSAGE_DEFINITION;
+extern const SPI_Message_Definition_T VSEP_FAULT_MESSAGE_DEFINITION;
 
 typedef struct
 {
@@ -14,57 +18,57 @@ typedef struct
 static SPI_SCHEDULER_DATA_T SPI_SCHEDULER_Data = { 0, 0 };
 
 static SPI_Message_Queue_T msg_queue_soh = {
-    &VSEP_MESSAGE[VSEP_MESSAGE_SOH_STATUS],
+    &VSEP_SOH_STATUS_MESSAGE_DEFINITION,
     10,
 };
 
 static SPI_Message_Queue_T msg_queue_pwm1 = {
-    &VSEP_MESSAGE[VSEP_MESSAGE_PWM + 0],
+    &VSEP_PWM_MESSAGE_DEFINITION[0],
     10,
 };
 
 static SPI_Message_Queue_T msg_queue_pwm2 = {
-    &VSEP_MESSAGE[VSEP_MESSAGE_PWM + 1],
+    &VSEP_PWM_MESSAGE_DEFINITION[1],
     10,
 };
 
 static SPI_Message_Queue_T msg_queue_pwm3 = {
-    &VSEP_MESSAGE[VSEP_MESSAGE_PWM + 2],
+    &VSEP_PWM_MESSAGE_DEFINITION[2],
     10,
 };
 
 static SPI_Message_Queue_T msg_queue_pwm4 = {
-    &VSEP_MESSAGE[VSEP_MESSAGE_PWM + 3],
+    &VSEP_PWM_MESSAGE_DEFINITION[3],
     10,
 };
 
 static SPI_Message_Queue_T msg_queue_pwm5 = {
-    &VSEP_MESSAGE[VSEP_MESSAGE_PWM + 4],
+    &VSEP_PWM_MESSAGE_DEFINITION[4],
     10,
 };
 
 static SPI_Message_Queue_T msg_queue_pwm6 = {
-    &VSEP_MESSAGE[VSEP_MESSAGE_PWM + 5],
+    &VSEP_PWM_MESSAGE_DEFINITION[5],
     10,
 };
 
 static SPI_Message_Queue_T msg_queue_pwm7 = {
-    &VSEP_MESSAGE[VSEP_MESSAGE_PWM + 6],
+    &VSEP_PWM_MESSAGE_DEFINITION[6],
     10,
 };
 
 static SPI_Message_Queue_T msg_queue_pwm8 = {
-    &VSEP_MESSAGE[VSEP_MESSAGE_PWM + 7],
+    &VSEP_PWM_MESSAGE_DEFINITION[7],
     10,
 };
 
 static SPI_Message_Queue_T msg_queue_pch_mpio = {
-    &VSEP_MESSAGE[VSEP_MESSAGE_PCH_MPIO],
+    &VSEP_PCH_MESSAGE_DEFINITION,
     10,
 };
 
 static SPI_Message_Queue_T msg_queue_fault = {
-    &VSEP_MESSAGE[VSEP_MESSAGE_FAULT],
+    &VSEP_FAULT_MESSAGE_DEFINITION,
     10,
 };
 
@@ -121,11 +125,15 @@ void VSEP_SPI_SCHEDULER_10MS(void)
 {
     struct list_head *pos;
     SPI_Message_Queue_T *q;
+    static int test[10];
+    int i = 0;
 
     list_for_each(pos, &msg_queue) {
+        test[i] += 10;
+        i++;
         q = list_entry(pos, SPI_Message_Queue_T, list);
         q -> time += 10;
-        if ((q->time > q->interval) & SPI_SCHEDULER_Data.Running){
+        if ((q->time >= q->interval) & SPI_SCHEDULER_Data.Running){
             q->time = 0;
             VSEP_SPI_Port_Transfer( q->spi_msg);
         }

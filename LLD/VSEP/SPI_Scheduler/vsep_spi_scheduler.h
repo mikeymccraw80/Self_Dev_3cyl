@@ -18,24 +18,8 @@ typedef struct {
     struct list_head          list;
 } SPI_Message_Queue_T;
 
-#define VSEP_SOH_OFFSET          SEC_TO_CLOCK( 0.00000000 )
-#define VSEP_SOH_INTERVAL        SEC_TO_CLOCK( 0.02000000 )
-
-#define VSEP_SOH_STATUS_OFFSET   SEC_TO_CLOCK( 0.03500000 )
-#define VSEP_SOH_STATUS_INTERVAL SEC_TO_CLOCK( 0.16000000 )
-
-#define VSEP_PWM_OFFSET(x)       SEC_TO_CLOCK( 0.01000000*x )
-#define VSEP_PWM_INTERVAL        SEC_TO_CLOCK( 0.01000000 )
-
-#define VSEP_PCH_OFFSET          SEC_TO_CLOCK( 0.01500000 )
-#define VSEP_PCH_INTERVAL        SEC_TO_CLOCK( 0.01000000 )
-
-#define VSEP_FAULT_OFFSET        SEC_TO_CLOCK( 0.00500000 )
-#define VSEP_FAULT_INTERVAL      SEC_TO_CLOCK( 0.01000000 )
-
 //=============================================================================
 // VSEP_SPI_SCHEDULER_Initialize
-
 //=============================================================================
 void VSEP_SPI_SCHEDULER_Initialize(void);
 

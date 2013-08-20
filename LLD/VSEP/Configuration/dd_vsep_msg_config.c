@@ -65,7 +65,7 @@ const SPI_Message_Definition_T VSEP_EST_FAULT_MESSAGE_DEFINITION =
 const SPI_Message_Definition_T VSEP_FAULT_MESSAGE_DEFINITION =
 {
     VSEP_Fault_Rxd,
-    (void *)VSEP_FAULT_TXD,
+    (void*)VSEP_FAULT_TXD,
     VSEP_FAULT_RXD_MESSAGE_MAX,
     VSEP_FAULT_TXD_MESSAGE_MAX
 };
@@ -76,7 +76,7 @@ const SPI_Message_Definition_T VSEP_FAULT_MESSAGE_DEFINITION =
 const SPI_Message_Definition_T VSEP_INIT_MESSAGE_DEFINITION =
 {
     NULL,//
-    &VSEP_INIT_TXD_INITIAL,
+    VSEP_INIT_TXD_INITIAL,
     0,
     VSEP_INIT_TXD_MESSAGE_MAX
 };
@@ -86,8 +86,8 @@ const SPI_Message_Definition_T VSEP_INIT_MESSAGE_DEFINITION =
 //=============================================================================
 const SPI_Message_Definition_T VSEP_PCH_MESSAGE_DEFINITION =
 {
-    &VSEP_PCH_Rxd,
-    &VSEP_PCH_Txd,
+    VSEP_PCH_Rxd,
+    VSEP_PCH_Txd,
     VSEP_PCH_RXD_MESSAGE_MAX,
     VSEP_PCH_TXD_MESSAGE_MAX
 };
@@ -99,49 +99,49 @@ const SPI_Message_Definition_T VSEP_PWM_MESSAGE_DEFINITION[ VSEP_PWM_CHANNEL_MAX
 {
     {
         VSEP_PWM_Rxd,
-        &VSEP_PWM_Txd[ VSEP_PWM_CHANNEL_1 ],
+        VSEP_PWM_Txd[VSEP_PWM_CHANNEL_1],
         VSEP_PWM_RXD_MESSAGE_MAX,
         VSEP_PWM_TXD_MESSAGE_MAX
     },
     {
         VSEP_PWM_Rxd,
-        &VSEP_PWM_Txd[ VSEP_PWM_CHANNEL_2 ],
+        VSEP_PWM_Txd[ VSEP_PWM_CHANNEL_2 ],
         VSEP_PWM_RXD_MESSAGE_MAX,
         VSEP_PWM_TXD_MESSAGE_MAX
     },
     {
         VSEP_PWM_Rxd,
-        &VSEP_PWM_Txd[ VSEP_PWM_CHANNEL_3 ],
+        VSEP_PWM_Txd[ VSEP_PWM_CHANNEL_3 ],
         VSEP_PWM_RXD_MESSAGE_MAX,
         VSEP_PWM_TXD_MESSAGE_MAX
     },
     {
         VSEP_PWM_Rxd,
-        &VSEP_PWM_Txd[ VSEP_PWM_CHANNEL_4 ],
+        VSEP_PWM_Txd[ VSEP_PWM_CHANNEL_4 ],
         VSEP_PWM_RXD_MESSAGE_MAX,
         VSEP_PWM_TXD_MESSAGE_MAX
     },
     {
         VSEP_PWM_Rxd,
-        &VSEP_PWM_Txd[ VSEP_PWM_CHANNEL_5 ],
+        VSEP_PWM_Txd[ VSEP_PWM_CHANNEL_5 ],
         VSEP_PWM_RXD_MESSAGE_MAX,
         VSEP_PWM_TXD_MESSAGE_MAX
     },
     {
         VSEP_PWM_Rxd,
-        &VSEP_PWM_Txd[ VSEP_PWM_CHANNEL_6 ],
+        VSEP_PWM_Txd[ VSEP_PWM_CHANNEL_6 ],
         VSEP_PWM_RXD_MESSAGE_MAX,
         VSEP_PWM_TXD_MESSAGE_MAX
     },
     {
         VSEP_PWM_Rxd,
-        &VSEP_PWM_Txd[ VSEP_PWM_CHANNEL_7 ],
+        VSEP_PWM_Txd[ VSEP_PWM_CHANNEL_7 ],
         VSEP_PWM_RXD_MESSAGE_MAX,
         VSEP_PWM_TXD_MESSAGE_MAX
     },
     {
         VSEP_PWM_Rxd,
-        &VSEP_PWM_Txd[ VSEP_PWM_CHANNEL_8],
+        VSEP_PWM_Txd[ VSEP_PWM_CHANNEL_8],
         VSEP_PWM_RXD_MESSAGE_MAX,
         VSEP_PWM_TXD_MESSAGE_MAX
     }
@@ -152,8 +152,8 @@ const SPI_Message_Definition_T VSEP_PWM_MESSAGE_DEFINITION[ VSEP_PWM_CHANNEL_MAX
 //=============================================================================
 const SPI_Message_Definition_T VSEP_SOH_MESSAGE_DEFINITION =
 {
-    &VSEP_SOH_Rxd,
-    &VSEP_SOH_Txd,
+    VSEP_SOH_Rxd,
+    VSEP_SOH_Txd,
     VSEP_SOH_RXD_MESSAGE_MAX,
     VSEP_SOH_TXD_MESSAGE_MAX
 };
@@ -163,8 +163,8 @@ const SPI_Message_Definition_T VSEP_SOH_MESSAGE_DEFINITION =
 //=============================================================================
 const SPI_Message_Definition_T VSEP_SOH_STATUS_MESSAGE_DEFINITION =
 {
-    &VSEP_SOH_Status_Rxd,
-    (void *)&VSEP_SOH_STATUS_TXD,
+    VSEP_SOH_Status_Rxd,
+    (void *)VSEP_SOH_STATUS_TXD,
     VSEP_SOH_STATUS_RXD_MESSAGE_MAX,
     VSEP_SOH_STATUS_TXD_MESSAGE_MAX
 };
@@ -175,7 +175,7 @@ const SPI_Message_Definition_T VSEP_SOH_STATUS_MESSAGE_DEFINITION =
 const SPI_Message_Definition_T VSEP_LEDMODE_MESSAGE_DEFINITION =
 {
     NULL,
-    &VSEP_LEDMODE_Txd,
+    VSEP_LEDMODE_Txd,
     0,
     VSEP_LEDMODE_TXD_MESSAGE_MAX
 };
@@ -185,8 +185,8 @@ const SPI_Message_Definition_T VSEP_LEDMODE_MESSAGE_DEFINITION =
 //=============================================================================
 const SPI_Message_Definition_T VSEP_VR_MESSAGE_DEFINITION =
 {
-    &VSEP_VR_Rxd,
-    &VSEP_VR_Txd,
+    VSEP_VR_Rxd,
+    VSEP_VR_Txd,
     VSEP_VR_RXD_MESSAGE_MAX,
     VSEP_VR_TXD_MESSAGE_MAX
 };
@@ -196,8 +196,8 @@ const SPI_Message_Definition_T VSEP_VR_MESSAGE_DEFINITION =
 //=============================================================================
 const SPI_Message_Definition_T VSEP_DEPS_MESSAGE_DEFINITION =
 {
-    &VSEP_DEPS_Rxd,
-    &VSEP_DEPS_Txd,
+    VSEP_DEPS_Rxd,
+    VSEP_DEPS_Txd,
     VSEP_DEPS_RXD_MESSAGE_MAX,
     VSEP_DEPS_TXD_MESSAGE_MAX
 };
@@ -207,8 +207,8 @@ const SPI_Message_Definition_T VSEP_DEPS_MESSAGE_DEFINITION =
 //=============================================================================
 const SPI_Message_Definition_T VSEP_EST_SELECT_MESSAGE_DEFINITION =
 {
-    &VSEP_EST_Select_Rxd,
-    &VSEP_EST_Select_Txd,
+    VSEP_EST_Select_Rxd,
+    VSEP_EST_Select_Txd,
     VSEP_EST_SELECT_RXD_MESSAGE_MAX,
     VSEP_EST_SELECT_TXD_MESSAGE_MAX
 };
@@ -219,7 +219,7 @@ const SPI_Message_Definition_T VSEP_EST_SELECT_MESSAGE_DEFINITION =
 const SPI_Message_Definition_T VSEP_MPIO_MODE_MESSAGE_DEFINITION =
 {
     NULL,
-    &VSEP_MPIO_MODE_Txd,
+    VSEP_MPIO_MODE_Txd,
     0,
     VSEP_MPIO_MODE_TXD_MESSAGE_MAX
 };

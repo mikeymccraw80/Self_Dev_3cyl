@@ -46,7 +46,7 @@
 #include "vsep_spi_scheduler.h"
 
 uint32_t     VSEP_Channel_Enabled;
-extern const SPI_Message_Definition_T VSEP_MESSAGE[VSEP_MESSAGE_MAX+7];
+extern const SPI_Message_Definition_T * VSEP_MESSAGE[VSEP_MESSAGE_MAX+7];
 
 
 #ifdef  VSEP_CALIBRATION_ENABLE
@@ -257,7 +257,7 @@ void  VSEP_SPI_Port_Transfer(SPI_Message_Definition_T  const *def)
 
 	for (index_transmint = 0,idex_receive =0; index_transmint < def->length_of_transmit_message; index_transmint++,idex_receive++) {
 		//for word transfer algorithem
-		if ((idex_receive<def->length_of_receive_message)&&(((((uint16_t*)def->transmit_data)[0])&0xF00)!=0x0F00)) {
+		if ((idex_receive<def->length_of_receive_message) && ((((uint16_t*)def->transmit_data)[0] & 0xF00) != 0x0F00) ) {
 			if(index_transmint == def->length_of_transmit_message-1) {
 				end = 1;
 			} else {
@@ -307,12 +307,12 @@ void VSEP_SPI_Immediate_Transfer(IO_Configuration_T in_configuration, VSEP_Messa
 	case VSEP_MESSAGE_EST_FAULT:
 	case VSEP_MESSAGE_SOH:
 	case VSEP_MESSAGE_SOH_STATUS:
-		VSEP_SPI_Port_Transfer(&VSEP_MESSAGE[in_message]);
+		VSEP_SPI_Port_Transfer(VSEP_MESSAGE[in_message]);
 		break;
 	case VSEP_MESSAGE_PWM:
 		pwm_channel = VSEP_PWM_Get_Channel(in_configuration);
 		if(pwm_channel != VSEP_PWM_CHANNEL_MAX)
-			VSEP_SPI_Port_Transfer(&VSEP_MESSAGE[VSEP_MESSAGE_PWM + pwm_channel]);
+			VSEP_SPI_Port_Transfer(VSEP_MESSAGE[VSEP_MESSAGE_PWM + pwm_channel]);
 		break;
 	default:
 		break;

@@ -75,7 +75,8 @@ void MngOSTK_10msTasks(void)
 
     /* call device driver layer functions */
     SWT_Service_WatchDog();
-    VSEP_SPI_Scheduler_Manage_Periodic();
+    //VSEP_SPI_Scheduler_Manage_Periodic();
+    VSEP_SPI_SCHEDULER_10MS();
     L9958_FAULT_Diagnose_Update();
 
     /* call soh service */
