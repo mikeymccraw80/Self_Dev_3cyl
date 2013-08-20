@@ -65,7 +65,7 @@ uint32_t VSEP_DIS_ON_OFF_state = 0x00000000;
 bool     EST_Diagnostic_7p8ms[4];
 
 /* local private variables define */
-static uint32_t Channel_Protect_Enable;
+uint32_t Channel_Protect_Enable;
 
 //****************************************************************//
 //this const is created to derive the diagnostic infromation from VSEP_Fault_Rxd,

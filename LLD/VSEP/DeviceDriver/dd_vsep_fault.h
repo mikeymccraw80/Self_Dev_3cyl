@@ -403,7 +403,7 @@ void VSEP_Fault_GRADCOUNT_Diagnose_EST_Channel(
    uint8_t            in_channel,
    uint32_t           in_time	);
 
-void VSEP_EST_Fault_SYNC_Interface(VSEP_Index_T vsep_index, EST_Select_Cylinder_T curent_spark_cylinder);
+void VSEP_EST_Fault_SYNC_Interface(EST_Select_Cylinder_T curent_spark_cylinder);
 void VSEP_Fault_Initialize(void);
 //=============================================================================
 // VSEP_FAULT_EST_Initialize_Device
