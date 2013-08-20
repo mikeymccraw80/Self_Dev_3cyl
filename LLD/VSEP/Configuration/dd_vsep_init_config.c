@@ -179,7 +179,6 @@ uint8_t VSEP_EST_Select_Dwell_Current_Time[8];
 #else
 const uint16_t VSEP_EST_SELECT_INITIAL[VSEP_EST_SELECT_TXD_MESSAGE_MAX] =
 {
-   {
       {
          VSEP_Msg_Set_SDOA( 0, VSEP_RXD_SDOA_EST_STAT  ) |
          VSEP_Msg_Set_SDIA(0,VSEP_TXD_SDIA_EST_CTRL)  
@@ -189,7 +188,6 @@ const uint16_t VSEP_EST_SELECT_INITIAL[VSEP_EST_SELECT_TXD_MESSAGE_MAX] =
            VSEP_Msg_EST_Set_INDEX( 0, VSEP_EST_Select_Get_Increment_Index_Mode( VSEP_0_EST_SELECT_SETUP_INIT ) ) |
           VSEP_Msg_EST_Set_PFMODE( 0,     VSEP_EST_Select_Get_Paired_Fire_Mode( VSEP_0_EST_SELECT_SETUP_INIT ) ) 
       }
-   }
 };
 #endif
 
@@ -197,14 +195,12 @@ const uint16_t VSEP_EST_SELECT_INITIAL[VSEP_EST_SELECT_TXD_MESSAGE_MAX] =
 const uint32_t VSEP_TIMER_DEPS_Base_Frequency = 0;
 const uint16_t VSEP_DEPS_TXD_INITIAL[VSEP_DEPS_TXD_MESSAGE_MAX] =
 {
-   {
       {     VSEP_Msg_Set_SDOA( 0, VSEP_RXD_SDOA_NOT_USED  ) |
             VSEP_Msg_Set_SDIA( 0, VSEP_TXD_SDIA_DEPS_CTRL )   
       },
       {     
             VSEP_Msg_DEPS_Set_Delay( 0, VSEP_DEPS_Get_Initial_Delay( VSEP_0_DEPS_INIT ) ) 
       }
-   }
 };
 
 
@@ -347,8 +343,7 @@ const uint16_t VSEP_PWM_TXD_INITIAL[VSEP_PWM_CHANNEL_MAX][VSEP_PWM_TXD_MESSAGE_M
 
 /* VSEP PCH Init Value */
 const uint16_t VSEP_PCH_TXD_INITIAL[VSEP_PCH_TXD_MESSAGE_MAX] = 
-{  
-   {
+{
       {      
             VSEP_Msg_Set_SDOA( 0, VSEP_RXD_SDOA_EST_STAT ) |
             VSEP_Msg_Set_SDIA( 0, VSEP_TXD_SDIA_PCH      )   
@@ -371,13 +366,11 @@ const uint16_t VSEP_PCH_TXD_INITIAL[VSEP_PCH_TXD_MESSAGE_MAX] =
           ( VSEP_Msg_PCHx_Set_State( 0, VSEP_PCH_CHANNEL_OUT_26, VSEP_Msg_PCH_Get_Initial_State( VSEP_0_PCH26_INIT ) ) ) |
           ( VSEP_Msg_PCHx_Set_State( 0, VSEP_PCH_CHANNEL_OUT_30, VSEP_Msg_PCH_Get_Initial_State( VSEP_0_PCH30_INIT ) ) ) 
       }
-   }
 };
 
 /* vsep soh module init value */
 const uint16_t VSEP_SOH_STATUS_TXD[VSEP_SOH_STATUS_TXD_MESSAGE_MAX] =
 {
-   {
      {  
          VSEP_Msg_Set_FLTCLR( 0, 0 ) |
         VSEP_Msg_Set_CRTOCLR( 0, 0 ) |
@@ -385,7 +378,6 @@ const uint16_t VSEP_SOH_STATUS_TXD[VSEP_SOH_STATUS_TXD_MESSAGE_MAX] =
            VSEP_Msg_Set_SDIA(0, VSEP_TXD_SDIA_NOT_USED )     
      },
      { 0                                                 }
-   }
 };
 
 // IGBT GRAD Fault data
@@ -432,7 +424,7 @@ const uint16_t VSEP_FAULT_TXD[VSEP_FAULT_TXD_MESSAGE_MAX]=
 
 const uint16_t VSEP_MPIO_MODE_TXD_INITIAL[VSEP_MPIO_MODE_TXD_MESSAGE_MAX] =
 {
-   {
+
       {     VSEP_Msg_Set_SDOA( 0, VSEP_RXD_SDOA_NOT_USED  ) |
             VSEP_Msg_Set_SDIA( 0, VSEP_TXD_SDIA_SETUP )   
       },
@@ -445,7 +437,6 @@ const uint16_t VSEP_MPIO_MODE_TXD_INITIAL[VSEP_MPIO_MODE_TXD_MESSAGE_MAX] =
               VSEP_Msg_EST_Set_DEC_DISCB( 0,    VSEP_EST_Select_Get_Select_Mode( VSEP_0_EST_SELECT_SETUP_INIT )                         ) |
                 VSEP_Msg_EST_Set_IGBTCFG( 0,     VSEP_EST_Select_Get_Drive_Mode( VSEP_0_EST_SELECT_SETUP_INIT )                         ) 
       }
-   }
 };
 
 /*===========================================================================*\
