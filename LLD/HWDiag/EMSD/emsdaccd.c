@@ -36,13 +36,13 @@ TbBOOLEAN        SbEMSD_ACCDTestComplete ;
 T_COUNT_WORD     ScEMSD_ACCDShortHiFailCntr ;
 T_COUNT_WORD     ScEMSD_ACCDShortLoFailCntr ;
 T_COUNT_WORD     VcEMSD_ACCDSampleCntr ;
+TbBOOLEAN        SbEMSD_ACCDTestComplete_Internal ;
 
-// #pragma section [nvram] 
+#pragma section DATA " " ".nc_nvram"
 TbBOOLEAN        SbEMSD_ACCDShortHiTestFailed ;
 TbBOOLEAN        SbEMSD_ACCDShortLoTestFailed ;
-// #pragma section [] 
+#pragma section DATA " " ".bss"
 
-TbBOOLEAN        SbEMSD_ACCDTestComplete_Internal ;
 /*****************************************************************************
  *  Function definition
  ******************************************************************************/
