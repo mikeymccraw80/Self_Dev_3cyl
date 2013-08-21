@@ -1,9 +1,5 @@
 #ifndef IO_TYPE_H
 #define IO_TYPE_H
-#ifdef __QAC__
-/* Deviation for OSEK usage through include of standard osek.h header. */
-#pragma PRQA_MESSAGES_OFF 1011, 3108
-#endif
 //=============================================================================
 //
 //       COPYRIGHT, 2003, Delphi Technologies, Inc. All Rights reserved
@@ -35,7 +31,6 @@
 // @end
 //
 //=============================================================================
-
 #include "reuse.h"
 
 #define HW_SOH_DISABLE

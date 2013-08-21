@@ -97,24 +97,24 @@ SetDuty	SetPeriodImmediate	SetDutyImmediate		GetDuty Getperiod
 
 #define VSEP_PWM_PWMGet_Fault(in_configuration, value) \
 	(OUTPUT_SHORT_CKT_FAULT == value? \
-	VSEP_FAULT_Get_OUTPUT_SHORT_CKT_FAULT(VSEP_Fault_Log[VSEP_Get_Device_Index(in_configuration)][VSEP_Get_Channel(in_configuration)]):\
+	VSEP_FAULT_Get_OUTPUT_SHORT_CKT_FAULT(VSEP_Fault_Log[VSEP_Get_Channel(in_configuration)]):\
 	(OUTPUT_SHORT_CKT_TESTED == value? \
-	VSEP_FAULT_Get_OUTPUT_SHORT_CKT_TESTED(VSEP_Fault_Log[VSEP_Get_Device_Index(in_configuration)][VSEP_Get_Channel(in_configuration)]):\
+	VSEP_FAULT_Get_OUTPUT_SHORT_CKT_TESTED(VSEP_Fault_Log[VSEP_Get_Channel(in_configuration)]):\
 	(OUTPUT_OPEN_CKT_FAULT == value? \
-	VSEP_FAULT_Get_OUTPUT_OPEN_CKT_FAULT(VSEP_Fault_Log[VSEP_Get_Device_Index(in_configuration)][VSEP_Get_Channel(in_configuration)]):\
+	VSEP_FAULT_Get_OUTPUT_OPEN_CKT_FAULT(VSEP_Fault_Log[VSEP_Get_Channel(in_configuration)]):\
 	(OUTPUT_OPEN_CKT_TESTED == value? \
-	VSEP_FAULT_Get_OUTPUT_OPEN_CKT_TESTED(VSEP_Fault_Log[VSEP_Get_Device_Index(in_configuration)][VSEP_Get_Channel(in_configuration)]):0))))
+	VSEP_FAULT_Get_OUTPUT_OPEN_CKT_TESTED(VSEP_Fault_Log[VSEP_Get_Channel(in_configuration)]):0))))
 	
 
 #define VSEP_PWM_PWMClear_Fault(in_configuration, value) \
 	(OUTPUT_SHORT_CKT_FAULT == value? \
-	VSEP_Fault_Log[VSEP_Get_Device_Index(in_configuration)][VSEP_Get_Channel(in_configuration)]=VSEP_FAULT_Clear_OUTPUT_SHORT_CKT_FAULT(VSEP_Fault_Log[VSEP_Get_Device_Index(in_configuration)][VSEP_Get_Channel(in_configuration)]):\
+	VSEP_Fault_Log[VSEP_Get_Channel(in_configuration)]=VSEP_FAULT_Clear_OUTPUT_SHORT_CKT_FAULT(VSEP_Fault_Log[VSEP_Get_Channel(in_configuration)]):\
 	(OUTPUT_SHORT_CKT_TESTED == value? \
-	VSEP_Fault_Log[VSEP_Get_Device_Index(in_configuration)][VSEP_Get_Channel(in_configuration)]=VSEP_FAULT_Clear_OUTPUT_SHORT_CKT_TESTED(VSEP_Fault_Log[VSEP_Get_Device_Index(in_configuration)][VSEP_Get_Channel(in_configuration)]):\
+	VSEP_Fault_Log[VSEP_Get_Channel(in_configuration)]=VSEP_FAULT_Clear_OUTPUT_SHORT_CKT_TESTED(VSEP_Fault_Log[VSEP_Get_Channel(in_configuration)]):\
 	(OUTPUT_OPEN_CKT_FAULT == value? \
-	VSEP_Fault_Log[VSEP_Get_Device_Index(in_configuration)][VSEP_Get_Channel(in_configuration)]=VSEP_FAULT_Clear_OUTPUT_OPEN_CKT_FAULT(VSEP_Fault_Log[VSEP_Get_Device_Index(in_configuration)][VSEP_Get_Channel(in_configuration)]):\
+	VSEP_Fault_Log[VSEP_Get_Channel(in_configuration)]=VSEP_FAULT_Clear_OUTPUT_OPEN_CKT_FAULT(VSEP_Fault_Log[VSEP_Get_Channel(in_configuration)]):\
 	(OUTPUT_OPEN_CKT_TESTED == value? \
-	VSEP_Fault_Log[VSEP_Get_Device_Index(in_configuration)][VSEP_Get_Channel(in_configuration)]=VSEP_FAULT_Clear_OUTPUT_OPEN_CKT_TESTED(VSEP_Fault_Log[VSEP_Get_Device_Index(in_configuration)][VSEP_Get_Channel(in_configuration)]):0))))
+	VSEP_Fault_Log[VSEP_Get_Channel(in_configuration)]=VSEP_FAULT_Clear_OUTPUT_OPEN_CKT_TESTED(VSEP_Fault_Log[VSEP_Get_Channel(in_configuration)]):0))))
 
 //VSEP_PWM_DISCRETE_INTERFACE
 
@@ -141,23 +141,23 @@ Initialize	Clear	Set	SetImmediate	Get GetImmediate 	Toggle	ToggleImmediate
 
 #define VSEP_PWM_DiscreteGet_Fault(in_configuration, value) \
 	(OUTPUT_SHORT_CKT_FAULT == value? \
-	VSEP_FAULT_Get_OUTPUT_SHORT_CKT_FAULT(VSEP_Fault_Log[VSEP_Get_Device_Index(in_configuration)][VSEP_Get_Channel(in_configuration)]):\
+	VSEP_FAULT_Get_OUTPUT_SHORT_CKT_FAULT(VSEP_Fault_Log[VSEP_Get_Channel(in_configuration)]):\
 	(OUTPUT_SHORT_CKT_TESTED == value? \
-	VSEP_FAULT_Get_OUTPUT_SHORT_CKT_TESTED(VSEP_Fault_Log[VSEP_Get_Device_Index(in_configuration)][VSEP_Get_Channel(in_configuration)]):\
+	VSEP_FAULT_Get_OUTPUT_SHORT_CKT_TESTED(VSEP_Fault_Log[VSEP_Get_Channel(in_configuration)]):\
 	(OUTPUT_OPEN_CKT_FAULT == value? \
-	VSEP_FAULT_Get_OUTPUT_OPEN_CKT_FAULT(VSEP_Fault_Log[VSEP_Get_Device_Index(in_configuration)][VSEP_Get_Channel(in_configuration)]):\
+	VSEP_FAULT_Get_OUTPUT_OPEN_CKT_FAULT(VSEP_Fault_Log[VSEP_Get_Channel(in_configuration)]):\
 	(OUTPUT_OPEN_CKT_TESTED == value? \
-	VSEP_FAULT_Get_OUTPUT_OPEN_CKT_TESTED(VSEP_Fault_Log[VSEP_Get_Device_Index(in_configuration)][VSEP_Get_Channel(in_configuration)]):0))))
+	VSEP_FAULT_Get_OUTPUT_OPEN_CKT_TESTED(VSEP_Fault_Log[VSEP_Get_Channel(in_configuration)]):0))))
 
 #define VSEP_PWM_DiscreteClear_Fault(in_configuration, value) \
 	(OUTPUT_SHORT_CKT_FAULT == value? \
-	VSEP_Fault_Log[VSEP_Get_Device_Index(in_configuration)][VSEP_Get_Channel(in_configuration)]=VSEP_FAULT_Clear_OUTPUT_SHORT_CKT_FAULT(VSEP_Fault_Log[VSEP_Get_Device_Index(in_configuration)][VSEP_Get_Channel(in_configuration)]):\
+	VSEP_Fault_Log[VSEP_Get_Channel(in_configuration)]=VSEP_FAULT_Clear_OUTPUT_SHORT_CKT_FAULT(VSEP_Fault_Log[VSEP_Get_Channel(in_configuration)]):\
 	(OUTPUT_SHORT_CKT_TESTED == value? \
-	VSEP_Fault_Log[VSEP_Get_Device_Index(in_configuration)][VSEP_Get_Channel(in_configuration)]=VSEP_FAULT_Clear_OUTPUT_SHORT_CKT_TESTED(VSEP_Fault_Log[VSEP_Get_Device_Index(in_configuration)][VSEP_Get_Channel(in_configuration)]):\
+	VSEP_Fault_Log[VSEP_Get_Channel(in_configuration)]=VSEP_FAULT_Clear_OUTPUT_SHORT_CKT_TESTED(VSEP_Fault_Log[VSEP_Get_Channel(in_configuration)]):\
 	(OUTPUT_OPEN_CKT_FAULT == value? \
-	VSEP_Fault_Log[VSEP_Get_Device_Index(in_configuration)][VSEP_Get_Channel(in_configuration)]=VSEP_FAULT_Clear_OUTPUT_OPEN_CKT_FAULT(VSEP_Fault_Log[VSEP_Get_Device_Index(in_configuration)][VSEP_Get_Channel(in_configuration)]):\
+	VSEP_Fault_Log[VSEP_Get_Channel(in_configuration)]=VSEP_FAULT_Clear_OUTPUT_OPEN_CKT_FAULT(VSEP_Fault_Log[VSEP_Get_Channel(in_configuration)]):\
 	(OUTPUT_OPEN_CKT_TESTED == value? \
-	VSEP_Fault_Log[VSEP_Get_Device_Index(in_configuration)][VSEP_Get_Channel(in_configuration)]=VSEP_FAULT_Clear_OUTPUT_OPEN_CKT_TESTED(VSEP_Fault_Log[VSEP_Get_Device_Index(in_configuration)][VSEP_Get_Channel(in_configuration)]):0))))
+	VSEP_Fault_Log[VSEP_Get_Channel(in_configuration)]=VSEP_FAULT_Clear_OUTPUT_OPEN_CKT_TESTED(VSEP_Fault_Log[VSEP_Get_Channel(in_configuration)]):0))))
 
 #endif // DD_VSEP_PWM_INTERFACE_H
 /*===========================================================================*\

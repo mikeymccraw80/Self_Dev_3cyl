@@ -872,19 +872,19 @@ extern EOBD_PERCENTa   EOBD_CcpDutyCycle;
 /******************************************************************************
  * TPIC Fault reading for AcClutch diagnostic 
  ******************************************************************************/
-#define GetVIOS_ACCD_FaultShortHi()    (DD_GetDiscreteDiagStatus(DISCRETE_OUT_AC_CLUTCH,OUTPUT_SHORT_CKT_FAULT))
-#define GetVIOS_ACCD_FaultShortLo()    (DD_GetDiscreteDiagStatus(DISCRETE_OUT_AC_CLUTCH,OUTPUT_OPEN_CKT_FAULT))
-#define GetVIOS_ACCD_FaultAny()        (GetVIOS_ACCD_FaultShortHi() ||\
-                                        GetVIOS_ACCD_FaultShortLo() )
-#define GetVIOS_ACCD_Presnt()          (true)//(AcFlags.AcPresent)
+// #define GetVIOS_ACCD_FaultShortHi()    (DD_GetDiscreteDiagStatus(DISCRETE_OUT_AC_CLUTCH,OUTPUT_SHORT_CKT_FAULT))
+// #define GetVIOS_ACCD_FaultShortLo()    (DD_GetDiscreteDiagStatus(DISCRETE_OUT_AC_CLUTCH,OUTPUT_OPEN_CKT_FAULT))
+// #define GetVIOS_ACCD_FaultAny()        (GetVIOS_ACCD_FaultShortHi() ||\
+                                        // GetVIOS_ACCD_FaultShortLo() )
+// #define GetVIOS_ACCD_Presnt()          (true)//(AcFlags.AcPresent)
 
 /******************************************************************************
  * TPIC Fault reading for Main Power Relay diagnostic 
  ******************************************************************************/
-#define GetVIOS_MPRD_FaultShortHi()    (DD_GetDiscreteDiagStatus(DISCRETE_OUT_MAINRLY,OUTPUT_SHORT_CKT_FAULT))
-#define GetVIOS_MPRD_FaultShortLo()    (DD_GetDiscreteDiagStatus(DISCRETE_OUT_MAINRLY,OUTPUT_OPEN_CKT_FAULT))
-#define GetVIOS_MPRD_FaultAny()        (GetVIOS_MPRD_FaultShortHi()||GetVIOS_MPRD_FaultShortLo() )
-#define GetVIOS_MPRD_Presnt()          (true)//(IsMPRPresent())
+// #define GetVIOS_MPRD_FaultShortHi()    (DD_GetDiscreteDiagStatus(DISCRETE_OUT_MAINRLY,OUTPUT_SHORT_CKT_FAULT))
+// #define GetVIOS_MPRD_FaultShortLo()    (DD_GetDiscreteDiagStatus(DISCRETE_OUT_MAINRLY,OUTPUT_OPEN_CKT_FAULT))
+// #define GetVIOS_MPRD_FaultAny()        (GetVIOS_MPRD_FaultShortHi());//||GetVIOS_MPRD_FaultShortLo() )
+// #define GetVIOS_MPRD_Presnt()          (true)//(IsMPRPresent())
 #define GetVIOS_t_IgnOnTime()          (IgnitionOn_Time)
 #define GetVIOS_MainPwrRly_Status()    (IsMPRPresent() ? CbTRUE : CbTRUE)
 #define IsMPRPresent()\
@@ -899,27 +899,27 @@ extern EOBD_PERCENTa   EOBD_CcpDutyCycle;
 /******************************************************************************
  * TPIC Fault reading for Fuel Pump Relay diagnostic 
  ******************************************************************************/
-#define GetVIOS_FPRD_FaultShortHi()    (DD_GetDiscreteDiagStatus(DISCRETE_OUT_FUEL_PUMP,OUTPUT_SHORT_CKT_FAULT))
-#define GetVIOS_FPRD_FaultShortLo()    (DD_GetDiscreteDiagStatus(DISCRETE_OUT_FUEL_PUMP,OUTPUT_OPEN_CKT_FAULT))
-#define GetVIOS_FPRD_FaultAny()        (GetVIOS_FPRD_FaultShortHi() ||\
-                                            GetVIOS_FPRD_FaultShortLo())
-#define GetVIOS_FPRD_Presnt()              (CbTRUE)
+// #define GetVIOS_FPRD_FaultShortHi()    (DD_GetDiscreteDiagStatus(DISCRETE_OUT_FUEL_PUMP,OUTPUT_SHORT_CKT_FAULT))
+// #define GetVIOS_FPRD_FaultShortLo()    (DD_GetDiscreteDiagStatus(DISCRETE_OUT_FUEL_PUMP,OUTPUT_OPEN_CKT_FAULT))
+// #define GetVIOS_FPRD_FaultAny()        (GetVIOS_FPRD_FaultShortHi() ||\
+                                            // GetVIOS_FPRD_FaultShortLo())
+// #define GetVIOS_FPRD_Presnt()              (CbTRUE)
 
 /******************************************************************************
  * TPIC Fault reading for FAN1 diagnostic 
  ******************************************************************************/
-#define GetVIOS_FANA_FaultShortHi()    (GetShortFault(DISCRETE_OUT_FAN_1))
-#define GetVIOS_FANA_FaultShortLo()    (GetOpenFault(DISCRETE_OUT_FAN_1))
-#define GetVIOS_FANA_FaultAny()        (GetAnyFault(DISCRETE_OUT_FAN_1))
-#define GetVIOS_FANA_Presnt()          (true)//(FanPresentFlags.bf.Fan1Present)
+// #define GetVIOS_FANA_FaultShortHi()    (GetShortFault(DISCRETE_OUT_FAN_1))
+// #define GetVIOS_FANA_FaultShortLo()    (GetOpenFault(DISCRETE_OUT_FAN_1))
+// #define GetVIOS_FANA_FaultAny()        (GetAnyFault(DISCRETE_OUT_FAN_1))
+// #define GetVIOS_FANA_Presnt()          (true)//(FanPresentFlags.bf.Fan1Present)
 
 /******************************************************************************
  * TPIC Fault reading for FAN2 diagnostic 
  ******************************************************************************/
-#define GetVIOS_FANB_FaultShortHi()    (GetShortFault(DISCRETE_OUT_FAN_2))
-#define GetVIOS_FANB_FaultShortLo()    (GetOpenFault(DISCRETE_OUT_FAN_2))
-#define GetVIOS_FANB_FaultAny()        (GetAnyFault(DISCRETE_OUT_FAN_2))
-#define GetVIOS_FANB_Presnt()              (true)//(FanPresentFlags.bf.Fan2Present)
+// #define GetVIOS_FANB_FaultShortHi()    (GetShortFault(DISCRETE_OUT_FAN_2))
+// #define GetVIOS_FANB_FaultShortLo()    (GetOpenFault(DISCRETE_OUT_FAN_2))
+// #define GetVIOS_FANB_FaultAny()        (GetAnyFault(DISCRETE_OUT_FAN_2))
+// #define GetVIOS_FANB_Presnt()              (true)//(FanPresentFlags.bf.Fan2Present)
 
 
 // /******************************************************************************
