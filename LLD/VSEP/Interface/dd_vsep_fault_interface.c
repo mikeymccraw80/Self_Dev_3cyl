@@ -30,7 +30,7 @@
 #include "dd_vsep_fault_interface.h"
 #include "dd_vsep_fault.h"
 
-void VSEP_Fault_Task_7_8ms( void )
+void VSEP_Fault_Task_10MS( void )
 {
 	VSEP_Fault_Diagnose_Channels((void*)VSEP_Fault_Logging);
 }

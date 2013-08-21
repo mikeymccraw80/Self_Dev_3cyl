@@ -32,6 +32,6 @@
 #include "dd_vsep_fault.h"
 
 
-void VSEP_Fault_Task_7_8ms( void );
+void VSEP_Fault_Task_10MS( void );
 
 #endif // DD_VSEP_FAULT_INTERFACE_H
