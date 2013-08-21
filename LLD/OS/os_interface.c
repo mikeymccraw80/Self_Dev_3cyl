@@ -10,8 +10,8 @@
 #include "dd_dspi_interface.h"
 #include "dd_fi_interface.h"
 #include "dd_l9958_interface.h"
+#include "dd_vsep_fault_interface.h"
 #include "v_ignit.h"
-//tempoary
 #include "soh.h"
 #include "dd_vsep_est_select.h"
 
@@ -75,8 +75,8 @@ void MngOSTK_10msTasks(void)
 
     /* call device driver layer functions */
     SWT_Service_WatchDog();
-    //VSEP_SPI_Scheduler_Manage_Periodic();
     VSEP_SPI_SCHEDULER_10MS();
+    VSEP_Fault_Task_10MS();
     L9958_FAULT_Diagnose_Update();
 
     /* call soh service */
@@ -152,8 +152,7 @@ void OS_TimeBasedTask5ms(void)
 //=============================================================================
 void OS_TimeBasedTask10ms(void)
 {
-    //wait for update   
-    VSEP_Fault_Task_7_8ms();
+
 }
 
 //=============================================================================

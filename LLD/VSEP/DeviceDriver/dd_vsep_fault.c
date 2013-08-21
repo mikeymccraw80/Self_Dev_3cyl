@@ -187,9 +187,15 @@ void VSEP_Fault_Diagnose_Channels(void* in_pointer)
 	uint32_t           counts_per_time;
 	uint32_t           percent_in_counts;
 	VSEP_Fault_PCH_T   vsep_pch_fault;
+	static int fault_clear_count;
 
 	VSEP_Fault_Channel_Data_T *vsep_fault_channel_data = (VSEP_Fault_Channel_Data_T*)in_pointer;
-	VSEP_Fault_Log_Clear();
+	fault_clear_count ++;
+	/* clear fault log buffer every 500ms */
+	if (fault_clear_count >= 50) {
+		VSEP_Fault_Log_Clear();
+		fault_clear_count = 0;
+	}
 	if (vsep_fault_channel_data != NULL) {
 		// diagnose fault, and also provide delay between IO_DISCRETE_Set_Immediate_State commands
 		//VSEP_Fault_Diagnose_Get_channel_state();
@@ -208,7 +214,7 @@ void VSEP_Fault_Diagnose_Channels(void* in_pointer)
 				case VSEP_FAULT_IO_KIND_DISCRETE:
 				{
 					if (VSEP_DIS_ON_OFF_state & vsep_fault_channel_data[x].io_mask) {
-						VSEP_Fault_Log[ fault_channel ] |= FAULT_TESTED_SHORT_TO_BATTERY_SET;
+						VSEP_Fault_Log[fault_channel] |= FAULT_TESTED_SHORT_TO_BATTERY_SET;
 						// if discrete signal report short to battery fault
 						if (vsep_pch_fault == VSEP_FAULT_PCH_SHORT_TO_BATTERY_FAULT ) {
 							VSEP_Fault_Log[fault_channel] |= FAULT_OCCURED_SHORT_TO_BATTERY_SET;
@@ -220,12 +226,12 @@ void VSEP_Fault_Diagnose_Channels(void* in_pointer)
 							VSEP_DiscreteToggleImmediate(vsep_fault_channel_data[x].io_configuration);
 						}
 					} else {
-						VSEP_Fault_Log[ fault_channel ] |=FAULT_TESTED_OPEN_CIRCUIT_SET;
-						VSEP_Fault_Log[ fault_channel ] |= FAULT_TESTED_SHORT_TO_GROUND_SET;
+						VSEP_Fault_Log[fault_channel] |=FAULT_TESTED_OPEN_CIRCUIT_SET;
+						VSEP_Fault_Log[fault_channel] |= FAULT_TESTED_SHORT_TO_GROUND_SET;
 						if(vsep_pch_fault == VSEP_FAULT_PCH_OPEN_FAULT ){
-							VSEP_Fault_Log[ fault_channel ] |= FAULT_OCCURED_OPEN_CIRCUIT_SET;
+							VSEP_Fault_Log[fault_channel] |= FAULT_OCCURED_OPEN_CIRCUIT_SET;
 						} else if (vsep_pch_fault == VSEP_FAULT_PCH_SHORT_TO_GROUND_FAULT ){ 
-							VSEP_Fault_Log[ fault_channel ] |= FAULT_OCCURED_SHORT_TO_GROUND_SET;
+							VSEP_Fault_Log[fault_channel] |= FAULT_OCCURED_SHORT_TO_GROUND_SET;
 						}
 					}
 					break;
@@ -235,20 +241,16 @@ void VSEP_Fault_Diagnose_Channels(void* in_pointer)
 					on_time = VSEP_PWM_ontime_us[fault_channel];//HZ
 					period = VSEP_PWM_period_us[fault_channel];
 					off_time = period - on_time;
-					if((off_time == 0) || (on_time > ( Filter_Time_Array[fault_channel]+ 1)))
-					{
+					if ((off_time == 0) || (on_time > ( Filter_Time_Array[fault_channel]+ 1))) {
 						VSEP_Fault_Log[fault_channel] |= FAULT_TESTED_SHORT_TO_BATTERY_SET;
 						// check if shorted to battery and if pwm is on 100%, toggle to reset output
-						if (vsep_pch_fault == VSEP_FAULT_PCH_SHORT_TO_BATTERY_FAULT )
-						{
+						if (vsep_pch_fault == VSEP_FAULT_PCH_SHORT_TO_BATTERY_FAULT ) {
 							VSEP_Fault_Log[fault_channel] |= FAULT_OCCURED_SHORT_TO_BATTERY_SET;
-							if (VSEP_Fault_Counter[x] < (KsVSEP_Diagnostic_Counter_Thd))
-							{
+							if (VSEP_Fault_Counter[x] < (KsVSEP_Diagnostic_Counter_Thd)) {
 								// increment channel fault counter
 								VSEP_Fault_Counter[x] = VSEP_Fault_Counter[x] + VSEP_CHANNEL_FAULT_COUNTER_INCREMENT_STEP;
 							}
-							if(on_time == period)
-							{
+							if(on_time == period) {
 								//when PWM is at 100% duty cycle, pin must be toggled to reset pin fault
 								//need put something here, need a function to toggle the pin
 								VSEP_PWM_DISCRETE_Toggle_Immediate_State(vsep_fault_channel_data[x].io_configuration);
@@ -256,14 +258,13 @@ void VSEP_Fault_Diagnose_Channels(void* in_pointer)
 							}
 						}
 					}
-					if((on_time == 0) || (off_time > VSEP_MIN_OFF_TIME_FOR_TEST))
-					{
-						VSEP_Fault_Log[ fault_channel ] |= FAULT_TESTED_OPEN_CIRCUIT_SET;
-						VSEP_Fault_Log[ fault_channel ] |= FAULT_TESTED_SHORT_TO_GROUND_SET;
+					if((on_time == 0) || (off_time > VSEP_MIN_OFF_TIME_FOR_TEST)) {
+						VSEP_Fault_Log[fault_channel] |= FAULT_TESTED_OPEN_CIRCUIT_SET;
+						VSEP_Fault_Log[fault_channel] |= FAULT_TESTED_SHORT_TO_GROUND_SET;
 						if(vsep_pch_fault == VSEP_FAULT_PCH_OPEN_FAULT ){   
-							VSEP_Fault_Log[ fault_channel ] |= FAULT_OCCURED_OPEN_CIRCUIT_SET;
+							VSEP_Fault_Log[fault_channel] |= FAULT_OCCURED_OPEN_CIRCUIT_SET;
 						}else if(vsep_pch_fault == VSEP_FAULT_PCH_SHORT_TO_GROUND_FAULT ){ 
-							VSEP_Fault_Log[ fault_channel ] |= FAULT_OCCURED_SHORT_TO_GROUND_SET;
+							VSEP_Fault_Log[fault_channel] |= FAULT_OCCURED_SHORT_TO_GROUND_SET;
 						}
 					}
 					break;
@@ -275,12 +276,12 @@ void VSEP_Fault_Diagnose_Channels(void* in_pointer)
 				case VSEP_FAULT_IO_KIND_IGNORE_PIN_STATE:
 				default:
 				{
-					VSEP_Fault_Log[ fault_channel ] |= FAULT_TESTED_SHORT_TO_BATTERY_SET;             
+					VSEP_Fault_Log[fault_channel] |= FAULT_TESTED_SHORT_TO_BATTERY_SET;             
 					// if IGBT - only diagnose short to battery, we should change the logic
-					VSEP_Fault_Log[ fault_channel ] |= FAULT_TESTED_OPEN_CIRCUIT_SET;
-					VSEP_Fault_Log[ fault_channel ] |= FAULT_TESTED_SHORT_TO_GROUND_SET;
+					VSEP_Fault_Log[fault_channel] |= FAULT_TESTED_OPEN_CIRCUIT_SET;
+					VSEP_Fault_Log[fault_channel] |= FAULT_TESTED_SHORT_TO_GROUND_SET;
 					if (vsep_pch_fault == VSEP_FAULT_PCH_SHORT_TO_BATTERY_FAULT ) {
-						VSEP_Fault_Log[ fault_channel ] |= FAULT_OCCURED_SHORT_TO_BATTERY_SET;
+						VSEP_Fault_Log[fault_channel] |= FAULT_OCCURED_SHORT_TO_BATTERY_SET;
 						if (VSEP_Fault_Counter[x] < (KsVSEP_Diagnostic_Counter_Thd)) {
 							// increment channel fault counter
 							VSEP_Fault_Counter[x] = VSEP_Fault_Counter[x] + VSEP_CHANNEL_FAULT_COUNTER_INCREMENT_STEP;
@@ -297,7 +298,8 @@ void VSEP_Fault_Diagnose_Channels(void* in_pointer)
 			}
 
 			//application can not set the channel to high again
-			if( (VSEP_Fault_Counter[x] >= (KsVSEP_Diagnostic_Counter_Thd))&&(VSEP_Channel_Enabled & (vsep_fault_channel_data[x].io_mask))
+			if( (VSEP_Fault_Counter[x] >= (KsVSEP_Diagnostic_Counter_Thd)) 
+				&& (VSEP_Channel_Enabled & (vsep_fault_channel_data[x].io_mask))
 				&& (Channel_Protect_Enable & (vsep_fault_channel_data[x].io_mask)))
 			{
 				// channel is discrete, disable channel by setting to FALSE
