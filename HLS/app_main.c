@@ -133,13 +133,13 @@ uint32_t  nvram_test2;
 }
 
 /*HWIO DI test code*/
-  void Test_DI_Function(void)
+void Test_DI_Function(void)
 {
-HLS_Filtered_AC_REQUEST_INPUT = LLD_di_table[LLD_DI_AC_REQUEST_INPUT].value;
-HLS_Filtered_AC_PRESSURE_SWITCH= LLD_di_table[LLD_DI_AC_PRESSURE_SWITCH].value;
-HLS_Filtered_DI_CAM_1=LLD_di_table[LLD_DI_CAM_1].value;
-HLS_Filtered_DI_IGN_ON_OFF_SW=LLD_di_table[LLD_DI_IGN_ON_OFF_SW].value;
-HLS_Filtered_DI_HEAD_LAMP=LLD_di_table[LLD_DI_HEAD_LAMP].value;
+    HLS_Filtered_AC_REQUEST_INPUT = LLD_di_table[LLD_DI_AC_REQUEST_INPUT].value;
+    HLS_Filtered_AC_PRESSURE_SWITCH= LLD_di_table[LLD_DI_AC_PRESSURE_SWITCH].value;
+    HLS_Filtered_DI_CAM_1=LLD_di_table[LLD_DI_CAM_1].value;
+    HLS_Filtered_DI_IGN_ON_OFF_SW=LLD_di_table[LLD_DI_IGN_ON_OFF_SW].value;
+    HLS_Filtered_DI_HEAD_LAMP=LLD_di_table[LLD_DI_HEAD_LAMP].value;
 
 }
 
@@ -163,29 +163,29 @@ void Test_DO_Toggle_Function(void)
  * Exported FAR_COS FUNCTION.
 \* ============================================================================ */
 /* Call back function for 1ms task */
- void HLS_Task_1ms(void)
+void HLS_Task_1ms(void)
 {
-  TestATD_ATD_Function();
+    TestATD_ATD_Function();
 }
 
 /* Call back function for 2ms task */
- void HLS_Task_2ms(void)
+void HLS_Task_2ms(void)
 {
   
 }
 
- void HLS_Task_5ms(void)
+void HLS_Task_5ms(void)
 {
  
 }
 
 /* Call back function for 10ms task */
- void HLS_Task_10ms(void)
+void HLS_Task_10ms(void)
 {
  Test_DI_Function();
 }
 /* Call back function for 20ms task */
- void HLS_Task_20ms(void)
+void HLS_Task_20ms(void)
 {
 }
 /* Call back function for 50ms task */
@@ -197,19 +197,21 @@ void Test_DO_Toggle_Function(void)
 {
 }
 /* Call back function for 200ms task */
- void HLS_Task_200ms(void)
+
+void HLS_Task_200ms(void)
 {
 }
 /* Call back function for 1000ms task */
 void HLS_Task_1000ms(void)
 {
-    // Test_DO_Toggle_Function();
-    // Test_IAC_Running();
+    static int b_toggle_function = 1;
+    if (b_toggle_function)
+        Test_DO_Toggle_Function();
 }
 
- void HLS_afterrun(void)
+void HLS_afterrun(void)
 {
- //sys_cmd.B_after_run_end = true;
+    //sys_cmd.B_after_run_end = true;
 }
 
 /*HLS initialization function.*/
@@ -217,7 +219,7 @@ void HLS_ini(void)
 {
 	/* etc signal output set */
 	etc_sig.etc_enable = true;
-	 etc_sig.etc_freq = 500; //set to 2khz
+	etc_sig.etc_freq = 500; //set to 2khz
 	etc_sig.etc_duty = 32768;
 	etc_sig.etc_direction = false;
 
@@ -322,102 +324,58 @@ void HLS_ini(void)
 }
 
 /*HLS initialization function*/
- void HLS_ini2(void)
+void HLS_ini2(void)
 {
-
-unsigned char i;
-telem_data.tele_N =0x1234;
-telem_data.tele_B_FuelStatus = 0xaa;
-telem_data.tele_CsMaf = 0xbb;
-telem_data.tele_fLc = 0xcc;
-telem_data.tele_fLcAd = 0xdd;
-telem_data.tele_IgaOut = 0xee;
-telem_data.tele_Pmap = 0xff;
-telem_data.tele_TaLin = 0x11;
-telem_data.tele_TmLin = 0x22;
-telem_data.tele_TpPos = 0x33;
-telem_data.tele_uLsb = 0x44;
-telem_data.tele_Vsp = 0x55;
-
-
-//scnVehInfo.CVN[0] = 0xaa;
-//scnVehInfo.CVN[1] = 0xbb;
-//scnVehInfo.CVN[2] =0xcc;
-//scnVehInfo.CVN[3] =0xdd;
+    unsigned char i;
+    telem_data.tele_N =0x1234;
+    telem_data.tele_B_FuelStatus = 0xaa;
+    telem_data.tele_CsMaf = 0xbb;
+    telem_data.tele_fLc = 0xcc;
+    telem_data.tele_fLcAd = 0xdd;
+    telem_data.tele_IgaOut = 0xee;
+    telem_data.tele_Pmap = 0xff;
+    telem_data.tele_TaLin = 0x11;
+    telem_data.tele_TmLin = 0x22;
+    telem_data.tele_TpPos = 0x33;
+    telem_data.tele_uLsb = 0x44;
+    telem_data.tele_Vsp = 0x55;
 }
 
 /*will be called after _ini() at ECU power on, and at engine stall*/
- void HLS_inisyn(void)
+void HLS_inisyn(void)
 {
 
 }
 
 /*will be called when the synch is lost/reset, this is an event trigged function call*/
- void HLS_rstsyn(void)
+void HLS_rstsyn(void)
 {
 
 }
 /*will be called when the first Synchronization (first gap) is confirmed, this is an event trigged function call*/
-  void HLS_firstsyn(void)
+void HLS_firstsyn(void)
 {
 
 }
 /*will be called for every segment (at Software reference mark)*/
- void HLS_syn(void)
-{ 
-  /* if( knock_flag_a == true)
-   {
-      ign_sig[LLD_IGN_CHANNEL_A].ign_angle = knock_retard_a;
-   }	
-   else
-   {
-      ign_sig[LLD_IGN_CHANNEL_A].ign_angle = 0;
-   }
+void HLS_syn(void)
+{
+    inj_sig[INJ_CHANNEL_A].inj_time = 10000;
+    inj_sig[INJ_CHANNEL_B].inj_time = 10000;
+    inj_sig[INJ_CHANNEL_C].inj_time = 10000;
+    inj_sig[INJ_CHANNEL_D].inj_time = 10000;
 
-     if( knock_flag_b == true)
-   {
-      ign_sig[LLD_IGN_CHANNEL_B].ign_angle = knock_retard_b;
-   }	
-   else
-   {
-      ign_sig[LLD_IGN_CHANNEL_B].ign_angle = 0;
-   }
-
-      if( knock_flag_c == true)
-   {
-      ign_sig[LLD_IGN_CHANNEL_C].ign_angle = knock_retard_c;
-   }	
-   else
-   {
-      ign_sig[LLD_IGN_CHANNEL_C].ign_angle = 0;
-   }
-
-    if( knock_flag_d == true)
-   {
-      ign_sig[LLD_IGN_CHANNEL_D].ign_angle = knock_retard_d; 
-   }	
-   else
-   {
-      ign_sig[LLD_IGN_CHANNEL_D].ign_angle = 0;
-   }*/
-   
-   inj_sig[INJ_CHANNEL_A].inj_time = 10000;
-   inj_sig[INJ_CHANNEL_B].inj_time = 10000;
-   inj_sig[INJ_CHANNEL_C].inj_time = 10000;
-   inj_sig[INJ_CHANNEL_D].inj_time = 10000;
-  
-   inj_sig[INJ_CHANNEL_A].B_post_inj = true;
-   inj_sig[INJ_CHANNEL_A].post_inj_time =1000;
-   inj_sig[INJ_CHANNEL_B].B_post_inj = true;
-   inj_sig[INJ_CHANNEL_B].post_inj_time =1000;
-   inj_sig[INJ_CHANNEL_C].B_post_inj = true;
-   inj_sig[INJ_CHANNEL_C].post_inj_time =1000;
-   inj_sig[INJ_CHANNEL_D].B_post_inj = true;
-   inj_sig[INJ_CHANNEL_D].post_inj_time =1000;
-
+    inj_sig[INJ_CHANNEL_A].B_post_inj = true;
+    inj_sig[INJ_CHANNEL_A].post_inj_time =1000;
+    inj_sig[INJ_CHANNEL_B].B_post_inj = true;
+    inj_sig[INJ_CHANNEL_B].post_inj_time =1000;
+    inj_sig[INJ_CHANNEL_C].B_post_inj = true;
+    inj_sig[INJ_CHANNEL_C].post_inj_time =1000;
+    inj_sig[INJ_CHANNEL_D].B_post_inj = true;
+    inj_sig[INJ_CHANNEL_D].post_inj_time =1000;
 }
 /*will be called on each falling edge of the CAM signal*/
- void HLS_ph1(void)
+void HLS_ph1(void)
 {
 
 }
