@@ -45,7 +45,6 @@
 /*===========================================================================*\
  * Standard Header Files
 \*===========================================================================*/
-#include "reuse.h"
 #include "io_type.h"
 
 /*===========================================================================*\
@@ -73,14 +72,14 @@ extern bool Soh_RecoverMode;
 /*===========================================================================*\
  * Exported Function Prototypes
 \*===========================================================================*/
-extern FAR_COS uint16_t SOH_ETC_Get_Fault_Log(void);
-extern FAR_COS uint8_t  SOH_ETC_Get_Test_Result(void);
-extern FAR_COS void SOH_ETC_ISR(void);
-extern FAR_COS void SOH_ETC_Initialize(bool power_on_reset_status);
-extern FAR_COS void SOH_ETC_Update_Loop_Sequence_Array(const uint8_t ID_tag);
-extern FAR_COS void SOH_ETC_Update_RTI_Array(void);
-extern FAR_COS void SOH_VSEP_CR_Service(void);			//just for debug and test
-extern FAR_COS void SOH_Logic_Debug_and_Test(void);	//just for debug and test
+extern uint16_t SOH_ETC_Get_Fault_Log(void);
+extern uint8_t  SOH_ETC_Get_Test_Result(void);
+extern void SOH_ETC_ISR(void);
+extern void SOH_ETC_Initialize(bool power_on_reset_status);
+extern void SOH_ETC_Update_Loop_Sequence_Array(const uint8_t ID_tag);
+extern void SOH_ETC_Update_RTI_Array(void);
+extern void SOH_VSEP_CR_Service(void);			//just for debug and test
+extern void SOH_Logic_Debug_and_Test(void);	//just for debug and test
 
 
 /*===========================================================================*\

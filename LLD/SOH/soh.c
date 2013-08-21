@@ -208,7 +208,7 @@ static uint8_t CalcSohResponse(uint8_t challenge);
  * The array is a circular buffer.
  * Updating stopped when any fault is logged.
 \*===========================================================================*/
-FAR_COS void SOH_ETC_Update_Loop_Sequence_Array(const uint8_t ID_tag)
+void SOH_ETC_Update_Loop_Sequence_Array(const uint8_t ID_tag)
 {
 	Soh_LoopSeq[Soh_SchdLoopSeqIdx] = ID_tag;
 	Soh_SchdLoopSeqIdx = IncCirBuffIdx(Soh_SchdLoopSeqIdx, SOH_LOOPSEQBUFSZ);
@@ -860,7 +860,7 @@ static void EtcSohRecovery(void)
  * The interrupt is setup in one-shot mode to ensure itself is being executed,
  * failing which the watchdog timer will timeout and trigger a watchdog reset.
 \*===========================================================================*/
-FAR_COS void SOH_ETC_ISR(void)
+void SOH_ETC_ISR(void)
 {
 
 	SOH_PIT_TMR_MSEC_T SOH_ETC_ISR_Time;
@@ -975,7 +975,7 @@ FAR_COS void SOH_ETC_ISR(void)
  * and before the cyclic executive is started.
  *
 \*===========================================================================*/
-FAR_COS void SOH_ETC_Initialize(bool power_on_reset_status)
+void SOH_ETC_Initialize(bool power_on_reset_status)
 {
 	uint8_t i;
 	SOH_TMR_MSEC_T time;
@@ -1095,7 +1095,7 @@ FAR_COS void SOH_ETC_Initialize(bool power_on_reset_status)
  * This function returns the most recent ETC SOH test result.
  *
 \*===========================================================================*/
-FAR_COS uint8_t SOH_ETC_Get_Test_Result(void)
+uint8_t SOH_ETC_Get_Test_Result(void)
 {
 	return Soh_TestResult.Byte;
 }
@@ -1159,7 +1159,7 @@ FAR_COS uint8_t SOH_ETC_Get_Test_Result(void)
  * This function returns the ETC SOH fault logged.
  *
 \*===========================================================================*/
-FAR_COS uint16_t SOH_ETC_Get_Fault_Log(void)
+uint16_t SOH_ETC_Get_Fault_Log(void)
 {
 	return (uint16_t)Soh_FaultLogNVM.Word;
 }
@@ -1185,7 +1185,7 @@ FAR_COS uint16_t SOH_ETC_Get_Fault_Log(void)
  * This function services VSEP challeng and response logic. It is just for SOH logic debug.
  *
 \*===========================================================================*/
-FAR_COS void SOH_VSEP_CR_Service(void)
+void SOH_VSEP_CR_Service(void)
 {
 	HAL_SOH_CnR_Clear_Timeout_Fault(true);
 	Soh_CnRValue.Bits.Challenge = HAL_SOH_CnR_Get_Challenge();
@@ -1216,7 +1216,7 @@ FAR_COS void SOH_VSEP_CR_Service(void)
  * This function services VSEP challeng and response logic. It is just for SOH logic debug.
  *
 \*===========================================================================*/
-FAR_COS void SOH_Logic_Debug_and_Test(void)
+void SOH_Logic_Debug_and_Test(void)
 {
 	switch(Temp_SOH_Debug_ID)
 	{
