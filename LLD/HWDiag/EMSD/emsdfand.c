@@ -48,25 +48,19 @@
  * FAN1
  */
 TbBOOLEAN        SbEMSD_FANAEnblCriteriaMet ;
-
-
 TbBOOLEAN        SbEMSD_FANAShortHiFailCriteriaMet ;
 TbBOOLEAN        SbEMSD_FANAShortLoFailCriteriaMet ;
-
 TbBOOLEAN        SbEMSD_FANATestComplete ;
-// #pragma section [nvram] 
-TbBOOLEAN        SbEMSD_FANAShortHiTestFailed ;
-
-TbBOOLEAN        SbEMSD_FANAShortLoTestFailed ;
-// #pragma section [] 
 T_COUNT_WORD     ScEMSD_FANAShortHiFailCntr ;
 T_COUNT_WORD     ScEMSD_FANAShortLoFailCntr ;
-
-
 T_COUNT_WORD             VcEMSD_FANASampleCntr ;
-
-
 TbBOOLEAN        SbEMSD_FANATestComplete_Internal;
+
+#pragma section DATA " " ".nc_nvram"
+TbBOOLEAN        SbEMSD_FANAShortHiTestFailed ;
+TbBOOLEAN        SbEMSD_FANAShortLoTestFailed ;
+#pragma section DATA " " ".bss"
+
 /*
  *
  * FAN2
@@ -74,19 +68,16 @@ TbBOOLEAN        SbEMSD_FANATestComplete_Internal;
 TbBOOLEAN        SbEMSD_FANBEnblCriteriaMet ;
 TbBOOLEAN        SbEMSD_FANBShortHiFailCriteriaMet ;
 TbBOOLEAN        SbEMSD_FANBShortLoFailCriteriaMet ;
-
 TbBOOLEAN        SbEMSD_FANBTestComplete ;
-// #pragma section [nvram]
-TbBOOLEAN        SbEMSD_FANBShortHiTestFailed ;
-TbBOOLEAN        SbEMSD_FANBShortLoTestFailed ;
-// #pragma section [] 
 T_COUNT_WORD     ScEMSD_FANBShortHiFailCntr ;
 T_COUNT_WORD     ScEMSD_FANBShortLoFailCntr ;
 T_COUNT_WORD     VcEMSD_FANBSampleCntr ;
-
-
 TbBOOLEAN        SbEMSD_FANBTestComplete_Internal;
 
+#pragma section DATA " " ".nc_nvram"
+TbBOOLEAN        SbEMSD_FANBShortHiTestFailed ;
+TbBOOLEAN        SbEMSD_FANBShortLoTestFailed ;
+#pragma section DATA " " ".bss"
 /*****************************************************************************
  *  Function definition
  ******************************************************************************/
