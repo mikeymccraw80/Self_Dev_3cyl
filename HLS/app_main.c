@@ -201,10 +201,10 @@ void Test_DO_Toggle_Function(void)
 {
 }
 /* Call back function for 1000ms task */
-  void HLS_Task_1000ms(void)
+void HLS_Task_1000ms(void)
 {
-Test_DO_Toggle_Function();
-//Test_IAC_Running();
+    // Test_DO_Toggle_Function();
+    // Test_IAC_Running();
 }
 
  void HLS_afterrun(void)
