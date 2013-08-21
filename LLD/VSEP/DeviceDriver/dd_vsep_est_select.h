@@ -380,7 +380,7 @@ extern const uint16_t VSEP_EST_SELECT_INITIAL[VSEP_EST_SELECT_TXD_MESSAGE_MAX];
 //
 // @end
 //=============================================================================
-FAR_COS void VSEP_EST_Select_Initialize_Device(void);
+void VSEP_EST_Select_Initialize_Device(void);
 
 #else
 //=============================================================================
@@ -394,7 +394,7 @@ FAR_COS void VSEP_EST_Select_Initialize_Device(void);
 //
 // @end
 //=============================================================================
-FAR_COS void VSEP_EST_Select_Initialize_Device(void);
+void VSEP_EST_Select_Initialize_Device(void);
 
 
 //=============================================================================
@@ -408,7 +408,7 @@ FAR_COS void VSEP_EST_Select_Initialize_Device(void);
 //
 // @end
 //=============================================================================
-FAR_COS void VSEP_EST_Select_Set_Channel(
+void VSEP_EST_Select_Set_Channel(
    IO_Configuration_T        in_configuration,
    EST_Select_Cylinder_T   in_channel );
 
@@ -424,7 +424,7 @@ FAR_COS void VSEP_EST_Select_Set_Channel(
 //
 // @end
 //=============================================================================
-FAR_COS void VSEP_EST_Select_Set_Index(
+void VSEP_EST_Select_Set_Index(
    IO_Configuration_T        in_configuration,
    bool					     in_index );
 #endif
@@ -439,7 +439,7 @@ FAR_COS void VSEP_EST_Select_Set_Index(
 //
 // @end
 //=============================================================================
-FAR_COS void VSEP_EST_Select_Increment_Channel(
+void VSEP_EST_Select_Increment_Channel(
    EST_Select_Cylinder_T   in_channel );
 
 
@@ -454,7 +454,7 @@ FAR_COS void VSEP_EST_Select_Increment_Channel(
 //
 // @end
 //=============================================================================
-FAR_COS void VSEP_EST_Select_Enable(void);
+void VSEP_EST_Select_Enable(void);
 
 
 //=============================================================================
@@ -468,7 +468,7 @@ FAR_COS void VSEP_EST_Select_Enable(void);
 //
 // @end
 //=============================================================================
-FAR_COS void VSEP_EST_Select_Disable(void);
+void VSEP_EST_Select_Disable(void);
 
 
 
@@ -498,9 +498,9 @@ void VSEP_EST_Select_Set_Number_Of_Cylinders(
 //
 // @end
 //=============================================================================
-FAR_COS EST_Mode_T VSEP_EST_Select_Get_Mode(void );
+EST_Mode_T VSEP_EST_Select_Get_Mode(void );
 
-FAR_COS bool VSEP_EST_Select_Get_Mode_PF(void);
+bool VSEP_EST_Select_Get_Mode_PF(void);
 //=============================================================================
 // EST_Select_Set_Mode_T
 //
@@ -512,7 +512,7 @@ FAR_COS bool VSEP_EST_Select_Get_Mode_PF(void);
 //
 // @end
 //=============================================================================
-FAR_COS void VSEP_EST_Select_Set_Mode(
+void VSEP_EST_Select_Set_Mode(
    IO_Configuration_T        in_configuration,
    EST_Mode_T        in_mode );
 
@@ -528,7 +528,7 @@ FAR_COS void VSEP_EST_Select_Set_Mode(
 // @end
 //=============================================================================
 
-FAR_COS void VSEP_EST_Set_PF_Mode(
+void VSEP_EST_Set_PF_Mode(
    IO_Configuration_T        in_configuration,//MTSA_EST_SELECT_DEVICE/	VSEP_INDEX_0
    VSEP_EST_Select_Paired_Fire_Mode_T        in_mode );
 

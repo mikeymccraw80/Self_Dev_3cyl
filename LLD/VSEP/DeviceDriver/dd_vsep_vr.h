@@ -370,7 +370,7 @@ void VSEP_TIMER_VR_Set_Value(
 //
 // @end
 //=============================================================================
-FAR_COS void VSEP_TIMER_VR_Set_Value_Immediate(
+void VSEP_TIMER_VR_Set_Value_Immediate(
    IO_Configuration_T   in_configuration,
    uint32_t             in_time );
 

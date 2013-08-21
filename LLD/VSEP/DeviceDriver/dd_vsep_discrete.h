@@ -266,7 +266,7 @@ void VSEP_DISCRETE_Channel_Initialize(
 //
 // @end
 //=============================================================================
-FAR_COS void VSEP_DISCRETE_Channel_Clear(
+void VSEP_DISCRETE_Channel_Clear(
    IO_Configuration_T in_configuration);
 
 //=============================================================================
@@ -285,7 +285,7 @@ FAR_COS void VSEP_DISCRETE_Channel_Clear(
 //
 // @end
 //=============================================================================
-FAR_COS bool VSEP_DISCRETE_Get_State( 
+bool VSEP_DISCRETE_Get_State( 
    IO_Configuration_T in_configuration);
 
 //=============================================================================
@@ -304,7 +304,7 @@ FAR_COS bool VSEP_DISCRETE_Get_State(
 //
 // @end
 //=============================================================================
-FAR_COS bool VSEP_DISCRETE_Get_Immediate_State( 
+bool VSEP_DISCRETE_Get_Immediate_State( 
    IO_Configuration_T in_configuration);
 
 //=============================================================================
@@ -326,7 +326,7 @@ FAR_COS bool VSEP_DISCRETE_Get_Immediate_State(
 //
 // @end
 //=============================================================================
-FAR_COS void VSEP_DISCRETE_Set_State(
+void VSEP_DISCRETE_Set_State(
    IO_Configuration_T in_configuration,
    bool               in_state);
 
@@ -348,7 +348,7 @@ FAR_COS void VSEP_DISCRETE_Set_State(
 //
 // @end
 //=============================================================================
-FAR_COS void VSEP_DISCRETE_Set_Immediate_State(
+void VSEP_DISCRETE_Set_Immediate_State(
    IO_Configuration_T in_configuration,
    bool               in_state);
 
@@ -365,7 +365,7 @@ FAR_COS void VSEP_DISCRETE_Set_Immediate_State(
 //
 // @end
 //=============================================================================
-FAR_COS void VSEP_DISCRETE_Toggle_State(
+void VSEP_DISCRETE_Toggle_State(
    IO_Configuration_T in_configuration);
 
 //=============================================================================
@@ -381,7 +381,7 @@ FAR_COS void VSEP_DISCRETE_Toggle_State(
 //
 // @end
 //=============================================================================
-FAR_COS void VSEP_DISCRETE_Toggle_Immediate_State(
+void VSEP_DISCRETE_Toggle_Immediate_State(
    IO_Configuration_T in_configuration);
 
 

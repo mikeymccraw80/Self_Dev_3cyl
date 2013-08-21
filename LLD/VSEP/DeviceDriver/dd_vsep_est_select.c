@@ -60,7 +60,7 @@ static VSEP_EST_Select_State_T VSEP_EST_Select_State;
 //=============================================================================
 // VSEP_PWM_Device_Initialize
 //=============================================================================
-FAR_COS void VSEP_EST_Select_Initialize_Device(void)
+void VSEP_EST_Select_Initialize_Device(void)
 {
 
 #ifdef VSEP_EST_SELECT_STATIC_INITIALIZATION
@@ -88,7 +88,7 @@ static void VSEP_EST_Select_Manage_Transition( void );
 //=============================================================================
 // VSEP_PWM_Device_Initialize
 //=============================================================================
-FAR_COS void VSEP_EST_Select_Initialize_Device(void)
+void VSEP_EST_Select_Initialize_Device(void)
 {
 #ifdef VSEP_EST_SELECT_STATIC_INITIALIZATION
 
@@ -122,7 +122,7 @@ uint8_t LA_EST_Select_Counter = 0;
 //=============================================================================
 // VSEP_EST_Select_Set_Index  change for MT22.1
 //=============================================================================
-FAR_COS void VSEP_EST_Select_Set_Index(
+void VSEP_EST_Select_Set_Index(
    IO_Configuration_T        in_configuration,//MTSA_CONFIG_VSEP_DEVICE_0
    bool						 in_index )//Crank_Cylinder_T
 {
@@ -145,7 +145,7 @@ FAR_COS void VSEP_EST_Select_Set_Index(
 //=============================================================================
 // VSEP_EST_Select_Set_Channel  change for MT22.1
 //=============================================================================
-FAR_COS void VSEP_EST_Select_Set_Channel(
+void VSEP_EST_Select_Set_Channel(
    IO_Configuration_T        in_configuration,//MTSA_CONFIG_VSEP_DEVICE_0
    EST_Select_Cylinder_T   in_channel )//Crank_Cylinder_T
 {
@@ -169,7 +169,7 @@ FAR_COS void VSEP_EST_Select_Set_Channel(
 //=============================================================================
 // VSEP_EST_Select_Set_Channel
 //=============================================================================
-FAR_COS void VSEP_EST_Select_Increment_Channel(
+void VSEP_EST_Select_Increment_Channel(
    EST_Select_Cylinder_T   in_channel )//Crank_Cylinder_T
 {
    uint32_t channel = (uint32_t)in_channel;
@@ -244,7 +244,7 @@ FAR_COS void VSEP_EST_Select_Increment_Channel(
 //=============================================================================
 // VSEP_EST_Select_Enable
 //=============================================================================
-FAR_COS void VSEP_EST_Select_Enable(void)
+void VSEP_EST_Select_Enable(void)
 {
  //DD_SetDiscrete(DISCRETE_OUT_EST_SYNC,false);
  HAL_GPIO_SET_ESTSYNC_Enable(false);
@@ -258,7 +258,7 @@ FAR_COS void VSEP_EST_Select_Enable(void)
 //=============================================================================
 // VSEP_EST_Select_Disable
 //=============================================================================
-FAR_COS void VSEP_EST_Select_Disable(void)
+void VSEP_EST_Select_Disable(void)
 {
   // Parameter_Not_Used( DISCRETE_OUT_EST_SYNC );
    // Deactivate the EST signal
@@ -268,7 +268,7 @@ FAR_COS void VSEP_EST_Select_Disable(void)
 //=============================================================================
 // VSEP_EST_Select_Set_Number_Of_Cylinders
 //=============================================================================
-FAR_COS void VSEP_EST_Select_Set_Number_Of_Cylinders(
+void VSEP_EST_Select_Set_Number_Of_Cylinders(
    uint8_t           in_number_of_cylinders )
 {
    VSEP_EST_Number_Of_Cylinders = in_number_of_cylinders;
@@ -282,7 +282,7 @@ FAR_COS void VSEP_EST_Select_Set_Number_Of_Cylinders(
 //=============================================================================
 // VSEP_EST_Select_Set_Mode
 //=============================================================================
-FAR_COS void VSEP_EST_Select_Set_Mode(
+void VSEP_EST_Select_Set_Mode(
    IO_Configuration_T        in_configuration,//MTSA_EST_SELECT_DEVICE/	VSEP_INDEX_0
    EST_Mode_T        in_mode )
 {
@@ -452,7 +452,7 @@ FAR_COS void VSEP_EST_Select_Set_Mode(
 //=============================================================================
 // VSEP_EST_Set_PF_Mode
 //=============================================================================
-FAR_COS void VSEP_EST_Set_PF_Mode(
+void VSEP_EST_Set_PF_Mode(
    IO_Configuration_T        in_configuration,//MTSA_EST_SELECT_DEVICE/	VSEP_INDEX_0
    VSEP_EST_Select_Paired_Fire_Mode_T        in_mode )
 {
@@ -465,7 +465,7 @@ FAR_COS void VSEP_EST_Set_PF_Mode(
 //=============================================================================
 // VSEP_EST_Select_Get_Mode
 //=============================================================================
-FAR_COS EST_Mode_T VSEP_EST_Select_Get_Mode(void)
+EST_Mode_T VSEP_EST_Select_Get_Mode(void)
 {
    //Parameter_Not_Used( DISCRETE_OUT_EST_SYNC );
    return VSEP_EST_Select_Mode;
@@ -474,7 +474,7 @@ FAR_COS EST_Mode_T VSEP_EST_Select_Get_Mode(void)
 //=============================================================================
 // VSEP_EST_Select_Get_Mode
 //=============================================================================
-FAR_COS bool VSEP_EST_Select_Get_Mode_PF(void)
+bool VSEP_EST_Select_Get_Mode_PF(void)
 {
   // Parameter_Not_Used( DISCRETE_OUT_EST_SYNC );
    return   VSEP_EST_Select_State.paired_fire_mode;

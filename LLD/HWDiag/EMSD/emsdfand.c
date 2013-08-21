@@ -100,7 +100,7 @@ TbBOOLEAN        SbEMSD_FANBTestComplete_Internal;
  * Parameters:   None
  * Return:       None
  *****************************************************************************/
-FAR_COS void InitEMSD_FanxRstToKeyOff(void)
+void InitEMSD_FanxRstToKeyOff(void)
 {  
   
   SbEMSD_FANAEnblCriteriaMet = CbFALSE ;

@@ -52,7 +52,7 @@ TbBOOLEAN        SbEMSD_FileROMTestFailed ;
  * Parameters:   None
  * Return:       None
  *****************************************************************************/
-//FAR_COS void InitEMSD_FileROMRstToKeyOn(void)
+//void InitEMSD_FileROMRstToKeyOn(void)
 //{
   
   //SbEMSD_FileROMTestComplete= CbFALSE;

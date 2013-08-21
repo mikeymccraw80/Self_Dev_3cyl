@@ -55,7 +55,7 @@ uint16_t VSEP_SOH_Response_Txd[VSEP_SOH_TXD_MESSAGE_MAX];
 ///////////////////////////////////////////////////////////////////////////////
 // VSEP PCH VSEP_SOH_Initialize_Device
 ///////////////////////////////////////////////////////////////////////////////
-FAR_COS void VSEP_SOH_Initialize_Device( IO_Configuration_T in_configuration )
+void VSEP_SOH_Initialize_Device( IO_Configuration_T in_configuration )
 {
    VSEP_SOH_Txd[VSEP_SOH_TXD_MESSAGE_CTRL] = VSEP_Msg_Set_SDOA( VSEP_SOH_Txd[VSEP_SOH_TXD_MESSAGE_CTRL], VSEP_RXD_SDOA_CHALLENGE );
    VSEP_SOH_Txd[VSEP_SOH_TXD_MESSAGE_CTRL] = VSEP_Msg_Set_SDIA( VSEP_SOH_Txd[VSEP_SOH_TXD_MESSAGE_CTRL], VSEP_TXD_SDIA_NOT_USED );
@@ -64,7 +64,7 @@ FAR_COS void VSEP_SOH_Initialize_Device( IO_Configuration_T in_configuration )
 ///////////////////////////////////////////////////////////////////////////////
 // VSEP_SOH_Get_Challenge
 ///////////////////////////////////////////////////////////////////////////////
-FAR_COS uint32_t VSEP_SOH_Get_Challenge( IO_Configuration_T in_configuration  )
+uint32_t VSEP_SOH_Get_Challenge( IO_Configuration_T in_configuration  )
 {
    uint32_t challenge;
 
@@ -82,7 +82,7 @@ FAR_COS uint32_t VSEP_SOH_Get_Challenge( IO_Configuration_T in_configuration  )
 // Update_VSEP_SOH_Status_Immediate	
 // mz38cg: update SOH Status
 ///////////////////////////////////////////////////////////////////////////////
-FAR_COS void Update_VSEP_SOH_Status_Immediate( IO_Configuration_T in_configuration  )
+void Update_VSEP_SOH_Status_Immediate( IO_Configuration_T in_configuration  )
 {
  
    VSEP_SPI_Immediate_Transfer( in_configuration, VSEP_MESSAGE_SOH_STATUS );
@@ -94,7 +94,7 @@ FAR_COS void Update_VSEP_SOH_Status_Immediate( IO_Configuration_T in_configurati
 // VSEP_SOH_Set_SOHRSTEN_Request	
 // mz38cg: set SOHRSTEN flag
 ///////////////////////////////////////////////////////////////////////////////
-FAR_COS void VSEP_SOH_Set_SOHRSTEN_Request( IO_Configuration_T in_configuration, bool sohrsten  )
+void VSEP_SOH_Set_SOHRSTEN_Request( IO_Configuration_T in_configuration, bool sohrsten  )
 {
    VSEP_SOH_Txd[VSEP_SOH_TXD_MESSAGE_CTRL] = VSEP_Msg_Set_SDOA( VSEP_SOH_Txd[VSEP_SOH_TXD_MESSAGE_CTRL], VSEP_RXD_SDOA_NOT_USED );
    VSEP_SOH_Txd[VSEP_SOH_TXD_MESSAGE_CTRL] = VSEP_Msg_Set_SDIA( VSEP_SOH_Txd[VSEP_SOH_TXD_MESSAGE_CTRL], VSEP_TXD_SDIA_SETUP  );
@@ -105,7 +105,7 @@ FAR_COS void VSEP_SOH_Set_SOHRSTEN_Request( IO_Configuration_T in_configuration,
 }
 
 
-FAR_COS void VSEP_SOH_DisableSOH_Request( IO_Configuration_T in_configuration  )
+void VSEP_SOH_DisableSOH_Request( IO_Configuration_T in_configuration  )
 {
    VSEP_SOH_Txd[VSEP_SOH_TXD_MESSAGE_CTRL] = VSEP_Msg_Set_SDOA( VSEP_SOH_Txd[VSEP_SOH_TXD_MESSAGE_CTRL], VSEP_RXD_SDOA_NOT_USED );
    VSEP_SOH_Txd[VSEP_SOH_TXD_MESSAGE_CTRL] = VSEP_Msg_Set_SDIA( VSEP_SOH_Txd[VSEP_SOH_TXD_MESSAGE_CTRL], VSEP_TXD_SDIA_SETUP  );
@@ -117,7 +117,7 @@ FAR_COS void VSEP_SOH_DisableSOH_Request( IO_Configuration_T in_configuration  )
 ///////////////////////////////////////////////////////////////////////////////
 // VSEP_SOH_Set_Response
 ///////////////////////////////////////////////////////////////////////////////
-FAR_COS void VSEP_SOH_Set_Response( IO_Configuration_T in_configuration, uint32_t response  )
+void VSEP_SOH_Set_Response( IO_Configuration_T in_configuration, uint32_t response  )
 {
    VSEP_SOH_Txd[VSEP_SOH_TXD_MESSAGE_CTRL] = VSEP_Msg_Set_SDOA( VSEP_SOH_Txd[VSEP_SOH_TXD_MESSAGE_CTRL], VSEP_RXD_SDOA_NOT_USED  );
    VSEP_SOH_Txd[VSEP_SOH_TXD_MESSAGE_CTRL] = VSEP_Msg_Set_SDIA( VSEP_SOH_Txd[VSEP_SOH_TXD_MESSAGE_CTRL], VSEP_TXD_SDIA_RESPONSE  );
@@ -126,7 +126,7 @@ FAR_COS void VSEP_SOH_Set_Response( IO_Configuration_T in_configuration, uint32_
    VSEP_SPI_Immediate_Transfer( in_configuration, VSEP_MESSAGE_SOH );
 }
 
-FAR_COS void VSEP_SOH_Set_DisableFSE_Request( IO_Configuration_T in_configuration, bool fse_disreq )
+void VSEP_SOH_Set_DisableFSE_Request( IO_Configuration_T in_configuration, bool fse_disreq )
 {
    VSEP_Index_T device = VSEP_Get_Device_Index( in_configuration );
 
@@ -136,12 +136,12 @@ FAR_COS void VSEP_SOH_Set_DisableFSE_Request( IO_Configuration_T in_configuratio
    VSEP_SOH_Txd[VSEP_SOH_TXD_MESSAGE_RESPONSE] = VSEP_Msg_Set_FSE_DISABLE( VSEP_SOH_Txd[VSEP_SOH_TXD_MESSAGE_RESPONSE], fse_disreq );
 }
 
-FAR_COS void VSEP_SOH_Set_Timeout_Fault( IO_Configuration_T in_configuration, bool cr_timeout )
+void VSEP_SOH_Set_Timeout_Fault( IO_Configuration_T in_configuration, bool cr_timeout )
 {
    VSEP_SOH_Txd[VSEP_SOH_TXD_MESSAGE_CTRL] = VSEP_Msg_Set_CRTOCLR( VSEP_SOH_Txd[VSEP_SOH_TXD_MESSAGE_CTRL], cr_timeout );
 }
 
-FAR_COS void VSEP_SOH_Set_DisableFSE_Request_Immediate( IO_Configuration_T in_configuration, bool fse_disreq )
+void VSEP_SOH_Set_DisableFSE_Request_Immediate( IO_Configuration_T in_configuration, bool fse_disreq )
 {
    VSEP_SOH_Set_DisableFSE_Request( in_configuration, fse_disreq );
    VSEP_SPI_Immediate_Transfer( in_configuration, VSEP_MESSAGE_SOH );
@@ -256,7 +256,7 @@ void VSEP_SeviceSOH( void )
 ///////////////////////////////////////////////////////////////////////////////
 // VSEP_SeviceSOH
 ///////////////////////////////////////////////////////////////////////////////
-FAR_COS void VSEP_Disable_SOH( void ) 
+void VSEP_Disable_SOH( void ) 
 {
 
   uint16_t index = 0;

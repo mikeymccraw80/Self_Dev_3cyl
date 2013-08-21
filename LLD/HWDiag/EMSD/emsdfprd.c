@@ -59,7 +59,7 @@ TbBOOLEAN        SbEMSD_FPRDTestComplete_Internal ;
  * Parameters:   None
  * Return:       None
  *****************************************************************************/
-FAR_COS void InitEMSD_FuelPumpRstToKeyOff(void)
+void InitEMSD_FuelPumpRstToKeyOff(void)
 {
 
   SbEMSD_FPRDEnblCriteriaMet = CbFALSE ;

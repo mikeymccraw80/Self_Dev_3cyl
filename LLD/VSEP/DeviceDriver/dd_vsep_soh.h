@@ -187,7 +187,7 @@ typedef enum
 //
 // @end
 //=============================================================================
-FAR_COS void VSEP_SOH_Initialize_Device( IO_Configuration_T in_config );
+void VSEP_SOH_Initialize_Device( IO_Configuration_T in_config );
 
 //=============================================================================
 // VSEP_SOH_Set_Response
@@ -205,7 +205,7 @@ FAR_COS void VSEP_SOH_Initialize_Device( IO_Configuration_T in_config );
 //
 // @end
 //=============================================================================
-FAR_COS void VSEP_SOH_Set_Response( IO_Configuration_T in_configuration, uint32_t response  );
+void VSEP_SOH_Set_Response( IO_Configuration_T in_configuration, uint32_t response  );
 
 //=============================================================================
 // VSEP_SOH_Set_Disable_Request
@@ -222,7 +222,7 @@ FAR_COS void VSEP_SOH_Set_Response( IO_Configuration_T in_configuration, uint32_
 //
 // @end
 //=============================================================================
-FAR_COS void VSEP_SOH_Set_DisableFSE_Request( IO_Configuration_T in_configuration, bool fse_disreq );
+void VSEP_SOH_Set_DisableFSE_Request( IO_Configuration_T in_configuration, bool fse_disreq );
 
 //=============================================================================
 // VSEP_SOH_Set_Disable_Request_Immediate
@@ -239,7 +239,7 @@ FAR_COS void VSEP_SOH_Set_DisableFSE_Request( IO_Configuration_T in_configuratio
 //
 // @end
 //=============================================================================
-FAR_COS void VSEP_SOH_Set_DisableFSE_Request_Immediate( IO_Configuration_T in_configuration, bool fse_disreq );
+void VSEP_SOH_Set_DisableFSE_Request_Immediate( IO_Configuration_T in_configuration, bool fse_disreq );
 
 //=============================================================================
 // VSEP_SOH_Set_Timeout_Fault
@@ -256,7 +256,7 @@ FAR_COS void VSEP_SOH_Set_DisableFSE_Request_Immediate( IO_Configuration_T in_co
 //
 // @end
 //=============================================================================
-FAR_COS void VSEP_SOH_Set_Timeout_Fault( IO_Configuration_T in_configuration, bool cr_timeout );
+void VSEP_SOH_Set_Timeout_Fault( IO_Configuration_T in_configuration, bool cr_timeout );
 
 //=============================================================================
 // VSEP_SOH_Get_Challenge
@@ -271,7 +271,7 @@ FAR_COS void VSEP_SOH_Set_Timeout_Fault( IO_Configuration_T in_configuration, bo
 //
 // @end
 //=============================================================================
-FAR_COS uint32_t VSEP_SOH_Get_Challenge( IO_Configuration_T in_configuration  );
+uint32_t VSEP_SOH_Get_Challenge( IO_Configuration_T in_configuration  );
 
 
 //=============================================================================
@@ -287,7 +287,7 @@ FAR_COS uint32_t VSEP_SOH_Get_Challenge( IO_Configuration_T in_configuration  );
 //
 // @end
 //=============================================================================
-FAR_COS void Update_VSEP_SOH_Status_Immediate( IO_Configuration_T in_configuration  );
+void Update_VSEP_SOH_Status_Immediate( IO_Configuration_T in_configuration  );
 
 
 //=============================================================================
@@ -303,7 +303,7 @@ FAR_COS void Update_VSEP_SOH_Status_Immediate( IO_Configuration_T in_configurati
 //
 // @end
 //=============================================================================
-FAR_COS void VSEP_SOH_Set_SOHRSTEN_Request( IO_Configuration_T in_configuration, bool sohrsten  );
+void VSEP_SOH_Set_SOHRSTEN_Request( IO_Configuration_T in_configuration, bool sohrsten  );
 
 
 // VSEP_SOH_Calculate_Response
