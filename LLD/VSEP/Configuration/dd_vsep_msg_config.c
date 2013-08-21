@@ -41,7 +41,6 @@
 #include "dd_vsep_deps.h"
 #include "io_config_vsep.h"
 #include "dd_vsep_discrete_interface.h"
-#include "io_config_spi.h"
 #include "dd_vsep_fault.h"
 #include "dd_vsep_led.h"
 #include "dd_vsep_init_config.h"

@@ -3,7 +3,7 @@
 
 #include "dd_mios.h"
 #include "io_config_fmpll.h"
-#include "io_config_spi.h"
+#include "io_config_vsep.h"
 
 
 

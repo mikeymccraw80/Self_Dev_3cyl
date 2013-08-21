@@ -31,7 +31,6 @@
 // Include interface for the device driver
 //=============================================================================
 #include "dd_vsep_fault.h"
-#include "io_config_spi.h"
 #include "dd_vsep_discrete.h"
 #include "dd_vsep_discrete_interface.h"
 #include "dd_vsep_soh.h"

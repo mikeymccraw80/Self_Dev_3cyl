@@ -26,7 +26,6 @@
 // none
 //
 //=============================================================================
-#include "io_config_spi.h"
 #include "io_config_vsep.h"
 #include "dd_vsep.h"
 #include "dd_vsep_deps.h"
