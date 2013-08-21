@@ -24,7 +24,7 @@
 
 #include "dd_l9958.h"
 #include "dd_vsep_est_select.h"
-#include "soh.h"
+#include "dd_stm.h"
 
 
 
@@ -236,7 +236,9 @@ void InitializeHardwareRegisters(void)
 
 	VSEP_Initialize_Device();
 
-	SOH_ETC_Initialize(true);
+//	SOH_ETC_Initialize(TRUE);
+STM_Timer_Set_Value(STM_CHANNEL_0,64*20);
+
 }
 
 //=============================================================================

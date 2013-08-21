@@ -32,5 +32,9 @@ typedef enum STM_Channel_Index_Tag
 
 }  STM_Channel_Index_T;
 
+//external function
+
+extern void STM_INTERRUPT_Clear_Pending(STM_Channel_Index_T channel );
+extern void STM_Timer_Set_Value(STM_Channel_Index_T channel,uint32_t in_time);
 #endif // DD_STM_H
 
