@@ -237,7 +237,7 @@ void InitializeHardwareRegisters(void)
 	VSEP_Initialize_Device();
 
 //	SOH_ETC_Initialize(TRUE);
-STM_Timer_Set_Value(STM_CHANNEL_0,64*20);
+STM_Timer_Set_Value(STM_CHANNEL_0,1000*20);
 
 }
 

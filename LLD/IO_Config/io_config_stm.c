@@ -19,13 +19,13 @@ const STM_CR_T STM_CR_INITIAL =
    false                            //Timer Counter Enabled.
 };
 //#ifdef 0
-void IO_STM0_3P91ms_INT(void)
+void IO_STM0_20ms_INT(void)
 {
 
 	STM_INTERRUPT_Clear_Pending(STM_CHANNEL_0);
 
-	SIU.GPDO[128].F.PDO =!SIU.GPDO[128].F.PDO;
+	SIU.GPDO[129].F.PDO =!SIU.GPDO[129].F.PDO;
 
-	STM_Timer_Set_Value(STM_CHANNEL_0,64*20);
+	STM_Timer_Set_Value(STM_CHANNEL_0,1000*20);
 }
 //#endif

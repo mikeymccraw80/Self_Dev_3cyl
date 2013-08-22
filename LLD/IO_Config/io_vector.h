@@ -27,6 +27,8 @@ void HAL_CAN_RX_B09_INT(void);
 void HAL_CAN_RX_B10_INT(void);
 void HAL_CAN_RX_B11_INT(void);
 void HAL_CAN_RX_B12_INT(void);
+void IO_STM0_20ms_INT(void);
+
 //=============================================================================
 //
 // The following preprocessor definitions must reside at the top of cxio_schedule.h
@@ -515,6 +517,6 @@ void HAL_CAN_RX_B12_INT(void);
 #endif
 
 #if  INTC_CHANNEL_SYSTEM_TIMER_MODULE_0 ==  USED_IRQ
-#define INTC_CHANNEL_SYSTEM_TIMER_MODULE_0_HANDLER      IO_STM0_3P91ms_INT
-#define INTC_CHANNEL_SYSTEM_TIMER_MODULE_0_PRIORITY      INTC_PRIORITY_5
+#define INTC_CHANNEL_SYSTEM_TIMER_MODULE_0_HANDLER      IO_STM0_20ms_INT
+#define INTC_CHANNEL_SYSTEM_TIMER_MODULE_0_PRIORITY      INTC_PRIORITY_7
 #endif
