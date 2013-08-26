@@ -40,14 +40,16 @@ TbBOOLEAN        SbEMSD_MPRDEnblCriteriaMet;
 TbBOOLEAN        SbEMSD_MPRDShortHiFailCriteriaMet;
 TbBOOLEAN        SbEMSD_MPRDShortLoFailCriteriaMet;
 TbBOOLEAN        SbEMSD_MPRDTestComplete ;
-// #pragma section [nvram] 
-TbBOOLEAN        SbEMSD_MPRDShortHiTestFailed ;
-TbBOOLEAN        SbEMSD_MPRDShortLoTestFailed ;
-// #pragma section [] 
 T_COUNT_WORD     ScEMSD_MPRDShortHiFailCntr ;
 T_COUNT_WORD     ScEMSD_MPRDShortLoFailCntr ;
 T_COUNT_WORD     VcEMSD_MPRDSampleCntr ;
 TbBOOLEAN        SbEMSD_MPRDTestComplete_Internal ;
+
+#pragma section DATA " " ".nc_nvram"
+TbBOOLEAN        SbEMSD_MPRDShortHiTestFailed ;
+TbBOOLEAN        SbEMSD_MPRDShortLoTestFailed ;
+#pragma section DATA " " ".bss"
+
 /*****************************************************************************
  *  Function definition
  ******************************************************************************/

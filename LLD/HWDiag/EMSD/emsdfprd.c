@@ -41,14 +41,15 @@ TbBOOLEAN        SbEMSD_FPRDEnblCriteriaMet ;
 TbBOOLEAN        SbEMSD_FPRDShortHiFailCriteriaMet ;
 TbBOOLEAN        SbEMSD_FPRDShortLoFailCriteriaMet ;
 TbBOOLEAN        SbEMSD_FPRDTestComplete ;
-// #pragma section [nvram] 
-TbBOOLEAN        SbEMSD_FPRDShortHiTestFailed ;
-TbBOOLEAN        SbEMSD_FPRDShortLoTestFailed ;
-// #pragma section [] 
 T_COUNT_WORD     ScEMSD_FPRDShortHiFailCntr ;
 T_COUNT_WORD     ScEMSD_FPRDShortLoFailCntr ;
 T_COUNT_WORD             VcEMSD_FPRDSampleCntr ;
-TbBOOLEAN        SbEMSD_FPRDTestComplete_Internal ;
+TbBOOLEAN        SbEMSD_FPRDTestComplete_Internal;
+
+#pragma section DATA " " ".nc_nvram"
+TbBOOLEAN        SbEMSD_FPRDShortHiTestFailed ;
+TbBOOLEAN        SbEMSD_FPRDShortLoTestFailed ;
+#pragma section DATA " " ".bss"
 #if 0
 /*****************************************************************************
  *

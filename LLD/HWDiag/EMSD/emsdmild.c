@@ -42,14 +42,16 @@ TbBOOLEAN        SbEMSD_MILDEnblCriteriaMet ;
 TbBOOLEAN        SbEMSD_MILDShortHiFailCriteriaMet ;
 TbBOOLEAN        SbEMSD_MILDShortLoFailCriteriaMet ;
 TbBOOLEAN        SbEMSD_MILDTestComplete ;
-// #pragma section [nvram] 
-TbBOOLEAN        SbEMSD_MILDShortHiTestFailed ;
-TbBOOLEAN        SbEMSD_MILDShortLoTestFailed ;
-// #pragma section [] 
+
 T_COUNT_WORD     ScEMSD_MILDShortHiFailCntr ;
 T_COUNT_WORD     ScEMSD_MILDShortLoFailCntr ;
 T_COUNT_WORD             VcEMSD_MILDSampleCntr ;
 TbBOOLEAN        SbEMSD_MILDTestComplete_Internal ;
+
+#pragma section DATA " " ".nc_nvram"
+TbBOOLEAN        SbEMSD_MILDShortHiTestFailed ;
+TbBOOLEAN        SbEMSD_MILDShortLoTestFailed ;
+#pragma section DATA " " ".bss"
 
 /*****************************************************************************
  *  Function definition

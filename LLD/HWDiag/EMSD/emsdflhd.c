@@ -36,9 +36,10 @@
  *  Static Data Define
  *****************************************************************************/
 TbBOOLEAN        SbEMSD_FileROMTestComplete ;
-// #pragma section [nvram] 
+
+#pragma section DATA " " ".nc_nvram"
 TbBOOLEAN        SbEMSD_FileROMTestFailed ;
-// #pragma section [] 
+#pragma section DATA " " ".bss"
 /*****************************************************************************
  *  Function definition
  ******************************************************************************/
