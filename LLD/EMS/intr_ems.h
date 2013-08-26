@@ -330,35 +330,6 @@ extern EOBD_VOLTb        EOBD_IgnVoltageAtKeyOn;
     // EOBD_IgnVoltageAtKeyOn = FixConvert( ATD_buffer[AD_IGNITION_VOLTAGE_TYPE], Volts_Plus_Fraction, EOBD_VOLTb ) ;
 // }
 
-
-/***********************************************************************
- **************    Mileage        **************************************
- ***********************************************************************/
-// extern uint16_t          EOBD_HiResOdometerAccumB;
-// extern uint8_t           EOBD_HiResOdometerAccumC;
-// #define GetVIOS_HiResOdometerAccumB()\
-                     // (EOBD_HiResOdometerAccumB)
-// #define	GetVIOS_LoResLockingOdometer()\
-                     // (EOBD_HiResOdometerAccumB)
-// #define GetVIOS_HiResOdometerAccumC()\
-                     // (EOBD_HiResOdometerAccumC)
-// INLINE void ConvertIntrParam_Mileage(void)
-// {
-    // EOBD_HiResOdometerAccumB =  KmQ1;
-    // EOBD_HiResOdometerAccumC =  Lo8Of16(KmQ65);
-// }
-
-/***********************************************************************
- **************    Barometric Pressure  ********************************
- ***********************************************************************/
-// extern EOBD_KPAa         EOBD_Baro;
-// #define GetVIOS_p_Baro()\
-                   // (EOBD_Baro)
-// INLINE void ConvertIntrParam_Baro(void)
-// {
-    // EOBD_Baro = Pam;
-// }
-
 /***********************************************************************
  **************    Manifold Pressure    ********************************
  ***********************************************************************/
@@ -406,23 +377,6 @@ extern EOBD_VOLTb        EOBD_IgnVoltageAtKeyOn;
 
 //}
 
-/***********************************************************************
- *************************    Vacuum    ********************************
- ***********************************************************************/
-// extern kPa_W_EOBD                           EOBD_Vacuum_W_;
-// #define GetVIOS_p_MnfdVac()\
-                      // ( EOBD_Vacuum_W_ )
-// INLINE void ConvertIntrParam_Vacuum(void)
-// {
-    // if (Pam >= Pim)
-    // {
-       // EOBD_Vacuum_W_ = Pam - Pim;
-    // }
-    // else
-    // {
-       // EOBD_Vacuum_W_ = FixDefConst(0, kPa_W_EOBD);
-    // }
-// }
 
 /***********************************************************************
  **************    Coolant Temperature  ********************************
@@ -469,19 +423,6 @@ extern int16_t           EOBD_CoolTemp;
 // }
 
 /***********************************************************************
- **************    Vehicle Speed   *************************************
- ***********************************************************************/
-// extern EOBD_KPH          EOBD_VehSpd;
-// #define GetVIOS_v_VehSpd()\
-                      // (EOBD_VehSpd)
-// #define GetVIOS_v_ATVehSpd()\
-                      // (FixDefConst(0.0, EOBD_KPH))
-// INLINE void ConvertIntrParam_VSS(void)
-// {
-    // EOBD_VehSpd = Vsp;
-// }
-
-/***********************************************************************
  ********************    Air Flow  *************************************
  ***********************************************************************/
 // extern EOBD_AIRFLOW      EOBD_dm_Airflow;
@@ -490,60 +431,6 @@ extern int16_t           EOBD_CoolTemp;
 // INLINE void ConvertIntrParam_Airflow(void)
 // {
     // EOBD_dm_Airflow =  FixConvert(Maf, CHERY_AIRFLOW, EOBD_AIRFLOW);
-// }
-
-/***********************************************************************
- ********************    Air Fuel Ratio    *****************************
- ***********************************************************************/
-// extern EOBD_AFR_T        EOBD_AirFuelRatio;
-// #define GetFUEL_AirFuelRatio()\
-                       // (EOBD_AirFuelRatio)
-// INLINE void ConvertIntrParam_AFR(void)
-// {
-    // EOBD_AirFuelRatio =  FixConvert(LamDsrLim, CHERY_AFR, EOBD_AFR_T);
-// }
-
-/***********************************************************************
- ********************    Idle Speed        *****************************
- ***********************************************************************/
-// extern EOBD_RPMa         EOBD_Dsr_Eng_Spd;
-// extern int16_t           EOBD_Eng_Spd_Eror;
-// #define GetIDLE_n_DsrdRPM()\
-                      // (EOBD_Dsr_Eng_Spd)
-// #define GetIDLE_n_RPMError()\
-                      // (EOBD_Eng_Spd_Eror)
-// INLINE void ConvertIntrParam_IdleSpd(void)
-// {
-    // EOBD_Dsr_Eng_Spd = FixConvert( Nstat, CHERY_RPMa, EOBD_RPMa);
-   // EOBD_Eng_Spd_Eror = (int16_t)(dNDsr)*80;
-// }
-
-/***********************************************************************
- ********************    O2 Sensor Voltage        **********************
- ***********************************************************************/
-// extern EOBD_VOLTb        EOBD_O2_Bank1_Snsr1;
-// extern EOBD_VOLTb        EOBD_O2_Bank1_Snsr2;
-// #define GetVIOS_U_Bank1OxygenSnsr1()\
-                    // (EOBD_O2_Bank1_Snsr1)
-// #define GetVIOS_U_Bank1OxygenSnsr2()\
-                    // (EOBD_O2_Bank1_Snsr2)
-// #define GetAD_U_Bank1OxygenSnsr1()\
-                    // ( FixConvert(ATD_buffer[AD_O2_SENSOR_11_TYPE],\
-                                 // Volt0to5Volts_W,\
-                                 // Volt0to31p99Volts_W) )                    
-// #define GetAD_U_Bank1OxygenSnsr2()\
-                    // ( FixConvert(ATD_buffer[AD_O2_SENSOR_12_TYPE],\
-                                 // Volt0to5Volts_W,\
-                                 // Volt0to31p99Volts_W) )                    
-// INLINE void ConvertIntrParam_O2SensorV(void)
-// {
-    // EOBD_O2_Bank1_Snsr1 = ( (uLsb > FixDefConst(0.0, CHERY_VOLTb)) ?
-                            // FixConvert(uLsb, CHERY_VOLTb, EOBD_VOLTb) :
-                            // FixDefConst(0.0, EOBD_VOLTb) );
-    
-    // EOBD_O2_Bank1_Snsr2 = ( (uLsa > FixDefConst(0.0, CHERY_VOLTb)) ?
-                            // FixConvert(uLsa, CHERY_VOLTb, EOBD_VOLTb) :
-                            // FixDefConst(0.0, EOBD_VOLTb) );
 // }
 
 /***********************************************************************
@@ -654,13 +541,6 @@ extern EOBD_PERCENTa   EOBD_CcpDutyCycle;
 // }
 
 /***********************************************************************
- ********************   Idle Mode                 **********************
- ***********************************************************************/
-// #define GetIDLE_Normal_PID_Enabled()\
-                     // ((B_Idc==1) && (B_IdcG==0))
-
-
-/***********************************************************************
  ********************   TPS                       **********************
  ***********************************************************************/
 // extern EOBD_T_PERCENT    EOBD_RawThrotPstn;
@@ -707,45 +587,6 @@ extern EOBD_PERCENTa   EOBD_CcpDutyCycle;
    // }
 // }
 
-/***********************************************************************
- ********************   A/C clutch                **********************
- ***********************************************************************/
-// extern bool                                 EOBD_ACClutchTrnstng;
-// extern bool                                 EOBD_ACClutchTrnstngForMisfire;
-// #define GetAcConditionMet()\
-                    // (B_TqRsvAc)
-// #define GetHVAC_Clutch()\
-                    // (GetAcConditionMet())
-// INLINE void SetHVAC_ClutchTrnstng(void)
-// {
-         // EOBD_ACClutchTrnstng = true;
-         // EOBD_ACClutchTrnstngForMisfire = true;
-// }
-
-// INLINE bool GetHVAC_ClutchTrnstng(void)
-// {
-// bool LbHVAC_ClutchTrnstng;
-
-     // LbHVAC_ClutchTrnstng = EOBD_ACClutchTrnstng;
-     // EOBD_ACClutchTrnstng = false;
-
-// return (LbHVAC_ClutchTrnstng);
-// }
-
-// INLINE bool GetHVAC_ClutchTrnstngForMisfire(void)
-// {
-// bool LbHVAC_ClutchTrnstngForMisfire;
-
-     // LbHVAC_ClutchTrnstngForMisfire = EOBD_ACClutchTrnstngForMisfire;
-     // EOBD_ACClutchTrnstngForMisfire = false;
-
-// return (LbHVAC_ClutchTrnstngForMisfire);
-// }
-
-
-// #define GetIO_DiscreteInputStateImmediate(pinname)        (pinname##_Pin)
-
-// #define GetACRequestActive()                              (S_AC)
 #define Ignition_On()                                     ((bool)(IgnitionOnStatus.IgnitionIsOn))
 // #define GetFILE_NVM_Failure()                             (NvRamTestFailed)
 #define GetVIOS_IgnSt()                                   (Ignition_On())
@@ -787,25 +628,6 @@ extern EOBD_PERCENTa   EOBD_CcpDutyCycle;
 #define GetVIOS_CamOccurred()                           (1)
 // #define GetVIOS_CamStuck()                              ( CamSensorFlags.CamStuck )
 
-// /*for PIDs*/
-// #define GetVIOS_IAC_PresentMtrPstn()                    (StepPos)     /*T_COUNT_BYTE = Fix_shortcard */    
-// #define GetVIOS_Pct_ClosedThrot()                       ((TbBOOLEAN)(CbFALSE))    /* no type convertion */
-// #define GetVIOS_AC_Request()                            ((TbBOOLEAN)(CbFALSE))   /* AC request state*/
-// #define GetVIOS_AC_Clutch()                             (B_AcOn) /* AC CLutch state or AcClutchFlags.AcClutchTurnedOn*/
-// #define GetEXAC_OverTempActive()                        (B_TcatMx)
-// #define GetVIOS_FuelPumpState()                         (B_Pmp)
-// #define GetFUEL_O2_ReadyB1()                            (B_LsbRdy)
-// #define GetKNOC_KnockActive()                           ((TbBOOLEAN)(GetKnockActive()))
-
-// #define GetFUEL_PowerEnrichment()                       (B_Wot && B_LcEnri)          /* moved from eosdfexi.h, since it's no long used only by eosd module*/
-// #define GetFUEL_DFCO_Enabled()                          (B_Fof)
-// #define GetVIOS_O2_RichLeanState()                      ((TbBOOLEAN)(CbFALSE))
-// #define GetKNOC_phi_CCESC_Retard()                        ((TbBOOLEAN)(CbFALSE))            /* redefine for EOBD usage*/
-// #define GetMAPCID_InvalidForMisfire()                   (false)
-// #define GetAIRF_Pct_LoadGmsPerSec()                     (MafTst)            
-// #define GetHWIO_FirstValidCrankTooth()\
-                              // (Status58X.Bits.Valid58XToothOccurred)
-
 // #if CcSYST_NUM_OF_CYLINDERS ==3
 // #define  GetFUEL_AllCylsOn()                   (inj_enable.B_inj_A &&\
                                                 // inj_enable.B_inj_B &&\
@@ -833,14 +655,6 @@ extern EOBD_PERCENTa   EOBD_CcpDutyCycle;
 // #define  GetHWIO_58xCylinderEvent()            (PhysicalEstCylinder)
 // #define  GetSPRK_SparkMode()                   (GetVIOS_EngSt())
 
-// /* EOSD interface */
-// #define GetEOSD_O2_11_PumpingCurrent()    (KbVIOS_O2APumpingCurrentEnabled)
-// #define GetEOSD_O2_12_PumpingCurrent()    (KbVIOS_O2BPumpingCurrentEnabled)
-// #define GetFLOS_O2_11_HtrActive()         (B_LsbDew)
-// #define GetFLOS_O2_12_HtrActive()         (B_LsaDew)
-// #define GetEOSD_O2_12_Ready()             (VbO2_BO2_Ready)
-// #define GetFUEL_B1_DFCO_ExitRichBias()    (fFlRsm > FixDefConst(1.01, Multiplier_0_to_2))
-
 #define GetVIOS_O2_11_Htr_PSVIFaultShortHi()\
    ( DD_GetDiscreteDiagStatus(PULSE_OUT_O2_HEATER_11,OUTPUT_SHORT_CKT_FAULT) )
 #define GetVIOS_O2_11_Htr_PSVIFaultShortLow()\
@@ -857,17 +671,6 @@ extern EOBD_PERCENTa   EOBD_CcpDutyCycle;
 // #define GetShortFault(function)      (DD_GetDiscreteDiagStatus(function,OUTPUT_SHORT_CKT_FAULT))
 // #define GetAnyFault(function)        (GetOpenFault(function) || GetShortFault(function))
 
-// /******************************************************************************
- // * FUEL PUMP
- // ******************************************************************************/
-// #define GetFuelPump_ShortHi()        (DD_GetDiscreteDiagStatus(DISCRETE_OUT_FUEL_PUMP,OUTPUT_SHORT_CKT_FAULT))
-// #define GetFuelPump_Open()           (DD_GetDiscreteDiagStatus(DISCRETE_OUT_FUEL_PUMP,OUTPUT_OPEN_CKT_FAULT))
-
-// /******************************************************************************
- // * AC CLUTCH
- // ******************************************************************************/
-// #define GetAcClutch_ShortFault() (DD_GetDiscreteDiagStatus(DISCRETE_OUT_AC_CLUTCH,OUTPUT_SHORT_CKT_FAULT))
-// #define GetAcClutch_OpenFault()  (DD_GetDiscreteDiagStatus(DISCRETE_OUT_AC_CLUTCH,OUTPUT_OPEN_CKT_FAULT))
 
 /******************************************************************************
  * TPIC Fault reading for AcClutch diagnostic 
@@ -893,42 +696,6 @@ extern EOBD_PERCENTa   EOBD_CcpDutyCycle;
                (K_MainPowerRelayPresent == false)
 #define GetMPRState()\
                (HAL_GPIO_GET_MPR_Status())
-
-
-
-/******************************************************************************
- * TPIC Fault reading for Fuel Pump Relay diagnostic 
- ******************************************************************************/
-// #define GetVIOS_FPRD_FaultShortHi()    (DD_GetDiscreteDiagStatus(DISCRETE_OUT_FUEL_PUMP,OUTPUT_SHORT_CKT_FAULT))
-// #define GetVIOS_FPRD_FaultShortLo()    (DD_GetDiscreteDiagStatus(DISCRETE_OUT_FUEL_PUMP,OUTPUT_OPEN_CKT_FAULT))
-// #define GetVIOS_FPRD_FaultAny()        (GetVIOS_FPRD_FaultShortHi() ||\
-                                            // GetVIOS_FPRD_FaultShortLo())
-// #define GetVIOS_FPRD_Presnt()              (CbTRUE)
-
-/******************************************************************************
- * TPIC Fault reading for FAN1 diagnostic 
- ******************************************************************************/
-// #define GetVIOS_FANA_FaultShortHi()    (GetShortFault(DISCRETE_OUT_FAN_1))
-// #define GetVIOS_FANA_FaultShortLo()    (GetOpenFault(DISCRETE_OUT_FAN_1))
-// #define GetVIOS_FANA_FaultAny()        (GetAnyFault(DISCRETE_OUT_FAN_1))
-// #define GetVIOS_FANA_Presnt()          (true)//(FanPresentFlags.bf.Fan1Present)
-
-/******************************************************************************
- * TPIC Fault reading for FAN2 diagnostic 
- ******************************************************************************/
-// #define GetVIOS_FANB_FaultShortHi()    (GetShortFault(DISCRETE_OUT_FAN_2))
-// #define GetVIOS_FANB_FaultShortLo()    (GetOpenFault(DISCRETE_OUT_FAN_2))
-// #define GetVIOS_FANB_FaultAny()        (GetAnyFault(DISCRETE_OUT_FAN_2))
-// #define GetVIOS_FANB_Presnt()              (true)//(FanPresentFlags.bf.Fan2Present)
-
-
-// /******************************************************************************
- // * PSVI Fault reading for MIL Lamp diagnostic 
- // ******************************************************************************/
-// #define GetVIOS_MILD_FaultShortHi()    (GetShortFault(DISCRETE_OUT_OBD2_LAMP))
-// #define GetVIOS_MILD_FaultShortLo()    (GetOpenFault(DISCRETE_OUT_OBD2_LAMP))
-// #define GetVIOS_MILD_FaultAny()        (GetAnyFault(DISCRETE_OUT_OBD2_LAMP))
-// #define GetVIOS_MILD_Presnt()              (CbTRUE)
 
 // /******************************************************************************
  // * Power OK Check 
@@ -1048,13 +815,6 @@ INLINE void ClrVIOS_CrankRefToothErrCnt( void )
 // #define GetKNKD_Disable_Fault()   \
 	// (LLD_atd_input_table[LLD_ATD_MAP].LLD_atd_status.B_max||\
 	// LLD_atd_input_table[LLD_ATD_MAP].LLD_atd_status.B_min)
-
-/* ============================================================================ *\
- * Exported Function prototypes
-\* ============================================================================ */
-void Intr_16msTasks(void);
-void Init_IntrParameter(void);
-EOBD_PERCENTa GetDINT_Pct_ThrotPstnOld(uint8_t index);
 
 /* ============================================================================ *\
  * File revision history (top to bottom, first revision to last revision
