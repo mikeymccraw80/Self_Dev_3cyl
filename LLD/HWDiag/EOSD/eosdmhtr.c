@@ -37,10 +37,10 @@ TbBOOLEAN        SbEOSD_O2_11_HtrShortLowFailCriteriaMet ;
 TbBOOLEAN        SbEOSD_O2_11_HtrShortHiFailCriteriaMet ;
 TbBOOLEAN        SbEOSD_O2_11_HtrTestComplete ;
 TbBOOLEAN        SbEOSD_O2_11_HtrTestComplete_Internal ;
-#pragma section [nvram] 
+#pragma section DATA " " ".nc_nvram"
 TbBOOLEAN        SbEOSD_O2_11_HtrShortLowTestFailed ;
 TbBOOLEAN        SbEOSD_O2_11_HtrShortHiTestFailed ;
-#pragma section []
+#pragma section DATA " " ".bss"
 T_COUNT_WORD     ScEOSD_O2_11_HtrShortLowFailCntr ;
 T_COUNT_WORD     ScEOSD_O2_11_HtrShortHiFailCntr ;
 T_COUNT_WORD     VcEOSD_O2_11_HtrSampleCntr ;
@@ -51,10 +51,10 @@ TbBOOLEAN        SbEOSD_O2_12_HtrShortLowFailCriteriaMet ;
 TbBOOLEAN        SbEOSD_O2_12_HtrShortHiFailCriteriaMet ;
 TbBOOLEAN        SbEOSD_O2_12_HtrTestComplete ;
 TbBOOLEAN        SbEOSD_O2_12_HtrTestComplete_Internal ;
-#pragma section [nvram] 
+#pragma section DATA " " ".nc_nvram"
 TbBOOLEAN        SbEOSD_O2_12_HtrShortLowTestFailed ;
 TbBOOLEAN        SbEOSD_O2_12_HtrShortHiTestFailed ;
-#pragma section []
+#pragma section DATA " " ".bss"
 T_COUNT_WORD     ScEOSD_O2_12_HtrShortLowFailCntr ;
 T_COUNT_WORD     ScEOSD_O2_12_HtrShortHiFailCntr ;
 T_COUNT_WORD     VcEOSD_O2_12_HtrSampleCntr ;

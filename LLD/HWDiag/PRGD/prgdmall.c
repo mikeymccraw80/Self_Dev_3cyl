@@ -35,11 +35,11 @@
  TbBOOLEAN            SbPRGD_Purge_State2Set;
  T_COUNT_WORD         ScPRGD_Purge_FailCntr;
  T_COUNT_WORD         ScPRGD_Purge_SampleCntr;
- // #pragma section [nvram] 
+ #pragma section DATA " " ".nc_nvram"
  TbBOOLEAN            SbPRGD_Purge_TestFailed;
  TbBOOLEAN            SbPRGD_Purge_TestFailedHi;
  TbBOOLEAN            SbPRGD_Purge_TestFailedLo;
- // #pragma section [] 
+ #pragma section DATA " " ".bss"
  TbBOOLEAN            SbPRGD_Purge_TestComplete;
  TbBOOLEAN            SbPRGD_Purge_TestComplete_Internal;
  TbBOOLEAN            SbPRGD_Purge_ShortLoCritMet;
