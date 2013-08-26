@@ -65,9 +65,11 @@ TbBOOLEAN     VbINJD_InjectorsAllFaulted;
 TbBOOLEAN     SbINJD_InjCktEnblCriteriaMet;
 TbBOOLEAN     SaINJD_CktTestComplete[CcSYST_NUM_OF_INJECTORS];
 TbBOOLEAN     SaINJD_CktTestComplete_Internal[CcSYST_NUM_OF_INJECTORS];
-// #pragma section [nvram] 
+
+#pragma section DATA " " ".nc_nvram"
 TbBOOLEAN     SaINJD_CktTestFailed[CcSYST_NUM_OF_INJECTORS];
-// #pragma section [] 
+#pragma section DATA " " ".bss"
+
 /*****************************************************************************/
 
 /******************************************************************************

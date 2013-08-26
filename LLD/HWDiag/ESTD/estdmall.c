@@ -61,9 +61,9 @@ TbBOOLEAN     SbESTD_FaultEnblCriteriaMet;
 T_COUNT_BYTE  SaESTD_FaultFailureCounter[CcSYST_NUM_OF_EST_OUTPUTS];
 T_COUNT_BYTE  SaESTD_FaultSampleCounter[CcSYST_NUM_OF_EST_OUTPUTS];
 TbBOOLEAN     SaESTD_FaultTestComplete[CcSYST_NUM_OF_EST_OUTPUTS];
-// #pragma section [nvram] 
+#pragma section DATA " " ".nc_nvram"
 TbBOOLEAN     SaESTD_FaultTestFailed[CcSYST_NUM_OF_EST_OUTPUTS];
-// #pragma section [] 
+#pragma section DATA " " ".bss"
 T_COUNT_BYTE  ScESTD_EST_OutputNumber;
 TbBOOLEAN     SbESTD_EST_FaultResetRequest;
 TbBOOLEAN     SaESTD_FaultTestComplete_Internal[CcSYST_NUM_OF_EST_OUTPUTS];
