@@ -47,6 +47,9 @@ void MIOS_Initialize_Device(void )
 //=======================================================================================
 // MIOS_CHANNEL_INIT_4 - 
 //=======================================================================================
+		MIOS.CH[MIOS_CHANNEL_4].CADR		= 0;
+		MIOS.CH[MIOS_CHANNEL_4].CBDR		= 0;
+		MIOS.CH[MIOS_CHANNEL_4].CCR.U32 = MIOS_CH4_INITIAL.U32;
 
 //=======================================================================================
 // MIOS_CHANNEL_INIT_5 -
@@ -223,5 +226,12 @@ void MIOS_PWM_Enable_Channel(
    	}
 }
 
-
+//=============================================================================
+// MIOS_interrupt_flag_clear_Channel
+// write 1 to clear.
+//=============================================================================
+//void MIOS_Interrupt_Flag_clear(MIOS_Channel_T   channel)
+//	{
+//    MIOS.CH[channel].CSR.F.FLAG=1;
+//}
 

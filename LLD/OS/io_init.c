@@ -210,6 +210,16 @@ void InitializeHardwareRegisters(void)
 	DSPI_B_Enable_Transfer(true);
 
 	// DSPI_C_Initialize_Device();
+	DMA_Initialize_Channel(
+		DMA_CHANNEL_MIOS_EMIOSFLAG_4,
+		DMA_EMIOSFLAG_4_Source_Address,
+		DMA_EMIOSFLAG_4_Second_32Bit,
+		DMA_EMIOSFLAG_4_Third_32Bit,
+		DMA_EMIOSFLAG_4_Slast,
+		DMA_EMIOSFLAG_4_Dest_Address,
+		DMA_EMIOSFLAG_4_Sixth_32Bit,
+		DMA_EMIOSFLAG_4_Dlast,
+		DMA_EMIOSFLAG_4_Eighth_32Bit);
 
 	STM_Set_Timer_Enable(true);
 
@@ -238,6 +248,7 @@ void InitializeHardwareRegisters(void)
 
 //	SOH_ETC_Initialize(TRUE);
 STM_Timer_Set_Value(STM_CHANNEL_0,1000*20);
+DMA_Enable_Request(DMA_CHANNEL_MIOS_EMIOSFLAG_4);
 
 }
 

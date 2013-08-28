@@ -13,7 +13,7 @@ const MIOS_MCR_T MIOS_MCR_INITIAL =
      MIOS_MODULE_ENABLE,       // Module disable   :  BIT_1;   // Bit      30
      MIOS_DEBUG_FREEZE_DISABLE,   // Freeze enable  :  BIT_1;   // Bit      29
      MIOS_GLOBAL_TIME_BASE_ENABLE,   // Global time base enable   :  BIT_1;   // Bit      28
-     MIOS_EXTERNAL_TIME_BASE_SELECT_UC23,   // External time base   ETB    :  BIT_1;   // Bit      27
+     MIOS_EXTERNAL_TIME_BASE_SELECT_STAC,   // External time base   ETB    :  BIT_1;   // Bit      27
      true,               //  GPREN  :  BIT_1;   // Bit      26
      MIOS_SERVER_TIME_SLOT_TPUA_TCR1,   // Server time slot  SRV    :  BIT_4;   // Bits [19:16]
      EMIOS_GLOBAL_PRESCALER                //   GPRE   :  BIT_8;   // Bits [15: 8]
@@ -89,7 +89,42 @@ const MIOS_CCR_T MIOS_CH0_INITIAL =
 
 //=======================================================================================
 // MIOS_CHANNEL_INIT_4 - 
+// SAIC Mode for ETC_SOH External 818HZ frequency input
+// Channel bus from TRC1 4MHZ 0.25us each count
+// DMA request SAIC
+// Validate TCR1 of ETPU2 against 818HZ
 //=======================================================================================
+const MIOS_CCR_T MIOS_CH4_INITIAL = 
+{
+      ///1 Freeze UC registers values
+      ///0 Normal operation
+      false,  // Normal opreation
+      MIOS_OUTPUT_DISABLE, // Output disable MIOS
+      MIOS_OUTPUT_LINE_0 ,// Output disable select ODISSL
+      MIOS_CH4_PRESCALER, // Prescaler UCPRE
+      ///1 Prescaler enabled
+      ///0 Prescaler disabled (no clock)
+      true, // Prescaler enable UCPREN
+      MIOS_FLAG_SELECT_DMA, // Interrupt or DMA Flag
+      MIOS_INPUT_FILTER_BYPASS, // Input filter
+      MIOS_FILTER_CLOCK_SELECT_PRESCALED, // Filter clock select
+      //The FEN bit allows the Unified Channel FLAG bit to generate an interrupt signal or a DMA request
+     //signal (The type of signal to be generated is defined by the DMA bit).
+     ////1 = Enable (FlAG will generate an interrupt or DMA request)
+     ////0 = Disable (FLAG does not generate an interrupt or DMA request)
+      true, // FLAG Enable bit FEN,DMA request
+      ///1 Force a match at comparator A
+     ///0 Has no effect
+      false, // no effect
+      ///1 Force a match at comparator B
+     ///0 Has no effect
+      false, //no effect
+      MIOS_CLOCK_BUS_BUS_A, // Bus select BSL ,validate TCR1 against TCR1 from ETPU2
+      //0 The EDPOL value
+      0, // Edge select EDSEL, input mode single edge
+      MIOS_EDGE_POLARITY_INPUT_MODE_FALLING, // Edge polarity
+      MIOS_CHANNEL_BASE_MODE_SINGLE_ACTION_INPUT_CAPTURE// Mode selection SAIC
+  };
 
 //=======================================================================================
 // MIOS_CHANNEL_INIT_5 -
@@ -371,8 +406,23 @@ const MIOS_CCR_T MIOS_CH23_INITIAL =
       MIOS_EDGE_POLARITY_OUTPUT_MODE_MATCH_A_CLEAR_B_SET, // Edge polarity
       MIOS_CHANNEL_BASE_MODE_PULSE_WIDTH_FREQUENCY_MODULATION_BUFFERED  // Mode selection
   };
+//	uint32_t SOH_DMA_External_Ref_Time[32];
+ // uint16_t soh_818_count=0;
 
+	void IO_SOH_818HZ_INT(void)
+	{
+		//MIOS_Interrupt_Flag_clear(MIOS_CHANNEL_4);
+		
+   MIOS.CH[4].CSR.F.FLAG=1;
+		
+//		SOH_DMA_External_Ref_Time[soh_818_count]=MIOS.CH[4].CADR;
+//    if(soh_818_count>31)
+//			{
+//		   soh_818_count=0;	
+//		  }
+//			soh_818_count++;
 
+	}
 
 
 

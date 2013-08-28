@@ -28,6 +28,7 @@ void HAL_CAN_RX_B10_INT(void);
 void HAL_CAN_RX_B11_INT(void);
 void HAL_CAN_RX_B12_INT(void);
 void IO_STM0_20ms_INT(void);
+void IO_SOH_818HZ_INT(void);
 
 //=============================================================================
 //
@@ -520,3 +521,9 @@ void IO_STM0_20ms_INT(void);
 #define INTC_CHANNEL_SYSTEM_TIMER_MODULE_0_HANDLER      IO_STM0_20ms_INT
 #define INTC_CHANNEL_SYSTEM_TIMER_MODULE_0_PRIORITY      INTC_PRIORITY_7
 #endif
+
+#if  INTC_CHANNEL_MIOS_CH4 ==  USED_IRQ
+#define INTC_CHANNEL_MIOS_CH4_HANDLER      IO_SOH_818HZ_INT
+#define INTC_CHANNEL_MIOS_CH4_PRIORITY      INTC_PRIORITY_7
+#endif
+
