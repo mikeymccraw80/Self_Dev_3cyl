@@ -13,7 +13,8 @@
 //=============================================================================
 // static variable
 //=============================================================================
-
+uint16_t cam_inlet[4];
+uint16_t cam_outlet[4];
 //=============================================================================
 //  IO_VCPC_Convert_CAMW
 //=============================================================================
@@ -27,6 +28,7 @@ void IO_VCPC_Convert_CAMW(void)
 	/* unit: 6/256 => 1024/65536(1/64) */
 	angle_temp =  ((HAL_VCPC_Get_CAM_Angle(0,edge_index) - (KyHWIO_ToothOfCAMRefEvent << 8)) * 3) / 2;
 	angle_crank_cam_inlet = (uint16_t)angle_temp;
+	cam_inlet[edge_index] = angle_crank_cam_inlet;
 }
 
 //=============================================================================
@@ -42,5 +44,6 @@ void IO_VCPC_Convert_CAMX(void)
 	/* unit: 6/256 => 1024/65536(1/64) */
 	angle_temp =  ((HAL_VCPC_Get_CAM_Angle(1,edge_index) - (KyHWIO_ToothOfCAMRefEvent << 8)) * 3) / 2;
 	angle_crank_cam_outlet = (uint16_t)angle_temp;
+	cam_outlet[edge_index] = angle_crank_cam_outlet;
 }
 

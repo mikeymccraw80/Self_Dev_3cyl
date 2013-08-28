@@ -43,6 +43,103 @@
 *-  description              = "cam outlet phase";
 *-}
 
+*-cam_inlet[0]{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CAMPHIN0";
+*-  variable_location.symbol = cam_inlet[0];
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.015625000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "cam inlet phase 0";
+*-}
+
+*-cam_inlet[1]{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CAMPHIN1";
+*-  variable_location.symbol = cam_inlet[1];
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.015625000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "cam inlet phase 1";
+*-}
+
+*-cam_inlet[2]{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CAMPHIN2";
+*-  variable_location.symbol = cam_inlet[2];
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.015625000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "cam inlet phase 2";
+*-}
+
+*-cam_inlet[3]{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CAMPHIN3";
+*-  variable_location.symbol = cam_inlet[3];
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.015625000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "cam inlet phase 3";
+*-}
+
+
+*-cam_outlet[0]{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CAMPHOUT0";
+*-  variable_location.symbol = cam_outlet[0];
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.015625000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "cam outlet phase 0";
+*-}
+
+*-cam_outlet[1]{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CAMPHOUT1";
+*-  variable_location.symbol = cam_outlet[1];
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.015625000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "cam outlet phase 1";
+*-}
+
+*-cam_outlet[2]{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CAMPHOUT2";
+*-  variable_location.symbol = cam_outlet[2];
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.015625000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "cam outlet phase 2";
+*-}
+
+*-cam_outlet[3]{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CAMPHOUT3";
+*-  variable_location.symbol = cam_outlet[3];
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.015625000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "cam outlet phase 3";
+*-}
+
 *-crank_sig{
 *-  OBJECTS_CLASS: parameter_es_class;
 *-  label                    = "CRANK_PRD";
