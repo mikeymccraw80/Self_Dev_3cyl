@@ -478,7 +478,7 @@ static bool CRANK_Gap_Cofirm( void )
 				// Indicate that the synchronization not missed
 				CRANK_Internal_State.U32 = CRANK_Set_Sync_Error_In_Progress( CRANK_Internal_State.U32, false );
 				CRANK_Internal_State.U32 = CRANK_Set_Resync_Attempt_In_Prog( CRANK_Internal_State.U32, false );
-				CRANK_Error_Count_More = 0;	
+				CRANK_Error_Count_More = 0;
 				CRANK_Error_Count_Less = 0;
 			} else {
 				// Indicate that the synchronization has been missed
