@@ -411,24 +411,19 @@ static uint8_t CAM_Increment_Cam_Edge_Counter(uint8_t in_cam_edge)
 	return in_cam_edge;
 }
 
-uCrank_Count_T pa_tooth_count;
-uCrank_Count_T whole_angle_in_teeth;
-uCrank_Angle_T cam_event_angle_fraction;
-uCrank_Angle_T cam_event_angle_teeth;
-uCrank_Count_T egde_count;
-extern uCrank_Count_T    CRANK_GAP_COUNT;
-uint32_t delta_time1, delta_time2, delta_time3;
 //=============================================================================
 // CAM_Edge_Interrupt_Handler
 //=============================================================================
+extern uCrank_Count_T    CRANK_GAP_COUNT;
 void CAM_Edge_Process( uint32_t in_cam_sensor )
 {
 	CAM_Sensors_T   cam_sensor = (CAM_Sensors_T)in_cam_sensor;
 
 	uint8_t         current_edge_index;
-	// uCrank_Count_T  pa_tooth_count;
-	// uCrank_Count_T  whole_angle_in_teeth;
-	// uCrank_Angle_T  cam_event_angle_fraction;
+	uCrank_Count_T  pa_tooth_count;
+	uCrank_Count_T  whole_angle_in_teeth;
+	uCrank_Angle_T  cam_event_angle_fraction;
+	uCrank_Angle_T  cam_event_angle_teeth;
 	uint32_t        delta_time;
 	uint32_t        cam_event_time;
 	uint32_t        cam_previou_event_time;
@@ -447,7 +442,6 @@ void CAM_Edge_Process( uint32_t in_cam_sensor )
 
 	// get the tooth before for the correct tooth period.
 	pa_tooth_count = CAM_Sensor_Coherent_data[cam_sensor].current_crank_count_at_critical_edge;
-	// egde_count = CRANK_Get_Parameter(CRANK_PARAMETER_CURRENT_EDGE_COUNT,0,0);
 	whole_angle_in_teeth = pa_tooth_count - CRANK_GAP_COUNT + 2;
 	switch(CRANK_Get_Cylinder_ID()) {
 	case CRANK_CYLINDER_A:
@@ -466,8 +460,6 @@ void CAM_Edge_Process( uint32_t in_cam_sensor )
 	// Get the time from the previous edge out of the array
 	current_time = CRANK_Get_Edge_Time_From_Count(pa_tooth_count);
 	previous_time = CRANK_Get_Edge_Time_From_Count(pa_tooth_count-1);
-	if ((cam_event_time > previous_time) && (cam_event_time < current_time))
-		while(1);
 	delta_time = (cam_event_time - current_time) & UINT24_MAX;
 	tooth_period = (current_time - previous_time) & UINT24_MAX;
 
