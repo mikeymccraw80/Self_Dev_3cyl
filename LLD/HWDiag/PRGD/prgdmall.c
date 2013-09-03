@@ -87,67 +87,34 @@ FAR_COS  void InitPRGD_Purge_RstToKeyOff(void)
 void MngPRGD_Purge_125msTasks(void)
 {
 	/* Determine_Purge_Solenoid_Output_Enable_Criteria_Met */
-	if ( ( SbPRGD_Purge_DisableFltPresent == CbFALSE )
-		&& ( GetVIOS_EngSt() == CeENG_RUN )
-		&& ( GetVIOS_U_IgnVolt() > KfPRGD_U_SystemThrshLo )
-		&& ( ( GetEVAP_CCP_DutyCycle() >= KfPRGD_HiBandDCThrsh )
-		|| ( GetEVAP_CCP_DutyCycle() <= KfPRGD_LoBandDCThrsh ) ) )
-	{
+	if ((GetVIOS_EngSt() == CeENG_RUN) && (GetVIOS_U_IgnVolt() > KfPRGD_U_SystemThrshLo)) {
 		SbPRGD_Purge_EnblCritMet = CbTRUE;
-	}
-	else
-	{
+	} else {
 		SbPRGD_Purge_EnblCritMet = CbFALSE;
 	}
 
 	/* Check_Purge_Solenoid_Output_Status */
 	if ( SbPRGD_Purge_EnblCritMet != CbFALSE )
 	{
-		if ( GetEVAP_CCP_DutyCycle() <= KfPRGD_LoBandDCThrsh )
-		{
-			SbPRGD_Purge_State1Set = CbTRUE;
-		}
-		else if ( GetEVAP_CCP_DutyCycle() >= KfPRGD_HiBandDCThrsh )
-		{
-			SbPRGD_Purge_State2Set = CbTRUE;
-		}
-
-		if ( GetHWIO_PurgeSolOutputFaultShortHi() )
-		{
+		if ( GetHWIO_PurgeSolOutputFaultShortHi() ) {
 			SbPRGD_Purge_ShortHiCritMet = CbTRUE;
-			SbPRGD_Purge_State1Set = CbFALSE;
-			SbPRGD_Purge_State2Set = CbFALSE;
-		}
-		else
-		{
+		} else {
 			SbPRGD_Purge_ShortHiCritMet = CbFALSE;
 		}
-        
-		if ( GetHWIO_PurgeSolOutputFaultShortLo() &&
-			GetVIOS_CCP_PowerOK() )
-		{
+
+		if ( GetHWIO_PurgeSolOutputFaultShortLo() && GetVIOS_CCP_PowerOK() ) {
 			SbPRGD_Purge_ShortLoCritMet = CbTRUE;
-			SbPRGD_Purge_State1Set = CbFALSE;
-			SbPRGD_Purge_State2Set = CbFALSE;
-		}
-		else if ( GetVIOS_CCP_PowerOK() )
-		{
+		} else if ( GetVIOS_CCP_PowerOK() ) {
 			SbPRGD_Purge_ShortLoCritMet = CbFALSE;
-		}
-		else
-		{
+		} else {
 			/* do nothing */
 		}
-		if ( SbPRGD_Purge_ShortHiCritMet )
-		{
+
+		if ( SbPRGD_Purge_ShortHiCritMet ) {
 			SbPRGD_Purge_FailCritMet = CbTRUE;
-		}
-		else if ( SbPRGD_Purge_ShortLoCritMet )
-		{
+		} else if ( SbPRGD_Purge_ShortLoCritMet ) {
 			SbPRGD_Purge_FailCritMet = CbTRUE;
-		}
-		else
-		{
+		} else {
 			SbPRGD_Purge_FailCritMet = CbFALSE;
 		}
 	}
@@ -160,28 +127,22 @@ void MngPRGD_Purge_125msTasks(void)
 							   &ScPRGD_Purge_SampleCntr );
 
 	/* Perform_Purge_Solenoid_Output_Cntr_Evaluation */
-	if ( SbPRGD_Purge_TestComplete_Internal != CbFALSE )
-	{
+	if ( SbPRGD_Purge_TestComplete_Internal != CbFALSE ) {
 		SbPRGD_Purge_TestComplete_Internal = CbFALSE;
 	}
 
 	if ( ScPRGD_Purge_FailCntr >= KcPRGD_PurgeOutFailThrsh )
 	{
 		SbPRGD_Purge_TestFailed = CbTRUE;
-		if(SbPRGD_Purge_ShortHiCritMet)
-		{
+		if (SbPRGD_Purge_ShortHiCritMet) {
 			SbPRGD_Purge_TestFailedHi = CbTRUE;
-		}
-		else
-		{
+		} else {
 			SbPRGD_Purge_TestFailedLo = CbTRUE;
-		} 
-	   SbPRGD_Purge_TestComplete_Internal = CbTRUE;
+		}
+		SbPRGD_Purge_TestComplete_Internal = CbTRUE;
 	}
 	else if ( ( ScPRGD_Purge_SampleCntr >= KcPRGD_PurgeOutSampleThrsh )
-		&& ( (  SbPRGD_Purge_FailCritMet == CbFALSE )
-		|| ( ( SbPRGD_Purge_State1Set != CbFALSE )
-		&& ( SbPRGD_Purge_State2Set != CbFALSE ) ) ) )
+		   && ( SbPRGD_Purge_FailCritMet == CbFALSE ) )
 	{
 		SbPRGD_Purge_TestFailed = CbFALSE;
 		SbPRGD_Purge_TestFailedHi = CbFALSE;

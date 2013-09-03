@@ -41,6 +41,59 @@ EOBD_VOLTb                           EOBD_Ignition_Voltage;
 EOBD_VOLTb                           EOBD_IgnVoltageAtKeyOn;
 
 
+void Init_IntrParameter(void)
+{
+    /* update Ignition Voltage at Power On */
+    ConvertIntrParam_IgnKeyOn();
+    /* Update Mileage at Power On */
+    // ConvertIntrParam_Mileage();
+    /* Initialize TPS buffer data */
+    // Initialize_TPSBuffer();
+
+}
+
+void Intr_16msTasks(void)
+{
+    // /* Convert Ignition Voltage */
+    ConvertIntrParam_IgnitionVoltage();
+    // /* Convert Mileage */
+    // ConvertIntrParam_Mileage();
+    // /* Convert Baro */
+    // ConvertIntrParam_Baro();
+    // /* Convert MAP */
+    // ConvertIntrParam_MAP();
+    // /* Convert Vacuum */
+    // ConvertIntrParam_Vacuum();
+    // /* Convert Engine Coolant Temperature */
+    // ConvertIntrParam_ECT();
+    // /* Convert Intake Air Temperature */
+    // ConvertIntrParam_IAT();
+    // /* Convert Vehicle Speed */
+    // ConvertIntrParam_VSS();
+    // /* Convert Air Flow */
+    // ConvertIntrParam_Airflow();
+    // /* Calculate Table Lookup Index */
+    // ConvertIntrParam_TableIndex();
+    // /* Convert Air Fuel Ratio */
+    // ConvertIntrParam_AFR();
+    // /* Convert Idle Speed */
+    // ConvertIntrParam_IdleSpd();
+    // /* Convert O2 sensor voltage */
+    // ConvertIntrParam_O2SensorV();
+    // /* Convert Spark Advance */
+    // ConvertIntrParam_SparkAdv();
+    // /* Convert BPW */
+    // ConvertIntrParam_BPW();
+    // /* Convert Catalyst Temperature */
+    // ConvertIntrParam_ConverterTemp();
+    // /* Convert Knock Parameters */
+    // ConvertIntrParam_KnockParam();
+    // /* Convert CCP solenoid PWM duty cycle */
+    // ConvertIntrParam_CcpDC();
+    // /* Convert TPS */
+    // ConvertIntrParam_TPS();
+}
+
 /* ============================================================================ *\
  * File revision history (top to bottom, first revision to last revision
  * ============================================================================

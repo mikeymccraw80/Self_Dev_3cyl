@@ -14,6 +14,7 @@
 #include "v_ignit.h"
 #include "soh.h"
 #include "dd_vsep_est_select.h"
+#include "intr_ems.h"
 
 
 //=============================================================================
@@ -34,6 +35,9 @@ void OS_Startup_Hook(void)
     FI_Initialize();
 
     CCP_Initialize();
+
+    /* update ems initial parameters */
+    Init_IntrParameter();
 
     /* init power source status */
     InitializePowerSource();
@@ -112,6 +116,9 @@ void MngOSTK_100msTasks(void)
         /* CCP 500ms Task 0 Trigger */
         CCP_Trigger_Event_Channel( 25 );
     }
+    
+    /* update ems parameters */
+    Intr_16msTasks();
 }
 //=============================================================================
 // OS_Free_Time_Tasks_Hook

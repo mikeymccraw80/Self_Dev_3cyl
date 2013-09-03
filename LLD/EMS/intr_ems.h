@@ -35,6 +35,7 @@
 #include "hal_gpio.h"
 #include "hal_eng.h"
 #include "hal_diag.h"
+#include "hal_analog.h"
 
 /* ============================================================================ *\
  * Other header files.
@@ -321,14 +322,14 @@ extern EOBD_VOLTb        EOBD_IgnVoltageAtKeyOn;
                         (EOBD_Ignition_Voltage)
 #define GetVIOS_U_IgnVoltageAtKeyOn()\
                         (EOBD_IgnVoltageAtKeyOn)
-// INLINE void ConvertIntrParam_IgnitionVoltage(void)
-// {
-    // EOBD_Ignition_Voltage = FixConvert( ATD_buffer[AD_IGNITION_VOLTAGE_TYPE], Volts_Plus_Fraction, EOBD_VOLTb ) ;
-// }
-// INLINE void ConvertIntrParam_IgnKeyOn(void)
-// {
-    // EOBD_IgnVoltageAtKeyOn = FixConvert( ATD_buffer[AD_IGNITION_VOLTAGE_TYPE], Volts_Plus_Fraction, EOBD_VOLTb ) ;
-// }
+static INLINE void ConvertIntrParam_IgnitionVoltage(void)
+{
+    EOBD_Ignition_Voltage = FixConvert((HAL_Analog_Get_IGNVI_Value() << 2), Volts_Plus_Fraction, EOBD_VOLTb );
+}
+static INLINE void ConvertIntrParam_IgnKeyOn(void)
+{
+    EOBD_IgnVoltageAtKeyOn = FixConvert((HAL_Analog_Get_IGNVI_Value() << 2), Volts_Plus_Fraction, EOBD_VOLTb);
+}
 
 /***********************************************************************
  **************    Manifold Pressure    ********************************
@@ -655,10 +656,6 @@ extern EOBD_PERCENTa   EOBD_CcpDutyCycle;
 // #define  GetHWIO_58xCylinderEvent()            (PhysicalEstCylinder)
 // #define  GetSPRK_SparkMode()                   (GetVIOS_EngSt())
 
-#define GetVIOS_O2_11_Htr_PSVIFaultShortHi()\
-   ( DD_GetDiscreteDiagStatus(PULSE_OUT_O2_HEATER_11,OUTPUT_SHORT_CKT_FAULT) )
-#define GetVIOS_O2_11_Htr_PSVIFaultShortLow()\
-   ( DD_GetDiscreteDiagStatus(PULSE_OUT_O2_HEATER_11,OUTPUT_OPEN_CKT_FAULT) )
 #define GetVIOS_O2_12_Htr_PSVIFaultShortHi()\
    ( DD_GetDiscreteDiagStatus(PULSE_OUT_O2_HEATER_12,OUTPUT_SHORT_CKT_FAULT) )
 #define GetVIOS_O2_12_Htr_PSVIFaultShortLow()\
@@ -815,6 +812,10 @@ INLINE void ClrVIOS_CrankRefToothErrCnt( void )
 // #define GetKNKD_Disable_Fault()   \
 	// (LLD_atd_input_table[LLD_ATD_MAP].LLD_atd_status.B_max||\
 	// LLD_atd_input_table[LLD_ATD_MAP].LLD_atd_status.B_min)
+
+void Intr_16msTasks(void);
+void Init_IntrParameter(void);
+// EOBD_PERCENTa GetDINT_Pct_ThrotPstnOld(uint8_t index);
 
 /* ============================================================================ *\
  * File revision history (top to bottom, first revision to last revision
