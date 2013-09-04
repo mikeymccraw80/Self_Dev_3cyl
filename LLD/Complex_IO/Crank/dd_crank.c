@@ -107,6 +107,7 @@ uCrank_Count_T    CRANK_Current_Event_Tooth; //[1, 120]
 uCrank_Count_T    CRANK_Current_Event_PA_Content;
 uCrank_Count_T     CRANK_Current_Event_Edge_Content;
 uCrank_Count_T    CRANK_Next_Event_PA_Content;
+uCrank_Count_T    CRANK_GAP_COUNT;
 uCrank_Count_T    CRANK_First_Cylinder_Event_Tooth;
 uCrank_Count_T    CRANK_Synchronization_Start_Tooth;
 uCrank_Count_T    CRANK_Error_Count_More;
@@ -501,6 +502,7 @@ static bool CRANK_Gap_Cofirm( void )
 		}
 		CRANK_Internal_State.U32 = CRANK_Set_Sync_Occurred( CRANK_Internal_State.U32, true );
 		MCD5408_Set_Gap_Count(EPPWMT_TPU_INDEX, TPU_CONFIG_IC_EPPWMT,CRANK_ACTUAL_TEETH_PER_CRANK);
+		CRANK_GAP_COUNT = CRANK_Next_Event_PA_Content;
 		gap_detected = true;
 	}
 	CRANK_Parameters.F.current_tooth = CRANK_Current_Event_Tooth;
