@@ -948,7 +948,7 @@ void MCD5408_BACKUP_MODE_Initialize_Channel(
       mcd5408_sdm->IRQ_Edge_Time_4.F.Backups_Left = 0;
 
       // Set bkup_1st_Edge_Time
-      mcd5408_sdm->Backup.F.First_Edge_Time = TPU_TIMER_Get_Value(index,configure );
+      mcd5408_sdm->Backup.F.First_Edge_Time = TPU_TIMER_Get_Value_Channel(index,configure );
 
       mcd5408_sdm->Backup.F.Between_Cams = 0;
 

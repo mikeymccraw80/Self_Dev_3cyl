@@ -9,6 +9,8 @@
  * Other Header Files
 \*===========================================================================*/
 #include "HLS.h"
+#include "hal_knock.h"
+#include "intr_ems.h"
 //#include "hal_di.h"
 
 
@@ -85,6 +87,22 @@ uint16_t             KmQ65;
 signed char              dNDsr;
 bool                 B_Fof;
 
+EOBD_KPAa            Pam;
+CHERY_KPAa             Pim;
+CHERY_DEG_T            Taini;
+CHERY_DEG_T          Tmini;
+EOBD_KPH             Vsp;
+CHERY_AIRFLOW_KGH    Maf ;
+CHERY_Lam            LamDsrLim;
+signed char              dNDsr;
+CHERY_RPMa           Nstat;
+CHERY_BPW            Ti_b1;
+CHERY_TEMP_Ta        TexBfCat;
+CHERY_TEMP_Ta        TcatInPre;
+Percent_B            DuCyPgOut;
+
+Percent_Plus_Fraction  TpPosl;
+
 
 /*VCPC*/
 uint16_t angle_crank_cam_inlet;
@@ -108,6 +126,11 @@ uint32_t nvram_test1;
 uint32_t  nvram_test2;
 #define STOP_SECTION_static_nonvolatile_SlowRam_32bit
 #include "PRAGMA_CHERY.h"
+
+
+T_CRANK_ANGLEa PfKNOC_phi_FinalWindow2Begin;/* Start angle of  knock window 2 */
+T_CRANK_ANGLEa PfKNOC_phi_FinalWindow2End;/* End angle of  knock window 2 */
+T_MILLISECONDSb PfKNOC_phi_FinalWindow2_length;
 
 /* ============================================================================ *\
  * Local FUNCTION.
@@ -301,7 +324,7 @@ void HLS_ini(void)
 	 sys_status.B_Pwf = false;
 	 sys_status.B_rsv = 0x0;*/
 
-	//TpPos_b=100;//tps=100*0.3922=39.22
+	TpPos_b=100;//tps=100*0.3922=39.22
 	Pmap_b=100;//Pmap_b=100kpa
 	Pmap=25650;//pmap=0.0039*25650=100.35kpa
 	Tm=200;//Tm= 200*0.75-48 =102 
@@ -321,6 +344,9 @@ void HLS_ini(void)
 	LLD_do_table[LLD_DO_R_LINE].value = true;
 	LLD_do_table[LLD_DO_START_MOTR_RLY].value = true;
 
+	PfKNOC_phi_FinalWindow2Begin = V_CRANK_ANGLEa(0);
+	PfKNOC_phi_FinalWindow2End =  V_CRANK_ANGLEa(24);
+	PfKNOC_phi_FinalWindow2_length = V_MILLISECONDSb(4.0);
 }
 
 /*HLS initialization function*/
@@ -373,6 +399,12 @@ void HLS_syn(void)
     inj_sig[INJ_CHANNEL_C].post_inj_time =1000;
     inj_sig[INJ_CHANNEL_D].B_post_inj = true;
     inj_sig[INJ_CHANNEL_D].post_inj_time =1000;
+     /* PerfmKNOC_VIOS_WingateSetup */
+
+  //SetIO_MultiKnock_Window_Start(MULTIKNOCK_WINDOW_2, PfKNOC_phi_FinalWindow2Begin);
+  //SetIO_MultiKnock_Window_End(MULTIKNOCK_WINDOW_2, PfKNOC_phi_FinalWindow2End);
+  //SetIO_MultiKnock_Window_Length(MULTIKNOCK_WINDOW_2, PfKNOC_phi_FinalWindow2_length);
+
 }
 /*will be called on each falling edge of the CAM signal*/
 void HLS_ph1(void)

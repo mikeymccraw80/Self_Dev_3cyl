@@ -614,6 +614,136 @@ typedef struct ADC_CCMF_EXT_F_Tag
 }  ADC_CCMF_EXT_F_T;
 
 //=============================================================================
+// ID - ADC Conversion Command Message Format for Alternate Configuration On-Chip ADC Operation
+//
+// Field        Bits     Type Description
+// ============ ======== ==== ===============================================
+// EOQ           0         rw End-of-queue. Asserted in the last command of a command queue to indicate to the
+//                            eQADC that a scan of the queue is completed. EOQ instructs the eQADC to reset its
+//                            current CFIFO transfer counter value (TC_CF) to 0. Depending on the CFIFO mode of
+//                            operation, the CFIFO status will also change upon the detection of an asserted EOQ bit on
+//                            the last transferred command. See Section 19.4.3.5, CFIFO Scan Trigger Modes, for
+//                            details.
+//                            0 Not the last entry of the command queue.
+//                            1 Last entry of the command queue.
+//                               Note: If both the pause and EOQ bits are asserted in the same command message the
+//                               respective flags are set, but the CFIFO status changes as if only the EOQ bit were
+//                               asserted..
+//
+// PAUSE        1          rw Pause. Allows software to create sub-queues within a command queue. When the eQADC
+//                            completes the transfer of a command with an asserted pause bit, the CFIFO enters the
+//                            WAITING FOR TRIGGER state. Refer to Section 19.4.3.6.1, CFIFO Operation Status, for
+//                            a description of the state transitions. The pause bit is only valid when CFIFO operation
+//                            mode is configured to single or continuous-scan edge trigger mode.
+//                            0 Do not enter WAITING FOR TRIGGER state after transfer of the current command message.
+//                            1 Enter WAITING FOR TRIGGER state after transfer of the current command message.
+//                               Note: If both the pause and EOQ bits are asserted in the same command message the
+//                               respective flags are set, but the CFIFO status changes as if only the EOQ bit were
+//                               asserted.
+//
+// 0            [3:4]      r  Reserved.
+//
+// EB             5        rw External buffer bit. A negated EB bit indicates that the command is sent to an on chip ADC.
+//                            0 Command is sent to an internal buffer.
+//                            1 Command is sent to an external buffer.
+//
+// BN             6        rw Buffer number. Indicates which ADC the message will be sent to. ADCs 1 and 0 can either
+//                            be internal or external depending on the EB bit setting.
+//                            0 Message sent to ADC 0.
+//                            1 Message sent to ADC 1.
+//
+// CAL            7        rw Calibration. Indicates if the returning conversion result must be calibrated.
+//                            0 Do not calibrate conversion result.
+//                            1 Calibrate conversion result.
+//
+// MESSAGE_TAG  [8:11]     rw MESSAGE_TAG field. Allows the eQADC to separate returning results into different
+//                            the eQADC transfers a command, the MESSAGE_TAG is included as part
+//                            of the command. Eventually the external device/on-chip ADC returns the result with the
+//                            same MESSAGE_TAG. The eQADC separates incoming messages into different RFIFOs
+//                            by decoding the MESSAGE_TAG of the incoming data.
+//
+//                               MESSAGE_TAG[0:3]  MESSAGE_TAG Meaning
+//                               0b0000            Result is sent to RFIFO 0
+//                               0b0001            Result is sent to RFIFO 1
+//                               0b0010            Result is sent to RFIFO 2
+//                               0b0011            Result is sent to RFIFO 3
+//                               0b0100            Result is sent to RFIFO 4
+//                               0b0101            Result is sent to RFIFO 5
+//                               0b0110            0b0111 Reserved
+//                               0b1000            Null message received
+//                               0b1001            Reserved for customer use.(1)
+//                               0b1010            Reserved for customer use.(1)
+//                               0b1011-0b1111     Reserved
+//
+//                           (1) These messages are treated as null messages. Therefore, they must obey the
+//                               format for incoming null messages and return valid BUSY0/1 fields. Refer to
+//                               Section , " Null Message Format for External Device Operation."
+//
+// LST         [12:13]     rw Long sampling time. These two bits determine the duration of the sampling time in ADC
+//                            clock cycles.
+//                            Note: For external mux mode, 64 or 128 sampling cycles is recommended.
+//
+//                               LST[0:1]          Sampling cycles
+//                                                 (ADC Clock Cycles)
+//                               0b00                2
+//                               0b01                8
+//                               0b10               64
+//                               0b11              128
+//
+// TSR           14       rw Time stamp request. TSR indicates the request for a time stamp. When TSR is asserted,
+//                            the on-chip ADC control logic returns a time stamp for the current conversion command
+//                            after the conversion result is sent to the RFIFOs. See Section 19.4.5.3, Time Stamp
+//                            Feature, for details.
+//                            0 Return conversion result only.
+//                            1 Return conversion time stamp after the conversion result.
+//
+// FMT           15        rw Conversion data format. FMT specifies to the eQADC how to format the 12-bit conversion
+//                            data returned by the ADCs into the 16-bit format which is sent to the RFIFOs. See Section ,
+//                            " ADC Result Format for On-Chip ADC Operation," for details.
+//                            0 Right justified unsigned.
+//                            1 Right justified signed.
+//
+// CHANNEL      [16:23]    rw Channel number. Selects the analog input channel. The software programs this field with
+//                            the channel number corresponding to the analog input pin to be sampled and converted.
+//                            See Section 19.4.6.1, "Channel Assignment," for details.
+//
+// REG_ADDRESS   [24:31]   rw ADC register address. Selects a register on the ADC register set to be used.
+//
+//                                 ADC0
+//                               Register
+//                               Address     USE                                                   ACCESS
+//                               0x00 ADC0   Address 0x00 is used for conversion command
+//                                           messages.
+//                               0x01        ADC0   Control Register (ADC0_CR)                     Write/Read
+//                               0x02        ADC Time Stamp Control Register (ADC_TSCR) (1)        Write/Read
+//                               0x03        ADC Time Base Counter Register (ADC_TBCR) (1)         Write/Read
+//                               0x04        ADC0 Gain Calibration Constant Register (ADC0_GCCR)   Write/Read
+//                               0x05        ADC0 Offset Calibration Constant Register (ADC0_OCCR) Write/Read
+//                               0x06-0xFF   Reserved -
+//
+//                           (1) This register is also accessible by configuration commands sent to the ADC1 command buffer.
+//
+//=============================================================================
+typedef struct ADC_CCMF_AC_F_Tag
+{
+   bitfield32_t  EOQ         :  BIT_1;   // Bit       0
+   bitfield32_t  PAUSE       :  BIT_1;   // Bit       1
+   bitfield32_t  REP         :  BIT_1;   // Bit       2
+   bitfield32_t              :  BIT_2;   // Bit    [3:4]
+   bitfield32_t  EB          :  BIT_1;   // Bit       5
+   bitfield32_t  BN          :  BIT_1;   // Bit       6
+   bitfield32_t  CAL         :  BIT_1;   // Bit       7
+   bitfield32_t  MESSAGE_TAG :  BIT_4;   // Bit   [8:11]
+   bitfield32_t  LST         :  BIT_2;   // Bits [12:13]
+   bitfield32_t  TSR         :  BIT_1;   // Bit      14
+   bitfield32_t  FMT         :  BIT_1;   // Bit      15
+   bitfield32_t  CHANNEL     :  BIT_8;   // Bit   [16:23]
+   bitfield32_t  REG_ADDRESS :  BIT_8;   // Bits  [24:31]
+
+}  ADC_CCMF_AC_F_T;
+
+
+//=============================================================================
 // ID - ADC Write Configuration Command Message Format for On-Chip ADC Operation
 //
 // Field        Bits     Type Description
@@ -813,6 +943,7 @@ typedef union ADC_CCMF_Tag
 typedef union ADC_CMF_Tag
 {
    ADC_CCMF_F_T         CF;
+   ADC_CCMF_AC_F_T      AC_CF;
    ADC_CCMF_EXT_F_T     EF;
    ADC_WCCMF_F_T        WF;
    ADC_RCCMF_F_T        RF;

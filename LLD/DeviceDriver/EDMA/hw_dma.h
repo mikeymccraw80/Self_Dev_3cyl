@@ -1176,9 +1176,9 @@ typedef struct DMA_Third_32Bit_Tag
 
 typedef struct DMA_Sixth_32Bit_F_Tag
 {
-   bitfield32_t   CITER_E_LINK :  BIT_1;  // Bit      31
-   bitfield32_t   CITER_LINKCH :  BIT_6;  // Bits  [30:25]
-   bitfield32_t   CITER        :  BIT_9;  // Bits  [24:16]
+ //  bitfield32_t   CITER_E_LINK :  BIT_1;  // Bit      31
+   //bitfield32_t   CITER_LINKCH :  BIT_6;  // Bits  [30:25]
+   bitfield32_t   CITER        :  BIT_16;  // Bits  [24:16]
    bitfield32_t   DOFF         :  BIT_16; // Bits  [15:00]
 
 }  DMA_Sixth_32Bit_F_T;
@@ -1193,9 +1193,9 @@ typedef union DMA_Sixth_32Bit_Tag
 
 typedef struct DMA_Eighth_32Bit_F_Tag
 {
-   bitfield32_t   BITER_E_LINK :  BIT_1;  // Bit       31
-   bitfield32_t   BITER_LINKCH :  BIT_6;  // Bits  [30:25]
-   bitfield32_t   BITER        :  BIT_9;  // Bits  [24:16]
+ //  bitfield32_t   BITER_E_LINK :  BIT_1;  // Bit       31
+//   bitfield32_t   BITER_LINKCH :  BIT_6;  // Bits  [30:25]
+   bitfield32_t   BITER        :  BIT_16;  // Bits  [24:16]
    bitfield32_t   BWC          :  BIT_2;  // Bits  [15:14]
    bitfield32_t   MAJOR_LINKCH :  BIT_6;  // Bits  [13:08]
    bitfield32_t   DONE         :  BIT_1;  // Bit       07

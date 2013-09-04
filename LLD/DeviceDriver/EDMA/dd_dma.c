@@ -116,7 +116,7 @@ void DMA_Initialize_Channel(
 //=============================================================================
 void DMA_Set_Channel_Transfer_Count(
    DMA_Channel_T           channel,
-    uint8_t  elements_number_of)
+    uint16_t  elements_number_of)
 {
 
    DMA_A.TCD[channel].F.F_6.F.CITER = elements_number_of;
@@ -153,12 +153,40 @@ void DMA_Set_Channel_Destination_Address(
     DMA_A.TCD[channel].F.DLAST_SGA=-(DMA_A.TCD[channel].F.F_6.F.CITER*DMA_A.TCD[channel].F.F_3.NBYTES);
 
 }
+
+//=============================================================================
+// DMA_Set_Channel_SLast
+//=============================================================================
+void DMA_Set_Channel_SLast(
+   DMA_Channel_T           channel,
+     uint32_t             SLAST)
+{
+
+   //Last Source Address Adjustment (slast)
+   DMA_A.TCD[channel].F.SLAST = SLAST;
+
+
+}
+
+
+//=============================================================================
+// DMA_Set_Channel_DLast
+//=============================================================================
+void DMA_Set_Channel_DLast(
+   DMA_Channel_T           channel,
+     uint32_t             DLAST)
+{
+      //Last Destination Address Adjustment/Scatter Gather Address (dlast_sga)
+   DMA_A.TCD[channel].F.DLAST_SGA = DLAST;
+
+}
+
 //=============================================================================
 // DMA_Enable_request
 //=============================================================================
 void DMA_Enable_Request(DMA_Channel_T  dma_channel)
 {
-  DMA_A.SERQR.U8 = dma_channel;
+  DMA_A.SERQR.F.SERQ = dma_channel;
 }
 
 //=============================================================================
@@ -166,7 +194,7 @@ void DMA_Enable_Request(DMA_Channel_T  dma_channel)
 //=============================================================================
 void DMA_Clear_Request(DMA_Channel_T  dma_channel)
 {
-  DMA_A.CERQR.U8 = dma_channel;
+  DMA_A.CERQR.F.CERQ = dma_channel;
 }
 
 //=============================================================================
@@ -184,11 +212,35 @@ bool DMA_Get_Channel_Running_Status(DMA_Channel_T  dma_channel)
 }
 
 //=============================================================================
+// DMA_Get_Channel_Biter
+//=============================================================================
+uint16_t  DMA_Get_Channel_Biter(DMA_Channel_T  dma_channel)
+{
+    uint16_t  biter;
+	
+    biter = DMA_A.TCD[dma_channel].F.F_8.F.BITER; 
+	
+   return biter;	
+} 
+
+//=============================================================================
+// DMA_Get_Channel_Citer
+//=============================================================================
+uint16_t  DMA_Get_Channel_Citer(DMA_Channel_T  dma_channel)
+{     
+
+     uint16_t  citer;
+	
+    citer = DMA_A.TCD[dma_channel].F.F_6.F.CITER; 
+	
+   return citer;
+}
+//=============================================================================
 // DMA_clear_request
 //=============================================================================
 void DMA_Clear_MAJ_Pending_INT(DMA_Channel_T  dma_channel)
 {
-  DMA_A.CIRQR.U8 = dma_channel;
+         DMA_A.CIRQR.U8 = dma_channel;
 }
 
 //=============================================================================

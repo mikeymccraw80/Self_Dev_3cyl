@@ -289,7 +289,24 @@ const TPU_CHANNEL_Configuration_T   TPU_CONFIG_IC_FI[FEI_INDEX_MAX] =
   }
 };
 
-// ETPUA30 - Not used 
+// ETPUA30 - WINGATE_RQOME
+const TPU_CHANNEL_Configuration_T   WINGATE_RQOME =
+{
+   TPU_EVENT_ABSOLUTE,   //   Set the desired value for TPU configuration
+   0,                                   //      PWM Update Mode 1- Coherent,0- synchronus
+   0,                                   //     Refernce channel number
+   TPU_CHANNEL_30,            //     Channel
+   0,                                   //    Channel Function Mode1
+   TPU_TCR1_TIME_BASE,                                     //   Channel Function Mode0
+   0,                                      //  Entry Table Condition Select
+   TPU_CHANNEL_INTERRUPT_ENABLE,  //1  //Interrupt Request Enable
+   TPU_TRANSFER_REQUEST_DISABLE,   //Transfer Request Enable
+   TPU_CHANNEL_PRIORITY_LOW,  // Channel Priority Index
+   ACTIVE_HIGH,  //    Active state of channel
+   TPU_OFF_OUTPUT_DISABLE,            //       8   Output Disable
+   EDGE_RISING,                 //   Host Service Request Type
+   RQOME_FUNCTION_NUM          //   TPU Primitives or Channel function Select
+};
 
 // ETPUA31 - Not used 
 

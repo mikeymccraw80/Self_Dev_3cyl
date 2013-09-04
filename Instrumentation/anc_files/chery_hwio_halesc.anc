@@ -1,0 +1,106 @@
+
+
+
+
+
+*-v_esc.Coolant_Temperature_{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ESCCOOLT";
+*-  variable_location.symbol = v_esc.Coolant_Temperature_;
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.75000000";
+*-  ds_const_b               = "-40.000000";
+*-  ds_scaling_unit          = "Degrees_C_B";
+*-  description              = "v_esc.Coolant_Temperature_";
+*-}
+
+*-v_esc.Manifold_Air_Pressure_W_{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ESCMAPVA";
+*-  variable_location.symbol = v_esc.Manifold_Air_Pressure_W_;
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.01953125";
+*-  ds_const_b               = "0.00000000";
+*-  ds_scaling_unit          = "kPa_W";
+*-  description              = "v_esc.Manifold_Air_Pressure_W_";
+*-}
+
+*-v_esc.Throttle_Position_{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ESCTPSVA";
+*-  variable_location.symbol = v_esc.Throttle_Position_;
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.390625";
+*-  ds_const_b               = "0.000000";
+*-  ds_scaling_unit          = "Percent_B";
+*-  description              = "v_esc.Throttle_Position_";
+*-}
+
+*-v_esc.MAPADFiltered_B{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ESCMAPAD";
+*-  variable_location.symbol = v_esc.MAPADFiltered_B;
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.36886";
+*-  ds_const_b               = "10.3300";
+*-  ds_scaling_unit          = "kPa_B";
+*-  description              = "v_esc.MAPADFiltered_B";
+*-}
+
+
+*-v.Manifold_Air_Temperature_{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ESCMATVA";
+*-  variable_location.symbol = v_esc.Manifold_Air_Temperature_;
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.75000000";
+*-  ds_const_b               = "-40.000000";
+*-  ds_scaling_unit          = "Degrees_C_B";
+*-  description              = "v_esc.Manifold_Air_Temperature_";
+*-}
+
+*-v_esc.Engine_Run_Time_{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ENGRUNTM";
+*-  variable_location.symbol = v_esc.Engine_Run_Time_;
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.00000000";
+*-  ds_const_b               = "0.00000000";
+*-  ds_scaling_unit          = "Seconds_Low";
+*-  description              = "v_esc.Engine_Run_Time_";
+*-}
+
+*-v_esc.Engine_Run_Spark_{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ENGRUNSP";
+*-  variable_location.symbol = v_esc.Engine_Run_Spark_;
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.00000000";
+*-  ds_const_b               = "0.00000000";
+*-  ds_scaling_unit          = "bool";
+*-  bit_mask                 = 0x01;
+*-  description              = "v_esc.Engine_Run_Spark_";
+*-}
+
+*-v_esc.Power_Enrichment_Met_BIT{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "PWRENRMT";
+*-  variable_location.symbol = v_esc.Power_Enrichment_Met_BIT;
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.00000000";
+*-  ds_const_b               = "0.00000000";
+*-  ds_scaling_unit          = "bool";
+*-  bit_mask                 = 0x01;
+*-  description              = "v_esc.Power_Enrichment_Met_BIT";
+*-}
+
+
+

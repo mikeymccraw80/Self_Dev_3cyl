@@ -21,6 +21,7 @@
 #include "prgdpapi.h"
 #include "estdpapi.h"
 #include "epsdpapi.h"
+#include "es_knock.h"
 
 //extern void Update_DiagStatus_10ms(void);
 //=============================================================================
@@ -100,11 +101,14 @@ void  HAL_OS_10ms_Task(void)
 	IO_GPIO_DI_Task();
 	IO_Analog_10ms_Update();
 	IO_Eng_Update_System_Time_Background();
+	Calculate_HiRes_Engine_Speed();
+	Calculate_Esc_Input_10ms();
 	HLS_Task_10ms();
 	IO_GPIO_DO_Task();
 	IO_Pulse_Update_Function();
 	if(OS_10ms_Cnt1&1)
 	{
+	   ScheduleKnockFastBckgLogic();
 		HLS_Task_20ms();
 	}
 	OS_10ms_Cnt1++;
@@ -134,6 +138,8 @@ uint16_t OS_100ms_Cnt;
 void HAL_OS_100ms_Task(void)
 {
 	OS_100ms_Cnt++;
+	Calculate_Esc_Input_1000ms();
+	ScheduleKnockSlowBckgLogic();
 	HLS_Task_100ms();
 	if(OS_100ms_Cnt ==5) {
 		IO_Pulse_VSS_Update_500ms();
@@ -170,7 +176,7 @@ void HAL_OS_100ms_Task(void)
 void HAL_OS_Init_Task(void)
 {
 	IO_OS_Power_Status_Init();
-
+	Initialize_HiRes_Engine_Speed();
 	//chery init
 	HLS_ini();
 	HLS_inisyn();
@@ -183,6 +189,9 @@ void HAL_OS_Init_Task(void)
 	IO_Analog_1ms_Update();
 	IO_Analog_10ms_Update();
 	HLS_ini2();
+       //knock init
+	Calculate_Esc_Input_10ms();
+	InitialiseESC() ;
 
 	/*Initialize the Engine State value at power up. */
 	InitVIOS_EngSt();
@@ -195,6 +204,7 @@ void HAL_OS_Init_Task(void)
 void HAL_OS_SYN_Task(void)
 {
     IO_Eng_Cyl_Update();
+     KnockControl58XReferenceLogic();
     HLS_syn();
     //app fuel update
     IO_Fuel_Syn_Update();
@@ -248,6 +258,20 @@ void HAL_OS_CAM_READ_Hook(void)
 {
 	//syn of chery
 	IO_CAM_Status_Update();
+}
+//=============================================================================
+// HAL_OS_KNOCK_CYL_EVENT
+//=============================================================================
+ void HAL_OS_KNOCK_CYL_EVENT(void) 
+{
+
+}
+//=============================================================================
+// HAL_OS_KNOCK_WINGATE_OFF
+//=============================================================================
+ void HAL_OS_KNOCK_WINGATE_OFF(void) 
+{
+   ESCEvent();
 }
 
 //=============================================================================

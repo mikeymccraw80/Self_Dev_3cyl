@@ -39,10 +39,9 @@ void SIU_Initialize_Device(void )
    SIU.ISEL8.U32 = SIU_INITIAL_ISEL8.U32;
 
    //eQADC Trigger Input Select Register (SIU_ETISR)
-    SIU.ETISR.U32 = SIU_ETISR_INITIAL.U32;
+   SIU.ETISR.U32 = SIU_ETISR_INITIAL.U32;
    SIU.ISEL3.U32 = SIU_ISEL3_INITIAL.U32;
-
-   //SIU.ISEL9.U32 = SIU_INITIAL_ISEL9.U32;
+   SIU.ISEL9.U32 = SIU_INITIAL_ISEL9.U32;
   
 
 }
@@ -413,5 +412,26 @@ void SIU_GPIO_Initialize_Device( void )
         SIU.PCR[channel].F.OBE = false;
  	}
 }
+
+//=============================================================================
+// SIU_Knock_Connect_Pin_To_ETPU
+//=============================================================================
+ void SIU_Knock_Connect_Pin_To_ETPU(bool state, SIU_GPIO_Channel_T siu_channel)
+{
+
+      if (state == true) 
+      {
+         SIU.PCR[siu_channel].F.PA = SIU_GPIO_PIN_ASSIGNMENT_PRIMARY_0; // ETPU 30
+         SIU.PCR[siu_channel].F.OBE = true;   // GPIO OUT
+      }
+      else
+      {
+         SIU.PCR[siu_channel].F.PA = SIU_GPIO_PIN_ASSIGNMENT_GPIO; // GPIO
+         SIU.PCR[siu_channel].F.OBE = true;   // GPIO OUT
+         SIU.PCR[siu_channel].F.IBE = false;   // GPIO OUT
+         SIU.GPDO[siu_channel].F.PDO = true;
+      }
+}
+
 
 

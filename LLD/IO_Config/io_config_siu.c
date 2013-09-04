@@ -59,7 +59,7 @@ const SIU_ISEL3_T SIU_ISEL3_INITIAL =
       QADC_TRIGGER_SELECT_1_eTRIG0,   //eTSEL3,
       QADC_TRIGGER_SELECT_1_eTRIG0,   //eTSEL2,
       QADC_TRIGGER_SELECT_1_eTRIG0,   //eTSEL1,
-      QADC_TRIGGER_SELECT_1_eTRIG0    //eTSEL0
+      QADC_TRIGGER_SELECT_1_PIT0_TRIGGER    //eTSEL0
    }
 };
 
@@ -103,7 +103,7 @@ const SIU_ISEL8_T SIU_INITIAL_ISEL8 =
 //register is required to select the source of this new queue0 trigger.
 const SIU_ISEL9_T SIU_INITIAL_ISEL9 = 
 {
-   SIU_ISEL9_eTSEL0A_PIT2_TRIGGER
+   SIU_ISEL9_eTSEL0A_eTPUB30
 };
 
 //=============================================================================

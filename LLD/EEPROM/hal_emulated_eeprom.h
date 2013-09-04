@@ -115,6 +115,8 @@ typedef struct EEPROM_Page_Tag
 \*===========================================================================*/
 
 extern bool        EEP_NVM_full_flg;
+extern bool                      EEP_NVM_Fault;
+#define Get_EEP_NVM_Fault()  (EEP_NVM_Fault)
 
 /*=============================================================================
  * EEPROM_Get_Current_Bank

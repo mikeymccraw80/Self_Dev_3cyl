@@ -9,6 +9,7 @@
 #include "dd_cam_interface.h"
 #include "dd_tpu_interface.h"
 #include "dd_pfi_interface.h"
+#include "dd_knock_interface.h"
 #include "io_config_crank.h"
 #include "io_config_cam.h"
 #include "os_sw_intc.h"
@@ -44,8 +45,8 @@ static void CRANK_Scheduler_Initialize( void )
    CRANK_SCHEDULER_Assign_Event(  CRANK_EVENT_ID_CAM,                  cam_event,              crank_offset,           2 );
   // CRANK_SCHEDULER_Assign_Handler_To_Event_ID( CRANK_EVENT_ID_PER_CYLINDER_EVENT,CRANK_High_Priority_Cylinder_Event   );
   // CRANK_SCHEDULER_Assign_Event(   CRANK_EVENT_ID_PER_CYLINDER_EVENT,   first_cylinder_event,   cylinder_offset,        cylinders );
-    
-   //CRANK_SCHEDULER_Assign_Event(  KNOCK_CYLINDER_EVENT,                first_cylinder_event,   cylinder_offset,        cylinders );
+   CRANK_SCHEDULER_Assign_Handler_To_Event_ID( KNOCK_CYLINDER_EVENT, KNOCK_Cylinder_Event_MultiKnock    );
+   CRANK_SCHEDULER_Assign_Event(  KNOCK_CYLINDER_EVENT,                first_cylinder_event,   cylinder_offset,        cylinders );
    //CRANK_SCHEDULER_Assign_Event(  VCP_CYLINDER_EVENT,                  first_cylinder_event,   cylinder_offset,        cylinders );
    // CRANK_SCHEDULER_Assign_Handler_To_Event_ID( SPARK_CYLINDER_EVENT, SPARK_Process_Cylinder_Event    );
    // CRANK_SCHEDULER_Assign_Event(   SPARK_CYLINDER_EVENT,                first_cylinder_event,   cylinder_offset,        cylinders );
@@ -105,7 +106,7 @@ void InitializeComplexIO( void )
   PFI_Initialize((IO_PFI_Initialization_Parameters_T  * const)&IO_Init_Pfi_Initialization_Parameters );
 
   // IO_KNOCK_Set_OS_End_Of_Window_CallBack( &MTSA_KNOCK, NULL  );
-
+   KNOCK_Initialize();
 //#ifndef HWTEST
   // IO_KNOCK_Initialize( &MTSA_KNOCK, (IO_Knock_Initialization_Parameters_T  * const)&MTSA_KNOCK_INITIALIZATION_PARAMETERS );
 //#endif

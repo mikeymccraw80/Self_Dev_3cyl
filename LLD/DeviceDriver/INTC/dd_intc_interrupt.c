@@ -9,7 +9,7 @@ void INTC_INTERRUPT_Set_Enable(
    bool                 in_enable )
 {
 
-   if ( channel <= INTC_CHANNEL_SOFTWARE_CH7 )
+   if ( channel <= INTC_CHANNEL_SOFTWARE_CH7_CH )
    {
       
        asm(" msync ");
@@ -41,7 +41,7 @@ bool INTC_INTERRUPT_Get_Enable(
 {
    bool in_enable=false;
    
-   if ( channel <= INTC_CHANNEL_SOFTWARE_CH7 )
+   if ( channel <= INTC_CHANNEL_SOFTWARE_CH7_CH )
    {
       
        asm(" msync ");
@@ -67,7 +67,7 @@ void INTC_INTERRUPT_Clear_Pending(
     INTC_Channel_T channel  )
 {
 
-   if ( channel <= INTC_CHANNEL_SOFTWARE_CH7 )
+   if ( channel <= INTC_CHANNEL_SOFTWARE_CH7_CH )
    {
       
        asm(" msync ");

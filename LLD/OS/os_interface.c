@@ -49,6 +49,7 @@ void OS_Startup_Hook(void)
 void MngOSTK_1msTasks(void)
 {
 
+  HAL_OS_1ms_Task();
 }
 
 //=============================================================================
@@ -82,6 +83,7 @@ void MngOSTK_10msTasks(void)
     VSEP_SPI_SCHEDULER_10MS();
     VSEP_Fault_Task_10MS();
     L9958_FAULT_Diagnose_Update();
+      HAL_OS_10ms_Task(); 
 
     /* call soh service */
     test_cnt_30ms++;
@@ -228,7 +230,21 @@ void OS_Engine_First_Gap(void)
 {
     HAL_OS_Engine_First_Gap();
 }
+//=============================================================================
+// OS_KnockEvntTasks_Hook
+//=============================================================================
+ void OS_KnockEvntTasks_Hook(void) 
+{
+   HAL_OS_KNOCK_CYL_EVENT();
+}
 
+//=============================================================================
+// OS_WinGateTasks_Hook
+//=============================================================================
+ void OS_WinGateTasks_Hook(void) 
+{
+   HAL_OS_KNOCK_WINGATE_OFF();
+}
 
 
  

@@ -1,5 +1,5 @@
-#ifndef DD_INTERFACE_H
-#define DD_INTERFACE_H
+#ifndef DD_SWT_INTERFACE_H
+#define DD_SWT_INTERFACE_H
 
 #include "dd_swt.h"
 

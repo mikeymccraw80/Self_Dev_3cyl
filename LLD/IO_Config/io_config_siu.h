@@ -369,6 +369,8 @@ extern const SIU_PCR_T SIU_INITIAL_PCR_143;
 //eTPU_A, DSPI_C_PCS and GPIO functions. The eTPU_A[11] is an output only function.
 extern const SIU_PCR_T SIU_INITIAL_PCR_144;
 
+#define  HAL_RQOME_Wingate_CHANNEL       SIU_GPIO_CHANNEL_144
+
 //etpu31
 //not active  
 //The SIU_PCR145 register controls the function, direction, and static electrical attributes of the

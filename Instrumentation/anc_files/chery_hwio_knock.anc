@@ -1,0 +1,1130 @@
+/******************************************************************************/
+/*                                                                            */
+/* Filename:          dd_knock.anc                                            */
+/*                                                                            */
+/* Description:       Private ancillary definitions file                      */
+/*                    for dd_knock.                                           */
+/*                                                                            */
+/* Global Functions Defined:                                                  */
+/*                    None                                                    */
+/* Static Functions Defined:                                                  */
+/*                    None                                                    */
+/* Inline Functions Defined:                                                  */
+/*                    None                                                    */
+/*                                                                            */
+/* Forward Engine Management Systems                                          */
+/*                                                                            */
+/* Copyright 2004, Delphi Technologies, Inc.                                  */
+/* All rights reserved.                                                       */
+/*                                                                            */
+/******************************************************************************/
+
+*-es_knock.KnockWindowLength{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "WINLENGH";
+*-  variable_location.symbol = es_knock.KnockWindowLength;
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.007629";
+*-  ds_const_b               = "0.000000";
+*-  ds_scaling_unit          = "MicroSec_WINGATE";
+*-  description              = "es_knock.KnockWindowLength";
+*-}
+
+
+*-es_knock.KnockWindowStartToothVsRef{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "WINSTATH";
+*-  variable_location.symbol = es_knock.KnockWindowStartToothVsRef;
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000";
+*-  ds_const_b               = "0.000000";
+*-  ds_scaling_unit          = "CrankAngleInTeeth";
+*-  description              = "es_knock.KnockWindowStartToothVsRef";
+*-}
+
+
+*-es_knock.KnockWindowStartAngleVsRef{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "WINAGREF";
+*-  variable_location.symbol = es_knock.KnockWindowStartAngleVsRef;
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.3515625";
+*-  ds_const_b               = "0.000000";
+*-  ds_scaling_unit          = "CrankAngleInDeg_W";
+*-  description              = "es_knock.KnockWindowStartAngleVsRef";
+*-}
+
+*-es_knock.KnockWindowStartAngleVsTDC{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "WINAGTDC";
+*-  variable_location.symbol = es_knock.KnockWindowStartAngleVsTDC;
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.3515625";
+*-  ds_const_b               = "-45.000000";
+*-  ds_scaling_unit          = "WindowStartAngle_Type";
+*-  description              = "es_knock.KnockWindowStartAngleVsTDC";
+*-}
+
+
+
+*-es_knock.EscCylinder{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ESCCYLNU";
+*-  variable_location.symbol = es_knock.EscCylinder;
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000";
+*-  ds_const_b               = "0.000000";
+*-  ds_scaling_unit          = "ESCCylinderType";
+*-  description              = "es_knock.EscCylinder";
+*-}
+
+
+*-es_knock.ESCGain_0{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ESCGAIN0";
+*-  variable_location.symbol = es_knock.ESCGain[0];
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "6.000000";
+*-  ds_const_b               = "0.000000";
+*-  ds_scaling_unit          = "BPFGain_Type";
+*-  description              = "es_knock.ESCGain_0";
+*-}
+
+*-es_knock.ESCGain_1{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ESCGAIN1";
+*-  variable_location.symbol = es_knock.ESCGain[1];
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "6.000000";
+*-  ds_const_b               = "0.000000";
+*-  ds_scaling_unit          = "BPFGain_Type";
+*-  description              = "es_knock.ESCGain_1";
+*-}
+
+*-es_knock.ESCGain_2{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ESCGAIN2";
+*-  variable_location.symbol = es_knock.ESCGain[2];
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "6.000000";
+*-  ds_const_b               = "0.000000";
+*-  ds_scaling_unit          = "BPFGain_Type";
+*-  description              = "es_knock.ESCGain_2";
+*-}
+
+#if CcSYST_NUM_OF_CYLINDERS > 3
+*-es_knock.ESCGain_3{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ESCGAIN3";
+*-  variable_location.symbol = es_knock.ESCGain[3];
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "6.000000";
+*-  ds_const_b               = "0.000000";
+*-  ds_scaling_unit          = "BPFGain_Type";
+*-  description              = "es_knock.ESCGain_3";
+*-}
+#endif
+
+*-es_knock.ADESC_0{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ADESC000";
+*-  variable_location.symbol = es_knock.ADESC[0];
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.0000762939453125";
+*-  ds_const_b               = "0.000000";
+*-  ds_scaling_unit          = "Volt0to5Volts_W";
+*-  description              = "es_knock.ADESC_0";
+*-}
+
+*-es_knock.ADESC_1{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ADESC001";
+*-  variable_location.symbol = es_knock.ADESC[1];
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.0000762939453125";
+*-  ds_const_b               = "0.000000";
+*-  ds_scaling_unit          = "Volt0to5Volts_W";
+*-  description              = "es_knock.ADESC_1";
+*-}
+
+*-es_knock.ADESC_2{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ADESC002";
+*-  variable_location.symbol = es_knock.ADESC[2];
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.0000762939453125";
+*-  ds_const_b               = "0.000000";
+*-  ds_scaling_unit          = "Volt0to5Volts_W";
+*-  description              = "es_knock.ADESC_2";
+*-}
+
+#if CcSYST_NUM_OF_CYLINDERS > 3
+*-es_knock.ADESC_3{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ADESC003";
+*-  variable_location.symbol = es_knock.ADESC[3];
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.0000762939453125";
+*-  ds_const_b               = "0.000000";
+*-  ds_scaling_unit          = "Volt0to5Volts_W";
+*-  description              = "es_knock.ADESC_3";
+*-}
+#endif
+
+*-es_knock.IntegratorAverage_0{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "INTEAVE0";
+*-  variable_location.symbol = es_knock.IntegratorAverage[0];
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.0000762939453125";
+*-  ds_const_b               = "0.000000";
+*-  ds_scaling_unit          = "Volt0to5Volts_W";
+*-  description              = "es_knock.IntegratorAverage_0";
+*-}
+
+*-es_knock.IntegratorAverage_1{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "INTEAVE1";
+*-  variable_location.symbol = es_knock.IntegratorAverage[1];
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.0000762939453125";
+*-  ds_const_b               = "0.000000";
+*-  ds_scaling_unit          = "Volt0to5Volts_W";
+*-  description              = "es_knock.IntegratorAverage_1";
+*-}
+
+
+*-es_knock.IntegratorAverage_2{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "INTEAVE2";
+*-  variable_location.symbol = es_knock.IntegratorAverage[2];
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.0000762939453125";
+*-  ds_const_b               = "0.000000";
+*-  ds_scaling_unit          = "Volt0to5Volts_W";
+*-  description              = "es_knock.IntegratorAverage_2";
+*-}
+
+#if CcSYST_NUM_OF_CYLINDERS > 3
+*-es_knock.IntegratorAverage_3{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "INTEAVE3";
+*-  variable_location.symbol = es_knock.IntegratorAverage[3];
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.0000762939453125";
+*-  ds_const_b               = "0.000000";
+*-  ds_scaling_unit          = "Volt0to5Volts_W";
+*-  description              = "es_knock.IntegratorAverage_3";
+*-}
+#endif
+
+*-es_knock.RawMAD_0{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "RAWMAD00";
+*-  variable_location.symbol = es_knock.RawMAD[0];
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.0000762939453125";
+*-  ds_const_b               = "0.000000";
+*-  ds_scaling_unit          = "Volt0to5Volts_W";
+*-  description              = "es_knock.RawMAD_0";
+*-}
+
+*-es_knock.RawMAD_1{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "RAWMAD01";
+*-  variable_location.symbol = es_knock.RawMAD[1];
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.0000762939453125";
+*-  ds_const_b               = "0.000000";
+*-  ds_scaling_unit          = "Volt0to5Volts_W";
+*-  description              = "es_knock.RawMAD_1";
+*-}
+
+*-es_knock.RawMAD_2{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "RAWMAD02";
+*-  variable_location.symbol = es_knock.RawMAD[2];
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.0000762939453125";
+*-  ds_const_b               = "0.000000";
+*-  ds_scaling_unit          = "Volt0to5Volts_W";
+*-  description              = "es_knock.RawMAD_2";
+*-}
+
+
+#if CcSYST_NUM_OF_CYLINDERS > 3
+*-es_knock.RawMAD_3{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "RAWMAD03";
+*-  variable_location.symbol = es_knock.RawMAD[3];
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.0000762939453125";
+*-  ds_const_b               = "0.000000";
+*-  ds_scaling_unit          = "Volt0to5Volts_W";
+*-  description              = "es_knock.RawMAD_3";
+*-}
+#endif
+
+*-es_knock.FilteredMAD_0{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "FILMAD00";
+*-  variable_location.symbol = es_knock.FilteredMAD[0];
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.0000762939453125";
+*-  ds_const_b               = "0.000000";
+*-  ds_scaling_unit          = "Volt0to5Volts_W";
+*-  description              = "es_knock.FilteredMAD_0";
+*-}
+
+*-es_knock.FilteredMAD_1{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "FILMAD01";
+*-  variable_location.symbol = es_knock.FilteredMAD[1];
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.0000762939453125";
+*-  ds_const_b               = "0.000000";
+*-  ds_scaling_unit          = "Volt0to5Volts_W";
+*-  description              = "es_knock.FilteredMAD_1";
+*-}
+
+*-es_knock.FilteredMAD_2{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "FILMAD02";
+*-  variable_location.symbol = es_knock.FilteredMAD[2];
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.0000762939453125";
+*-  ds_const_b               = "0.000000";
+*-  ds_scaling_unit          = "Volt0to5Volts_W";
+*-  description              = "es_knock.FilteredMAD_2";
+*-}
+
+
+#if CcSYST_NUM_OF_CYLINDERS > 3
+*-es_knock.FilteredMAD_3{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "FILMAD03";
+*-  variable_location.symbol = es_knock.FilteredMAD[3];
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.0000762939453125";
+*-  ds_const_b               = "0.000000";
+*-  ds_scaling_unit          = "Volt0to5Volts_W";
+*-  description              = "es_knock.FilteredMAD_3";
+*-}
+#endif
+
+*-es_knock.MADMultiplier_0{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "MADMUL00";
+*-  variable_location.symbol = es_knock.MADMultiplier[0];
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.250000";
+*-  ds_const_b               = "0.000000";
+*-  ds_scaling_unit          = "Multiplier_0_to_64";
+*-  description              = "es_knock.MADMultiplier_0";
+*-}
+
+*-es_knock.MADMultiplier_1{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "MADMUL01";
+*-  variable_location.symbol = es_knock.MADMultiplier[1];
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.250000";
+*-  ds_const_b               = "0.000000";
+*-  ds_scaling_unit          = "Multiplier_0_to_64";
+*-  description              = "es_knock.MADMultiplier_1";
+*-}
+
+*-es_knock.MADMultiplier_2{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "MADMUL02";
+*-  variable_location.symbol = es_knock.MADMultiplier[2];
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.250000";
+*-  ds_const_b               = "0.000000";
+*-  ds_scaling_unit          = "Multiplier_0_to_64";
+*-  description              = "es_knock.MADMultiplier_2";
+*-}
+
+
+#if CcSYST_NUM_OF_CYLINDERS > 3
+*-es_knock.MADMultiplier_3{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "MADMUL03";
+*-  variable_location.symbol = es_knock.MADMultiplier[3];
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.250000";
+*-  ds_const_b               = "0.000000";
+*-  ds_scaling_unit          = "Multiplier_0_to_64";
+*-  description              = "es_knock.MADMultiplier_3";
+*-}
+#endif
+
+*-es_knock.KnockThreshold_0{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "KNKTHRE0";
+*-  variable_location.symbol = es_knock.KnockThreshold[0];
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.0000762939453125";
+*-  ds_const_b               = "0.000000";
+*-  ds_scaling_unit          = "Volt0to5Volts_W";
+*-  description              = "es_knock.KnockThreshold_0";
+*-}
+
+*-es_knock.KnockThreshold_1{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "KNKTHRE1";
+*-  variable_location.symbol = es_knock.KnockThreshold[1];
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.0000762939453125";
+*-  ds_const_b               = "0.000000";
+*-  ds_scaling_unit          = "Volt0to5Volts_W";
+*-  description              = "es_knock.KnockThreshold_1";
+*-}
+
+*-es_knock.KnockThreshold_2{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "KNKTHRE2";
+*-  variable_location.symbol = es_knock.KnockThreshold[2];
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.0000762939453125";
+*-  ds_const_b               = "0.000000";
+*-  ds_scaling_unit          = "Volt0to5Volts_W";
+*-  description              = "es_knock.KnockThreshold_2";
+*-}
+
+#if CcSYST_NUM_OF_CYLINDERS > 3
+*-es_knock.KnockThreshold_3{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "KNKTHRE3";
+*-  variable_location.symbol = es_knock.KnockThreshold[3];
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.0000762939453125";
+*-  ds_const_b               = "0.000000";
+*-  ds_scaling_unit          = "Volt0to5Volts_W";
+*-  description              = "es_knock.KnockThreshold_3";
+*-}
+#endif
+
+*-es_knock.IntAveQ{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "INTAVEQ0";
+*-  variable_location.symbol = es_knock.IntAveQ;
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.0000152587890625";
+*-  ds_const_b               = "0.0000000000000000";
+*-  ds_scaling_unit          = "Filter_Q_W";
+*-  description              = "es_knock.IntAveQ";
+*-}
+
+*-es_knock.GainIncreaseMultiplier{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "GAININMU";
+*-  variable_location.symbol = es_knock.GainIncreaseMultiplier;
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.0000152587890625";
+*-  ds_const_b               = "0.0000000000000000";
+*-  ds_scaling_unit          = "Multiplier_0_to_2";
+*-  description              = "es_knock.GainIncreaseMultiplier";
+*-}
+
+*-es_knock.GainDecreaseMultiplier{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "GAINDEMU";
+*-  variable_location.symbol = es_knock.GainDecreaseMultiplier;
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.0000152587890625";
+*-  ds_const_b               = "0.0000000000000000";
+*-  ds_scaling_unit          = "Multiplier_0_to_2";
+*-  description              = "es_knock.GainDecreaseMultiplier";
+*-}
+
+
+*-es_knock.ESCFastAttack{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ESCFAATK";
+*-  variable_location.symbol = es_knock.ESCFastAttack;
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.011718750";
+*-  ds_const_b               = "0.000000000";
+*-  ds_scaling_unit          = "ESC_Attack_B";
+*-  description              = "es_knock.ESCFastAttack";
+*-}
+
+*-es_knock.ESCFastRetard_0{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ESCFARE0";
+*-  variable_location.symbol = es_knock.ESCFastRetard[0];
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.001373291";
+*-  ds_const_b               = "0.000000000";
+*-  ds_scaling_unit          = "CrankAngleInDeg_Plus_Fraction";
+*-  description              = "es_knock.EESCFastRetard_0";
+*-}
+
+*-es_knock.ESCFastRetard_1{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ESCFARE1";
+*-  variable_location.symbol = es_knock.ESCFastRetard[1];
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.001373291";
+*-  ds_const_b               = "0.000000000";
+*-  ds_scaling_unit          = "CrankAngleInDeg_Plus_Fraction";
+*-  description              = "es_knock.ESCFastRetard_1";
+*-}
+
+*-es_knock.ESCFastRetard_2{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ESCFARE2";
+*-  variable_location.symbol = es_knock.ESCFastRetard[2];
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.001373291";
+*-  ds_const_b               = "0.000000000";
+*-  ds_scaling_unit          = "CrankAngleInDeg_Plus_Fraction";
+*-  description              = "es_knock.ESCFastRetard_2";
+*-}
+
+*-es_knock.ESCFastRetard_3{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ESCFARE3";
+*-  variable_location.symbol = es_knock.ESCFastRetard[3];
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.001373291";
+*-  ds_const_b               = "0.000000000";
+*-  ds_scaling_unit          = "CrankAngleInDeg_Plus_Fraction";
+*-  description              = "es_knock.ESCFastRetard_3";
+*-}
+
+*-es_knock.ESCFastRetardMax{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ESCREMAX";
+*-  variable_location.symbol = es_knock.ESCFastRetardMax;
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.001373291";
+*-  ds_const_b               = "0.000000000";
+*-  ds_scaling_unit          = "CrankAngleInDeg_Plus_Fraction";
+*-  description              = "es_knock.ESCFastRetardMax";
+*-}
+
+*-es_knock.ESCKnockLevel_0{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ESCKNKL0";
+*-  variable_location.symbol = es_knock.ESCKnockLevel[0];
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.0000762939453125";
+*-  ds_const_b               = "0.000000";
+*-  ds_scaling_unit          = "CrankAngleInDeg_Plus_Fraction";
+*-  description              = "es_knock.ESCKnockLevel_0";
+*-}
+
+*-es_knock.ESCKnockLevel_1{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ESCKNKL1";
+*-  variable_location.symbol = es_knock.ESCKnockLevel[1];
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.0000762939453125";
+*-  ds_const_b               = "0.000000";
+*-  ds_scaling_unit          = "CrankAngleInDeg_Plus_Fraction";
+*-  description              = "es_knock.ESCKnockLevel_1";
+*-}
+
+*-es_knock.ESCKnockLevel_2{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ESCKNKL2";
+*-  variable_location.symbol = es_knock.ESCKnockLevel[2];
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.0000762939453125";
+*-  ds_const_b               = "0.000000";
+*-  ds_scaling_unit          = "CrankAngleInDeg_Plus_Fraction";
+*-  description              = "es_knock.ESCKnockLevel_2";
+*-}
+
+*-es_knock.ESCKnockLevel_3{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ESCKNKL3";
+*-  variable_location.symbol = es_knock.ESCKnockLevel[3];
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.0000762939453125";
+*-  ds_const_b               = "0.000000";
+*-  ds_scaling_unit          = "CrankAngleInDeg_Plus_Fraction";
+*-  description              = "es_knock.ESCKnockLevel_3";
+*-}
+
+
+*-es_knock.EscOldTPS{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ESCODTPS";
+*-  variable_location.symbol = es_knock.EscOldTPS;
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.390625";
+*-  ds_const_b               = "0.000000";
+*-  ds_scaling_unit          = "TPS_B";
+*-  description              = "es_knock.EscOldTPS";
+*-}
+
+*-es_knock.EscOldMultiplierTPS{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ESCOMTPS";
+*-  variable_location.symbol = es_knock.EscOldMultiplierTPS;
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.390625";
+*-  ds_const_b               = "0.000000";
+*-  ds_scaling_unit          = "TPS_B";
+*-  description              = "es_knock.EscOldMultiplierTPS";
+*-}
+
+*-es_knock.EscOldRPM{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ESCODRPM";
+*-  variable_location.symbol = es_knock.EscOldRPM;
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.125000";
+*-  ds_const_b               = "0.000000";
+*-  ds_scaling_unit          = "RPM_W";
+*-  description              = "es_knock.EscOldRPM";
+*-}
+
+*-es_knock.EscOldMAP{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ESCODMAP";
+*-  variable_location.symbol = es_knock.EscOldMAP;
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.368860";
+*-  ds_const_b               = "10.33000";
+*-  ds_scaling_unit          = "kPa_B";
+*-  description              = "es_knock.EscOldMAP";
+*-}
+
+*-es_knock.EscNegativeDeltaMAP{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ESCDLMAP";
+*-  variable_location.symbol = es_knock.EscNegativeDeltaMAP;
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.01953125";
+*-  ds_const_b               = "0.00000000";
+*-  ds_scaling_unit          = "kPa_W";
+*-  description              = "es_knock.EscNegativeDeltaMAP";
+*-}
+
+*-es_knock.EscOldMAPW_0{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ESCOMAP0";
+*-  variable_location.symbol = es_knock.EscOldMAPW[0];
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.01953125";
+*-  ds_const_b               = "0.00000000";
+*-  ds_scaling_unit          = "kPa_W";
+*-  description              = "es_knock.EscOldMAPW_0";
+*-}
+
+*-es_knock.EscOldMAPW_1{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ESCOMAP1";
+*-  variable_location.symbol = es_knock.EscOldMAPW[1];
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.01953125";
+*-  ds_const_b               = "0.00000000";
+*-  ds_scaling_unit          = "kPa_W";
+*-  description              = "es_knock.EscOldMAPW_1";
+*-}
+
+*-es_knock.EscOldMultiplierRPM{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ESCOMRPM";
+*-  variable_location.symbol = es_knock.EscOldMultiplierRPM;
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.00000000";
+*-  ds_const_b               = "0.00000000";
+*-  ds_scaling_unit          = "RPM_Hi_Res_W";
+*-  description              = "es_knock.EscOldMultiplierRPM";
+*-}
+
+*-es_knock.MAD_Mult_TPS_Timer{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "MADTPSTR";
+*-  variable_location.symbol = es_knock.MAD_Mult_TPS_Timer;
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.02000000";
+*-  ds_const_b               = "0.00000000";
+*-  ds_scaling_unit          = "Every_2nd_Loop_Sec_B";
+*-  description              = "es_knock.MAD_Mult_TPS_Timer";
+*-}
+
+*-es_knock.MAD_Mult_RPM_Timer{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "MADRPMTR";
+*-  variable_location.symbol = es_knock.MAD_Mult_RPM_Timer;
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.04000000";
+*-  ds_const_b               = "0.00000000";
+*-  ds_scaling_unit          = "Every_4th_Loop_Sec_B";
+*-  description              = "es_knock.MAD_Mult_RPM_Timer";
+*-}
+
+*-es_knock.KnockActiveTime{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "KNKACTTR";
+*-  variable_location.symbol = es_knock.KnockActiveTime;
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.02000000";
+*-  ds_const_b               = "0.00000000";
+*-  ds_scaling_unit          = "Every_2nd_Loop_Sec_B";
+*-  description              = "es_knock.KnockActiveTime";
+*-}
+
+*-es_knock.ESC_TipIn_Old_TPS{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ESCTITPS";
+*-  variable_location.symbol = es_knock.ESC_TipIn_Old_TPS;
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.39062500";
+*-  ds_const_b               = "0.00000000";
+*-  ds_scaling_unit          = "TPS_B";
+*-  description              = "es_knock.ESC_TipIn_Old_TPS";
+*-}
+
+
+*-es_knock.ESC_TipIn_Angle{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ESCTIANG";
+*-  variable_location.symbol = es_knock.ESC_TipIn_Angle;
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.35156250";
+*-  ds_const_b               = "0.00000000";
+*-  ds_scaling_unit          = "SparkAdvance_Delta_Deg_B";
+*-  description              = "es_knock.ESC_TipIn_Angle";
+*-}
+
+
+*-es_knock.ESC_TipIn_Time{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ESCTITMR";
+*-  variable_location.symbol = es_knock.ESC_TipIn_Time;
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.02000000";
+*-  ds_const_b               = "0.00000000";
+*-  ds_scaling_unit          = "KnockControl_Timer_Type";
+*-  description              = "es_knock.ESC_TipIn_Time";
+*-}
+
+*-es_knock.EscSystemAverage{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ESCSYAVE";
+*-  variable_location.symbol = es_knock.EscSystemAverage;
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.0000762939453125";
+*-  ds_const_b               = "0.00000000";
+*-  ds_scaling_unit          = "Volt0to5Volts_W";
+*-  description              = "es_knock.EscSystemAverage";
+*-}
+
+
+
+*-es_knock.ADESC_Average_Wingateoff_0{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ADESCAV0";
+*-  variable_location.symbol = es_knock.ADESC_Average_Wingateoff[0];
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.0000762939453125";
+*-  ds_const_b               = "0.000000";
+*-  ds_scaling_unit          = "Volt0to5Volts_W";
+*-  description              = "es_knock.ADESC_Average_Wingateoff_0";
+*-}
+
+*-es_knock.ADESC_Average_Wingateoff_1{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ADESCAV1";
+*-  variable_location.symbol = es_knock.ADESC_Average_Wingateoff[1];
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.0000762939453125";
+*-  ds_const_b               = "0.000000";
+*-  ds_scaling_unit          = "Volt0to5Volts_W";
+*-  description              = "es_knock.ADESC_Average_Wingateoff_1";
+*-}
+
+*-es_knock.ADESC_Average_Wingateoff_2{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ADESCAV2";
+*-  variable_location.symbol = es_knock.ADESC_Average_Wingateoff[2];
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.0000762939453125";
+*-  ds_const_b               = "0.000000";
+*-  ds_scaling_unit          = "Volt0to5Volts_W";
+*-  description              = "es_knock.ADESC_Average_Wingateoff_2";
+*-}
+
+#if CcSYST_NUM_OF_CYLINDERS > 3
+*-es_knock.ADESC_Average_Wingateoff_3{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ADESCAV3";
+*-  variable_location.symbol = es_knock.ADESC_Average_Wingateoff[3];
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.0000762939453125";
+*-  ds_const_b               = "0.000000";
+*-  ds_scaling_unit          = "Volt0to5Volts_W";
+*-  description              = "es_knock.ADESC_Average_Wingateoff_3";
+*-}
+#endif
+
+
+*-es_knock.knock_spark_retard_0{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "KNKRETD0";
+*-  variable_location.symbol = es_knock.knock_spark_retard[0];
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.3515625";
+*-  ds_const_b               = "0.000000";
+*-  ds_scaling_unit          = "CrankAngleInDeg_W";
+*-  description              = "es_knock.knock_spark_retard_0";
+*-}
+
+*-es_knock.knock_spark_retard_1{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "KNKRETD1";
+*-  variable_location.symbol = es_knock.knock_spark_retard[1];
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.3515625";
+*-  ds_const_b               = "0.000000";
+*-  ds_scaling_unit          = "CrankAngleInDeg_W";
+*-  description              = "es_knock.knock_spark_retard_1";
+*-}
+
+*-es_knock.knock_spark_retard_2{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "KNKRETD2";
+*-  variable_location.symbol = es_knock.knock_spark_retard[2];
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.3515625";
+*-  ds_const_b               = "0.000000";
+*-  ds_scaling_unit          = "CrankAngleInDeg_W";
+*-  description              = "es_knock.knock_spark_retard_2";
+*-}
+
+*-es_knock.knock_spark_retard_3{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "KNKRETD3";
+*-  variable_location.symbol = es_knock.knock_spark_retard[3];
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.3515625";
+*-  ds_const_b               = "0.000000";
+*-  ds_scaling_unit          = "CrankAngleInDeg_W";
+*-  description              = "es_knock.knock_spark_retard_3";
+*-}
+
+*-es_knock.SlowRetardCell{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "SLREDCEL";
+*-  variable_location.symbol = es_knock.SlowRetardCell;
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000";
+*-  ds_const_b               = "0.000000";
+*-  ds_scaling_unit          = "Count";
+*-  description              = "es_knock.SlowRetardCell";
+*-}
+
+*-es_knock.ESCSlowAttack{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ESCSLATT";
+*-  variable_location.symbol = es_knock.ESCSlowAttack;
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.017578125";
+*-  ds_const_b               = "0.000000000";
+*-  ds_scaling_unit          = "DEG";
+*-  description              = "es_knock.ESCSlowAttack";
+*-}
+
+*-es_knock.SlowRetardLearnDelay{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "SLREDDLY";
+*-  variable_location.symbol = es_knock.SlowRetardLearnDelay;
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.100000";
+*-  ds_const_b               = "0.000000";
+*-  ds_scaling_unit          = "second";
+*-  description              = "es_knock.SlowRetardLearnDelay";
+*-}
+
+*-es_knock.ESC_SlowLearn_Int{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "SLLRNINT";
+*-  variable_location.symbol = es_knock.ESC_SlowLearn_Int;
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.100000";
+*-  ds_const_b               = "0.000000";
+*-  ds_scaling_unit          = "second";
+*-  description              = "es_knock.ESC_SlowLearn_Int";
+*-}
+
+*-es_knock.ESC_SlowLearn_Enable{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "SLLRNENL";
+*-  variable_location.symbol = es_knock.ESC_SlowLearn_Enable;
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000";
+*-  ds_const_b               = "0.000000";
+*-  ds_scaling_unit          = "bool";
+*-  description              = "es_knock.ESC_SlowLearn_Enable";
+*-}
+
+*-es_knock.ESC_Slowlearn_Clear{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "SLLRNCLR";
+*-  variable_location.symbol = es_knock.ESC_Slowlearn_Clear;
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000";
+*-  ds_const_b               = "0.000000";
+*-  ds_scaling_unit          = "bool";
+*-  description              = "es_knock.ESC_Slowlearn_Clear";
+*-}
+
+*-es_knock.ESCSlowRetard_0{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ESCSLRED0";
+*-  variable_location.symbol = es_knock.ESCSlowRetard[0];
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.3515625";
+*-  ds_const_b               = "0.000000";
+*-  ds_scaling_unit          = "CrankAngleInDeg_W";
+*-  description              = "es_knock.ESCSlowRetard_0";
+*-}
+
+*-es_knock.ESCSlowRetard_1{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ESCSLRED1";
+*-  variable_location.symbol = es_knock.ESCSlowRetard[1];
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.3515625";
+*-  ds_const_b               = "0.000000";
+*-  ds_scaling_unit          = "CrankAngleInDeg_W";
+*-  description              = "es_knock.ESCSlowRetard_1";
+*-}
+
+*-es_knock.ESCSlowRetard_2{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ESCSLRED2";
+*-  variable_location.symbol = es_knock.ESCSlowRetard[2];
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.3515625";
+*-  ds_const_b               = "0.000000";
+*-  ds_scaling_unit          = "CrankAngleInDeg_W";
+*-  description              = "es_knock.ESCSlowRetard_2";
+*-}
+
+*-es_knock.ESCSlowRetard_3{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ESCSLRED3";
+*-  variable_location.symbol = es_knock.ESCSlowRetard[3];
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.3515625";
+*-  ds_const_b               = "0.000000";
+*-  ds_scaling_unit          = "CrankAngleInDeg_W";
+*-  description              = "es_knock.ESCSlowRetard_3";
+*-}
+
+
+*-es_knock.Knock_Present{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "KNKPREST";
+*-  variable_location.symbol = es_knock.Knock_Present;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  bit_mask                 = 0x40;
+*-  description              = "es_knock.Knock_Present";
+*-}
+
+
+*-es_knock.Multiplier_Delta_RPM{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "KNKMURPM";
+*-  variable_location.symbol = es_knock.Multiplier_Delta_RPM;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "es_knock.Multiplier_Delta_RPM";
+*-}
+
+*-es_knock.Multiplier_Delta_TPS{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "KNKMUTPS";
+*-  variable_location.symbol = es_knock.Multiplier_Delta_TPS;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "es_knock.Multiplier_Delta_TPS";
+*-}
+
+
+*-es_knock.MAD_Transient_Detected{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "MADTRDET";
+*-  variable_location.symbol = es_knock.MAD_Transient_Detected;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "es_knock.MAD_Transient_Detected";
+*-}
+
+
+*-es_knock.MAD_Filtering_Enabled{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "MADFILEN";
+*-  variable_location.symbol = es_knock.MAD_Filtering_Enabled;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "es_knock.MAD_Filtering_Enabled";
+*-}
+
+
+*-es_knock.TipIn_Conditions_Detected{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "TIPINDET";
+*-  variable_location.symbol = es_knock.TipIn_Conditions_Detected;
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  ds_scaling_unit          = "bool";
+*-  description              = "es_knock.TipIn_Conditions_Detected";
+*-}
+
+
+*-es_knock.Esc_Enabled{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ESCFLG";
+*-  variable_location.symbol = es_knock.Esc_Enabled;
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000";
+*-  ds_const_b               = "0.000000";
+*-  ds_scaling_unit          = "bool";
+*-  description              = "es_knock.Esc_Enabled";
+*-}
+
+
+*-es_knock.Esc_Knock_Active{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "KNKACTIV";
+*-  variable_location.symbol = es_knock.Esc_Knock_Active;
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000";
+*-  ds_const_b               = "0.000000";
+*-  ds_scaling_unit          = "bool";
+*-  description              = "es_knock.Esc_Knock_Active";
+*-}
+
+*-es_knock.EscSensorDelta{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "KNKSERDL";
+*-  variable_location.symbol = es_knock.EscSensorDelta;
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.0000762939453125";
+*-  ds_const_b               = "0.000000";
+*-  ds_scaling_unit          = "Volt0to5Volts_W";
+*-  description              = "es_knock.EscSensorDelta";
+*-}
+
+
+
+
+
+/******************************************************************************/
+/*                                                                            */
+/* Revision History:                                                          */
+/*                                                                            */
+/* Rev.   DDMMYY  user id      Description                                    */
+/* ------ ------  -------      ---------------------------------------------- */
+/*                */
+/*                                                                            */
+/******************************************************************************/

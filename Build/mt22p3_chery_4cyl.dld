@@ -28,6 +28,7 @@ SECTIONS
       hwiocald.o (.text_vle)
       vsepcald.o (.text_vle)
       vehicle_can_cald.o (.text_vle)
+        esc_cal.o(.text_vle)
       CalVariable.o (.text_vle)
       end_of_calrom = .;
   } > cal

@@ -377,7 +377,206 @@ void QADC_ANALOG_Calibrate_Converter( ADC_Converter_T  converter)
 
 }
 
+//=============================================================================
+// QADC_Knock_ADConvert
+//=============================================================================
+QADC_Knock_ADConvert(void)
+{
 
+   ADC_CMF_T       cmf;
+   QADC_CFCR_T  cfcr;
+   ADC_ACR_T  acr1;
+   ADC_PUDCR_T PUDCR;
+
+   //QADC.IDCR[0].U16 = 0x03;
+
+
+   // p12bit right justified unsigned (alternate config 1) 
+   //ui16_config = ADC_ACR_RET_INH(1) | ADC_ACR_DEST(0) | ADC_ACR_FMTA(0) | ADC_ACR_RESSEL(0) | ADC_ACR_PRE_GAIN(0);				
+   //EQADC.CFPR[0].R = ADC_REG_VALUE(ui16_config) | ADC_REG_ADDRESS(ADC_ACR1);  
+   //PRE_GAIN
+   //00: 1 gain
+   //01: 2 gain
+   //10: 4 gain
+      //acr1 to 1 gain
+   acr1.U16 = 0;
+   acr1.F.PRE_GAIN = 0b00;
+   // Push command into fifo
+   // qadc->CFPR[1] =0x80000000| ((acr1.U16<<8)& 0x00FFFF00)|0x30;
+   QADC.CFPR[1] = ((acr1.U16<<8)& 0x00FFFF00)|0x30;
+
+
+   //acr2 to 4 gain
+   acr1.U16 = 0;
+   acr1.F.PRE_GAIN = 0b10;
+   // Push command into fifo
+   QADC.CFPR[1] = ((acr1.U16<<8)& 0x00FFFF00)|0x34;
+
+
+   // set DAN0 both pull up and down
+   //set pull up and pull down resistor 100K
+   PUDCR.U16 = 0;
+   PUDCR.F.CH_PULL = 0b11;
+   PUDCR.F.PULL_STR=0b10;
+   ///0x71 is address for PUDCR_0 
+   QADC.CFPR[1] =  ((PUDCR.U16<<8)& 0x00FFFF00)|0x70;
+   //0x80000000 == end of quence /0x71 is address for PUDCR_1  
+   QADC.CFPR[1] = 0x80000000| ((PUDCR.U16<<8)& 0x00FFFF00)|0x71;
+
+   //Set FIFO 0 to software triggered mode
+   QADC.CFCR[1].F.MODE = QADC_TRIGGER_MODE_SOFTWARE_TRIGGER_Single_Scan;
+   //Set to single scan enabled ( when this value is written FISRn.SSS is set until EOQF if processed
+   QADC.CFCR[1].F.SSE = 1;
+
+   // now wait for the Command Queue to reach End-Of-Queue status, where
+   // we need to disable the CFIFO so that it can be reset for conversion
+   // queues (CFIFO MODE must be disabled before resetting to another mode
+   // according to eQADC specifications)
+   while( QADC.FISR[1].F.EOQF != 1 )
+   {
+      // wait till End-Of-Queue reached
+   }
+
+   QADC.FISR[1].F.EOQF = 1 ;
+
+   QADC.CFCR[1].F.MODE = QADC_TRIGGER_MODE_DISABLED;
+
+   while ( QADC_COMMAND_FIFO_STATUS_IDLE != Extract_Bits( QADC.CFSR.U32, BIT_28 ,BIT_2 ) )
+      //while(qadc->CFSR.F.CFS1)
+   {
+      // Certify that CFS has changed to IDLE before setting CFINVn.
+   }
+
+   QADC.CFCR[1].F.CFINV = 1;
+
+   // Put QADC to WTF state
+   cmf.U32              =  0;
+   cmf.CF.MESSAGE_TAG   =  QADC_MESSAGE_TAG_NULL;
+   cmf.CF.EOQ           =  0;
+   cmf.CF.PAUSE         =  1;
+   cmf.CF.REP           =  0;
+   cmf.CF.EB            =  false;
+   cmf.CF.BN            =  ADC_CONVERTER_0;
+   cmf.CF.CAL           =   false;
+   cmf.CF.LST           =  QADC_SAMPLE_CYCLES_2;
+   cmf.CF.TSR           =  false;
+   cmf.CF.FFMT           =  QADC_CHANNEL_CONVERSION_FORMAT_RIGHT_JUSTIFIED_SIGNED;
+   cmf.CF.CHANNEL       =  QADC_CHANNEL_DAN_0;
+
+   QADC.CFPR[0] = cmf.U32;
+
+   cfcr.U16 = 0;
+   cfcr.F.AMODE0 = QADC_TRIGGER_MODE_RISING_EDGE_EXTERNAL_TRIGGER_Single_Scan;//QADC_TRIGGER_MODE_FALLING_EDGE_EXTERNAL_TRIGGER;
+   cfcr.F.MODE = QADC_TRIGGER_MODE_FALLING_EDGE_EXTERNAL_TRIGGER_Single_Scan;//|0x08;
+   cfcr.F.CFINV = 0;
+   cfcr.F.SSE = 1;
+   cfcr.F.STRME0 = true;
+   cfcr.F.CFEEE0 = true;
+
+   QADC.CFCR[0].U16  = cfcr.U16;
+
+}
+
+//=============================================================================
+// QADC_Push_Knock_Command
+//=============================================================================
+void QADC_Push_Knock_Command(bool in_gain_high)
+{
+
+   ADC_CMF_T       cmf;
+   uint8_t         acr_used = 0x00;
+
+
+   if (in_gain_high) 
+   {
+      // arc 2 for high gain
+      acr_used = 0x09;
+   }
+   else 
+   {
+      // acr 1 for low gain
+      acr_used = 0x08;
+   }
+
+
+     // Build conversion command using configuration
+   cmf.U32              =  0;
+   cmf.AC_CF.MESSAGE_TAG   =  QADC_MESSAGE_TAG_RESULT_FIFO_0;
+   cmf.AC_CF.EOQ           =  0;
+   cmf.AC_CF.PAUSE         =  1;
+   cmf.AC_CF.REP           =  1;
+   cmf.AC_CF.EB            =  false;
+   cmf.AC_CF.BN            =  ADC_CONVERTER_0;
+   cmf.AC_CF.CAL           =   false;
+   cmf.AC_CF.LST           =  QADC_SAMPLE_CYCLES_2;
+   cmf.AC_CF.TSR           =  false;
+   cmf.AC_CF.FMT           =  QADC_CHANNEL_CONVERSION_FORMAT_RIGHT_JUSTIFIED_SIGNED;
+   cmf.AC_CF.CHANNEL       =  QADC_CHANNEL_DAN_0;
+   cmf.AC_CF.REG_ADDRESS   =  acr_used;
+
+
+   // Push command into fifo
+   QADC.CFPR[0] = cmf.U32;
+
+
+   // Build conversion command using configuration
+   cmf.U32              =  0;
+   cmf.AC_CF.MESSAGE_TAG   =  QADC_MESSAGE_TAG_NULL;
+   cmf.AC_CF.EOQ           =  1;
+   cmf.AC_CF.PAUSE         =  0;
+   cmf.AC_CF.REP           =  0;
+   cmf.AC_CF.EB            =  false;
+   cmf.AC_CF.BN            =  ADC_CONVERTER_0;
+   cmf.AC_CF.CAL           =  false;
+   cmf.AC_CF.LST           =  QADC_SAMPLE_CYCLES_2;
+   cmf.AC_CF.TSR           =  false;
+   cmf.AC_CF.FMT           =  QADC_CHANNEL_CONVERSION_FORMAT_RIGHT_JUSTIFIED_SIGNED;
+   cmf.AC_CF.CHANNEL       =  QADC_CHANNEL_DAN_0;
+   cmf.AC_CF.REG_ADDRESS   =  acr_used;
+
+
+
+   // Push command into fifo
+   QADC.CFPR[0] = cmf.U32;
+
+   QADC.CFCR[0].F.SSE  = 1;
+
+
+}
+
+
+//=============================================================================
+// QADC_Knock_Stop_ADConvert
+//=============================================================================
+void QADC_Knock_Stop_ADConvert(void )
+{
+   // reset to disabled before returning to a running state.
+   QADC.CFCR[0].F.MODE = QADC_TRIGGER_MODE_DISABLED;
+   QADC.CFCR[0].F.AMODE0 = QADC_TRIGGER_MODE_DISABLED;
+
+   while ( QADC_COMMAND_FIFO_STATUS_IDLE != Extract_Bits(QADC.CFSR.U32, BIT_30 ,BIT_2 ) )
+   {
+      // Certify that CFS has changed to IDLE before setting CFINVn.
+   }
+
+   // ONLY write to this when mode is configured as disabled!!!
+   QADC.CFCR[0].F.CFINV = 1;    
+
+}
+
+//=============================================================================
+// QADC_Push_Knock_Command
+//=============================================================================
+//extern uint8_t KNOCK_VGA_Gain;
+void QADC_Knock_SIU_Init(void )
+{
+   QADC.CFCR[0].U16  = QADC_CFCR_RESET.U16;
+   QADC.IDCR[0].U16 = 0x03;  
+   QADC.CFTCR[0].U16 = (uint16_t)0;
+
+   QADC_Knock_ADConvert();
+
+}
 //=============================================================================
 // QADC_Analog_Get_Value
 //=============================================================================

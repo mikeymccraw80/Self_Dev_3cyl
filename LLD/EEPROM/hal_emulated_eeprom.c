@@ -45,6 +45,7 @@ uint8_t                   No_active_page_flg=0;
 EEPROM_State_T            Present_EEPROM_State = EEPROM_NULL;
 uint16_t                  High_sequence_No_EEP_NVM=0;
 uint32_t                  High_sequence_No_EEP_NVRAM=0;
+bool                      EEP_NVM_Fault=0;
 
 
 
@@ -948,7 +949,7 @@ void EEPROM_Restore_Vehicle_NVRAM_Block(HWIO_Reset_Status_T status_poweron)
       {
          No_active_page_flg = 1;
       }
-
+      EEP_NVM_Fault = true;
    }
    else if(op_return == EEPROM_ACTIVE_PAGE_FOUND)
    {
@@ -968,7 +969,7 @@ void EEPROM_Restore_Vehicle_NVRAM_Block(HWIO_Reset_Status_T status_poweron)
          }
          Leave_Critical_Section( context );
          EEPROM_Set_Mirror_RAM_KKSUM_Checksum((uint32_t*) nvram_start_addr,pf_kksum);
-
+        EEP_NVM_Fault = true;
       }
       else if((1 == status_poweron.Power_On_Reset) && (pf_kksum == df_kksum))
       {
@@ -979,6 +980,7 @@ void EEPROM_Restore_Vehicle_NVRAM_Block(HWIO_Reset_Status_T status_poweron)
          {
             *nvram_start_addr++ = *src++;
          }
+	  EEP_NVM_Fault = false;
 
       }
       else if((pf_kksum == df_kksum)&&(0 == status_poweron.Power_On_Reset))
@@ -1000,6 +1002,7 @@ void EEPROM_Restore_Vehicle_NVRAM_Block(HWIO_Reset_Status_T status_poweron)
          else
          {
          }
+          EEP_NVM_Fault = false;	 
       }
 
    }

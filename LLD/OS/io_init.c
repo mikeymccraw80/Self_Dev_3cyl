@@ -165,8 +165,9 @@ void InitializeHardwareRegisters(void)
 	QADC_Initialize_Device();
 	PIT_Initialize_Device();
 
-	//set up PIT time 20us
-	PIT_TIMER_Set_Value( PIT_CHANNEL_1, PIT_LOAD_VALUE_20US);
+	    //set up PIT time 5us
+       PIT_TIMER_Set_Value( PIT_CHANNEL_1, PIT_LOAD_VALUE_20US);
+	PIT_TIMER_Set_Value( PIT_CHANNEL_0, PIT_LOAD_VALUE_5US);
 
 	//enable QADC DMA time base scan
 	DMA_Enable_Request(DMA_CHANNEL_QADC_FISR4_RFDF_4);

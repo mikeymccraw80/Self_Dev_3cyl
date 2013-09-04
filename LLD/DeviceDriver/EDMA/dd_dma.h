@@ -46,8 +46,8 @@ typedef enum
    DMA_CHANNEL_DSPI_B_SR_RFDF       = 13, // @emem DSPIB Receive FIFO Drain Flag
    DMA_CHANNEL_DSPI_C_SR_TFFF       = 14, // @emem DSPIC Transmit FIFO Fill Flag
    DMA_CHANNEL_DSPI_C_SR_RFDF       = 15, // @emem DSPIC Receive FIFO Drain Flag
-   DMA_CHANNEL_DSPI_D_SR_TFFF       = 16, // @emem DSPID Transmit FIFO Fill Flag
-   DMA_CHANNEL_DSPI_D_SR_RFDF       = 17, // @emem DSPID Receive FIFO Drain Flag
+   DMA_CHANNEL_DECFIL_FILL_BUF       = 16, // @emem DSPID Transmit FIFO Fill Flag
+   DMA_CHANNEL_DECFIL_DRAIN_BUF       = 17, // @emem DSPID Receive FIFO Drain Flag
    DMA_CHANNEL_SCI_A_SR_TDRE        = 18, // @emem eSCIA combined DMA request of the Transmit Data Register Empty, Transmit Complete, and LIN Transmit Data Ready DMA requests
    DMA_CHANNEL_SCI_A_SR_TC          = 18, // @emem eSCIA combined DMA request of the Transmit Data Register Empty, Transmit Complete, and LIN Transmit Data Ready DMA requests
    DMA_CHANNEL_SCI_A_SR_TXRDY       = 18, // @emem eSCIA combined DMA request of the Transmit Data Register Empty, Transmit Complete, and LIN Transmit Data Ready DMA requests

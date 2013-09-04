@@ -4,13 +4,48 @@
 
 #include "dd_dma.h"
 #include "io_config_qadc.h"
+#include "io_config_knock.h"
 #include "dd_qadc_interface.h"
+#include "dd_dfilter_interface.h"
 #include "dd_dspi_interface.h"
 
 //=============================================================================
 // Initialization Constant for DMA Group Priority
 //=============================================================================
 
+//=============================================================================
+// DMA_QADC_CFFF_0
+//=============================================================================
+#define DMA_QADC_CFFF_0_Source_Address  (uint32_t)&QADC_KNOCK_ADC0
+#define DMA_QADC_CFFF_0_Dest_Address   (uint32_t)&(QADC.CFPR[0])
+#define DMA_QADC_CFFF_0_SIZE ( sizeof(QADC_KNOCK_ADC0)/sizeof(uint32_t) )
+#define DMA_QADC_CFFF_0_Slast -( DMA_QADC_CFFF_0_SIZE*sizeof(uint32_t) )
+#define DMA_QADC_CFFF_0_Dlast 0
+
+extern DMA_Second_32Bit_T DMA_QADC_CFFF_0_Second_32Bit;
+
+extern DMA_Third_32Bit_T DMA_QADC_CFFF_0_Third_32Bit;
+
+extern DMA_Sixth_32Bit_T DMA_QADC_CFFF_0_Sixth_32Bit;
+
+extern DMA_Eighth_32Bit_T DMA_QADC_CFFF_0_Eighth_32Bit;
+
+//=============================================================================
+// DMA_QADC_RFDF_0
+//=============================================================================
+#define DMA_QADC_RFDF_0_Source_Address  (uint32_t)&(QADC.RFPR[0].U16[1])
+#define DMA_QADC_RFDF_0_Dest_Address     (uint32_t)&DEC_FILT_A_Result_Buffer_A
+#define DMA_QADC_RFDF_0_SIZE     DEC_FILT_A_DMA_RESULT_BUFF_SIZE //( sizeof(DEC_FILT_A_Result_Buffer_A)/sizeof(int16_t) )
+#define DMA_QADC_RFDF_0_Slast   0
+#define DMA_QADC_RFDF_0_Dlast   -( DMA_QADC_RFDF_0_SIZE*sizeof(uint16_t) )
+
+extern DMA_Second_32Bit_T DMA_QADC_RFDF_0_Second_32Bit;
+
+extern DMA_Third_32Bit_T DMA_QADC_RFDF_0_Third_32Bit;
+
+extern DMA_Sixth_32Bit_T DMA_QADC_RFDF_0_Sixth_32Bit;
+
+extern DMA_Eighth_32Bit_T DMA_QADC_RFDF_0_Eighth_32Bit ;
 //=============================================================================
 // DMA_QADC_CFFF_4
 //=============================================================================
@@ -70,7 +105,7 @@ extern DMA_Eighth_32Bit_T DMA_DSPIB_SR_TFFF_Eighth_32Bit ;
 #define DMA_DSPIB_SR_RFDF_Dest_Address   (uint32_t) DSPI_SPI_Port_Rxd_B
 #define DMA_DSPIB_SR_RFDF_SIZE ( sizeof(DSPI_SPI_Port_Rxd_B)/sizeof(uint32_t) )
 #define DMA_DSPIB_SR_RFDF_Slast   0
-#define DMA_DSPIB_SR_RFDF_Dlast  -(DMA_DSPIB_SR_RFDF_SIZE*2)
+#define DMA_DSPIB_SR_RFDF_Dlast  -(DMA_DSPIB_SR_RFDF_SIZE*sizeof(uint16_t) )
 
 extern DMA_Second_32Bit_T DMA_DSPIB_SR_RFDF_Second_32Bit;
 
@@ -80,5 +115,71 @@ extern DMA_Sixth_32Bit_T DMA_DSPIB_SR_RFDF_Sixth_32Bit;
 
 extern DMA_Eighth_32Bit_T DMA_DSPIB_SR_RFDF_Eighth_32Bit;
 
+//=============================================================================
+//  DMA_DECFIL_FILL_BUF_A_LowPass
+//=============================================================================
+#define DMA_DECFIL_FILL_BUFA_LowPass_Source_Address  (uint32_t)&DEC_FILT_A_Result_Buffer_A[DEC_FILT_A_DMA_PREFILL_SIZE]
+#define DMA_DECFIL_FILL_BUFA_LowPass_Dest_Address     (uint32_t)&(DEC_FILTER_A.IB)+2
+#define DMA_DECFIL_FILL_BUFA_LowPass_SIZE     ( sizeof(DEC_FILT_A_Result_Buffer_A) -DEC_FILT_A_DMA_PREFILL_SIZE) 
+#define DMA_DECFIL_FILL_BUFA_LowPass_Slast   0//-(DMA_DECFIL_FILL_BUFA_LowPass_SIZE*sizeof(uint16_t) )
+#define DMA_DECFIL_FILL_BUFA_LowPass_Dlast   0
 
+extern DMA_Second_32Bit_T DMA_DECFIL_FILL_BUFA_LowPass_Second_32Bit;
+
+extern DMA_Third_32Bit_T DMA_DECFIL_FILL_BUFA_LowPass_Third_32Bit;
+
+extern DMA_Sixth_32Bit_T DMA_DECFIL_FILL_BUFA_LowPass_Sixth_32Bit;
+
+extern DMA_Eighth_32Bit_T DMA_DECFIL_FILL_BUFA_LowPass_Eighth_32Bit ;
+
+//=============================================================================
+//  DMA_DECFIL_FILL_BUF_A_LowPass
+//=============================================================================
+#define DMA_DECFIL_DRAIN_BUFA_LowPass_Source_Address  (uint32_t)&(DEC_FILTER_A.OB) +2
+#define DMA_DECFIL_DRAIN_BUFA_LowPass_Dest_Address      (uint32_t)&DEC_FILT_A_Result_Buffer_B[DEC_FILT_A_DMA_PREFILL_SIZE/4]
+#define DMA_DECFIL_DRAIN_BUFA_LowPass_SIZE     (( sizeof(DEC_FILT_A_Result_Buffer_A) -DEC_FILT_A_DMA_PREFILL_SIZE)/4 )
+#define DMA_DECFIL_DRAIN_BUFA_LowPass_Slast   0
+#define DMA_DECFIL_DRAIN_BUFA_LowPass_Dlast   0
+
+extern DMA_Second_32Bit_T DMA_DECFIL_DRAIN_BUFA_LowPass_Second_32Bit;
+
+extern DMA_Third_32Bit_T DMA_DECFIL_DRAIN_BUFA_LowPass_Third_32Bit;
+
+extern DMA_Sixth_32Bit_T DMA_DECFIL_DRAIN_BUFA_LowPass_Sixth_32Bit;
+
+extern DMA_Eighth_32Bit_T DMA_DECFIL_DRAIN_BUFA_LowPass_Eighth_32Bit ;
+
+//=============================================================================
+//  DMA_DECFIL_FILL_BUF_A_LowPass
+//=============================================================================
+#define DMA_DECFIL_FILL_BUFA_BandPass_Source_Address  (uint32_t)&DEC_FILT_A_Result_Buffer_B[DEC_FILT_A_DMA_PREFILL_SIZE+1]
+#define DMA_DECFIL_FILL_BUFA_BandPass_Dest_Address     (uint32_t)&(DEC_FILTER_A.IB) +2 
+#define DMA_DECFIL_FILL_BUFA_BandPass_SIZE     (uint32_t)(( sizeof(DEC_FILT_A_Result_Buffer_A) -DEC_FILT_A_DMA_PREFILL_SIZE)/4 )
+#define DMA_DECFIL_FILL_BUFA_BandPass_Slast   -(DMA_DECFIL_FILL_BUFA_BandPass_SIZE*sizeof(uint16_t) )
+#define DMA_DECFIL_FILL_BUFA_BandPass_Dlast   0
+
+extern DMA_Second_32Bit_T DMA_DECFIL_FILL_BUFA_BandPass_Second_32Bit;
+
+extern DMA_Third_32Bit_T DMA_DECFIL_FILL_BUFA_BandPass_Third_32Bit;
+
+extern DMA_Sixth_32Bit_T DMA_DECFIL_FILL_BUFA_BandPass_Sixth_32Bit;
+
+extern DMA_Eighth_32Bit_T DMA_DECFIL_FILL_BUFA_BandPass_Eighth_32Bit ;
+
+//=============================================================================
+//  DMA_DECFIL_FILL_BUF_A_LowPass
+//=============================================================================
+#define DMA_DECFIL_DRAIN_BUFA_BandPass_Source_Address  (uint32_t)&(DEC_FILTER_A.OB)+2
+#define DMA_DECFIL_DRAIN_BUFA_BandPass_Dest_Address       (uint32_t)&DEC_FILT_A_Result_Buffer_B[DEC_FILT_A_DMA_RESULT_BUFF_SIZE/4+DEC_FILT_A_DMA_PREFILL_SIZE+1]
+#define DMA_DECFIL_DRAIN_BUFA_BandPass_SIZE     (uint32_t)(( sizeof(DEC_FILT_A_Result_Buffer_A) -DEC_FILT_A_DMA_PREFILL_SIZE)/4 )
+#define DMA_DECFIL_DRAIN_BUFA_BandPass_Slast   0
+#define DMA_DECFIL_DRAIN_BUFA_BandPass_Dlast   0
+
+extern DMA_Second_32Bit_T DMA_DECFIL_DRAIN_BUFA_BandPass_Second_32Bit;
+
+extern DMA_Third_32Bit_T DMA_DECFIL_DRAIN_BUFA_BandPass_Third_32Bit;
+
+extern DMA_Sixth_32Bit_T DMA_DECFIL_DRAIN_BUFA_BandPass_Sixth_32Bit;
+
+extern DMA_Eighth_32Bit_T DMA_DECFIL_DRAIN_BUFA_BandPass_Eighth_32Bit ;
 #endif

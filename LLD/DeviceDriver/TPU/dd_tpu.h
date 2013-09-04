@@ -741,9 +741,9 @@ typedef struct DESFIE_GLOBAL_RAM_Tag
 //#ifndef TPU_A_CHANNEL_29_INIT_SDM_SIZE
 //#define TPU_A_CHANNEL_29_INIT_SDM_SIZE    0
 //#endif
-#ifndef TPU_A_CHANNEL_30_INIT_SDM_SIZE
-#define TPU_A_CHANNEL_30_INIT_SDM_SIZE    0
-#endif
+//#ifndef TPU_A_CHANNEL_30_INIT_SDM_SIZE
+//#define TPU_A_CHANNEL_30_INIT_SDM_SIZE    0
+//#endif
 #ifndef TPU_A_CHANNEL_31_INIT_SDM_SIZE
 #define TPU_A_CHANNEL_31_INIT_SDM_SIZE    0
 #endif

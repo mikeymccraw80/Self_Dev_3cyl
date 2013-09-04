@@ -149,6 +149,7 @@ SUBDIRS += LLD/DeviceDriver/DSPI
 SUBDIRS += LLD/DeviceDriver/CAN
 SUBDIRS += LLD/DeviceDriver/TPU
 SUBDIRS += LLD/DeviceDriver/STM
+SUBDIRS += LLD/DeviceDriver/DFILTER
 SUBDIRS += LLD/VSEP
 SUBDIRS += LLD/VSEP/DeviceDriver
 SUBDIRS += LLD/VSEP/SPI_Scheduler
@@ -160,6 +161,7 @@ SUBDIRS += LLD/TPU/MCD5412
 SUBDIRS += LLD/TPU/MCD5417
 SUBDIRS += LLD/TPU/MCD5411
 SUBDIRS += LLD/TPU/MCD5401
+SUBDIRS += LLD/TPU/MCD5406
 SUBDIRS += LLD/TPU/uCode
 SUBDIRS += LLD/Complex_IO/Crank
 SUBDIRS += LLD/Complex_IO/Spark
@@ -167,6 +169,7 @@ SUBDIRS += LLD/Complex_IO/PFI
 SUBDIRS += LLD/Complex_IO/CXIO
 SUBDIRS += LLD/Complex_IO/CAM
 SUBDIRS += LLD/Complex_IO/IGN
+SUBDIRS += LLD/Complex_IO/KNOCK
 SUBDIRS += LLD/Complex_IO/Power
 SUBDIRS += LLD/OS
 SUBDIRS += LLD/SOH
@@ -183,6 +186,7 @@ SUBDIRS += LLD/HWDiag/ESTD
 SUBDIRS += LLD/HWDiag/EOSD
 SUBDIRS += LLD/HWDiag/PRGD
 SUBDIRS += LLD/HWDiag/EPSD
+SUBDIRS += knock
 SUBDIRS += LLD/EMS
 endif
 
@@ -215,6 +219,7 @@ INCDIRS += LLD/DeviceDriver/DSPI
 INCDIRS += LLD/DeviceDriver/CAN
 INCDIRS += LLD/DeviceDriver/TPU
 INCDIRS += LLD/DeviceDriver/STM
+INCDIRS += LLD/DeviceDriver/DFILTER
 INCDIRS += LLD/VSEP/SPI_Scheduler
 INCDIRS += LLD/VSEP/DeviceDriver
 INCDIRS += LLD/VSEP/Configuration
@@ -225,6 +230,7 @@ INCDIRS += LLD/TPU/MCD5412
 INCDIRS += LLD/TPU/MCD5417
 INCDIRS += LLD/TPU/MCD5411
 INCDIRS += LLD/TPU/MCD5401
+INCDIRS += LLD/TPU/MCD5406
 INCDIRS += LLD/TPU/uCode
 INCDIRS += LLD/Complex_IO/Crank
 INCDIRS += LLD/Complex_IO/Spark
@@ -232,6 +238,7 @@ INCDIRS += LLD/Complex_IO/PFI
 INCDIRS += LLD/Complex_IO/CXIO
 INCDIRS += LLD/Complex_IO/CAM
 INCDIRS += LLD/Complex_IO/IGN
+INCDIRS += LLD/Complex_IO/KNOCK
 INCDIRS += LLD/Complex_IO/Power
 INCDIRS += LLD/OS
 INCDIRS += LLD/HAL
@@ -250,6 +257,7 @@ INCDIRS += LLD/HWDiag/PRGD
 INCDIRS += LLD/HWDiag/EPSD
 INCDIRS += LLD/EMS
 INCDIRS += LLD/LUX_Library
+INCDIRS += knock
 
 # ifneq ($(TARGET),INTEGRATION)
 INCDIRS += HLS
@@ -319,7 +327,7 @@ export CC_DEPENDS = $(COMPILER) $(INCLUDE_DIR) $(DEPENDS_OPTION)
 # Section 5.3
 ###############################################################################
 ASMDEBUG=
-    export ASM_OPT= -g
+    export ASM_OPT= -g $(PPC_DIAB_TARGET)
 export ASM= $(COMP_DIR)\$(ASSEMBLER)
 
 ###############################################################################

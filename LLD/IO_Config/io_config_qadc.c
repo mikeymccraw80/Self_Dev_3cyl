@@ -165,6 +165,25 @@ const ADC_CCMF_T  QADC_CALIBRATION_ADC1_REF25[ADC_CONVERTER_MAX] =
 };
 
 
+
+const ADC_CCMF_T  QADC_KNOCK_ADC0=
+{
+
+    false,    //EOQ      
+   0,    //PAUSE 
+   0,    // REP     
+   0,    //EB   
+   ADC_CONVERTER_0,    //BN    
+   false,   // CAL  
+   QADC_FIFO_0,   //MESSAGE_TAG 
+   QADC_SAMPLE_CYCLES_2,   //LST        
+   0,   //TSR       
+   QADC_CHANNEL_CONVERSION_FORMAT_RIGHT_JUSTIFIED_UNSIGNED,   //FMT         
+   QADC_CHANNEL_DAN_0,    // CHANNEL 
+   0
+   
+};
+
 const ADC_CCMF_T  QADC_CMD_Timebase[AD_ANALOG_MAX_SIGNAL_NAMES]=
 {
 

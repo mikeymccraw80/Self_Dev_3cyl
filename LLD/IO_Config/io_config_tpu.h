@@ -109,6 +109,13 @@ extern const TPU_CHANNEL_Configuration_T   TPU_CONFIG_IC_FI[FEI_INDEX_MAX];
 //extern const TPU_CHANNEL_Configuration_T   TPU_CONFIG_IC_ENSFI;
 #define TPU_A_CHANNEL_29_INIT_SDM_SIZE   FIE_SPRAM_FRAME_SIZE
 
+//TPUA 30 - wingate
+#define RQOME_TPU_INDEX  TPU_INDEX_0
+
+#define TPU_A_CHANNEL_30_INIT_SDM_SIZE   RQOME_SPRAM_FRAME_SIZE
+
+extern const TPU_CHANNEL_Configuration_T   WINGATE_RQOME;
+
 //=============================================================================
 // /------------------------------------------------------------------------
 // | External Constants

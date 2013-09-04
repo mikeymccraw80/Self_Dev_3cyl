@@ -62,7 +62,7 @@ extern const MCD5408_Channel_Init_T  EPPWMT_INIT;
 #define PFI_BOUNDARY_EVENT                   CRANK_EVENT_ID_USER3
 #define TDC_EVENT                            CRANK_EVENT_ID_USER4
 #define SIX_X_EVENT                          CRANK_EVENT_ID_USER7
-#define KNOCK_CYLINDER_EVENT                 CRANK_EVENT_ID_USER9
+#define KNOCK_CYLINDER_EVENT                 CRANK_EVENT_ID_USER14
 #define PFI_CYLINDER_EVENT                   CRANK_EVENT_ID_USER10
 #define SPARK_CYLINDER_EVENT                 CRANK_EVENT_ID_USER11
 #define VCP_CYLINDER_EVENT                   CRANK_EVENT_ID_USER12

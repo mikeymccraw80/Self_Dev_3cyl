@@ -45,7 +45,7 @@ extern void DMA_Clear_Request(DMA_Channel_T  dma_channel);
 //=============================================================================
 extern void DMA_Set_Channel_Transfer_Count(
    DMA_Channel_T           channel,
-   uint8_t                     elements_number_of    );
+   uint16_t                     elements_number_of    );
 //=============================================================================
 // DMA_Set_Channel_Source_Address
 //=============================================================================
@@ -64,6 +64,16 @@ extern void DMA_Set_Channel_Destination_Address(
 // DMA_Get_Channel_Running_Status
 //=============================================================================
 extern bool DMA_Get_Channel_Running_Status(DMA_Channel_T  dma_channel);
+
+//=============================================================================
+// DMA_Get_Channel_Biter
+//=============================================================================
+uint16_t  DMA_Get_Channel_Biter(DMA_Channel_T  dma_channel);
+
+//=============================================================================
+// DMA_Get_Channel_Citer
+//=============================================================================
+uint16_t  DMA_Get_Channel_Citer(DMA_Channel_T  dma_channel);
 
 //=============================================================================
 // DMA_clear_request

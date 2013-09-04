@@ -38,5 +38,10 @@ extern void SIU_GPIO_DISCRETE_Toggle_State(SIU_GPIO_Channel_T channel );
 //=============================================================================
  void SIU_GPIO_Output_Confige(SIU_GPIO_Channel_T channel, bool enable );
 
+//=============================================================================
+// SIU_Knock_Connect_Pin_To_ETPU
+//=============================================================================
+ void SIU_Knock_Connect_Pin_To_ETPU(bool state, SIU_GPIO_Channel_T siu_channel);
+
 #endif // DD_SIU_INTERFACE_H
 

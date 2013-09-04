@@ -525,6 +525,7 @@ extern uint8_t SsCatDwnM;
 extern uint8_t MxGrdLsaFit_b;
 extern uint8_t Gr;
 extern uint8_t Maf_b;
+extern  unsigned short       Pmap;
 
 extern bool knock_flag_a;
 extern bool knock_flag_b;

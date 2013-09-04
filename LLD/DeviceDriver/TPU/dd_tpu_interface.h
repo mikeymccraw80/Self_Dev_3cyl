@@ -54,8 +54,7 @@ void TPU_INTERRUPT_Set_Enable(
 //=============================================================================
 bool TPU_INTERRUPT_Get_Enable(
   TPU_Index_T index,
-  TPU_CHANNEL_Configuration_T   configure,
-   bool                 in_enable );
+  TPU_CHANNEL_Configuration_T   configure);
 
 //=============================================================================
 // TPU_INTERRUPT_Clear_Pending
@@ -82,7 +81,18 @@ uint32_t TPU_TIMER_Get_Base_Frequency(
 // TPU_TIMER_Get_Size
 //=============================================================================
 Timer_Size_T TPU_TIMER_Get_Size(void );
-
+//=============================================================================
+// TPU_TIMER_Get_Value_Channel
+//=============================================================================
+uint32_t TPU_TIMER_Get_Value_Channel(
+      TPU_Index_T index,
+       TPU_CHANNEL_Configuration_T   configure);
+//=============================================================================
+// TPU_TIMER_Get_Value
+//=============================================================================
+uint32_t TPU_TIMER_Get_Value(
+      TPU_Index_T index,
+       TPU_Time_Base_T   tcr_type);
 
 
 #endif // DD_TPU_INTERFACE_H

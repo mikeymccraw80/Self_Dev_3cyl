@@ -620,13 +620,23 @@ bool TPU_Get_Channel_Status(
    return (TPU.Channel_Map[index].Channel_Control[channel].CCR.F.CPR > 0) ? true : false;
 }
 //=============================================================================
-// TPU_TIMER_Get_Value
+// TPU_TIMER_Get_Value_Channel
 //=============================================================================
-uint32_t TPU_TIMER_Get_Value(
+uint32_t TPU_TIMER_Get_Value_Channel(
       TPU_Index_T index,
        TPU_CHANNEL_Configuration_T   configure)
 {
    uint32_t tcr_type = configure.F.TPU_CHANNEL_CONFIGURATION_FUNCTION_MODE0;
+   return( TPU.Clock[index].TBR[tcr_type].U32);
+}
+
+//=============================================================================
+// TPU_TIMER_Get_Value
+//=============================================================================
+uint32_t TPU_TIMER_Get_Value(
+      TPU_Index_T index,
+       TPU_Time_Base_T   tcr_type)
+{
    return( TPU.Clock[index].TBR[tcr_type].U32);
 }
 
