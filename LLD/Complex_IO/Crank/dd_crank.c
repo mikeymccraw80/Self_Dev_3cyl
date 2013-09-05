@@ -1180,7 +1180,7 @@ uint32_t CRANK_Get_Parameter(
       break;
    case   CRANK_PARAMETER_TIMER_VALUE_RAW:
    	  counts_per_time = TPU_TIMER_Get_Base_Frequency( EPPWMT_TPU_INDEX, TPU_CONFIG_IC_EPPWMT);
-	  time = TPU_TIMER_Get_Value_Channel(TPU_CONFIG_IC_EPPWMT);
+	  time = TPU_TIMER_Get_Value_Channel( EPPWMT_TPU_INDEX, TPU_CONFIG_IC_EPPWMT);
 	  CRANK_Parameters.F.timer_value_raw = IO_PULSE_Convert_Counts_To_Time(counts_per_time, time,0,0);
       //CRANK_Parameters.F.timer_value_raw = IO_PULSE_Timer_Get_Value_Immediate( CRANK_Object->Init.Eppwmt, 0, 0 );
       break;
