@@ -49,7 +49,7 @@ void OS_Startup_Hook(void)
 void MngOSTK_1msTasks(void)
 {
 
-  HAL_OS_1ms_Task();
+//  HAL_OS_1ms_Task();
 }
 
 //=============================================================================
@@ -76,7 +76,7 @@ void MngOSTK_10msTasks(void)
     static uint16_t test_cnt_30ms;
 
     /* call hal layer callback functions */
-    HAL_OS_10ms_Task(); 
+//    HAL_OS_10ms_Task(); 
 
     /* call device driver layer functions */
     SWT_Service_WatchDog();

@@ -1180,7 +1180,7 @@ uint32_t CRANK_Get_Parameter(
       break;
    case   CRANK_PARAMETER_TIMER_VALUE_RAW:
    	  counts_per_time = TPU_TIMER_Get_Base_Frequency( EPPWMT_TPU_INDEX, TPU_CONFIG_IC_EPPWMT);
-	  time = TPU_TIMER_Get_Value(TPU_CONFIG_IC_EPPWMT);
+	  time = TPU_TIMER_Get_Value_Channel(TPU_CONFIG_IC_EPPWMT);
 	  CRANK_Parameters.F.timer_value_raw = IO_PULSE_Convert_Counts_To_Time(counts_per_time, time,0,0);
       //CRANK_Parameters.F.timer_value_raw = IO_PULSE_Timer_Get_Value_Immediate( CRANK_Object->Init.Eppwmt, 0, 0 );
       break;
@@ -1314,7 +1314,7 @@ void CRANK_EngineStall_PerioCheck(void)
       stall_time_out = CRANK_Get_Parameter( CRANK_PARAMETER_LO_RES_REFERENCE_PERIOD, 0, 0 ) / 2;
       edge_time  = CRANK_Get_Parameter(CRANK_PARAMETER_CURRENT_EDGE_TIME, 0, 0 );
       counts_per_time = TPU_TIMER_Get_Base_Frequency( EPPWMT_TPU_INDEX, TPU_CONFIG_IC_EPPWMT);
-      current_time = TPU_TIMER_Get_Value( EPPWMT_TPU_INDEX, TPU_CONFIG_IC_EPPWMT);
+      current_time = TPU_TIMER_Get_Value_Channel( EPPWMT_TPU_INDEX, TPU_CONFIG_IC_EPPWMT);
        current_time = IO_PULSE_Convert_Counts_To_Time(counts_per_time, current_time,0,0);
 
 	 if ( ( (current_time - edge_time) & UINT24_MAX ) > stall_time_out)  	
