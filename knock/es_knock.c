@@ -634,7 +634,7 @@ static void FilterIntegratorAverage( void )
 /*===========================================================*\
  * CalculateIntAveQ
 \*===========================================================*/
-void CalculateIntAveQ( void )
+static void CalculateIntAveQ( void )
 {
     if ( ( SubLimit( ( Throttle_Position_Value() ), EscOldTPS ) > K_DeltaTPSIncThreshold ) ||
          ( SubLimit( ( HAL_Eng_Get_Engine_Speed() ), EscOldRPM ) > K_DeltaRPMIncThreshold ) )

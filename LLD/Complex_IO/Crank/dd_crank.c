@@ -954,7 +954,7 @@ int32_t CRANK_Convert_Time_To_Angle(
 //
 // @end
 //=============================================================================
-uint32_t CRANK_Convert_Ref_Period_To_RPM( void )
+static uint32_t CRANK_Convert_Ref_Period_To_RPM( void )
 {
    uint32_t engine_speed=0;
    uint8_t tooth_per_lores;

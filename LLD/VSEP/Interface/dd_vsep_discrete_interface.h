@@ -49,10 +49,10 @@
 #define VSEP_DiscreteSetImmediate(in_configuration, value) \
 	VSEP_DISCRETE_Set_Immediate_State(in_configuration, value)
 	
-#define VSEP_DiscreteGet(in_configuration, value) \
+#define VSEP_DiscreteGet(in_configuration) \
 	VSEP_DISCRETE_Get_State(in_configuration)
 	
-#define VSEP_DiscreteGetImmediate(in_configuration, value) \
+#define VSEP_DiscreteGetImmediate(in_configuration) \
 	VSEP_DISCRETE_Get_Immediate_State(in_configuration)
 	
 #define VSEP_DiscreteToggle(in_configuration) \

@@ -37,6 +37,6 @@ uint16_t HAL_Diag_Get_L9958_HWDiag_Status(void)
 /*===========================================================================*\
  * File Revision History (top to bottom: first revision to last revision)
  *===========================================================================
-/*   110420   hzm   updated for StartStop Application
+ *   110420   hzm   updated for StartStop Application
  *
 \*===========================================================================*/

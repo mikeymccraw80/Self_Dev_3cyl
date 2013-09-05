@@ -75,7 +75,7 @@ void L9958_FAULT_Diagnose_Update(void)
         {
             fault_temp |= FAULT_Set_Occured_Thermal(fault_temp, true);
         }
-        FAULT_Set_Tested_Thermal(L9958_Fault_Log, true);
+        L9958_Fault_Log = FAULT_Set_Tested_Thermal(L9958_Fault_Log, true);
     }
 
     if (FAULT_Get_Supported_Open_Circuit(L9958_Fault_Log)) {
@@ -83,7 +83,7 @@ void L9958_FAULT_Diagnose_Update(void)
         {
             fault_temp |= FAULT_Set_Occured_Open_Circuit(fault_temp, true);
         }
-        FAULT_Set_Tested_Open_Circuit(L9958_Fault_Log, true);
+        L9958_Fault_Log = FAULT_Set_Tested_Open_Circuit(L9958_Fault_Log, true);
     }
 
     if (FAULT_Get_Supported_Voltage_Regulation(L9958_Fault_Log)) {
@@ -91,7 +91,7 @@ void L9958_FAULT_Diagnose_Update(void)
         {
             fault_temp |= FAULT_Set_Occured_Voltage_Regulation(fault_temp, true);
         }
-        FAULT_Set_Tested_Voltage_Regulation(L9958_Fault_Log, true);
+        L9958_Fault_Log = FAULT_Set_Tested_Voltage_Regulation(L9958_Fault_Log, true);
     }
 
     if (FAULT_Get_Supported_Short_To_Battery(L9958_Fault_Log)) {
@@ -99,7 +99,7 @@ void L9958_FAULT_Diagnose_Update(void)
         {
             fault_temp |= FAULT_Set_Occured_Short_To_Battery(fault_temp, true);
         }
-        FAULT_Set_Tested_Short_To_Battery(L9958_Fault_Log, true);
+       L9958_Fault_Log =  FAULT_Set_Tested_Short_To_Battery(L9958_Fault_Log, true);
     }
 
     if (FAULT_Get_Supported_Short_To_Ground(L9958_Fault_Log)) {
@@ -107,7 +107,7 @@ void L9958_FAULT_Diagnose_Update(void)
         {
             fault_temp |= FAULT_Set_Occured_Short_To_Ground(fault_temp, true);
         }
-        FAULT_Set_Tested_Short_To_Ground(L9958_Fault_Log, true);
+        L9958_Fault_Log = FAULT_Set_Tested_Short_To_Ground(L9958_Fault_Log, true);
     }
 
     diag_cnt ++;

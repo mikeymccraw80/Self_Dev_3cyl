@@ -225,7 +225,8 @@ void VSEP_DISCRETE_Set_State(IO_Configuration_T in_configuration, bool in_state)
 
     } else  {
         if( channel == VSEP_PCH_CHANNEL_SOHRSTEN_STAT ) {
-            VSEP_Msg_Set_SOHRSTEN_STAT( VSEP_SOH_Status_Rxd[ VSEP_SOH_STATUS_RXD_MESSAGE_STATUS ], in_state);
+            VSEP_SOH_Status_Rxd[ VSEP_SOH_STATUS_RXD_MESSAGE_STATUS ] = 
+                VSEP_Msg_Set_SOHRSTEN_STAT( VSEP_SOH_Status_Rxd[ VSEP_SOH_STATUS_RXD_MESSAGE_STATUS ], in_state);
         }
     }
 }
