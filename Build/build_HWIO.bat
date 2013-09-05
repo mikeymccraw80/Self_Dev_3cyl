@@ -7,6 +7,7 @@ echo .                                                                          
 echo +============================================================================+ >> build.log
 
 del obj_list.txt
+del ERROR.err
 
 rem The real thing
 set TARGET=HWIO
