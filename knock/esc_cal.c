@@ -32,27 +32,25 @@
  * Exported variables.
 \* ============================================================================ */
 
-
-/*
-*| esc_cal. {
-*/
-
 /*  -------------------------------------------------  *\
  *  system initialisation
 \*  -------------------------------------------------  */
 const  bool                       K_ESC_Enable = true;
 /*
+*| esc_cal.{
 *|    K_ESC_Enable{
 *|       :is_calconst;
 *|       :units = "BOOLEAN";
 *|       :description = "enable ESC Detection";
 *|    }
+*| }
 */
 
 
 
 const Volt0to5Volts_W                     K_ADESC_Min_Threshold= FixDefConst( 0.1, Volt0to5Volts_W );
 /*
+*| esc_cal.{
 *|    K_ADESC_Min_Threshold
 *|    {
 *|       :is_calconst;
@@ -60,10 +58,12 @@ const Volt0to5Volts_W                     K_ADESC_Min_Threshold= FixDefConst( 0.
 *|       :units = "Volt";
 *|       :type = types.Volt0to5Volts_W;
 *|    }
+*| }
 */
 
 const Multiplier_0_to_2                     K_ADESC_Scl_Multi= FixDefConst( 1.0, Multiplier_0_to_2 ) ;
 /*
+*| esc_cal.{
 *|    K_ADESC_Scl_Multi
 *|    {
 *|       :is_calconst;
@@ -71,6 +71,7 @@ const Multiplier_0_to_2                     K_ADESC_Scl_Multi= FixDefConst( 1.0,
 *|       :units = "scl";
 *|       :type = types.Multiplier_0_to_2;
 *|    }
+*| }
 */
 
 /*--------------------------------*\
@@ -97,13 +98,15 @@ const T_MILLISECONDSb FSTPWD[RPM_400to6400by400_Steps] =
     FixDefConst( 0.847, T_MILLISECONDSb )       /* RPM_6400 */
 } ;
 /*
+*| esc_cal.{
 *|    FSTPWD {
 *|       :is_calconst;
-*|       :elements:type = types.T_MILLISECONDSb;
+*|       :elements:type = types.t_millisecondsb;
 *|       :units = "Micro Seconds";
 *|       :description = "Knock window length from the start point for a given RPM";
 *|       :annotation = types.RPM_400to6400by400_Steps;
 *|    }
+*| }
 */
 
 
@@ -201,18 +204,20 @@ const CrankAngleInDeg_W FSTRTWD[kPa_60to100by10_Steps][RPM_400to6400by400_Steps]
     }
 } ;
 /*
+*| esc_cal.{
 *|    FSTRTWD {
 *|       :is_calconst;
-*|       :elements:elements:type = types.T_CRANK_ANGLEa;
+*|       :elements:elements:type = types.t_crank_anglea;
 *|       :units = "Degrees";
 *|       :description = "Knock window START angle : "
-*|"the values are defined from -45Deg (BTDC) to 24Deg (ATDC). "
-*|"A small value corresponds to early start, "
-*|"a large value corresponds to a late start. "
-*|"\n WARNING !!! Do not exceed 24 Deg ATDC";
+*| "the values are defined from -45Deg (BTDC) to 24Deg (ATDC). "
+*| "A small value corresponds to early start, "
+*| "a large value corresponds to a late start. "
+*| "\n WARNING !!! Do not exceed 24 Deg ATDC";
 *|       :elements:annotation = types.RPM_400to6400by400_Steps;
 *|       :annotation = types.kPa_60to100by10_Steps;
 *|    }
+*| }
 */
 
 
@@ -223,12 +228,14 @@ const CrankAngleInDeg_W FSTRTWD[kPa_60to100by10_Steps][RPM_400to6400by400_Steps]
 
 const Seconds_Low                   K_ESCEnableRunTime = FixDefConst( 3, Seconds_Low ) ;
 /*
+*| esc_cal.{
 *|    K_ESCEnableRunTime {
 *|       :is_calconst;
 *|       :type = types.Seconds_Low;
 *|       :units = "Seconds";
 *|       :description = "Minimum engine run time to enable knock control";
 *|    }
+*| }
 */
 
 
@@ -236,6 +243,7 @@ const RPM_W                         K_ESCEnableRPM = FixDefConst( 700.0, RPM_W )
 /*  RPM enable threshold for knock logic */
 /*  N = E/25 RPM  */
 /*
+*| esc_cal.{
 *|    K_ESCEnableRPM
 *|    {
 *|       :is_calconst;
@@ -243,12 +251,14 @@ const RPM_W                         K_ESCEnableRPM = FixDefConst( 700.0, RPM_W )
 *|       :units = "RPM";
 *|       :type = types.RPM_W;
 *|    }
+*| }
 */
 
 const kPa_B                         K_ESCEnableMAP = FixDefConst( 39.837, kPa_B ) ;
 /*  MAP enable threshold for knock logic */
 /*  N = (E*2.71104) - 28.05502  */
 /*
+*| esc_cal.{
 *|    K_ESCEnableMAP
 *|    {
 *|       :is_calconst;
@@ -256,6 +266,7 @@ const kPa_B                         K_ESCEnableMAP = FixDefConst( 39.837, kPa_B 
 *|       :units = "kPa";
 *|       :type = types.kPa_B;
 *|    }
+*| }
 */
 
 /*  -------------------------------------------------  *\
@@ -274,6 +285,7 @@ const Percent_B K_PE_TPS_Load_Thres_2D[RPM_0to6400by800_Steps] =
     FixDefConst( 90.0, Percent_B )  /*--- RPM_6400 ---*/
 } ;
 /*
+*| esc_cal.{
 *|    K_PE_TPS_Load_Thres_2D {
 *|       :is_calconst;
 *|       :elements:type = types.Percent_B;
@@ -282,16 +294,19 @@ const Percent_B K_PE_TPS_Load_Thres_2D[RPM_0to6400by800_Steps] =
 *|          "Input RPM-Speed.";
 *|       :annotation= types.RPM_0to6400by800_Steps;
 *|    }
+*| }
 */
 
 const Percent_B                       K_Fuel_TPS_Hysteresis_For_PE = FixDefConst( 3.125, Percent_B ) ;
 /*
+*| esc_cal.{
 *|    K_Fuel_TPS_Hysteresis_For_PE {
 *|       :is_calconst;
 *|       :type = types.Percent_B;
 *|       :units = "Percent";
 *|       :description = "KTPSHYS: Throttle hysteresis for power enrichment.";
 *|    }
+*| }
 */
 
 const Every_4th_Loop_Sec_W   F_PE_Delay_Time_2D[RPM_0to6400by800_Steps] =
@@ -307,6 +322,7 @@ const Every_4th_Loop_Sec_W   F_PE_Delay_Time_2D[RPM_0to6400by800_Steps] =
     FixDefConst( 3.0, Every_4th_Loop_Sec_W )       /*--- RPM_6400 ---*/
 } ;
 /*
+*| esc_cal.{
 *|    F_PE_Delay_Time_2D {
 *|       :is_calconst;
 *|       :elements:type = types.Every_4th_Loop_Sec_W;
@@ -314,6 +330,7 @@ const Every_4th_Loop_Sec_W   F_PE_Delay_Time_2D[RPM_0to6400by800_Steps] =
 *|       :description = "Fxx: Power Enrichment Delay Timer. Input RPM-Speed.";
 *|       :annotation= types.RPM_0to6400by800_Steps;
 *|    }
+*| }
 */
 
 const Every_4th_Loop_Sec_W   F_EveryPE_DelayTime_2D[RPM_0to6400by800_Steps] =
@@ -329,6 +346,7 @@ const Every_4th_Loop_Sec_W   F_EveryPE_DelayTime_2D[RPM_0to6400by800_Steps] =
     FixDefConst( 0.0, Every_4th_Loop_Sec_W )        /*--- RPM_6400 ---*/ 
 } ;
 /*
+*| esc_cal.{
 *|    F_EveryPE_DelayTime_2D {
 *|       :is_calconst;
 *|       :elements:type = types.Every_4th_Loop_Sec_W;
@@ -336,6 +354,7 @@ const Every_4th_Loop_Sec_W   F_EveryPE_DelayTime_2D[RPM_0to6400by800_Steps] =
 *|       :description = "Fxx: Power Enrichment Delay Timer from TPS above threshold to PE enabled. Input RPM-Speed.";
 *|       :annotation= types.RPM_0to6400by800_Steps;
 *|    }
+*| }
 */
 /*  -------------------------------------------------  *\
  *  ESC average calculation                            *
@@ -345,6 +364,7 @@ const Filter_Q_W                    K_IntegratorFilterUp = FixDefConst( 0.60, Fi
 /*  Integrator filter coefficient for increasing throttle/RPM */
 /*  N = E*65536  */
 /*
+*| esc_cal.{
 *|    K_IntegratorFilterUp
 *|    {
 *|       :is_calconst;
@@ -352,12 +372,14 @@ const Filter_Q_W                    K_IntegratorFilterUp = FixDefConst( 0.60, Fi
 *|       :units = "";
 *|       :type = types.Filter_Q_W;
 *|    }
+*| }
 */
 
 const Filter_Q_W                    K_IntegratorFilterDown = FixDefConst( 0.32, Filter_Q_W ) ;
 /*  Integrator filter coefficient for decreasing throttle/RPM */
 /*  N = E*65536  */
 /*
+*| esc_cal.{
 *|    K_IntegratorFilterDown
 *|    {
 *|       :is_calconst;
@@ -365,12 +387,14 @@ const Filter_Q_W                    K_IntegratorFilterDown = FixDefConst( 0.32, 
 *|       :units = "";
 *|       :type = types.Filter_Q_W;
 *|    }
+*| }
 */
 
 const Filter_Q_W                    K_IntegratorFilterSteadyState = FixDefConst( 0.10, Filter_Q_W ) ;
 /*  Integrator filter coefficient for steady state throttle/RPM */
 /*  N = E*65536  */
 /*
+*| esc_cal.{
 *|    K_IntegratorFilterSteadyState
 *|    {
 *|       :is_calconst;
@@ -378,12 +402,14 @@ const Filter_Q_W                    K_IntegratorFilterSteadyState = FixDefConst(
 *|       :units = "";
 *|       :type = types.Filter_Q_W;
 *|    }
+*| }
 */
 
 const Filter_Q_W                    K_IntegratorFilterKnockMult = FixDefConst( 0.10, Filter_Q_W ) ;
 /*  Integrator filter multiplier if knock is present */
 /*  N = E*65536  */
 /*
+*| esc_cal.{
 *|    K_IntegratorFilterKnockMult
 *|    {
 *|       :is_calconst;
@@ -391,12 +417,14 @@ const Filter_Q_W                    K_IntegratorFilterKnockMult = FixDefConst( 0
 *|       :units = "";
 *|       :type = types.Filter_Q_W;
 *|    }
+*| }
 */
 
 const RPM_W                         K_DeltaRPMIncThreshold = FixDefConst( 100.0, RPM_W ) ;
 /*  Engine speed increasing delta threshold for IntAveQ determination */
 /*  N = E/12.5 RPM  */
 /*
+*| esc_cal.{
 *|    K_DeltaRPMIncThreshold
 *|    {
 *|       :is_calconst;
@@ -404,12 +432,14 @@ const RPM_W                         K_DeltaRPMIncThreshold = FixDefConst( 100.0,
 *|       :units = "RPM";
 *|       :type = types.RPM_W;
 *|    }
+*| }
 */
 
 const RPM_W                         K_DeltaRPMDecThreshold = FixDefConst( 100.0, RPM_W ) ;
 /*  Engine speed decreasing delta threshold for IntAveQ determination */
 /*  N = E/12.5 RPM  */
 /*
+*| esc_cal.{
 *|    K_DeltaRPMDecThreshold
 *|    {
 *|       :is_calconst;
@@ -417,12 +447,14 @@ const RPM_W                         K_DeltaRPMDecThreshold = FixDefConst( 100.0,
 *|       :units = "RPM";
 *|       :type = types.RPM_W;
 *|    }
+*| }
 */
 
 const TPS_B                         K_DeltaTPSIncThreshold = FixDefConst( 10.0, TPS_B ) ;
 /*  Throttle increasing delta threshold for IntAveQ determination */
 /*  N = E*256/100 %  */
 /*
+*| esc_cal.{
 *|    K_DeltaTPSIncThreshold
 *|    {
 *|       :is_calconst;
@@ -430,12 +462,14 @@ const TPS_B                         K_DeltaTPSIncThreshold = FixDefConst( 10.0, 
 *|       :units = "%";
 *|       :type = types.TPS_B;
 *|    }
+*| }
 */
 
 const TPS_B                         K_DeltaTPSDecThreshold = FixDefConst( 10.0, TPS_B ) ;
 /*  Throttle decreasing delta threshold for IntAveQ determination */
 /*  N = E*256/100 % */
 /*
+*| esc_cal.{
 *|    K_DeltaTPSDecThreshold
 *|    {
 *|       :is_calconst;
@@ -443,12 +477,14 @@ const TPS_B                         K_DeltaTPSDecThreshold = FixDefConst( 10.0, 
 *|       :units = "%";
 *|       :type = types.TPS_B;
 *|    }
+*| }
 */
 
 const Volt0to5Volts_B               K_ESCAverageInit = FixDefConst( 1.914, Volt0to5Volts_B ) ;
 /*  ESC Average initialisation value */
 /*  N = E*256/5.0 V */
 /*
+*| esc_cal.{
 *|    K_ESCAverageInit
 *|    {
 *|       :is_calconst;
@@ -456,12 +492,14 @@ const Volt0to5Volts_B               K_ESCAverageInit = FixDefConst( 1.914, Volt0
 *|       :units = "V";
 *|       :type = types.Volt0to5Volts_B;
 *|    }
+*| }
 */
 
 const Volt0to5Volts_B               K_ESCAverageMin = FixDefConst( 0.17578125, Volt0to5Volts_B ) ;
 /*  ESC Average minimum value */
 /*  N = E*256/5.0 V */
 /*
+*| esc_cal.{
 *|    K_ESCAverageMin
 *|    {
 *|       :is_calconst;
@@ -469,6 +507,7 @@ const Volt0to5Volts_B               K_ESCAverageMin = FixDefConst( 0.17578125, V
 *|       :units = "V";
 *|       :type = types.Volt0to5Volts_B;
 *|    }
+*| }
 */
 
 /*  -------------------------------------------------  *\
@@ -479,6 +518,7 @@ const Volt0to5Volts_W               K_ESCAverageUppThreshold = FixDefConst( 5.0,
 /*  ESC Average upper threshold to decrease the amplifier gain */
 /*  N = E*65536/5 V */
 /*
+*| esc_cal.{
 *|    K_ESCAverageUppThreshold
 *|    {
 *|       :is_calconst;
@@ -486,12 +526,14 @@ const Volt0to5Volts_W               K_ESCAverageUppThreshold = FixDefConst( 5.0,
 *|       :units = "V";
 *|       :type = types.Volt0to5Volts_W;
 *|    }
+*| }
 */
 
 const Volt0to5Volts_W               K_ESCAverageLowThreshold = FixDefConst( 5.0, Volt0to5Volts_W ) ;
 /*  ESC Average lower threshold to increase the amplifier gain */
 /*  N = E*65536/5 V */
 /*
+*| esc_cal.{
 *|    K_ESCAverageLowThreshold
 *|    {
 *|       :is_calconst;
@@ -499,6 +541,7 @@ const Volt0to5Volts_W               K_ESCAverageLowThreshold = FixDefConst( 5.0,
 *|       :units = "V";
 *|       :type = types.Volt0to5Volts_W;
 *|    }
+*| }
 */
 
 /*  -------------------------------------------------  *\
@@ -509,6 +552,7 @@ const Filter_Q_W                    K_MADFilterCoefficient = FixDefConst( 0.01, 
 /*  MAD filter coefficient */
 /*  N = E*65536  */
 /*
+*| esc_cal.{
 *|    K_MADFilterCoefficient
 *|    {
 *|       :is_calconst;
@@ -516,12 +560,14 @@ const Filter_Q_W                    K_MADFilterCoefficient = FixDefConst( 0.01, 
 *|       :units = "";
 *|       :type = types.Filter_Q_W;
 *|    }
+*| }
 */
 
 const Volt0to5Volts_W               K_MADMax = FixDefConst( 0.15, Volt0to5Volts_W ) ;
 /*  Maximum MAD */
 /*  N = E*65536/5.0 V  */
 /*
+*| esc_cal.{
 *|    K_MADMax
 *|    {
 *|       :is_calconst;
@@ -529,12 +575,14 @@ const Volt0to5Volts_W               K_MADMax = FixDefConst( 0.15, Volt0to5Volts_
 *|       :units = "V";
 *|       :type = types.Volt0to5Volts_W;
 *|    }
+*| }
 */
 
 const Volt0to5Volts_W               K_MADMin = FixDefConst( 0.1, Volt0to5Volts_W ) ;
 /*  Minimum MAD */
 /*  N = E*65536/5.0 V  */
 /*
+*| esc_cal.{
 *|    K_MADMin
 *|    {
 *|       :is_calconst;
@@ -542,12 +590,14 @@ const Volt0to5Volts_W               K_MADMin = FixDefConst( 0.1, Volt0to5Volts_W
 *|       :units = "V";
 *|       :type = types.Volt0to5Volts_W;
 *|    }
+*| }
 */
 
 const RPM_W                         K_MADRPM = FixDefConst( 700.0, RPM_W ) ;
 /*  RPM threshold to update MAD */
 /*  N = E/25 RPM  */
 /*
+*| esc_cal.{
 *|    K_MADRPM
 *|    {
 *|       :is_calconst;
@@ -555,12 +605,14 @@ const RPM_W                         K_MADRPM = FixDefConst( 700.0, RPM_W ) ;
 *|       :units = "RPM";
 *|       :type = types.RPM_W;
 *|    }
+*| }
 */
 
 const kPa_B                         K_MADMAP = FixDefConst( 19.919, kPa_B ) ;
 /*  MAP threshold to update MAD */
 /*  N = (E*2.71104) - 28.05502  */
 /*
+*| esc_cal.{
 *|    K_MADMAP
 *|    {
 *|       :is_calconst;
@@ -568,12 +620,14 @@ const kPa_B                         K_MADMAP = FixDefConst( 19.919, kPa_B ) ;
 *|       :units = "kPa";
 *|       :type = types.kPa_B;
 *|    }
+*| }
 */
 
 const RPM_W                         K_MADDeltaRPM = FixDefConst( 100, RPM_W ) ;
 /*  RPM change limit for MAD update */
 /*  N = E/12.5 RPM  */
 /*
+*| esc_cal.{
 *|    K_MADDeltaRPM
 *|    {
 *|       :is_calconst;
@@ -581,12 +635,14 @@ const RPM_W                         K_MADDeltaRPM = FixDefConst( 100, RPM_W ) ;
 *|       :units = "RPM";
 *|       :type = types.RPM_W;
 *|    }
+*| }
 */
 
 const TPS_B                         K_MADDeltaTPS = FixDefConst( 10.0, TPS_B ) ;
 /*  TPS change limit for MAD update */
 /*  N = E*256/100 %  */
 /*
+*| esc_cal.{
 *|    K_MADDeltaTPS
 *|    {
 *|       :is_calconst;
@@ -594,12 +650,14 @@ const TPS_B                         K_MADDeltaTPS = FixDefConst( 10.0, TPS_B ) ;
 *|       :units = "%";
 *|       :type = types.TPS_B;
 *|    }
+*| }
 */
 
 const kPa_Delta                     K_MADDeltaMAP = FixDefConst( 10.0, kPa_Delta ) ;
 /*  MAP change limit for MAD update */
 /*  N = (E*2.71104)  */
 /*
+*| esc_cal.{
 *|    K_MADDeltaMAP
 *|    {
 *|       :is_calconst;
@@ -607,12 +665,14 @@ const kPa_Delta                     K_MADDeltaMAP = FixDefConst( 10.0, kPa_Delta
 *|       :units = "kPa";
 *|       :type = types.kPa_Delta;
 *|    }
+*| }
 */
 
 const Every_10th_Loop_Sec_B         K_MADTransientTime = FixDefConst( 2.0, Every_10th_Loop_Sec_B ) ;
 /*  Duration of transient period for MAD update */
 /*  N = E/8 ms */
 /*
+*| esc_cal.{
 *|    K_MADTransientTime
 *|    {
 *|       :is_calconst;
@@ -620,6 +680,7 @@ const Every_10th_Loop_Sec_B         K_MADTransientTime = FixDefConst( 2.0, Every
 *|       :units = "Seconds";
 *|       :type = types.Every_10th_Loop_Sec_B;
 *|    }
+*| }
 */
 
 /*  -------------------------------------------------  *\
@@ -630,6 +691,7 @@ const TPS_B                         K_MADMultiplierDeltaTPS = FixDefConst( 5.078
 /*  TPS change over 13.3 ms limit for MAD offset */
 /*  N = E*256/100 %  */
 /*
+*| esc_cal.{
 *|    K_MADMultiplierDeltaTPS
 *|    {
 *|       :is_calconst;
@@ -637,12 +699,14 @@ const TPS_B                         K_MADMultiplierDeltaTPS = FixDefConst( 5.078
 *|       :units = "%";
 *|       :type = types.TPS_B;
 *|    }
+*| }
 */
 
 const Every_2nd_Loop_Sec_B          K_MADMultTPSTimer = FixDefConst( 0.5, Every_2nd_Loop_Sec_B ) ;
 /*  duration of TPS delta condition to offset MAD multiplier */
 /*  N = E/16  */
 /*
+*| esc_cal.{
 *|    K_MADMultTPSTimer
 *|    {
 *|       :is_calconst;
@@ -650,12 +714,14 @@ const Every_2nd_Loop_Sec_B          K_MADMultTPSTimer = FixDefConst( 0.5, Every_
 *|       :units = "Seconds";
 *|       :type = types.Every_2nd_Loop_Sec_B;
 *|    }
+*| }
 */
 
 const RPM_Hi_Res_W                  K_MADMultiplierDeltaRPM = FixDefConst( 200.0, RPM_Hi_Res_W ) ;
 /*  RPM change limit for MAD offset */
 /*  N = E/1 RPM  */
 /*
+*| esc_cal.{
 *|    K_MADMultiplierDeltaRPM
 *|    {
 *|       :is_calconst;
@@ -663,12 +729,14 @@ const RPM_Hi_Res_W                  K_MADMultiplierDeltaRPM = FixDefConst( 200.0
 *|       :units = "RPM";
 *|       :type = types.RPM_Hi_Res_W;
 *|    }
+*| }
 */
 
 const Every_4th_Loop_Sec_B          K_MADMultRPMTimer = FixDefConst( 0.5, Every_4th_Loop_Sec_B ) ;
 /*  duration of RPM delta condition to offset MAD multiplier */
 /*  N = E/16 */
 /*
+*| esc_cal.{
 *|    K_MADMultRPMTimer
 *|    {
 *|       :is_calconst;
@@ -676,6 +744,7 @@ const Every_4th_Loop_Sec_B          K_MADMultRPMTimer = FixDefConst( 0.5, Every_
 *|       :units = "Seconds";
 *|       :type = types.Every_4th_Loop_Sec_B;
 *|    }
+*| }
 */
 
 const Multiplier_0_to_64 F_MADMultiplier[NUMBER_OF_CYLINDERS][RPM_0to6400by400_Steps] =
@@ -763,6 +832,7 @@ const Multiplier_0_to_64 F_MADMultiplier[NUMBER_OF_CYLINDERS][RPM_0to6400by400_S
 #endif
 };
 /*
+*| esc_cal.{
 *|    F_MADMultiplier
 *|    {
 *|       # --- 3D table --- #
@@ -783,6 +853,7 @@ const Multiplier_0_to_64 F_MADMultiplier[NUMBER_OF_CYLINDERS][RPM_0to6400by400_S
 /*
 *|       :elements:annotation = types.RPM_0to6400by400_Steps;
 *|    }
+*| }
 */
 
 const Multiplier_0_to_4 F_MADMultLoadComp[kPa_20to100by20_Steps][RPM_0to6400by400_Steps] =
@@ -886,6 +957,7 @@ const Multiplier_0_to_4 F_MADMultLoadComp[kPa_20to100by20_Steps][RPM_0to6400by40
     }
 };
 /*
+*| esc_cal.{
 *|    F_MADMultLoadComp
 *|    {
 *|         # --- 3D table --- #
@@ -896,6 +968,7 @@ const Multiplier_0_to_4 F_MADMultLoadComp[kPa_20to100by20_Steps][RPM_0to6400by40
 *|       :annotation = types.kPa_20to100by20_Steps;
 *|       :elements:annotation = types.RPM_0to6400by400_Steps;
 *|    }
+*| }
 */
 
 const Multiplier_0_to_4 F_MADMultPEComp[RPM_0to6400by400_Steps] =
@@ -921,6 +994,7 @@ const Multiplier_0_to_4 F_MADMultPEComp[RPM_0to6400by400_Steps] =
     FixDefConst( 1.0, Multiplier_0_to_4 )   /* 6400 RPM */
  } ;
 /*
+*| esc_cal.{
 *|    F_MADMultPEComp
 *|    {
 *|       # --- 2D table ---
@@ -930,6 +1004,7 @@ const Multiplier_0_to_4 F_MADMultPEComp[RPM_0to6400by400_Steps] =
 *|       :elements:type = types.Multiplier_0_to_4;
 *|       :annotation = types.RPM_0to6400by400_Steps;
 *|    }
+*| }
 */
 
 const Multiplier_0_to_64 F_MADMultTPSOffset[RPM_0to6400by400_Steps] =
@@ -955,6 +1030,7 @@ const Multiplier_0_to_64 F_MADMultTPSOffset[RPM_0to6400by400_Steps] =
     FixDefConst( 3.0, Multiplier_0_to_64 )  /* 6400 RPM */
  } ;
 /*
+*| esc_cal.{
 *|    F_MADMultTPSOffset
 *|    {
 *|        # --- 2D table ---
@@ -964,6 +1040,7 @@ const Multiplier_0_to_64 F_MADMultTPSOffset[RPM_0to6400by400_Steps] =
 *|       :elements:type = types.Multiplier_0_to_64;
 *|       :annotation = types.RPM_0to6400by400_Steps;
 *|    }
+*| }
 */
 
 const Multiplier_0_to_64 F_MADMultRPMOffset[RPM_0to6400by400_Steps] =
@@ -989,6 +1066,7 @@ const Multiplier_0_to_64 F_MADMultRPMOffset[RPM_0to6400by400_Steps] =
     FixDefConst( 6.0, Multiplier_0_to_64 )  /* 6400 RPM */
 } ;
 /*
+*| esc_cal.{
 *|    F_MADMultRPMOffset
 *|   {
 *|         # --- 2D table ---
@@ -998,12 +1076,5 @@ const Multiplier_0_to_64 F_MADMultRPMOffset[RPM_0to6400by400_Steps] =
 *|       :elements:type = types.Multiplier_0_to_64;
 *|       :annotation = types.RPM_0to6400by400_Steps;
 *|    }
+*| }
 */
-
-/*
-*|   }
-*/
-
-
-
-

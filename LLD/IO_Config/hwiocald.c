@@ -405,16 +405,19 @@ const   bool        KbHWIO_ELOAD2_Active_High     = true;
 const   bool        KbHWIO_BRKLMP_Active_High     = true;
 
 /*
+*| hwiocald.{
 *|    K_MainPowerRelayPresent {
 *|       : is_calconst;
 *|       : description = "Main Power Relay is present";
-*|       : units = "boolean";
 *|       : type = types.size2_0to1;
+*|       : units = "boolean";
 *|    }
+*| }
 */
-const bool                     K_MainPowerRelayPresent = true ;
+const bool        K_MainPowerRelayPresent = true;
 
 /*
+*| hwiocald.{
 *|   KfVIOS_T_RunCoolHi {
 *|     : is_calconst;
 *|     : description ="This calibration determines coolant temperature above which "
@@ -426,10 +429,12 @@ const bool                     K_MainPowerRelayPresent = true ;
 *|     : type = types.t_deg_ca;
 *|     : units = "deg C";
 *|   }
+*| }
 */
 const T_DEG_Ca      KfVIOS_T_RunCoolHi = V_DEG_Ca(65);
 
 /*
+*| hwiocald.{
 *|   KfVIOS_T_RunCoolLo {
 *|     : is_calconst;
 *|     : description ="This calibration determines coolant temperature below which "
@@ -441,10 +446,12 @@ const T_DEG_Ca      KfVIOS_T_RunCoolHi = V_DEG_Ca(65);
 *|     : type = types.t_deg_ca;
 *|     : units = "deg C";
 *|   }
+*| }
 */
 const T_DEG_Ca      KfVIOS_T_RunCoolLo = V_DEG_Ca(10);
 
 /*
+*| hwiocald.{
 *|   KcVIOS_RunRefCold{
 *|     : is_calconst;
 *|     : description ="This calibration determines the number of consecutive cylinder events that "
@@ -456,10 +463,12 @@ const T_DEG_Ca      KfVIOS_T_RunCoolLo = V_DEG_Ca(10);
 *|     : type = types.t_count_byte;
 *|     : units = "counts";
 *|   }
+*| }
 */
 const T_COUNT_BYTE  KcVIOS_RunRefCold = V_COUNT_BYTE(12);
 
 /*
+*| hwiocald.{
 *|   KcVIOS_RunRefWarm {
 *|     : is_calconst;
 *|     : description ="This calibration determines the number of consecutive cylinder events that "
@@ -471,10 +480,12 @@ const T_COUNT_BYTE  KcVIOS_RunRefCold = V_COUNT_BYTE(12);
 *|     : type = types.t_count_byte;
 *|     : units = "counts";
 *|   }
+*| }
 */
 const T_COUNT_BYTE  KcVIOS_RunRefWarm = V_COUNT_BYTE(9);
 
 /*
+*| hwiocald.{
 *|   KcVIOS_RunRefHot {
 *|     : is_calconst;
 *|     : description ="This calibration determines the number of consecutive cylinder events that "
@@ -486,10 +497,12 @@ const T_COUNT_BYTE  KcVIOS_RunRefWarm = V_COUNT_BYTE(9);
 *|     : type = types.t_count_byte;
 *|     : units = "counts";
 *|   }
+*| }
 */
 const T_COUNT_BYTE  KcVIOS_RunRefHot = V_COUNT_BYTE(6);
 
 /*
+*| hwiocald.{
 *|   KfVIOS_n_CrankToRunThrsh {
 *|     : is_calconst;
 *|     : description ="This calibration determines the crank-to-run engine speed threshold. "
@@ -500,10 +513,12 @@ const T_COUNT_BYTE  KcVIOS_RunRefHot = V_COUNT_BYTE(6);
 *|     : type = types.t_rpma;
 *|     : units = "RPM";
 *|   }
+*| }
 */
 const T_RPMa       KfVIOS_n_CrankToRunThrsh = V_RPMa(450);
 
 /*
+*| hwiocald.{
 *|   KfVIOS_n_RunToCrankThrsh {
 *|     : is_calconst;
 *|     : description ="This calibration determines the run-to-crank engine speed threshold. "
@@ -514,10 +529,12 @@ const T_RPMa       KfVIOS_n_CrankToRunThrsh = V_RPMa(450);
 *|     : type = types.t_rpma;
 *|     : units = "RPM";
 *|   }
+*| }
 */
 const T_RPMa        KfVIOS_n_RunToCrankThrsh = V_RPMa(150);
 
 /*
+*| hwiocald.{
 *|   KfVIOS_t_PowerdownDelayTime {
 *|     : is_calconst;
 *|     : description ="This calibration determines the delay time after key-off to begin the "
@@ -527,11 +544,13 @@ const T_RPMa        KfVIOS_n_RunToCrankThrsh = V_RPMa(150);
 *|     : type = types.t_w_R7p8125ms;
 *|     : units = "seconds";
 *|   }
+*| }
 */
 const TwTIME_t_R7p8125ms   KfVIOS_t_PowerdownDelayTime = C_R7p8125ms16(3);
 
 
 /*
+*| hwiocald.{
 *|    K_PowerConfig_FPR {
 *|       :is_calconst;
 *|       :units = "type";
@@ -540,6 +559,7 @@ const TwTIME_t_R7p8125ms   KfVIOS_t_PowerdownDelayTime = C_R7p8125ms16(3);
 *|          "1 = IgnitionON_FPR (same as IgnitionON) \n"
 *|          "2 = MainPowerRelay_FPR (same as MainPowerRelay) ";
 *|    }
+*| }
 */
 const PowerSource_FPR_Type K_PowerConfig_FPR =
 {
@@ -547,6 +567,7 @@ const PowerSource_FPR_Type K_PowerConfig_FPR =
 };
 
 /*
+*| hwiocald.{
 *|    K_PowerConfig_CCP {
 *|       :is_calconst;
 *|       :units = "type";
@@ -556,6 +577,7 @@ const PowerSource_FPR_Type K_PowerConfig_FPR =
 *|          "2 = MainPowerRelay \n"
 *|          "3 = FuelPumpRelay ";
 *|    }
+*| }
 */
 const PowerSourceType K_PowerConfig_CCP =
 {
@@ -563,6 +585,7 @@ const PowerSourceType K_PowerConfig_CCP =
 };
 
 /*
+*| hwiocald.{
 *|    K_PowerConfig_FANA {
 *|       :is_calconst;
 *|       :units = "type";
@@ -572,6 +595,7 @@ const PowerSourceType K_PowerConfig_CCP =
 *|          "2 = MainPowerRelay \n"
 *|          "3 = FuelPumpRelay ";
 *|    }
+*| }
 */
 const PowerSourceType K_PowerConfig_FANA =
 {
@@ -579,6 +603,7 @@ const PowerSourceType K_PowerConfig_FANA =
 };
 
 /*
+*| hwiocald.{
 *|    K_PowerConfig_FANB {
 *|       :is_calconst;
 *|       :units = "type";
@@ -588,6 +613,7 @@ const PowerSourceType K_PowerConfig_FANA =
 *|          "2 = MainPowerRelay \n"
 *|          "3 = FuelPumpRelay ";
 *|    }
+*| }
 */
 const PowerSourceType K_PowerConfig_FANB =
 {
@@ -595,6 +621,7 @@ const PowerSourceType K_PowerConfig_FANB =
 };
 
 /*
+*| hwiocald.{
 *|    K_PowerConfig_ACClutch {
 *|       :is_calconst;
 *|       :units = "type";
@@ -604,6 +631,7 @@ const PowerSourceType K_PowerConfig_FANB =
 *|          "2 = MainPowerRelay \n"
 *|          "3 = FuelPumpRelay ";
 *|    }
+*| }
 */
 const PowerSourceType K_PowerConfig_ACClutch =
 {
@@ -612,6 +640,7 @@ const PowerSourceType K_PowerConfig_ACClutch =
 
 
 /*
+*| hwiocald.{
 *|    K_PowerConfig_SparkCoil {
 *|       :is_calconst;
 *|       :units = "type";
@@ -621,6 +650,7 @@ const PowerSourceType K_PowerConfig_ACClutch =
 *|          "2 = MainPowerRelay \n"
 *|          "3 = FuelPumpRelay ";
 *|    }
+*| }
 */
 const PowerSourceType K_PowerConfig_SparkCoil =
 {
@@ -628,6 +658,7 @@ const PowerSourceType K_PowerConfig_SparkCoil =
 };
 
 /*
+*| hwiocald.{
 *|    K_PowerConfig_O2Heater {
 *|       :is_calconst;
 *|       :units = "type";
@@ -637,6 +668,7 @@ const PowerSourceType K_PowerConfig_SparkCoil =
 *|          "2 = MainPowerRelay \n"
 *|          "3 = FuelPumpRelay ";
 *|    }
+*| }
 */
 const PowerSourceType K_PowerConfig_O2Heater =
 {
@@ -644,6 +676,7 @@ const PowerSourceType K_PowerConfig_O2Heater =
 };
 
 /*
+*| hwiocald.{
 *|    K_PowerConfig_Injector {
 *|       :is_calconst;
 *|       :units = "type";
@@ -653,6 +686,7 @@ const PowerSourceType K_PowerConfig_O2Heater =
 *|          "2 = MainPowerRelay \n"
 *|          "3 = FuelPumpRelay ";
 *|    }
+*| }
 */
 const PowerSourceType K_PowerConfig_Injector =
 {

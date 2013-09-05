@@ -70,6 +70,13 @@ types
            :range = ( 0.000000 ) TO <   ( 65535 /64 );
      }
 
+    .t_crank_anglea
+    {
+       :kind = fixed;
+       :precision = 1024/65536; #0.015625;
+       :range = -512 TO <512;
+    }
+
 
      .T_HERTZ
      {
