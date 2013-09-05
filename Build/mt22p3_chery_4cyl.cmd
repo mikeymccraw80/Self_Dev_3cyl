@@ -8,13 +8,12 @@
 
 -e
 ..\Instrumentation\calsets.c
+..\LLD\IO_Config\hwiocald.c
+..\LLD\IO_Config\vsepcald.c
+..\LLD\IO_Config\vehicle_can_cald.c
+..\knock\esc_cal.c
 ..\LLD\HWDiag\EMSD\emsdcald.c
 ..\LLD\HWDiag\EOSD\eosdcald.c
 ..\LLD\HWDiag\EPSD\epsdcald.c
 ..\LLD\HWDiag\INJD\injdcald.c
 ..\LLD\HWDiag\PRGD\prgdcald.c
-..\LLD\IO_Config\hwiocald.c
-..\LLD\IO_Config\vsepcald.c
-..\LLD\IO_Config\vehicle_can_cald.c
-..\knock\esc_cal.c
-
