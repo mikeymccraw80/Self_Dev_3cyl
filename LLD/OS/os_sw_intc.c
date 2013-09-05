@@ -9,6 +9,8 @@
 #include "io_conversion.h"
 
 void OS_LoResTasks_Hook(void);
+void OS_KnockEvntTasks_Hook(void);
+void OS_WinGateTasks_Hook(void); 
 
 //=============================================================================
 //static variables
@@ -21,6 +23,7 @@ bool CAM_CYLINDER_EVENT_TASK;
 bool APPLICATION_CYLINDER_EVENT_TASK;
 bool APPLICATION_TDC_EVENT_TASK;
 bool APPLICATION_KNOCK_WINDOW_CLOSED_TASK;
+bool APPLICATION_KNOCK_CYL_EVENT_TASK;
 bool CAM_CYLINDER_EVENT_TASK;
 
 
@@ -99,7 +102,14 @@ void OS_SCHEDULER_KNOCK_WINDOW_CLOSED_Event(void)
   APPLICATION_KNOCK_WINDOW_CLOSED_TASK = true;
   INTC_INTERRUPT_Set_Enable(INTC_CHANNEL_SOFTWARE_CH0_CH, true);  
 }
-
+//=============================================================================
+// OS_SCHEDULER_KNOCK_CYL_Event
+//=============================================================================
+void OS_SCHEDULER_KNOCK_CYL_Event(void)
+{
+  APPLICATION_KNOCK_CYL_EVENT_TASK = true;
+  INTC_INTERRUPT_Set_Enable(INTC_CHANNEL_SOFTWARE_CH0_CH, true);  
+}
 
 //=============================================================================
 // OS_SW_INTC_Control, software interrupt trigered by Event
@@ -109,12 +119,12 @@ void OS_SW_INTC_Control( void)
 	INTC_INTERRUPT_Clear_Pending(INTC_CHANNEL_SOFTWARE_CH0_CH );
 
 	if (APPLICATION_KNOCK_WINDOW_CLOSED_TASK) {
-		//OS_WinGateTasks_Hook();
+		OS_WinGateTasks_Hook();
 		APPLICATION_KNOCK_WINDOW_CLOSED_TASK = false;
 	}
 
 	if (APPLICATION_TDC_EVENT_TASK) {
-		//OS_KnockEvntTasks_Hook();
+		OS_KnockEvntTasks_Hook();
 		APPLICATION_TDC_EVENT_TASK = false;
 	}
 
@@ -126,7 +136,7 @@ void OS_SW_INTC_Control( void)
 	}
 
 	if (CAM_CYLINDER_EVENT_TASK) {
-		//CAM_Lo_Res_Event_Tasks();
+		CAM_Lo_Res_Event_Tasks();
 		CAM_CYLINDER_EVENT_TASK = false;
 	}
 
