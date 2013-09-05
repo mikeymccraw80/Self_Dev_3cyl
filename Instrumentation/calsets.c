@@ -44,8 +44,7 @@
 *|                  injdcald,
 *|                  eosdcald,
 *|                  estdcald,
-*|                  esc_cal;
-*|                  knodcald,
+*|                  esc_cal,
 *|                  prgdcald,
 *|                  epsdcald,
 *|                  vsepcald,
