@@ -280,6 +280,10 @@ OUT_DIR = $(subst /,\,$(OUTPUT_DIR))
 PPC_DIAB_TARGET = -tPPCE200Z3VEN:simple
 
 PPC_DIAB_OPTS   =     -g2 -XO\
+                      -ei1025\
+                      -ei1241\
+                      -ei1583\
+                      -ei1789\
                       -Xclib-optim-off\
                       -Xstmw-fast\
                       -Xsize-opt\
