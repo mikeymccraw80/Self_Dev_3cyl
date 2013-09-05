@@ -139,7 +139,7 @@ $(OBJS_DEPENDS):
 ###############################################################################
 $(OBJ_DIR)/%.o:$(CURDIR)/%.c
 	@$(ECHO) Building $(CURDIR)/$(<F) to $(@F)
-	@$(CC) -c -o $@ -c -o $@ -@E=$(BUILD_DIR)/ERROR.err $(subst /,\,$<) 
+	@$(CC) -c -o $@ -c -o $@ -@E+$(BUILD_DIR)/ERROR.err $(subst /,\,$<) 
 ifeq ($(find_deps),$(DEPENDS_FILE))
 include $(DEPENDS_FILE) 
 endif
@@ -152,6 +152,6 @@ endif
 ###############################################################################
 
 $(OBJ_DIR)/%.o:$(CURDIR)/%.s
-	$(ASM) -o $(subst /,\,$@) $(ASM_OPT) -@E=$(BUILD_DIR)/ERROR.err $(subst /,\,$<)
+	$(ASM) -o $(subst /,\,$@) $(ASM_OPT) -@E+$(BUILD_DIR)/ERROR.err $(subst /,\,$<)
 
 
