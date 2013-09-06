@@ -102,11 +102,6 @@ uint32_t SPARK_Get_Delivered_Duration(
 Crank_Angle_T SPARK_Get_Commanded_Spark_Advance(
    Crank_Cylinder_T  in_cylinder );
 
-//=============================================================================
-// SPARK_Get_Delivered_End_Angle
-//=============================================================================
-Crank_Angle_T SPARK_Get_Delivered_End_Angle(
-   Crank_Cylinder_T  in_cylinder );
 
 //=============================================================================
 // SPARK_Set_Override_Mode

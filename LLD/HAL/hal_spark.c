@@ -86,16 +86,6 @@ T_ANGLEa CRANK_Convert_To_Signed_Angle( Crank_Angle_T in_crank_angle )
 
 
 //=============================================================================
-// GetHWIO_phi_DeliveredSparkAngle
-//=============================================================================
-T_ANGLEa GetHWIO_phi_DeliveredSparkAngle(uint8_t in_cylinder )
-{
-   Crank_Angle_T  crank_angle;
-
-   return CRANK_Convert_To_Signed_Angle(crank_angle);
-}
-
-//=============================================================================
 // SetHWIO_DualEST_AlternatingMode
 //=============================================================================
 void SetHWIO_DualEST_AlternatingMode( void )

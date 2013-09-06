@@ -29,7 +29,6 @@ bool                     SPARK_Override_Enabled;
 uint8_t                  SPARK_Control_Select_Max;
 Spark_Mode_T             SPARK_Mode;
 Crank_Angle_T           SPARK_Advance_Count[SPARK_MAX_CYLINDERS];
-Crank_Angle_T           SPARK_Delivered_End_Angle[SPARK_MAX_CYLINDERS];
 uCrank_Angle_T          SPARK_Calculated_End_Angle_In_Counts[SPARK_MAX_CYLINDERS];
 Spark_Control_Select_T  SPARK_Control_Select_Map[SPARK_MAX_CYLINDERS];
 Spark_Durations_T       SPARK_Duration[SPARK_MAX_CYLINDERS][SPARK_DWELL_INDEX_MAX];
@@ -551,15 +550,6 @@ Crank_Angle_T SPARK_Get_Commanded_Spark_Advance(
 }
 
 //=============================================================================
-// SPARK_Get_Delivered_End_Angle
-//=============================================================================
-Crank_Angle_T SPARK_Get_Delivered_End_Angle(
-   Crank_Cylinder_T  in_cylinder )
-{
-   return SPARK_Delivered_End_Angle[in_cylinder];
-}
-
-//=============================================================================
 // SPARK_Set_Override_Mode
 //=============================================================================
 void SPARK_Set_Override_Mode(
@@ -810,7 +800,6 @@ void SPARK_Process_Interrupt(
    uint8_t                 scheduled_cylinder_events_compensated;
    Crank_Cylinder_T        cylinder = 0;
    Spark_Control_Select_T  control_select; 
-   int8_t                  cylinder_event_complensation;
   uCrank_Angle_T          actual_angle_in_pa_counts;
    uCrank_Angle_T          end_angle;
 
@@ -900,9 +889,6 @@ void SPARK_Process_Interrupt(
          SPARK_Cylinder_Event_ID_test, 1    );
       cylinder = SPARK_Cylinder_Event_ID_test;
       
-      // Diagnostic conversion from pulse accumulated angle to Cylinder TDC referenced angle.
-      SPARK_Delivered_End_Angle[cylinder] = SPARK_Convert_PaCounts_To_End_Angle( cylinder_event_complensation, actual_angle_in_pa_counts );
-
       control_select = SPARK_Control_Select_Map[cylinder];
       // If there is a channel without a fault, update its values and set it up:
       if( SPARK_Get_Channel_Enable( cylinder ) )

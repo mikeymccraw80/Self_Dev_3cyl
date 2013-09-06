@@ -38,11 +38,6 @@ T_MILLISECONDSb GetHWIO_t_DeliveredDwell( void );
 uint8_t GetHWIO_Num58xGapsBeforeSeqn (void);
 
 //=============================================================================
-// GetHWIO_phi_DeliveredSparkAngle
-//=============================================================================
-T_ANGLEa GetHWIO_phi_DeliveredSparkAngle(uint8_t in_cylinder );
-
-//=============================================================================
 // SetHWIO_DualEST_AlternatingMode
 //=============================================================================
 void SetHWIO_DualEST_AlternatingMode( void );
