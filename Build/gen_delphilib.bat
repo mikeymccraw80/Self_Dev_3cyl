@@ -35,6 +35,7 @@ call get_lib.bat
 del get_lib.bat
 
 copy ..\HLS\HLS.h ..\tools\delphilib\outputlib\HLS.h
+copy ..\bin\Engine.mt22p3_chery_4cyl.a2l ..\tools\delphilib\outputlib\Engine.mt22p3_chery_4cyl.a2l
 
 echo +============================================================================+ >> build.log
 echo .                                                                            .

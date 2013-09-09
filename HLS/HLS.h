@@ -527,10 +527,16 @@ extern uint8_t Gr;
 extern uint8_t Maf_b;
 extern  unsigned short       Pmap;
 
+/* defined in HLS */
 extern bool knock_flag_a;
 extern bool knock_flag_b;
 extern bool knock_flag_c;
 extern bool knock_flag_d;
+
+/* define in LLD */
+extern uint16_t IntegratorAverage[LLD_MAX_IGN_CHANNEL];      /* filtered value */
+extern uint16_t KnockThreshold[LLD_MAX_IGN_CHANNEL];         /* knock threshold */
+
 
 /*VCPC*/
 extern uint16_t angle_crank_cam_inlet;
