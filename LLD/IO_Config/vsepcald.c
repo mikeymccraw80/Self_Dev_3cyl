@@ -653,6 +653,6 @@ const   uint16_t KsVSEP_Diagnostic_Counter_Thd = 16;
 *|   }
 *|   }
 */
-const uint8_t KSOHCRTH = 10;
+//const uint8_t KSOHCRTH = 10;
 
 

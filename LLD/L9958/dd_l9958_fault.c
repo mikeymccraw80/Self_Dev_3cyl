@@ -112,10 +112,10 @@ void L9958_FAULT_Diagnose_Update(void)
 
     diag_cnt ++;
     if (diag_cnt >= L9958_MAX_DIAGTIMER) {
-        Disable_Interrupts();
+    //    Disable_Interrupts();
         L9958_FAULT_Initialize_Device();
         L9958_Fault_Log |= fault_temp;
-        Enable_Interrupts();
+    //    Enable_Interrupts();
         diag_cnt = 0;
     }
     L9958_Fault_Log |= fault_temp;

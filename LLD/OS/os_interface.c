@@ -83,7 +83,7 @@ void MngOSTK_10msTasks(void)
     test_cnt_30ms++;
     if (test_cnt_30ms == 3) {
         test_cnt_30ms=0;
-        SOH_VSEP_CR_Service();
+       //SOH_VSEP_CR_Service();
     }
 
     /* CCP 10ms Trigger */

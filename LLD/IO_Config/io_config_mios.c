@@ -406,23 +406,8 @@ const MIOS_CCR_T MIOS_CH23_INITIAL =
       MIOS_EDGE_POLARITY_OUTPUT_MODE_MATCH_A_CLEAR_B_SET, // Edge polarity
       MIOS_CHANNEL_BASE_MODE_PULSE_WIDTH_FREQUENCY_MODULATION_BUFFERED  // Mode selection
   };
-//	uint32_t SOH_DMA_External_Ref_Time[32];
- // uint16_t soh_818_count=0;
 
-	void IO_SOH_818HZ_INT(void)
-	{
-		//MIOS_Interrupt_Flag_clear(MIOS_CHANNEL_4);
-		
-   MIOS.CH[4].CSR.F.FLAG=1;
-		
-//		SOH_DMA_External_Ref_Time[soh_818_count]=MIOS.CH[4].CADR;
-//    if(soh_818_count>31)
-//			{
-//		   soh_818_count=0;	
-//		  }
-//			soh_818_count++;
 
-	}
 
 
 

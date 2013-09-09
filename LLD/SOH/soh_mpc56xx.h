@@ -1,15 +1,15 @@
-#ifndef SOH_S12X_H /* { */
-#define SOH_S12X_H
+#ifndef SOH_MPC56XX_H /* { */
+#define SOH_MPC56XX_H
 /*===========================================================================*\
- * FILE: soh_s12x.h
+ * FILE: soh_mpc56xx.h
  *===========================================================================
  * Copyright 2005 Delphi Technologies, Inc., All Rights Reserved.
  * Delphi Confidential
  *---------------------------------------------------------------------------
- * %full_filespec:  soh_s12x.h~6:incl:mt20u2#1 %
- * %version: 6 %
- * %derived_by:vzd0pc %
- * %date_modified: %
+ * %full_filespec:  soh_mpc56xx.h~1:incl:ctc_pt3#1 %
+ * %version: 1 %
+ * %derived_by:rz65p6 %
+ * %date_modified:  %
  * $SOURCE: $
  * $REVISION: $
  * $AUTHOR: $
@@ -47,8 +47,7 @@
  * Standard Header Files
 \*===========================================================================*/
 #include "reuse.h"
-#include "soh_common.h"
-#include "hal_gpio.h"
+#include "hal_soh.h"
 
 /*===========================================================================*\
  * Other Header Files
@@ -67,37 +66,8 @@
 /*===========================================================================*\
  * Exported Preprocessor #define MACROS
 \*===========================================================================*/
-
-/* maximum TCNT timer value */
-#define SOH_TCNT_MAXTIME		(0xFFFF)
-#define SOH_PIT_MAXTIME			(0xFFFF)
-
-//for ETC SOH Sequence Validation
-#define OS_COPClear1st()               	(ARMCOP = 0x55)
-#define OS_COPClear2nd()              	(ARMCOP = 0xAA)
-
-
-#define SOH_ODDTSTMSK			( 0x15 )
-#define SOH_EVENTSTMSK			( 0xEA )
-
-
-#define Read_TCNT_TMR()      		(ECT_TCNT)
-
-#define Enable_EXTCLK_INT()		PIFJ_PIFJ7 = 1;\
-					PIEJ_PIEJ7 = 1
-
-#define Enable_ETCPWM_INT()		PIFP_PIFP3 = 1;\
-					PIEP_PIEP3 = 1
-
-#define Disable_ETCPWM_INT()		(PIEP_PIEP3 = 0)
-
-
-#define Clear_SOH_INT_Flag()		(ECT_MCFLG = ECT_MCFLG_MCZF_MASK)
-
-#define Set_SOH_INT_Period(irq_period)	(ECT_MCCNT = irq_period)
-
-#define Disable_SOH_Interrupt()     ( ECT_MCCTL_MCZI = 0)
-
+#define SOH_EXTERNAL_REF_TIME_DMA_BUFFER_SIZE  12//818HZ 
+//#define SOH_EXTERNAL_REF_TIME_DMA_BUFFER_SIZE  32
 
 /*===========================================================================*\
  * Exported Type Declarations
@@ -106,72 +76,31 @@
 /*===========================================================================*\
  * Exported Object Declarations
 \*===========================================================================*/
+extern uint32_t SOH_DMA_External_Ref_Time[SOH_EXTERNAL_REF_TIME_DMA_BUFFER_SIZE];
 
 /*===========================================================================*\
  * Exported Function Prototypes
 \*===========================================================================*/
-extern void ValidateSysTimer(void);
-extern void ValidateSysClkFreq(void);
-extern void ValidateEtcSohIrqFreq(void);
-extern void ValidateETCPWMFreq(void);
-extern void ValidateEtcSohTestSeq(bool odd_even);
-extern void SOH_Initialize_MCU_Hardware(void);
-extern void SOH_Initialize_MCU_Specific_Variables(void);
-extern void SOH_Setup_Interrupt(SOH_TMR_MSEC_T irq_period);
+#define Get_Current_DMA_idx(citer) \
+    ( (SOH_EXTERNAL_REF_TIME_DMA_BUFFER_SIZE - citer == 0) ? \
+      (SOH_EXTERNAL_REF_TIME_DMA_BUFFER_SIZE - 1):(SOH_EXTERNAL_REF_TIME_DMA_BUFFER_SIZE - citer - 1))
 
+#define NUMBER_OF_SAMPLE_POINT SOH_EXTERNAL_REF_TIME_DMA_BUFFER_SIZE - 2 
+
+#define Get_Start_DMA_idx(current_idx) \
+   ( ((current_idx - (NUMBER_OF_SAMPLE_POINT - 1)) < 0) ? \
+     (current_idx - (NUMBER_OF_SAMPLE_POINT - 1) + SOH_EXTERNAL_REF_TIME_DMA_BUFFER_SIZE ):(current_idx - (NUMBER_OF_SAMPLE_POINT - 1)) )
+
+
+void Initialize_SOH_HardwareRegister(void);
+void SOH_Start_DMA_For_External_Ref(void);
+void SOH_Enter_Critical_Section(void);
+void SOH_Leave_Critical_Section(void);
+void SOH_Service_Watchdog(bool iseven);
 
 /*===========================================================================*\
  * Exported Inline Function Definitions and #define Function-Like Macros
 \*===========================================================================*/
-
-
-/*===========================================================================*\
- * FUNCTION: SOH_Set_IO_Enable_Request
- *===========================================================================
- * RETURN VALUE:
- * None.
- *
- * PARAMETERS:
- * bool fse_en_req    : 1 - enable FSE_EN_REQ signal.
- *                   	0 - disable FSE_EN_REQ signal.
- *
- * EXTERNAL REFERENCES:
- * None.
- *
- * DEVIATIONS FROM STANDARDS:
- * None.
- *
- * --------------------------------------------------------------------------
- * ABSTRACT:
- * --------------------------------------------------------------------------
- * This macro enable/disable the FSE_EN_REQ signal.
-\*===========================================================================*/
-#define SOH_Set_FSE_Enable_Request(fse_en_req)	(HAL_GPIO_SET_FSE_Enable( fse_en_req))	//mz38cg
-
-
-/*===========================================================================*\
- * FUNCTION: SOH_Set_IO_Enable_Request
- *===========================================================================
- * RETURN VALUE:
- * None.
- *
- * PARAMETERS:
- * bool io_en    : 1 - enable IOEN signal.
- *                 0 - disable IOEN signal.
- *
- * EXTERNAL REFERENCES:
- * None.
- *
- * DEVIATIONS FROM STANDARDS:
- * None.
- *
- * --------------------------------------------------------------------------
- * ABSTRACT:
- * --------------------------------------------------------------------------
- * This macro enable/disable the IOEN signal.
-\*===========================================================================*/
-#define SOH_Set_GEN_Enable_Request(gen_en_req)	(HAL_GPIO_SET_GEN_Enable( gen_en_req))	//mz38cg
-
 
 /*===========================================================================*\
  * File Revision History (top to bottom: first revision to last revision)
@@ -179,9 +108,7 @@ extern void SOH_Setup_Interrupt(SOH_TMR_MSEC_T irq_period);
  *
  * Date        userid    (Description on following lines: SCR #, etc.)
  * ----------- --------
- * 01 June 05  sgchia
- * + Created initial file.
  *
 \*===========================================================================*/
-#endif /* } SOH_S12X_H */
+#endif /* } SOH_MPC56XX_H */
 

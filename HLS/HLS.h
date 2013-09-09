@@ -602,6 +602,23 @@ extern  void HLS_afterrun(void);
 /*will be called at the falling edge of every crank tooth */
 extern  void HLS_tooth_interrupt(void);
 
+extern void ETSMRSV_r40ms();
+extern void ETSMIST_r40ms();
+extern void ETSMAPV_r40ms();
+extern void ETSMN_r40ms();
+extern void ETSMLD_r40ms();
+extern void ETSMAFST_r40ms();
+extern void ETSMTQP_r40ms();
+extern void ETSMTQF_r40ms();
+extern void ETSMIGA_r40ms();
+extern void ETSMTQC_r40ms();
+extern void ETSMTQ_r40ms();
+extern void ETSMMFR_r40ms();
+extern void ETSMRES1_r40ms();
+extern void ETSMRES2_r40ms();
+extern void ETSMRES3_r40ms();
+extern void ETSMRES4_r40ms();
+
 
 /*===========================================================================*/
 /* File revision history (top to bottom, first revision to last revision     */

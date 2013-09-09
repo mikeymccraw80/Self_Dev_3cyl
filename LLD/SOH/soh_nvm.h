@@ -1,3 +1,5 @@
+#ifndef SOH_NVM_H
+#define SOH_NVM_H
 //=============================================================================
 //
 //       COPYRIGHT, 2008, Delphi Technologies, Inc. All Rights reserved
@@ -5,7 +7,7 @@
 //       Delphi Confidential
 //
 // ============================================================================
-// %name:            soh_nvm.c %
+// %name:            soh_nvm.h %
 //
 // created_by:       zzrfyj %
 //
@@ -13,18 +15,15 @@
 //
 // %derived_by:      zzrfyj %
 //
-// %date_modified:       %
+// %date_modified:        %
 //
-// %version:         1 %
+// %version:         2 %
 //
 //=============================================================================
-#include "soh_nvm.h"
 
-
-#pragma section DATA " " ".nc_nvram"
+#include "soh_common.h"
 
 /* ETC SOH fault log (history) */
-Soh_Fault_Log_T Soh_FaultLogNVM;
+extern Soh_Fault_Log_T Soh_FaultLogNVM;
 
-#pragma section DATA " " ".bss"
-
+#endif /* end of include guard: SOH_NVM_H */

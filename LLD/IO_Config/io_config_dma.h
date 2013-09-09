@@ -6,6 +6,7 @@
 #include "io_config_qadc.h"
 #include "dd_qadc_interface.h"
 #include "dd_dspi_interface.h"
+#include "soh_mpc56xx.h"
 
 //=============================================================================
 // Initialization Constant for DMA Group Priority
@@ -83,7 +84,6 @@ extern DMA_Eighth_32Bit_T DMA_DSPIB_SR_RFDF_Eighth_32Bit;
 //=============================================================================
 //DMA_CHANNEL_MIOS_EMIOSFLAG_4
 //=============================================================================
-extern uint32_t SOH_DMA_External_Ref_Time[8];
 
 #define DMA_EMIOSFLAG_4_Source_Address  (uint32_t)&MIOS.CH[4].CADR
 #define DMA_EMIOSFLAG_4_Dest_Address   (uint32_t) SOH_DMA_External_Ref_Time

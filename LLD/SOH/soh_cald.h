@@ -1,3 +1,5 @@
+#ifndef SOH_CALD_H
+#define SOH_CALD_H
 //=============================================================================
 //
 //       COPYRIGHT, 2008, Delphi Technologies, Inc. All Rights reserved
@@ -5,7 +7,7 @@
 //       Delphi Confidential
 //
 // ============================================================================
-// %name:            soh_nvm.c %
+// %name:            soh_cald.h %
 //
 // created_by:       zzrfyj %
 //
@@ -18,13 +20,15 @@
 // %version:         1 %
 //
 //=============================================================================
-#include "soh_nvm.h"
+
+#include "reuse.h"
+#include "soh_common.h"
 
 
-#pragma section DATA " " ".nc_nvram"
 
-/* ETC SOH fault log (history) */
-Soh_Fault_Log_T Soh_FaultLogNVM;
+extern const uint8_t        KSOHCRTH;
+extern const SOH_TMR_MSEC_T KSOHRTITH; 
 
-#pragma section DATA " " ".bss"
 
+
+#endif /* end of include guard: SOH_CALD_H */

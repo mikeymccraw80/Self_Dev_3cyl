@@ -43,6 +43,8 @@
 #include "io_config_dspi.h"
 #include "dd_vsep_init_config.h"
 #include "vsep_spi_scheduler.h"
+#include "soh.h"
+#include "hal_soh.h"
 
 uint32_t     VSEP_Channel_Enabled;
 extern const SPI_Message_Definition_T * VSEP_MESSAGE[VSEP_MESSAGE_MAX+7];
@@ -303,7 +305,7 @@ void VSEP_SPI_Immediate_Transfer(IO_Configuration_T in_configuration, VSEP_Messa
 	case VSEP_MESSAGE_DEPS:
 	case VSEP_MESSAGE_PCH_MPIO:
 	case VSEP_MESSAGE_EST_SELECT:
-	case VSEP_MESSAGE_EST_FAULT:
+	case VSEP_MESSAGE_EST_FAULT:		
 	case VSEP_MESSAGE_SOH:
 	case VSEP_MESSAGE_SOH_STATUS:
 		VSEP_SPI_Port_Transfer(VSEP_MESSAGE[in_message]);
@@ -311,7 +313,7 @@ void VSEP_SPI_Immediate_Transfer(IO_Configuration_T in_configuration, VSEP_Messa
 	case VSEP_MESSAGE_PWM:
 		pwm_channel = VSEP_PWM_Get_Channel(in_configuration);
 		if(pwm_channel != VSEP_PWM_CHANNEL_MAX)
-			VSEP_SPI_Port_Transfer(VSEP_MESSAGE[VSEP_MESSAGE_PWM + pwm_channel]);
+		VSEP_SPI_Port_Transfer(VSEP_MESSAGE[VSEP_MESSAGE_PWM + pwm_channel]);
 		break;
 	default:
 		break;
@@ -322,6 +324,7 @@ void VSEP_SPI_Immediate_Transfer(IO_Configuration_T in_configuration, VSEP_Messa
 void VSEP_Initialize_Device(void)
 {
 	uint16_t index=0;
+	bool spi_comm_err=0;
 	VSEP_Channel_Enabled = 0xFFFFFFFF;   
 
 #ifdef  VSEP_CALIBRATION_ENABLE
@@ -338,16 +341,40 @@ void VSEP_Initialize_Device(void)
 	VSEP_LEDMODE_Initialize_Device();
 	VSEP_PULSE_VR_Initialize_Device();
 
+     //Check VSEP SPI Comm before Send Initialize Msg.	
+  Update_VSEP_SOH_Status_Immediate(MTSA_CONFIG_VSEP_DEVICE_0);
+	if (HAL_SOH_VsepSPI_High_Low_Error(true))
+	{
+		spi_comm_err = true;
+	}
+
 	// Hardware Test uses its own method to initialize the VSEP
 	// Send the Init message to the VSEP. This will setup all the faults/slews/est select information/
 	// along with all the locked bit information.
 	VSEP_SPI_Immediate_Transfer(VSEP_Set_Device_Index(0, VSEP_INDEX_0 ), VSEP_MESSAGE_INIT );
 	// Need to check why redundant operation is needed, without it, no spark injection
 	VSEP_SPI_Immediate_Transfer(VSEP_Set_Device_Index(0, VSEP_INDEX_0 ), VSEP_MESSAGE_INIT );
-	VSEP_Disable_SOH();
-
+	//VSEP_Disable_SOH();
 	VSEP_EST_Select_Set_Mode(VSEP_INDEX_0,EST_MODE_SIMULTANEOUS_SINGLE_ENABLE); 
 	VSEP_EST_Select_Set_Channel(VSEP_INDEX_0,EST_SELECT_CYLINDER_A);
+	
+	//Check VSEP SPI Comm after Send Initialize Msg.	
+	Update_VSEP_SOH_Status_Immediate(MTSA_CONFIG_VSEP_DEVICE_0);
+	if (HAL_SOH_VsepSPI_High_Low_Error(true))
+	{
+		spi_comm_err = true;
+	}
+	if(spi_comm_err == true)
+	{
+		VbHWIO_SOH_Running = false;  //VSEP SPI high/low bit error occur
+		VbHWIO_VSEP_Initialized = false;
+		//VbHWIO_VSEP_Initialized will be checked in SOH initialized and GEN will force low if initialize fail
+	}
+	else
+	{
+		VbHWIO_SOH_Running = true;
+		VbHWIO_VSEP_Initialized = true;	
+	}
 }
 
 

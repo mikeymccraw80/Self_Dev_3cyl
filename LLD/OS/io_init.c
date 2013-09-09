@@ -246,10 +246,7 @@ void InitializeHardwareRegisters(void)
 
 	VSEP_Initialize_Device();
 
-//	SOH_ETC_Initialize(TRUE);
-STM_Timer_Set_Value(STM_CHANNEL_0,1000*20);
-DMA_Enable_Request(DMA_CHANNEL_MIOS_EMIOSFLAG_4);
-
+	SOH_ETC_Initialize(true);
 }
 
 //=============================================================================

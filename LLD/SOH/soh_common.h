@@ -6,10 +6,10 @@
  * Copyright 2005 Delphi Technologies, Inc., All Rights Reserved.
  * Delphi Confidential
  *---------------------------------------------------------------------------
- * %full_filespec:  soh_common.h~4:incl:mt20u2#1 %
- * %version: 4 %
- * %derived_by:wzmkk7 %
- * %date_modified: %
+ * %full_filespec:  soh_common.h~1:incl:ctc_pt3#1 %
+ * %version: 1 %
+ * %derived_by:rz65p6 %
+ * %date_modified:  %
  * $SOURCE: $
  * $REVISION: $
  * $AUTHOR: $
@@ -47,10 +47,14 @@
 \*===========================================================================*/
 #include "reuse.h"
 
-
 /*===========================================================================*\
  * Other Header Files
 \*===========================================================================*/
+//#include "os_loop_scheduler.h"
+#include "hal_soh.h"
+
+#include "dd_tpu.h"
+//#include "dd_tpu_timer.h"
 
 /*===========================================================================*\
  * Exported Preprocessor #define Constants
@@ -63,11 +67,30 @@
  *       XXX_US is expressed in microseconds
  *       XXX_HZ is expressed in Hertz
  */
-#define SOH_IRQ_PERIOD_MS						( 15.625 )
-#define SOH_RTI_PERIOD_MS						( 8.0 )
-#define SOH_SHUTOFF_PERIOD_MS					( 187.50 )
-#define REFCLK_FREQ_HZ							( 818UL )
+#define Main_Loop_Time_mS 10
+#define Base_Loop_Time_mS 1.0
+#define SOH_IRQ_PERIOD_MS						     ( 2 * Main_Loop_Time_mS )
+#define REFCLK_FREQ_HZ							     ( 818UL )
+#define SOH_RUNTEST_PERIOD_MS					     ( SOH_IRQ_PERIOD_MS * 2 )
 
+#define SOH_LOOPSEQBUFSZ						     (uint8_t)( (SOH_RUNTEST_PERIOD_MS / Main_Loop_Time_mS)*SOH_10ms_loop_funciotn_NUM + 6 )
+
+#define SOH_10ms_loop_funciotn_NUM  4
+// This is the time base for SOH function, used to validate external frequency in and interrupt
+//#define SOH_INTERNAL_TIME_BASE_CONFIG                TPU_CHANNEL_Set_TCR_Time_Base(0,TPU_TCR1_TIME_BASE)
+//ETPUA0 - EPPwMT
+
+
+
+
+
+#define SOH_INTERNAL_TIME_BASE_OVERFLOW_VALUE        0xFFFFFF
+
+#define SOH_NUM_MINORLOOP_PERCYCLE			        (uint8_t)( HAL_SOH_APP_Get_Number_Major_Loop() * Main_Loop_Time_mS / Base_Loop_Time_mS)
+
+#define MAJLOOPTIME_TYPICAL					        ( SOH_NUM_MINORLOOP_PERCYCLE * Base_Loop_Time_mS )
+
+#define SOH_RTIBUFSZ								(uint8_t)( SOH_NUM_MINORLOOP_PERCYCLE + 2 )
 
 /*===========================================================================*\
  * Exported Preprocessor #define MACROS
@@ -76,50 +99,20 @@
 /*===========================================================================*\
  * Exported Type Declarations
 \*===========================================================================*/
-
-/* data type for time variables */
-
-typedef uint16_t								SOH_TMR_MSEC_T;
-#define V_SOH_TMR_MSEC_T(val) 				((uint16_t)(val * 1000000 / (uint32_t)(TIM_PERIOD_US * 1000UL)) ) //mz38cg: Need to review it
-
-
-#define PIT_TIM_PERIOD_US	( 1000000UL / MICROTIMER1_FREQUENCY_HZ )//PIT Timer: 5us @40MHz bus clock
-
-typedef uint16_t								SOH_PIT_TMR_MSEC_T;
-#define V_SOH_PIT_TMR_MSEC_T(val) 			((uint16_t)(val * 1000000UL / (uint32_t)(PIT_TIM_PERIOD_US * 1000UL)) ) //mz38cg: Need to review it
-
-
-#define Convert_PITTMR_to_TCNTTMT(count)	((uint16_t)(count * (uint32_t)(PIT_TIM_PERIOD_US * 1000) / (uint32_t)(TIM_PERIOD_US * 1000)) )
-
-
-typedef union Soh_Fault_Log_Tag
+typedef union Soh_Test_Result_Tag
 {
-	uint16_t Word; /* ETC SOH fault code */
+	uint8_t Byte; /* 0 - test pass, 1 - test fail */
 	struct
 	{
-		uint8_t LoByte;
-		uint8_t HiByte;
-	} Bytes;
-	struct
-	{
-		bitfield8_t	W01					: 1; /* System clock frequency error */
-		bitfield8_t	W02					: 1; /* Interrupt source error */
-		bitfield8_t	W03					: 1; /* System timer error */
-		bitfield8_t	W04					: 1; /* Test sequence error */
-		bitfield8_t	W05					: 1; /* RTI frequency error */
-		bitfield8_t	W06					: 1; /* CPU loop sequence error */
-		bitfield8_t	W07					: 1; /* SOH C&R counter value low */
-		bitfield8_t	W08					: 1; /* ECT PWM frequecy error */
-		bitfield8_t	W09					: 1; /* SPI error */
-		bitfield8_t	W10					: 1; /* SPI communication error */
-		bitfield8_t	W11					: 1; /* SOH C&R disarmed */
-		bitfield8_t	W12					: 1; /* SOH C&R timeout */
-		bitfield8_t	W13					: 1; /* SOH C&R counter value zero */
-		bitfield8_t	W14					: 1; /* Shutoff timer expired */
-		bitfield8_t	Unused					: 2;
+		bitfield8_t		SysClkFail 		: 1; /* System clock frequency failure */
+		bitfield8_t 	SohIrqFail 		: 1; /* ETC SOH interrupt frequency failure */
+		bitfield8_t		SysTmrFail		: 1; /* System timer failure */
+		bitfield8_t						: 1;
+		bitfield8_t		RtiFreqFail		: 1; /* RTI frequency failure */
+		bitfield8_t		LoopSeqFail		: 1; /* CPU loop sequence failure */
+		bitfield8_t						: 2;
 	} Bits;
-} Soh_Fault_Log_T;
-
+} Soh_Test_Result_T;
 
 typedef union Soh_Test_Completion_Tag
 {
@@ -127,33 +120,15 @@ typedef union Soh_Test_Completion_Tag
 	struct
 	{
 		bitfield8_t		SysClk 			: 1; /* System clock frequency */
-		bitfield8_t 		SohIrq 			: 1; /* ETC SOH interrupt frequency */
+		bitfield8_t 	SohIrq 			: 1; /* ETC SOH interrupt frequency */
 		bitfield8_t		SysTmr			: 1; /* System timer */
 		bitfield8_t		CpuOpsCR		: 1; /* Fundamental CPU operation C&R */
 		bitfield8_t		RtiFreq			: 1; /* RTI frequency */
 		bitfield8_t		LoopSeq			: 1; /* CPU loop sequence */
 		bitfield8_t		CpuOpsResult	: 1; /* Fundamental CPU operation check result */
-		bitfield8_t		ETCPWM			: 1; /* ETC PWM frequency */
+		bitfield8_t						: 1;
 	} Bits;
 } Soh_Test_Completion_T;
-
-
-typedef union Soh_Test_Result_Tag
-{
-	uint8_t Byte; /* 0 - test pass, 1 - test fail */
-	struct
-	{
-		bitfield8_t		SysClkFail 		: 1; /* System clock frequency failure */
-		bitfield8_t 		SohIrqFail 		: 1; /* ETC SOH interrupt frequency failure */
-		bitfield8_t		SysTmrFail		: 1; /* System timer failure */
-		bitfield8_t		CpuOpsCRFail		: 1; 
-		bitfield8_t		RtiFreqFail		: 1; /* RTI frequency failure */
-		bitfield8_t		LoopSeqFail		: 1; /* CPU loop sequence failure */
-		bitfield8_t		CpuOpsResultFail	: 1; 
-		bitfield8_t		ETCPWMFail		: 1; /* ETC PWM frequency failure */
-	} Bits;
-} Soh_Test_Result_T;
-
 
 typedef union Soh_CnR_Value_Tag
 {
@@ -166,7 +141,7 @@ typedef union Soh_CnR_Value_Tag
 	struct
 	{
 		bitfield8_t	Challenge			: 6; /* C&R challenge value */
-		bitfield8_t  						: 2;
+		bitfield8_t  					: 2;
 		bitfield8_t	Response			: 6; /* C&R response value */
 		bitfield8_t	FSE_DisReq			: 1; /*	1: request disable fuel, spark and ETC
 												0: no control */
@@ -186,43 +161,56 @@ typedef union Soh_CnR_Status_Tag
 	struct
 	{
 		bitfield8_t	CRTimeout			: 1; /*	0: no timeout occurred
-												1: timeout occurred (48 ms expired) or
-												   	communication error */
-		bitfield8_t 						: 7;
+									                      1: timeout occurred (48 ms expired) or communication error */
+	//	bitfield8_t SPIFail     		: 1; /* 0: No SPI  error   
+//																				1: SPI  error  */																			
+		bitfield8_t 		            : 7;
 		bitfield8_t	Respcount			: 5; /* C&R counter value */
-		bitfield8_t	CRDisarm_Stat		: 1; /*	0: ETC SOH C&R logic not disabled
-												1: ETC SOH C&R logic disabled */
-		bitfield8_t	FSE_En_Stat			: 1; /*	0: FSE_Enable pin at low level
-												1: FSE_Enable pin at high level or
-												   	communication error */
-		bitfield8_t	GEN_Stat			: 1; /*	0: GEN input at low level
-												1: GEN input at high level */
+		bitfield8_t	CRDisarm_Stat	: 1; /*	0: ETC SOH C&R logic not disabled
+												                1: ETC SOH C&R logic disabled */
+		bitfield8_t	FSE_En_Stat		: 1; /*	0: FSE_Enable pin at low level
+												                1: FSE_Enable pin at high level or communication error */
+		bitfield8_t	GEN_Stat			  : 1; /*	0: GEN input at low level
+												                1: GEN input at high level */
 	} Bits;
 } Soh_CnR_Status_T;
 
-/*===========================================================================*\
- * Exported Object Declarations
-\*===========================================================================*/
-extern Soh_Test_Completion_T Soh_TestComp;
-extern Soh_Test_Result_T Soh_TestResult;
-extern Soh_Fault_Log_T Soh_FaultLogNVM;
+typedef union Soh_Fault_Log_Tag
+{
+	uint16_t Word; /* ETC SOH fault code */
+	struct
+	{
+		uint8_t LoByte;
+		uint8_t HiByte;
+	} Bytes;
+	struct
+	{
+		bitfield8_t	SysClkFail 		    : 1; /* System clock frequency error */
+		bitfield8_t	SohIrqSrcFail       : 1; /* Interrupt source error */
+		bitfield8_t	SysTmrFail		    : 1; /* System timer error */
+		bitfield8_t	SohSeqFail          : 1; /* Test sequence error */
+		bitfield8_t	RtiFreqFail         : 1; /* RTI frequency error */
+		bitfield8_t	LoopSeqFail		    : 1; /* CPU loop sequence error */
+		bitfield8_t	CRCounterLow        : 1; /* SOH C&R counter value low */
+		bitfield8_t	ShutOffTimeExpire   : 1; /* Shutoff timer expired */
+		bitfield8_t	SPIFail             : 1; /* SPI error */
+		bitfield8_t	SPICommFail         : 1; /* SPI communication error */
+		bitfield8_t	CRDisarmed          : 1; /* SOH C&R disarmed */
+		bitfield8_t	CRTimeoutFail       : 1; /* SOH C&R timeout */
+		bitfield8_t	CRCounterFail	    : 1; /* SOH C&R counter value zero */
+		bitfield8_t						: 3;
+	} Bits;
+} Soh_Fault_Log_T;
 
-/*===========================================================================*\
- * Exported Function Prototypes
-\*===========================================================================*/
 
-/*===========================================================================*\
- * Exported Inline Function Definitions and #define Function-Like Macros
-\*===========================================================================*/
 
-/*===========================================================================*\
- * File Revision History (top to bottom: first revision to last revision)
- *===========================================================================
- *
- * Date        userid    (Description on following lines: SCR #, etc.)
- * ----------- --------
- * 01 June 05  sgchia
- * + Created initial file.
- *
-\*===========================================================================*/
+
+/* data type for time variables */
+typedef uint32_t								SOH_TMR_MSEC_T;
+#define V_SOH_TMR_MSEC_T(val) 					(uint32_t)((val)*64)
+#define S_SOH_TMR_MSEC_T         				( 6 )
+
+#define DecCirBuffIdx(idx, arraysize)			( (idx) > 0 ? (idx) - 1: (arraysize) - 1)
+#define IncCirBuffIdx(idx, arraysize)			( (idx) >= (arraysize) - 1 ? 0 : (idx) + 1)
+
 #endif /* } SOH_COMMON_H */

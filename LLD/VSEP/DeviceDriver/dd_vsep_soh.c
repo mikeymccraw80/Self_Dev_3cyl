@@ -180,7 +180,7 @@ uint32_t VSEP_SOH_Calculate_Response( uint32_t challenge )//not sure
 //=============================================================================
 // VSEP Calculate Response
 //=============================================================================
-void VSEP_Calculate_Response( SPI_HClient_T in_hclient )
+/*void VSEP_Calculate_Response( SPI_HClient_T in_hclient )
 {
    uint32_t device = (uint32_t)in_hclient;
    uint8_t challenge = VSEP_Msg_Get_Challenge( VSEP_SOH_Rxd[VSEP_SOH_RXD_MESSAGE_CHALLENGE]);
@@ -238,7 +238,7 @@ void VSEP_Calculate_Response( SPI_HClient_T in_hclient )
 
    }
 }
-
+*/
 
 ///////////////////////////////////////////////////////////////////////////////
 // VSEP_SeviceSOH for SOH disable

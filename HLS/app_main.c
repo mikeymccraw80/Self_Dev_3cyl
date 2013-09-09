@@ -85,7 +85,7 @@ uint16_t             KmQ65;
 signed char              dNDsr;
 bool                 B_Fof;
 
-
+uint8_t SOH_LOOP;
 /*VCPC*/
 uint16_t angle_crank_cam_inlet;
 uint16_t angle_crank_cam_outlet;
@@ -112,6 +112,25 @@ uint32_t  nvram_test2;
 /* ============================================================================ *\
  * Local FUNCTION.
 \* ============================================================================ */
+//SOH test function
+
+void ETSMRSV_r40ms();
+void ETSMIST_r40ms();
+void ETSMAPV_r40ms();
+void ETSMN_r40ms();
+void ETSMLD_r40ms();
+void ETSMAFST_r40ms();
+void ETSMTQP_r40ms();
+void ETSMTQF_r40ms();
+void ETSMIGA_r40ms();
+void ETSMTQC_r40ms();
+void ETSMTQ_r40ms();
+void ETSMMFR_r40ms();
+void ETSMRES1_r40ms();
+void ETSMRES2_r40ms();
+void ETSMRES3_r40ms();
+void ETSMRES4_r40ms();
+
 
 /*AD test code*/
   void TestATD_ATD_Function(void)
@@ -171,7 +190,6 @@ void HLS_Task_1ms(void)
 /* Call back function for 2ms task */
 void HLS_Task_2ms(void)
 {
-  
 }
 
 void HLS_Task_5ms(void)
@@ -183,6 +201,39 @@ void HLS_Task_5ms(void)
 void HLS_Task_10ms(void)
 {
  Test_DI_Function();
+	 /*--- 32ms logics ---*/
+ switch ( SOH_LOOP&0x03 )
+ {
+		 case 0:
+			ETSMRSV_r40ms();			
+			ETSMIST_r40ms();			
+			ETSMAPV_r40ms();
+			ETSMRES1_r40ms();
+				 break ;
+		 case 1:
+			 ETSMN_r40ms();
+			 ETSMLD_r40ms();
+			 ETSMAFST_r40ms();
+			 ETSMRES2_r40ms();			
+				 break ;
+		 case 2:
+			 ETSMTQP_r40ms();
+			 ETSMTQF_r40ms();
+			 ETSMIGA_r40ms();
+			 ETSMRES3_r40ms();
+				 break ;
+		 case 3:
+			 ETSMTQC_r40ms();
+			 ETSMTQ_r40ms();
+			 ETSMMFR_r40ms();
+			 ETSMRES4_r40ms();
+	      break ;
+		 default :
+		 				
+				 break ;
+ }
+ 
+ SOH_LOOP++;
 }
 /* Call back function for 20ms task */
 void HLS_Task_20ms(void)
