@@ -17,3 +17,4 @@
 ..\LLD\HWDiag\EPSD\epsdcald.c
 ..\LLD\HWDiag\INJD\injdcald.c
 ..\LLD\HWDiag\PRGD\prgdcald.c
+..\LLD\SOH\soh_cald.c

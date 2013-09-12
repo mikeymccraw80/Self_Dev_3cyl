@@ -634,25 +634,5 @@ const VSEP_MPIO_Input_Mode_T KeVSEP_MIDAC_pin40_Status = VSEP_MPIO_INPUT_MODE_AC
 
 const   uint16_t KsVSEP_Diagnostic_Counter_Thd = 16;
 
-/*
-*| vsepcald.{
-*|   t_soh_0_14_ubyte
-*|   {
-*|     : kind = fixed;
-*|     : precision = 1;
-*|     : range = 0 TO <15;
-*|   }
-*|   KSOHCRTH {
-*|     : is_calconst;
-*|     : is_coordinated;
-*|     : description = "SOH challenge and response counter threshold "
-*| "below which fuel, spark and ETC outputs are disabled. "
-*| "Count should be less than 15";
-*|     : type = vsepcald.t_soh_0_14_ubyte;
-*|     : units = "count";
-*|   }
-*|   }
-*/
-//const uint8_t KSOHCRTH = 10;
 
 
