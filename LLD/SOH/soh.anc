@@ -1,0 +1,182 @@
+/*============================================================================
+ *
+ * ETC SOH Building Block Software
+ * Ancillary file for generating ASAP2 Objects
+ *
+ *============================================================================
+*/
+
+*-soh.Soh_ShutOffDnTimer{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "SOHSHUTD";
+*-  variable_location.symbol = soh.Soh_ShutOffDnTimer;
+*-  ds_scaling_unit          = "counts";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "SOH shutoff down timer.";
+*-}
+
+*-soh.Soh_ShutOffUpTimer{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "SOHSHUTU";
+*-  variable_location.symbol = soh.Soh_ShutOffUpTimer;
+*-  ds_scaling_unit          = "counts";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "SOH shutoff up timer.";
+*-}
+
+*-soh.Soh_OddErrCnt{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "SOHODDEC";
+*-  variable_location.symbol = soh.Soh_OddErrCnt;
+*-  ds_scaling_unit          = "counts";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "SOH odd loop test error counter.";
+*-}
+
+*-soh.Soh_EvenErrCnt{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "SOHEVNEC";
+*-  variable_location.symbol = soh.Soh_EvenErrCnt;
+*-  ds_scaling_unit          = "counts";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "SOH even loop test error counter.";
+*-}
+
+
+*-soh.Soh_CnRValue_Bit_Challenge{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "SOHCHALV";
+*-  variable_location.symbol = soh.Soh_CnRValue.Bits.Challenge;
+*-  description              = "SOH C&R challenge value.";
+*-}
+
+*-soh.Soh_CnRValue_Bit_Response{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "SOHRESPV";
+*-  variable_location.symbol = soh.Soh_CnRValue.Bits.Response;
+*-  description              = "SOH C&R response value.";
+*-}
+
+*-soh.Soh_CnRValue_Bit_FSE_DisReq{
+*-  OBJECTS_CLASS: status_bit_class;
+*-  label                    = "SOHDISRQ";
+*-  variable_location.symbol = soh.Soh_CnRValue.Bits.FSE_DisReq;
+*-  description              = "SOH Fuel, spark, ETC disable request. (1=request disable, 0=no control)";
+*-}
+
+
+*-soh.Soh_CnRStatus_Bit_CRTimeout{
+*-  OBJECTS_CLASS: status_bit_class;
+*-  label                    = "SOHCNRTO";
+*-  variable_location.symbol = soh.Soh_CnRStatus.Bits.CRTimeout;
+*-  description              = "SOH C&R timeout status. (1=timeout or comms error, 0=no timeout)";
+*-}
+
+
+*-soh.Soh_CnRStatus_Bit_Respcount{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "SOHRESPC";
+*-  variable_location.symbol = soh.Soh_CnRStatus.Bits.Respcount;
+*-  description              = "SOH C&R counter value. (range: 0 to 19)";
+*-}
+
+*-soh.Soh_CnRStatus_Bit_CRDIsarm_Stat{
+*-  OBJECTS_CLASS: status_bit_class;
+*-  label                    = "SOHDSARM";
+*-  variable_location.symbol = soh.Soh_CnRStatus.Bits.CRDisarm_Stat;
+*-  description              = "SOH C&R logic disable status. (1=disable, 0=not disable)";
+*-}
+
+
+*-soh.Soh_CnRStatus_Bit_FSE_EN_Stat{
+*-  OBJECTS_CLASS: status_bit_class;
+*-  label                    = "SOHFSEST";
+*-  variable_location.symbol = soh.Soh_CnRStatus.Bits.FSE_En_Stat;
+*-  description              = "SOH FSE_Enable pin status. (1=high level or comms error, 0=low level)";
+*-}
+
+
+*-soh.Soh_CnRStatus_Bit_Gen_Stat{
+*-  OBJECTS_CLASS: status_bit_class;
+*-  label                    = "SOHGENST";
+*-  variable_location.symbol = soh.Soh_CnRStatus.Bits.GEN_Stat;
+*-  description              = "SOH GEN pin status. (1=high level, 0=low level)";
+*-}
+
+
+*-soh.Soh_TestComp{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "SOHTSTCF";
+*-  variable_location.symbol = soh.Soh_TestComp.Byte;
+*-  ds_scaling_unit          = "hex no scale";
+*-  description              = "SOH test completed flag. (1=test completed, 0=test not completed)";
+*-}
+
+*-soh.Soh_TestResult{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "SOHTST_C";
+*-  variable_location.symbol = soh.Soh_TestResult.Byte;
+*-  ds_scaling_unit          = "-";
+*-  ds_scaling_unit          = "hex no scale";
+*-  description              = "SOH current test result. (1=test fail, 0=test pass)";
+*-}
+
+*-soh.Soh_TestErr{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "SOHTST_H";
+*-  variable_location.symbol = soh.Soh_TestErr.Byte;
+*-  ds_scaling_unit          = "hex no scale";
+*-  description              = "SOH test result history. (1=test fail, 0=test pass)";
+*-}
+
+*-soh_nvm.Soh_FaultLogNVM{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "SOHFLTNVM";
+*-  variable_location.symbol = soh_nvm.Soh_FaultLogNVM.Word;
+*-  ds_scaling_unit          = "hex no scale";
+*-  description              = "ETC SOH fault NVM. (1=error logged, 0=no error)";
+*-}
+
+*-soh.Soh_FaultLog{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "SOHFAULT";
+*-  variable_location.symbol = soh.Soh_FaultLog.Word;
+*-  ds_scaling_unit          = "hex no scale";
+*-  description              = "ETC SOH fault. (1=error logged, 0=no error)";
+*-}
+
+*-soh.Soh_RecoverMode{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "SOHRECVR";
+*-  variable_location.symbol = soh.Soh_RecoverMode;
+*-  ds_scaling_unit          = "-";
+*-  ds_precision             = "1.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  bit_mask                 = 0x01;
+*-  description              = "SOH recover mode flag. (1=start SOH recovery, 0=stop SOH recovery)";
+*-}
+
+
+/*===========================================================================*\
+ * File Revision History (top to bottom: first revision to last revision)
+ *===========================================================================
+ *
+ * Date        userid    (Description on following lines: SCR #, etc.)
+ * ----------- --------
+ *
+\*===========================================================================*/
+

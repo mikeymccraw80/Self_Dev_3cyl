@@ -850,6 +850,50 @@ typedef union TPU_CHANNEL_Configuration_Tag
 
 }  TPU_CHANNEL_Configuration_T;
 
+// /------------------------------------------------------------------------
+// | CHANNEL CONFIGURATION
+// \------------------------------------------------------------------------
+//=============================================================================
+// @enum TPU_CHANNEL_Configuration_Width_T | Defines width for extract and insertion of the channel configuration 
+typedef enum
+{
+   TPU_CHANNEL_CONFIGURATION_WIDTH_PRIMITIVE                =  5, // @emem [ 4: 0] TPU Primitives or Channel function Select
+   TPU_CHANNEL_CONFIGURATION_WIDTH_HSR                      =  3, // @emem [ 7: 5] Host Service Request Type
+   TPU_CHANNEL_CONFIGURATION_WIDTH_OUTPUT_DISABLE           =  1, // @emem      8   Output Disable
+   TPU_CHANNEL_CONFIGURATION_WIDTH_POLARITY                 =  1, // @emem      9  Active state of channel
+   TPU_CHANNEL_CONFIGURATION_WIDTH_CPR                      =  2, // @emem [11:10] Channel Priority Index
+   TPU_CHANNEL_CONFIGURATION_WIDTH_TREN                     =  1, // @emem     12  Transfer Request Enable
+   TPU_CHANNEL_CONFIGURATION_WIDTH_IREN                     =  1, // @emem     13  Interrupt Request Enable
+   TPU_CHANNEL_CONFIGURATION_WIDTH_ETCS                     =  1, // @emem     14  Entry Table Condition Select
+   TPU_CHANNEL_CONFIGURATION_WIDTH_FUNCTION_MODE0           =  1, // @emem     15  Channel Function Mode0
+   TPU_CHANNEL_CONFIGURATION_WIDTH_FUNCTION_MODE1           =  1, // @emem     16  Channel Function Mode1
+   TPU_CHANNEL_CONFIGURATION_WIDTH_CHANNEL                  =  5, // @emem [21:17] Channel
+   TPU_CHANNEL_CONFIGURATION_WIDTH_REFERNCE_CHANNEL         =  5, // @emem [28:24] Refernce channel number
+   TPU_CHANNEL_CONFIGURATION_WIDTH_PWM_UPDATE_MODE          =  1, // @emem      29 PWM Update Mode 1- Coherent,0- synchronus
+   TPU_CHANNEL_CONFIGURATION_WIDTH_EVENT_TYPE               =  2  // @emem [31:30] Event Type
+
+}  TPU_CHANNEL_Configuration_Width_T;
+
+
+// @enum TPU_CHANNEL_Configuration_Position_T | Defines position for extract and insertion of the channel configuration
+typedef enum
+{
+   TPU_CHANNEL_CONFIGURATION_POSITION_PRIMITIVE             =  0, // @emem [ 4: 0] TPU Primitives or Channel function Select
+   TPU_CHANNEL_CONFIGURATION_POSITION_HSR                   =  5, // @emem [ 7: 5] Host Service Request Type
+   TPU_CHANNEL_CONFIGURATION_POSITION_OUTPUT_DISABLE        =  8, // @emem     8   Output Disable
+   TPU_CHANNEL_CONFIGURATION_POSITION_POLARITY              =  9, // @emem     9   Active state of channel
+   TPU_CHANNEL_CONFIGURATION_POSITION_CPR                   = 10, // @emem [11:10] Channel Priority Index
+   TPU_CHANNEL_CONFIGURATION_POSITION_TREN                  = 12, // @emem     12  Transfer Request Enable
+   TPU_CHANNEL_CONFIGURATION_POSITION_IREN                  = 13, // @emem     13  Interrupt Request Enable
+   TPU_CHANNEL_CONFIGURATION_POSITION_ETCS                  = 14, // @emem     14  Entry Table Condition Select
+   TPU_CHANNEL_CONFIGURATION_POSITION_FUNTION_MODE0         = 15, // @emem     15  Channel Function Mode0
+   TPU_CHANNEL_CONFIGURATION_POSITION_FUNTION_MODE1         = 16, // @emem     16  Channel Function Mode1
+   TPU_CHANNEL_CONFIGURATION_POSITION_CHANNEL               = 17, // @emem [21:17] Channel
+   TPU_CHANNEL_CONFIGURATION_POSITION_REFERNCE_CHANNEL      = 24, // @emem [28:24] Refernce channel number
+   TPU_CHANNEL_CONFIGURATION_POSITION_PWM_UPDATE_MODE       = 29, // @emem      29 PWM Update Mode 1- Coherent,0- synchronus
+   TPU_CHANNEL_CONFIGURATION_POSITION_EVENT_TYPE            = 30  // @emem [31:30] Event Type
+}  TPU_CHANNEL_Configuration_Position_T;
+ 
 
 //=============================================================================
 // @enum TPU_Index_T | The Timer Processor Unit used by the configuration
@@ -916,6 +960,34 @@ void TPU_Set_HSR(
        TPU_Index_T index,
   TPU_CHANNEL_Configuration_T   configure,
    uint8_t              in_hsr);
+
+//=============================================================================
+// TPU_CHANNEL_Set_TCR_Time_Base
+//
+// @func Set the desired value for TPU configuration.
+//
+// @parm bool | x | A <t bool> element
+//
+// @rdesc <t IO_Configuration_T> containing the element <t bool>
+//
+// @end
+//=============================================================================
+#define TPU_CHANNEL_Set_TCR_Time_Base(x,y) \
+   (IO_Configuration_T)( Insert_Bits( (x), (y), TPU_CHANNEL_CONFIGURATION_POSITION_FUNTION_MODE0, TPU_CHANNEL_CONFIGURATION_WIDTH_FUNCTION_MODE0 ) )
+
+//=============================================================================
+// TPU_CHANNEL_Get_TCR_Time_Base
+//
+// @func Get the initial value for TPU configuration.
+//
+// @parm IO_Configuration_T | x | A <t IO_Configuration_T> type
+//
+// @rdesc <t bool> element decoded from the <t IO_Configuration_T>
+//
+// @end
+//=============================================================================
+#define TPU_CHANNEL_Get_TCR_Time_Base(x) \
+   (TPU_Time_Base_T)( Extract_Bits( (x), TPU_CHANNEL_CONFIGURATION_POSITION_FUNTION_MODE0, TPU_CHANNEL_CONFIGURATION_WIDTH_FUNCTION_MODE0 ) )
 
 
 //=============================================================================

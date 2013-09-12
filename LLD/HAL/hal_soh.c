@@ -4,10 +4,10 @@
  * Copyright 2005 Delphi Technologies, Inc., All Rights Reserved.
  * Delphi Confidential
  *---------------------------------------------------------------------------
- * %full_filespec: hal_soh.c~1:csrc:mt20u2#1 %
- * %version: 1 %
- * %derived_by: wzmkk7 %
- * %date_modified: Tue Nov  1 22:58:57 2005 %
+ * %full_filespec: hal_soh.c~4:csrc:ctc_pt3#1 %
+ * %version: 4 %
+ * %derived_by: zzrfyj %
+ * %date_modified:      %
  * $SOURCE: $
  * $REVISION: $
  * $AUTHOR: $
@@ -43,13 +43,15 @@
 /*===========================================================================*\
  * Other Header Files
 \*===========================================================================*/
-#include "hal_soh.h"
+
 #include "soh.h"
-#include "soh_s12x.h"
 #include "dd_vsep_soh.h"
-#include "dd_vsep_fault.h"
+#include "io_conversion.h"
+
+#include "io_config_stm.h"
 #include "dd_vsep.h"
-#include "dd_vsep_msg_config.h"
+#include "dd_mios.h"
+
 
 /*===========================================================================*\
  * Local Preprocessor #define Constants
@@ -68,15 +70,6 @@
 \*===========================================================================*/
 
 
-//=============================================================================
-// SOH ASIC - VSEP Device Configuration
-//=============================================================================
-#define MTSA_CONFIG_VSEP_DEVICE_0			( VSEP_Set_Device_Index( 0, VSEP_INDEX_0 ) )
-
-//extern const SPI_Message_T VSEP_STATUS_MESSAGE[ NUMBER_OF_VSEP ];
-//extern const SPI_Message_T VSEP_MESSAGE[VSEP_MESSAGE_MAX+8];
-extern uint16_t VSEP_SOH_Status_Rxd[VSEP_SOH_STATUS_RXD_MESSAGE_MAX];
-
 /*===========================================================================*\
  * Local Object Definitions
 \*===========================================================================*/
@@ -84,19 +77,14 @@ extern uint16_t VSEP_SOH_Status_Rxd[VSEP_SOH_STATUS_RXD_MESSAGE_MAX];
 /*===========================================================================*\
  * Local Function Prototypes
 \*===========================================================================*/
-//bool HAL_SOH_VsepSPI_High_Low_Error(bool unbuffered); //mz38cg
 
 /*===========================================================================*\
  * Local Inline Function Definitions and Function-Like Macros
 \*===========================================================================*/
 
-
 /*===========================================================================*\
  * Function Definitions
 \*===========================================================================*/
-
-
-
 /*===========================================================================*\
  * FUNCTION: HAL_SOH_VsepSPI_High_Low_Error
  *===========================================================================
@@ -119,7 +107,7 @@ extern uint16_t VSEP_SOH_Status_Rxd[VSEP_SOH_STATUS_RXD_MESSAGE_MAX];
  * This function checks whether the first two bits of SPI message from vsep
  * are correct or not
 \*===========================================================================*/
-static bool HAL_SOH_VsepSPI_High_Low_Error(bool unbuffered)
+ bool HAL_SOH_VsepSPI_High_Low_Error(bool unbuffered)
 {
 	bool spi_high_low_error;
 	uint16_t inbuffer;
@@ -206,7 +194,6 @@ void HAL_SOH_CnR_Set_Response(bool fse_disreq, uint8_t response)
 	VSEP_SOH_Set_Response(MTSA_CONFIG_VSEP_DEVICE_0, response);
 }
 
-
 /*===========================================================================*\
  * FUNCTION: HAL_SOH_CnR_Clear_Timeout_Fault
  *===========================================================================
@@ -235,6 +222,61 @@ void HAL_SOH_CnR_Clear_Timeout_Fault(bool cnr_timeout_fault)
 }
 
 
+
+/*===========================================================================*\
+ * FUNCTION: HAL_SOH_Setup_Interrupt
+ *===========================================================================
+ * RETURN VALUE:
+ * None.
+ *
+ * PARAMETERS:
+ * SOH_TMR_MSEC_T irq_period : interrupt occurrence time scaled to SOH_TMR_MSEC_T.
+ *
+ * EXTERNAL REFERENCES:
+ * None.
+ *
+ * DEVIATIONS FROM STANDARDS:
+ * None.
+ *
+ * --------------------------------------------------------------------------
+ * ABSTRACT:
+ * --------------------------------------------------------------------------
+ * This function setup an ETC SOH interrupt to occur in the specified time
+ * in one-shot mode.
+\*===========================================================================*/
+void HAL_SOH_Setup_Interrupt(SOH_TMR_MSEC_T irq_period)
+{
+	STM_Timer_Set_Value(STM_CHANNEL_0,IO_Convert_Time_To_Count(
+																			 irq_period,
+																			 STM_CLOCK_FREQUENCY_HZ,
+																			 S_SOH_TMR_MSEC_T,
+																			 MILLISECOND_RESOLUTION ));
+}
+
+/*===========================================================================*\
+ * FUNCTION: HAL_SOH_ETC_ISR
+ *===========================================================================
+ * RETURN VALUE:
+ * None.
+ *
+ * PARAMETERS:
+ * None.
+ *
+ * EXTERNAL REFERENCES:
+ * None.
+ *
+ * DEVIATIONS FROM STANDARDS:
+ * None.
+ *
+ * --------------------------------------------------------------------------
+ * ABSTRACT:
+ * --------------------------------------------------------------------------
+ * This ETC SOH interrupt service routine handler executes the ETC SOH tests.
+\*===========================================================================*/
+void HAL_SOH_ETC_ISR(void)
+{
+    SOH_ETC_ISR();
+}
 /*===========================================================================*\
  * FUNCTION: HAL_SOH_CnR_Get_Status
  *===========================================================================
@@ -289,7 +331,7 @@ uint16_t HAL_SOH_CnR_Get_Status(bool unbuffered)
    		if (HAL_SOH_VsepSPI_High_Low_Error(unbuffered))
 		{
 			vsep_status.Bits.FSE_En_Stat   = 1;
-   			vsep_status.Bits.CRTimeout     =1;
+   		vsep_status.Bits.CRTimeout     =1;
    	
 		}
 		else 
@@ -306,14 +348,14 @@ uint16_t HAL_SOH_CnR_Get_Status(bool unbuffered)
    		if (HAL_SOH_VsepSPI_High_Low_Error(unbuffered))
 		{
 			vsep_status.Bits.FSE_En_Stat   = 1;
-   			vsep_status.Bits.CRTimeout     =1;
+   		vsep_status.Bits.CRTimeout     =1;
    	
 		}
 		else 
 		{
 			vsep_status.Bits.FSE_En_Stat   = VSEP_Msg_CMD_Get_FSE_Enable_Status(VSEP_SOH_Rxd[VSEP_SOH_RXD_MESSAGE_FLT]);
 		   	vsep_status.Bits.CRTimeout     = VSEP_Msg_CMD_Get_Challenge_Response_Timeout(VSEP_SOH_Rxd[VSEP_SOH_RXD_MESSAGE_FLT]);
-	   		vsep_status.Bits.Respcount     = VSEP_Msg_CMD_Get_Challenge_Response_Count(VSEP_SOH_Rxd[VSEP_SOH_RXD_MESSAGE_FLT]);
+				vsep_status.Bits.Respcount     = VSEP_Msg_CMD_Get_Challenge_Response_Count(VSEP_SOH_Rxd[VSEP_SOH_RXD_MESSAGE_FLT]);
 		   	vsep_status.Bits.CRDisarm_Stat = VSEP_Msg_CMD_Get_Challenge_Response_Disarm(VSEP_SOH_Rxd[VSEP_SOH_RXD_MESSAGE_FLT]);
 	   		vsep_status.Bits.GEN_Stat      = VSEP_Msg_CMD_Get_Global_Enable_Status(VSEP_SOH_Rxd[VSEP_SOH_RXD_MESSAGE_FLT]);
 		}
@@ -322,59 +364,77 @@ uint16_t HAL_SOH_CnR_Get_Status(bool unbuffered)
    return (uint16_t)vsep_status.Word;
 }
 
-
-/*===========================================================================*\
- * FUNCTION: HAL_SOH_Set_HWReset_Enable_Request
- *===========================================================================
- * RETURN VALUE:
- *
- * PARAMETERS:
- *
- * EXTERNAL REFERENCES:
- * None.
- *
- * DEVIATIONS FROM STANDARDS:
- * None.
- *
- * --------------------------------------------------------------------------
- * ABSTRACT:
- * --------------------------------------------------------------------------
- * This function enable/disable the SOH external hardware reset logic.
-\*===========================================================================*/
-void HAL_SOH_Set_HWReset_Enable_Request(bool extrn_reset_en)
+ void UpdateHWIO_ETC_SOH_Loop_Sequence_Array( const uint8_t arr_index )
 {
-	VSEP_SOH_Set_SOHRSTEN_Request(MTSA_CONFIG_VSEP_DEVICE_0, extrn_reset_en);
+//#ifndef HW_SOH_DISABLE
+     SOH_ETC_Update_Loop_Sequence_Array( (const uint8_t )arr_index );//mz38cg
+//#endif
 }
 
-
-
-/*===========================================================================*\
- * FUNCTION: HAL_SOH_SPI_Get_Error_Status
- *===========================================================================
- * RETURN VALUE:
- * bool spi_status    : 0 - SPI transmit queue is empty.
- *                      1 - SPI transmit queue is not empty (error).
- *
- * PARAMETERS:
- * None.
- *
- * EXTERNAL REFERENCES:
- * None.
- *
- * DEVIATIONS FROM STANDARDS:
- * None.
- *
- * --------------------------------------------------------------------------
- * ABSTRACT:
- * --------------------------------------------------------------------------
- * This function reads the MCU SPI error status.
-\*===========================================================================*/
-bool HAL_SOH_SPI_Get_Error_Status(void)
-{
-	return false;
-}
-
-
+ //loop sequence validation for chery applicaiton//
+ void ETSMRSV_r40ms()
+ {UpdateHWIO_ETC_SOH_Loop_Sequence_Array(0);
+ }
+ 
+ void ETSMIST_r40ms()
+ {UpdateHWIO_ETC_SOH_Loop_Sequence_Array(1);
+ }
+ 
+ void ETSMAPV_r40ms()
+ {UpdateHWIO_ETC_SOH_Loop_Sequence_Array(2);
+ }
+ 
+ void ETSMRES1_r40ms()
+ {UpdateHWIO_ETC_SOH_Loop_Sequence_Array(3);
+ }
+ 
+ void ETSMN_r40ms()
+ {UpdateHWIO_ETC_SOH_Loop_Sequence_Array(4);
+ }
+ 
+ void ETSMLD_r40ms()
+ {UpdateHWIO_ETC_SOH_Loop_Sequence_Array(5);
+ }
+ 
+ void ETSMAFST_r40ms()
+ {UpdateHWIO_ETC_SOH_Loop_Sequence_Array(6);
+ }
+ 
+ void ETSMRES2_r40ms()
+ {UpdateHWIO_ETC_SOH_Loop_Sequence_Array(7);
+ }
+ 
+ void ETSMTQP_r40ms()
+ {UpdateHWIO_ETC_SOH_Loop_Sequence_Array(8);
+ }
+ 
+ void ETSMTQF_r40ms()
+ {UpdateHWIO_ETC_SOH_Loop_Sequence_Array(9);
+ }
+ 
+ void ETSMIGA_r40ms()
+ {UpdateHWIO_ETC_SOH_Loop_Sequence_Array(10);
+ }
+ 
+ void ETSMRES3_r40ms()
+ {UpdateHWIO_ETC_SOH_Loop_Sequence_Array(11);
+ }
+ 
+ void ETSMTQC_r40ms()
+ {UpdateHWIO_ETC_SOH_Loop_Sequence_Array(12);
+ }
+ 
+ void ETSMTQ_r40ms()
+ {UpdateHWIO_ETC_SOH_Loop_Sequence_Array(13);
+ }
+ 
+ void ETSMMFR_r40ms()
+ {UpdateHWIO_ETC_SOH_Loop_Sequence_Array(14);
+ }
+ 
+ void ETSMRES4_r40ms()
+ {UpdateHWIO_ETC_SOH_Loop_Sequence_Array(15);
+ }
 
 /*===========================================================================*\
  * File Revision History (top to bottom: first revision to last revision)

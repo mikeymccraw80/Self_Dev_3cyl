@@ -6,10 +6,10 @@
  * Copyright 2005 Delphi Technologies, Inc., All Rights Reserved.
  * Delphi Confidential
  *---------------------------------------------------------------------------
- * %full_filespec: hal_soh.h~1:incl:mt20u2#1 %
- * %version: 1 %
- * %derived_by: wzmkk7 %
- * %date_modified: Tue Nov  1 22:58:57 2005 %
+ * %full_filespec: hal_soh.h~4:incl:ctc_pt3#1 %
+ * %version: 4 %
+ * %derived_by: zzrfyj %
+ * %date_modified:      %
  * $SOURCE: $
  * $REVISION: $
  * $AUTHOR: $
@@ -44,8 +44,8 @@
  * Standard Header Files
 \*===========================================================================*/
 #include "soh_common.h"
-
-
+//#include "io_scale.h"
+//#include "io_discrete.h"
 
 
 /*===========================================================================*\
@@ -56,28 +56,11 @@
  * Exported Preprocessor #define Constants
 \*===========================================================================*/
 
-/* The following statement defines whether to enable/disable 
- * the SOH external hardware reset logic.
- * #define SOH_HWRESET_ENABLE		1	enable
- * #define SOH_HWRESET_ENABLE		0	disable
- */
-#define SOH_HWRESET_ENABLE		0
-
-
-/* the following macros are expressed in engineering unit
- * e.g., XXX_MS is expressed in milliseconds
- *       XXX_US is expressed in microseconds
- *       XXX_HZ is expressed in Hertz
- */
-
-/* This macro shall return the application software minor loop time in milliseconds */
-#define HAL_SOH_APP_Get_Minor_Loop_Time_MS()		( 3.90625 )
-
-/* This macro shall return the application software major loop time in milliseconds */
-#define HAL_SOH_APP_Get_Major_Loop_Time_MS()	   	( 7.8125 )
+/* comment out the following line if STM test is not applicable */
+#define SOH_STMTEST			1
 
 /* This macro shall return the number of major loops in the application software */
-#define HAL_SOH_APP_Get_Number_Major_Loop()		( 16 )
+#define HAL_SOH_APP_Get_Number_Major_Loop()			( 16 )
 
 /*===========================================================================*\
  * Exported Preprocessor #define MACROS
@@ -94,13 +77,9 @@
 /*===========================================================================*\
  * Exported Function Prototypes
 \*===========================================================================*/
-extern void HAL_SOH_CnR_Clear_Timeout_Fault(bool cnr_timeout_fault);
-extern void HAL_SOH_Set_HWReset_Enable_Request(bool extrn_reset_en);
-extern uint8_t HAL_SOH_CnR_Get_Challenge(void);
-extern uint16_t HAL_SOH_CnR_Get_Status(bool unbuffered);
-extern void HAL_SOH_CnR_Set_Response(bool fse_disreq, uint8_t response);
 extern bool HAL_SOH_SPI_Get_Error_Status(void);
-
+extern void HAL_SOH_ETC_ISR(void);
+extern bool HAL_SOH_VsepSPI_High_Low_Error(bool unbuffered);
 
 /*===========================================================================*\
  * Exported Inline Function Definitions and #define Function-Like Macros

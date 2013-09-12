@@ -30,6 +30,9 @@ void HAL_CAN_RX_B10_INT(void);
 void HAL_CAN_RX_B11_INT(void);
 void HAL_CAN_RX_B12_INT(void);
 void  DMA_DECFIL_DRAIN_BUF_A_Transfer_Complete(void );
+void IO_STM0_20ms_INT(void);
+void IO_SOH_818HZ_INT(void);
+
 //=============================================================================
 //
 // The following preprocessor definitions must reside at the top of cxio_schedule.h
@@ -239,7 +242,7 @@ void  DMA_DECFIL_DRAIN_BUF_A_Transfer_Complete(void );
    #define   INTC_CHANNEL_DEC_FILTER_A_INPUT_FILL  UNUSED_IRQ
    #define   INTC_CHANNEL_DEC_FILTER_A_OUTPUT_DRAIN  UNUSED_IRQ
    #define   INTC_CHANNEL_DEC_FILTER_A_ERROR  UNUSED_IRQ
-   #define   INTC_CHANNEL_SYSTEM_TIMER_MODULE_0  UNUSED_IRQ
+   #define   INTC_CHANNEL_SYSTEM_TIMER_MODULE_0  USED_IRQ
    #define   INTC_CHANNEL_SYSTEM_TIMER_MODULE_1_3  UNUSED_IRQ
    #define   INTC_CHANNEL_RESERVED_202  UNUSED_IRQ
    #define   INTC_CHANNEL_RESERVED_203  UNUSED_IRQ
@@ -538,6 +541,12 @@ void  DMA_DECFIL_DRAIN_BUF_A_Transfer_Complete(void );
 #define INTC_CHANNEL_RESERVED_232_PRIORITY      INTC_PRIORITY_6
 #endif
 
+#if  INTC_CHANNEL_SYSTEM_TIMER_MODULE_0 ==  USED_IRQ
+#define INTC_CHANNEL_SYSTEM_TIMER_MODULE_0_HANDLER      IO_STM0_20ms_INT
+#define INTC_CHANNEL_SYSTEM_TIMER_MODULE_0_PRIORITY      INTC_PRIORITY_7
+#endif
 
-
-
+#if  INTC_CHANNEL_MIOS_CH4 ==  USED_IRQ
+#define INTC_CHANNEL_MIOS_CH4_HANDLER      IO_SOH_818HZ_INT
+#define INTC_CHANNEL_MIOS_CH4_PRIORITY      INTC_PRIORITY_7
+#endif

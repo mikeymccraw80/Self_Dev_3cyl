@@ -65,6 +65,15 @@ void DMA_Initialize_Device( void  )
    DMA_A.CPR[DMA_CHANNEL_DSPI_B_SR_RFDF].F.ECP =false;
    //Channel priority when fixed-priority arbitration is enabled.
    DMA_A.CPR[DMA_CHANNEL_DSPI_B_SR_RFDF].F.CHPRI = DMA_CHANNEL_PRIORITY_13;
+	 
+     //DMA_CHANNEL_MIOS_EMIOSFLAG_4
+   DMA_A.CPR[DMA_CHANNEL_MIOS_EMIOSFLAG_4].U8 =0;
+   //Enable Channel Preemption
+   //Channel n can be temporarily suspended by the service request of a higher priority channel.
+   DMA_A.CPR[DMA_CHANNEL_MIOS_EMIOSFLAG_4].F.ECP =false;
+   //Channel priority when fixed-priority arbitration is enabled.
+   DMA_A.CPR[DMA_CHANNEL_MIOS_EMIOSFLAG_4].F.CHPRI = DMA_CHANNEL_PRIORITY_8;
+
 
    // Disable all DMA requests
    DMA_A.ERQRL.U32 = 0;

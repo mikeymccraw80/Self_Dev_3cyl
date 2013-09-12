@@ -6,10 +6,10 @@
  * Copyright 2005 Delphi Technologies, Inc., All Rights Reserved.
  * Delphi Confidential
  *---------------------------------------------------------------------------
- * %full_filespec:  soh.h~2:incl:mt20u2#1 %
- * %version: 2 %
- * %derived_by:wzmkk7 %
- * %date_modified: Mon Feb 19 13:58:46 2007 %
+ * %full_filespec:  soh.h~1:incl:ctc_pt3#1 %
+ * %version: 1 %
+ * %derived_by:rz65p6 %
+ * %date_modified:  %
  * $SOURCE: $
  * $REVISION: $
  * $AUTHOR: $
@@ -45,7 +45,8 @@
 /*===========================================================================*\
  * Standard Header Files
 \*===========================================================================*/
-#include "io_type.h"
+#include "reuse.h"
+#include "soh_common.h"
 
 /*===========================================================================*\
  * Other Header Files
@@ -54,38 +55,13 @@
 /*===========================================================================*\
  * Exported Preprocessor #define Constants
 \*===========================================================================*/
+extern bool Soh_RecoverMode;
+extern bool VbHWIO_SOH_Running;
+extern bool VbHWIO_VSEP_Initialized;
 
 /*===========================================================================*\
  * Exported Preprocessor #define MACROS
 \*===========================================================================*/
-//#define TRUE true
-//#define FALSE false
-/*===========================================================================*\
- * Exported Type Declarations
-\*===========================================================================*/
-
-/*===========================================================================*\
- * Exported Object Declarations
-\*===========================================================================*/
-extern bool Soh_RecoverMode;
-
-/*===========================================================================*\
- * Exported Function Prototypes
-\*===========================================================================*/
-extern uint16_t SOH_ETC_Get_Fault_Log(void);
-extern uint8_t  SOH_ETC_Get_Test_Result(void);
-extern void SOH_ETC_ISR(void);
-extern void SOH_ETC_Initialize(bool power_on_reset_status);
-extern void SOH_ETC_Update_Loop_Sequence_Array(const uint8_t ID_tag);
-extern void SOH_ETC_Update_RTI_Array(void);
-extern void SOH_VSEP_CR_Service(void);			//just for debug and test
-extern void SOH_Logic_Debug_and_Test(void);	//just for debug and test
-
-
-/*===========================================================================*\
- * Exported Inline Function Definitions and #define Function-Like Macros
-\*===========================================================================*/
-
 /*===========================================================================*\
  * MACRO: SOH_ETC_Invoke_Recovery
  *===========================================================================
@@ -99,7 +75,6 @@ extern void SOH_Logic_Debug_and_Test(void);	//just for debug and test
  * ABSTRACT:
  * --------------------------------------------------------------------------
  * This macro invokes the ETC SOH recovery process.
- *
 \*===========================================================================*/
 #define SOH_ETC_Invoke_Recovery()				( Soh_RecoverMode = TRUE )
 
@@ -108,8 +83,7 @@ extern void SOH_Logic_Debug_and_Test(void);	//just for debug and test
  * MACRO: SOH_ETC_Get_Recovery_Status
  *===========================================================================
  * RETURN VALUE:
- * bool soh_recovery_status : 1 - ETC SOH in recovery mode.
- *                      	   0 - ETC SOH recovery completed or not in recovery mode.
+ * bool soh_recovery_status : ETC SOH recovery mode status.
  *
  * PARAMETERS:
  * None.
@@ -118,40 +92,74 @@ extern void SOH_Logic_Debug_and_Test(void);	//just for debug and test
  * ABSTRACT:
  * --------------------------------------------------------------------------
  * This macro return the ETC SOH recovery status.
- *
 \*===========================================================================*/
-#define SOH_ETC_Get_Recovery_Status()			(bool)( Soh_RecoverMode == TRUE)
-
+#define SOH_ETC_Get_Recovery_Status()			( (bool)Soh_RecoverMode )
 
 /*===========================================================================*\
- * MACRO: SOH_Convert_PIT_TMR
+ * FUNCTION: SOH_Set_IO_Enable_Request
  *===========================================================================
  * RETURN VALUE:
- * PIT 
+ * None.
  *
  * PARAMETERS:
+ * bool fse_en_req    : 1 - enable FSE_EN_REQ signal.
+ *                   	0 - disable FSE_EN_REQ signal.
+ *
+ * EXTERNAL REFERENCES:
+ * None.
+ *
+ * DEVIATIONS FROM STANDARDS:
  * None.
  *
  * --------------------------------------------------------------------------
  * ABSTRACT:
  * --------------------------------------------------------------------------
- * This convert PIT reg count by 0-value.
- *
+ * This macro enable/disable the FSE_EN_REQ signal.
 \*===========================================================================*/
-#define SOH_Convert_PIT_TMR(count)			(0-count)
-
-
+#define SOH_Set_FSE_Enable_Request(fse_en_req)	SIU_GPIO_DISCRETE_Set_State(HAL_GPIO_FSE_ENABLE_CHANNEL,fse_en_req)
 
 /*===========================================================================*\
- * File Revision History (top to bottom: first revision to last revision)
+ * FUNCTION: SOH_Set_IO_Enable_Request
  *===========================================================================
+ * RETURN VALUE:
+ * None.
  *
- * Date        userid    (Description on following lines: SCR #, etc.)
- * ----------- --------
- * 01 June 05  sgchia
- * + Created initial file.
- * 19 Febr 07  gpstep
- * + Corrected SOH_ETC_Get_Error_Log name (RSM #5481).
+ * PARAMETERS:
+ * bool io_en    : 1 - enable IOEN signal.
+ *                 0 - disable IOEN signal.
  *
+ * EXTERNAL REFERENCES:
+ * None.
+ *
+ * DEVIATIONS FROM STANDARDS:
+ * None.
+ *
+ * --------------------------------------------------------------------------
+ * ABSTRACT:
+ * --------------------------------------------------------------------------
+ * This macro enable/disable the IOEN signal.
 \*===========================================================================*/
+#define SOH_Set_GEN_Enable_Request(gen_en_req)	SIU_GPIO_DISCRETE_Set_State(HAL_GPIO_GEN_ENABLE_CHANNEL,gen_en_req)
+	//mz38cg
+
+/*===========================================================================*\
+ * Exported Type Declarations
+\*===========================================================================*/
+
+/*===========================================================================*\
+ * Exported Object Declarations
+\*===========================================================================*/
+
+/*===========================================================================*\
+ * Exported Function Prototypes
+\*===========================================================================*/
+extern void SOH_ETC_Initialize(bool power_on_reset_status);
+extern void SOH_ETC_ISR(void);
+extern void SOH_ETC_Update_Loop_Sequence_Array(const uint8_t ID_tag);
+extern uint16_t SOH_ETC_Get_Fault_Log(void);
+
+/*===========================================================================*\
+ * Exported Inline Function Definitions and #define Function-Like Macros
+\*===========================================================================*/
+
 #endif /* } SOH_H */

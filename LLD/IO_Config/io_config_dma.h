@@ -8,6 +8,7 @@
 #include "dd_qadc_interface.h"
 #include "dd_dfilter_interface.h"
 #include "dd_dspi_interface.h"
+#include "soh_mpc56xx.h"
 
 //=============================================================================
 // Initialization Constant for DMA Group Priority
@@ -180,6 +181,23 @@ extern DMA_Second_32Bit_T DMA_DECFIL_DRAIN_BUFA_BandPass_Second_32Bit;
 extern DMA_Third_32Bit_T DMA_DECFIL_DRAIN_BUFA_BandPass_Third_32Bit;
 
 extern DMA_Sixth_32Bit_T DMA_DECFIL_DRAIN_BUFA_BandPass_Sixth_32Bit;
+
+//DMA_CHANNEL_MIOS_EMIOSFLAG_4
+//=============================================================================
+
+#define DMA_EMIOSFLAG_4_Source_Address  (uint32_t)&MIOS.CH[4].CADR
+#define DMA_EMIOSFLAG_4_Dest_Address   (uint32_t) SOH_DMA_External_Ref_Time
+#define DMA_EMIOSFLAG_4_SIZE ( sizeof(SOH_DMA_External_Ref_Time)/sizeof(uint32_t) )
+#define DMA_EMIOSFLAG_4_Slast   0
+#define DMA_EMIOSFLAG_4_Dlast  -(DMA_EMIOSFLAG_4_SIZE*sizeof(uint32_t))
+
+extern DMA_Second_32Bit_T DMA_EMIOSFLAG_4_Second_32Bit;
+
+extern DMA_Third_32Bit_T DMA_EMIOSFLAG_4_Third_32Bit;
+
+extern DMA_Sixth_32Bit_T DMA_EMIOSFLAG_4_Sixth_32Bit;
+
+extern DMA_Eighth_32Bit_T DMA_EMIOSFLAG_4_Eighth_32Bit;
 
 extern DMA_Eighth_32Bit_T DMA_DECFIL_DRAIN_BUFA_BandPass_Eighth_32Bit ;
 #endif

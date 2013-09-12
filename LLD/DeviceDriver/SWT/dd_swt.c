@@ -53,15 +53,19 @@ void SWT_Set_Timeout_Value(uint32_t   in_time)
 //=============================================================================
 // SWT_Service_WatchDog
 //=============================================================================
+
 void SWT_Service_WatchDog(void)
 {
    uint32_t SWT_KEY_Val;
    uint32_t SWT_SR_Val1;
    uint32_t SWT_SR_Val2;
+	 uint32_t cs;
 
    if(SWT.SWT_MCR.F.KEY == SWT_KEYED_SERVICE_MODE)         //check for fixed or random service mode
    {
-      // Read Key Value
+		 cs = Enter_Critical_Section();
+
+			// Read Key Value
       SWT_KEY_Val = SWT.SWT_SK.U32;
 
       // Generate Keys
@@ -71,6 +75,8 @@ void SWT_Service_WatchDog(void)
       // Service Watchdog
       SWT.SWT_SR.U32 = SWT_SR_Val1;
       SWT.SWT_SR.U32 = SWT_SR_Val2;
+
+			Leave_Critical_Section(cs);
    }
    else
    {
