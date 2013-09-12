@@ -535,8 +535,8 @@ DMA_Sixth_32Bit_T DMA_EMIOSFLAG_4_Sixth_32Bit =
 	
 {
 
-   false,     //CITER_E_LINK :  Enable channel-to-channel linking on minor loop complete
-   false,     //CITER_LINKCH :  Current ¡°major¡± iteration count or Link channel number
+   //false,     //CITER_E_LINK :  Enable channel-to-channel linking on minor loop complete
+   //false,     //CITER_LINKCH :  Current ¡°major¡± iteration count or Link channel number
    DMA_EMIOSFLAG_4_SIZE,   //CITER        Current ¡°major¡± iteration count
    sizeof(uint32_t)            //DOFF         Destination address signed offset
 
@@ -547,8 +547,8 @@ DMA_Eighth_32Bit_T DMA_EMIOSFLAG_4_Eighth_32Bit =
 
 {
 
-   false,               // Enable channel-to-channel linking on minor loop complete  BITER_E_LINK :  BIT_1;  // Bit       31
-   0,                    // Beginning ¡°major¡± iteration count or Beginning Link channel number bitfield32_t   BITER_LINKCH :  BIT_6;  // Bits  [30:25]
+   //false,               // Enable channel-to-channel linking on minor loop complete  BITER_E_LINK :  BIT_1;  // Bit       31
+   //0,                    // Beginning ¡°major¡± iteration count or Beginning Link channel number bitfield32_t   BITER_LINKCH :  BIT_6;  // Bits  [30:25]
    DMA_EMIOSFLAG_4_SIZE,   //Beginning ¡°major¡± iteration count bitfield32_t   BITER        :  BIT_9;  // Bits  [24:16]
    DMA_BANDWIDTH_CONTROL_NO_ENGINE_STALL,   //Bandwidth control bitfield32_t   BWC          :  BIT_2;  // Bits  [15:14]
    0,                    //Link channel number bitfield32_t   MAJOR_LINKCH :  BIT_6;  // Bits  [13:08]
