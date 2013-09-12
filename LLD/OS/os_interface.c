@@ -73,24 +73,15 @@ void MngOSTK_5msTasks(void)
 //=============================================================================
 void MngOSTK_10msTasks(void)
 {
-    static uint16_t test_cnt_30ms;
-
-    /* call hal layer callback functions */
-//    HAL_OS_10ms_Task(); 
-
     /* call device driver layer functions */
     SWT_Service_WatchDog();
     VSEP_SPI_SCHEDULER_10MS();
     VSEP_Fault_Task_10MS();
     L9958_FAULT_Diagnose_Update();
-      HAL_OS_10ms_Task(); 
+    
+    /* call hal layer callback functions */
+    HAL_OS_10ms_Task(); 
 
-    /* call soh service */
-    test_cnt_30ms++;
-    if (test_cnt_30ms == 3) {
-        test_cnt_30ms=0;
-       //SOH_VSEP_CR_Service();
-    }
 
     /* CCP 10ms Trigger */
     CCP_Trigger_Event_Channel( 10 );
