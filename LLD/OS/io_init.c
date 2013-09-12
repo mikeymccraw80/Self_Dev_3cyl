@@ -246,8 +246,6 @@ void InitializeHardwareRegisters(void)
 	HAL_GPIO_SET_FSE_Enable(false);
 
 	VSEP_Initialize_Device();
-
-	SOH_ETC_Initialize(true);
 }
 
 //=============================================================================
@@ -304,7 +302,7 @@ void InitializeHardwareLast(void)
    HAL_GPIO_SET_Reset_DIO_Enable(true);
 
 
-
+	SOH_ETC_Initialize(true);
 }
 
 
