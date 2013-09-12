@@ -108,14 +108,14 @@ void InitializeHardwareRegisters(void)
 	CPU_Info =  SIU_Get_CPU_Information();
 	Flash_Info = Get_FLASH_Driver_Mode();
 
-   if(CPU_LCI == CPU_Info)
-   {
-      MPC5644_FLASH_Initialize_Normal();
-       XBAR_MPC5644A_Initialize_Device();
-	//flash_init_sucess = C90FL_Initialize();
-   }
-   else
-   {
+	if(CPU_LCI == CPU_Info)
+	{
+		MPC5644_FLASH_Initialize_Normal();
+		XBAR_MPC5644A_Initialize_Device();
+		//flash_init_sucess = C90FL_Initialize();
+	}
+	else
+	{
 		MPC5634_FLASH_Initialize_Normal();
 		XBAR_MPC5634M_Initialize_Device();
 		// flash_init_sucess =	  C90LC_Initialize();
@@ -165,19 +165,13 @@ void InitializeHardwareRegisters(void)
 	QADC_Initialize_Device();
 	PIT_Initialize_Device();
 
-	    //set up PIT time 5us
-       PIT_TIMER_Set_Value( PIT_CHANNEL_1, PIT_LOAD_VALUE_20US);
+	//set up PIT time 5us
+	PIT_TIMER_Set_Value( PIT_CHANNEL_1, PIT_LOAD_VALUE_20US);
 	PIT_TIMER_Set_Value( PIT_CHANNEL_0, PIT_LOAD_VALUE_5US);
 
 	//enable QADC DMA time base scan
 	DMA_Enable_Request(DMA_CHANNEL_QADC_FISR4_RFDF_4);
 	DMA_Enable_Request(DMA_CHANNEL_QADC_FISR4_CFFF_4);
-
-	// Enable_Interrupts();
-	//ECSM_NVM_ChecksumCheck();
-	//  Disable_Interrupts();
-
-	//  Enable_MachineCheck();
 
 	MIOS_Initialize_Device();
 
@@ -263,45 +257,40 @@ void RefreshHardwareRegisters(void)
 void InitializeHardwareLast(void)
 {
 
-   EEPROM_Operation_Status_T op_Return; 
+	EEPROM_Operation_Status_T op_Return; 
+	HAL_GPIO_DI_Active_Status_Init();
 
-   HAL_GPIO_DI_Active_Status_Init();
+	if(!HAL_GPIO_GET_Reset_DIO_Status())
+	{
+		BatteryRemoved =  true;
+	}
+	else
+	{
+		BatteryRemoved =  false; 
+	}
 
-   if(!HAL_GPIO_GET_Reset_DIO_Status())
-   {
-     BatteryRemoved =  true;
-   }
-   else
-   {
-     BatteryRemoved =  false; 
-   }	  
+	HAL_GPIO_Reset_DIO_Output_Confige(true);
 
-   HAL_GPIO_Reset_DIO_Output_Confige(true);
-   
-      // only LCI will do the instrumentation operation
-   if(CPU_LCI == CPU_Info)
-   {
-      // resotre cal backup to ram
-      INST_Restore_Working_Page(Reset_Status);
-   }
-   //EBI Available only on the calibration system package 
- //  if (CPU_VERTICAL == CPU_Info) 
-//   {
-//      VERTICAL_Config_MMU();
-   //   EBI_Initialize_Device(0);
-  //    INST_Restore_Working_Page(HWIO_reset_status);
- //  }
-   // restore NVRAM first, beacuse it will restore MFG from EEE too(always zero, when MFG in pflash is not full)
-   // it will be overwrited by next MFG restore function
+	// only LCI will do the instrumentation operation
+	if(CPU_LCI == CPU_Info)
+	{
+		// resotre cal backup to ram
+		INST_Restore_Working_Page(Reset_Status);
+	}
+	//EBI Available only on the calibration system package 
+	//  if (CPU_VERTICAL == CPU_Info) 
+	//   {
+	//      VERTICAL_Config_MMU();
+	//   EBI_Initialize_Device(0);
+	//    INST_Restore_Working_Page(HWIO_reset_status);
+	//  }
+	// restore NVRAM first, beacuse it will restore MFG from EEE too(always zero, when MFG in pflash is not full)
+	// it will be overwrited by next MFG restore function
 
-  EEPROM_Restore_Vehicle_NVRAM_Block(Reset_Status);  
-  op_Return = EEPROM_Restore_MFG_NVM_Block();  // restore Pfalsh MFG if it is valid
-
-  INST_Initialize_Calibration_Pages();
-
-   HAL_GPIO_SET_Reset_DIO_Enable(true);
-
-
+	EEPROM_Restore_Vehicle_NVRAM_Block(Reset_Status);  
+	op_Return = EEPROM_Restore_MFG_NVM_Block();  // restore Pfalsh MFG if it is valid
+	INST_Initialize_Calibration_Pages();
+	HAL_GPIO_SET_Reset_DIO_Enable(true);
 	SOH_ETC_Initialize(true);
 }
 
