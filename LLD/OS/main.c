@@ -1,15 +1,27 @@
-
-//
-// other includes
-//
-
-#include "dd_swt_interface.h"
-#include "os_main.h"
+//=============================================================================
+// include files
+//=============================================================================
+#include "reuse.h"
 #include "io_init.h"
-#include "io_config_swt.h"
+
+//=============================================================================
+// type define
+//=============================================================================
+/* Data Types */
+typedef enum
+{
+   AM_normal,
+   AM_HardwareTest,
+   AM_ManufacturingTest
+}AppModeType_T;
 
 
-extern  void exit(void);
+//=============================================================================
+// function define
+//=============================================================================
+extern void StartOS_Task_Normal(void);
+extern void exit(void);
+
 //=============================================================================
 // main
 //
@@ -21,18 +33,24 @@ extern  void exit(void);
 
 void main(void)
 {
-   InitializeHardwareRegisters();
- //  if (!InitializeIllegalConditionCheck()) 
-   //{
-      StartOS(AM_normal);
-   //}
-  // else 
-   //{
-      // barch to testability software and never return
-   //   StartOS(AM_ManufacturingTest);
-   //}
+    int Mode = AM_normal;
+    InitializeHardwareRegisters();
+    InitializeHardwareLast();
 
-   exit();
+    //go into os schedule, event and time schedule
+    if( Mode == AM_normal ) {
+        StartOS_Task_Normal();
+    } else {
+        while(1);
+    }
+
+    exit();
 }
+
+
+
+
+
+
 
 

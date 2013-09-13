@@ -204,7 +204,6 @@ void InitializeHardwareRegisters(void)
 
 	DSPI_B_Enable_Transfer(true);
 
-	// DSPI_C_Initialize_Device();
 	DMA_Initialize_Channel(
 		DMA_CHANNEL_MIOS_EMIOSFLAG_4,
 		DMA_EMIOSFLAG_4_Source_Address,
@@ -219,8 +218,6 @@ void InitializeHardwareRegisters(void)
 	STM_Set_Timer_Enable(true);
 
 	FlexCAN_A_Initialize_Device();
-
-	// FlexCAN_C_Initialize_Device( )
 
 	QADC_ANALOG_Calibrate_Converter(ADC_CONVERTER_0);
 	QADC_ANALOG_Calibrate_Converter(ADC_CONVERTER_1); 
