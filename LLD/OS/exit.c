@@ -4,7 +4,6 @@
 //
 
 #include "dd_swt_interface.h"
-#include "os_main.h"
 #include "io_init.h"
 #include "io_config_swt.h"
 #include "dd_siu_interface.h"
