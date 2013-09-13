@@ -222,7 +222,7 @@ static void ValidateEtcSohIrqFreq(void)
   uint32_t        soh_CurIrq_Time, timediff;
   SOH_TMR_MSEC_T  delta_time;
 
-    soh_CurIrq_Time = TPU_TIMER_Get_Value(0,SOH_INTERNAL_TIME_BASE_CONFIG);
+    soh_CurIrq_Time = TPU_TIMER_Get_Value_Channel(0,SOH_INTERNAL_TIME_BASE_CONFIG);
     if (soh_CurIrq_Time >= Soh_LstIrq_Time) 
     {
         timediff = soh_CurIrq_Time - Soh_LstIrq_Time;
@@ -1169,7 +1169,7 @@ void SOH_ETC_Initialize(bool power_on_reset_status)
 			 HAL_SOH_CnR_Set_Response(Soh_CnRValue.Bits.FSE_DisReq, Soh_CnRValue.Bits.Response);
 		 }
 
-	time = TPU_TIMER_Get_Value(0,SOH_INTERNAL_TIME_BASE_CONFIG);
+	time = TPU_TIMER_Get_Value_Channel(0,SOH_INTERNAL_TIME_BASE_CONFIG);
 	Soh_LstIrq_Time = time; 
 
     RTI_Period = IO_Convert_Time_To_Count(SOH_RTI_PERIOD,TPU_A_TCR1_CLOCK_FREQ,S_SOH_TMR_MSEC_T,MILLISECOND_RESOLUTION);
@@ -1247,7 +1247,7 @@ void SOH_ETC_Update_Loop_Sequence_Array(const uint8_t ID_tag)
 \*===========================================================================*/
 void SOH_ETC_Update_RTI_Array(void)
 {
-	Soh_RtiLoopTime[Soh_RtiCirBufIdx] = TPU_TIMER_Get_Value(0,SOH_INTERNAL_TIME_BASE_CONFIG);
+	Soh_RtiLoopTime[Soh_RtiCirBufIdx] = TPU_TIMER_Get_Value_Channel(0,SOH_INTERNAL_TIME_BASE_CONFIG);
 	Soh_RtiCirBufIdx = IncCirBuffIdx(Soh_RtiCirBufIdx, SOH_RTIBUFSZ);
 }
 
