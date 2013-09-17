@@ -37,7 +37,7 @@ void OS_Startup_Hook(void)
     FI_Initialize();
 
     CCP_Initialize();
-	// scib.init(10400);
+
     KeywordExecutive(CwKW2000_Initializes);
     /* update ems initial parameters */
     Init_IntrParameter();
@@ -84,23 +84,23 @@ void MngOSTK_10msTasks(void)
     /* call hal layer callback functions */
     HAL_OS_10ms_Task(); 
 
-
     /* CCP 10ms Trigger */
     CCP_Trigger_Event_Channel( 10 );
+    /* update kw2000 state machine */
+    KeywordExecutive(CwKW2000_RunMode);
 
     /* update ignition status */
     UpdateIgnitionState_10MS();
 
     /* update power source status */
     PowerSourceStatus_EveryLoop();
-	/* update kw2000 state machine */
-	KeywordExecutive(CwKW2000_RunMode);
 }
 
 //=============================================================================
 // MngOSTK_100msTasks
 //=============================================================================	
 static uint16_t test_cnt_500ms;
+uint8_t abcd;
 void MngOSTK_100msTasks(void)
 {
     FI_Update_Count_Time();
@@ -116,6 +116,8 @@ void MngOSTK_100msTasks(void)
     
     /* update ems parameters */
     Intr_16msTasks();
+
+	// scib.write(abcd);
 }
 //=============================================================================
 // OS_Free_Time_Tasks_Hook
