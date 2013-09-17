@@ -49,7 +49,6 @@ void OS_Startup_Hook(void)
 void MngOSTK_1msTasks(void)
 {
 
-//  HAL_OS_1ms_Task();
 }
 
 //=============================================================================
@@ -126,6 +125,7 @@ void OS_Free_Time_Tasks_Hook(void)
 //=============================================================================
 void OS_TimeBasedTask1ms(void)
 {
+    SOH_ETC_Update_RTI_Array();
     HAL_OS_1ms_Task();
 }
 
