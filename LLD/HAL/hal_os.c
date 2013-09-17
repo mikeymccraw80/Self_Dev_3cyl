@@ -22,6 +22,7 @@
 #include "estdpapi.h"
 #include "epsdpapi.h"
 #include "es_knock.h"
+#include "hal_soh.h"
 
 //extern void Update_DiagStatus_10ms(void);
 //=============================================================================
@@ -104,16 +105,15 @@ void  HAL_OS_10ms_Task(void)
 	Calculate_HiRes_Engine_Speed();
 	Calculate_Esc_Input_10ms();
 	HLS_Task_10ms();
+	HAL_SOH_Update_Loop_Sequence_10MS();
 	IO_GPIO_DO_Task();
 	IO_Pulse_Update_Function();
-	if(OS_10ms_Cnt1&1)
-	{
-	   ScheduleKnockFastBckgLogic();
+	if(OS_10ms_Cnt1&1) {
+		ScheduleKnockFastBckgLogic();
 		HLS_Task_20ms();
 	}
 	OS_10ms_Cnt1++;
-	if(OS_10ms_Cnt0 ==5)
-	{
+	if(OS_10ms_Cnt0 ==5) {
 		HLS_Task_50ms();
 		OS_10ms_Cnt0 = 0;
 	}

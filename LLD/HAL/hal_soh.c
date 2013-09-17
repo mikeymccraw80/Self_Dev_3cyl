@@ -364,77 +364,64 @@ uint16_t HAL_SOH_CnR_Get_Status(bool unbuffered)
    return (uint16_t)vsep_status.Word;
 }
 
- void UpdateHWIO_ETC_SOH_Loop_Sequence_Array( const uint8_t arr_index )
+void UpdateHWIO_ETC_SOH_Loop_Sequence_Array( const uint8_t arr_index )
 {
 //#ifndef HW_SOH_DISABLE
      SOH_ETC_Update_Loop_Sequence_Array( (const uint8_t )arr_index );//mz38cg
 //#endif
 }
 
- //loop sequence validation for chery applicaiton//
- void ETSMRSV_r40ms()
- {UpdateHWIO_ETC_SOH_Loop_Sequence_Array(0);
- }
- 
- void ETSMIST_r40ms()
- {UpdateHWIO_ETC_SOH_Loop_Sequence_Array(1);
- }
- 
- void ETSMAPV_r40ms()
- {UpdateHWIO_ETC_SOH_Loop_Sequence_Array(2);
- }
- 
- void ETSMRES1_r40ms()
- {UpdateHWIO_ETC_SOH_Loop_Sequence_Array(3);
- }
- 
- void ETSMN_r40ms()
- {UpdateHWIO_ETC_SOH_Loop_Sequence_Array(4);
- }
- 
- void ETSMLD_r40ms()
- {UpdateHWIO_ETC_SOH_Loop_Sequence_Array(5);
- }
- 
- void ETSMAFST_r40ms()
- {UpdateHWIO_ETC_SOH_Loop_Sequence_Array(6);
- }
- 
- void ETSMRES2_r40ms()
- {UpdateHWIO_ETC_SOH_Loop_Sequence_Array(7);
- }
- 
- void ETSMTQP_r40ms()
- {UpdateHWIO_ETC_SOH_Loop_Sequence_Array(8);
- }
- 
- void ETSMTQF_r40ms()
- {UpdateHWIO_ETC_SOH_Loop_Sequence_Array(9);
- }
- 
- void ETSMIGA_r40ms()
- {UpdateHWIO_ETC_SOH_Loop_Sequence_Array(10);
- }
- 
- void ETSMRES3_r40ms()
- {UpdateHWIO_ETC_SOH_Loop_Sequence_Array(11);
- }
- 
- void ETSMTQC_r40ms()
- {UpdateHWIO_ETC_SOH_Loop_Sequence_Array(12);
- }
- 
- void ETSMTQ_r40ms()
- {UpdateHWIO_ETC_SOH_Loop_Sequence_Array(13);
- }
- 
- void ETSMMFR_r40ms()
- {UpdateHWIO_ETC_SOH_Loop_Sequence_Array(14);
- }
- 
- void ETSMRES4_r40ms()
- {UpdateHWIO_ETC_SOH_Loop_Sequence_Array(15);
- }
+//loop sequence validation for chery applicaiton
+static uint8_t SOH_LOOP;
+void HAL_SOH_Update_Loop_Sequence_10MS(void)
+{
+	switch ( SOH_LOOP&0x03 ) {
+	case 0:
+		ETSMRSV_r40ms();
+		UpdateHWIO_ETC_SOH_Loop_Sequence_Array(0);
+		ETSMIST_r40ms();
+		UpdateHWIO_ETC_SOH_Loop_Sequence_Array(1);
+		ETSMAPV_r40ms();
+		UpdateHWIO_ETC_SOH_Loop_Sequence_Array(2);
+		ETSMRES1_r40ms();
+		UpdateHWIO_ETC_SOH_Loop_Sequence_Array(3);
+		break ;
+	case 1:
+		ETSMN_r40ms();
+		UpdateHWIO_ETC_SOH_Loop_Sequence_Array(4);
+		ETSMLD_r40ms();
+		UpdateHWIO_ETC_SOH_Loop_Sequence_Array(5);
+		ETSMAFST_r40ms();
+		UpdateHWIO_ETC_SOH_Loop_Sequence_Array(6);
+		ETSMRES2_r40ms();
+		UpdateHWIO_ETC_SOH_Loop_Sequence_Array(7);
+		break ;
+	case 2:
+		ETSMTQP_r40ms();
+		UpdateHWIO_ETC_SOH_Loop_Sequence_Array(8);
+		ETSMTQF_r40ms();
+		UpdateHWIO_ETC_SOH_Loop_Sequence_Array(9);
+		ETSMIGA_r40ms();
+		UpdateHWIO_ETC_SOH_Loop_Sequence_Array(10);
+		ETSMRES3_r40ms();
+		UpdateHWIO_ETC_SOH_Loop_Sequence_Array(11);
+		break ;
+	case 3:
+		ETSMTQC_r40ms();
+		UpdateHWIO_ETC_SOH_Loop_Sequence_Array(12);
+		ETSMTQ_r40ms();
+		UpdateHWIO_ETC_SOH_Loop_Sequence_Array(13);
+		ETSMMFR_r40ms();
+		UpdateHWIO_ETC_SOH_Loop_Sequence_Array(14);
+		ETSMRES4_r40ms();
+		UpdateHWIO_ETC_SOH_Loop_Sequence_Array(15);
+		break ;
+	default :
+		break ;
+	}
+
+	SOH_LOOP++;
+}
 
 /*===========================================================================*\
  * File Revision History (top to bottom: first revision to last revision)

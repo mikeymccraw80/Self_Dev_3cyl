@@ -80,6 +80,7 @@
 extern bool HAL_SOH_SPI_Get_Error_Status(void);
 extern void HAL_SOH_ETC_ISR(void);
 extern bool HAL_SOH_VsepSPI_High_Low_Error(bool unbuffered);
+void HAL_SOH_Update_Loop_Sequence_10MS(void);
 
 /*===========================================================================*\
  * Exported Inline Function Definitions and #define Function-Like Macros
