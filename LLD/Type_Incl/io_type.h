@@ -194,3 +194,22 @@ typedef uint32_t 	IO_mask_T;
 
 #endif // IO_TYPE_H
 
+//=============================================================================
+// ASSERT
+//
+//    This macro/function is used to provide debugging support. When the
+// inIsValid value is flase, the function will stay here forever.
+//
+//=============================================================================
+#ifdef _DEBUG_
+INLINE
+void ASSERT( bool      inIsValid )
+{
+   if( !inIsValid )
+   {
+      while(1);// should stick the debug instruction here.
+   }
+}
+#else
+#define ASSERT( inIsValid ) // Non Debug
+#endif

@@ -94,7 +94,7 @@ uint32_t GetSrv10BaudRate ( BaudRate_type BaudRate )
 * DESCRIPTION:  Process Keyword 2000 baud rate change.                 *
 *                                                                      *
 ***********************************************************************/
-FAR_COS void ProcessRequest ( void )
+void ProcessRequest ( void )
 {
 
    /* Write the received baud rate in the transmit buffer to
@@ -132,7 +132,7 @@ FAR_COS void ProcessRequest ( void )
 * DESCRIPTION:  Same as the above file description.                    *
 *                                                                      *
 ***********************************************************************/
-FAR_COS void KwJ14230MiniStartDiagSession( void )
+void KwJ14230MiniStartDiagSession( void )
 {
 
    /* Define the local variables to store the diagnostic mode and

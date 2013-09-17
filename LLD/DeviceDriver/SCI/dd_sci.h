@@ -11,6 +11,7 @@
 //    Include Files
 //==============================================================================
 #include "hw_sci.h"
+#include "io_type.h"
 
 //==============================================================================
 //   Exported Type Declarations (enum, struct, union, typedef)
