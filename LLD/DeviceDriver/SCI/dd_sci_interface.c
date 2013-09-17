@@ -7,6 +7,7 @@
 // ============================================================================
 #include "dd_sci_interface.h"
 #include "dd_sci.h"
+#include "dd_siu.h"
 #include "io_config_sci.h"
 #include "dd_sci_interrupt.h"
 
@@ -92,7 +93,12 @@ static int scib_get_frm_err_flag(void)
 
 static int scib_get_active_flag(void)
 {
-	return SCI_Get_Status(SCI_DEVICE_1, SCI_STATUS_FLAG_RAF);
+	// return SCI_Get_Status(SCI_DEVICE_1, SCI_STATUS_FLAG_RAF);
+	if(SIU_GPIO_DISCRETE_Get_State(SIU_GPIO_CHANNEL_92)) {
+		return 0;
+	} else {
+		return 1;
+	}
 }
 
 static void scib_rx_disable_int(void)
