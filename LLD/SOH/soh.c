@@ -282,7 +282,6 @@ static void ValidateEtcSohIrqFreq(void)
  *
  * The test complete flag is set at the end of the function.
  \*===========================================================================*/
- bool enable_loop;
 static void ValidateCpuLoopSeq(void)
 {
     /* set test passed on entrance */
@@ -452,14 +451,14 @@ static void ValidateCpuOperation(void)
  *
  * The test complete flag is set at the end of the function.
  \*===========================================================================*/
-static void	CpuOperatingErrHandler(void)
+static void CpuOperatingErrHandler(void)
 {
-		// Get challenge
-    Soh_CnRValue.Bits.Challenge	= HAL_SOH_CnR_Get_Challenge();
-    // Get status
-		Soh_CnRStatus.Word = HAL_SOH_CnR_Get_Status(false);
+    /* SOH C&R SPI exchange */
+    /* receive next challenge value and status */
+    Soh_CnRValue.Bits.Challenge = HAL_SOH_CnR_Get_Challenge();
+    Soh_CnRStatus.Word = HAL_SOH_CnR_Get_Status(false);
 
-		if (TRUE == Soh_CnRStatus.Bits.CRDisarm_Stat)
+    if (TRUE == Soh_CnRStatus.Bits.CRDisarm_Stat)
     {
         Soh_FaultLog.Bits.CRDisarmed = TRUE;
     }
@@ -469,7 +468,7 @@ static void	CpuOperatingErrHandler(void)
     }
     else if (0 == Soh_CnRStatus.Bits.Respcount)
     {
-        Soh_FaultLog.Bits.CRCounterFail	= TRUE;
+        Soh_FaultLog.Bits.CRCounterFail = TRUE;
     }
     else if (Soh_CnRStatus.Bits.Respcount <= KSOHCRTH)
     {
@@ -482,10 +481,7 @@ static void	CpuOperatingErrHandler(void)
         {
             Soh_FaultLog.Bits.CRCounterLow = TRUE;
         }
-    }//else if(true==Soh_CnRStatus.Bits.SPIFail)
-  //  {
- //       Soh_FaultLog.Bits.SPIFail = TRUE;
-	//	}
+    }
     else
     {
         Soh_RecoverMode = FALSE;
@@ -669,7 +665,7 @@ static void ProcessShutOffTimer(void)
  * Shutoff timers Soh_ShutOffUpTimer counts up, Soh_ShutOffDnTimer counts down.
  * The two shutdown timers backing up each other in case there is a RAM error.
  \*===========================================================================*/
-static void	EtcSohErrorHandler(void)
+static void EtcSohErrorHandler(void)
 {
     /* Part 1 : process test results */
     ProcessTestResult();
@@ -685,10 +681,9 @@ static void	EtcSohErrorHandler(void)
         /* SOH CnR SPI exchange */
         /* send updated response, disable fuel, spark and ETC */
         Soh_CnRValue.Bits.FSE_DisReq = true;
-        Soh_CnRValue.Bits.Challenge	= HAL_SOH_CnR_Get_Challenge();
+        Soh_CnRValue.Bits.Challenge = HAL_SOH_CnR_Get_Challenge();
         Soh_CnRValue.Bits.Response = VSEP_SOH_Calculate_Response( Soh_CnRValue.Bits.Challenge );
-
-				HAL_SOH_CnR_Set_Response(Soh_CnRValue.Bits.FSE_DisReq, Soh_CnRValue.Bits.Response);
+        HAL_SOH_CnR_Set_Response(Soh_CnRValue.Bits.FSE_DisReq, Soh_CnRValue.Bits.Response);
     }
     else
     {
@@ -770,18 +765,13 @@ static void ValidateEtcSohTestSeq(bool even)
 \*===========================================================================*/
 static void EtcSohRecovery(void)
 {
-    if 	(TRUE == Soh_RecoverMode)
-    {
-        if (IsOdd(Soh_LoopCnt))
-        {
+    if (TRUE == Soh_RecoverMode) {
+        if (IsOdd(Soh_LoopCnt)) {
             /* odd loop - do nothing */
-        }
-        else
-        {
+        } else {
             /* even loop */
             /* re-initialize generic variables */
             Soh_LoopCnt = 0;
-            /* initialise SOH variables */
             Soh_SchdLoopSeqIdx = 0;
             Soh_IrqLoopSeqIdx = 0;
             Soh_IdTagExpect = 0;
@@ -789,87 +779,48 @@ static void EtcSohRecovery(void)
             /* clear Soh_FaultLog when any reset occurs; Soh_FaultLogNVM will record history */
             Soh_FaultLog.Word = 0;
 
+            /* re-initialize generic variables */
             Soh_TestErr.Byte = 0;
             Soh_TestResult.Byte = 0;
             Soh_TestComp.Byte = 0;
             Soh_ShutOffUpTimer = 0;
-            Soh_RecoverMode = FALSE;
-
             Soh_OddErrCnt = 0;
             Soh_EvenErrCnt = 0;
             Soh_ShutOffDnTimer = SOH_SHUTOFFTIME;
-						
-						Soh_LstRtiCirBufIdx = Soh_RtiCirBufIdx;
-						Soh_IrqLoopSeqIdx = Soh_SchdLoopSeqIdx;
-						Soh_IdTagExpect = IncCirBuffIdx(
-											Soh_LoopSeq[DecCirBuffIdx(Soh_SchdLoopSeqIdx, SOH_LOOPSEQBUFSZ)], 
-											HAL_SOH_APP_Get_Number_Major_Loop()
-											);
+            
+            Soh_LstRtiCirBufIdx = Soh_RtiCirBufIdx;
+            Soh_IrqLoopSeqIdx = Soh_SchdLoopSeqIdx;
+            Soh_IdTagExpect = IncCirBuffIdx(
+                                Soh_LoopSeq[DecCirBuffIdx(Soh_SchdLoopSeqIdx, SOH_LOOPSEQBUFSZ)], 
+                                HAL_SOH_APP_Get_Number_Major_Loop()
+                                );
 
             /* additional steps when recovering from C&R timeout or RESPCOUNT = 0 */
-           /* if (0 == Soh_CnRStatus.Bits.Respcount)
+            if (0 == Soh_CnRStatus.Bits.Respcount)
             {
-                Soh_CnRValue.Bits.FSE_DisReq = false;
-                IO_DISCRETE_Set_Immediate_State(&MTSA_D_OUT_FSE_ENABLE_REQ,false);
-
-                Soh_CnRValue.Bits.Challenge	= VSEP_SOH_Get_Challenge(0);
-                Soh_CnRValue.Bits.Response = VSEP_SOH_Calculate_Response( Soh_CnRValue.Bits.Challenge );
-                VSEP_SOH_Set_Disable_Request(0,Soh_CnRValue.Bits.FSE_DisReq);
-                VSEP_SOH_Set_Response(0, Soh_CnRValue.Bits.Response);
-
-                Soh_CnRValue.Bits.Challenge	= VSEP_SOH_Get_Challenge(0);
-                Soh_CnRValue.Bits.Response = VSEP_SOH_Calculate_Response( Soh_CnRValue.Bits.Challenge );
-                VSEP_SOH_Set_Disable_Request(0,0);
-                VSEP_SOH_Set_Response(0, Soh_CnRValue.Bits.Response);
-
-                IO_DISCRETE_Set_Immediate_State(&MTSA_D_OUT_FSE_ENABLE_REQ,true);
+                /* toggle the IOEN signal */
+                SOH_Set_GEN_Enable_Request(false);		//mz38cg
+                SOH_Set_GEN_Enable_Request(true); 	//mz38cg
             }
             else if (TRUE == Soh_CnRStatus.Bits.CRTimeout)
             {
-                Soh_CnRValue.Bits.FSE_DisReq = false;
-                IO_DISCRETE_Set_Immediate_State(&MTSA_D_OUT_FSE_ENABLE_REQ,false);
-               // clear SOH C&R timeout fault bit (buffered output)
-                VSEP_SOH_Set_Timeout_Fault(0,true);
-
-                Soh_CnRValue.Bits.Challenge	= VSEP_SOH_Get_Challenge(0);
-                Soh_CnRValue.Bits.Response = VSEP_SOH_Calculate_Response( Soh_CnRValue.Bits.Challenge );
-                VSEP_SOH_Set_Disable_Request(0,Soh_CnRValue.Bits.FSE_DisReq);
-                VSEP_SOH_Set_Response(0, Soh_CnRValue.Bits.Response);
-
-                Soh_CnRValue.Bits.Challenge	= VSEP_SOH_Get_Challenge(0);
-                Soh_CnRValue.Bits.Response = VSEP_SOH_Calculate_Response( Soh_CnRValue.Bits.Challenge );
-                VSEP_SOH_Set_Disable_Request(0,0);
-                VSEP_SOH_Set_Response(0, Soh_CnRValue.Bits.Response);
-
-                IO_DISCRETE_Set_Immediate_State(&MTSA_D_OUT_FSE_ENABLE_REQ,true);
-
-            }*/
-							/* additional steps when recovering from C&R timeout or RESPCOUNT = 0 */
-							if (0 == Soh_CnRStatus.Bits.Respcount)
-							{
-								/* toggle the IOEN signal */
-								SOH_Set_GEN_Enable_Request(false);		//mz38cg
-								SOH_Set_GEN_Enable_Request(true); 	//mz38cg
-							}
-							else if (TRUE == Soh_CnRStatus.Bits.CRTimeout)
-							{
-								/* clear SOH C&R timeout fault bit (buffered output) */
-								HAL_SOH_CnR_Clear_Timeout_Fault(true);
-							}
+                /* clear SOH C&R timeout fault bit (buffered output) */
+                HAL_SOH_CnR_Clear_Timeout_Fault(true);
+            }
 
             Soh_CnRValue.Word = 0;
-						
-						/* SOH C&R SPI exchange */
-						/* receive next challenge value */
-						Soh_CnRValue.Bits.Challenge = HAL_SOH_CnR_Get_Challenge();
 
-						/* do not clear SOH C&R timeout fault bit (buffered output) */
-						HAL_SOH_CnR_Clear_Timeout_Fault(false);
-			
+            /* SOH C&R SPI exchange */
+            /* receive next challenge value */
+            Soh_CnRValue.Bits.Challenge = HAL_SOH_CnR_Get_Challenge();
+
+            /* do not clear SOH C&R timeout fault bit (buffered output) */
+            HAL_SOH_CnR_Clear_Timeout_Fault(false);
+            
+            //initialize for SOH interrupt frequency validation
+            Soh_LstIrq_Time = TPU_TIMER_Get_Value_Channel(0,SOH_INTERNAL_TIME_BASE_CONFIG);
         }
-    }
-    else
-    {
+    } else {
         /* do nothing */
     }
 }
@@ -1014,65 +965,50 @@ static void ValidateRtiFreq(void)
  * failing which the watchdog timer will timeout and trigger a watchdog reset.
  \*===========================================================================*/
 void SOH_ETC_ISR(void)
-{		
+{
 	Soh_LoopCnt++;
-	if (SOH_TEST_NO_ERR == Soh_FaultLog.Word)
-	{
-		 if (IsOdd(Soh_LoopCnt))
-		 {
-		    // /* odd loop */
-		    ValidateCpuLoopSeq();
-		    ValidateCpuOperation();
-				SIU.GPDO[129].F.PDO =0;
-		 }
-		 else
-		 {
-		     /* even loop */
-		     ValidateSysClkFreq();
-		     ValidateEtcSohIrqFreq();						 
-				 SIU.GPDO[129].F.PDO =1;
-		     CpuOperatingErrHandler(); 
-		     ValidateRtiFreq();
-		 }
-		 EtcSohErrorHandler();
-	 }
-	 else
-	 {
-		 // read out all VSEP fualts
-		 Soh_CnRValue.Bits.Challenge	= VSEP_SOH_Get_Challenge(0);
-		 Soh_CnRValue.Bits.Response = VSEP_SOH_Calculate_Response( Soh_CnRValue.Bits.Challenge );
-		 VSEP_SOH_Set_Response(0, Soh_CnRValue.Bits.Response);        
-		 Soh_CnRStatus.Word = HAL_SOH_CnR_Get_Status(true);	
+	if (SOH_TEST_NO_ERR == Soh_FaultLog.Word) {
+		if (IsOdd(Soh_LoopCnt)) {
+			/* odd loop */
+			ValidateCpuLoopSeq();
+			ValidateCpuOperation();
+			// SIU.GPDO[129].F.PDO =0; //test code, VGIS output
+		} else {
+			/* even loop */
+			ValidateSysClkFreq();
+			ValidateEtcSohIrqFreq();
+			// SIU.GPDO[129].F.PDO =1; //test code, VGIS output
+			ValidateRtiFreq();
+			CpuOperatingErrHandler();
+		}
+		EtcSohErrorHandler();
+	} else {
+		// read out all VSEP faults
+		Soh_CnRValue.Bits.Challenge = VSEP_SOH_Get_Challenge(0);
+		Soh_CnRValue.Bits.Response = VSEP_SOH_Calculate_Response( Soh_CnRValue.Bits.Challenge );
+		VSEP_SOH_Set_Response(0, Soh_CnRValue.Bits.Response);        
+		Soh_CnRStatus.Word = HAL_SOH_CnR_Get_Status(true);
 
-		 // FSE is not disbale as expected
-		 if (FALSE == Soh_CnRStatus.Bits.FSE_En_Stat)
-		 {
-		     /* do nothing */
-		 }
-		 else
-		 {
-		   if (SOH_SPI_Get_Error_Status() == FALSE)
-	     {
-         /* SPI transmit queue empty */
-         if (TRUE == Soh_FaultLog.Bits.SPICommFail)
-         {
-             /* stop servicing internal COP */
-             return; /* [C163] DEVIATION: MULTIPLE RETURN VALUES! */
-         }
-         else
-         {
-             Soh_FaultLog.Bits.SPICommFail = TRUE;
-         }
-		   }
-	     else
-	     {
-         /* SPI message not send */
-         Soh_FaultLog.Bits.SPIFail = TRUE;
-	     }
-		 }
-		// EtcSohRecovery();
-	SetLoopTestComp(IsEven(Soh_LoopCnt));
-	 }
+		// FSE is not disbale as expected
+		if (FALSE == Soh_CnRStatus.Bits.FSE_En_Stat) {
+			/* do nothing */
+		} else {
+			if (SOH_SPI_Get_Error_Status() == FALSE) {
+				/* SPI transmit queue empty */
+				if (TRUE == Soh_FaultLog.Bits.SPICommFail) {
+					/* stop servicing internal COP */
+					return; /* [C163] DEVIATION: MULTIPLE RETURN VALUES! */
+				} else {
+					Soh_FaultLog.Bits.SPICommFail = TRUE;
+				}
+			} else {
+				/* SPI message not send */
+				Soh_FaultLog.Bits.SPIFail = TRUE;
+			}
+		}
+		EtcSohRecovery();
+		SetLoopTestComp(IsEven(Soh_LoopCnt));
+	}
 
 	ValidateEtcSohTestSeq(IsEven(Soh_LoopCnt));
 	//	SOH_VSEP_CR_Service();
@@ -1115,82 +1051,80 @@ void SOH_ETC_ISR(void)
  \*===========================================================================*/
 void SOH_ETC_Initialize(bool power_on_reset_status)
 {
-	uint8_t i;
+    uint8_t i;
     static uint32_t time,RTI_Period;
-		
-		if(VbHWIO_VSEP_Initialized)  //Do not set GEN and FSE_EN when VSEP initialize fail
-		{
-		/* enable GEN signal */
-		SOH_Set_GEN_Enable_Request(true); //mz38cg
-		/* request enable of fuel, spark and ETC */
-		SOH_Set_FSE_Enable_Request(true); //mz38cg
-		}
-		else
-		{ 
-			 /*do nothing*/
-		}
+
+    if(VbHWIO_VSEP_Initialized)  //Do not set GEN and FSE_EN when VSEP initialize fail
+    {
+        /* enable GEN signal */
+        SOH_Set_GEN_Enable_Request(true); //mz38cg
+        /* request enable of fuel, spark and ETC */
+        SOH_Set_FSE_Enable_Request(true); //mz38cg
+    }
+    else
+    { 
+        /*do nothing*/
+    }
 
     Soh_LoopCnt = 0;
-	/* initialise SOH variables */
-	Soh_SchdLoopSeqIdx = 0;
-	Soh_IrqLoopSeqIdx = 0;
-	Soh_IdTagExpect = 0;
+    /* initialise SOH variables */
+    Soh_SchdLoopSeqIdx = 0;
+    Soh_IrqLoopSeqIdx = 0;
+    Soh_IdTagExpect = 0;
 
-	/* clear Soh_FaultLog when any reset occurs; Soh_FaultLogNVM will record history */
-	Soh_FaultLog.Word = 0;
+    /* clear Soh_FaultLog when any reset occurs; Soh_FaultLogNVM will record history */
+    Soh_FaultLog.Word = 0;
 
-	Soh_TestErr.Byte = 0;
-	Soh_TestResult.Byte = 0;
-	Soh_TestComp.Byte = 0;
-	Soh_ShutOffUpTimer = 0;
-	Soh_RecoverMode = FALSE;
+    Soh_TestErr.Byte = 0;
+    Soh_TestResult.Byte = 0;
+    Soh_TestComp.Byte = 0;
+    Soh_ShutOffUpTimer = 0;
+    Soh_RecoverMode = FALSE;
 
-	Soh_OddErrCnt = 0;
-	Soh_EvenErrCnt = 0;
-	Soh_ShutOffDnTimer = SOH_SHUTOFFTIME;
-	
-	/* SOH C&R SPI exchange */
-	/* receive next challenge value and status */
-	Soh_CnRValue.Word = 0;
-	
-	// /* do not clear SOH C&R timeout fault bit (buffered output) */
-	HAL_SOH_CnR_Clear_Timeout_Fault(false);
-	Soh_CnRValue.Bits.Challenge = HAL_SOH_CnR_Get_Challenge();
-	Soh_CnRStatus.Word = HAL_SOH_CnR_Get_Status(false);
-	SIU.GPDO[129].F.PDO =1;
+    Soh_OddErrCnt = 0;
+    Soh_EvenErrCnt = 0;
+    Soh_ShutOffDnTimer = SOH_SHUTOFFTIME;
 
-	// /* disable fuel, spark and ETC if fault is present */
-		 if (Soh_FaultLogNVM.Word != SOH_TEST_NO_ERR)
-		 {
-			// /* SOH CnR SPI exchange */
-			// /* send updated response, disable fuel, spark and ETC */
-			 Soh_CnRValue.Bits.Response = VSEP_SOH_Calculate_Response(Soh_CnRValue.Bits.Challenge);
-			 Soh_CnRValue.Bits.FSE_DisReq = true;
-			 HAL_SOH_CnR_Set_Response(Soh_CnRValue.Bits.FSE_DisReq, Soh_CnRValue.Bits.Response);
-		 }
+    /* SOH C&R SPI exchange */
+    /* receive next challenge value and status */
+    Soh_CnRValue.Word = 0;
 
-	time = TPU_TIMER_Get_Value_Channel(0,SOH_INTERNAL_TIME_BASE_CONFIG);
-	Soh_LstIrq_Time = time; 
+    /* do not clear SOH C&R timeout fault bit (buffered output) */
+    HAL_SOH_CnR_Clear_Timeout_Fault(false);
+    Soh_CnRValue.Bits.Challenge = HAL_SOH_CnR_Get_Challenge();
+    Soh_CnRStatus.Word = HAL_SOH_CnR_Get_Status(false);
+    //SIU.GPDO[129].F.PDO =1; //VGIS, for test code
+
+    /* disable fuel, spark and ETC if fault is present */
+    if (Soh_FaultLogNVM.Word != SOH_TEST_NO_ERR)
+    {
+        // /* SOH CnR SPI exchange */
+        // /* send updated response, disable fuel, spark and ETC */
+        Soh_CnRValue.Bits.Response = VSEP_SOH_Calculate_Response(Soh_CnRValue.Bits.Challenge);
+        Soh_CnRValue.Bits.FSE_DisReq = true;
+        HAL_SOH_CnR_Set_Response(Soh_CnRValue.Bits.FSE_DisReq, Soh_CnRValue.Bits.Response);
+    }
+
+    time = TPU_TIMER_Get_Value_Channel(0,SOH_INTERNAL_TIME_BASE_CONFIG);
+    Soh_LstIrq_Time = time; 
 
     RTI_Period = IO_Convert_Time_To_Count(SOH_RTI_PERIOD,TPU_A_TCR1_CLOCK_FREQ,S_SOH_TMR_MSEC_T,MILLISECOND_RESOLUTION);
-	for (i = SOH_RTIBUFSZ - 1; i > 0; i--)
-	{
-		Soh_RtiLoopTime[i] = time;
-		if (time < RTI_Period)
-		{
-			time = SOH_INTERNAL_TIME_BASE_OVERFLOW_VALUE + 1 - RTI_Period + time;
-		}
-		else
-		{
-			time = time - RTI_Period;
-		}	
-	}	
-
+    for (i = SOH_RTIBUFSZ - 1; i > 0; i--)
+    {
+        Soh_RtiLoopTime[i] = time;
+        if (time < RTI_Period)
+        {
+            time = SOH_INTERNAL_TIME_BASE_OVERFLOW_VALUE + 1 - RTI_Period + time;
+        }
+        else
+        {
+            time = time - RTI_Period;
+        }
+    }
 
     /* setup ETC SOH interrupt */
-   HAL_SOH_Setup_Interrupt(V_SOH_TMR_MSEC_T(SOH_IRQ_PERIOD_MS));
-   SOH_Start_DMA_For_External_Ref();
-	 
+    HAL_SOH_Setup_Interrupt(V_SOH_TMR_MSEC_T(SOH_IRQ_PERIOD_MS));
+    SOH_Start_DMA_For_External_Ref();
 }
 
 /*===========================================================================*\
@@ -1368,24 +1302,3 @@ void SOH_ETC_Clear_Fault_Log(void)
 	Soh_CnRStatus.Word = HAL_SOH_CnR_Get_Status(false);
 //	PORTK_PK6 = !PORTK_PK6;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
