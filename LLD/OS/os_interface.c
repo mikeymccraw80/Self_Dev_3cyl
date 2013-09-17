@@ -8,6 +8,8 @@
 #include "dd_dma_interface.h"
 #include "dd_mios_interface.h"
 #include "dd_dspi_interface.h"
+#include "dd_sci_interface.h"
+#include "kw2exec.h"
 #include "dd_fi_interface.h"
 #include "dd_l9958_interface.h"
 #include "dd_vsep_fault_interface.h"
@@ -35,7 +37,8 @@ void OS_Startup_Hook(void)
     FI_Initialize();
 
     CCP_Initialize();
-
+	// scib.init(10400);
+    KeywordExecutive(CwKW2000_Initializes);
     /* update ems initial parameters */
     Init_IntrParameter();
 
@@ -90,6 +93,8 @@ void MngOSTK_10msTasks(void)
 
     /* update power source status */
     PowerSourceStatus_EveryLoop();
+	/* update kw2000 state machine */
+	KeywordExecutive(CwKW2000_RunMode);
 }
 
 //=============================================================================
