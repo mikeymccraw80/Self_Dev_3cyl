@@ -176,6 +176,55 @@
 *-  description              = "crank signal tooth count";
 *-}
 
+*-LLD_atd_input_table[7]{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "TPS1";
+*-  variable_location.symbol = LLD_atd_input_table[7].LLD_atd_val;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "2.2";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.001220703125";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "air throttle position 1";
+*-}
+
+*-LLD_atd_input_table[8]{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "TPS2";
+*-  variable_location.symbol = LLD_atd_input_table[8].LLD_atd_val;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "2.2";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.001220703125";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "air throttle position 2";
+*-}
+
+*-etc_sig{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ETC_PERIOD";
+*-  variable_location.symbol = etc_sig.etc_freq;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "etc signal period, not freq though name call freq";
+*-}
+
+*-etc_sig_plus_0x02{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ETC_DUTY";
+*-  variable_location.symbol = etc_sig.etc_duty;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "etc signal duty cycle, resolution is 100/65536";
+*-}
+
+
 
 /******************************************************************************/
 /*                                                                            */
