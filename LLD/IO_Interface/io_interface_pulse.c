@@ -132,14 +132,21 @@ void  IO_Pulse_VSS_Update_500ms(void)
 //=============================================================================
 void  IO_Pulse_Update_Function_1ms(void) 
 {
+	static uint16_t etc_freq_old;
+	static uint16_t etc_duty_old;
+
 	//MIOS channel: ETC
 	//500us equal 2KHZ
 	//duty resoultion is 1/1000
 	//etc freq is period form HLS, not frequency
 	// HAL_Pulse_ETC_Enable((bool)etc_sig.etc_enable);
-	if(etc_sig.etc_enable)
-	{
-		HAL_Pulse_ETC_Set_Period_Duty((uint32_t)etc_sig.etc_freq, (uint16_t)etc_sig.etc_duty*1000/65535);
+	if(etc_sig.etc_enable) {
+		/* avoid writing freq and duty register frequently(1ms) */
+		if ((etc_duty_old != etc_sig.etc_duty) || (etc_freq_old != etc_sig.etc_freq)) {
+			HAL_Pulse_ETC_Set_Period_Duty((uint32_t)etc_sig.etc_freq, (uint16_t)etc_sig.etc_duty*1000/65535);
+			etc_freq_old = etc_sig.etc_freq; //record this new data
+			etc_duty_old = etc_sig.etc_duty; //record this new data
+		}
 	}
 	else
 	{
