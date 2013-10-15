@@ -226,12 +226,56 @@ void MIOS_PWM_Enable_Channel(
    	}
 }
 
-//=============================================================================
-// MIOS_interrupt_flag_clear_Channel
-// write 1 to clear.
-//=============================================================================
-//void MIOS_Interrupt_Flag_clear(MIOS_Channel_T   channel)
-//	{
-//    MIOS.CH[channel].CSR.F.FLAG=1;
-//}
+void MIOS_Interrupt_Enable(
+    MIOS_Channel_T   channel)
+{
+	MIOS.CH[channel].CCR.F.FEN = 1;
+}
+
+void MIOS_Interrupt_Disable(
+    MIOS_Channel_T   channel)
+{
+	MIOS.CH[channel].CCR.F.FEN = 0;
+}
+
+void MIOS_Interrupt_Clear_Flag(
+    MIOS_Channel_T   channel)
+{
+	MIOS.CH[channel].CSR.F.FLAG = 1;
+}
+
+void MIOS_PWM_Set_Polarity(
+    MIOS_Channel_T   channel, bool egde_pol)
+{
+	MIOS.CH[channel].CCR.F.EDPOL = egde_pol;
+}
+
+void MIOS_PWM_Set_Frozen(
+    MIOS_Channel_T   channel, bool fren)
+{
+	MIOS.UCDIS.F.CHDIS8 = fren;
+	MIOS.MCR.F.FRZ = fren;
+	MIOS.CH[channel].CCR.F.FREN = fren;
+}
+
+void MIOS_PWM_Clear_FreeRunningRegister(
+    MIOS_Channel_T   channel)
+{
+	MIOS.CH[channel].CCNTR = 0;
+}
+
+bool MIOS_Interrupt_Get_Flag(
+    MIOS_Channel_T   channel)
+{
+	return MIOS.CH[channel].CSR.F.FLAG;
+}
+
+void MIOS_Interrupt_Clear_Pending(
+   MIOS_Channel_T channel )
+{
+   uint32_t                 reg_value;
+   reg_value = MIOS.CH[channel].CSR.U32;
+   reg_value = (reg_value & MIOS_CSR_FLAG_CLEAR_MASK);
+   MIOS.CH[channel].CSR.U32 = reg_value;
+}
 
