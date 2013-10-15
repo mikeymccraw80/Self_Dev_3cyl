@@ -5,8 +5,20 @@
 #include "hal_analog.h"
 #include "HLS.h"
 #include "vehicle_can_cald.h"
+#include "io_config_mios.h"
 
 
+void MIOS_Interrupt_Enable(
+    MIOS_Channel_T   channel);
+
+void MIOS_Interrupt_Disable(
+    MIOS_Channel_T   channel);
+
+void MIOS_Interrupt_Clear_Flag(
+    MIOS_Channel_T   channel);
+
+void MIOS_Interrupt_Clear_Pending(
+   MIOS_Channel_T channel );
 //=============================================================================
 // LLD_di_samplecnt
 //=============================================================================
@@ -68,9 +80,25 @@ uint8_t   LLD_di_samplecnt[LLD_DI_MAX_CHANNEL];
 //=============================================================================
 //IO_GPIO_DO_Task
 //=============================================================================
- void IO_GPIO_DO_Task_1ms(void) 
+void IO_GPIO_DO_Task_1ms(void) 
 {
- HAL_GPIO_SET_ETCDIS_Enable(!(bool)etc_sig.etc_enable);
- //etc direction 1 equal ETC open
- HAL_GPIO_SET_ETCDIR_Enable(!(bool) etc_sig.etc_direction);
+	static uint8_t etc_dir_old;
+	HAL_GPIO_SET_ETCDIS_Enable(!(bool)etc_sig.etc_enable);
+
+	//etc direction 1 equal ETC open
+	if (etc_dir_old != etc_sig.etc_direction) {
+		// trigger compare b interrupt
+		// HAL_GPIO_SET_ETCDIR_Enable(!(bool) etc_sig.etc_direction);
+		MIOS_Interrupt_Clear_Pending(MIOS_ETCCTLPWM_CH);
+		MIOS_Interrupt_Enable(MIOS_ETCCTLPWM_CH);
+		etc_dir_old = etc_sig.etc_direction;
+	}
+
+}
+
+void HAL_ETC_INT(void)
+{
+	HAL_GPIO_SET_ETCDIR_Enable(!(bool) etc_sig.etc_direction);
+	MIOS_Interrupt_Disable(MIOS_ETCCTLPWM_CH);
+	MIOS_Interrupt_Clear_Pending(MIOS_ETCCTLPWM_CH);
 }
