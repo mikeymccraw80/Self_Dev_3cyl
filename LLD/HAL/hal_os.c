@@ -59,8 +59,6 @@ void  HAL_OS_1ms_Task(void)
 {
 	IO_Analog_1ms_Update();
 	HLS_Task_1ms();
-	// IO_GPIO_DO_Task_1ms();
-	// IO_Pulse_Update_Function_1ms();
 	IO_ETC_Update_1msTimeBase();
 	IO_OS_BackGround_1ms_Status_Check();
 }
