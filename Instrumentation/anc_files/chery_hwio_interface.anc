@@ -224,7 +224,29 @@
 *-  description              = "etc signal duty cycle, resolution is 100/65536";
 *-}
 
+*-etc_sig_plus_0x03{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ETC_DIR";
+*-  variable_location.symbol = etc_sig.etc_direction;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "1.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "etc signal direction";
+*-}
 
+*-etc_sig_plus_0x04{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ETC_ENABLE";
+*-  variable_location.symbol = etc_sig.etc_enable;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "1.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "etc signal enable/disable";
+*-}
 
 /******************************************************************************/
 /*                                                                            */
