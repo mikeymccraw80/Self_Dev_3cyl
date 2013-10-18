@@ -132,7 +132,8 @@ void  IO_Pulse_VSS_Update_500ms(void)
 //=============================================================================
 void  IO_Pulse_Update_Function_1ms(void) 
 {
-	static uint16_t etc_freq_old;
+#if 0
+ 	static uint16_t etc_freq_old;
 	static uint16_t etc_duty_old;
 	uint32_t dc_temp;
 
@@ -152,5 +153,5 @@ void  IO_Pulse_Update_Function_1ms(void)
 	} else {
 		// HAL_Pulse_ETC_Set_Period_Duty((uint32_t)etc_sig.etc_freq, 65535);
 	}
-
+#endif
 }
