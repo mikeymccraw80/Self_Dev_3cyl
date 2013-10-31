@@ -40,7 +40,7 @@ typedef uint32_t               Multiplier_0_to_1_L ;
       Volt0to5Volts_W               FilteredMAD[num_cyl] ;            /* filtered MAD */
 #pragma section DATA " " ".bss"
 
-T_MILLISECONDSb              KnockWindowLength ; /*wingate length for s12*/
+T_CRANK_ANGLEa              KnockWindowLength ; /*wingate length for s12*/
 T_CRANK_ANGLEa            KnockWindowStartAngleVsTDC ;
 ESCCylinderType               EscCylinder ;           /* cylinder on which knock calculations are performed */
 bool                                ESCGain_High[num_cyl];                 /* gain for this cylinder */
@@ -218,7 +218,7 @@ static void DetermineMADEnabled( void );
  * averages if there is a jump in gain.
  * Called every 125 msec in RunSpark.
 \* ============================================================================ */
-static void UpdateDSPKNOCKGain( void );
+//static void UpdateDSPKNOCKGain( void );
 
 
 /* ============================================================================ *\
@@ -333,14 +333,14 @@ uint8_t  cylinder;
     DetermineMADEnabled() ;
 
     /*  only if the engine is properly running, execute the following sections */
-    if ( Run_Spark() )
-    {
+   // if ( Run_Spark() )
+    //{
        /*----------------------------------*/
         /*  Input amplifier gain adjustment */
         /*----------------------------------*/
 
-        UpdateDSPKNOCKGain() ;
-    }
+        //UpdateDSPKNOCKGain() ;
+   // }
 
     /*----------------------------------*/
     /*  update the 125ms old variables  */
@@ -423,15 +423,15 @@ uint8_t  cylinder;
            knock_flag_c = true;
          }
 #else
-        if(EscCylinder == cyl_3)
+        if(EscCylinder == cyl_1)
          {
            knock_flag_a = true;
          }
-         else if(EscCylinder == cyl_4)
+         else if(EscCylinder == cyl_2)
          {
            knock_flag_b = true;
          }
-         else if(EscCylinder == cyl_1)   
+         else if(EscCylinder == cyl_3)   
          {
            knock_flag_c = true;
          }
@@ -462,15 +462,15 @@ uint8_t  cylinder;
            knock_flag_c = false;
          }
 #else
-         if(EscCylinder == cyl_3)
+         if(EscCylinder == cyl_1)
          {
            knock_flag_a = false;
          }
-         else if(EscCylinder == cyl_4)
+         else if(EscCylinder == cyl_2)
          {
            knock_flag_b = false;
          }
-         else if(EscCylinder == cyl_1)   
+         else if(EscCylinder == cyl_3)   
          {
            knock_flag_c = false;
          }
@@ -514,7 +514,15 @@ uint8_t  cylinder;
 {
    Table_Index_Type         index_X, index_Y;
    CrankAngleInDeg_W crank_angle_temp;
-   KnockWindowLength = Table_2D_W( FSTPWD, Index_Var(HAL_Eng_Get_Engine_Speed(), Prec_RPM_W, 0.0, 400.0, 6400.0, 400.0 ) ) ;
+   crank_angle_temp = Table_2D_W( FSTPWD, Index_Var(HAL_Eng_Get_Engine_Speed(), Prec_RPM_W, 0.0, 400.0, 6400.0, 400.0 ) ) ;
+   if(crank_angle_temp >= FixDefConst(0.0, CrankAngleInDeg_W))
+    {
+      KnockWindowLength = crank_angle_temp - ShortMax;
+    }
+   else
+   {
+     KnockWindowLength = V_CRANK_ANGLEa(0.0);
+   }  
    /*--- lookup window start angle relative to TDC (-45 to 45 deg) ---*/
 
    index_X = Index_Var(MAP_W(), Prec_kPa_W, 0.0, 60.0, 100.0, 10.0);
@@ -534,7 +542,7 @@ uint8_t  cylinder;
   
   SetIO_MultiKnock_Window_Start(MULTIKNOCK_WINDOW_2, KnockWindowStartAngleVsTDC );
   
-  SetIO_MultiKnock_Window_Length (MULTIKNOCK_WINDOW_2,KnockWindowLength);
+  SetIO_MultiKnock_Window_End (MULTIKNOCK_WINDOW_2,KnockWindowLength);
   	
   SetIO_MultiKnock_High_Gain(ESCGain_High[EscCylinder]);
 
@@ -733,7 +741,7 @@ static void CalculateMAD( void )
 
 
 
-
+#if 0
 /*===========================================================*\
  * UpdateIRICGain
 \*===========================================================*/
@@ -760,7 +768,7 @@ static void UpdateDSPKNOCKGain( void )
    }
 } /* End UpdateIRICGain */
 
-
+#endif
 /*===========================================================*\
  * CalculateKnockThreshold
 \*===========================================================*/

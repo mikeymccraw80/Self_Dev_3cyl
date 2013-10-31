@@ -257,19 +257,21 @@ void KNOCK_Cylinder_Event_MultiKnock(void)
          - abs(KNOCK_Window_Begin2); //*(CRANK_DEGREES_PER_TOOTH<< (S_CRANK_ANGLEa)))>>uCRANK_ANGLE_PRECISION ;
 
    }
-#if 0
-   if(KNOCK_Window_End2>=0)
-   {
-      KNOCK_REF_To_WindowEnd2 = KNOCK_Angle_From_Cylinder_Event_To_TDC		  	
-         + KNOCK_Window_End2; //*(CRANK_DEGREES_PER_TOOTH<< (S_CRANK_ANGLEa)))>>uCRANK_ANGLE_PRECISION  ;
-   }
-   else
-   {
 
-      KNOCK_REF_To_WindowEnd2 = KNOCK_Angle_From_Cylinder_Event_To_TDC 
-         - abs(KNOCK_Window_End2); //*(CRANK_DEGREES_PER_TOOTH<< (S_CRANK_ANGLEa)))>>uCRANK_ANGLE_PRECISION  ;
-   }
-#endif
+ //  if(KNOCK_Window_End2>=0)
+//   {
+ //     KNOCK_REF_To_WindowEnd2 = KNOCK_Angle_From_Cylinder_Event_To_TDC		  	
+  //       + KNOCK_Window_End2; //*(CRANK_DEGREES_PER_TOOTH<< (S_CRANK_ANGLEa)))>>uCRANK_ANGLE_PRECISION  ;
+//   }
+  // else
+ // {
+
+  //    KNOCK_REF_To_WindowEnd2 = KNOCK_Angle_From_Cylinder_Event_To_TDC 
+   //      - abs(KNOCK_Window_End2); //*(CRANK_DEGREES_PER_TOOTH<< (S_CRANK_ANGLEa)))>>uCRANK_ANGLE_PRECISION  ;
+  // }
+
+ KNOCK_REF_To_WindowEnd2 = KNOCK_REF_To_WindowBegin2 + KNOCK_Window_End2;
+
    time_per_tooth_cnt =  CRANK_Get_Tooth_Period();
 
 
@@ -277,11 +279,15 @@ void KNOCK_Cylinder_Event_MultiKnock(void)
       =  (KNOCK_REF_To_WindowBegin2*time_per_tooth_cnt)
       >>(uCRANK_ANGLE_PRECISION);
 
-  // KNOCK_WindowBegin2_to_WindowEnd2_time 
+ //  KNOCK_WindowBegin2_to_WindowEnd2_time 
    //   = (KNOCK_REF_To_WindowEnd2-KNOCK_REF_To_WindowBegin2)* time_per_tooth_cnt
- //  >> (uCRANK_ANGLE_PRECISION);
+  //    >> (uCRANK_ANGLE_PRECISION);
 
-  KNOCK_WindowBegin2_to_WindowEnd2_time =  KNOCK_Window_Length;
+   KNOCK_WindowBegin2_to_WindowEnd2_time 
+      =  abs(KNOCK_Window_End2)* time_per_tooth_cnt
+      >> (uCRANK_ANGLE_PRECISION);
+
+  //KNOCK_WindowBegin2_to_WindowEnd2_time =  KNOCK_Window_Length;
 
 
    if( (KNOCK_WindowBegin2_to_WindowEnd2_time>(Knock_IIR_ADC_Sample_Time*Knock_Time_Scale)*Knock_Min_Wingate_Cnt)
@@ -310,7 +316,7 @@ void KNOCK_Cylinder_Event_MultiKnock(void)
 
          KNOCK_Status = KNOCK_Status_Stable;
 
-	  SIU_Knock_Connect_Pin_To_ETPU(true,HAL_RQOME_Wingate_CHANNEL);
+	  SIU_Knock_Connect_Pin_To_ETPU(false,HAL_RQOME_Wingate_CHANNEL);
 
 	     DMA_Initialize_Channel(
 	 DMA_CHANNEL_QADC_FISR0_RFDF_0,
@@ -436,7 +442,7 @@ knk_test_cnt1++;
          }
       }
 
-   KNOCK_DSP_Process_Count_Wingate_Stauts =    KNOCK_WindowBegin2_to_WindowEnd2_time/(Knock_IIR_ADC_Sample_Time*Knock_Time_Scale);
+   KNOCK_DSP_Process_Count_Wingate_Stauts =   (KNOCK_Stable_Time +  KNOCK_WindowBegin2_to_WindowEnd2_time)/(Knock_IIR_ADC_Sample_Time*Knock_Time_Scale);
          DMA_Clear_Request(DMA_CHANNEL_QADC_FISR0_RFDF_0);
 
 

@@ -77,6 +77,14 @@ types
        :range = -512 TO <512;
     }
 
+   . CrankAngleInDeg_W
+    {
+       : kind = fixed;
+       : precision = ( 0.015625 );
+       : range = ( -512 ) TO ( 511 );
+       : biased;
+    }
+
 
      .T_HERTZ
      {
@@ -574,7 +582,7 @@ types
   {
        :kind = define_annotation;
 	:units = "Cylinder_#";
-      :table = ( 2, 1, 3, 4 );
+      :table = ( 1, 2, 3, 4 );
   }
  
   .kPa_20to80by10_80to100by5_Steps

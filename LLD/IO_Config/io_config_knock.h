@@ -16,6 +16,8 @@
 #define Knock_Stable_Min_Time                  (400) //us
 #define Knock_Max_Winggate_Time                (4500) //us
 
+#define CcSYST_NUM_OF_CYLINDERS 4
+
 
 
 

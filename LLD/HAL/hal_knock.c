@@ -28,6 +28,8 @@ void GetIO_MultiKnock_Intensity_Value(EMS_MultiKnock_Window_T window, T_PERCENT_
    
   for (i=0; i<MULTIKNOCK_NUM_FILTERS; i++) 
   {
+       results[i]  = results[i] >> KyHWIO_Knock_Preshift;
+	   
        if(KNOCK_Get_High_Gain())
        {
           results[i] = results[i] >> 2;

@@ -78,31 +78,31 @@ const Multiplier_0_to_2                     K_ADESC_Scl_Multi= FixDefConst( 1.0,
  *---  Knock Window Placement  ---*
 \*--------------------------------*/
 
-const T_MILLISECONDSb FSTPWD[RPM_400to6400by400_Steps] =
+const CrankAngleInDeg_W FSTPWD[RPM_400to6400by400_Steps] =
 {
-    FixDefConst( 3.700, T_MILLISECONDSb ),      /* RPM_400  */
-    FixDefConst( 3.700, T_MILLISECONDSb ),      /* RPM_800  */
-    FixDefConst( 3.700, T_MILLISECONDSb ),      /* RPM_1200 */
-    FixDefConst( 3.700, T_MILLISECONDSb ),      /* RPM_1600 */
-    FixDefConst( 2.502, T_MILLISECONDSb ),      /* RPM_2000 */
-    FixDefConst( 2.006, T_MILLISECONDSb ),      /* RPM_2400 */
-    FixDefConst( 1.900, T_MILLISECONDSb ),      /* RPM_2800 */
-    FixDefConst( 1.900, T_MILLISECONDSb ),      /* RPM_3200 */
-    FixDefConst( 1.450, T_MILLISECONDSb ),      /* RPM_3600 */
-    FixDefConst( 1.350, T_MILLISECONDSb ),      /* RPM_4000 */
-    FixDefConst( 1.998, T_MILLISECONDSb ),      /* RPM_4400 */
-    FixDefConst( 1.998, T_MILLISECONDSb ),      /* RPM_4800 */
-    FixDefConst( 0.900, T_MILLISECONDSb ),      /* RPM_5200 */
-    FixDefConst( 0.847, T_MILLISECONDSb ),      /* RPM_5600 */
-    FixDefConst( 0.847, T_MILLISECONDSb ),      /* RPM_6000 */
-    FixDefConst( 0.847, T_MILLISECONDSb )       /* RPM_6400 */
+    FixDefConst( 6.700, CrankAngleInDeg_W ),      /* RPM_400  */
+    FixDefConst( 10.700, CrankAngleInDeg_W ),      /* RPM_800  */
+    FixDefConst( 12.700, CrankAngleInDeg_W ),      /* RPM_1200 */
+    FixDefConst( 12.700, CrankAngleInDeg_W ),      /* RPM_1600 */
+    FixDefConst( 18.502, CrankAngleInDeg_W ),      /* RPM_2000 */
+    FixDefConst( 18.006, CrankAngleInDeg_W ),      /* RPM_2400 */
+    FixDefConst( 24.900, CrankAngleInDeg_W ),      /* RPM_2800 */
+    FixDefConst( 24.900, CrankAngleInDeg_W ),      /* RPM_3200 */
+    FixDefConst( 24.450, CrankAngleInDeg_W ),      /* RPM_3600 */
+    FixDefConst( 36.350, CrankAngleInDeg_W ),      /* RPM_4000 */
+    FixDefConst( 36.998, CrankAngleInDeg_W ),      /* RPM_4400 */
+    FixDefConst( 36.998, CrankAngleInDeg_W ),      /* RPM_4800 */
+    FixDefConst( 20.900, CrankAngleInDeg_W ),      /* RPM_5200 */
+    FixDefConst( 24.847, CrankAngleInDeg_W ),      /* RPM_5600 */
+    FixDefConst( 24.847, CrankAngleInDeg_W ),      /* RPM_6000 */
+    FixDefConst( 24.847, CrankAngleInDeg_W )       /* RPM_6400 */
 } ;
 /*
 *| esc_cal.{
 *|    FSTPWD {
 *|       :is_calconst;
-*|       :elements:type = types.t_millisecondsb;
-*|       :units = "Micro Seconds";
+*|       :elements:type = types.CrankAngleInDeg_W;
+*|       :units = "Crank Angele";
 *|       :description = "Knock window length from the start point for a given RPM";
 *|       :annotation = types.RPM_400to6400by400_Steps;
 *|    }
@@ -207,7 +207,7 @@ const CrankAngleInDeg_W FSTRTWD[kPa_60to100by10_Steps][RPM_400to6400by400_Steps]
 *| esc_cal.{
 *|    FSTRTWD {
 *|       :is_calconst;
-*|       :elements:elements:type = types.t_crank_anglea;
+*|       :elements:elements:type = types.CrankAngleInDeg_W;
 *|       :units = "Degrees";
 *|       :description = "Knock window START angle : "
 *| "the values are defined from -45Deg (BTDC) to 24Deg (ATDC). "
@@ -509,7 +509,7 @@ const Volt0to5Volts_B               K_ESCAverageMin = FixDefConst( 0.17578125, V
 *|    }
 *| }
 */
-
+#if 0
 /*  -------------------------------------------------  *\
  *  Amplifier gain determination                       *
 \*  -------------------------------------------------  */
@@ -543,7 +543,7 @@ const Volt0to5Volts_W               K_ESCAverageLowThreshold = FixDefConst( 5.0,
 *|    }
 *| }
 */
-
+#endif
 /*  -------------------------------------------------  *\
  *  MAD determination                                  *
 \*  -------------------------------------------------  */

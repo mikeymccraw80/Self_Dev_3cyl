@@ -25,9 +25,9 @@
 *-  variable_location.symbol = es_knock.KnockWindowLength;
 *-  ds_precision             = "4.3";
 *-  ds_scaling_mode          = "Ax + B";
-*-  ds_const_a               = "0.007629";
-*-  ds_const_b               = "0.000000";
-*-  ds_scaling_unit          = "MicroSec_WINGATE";
+*-  ds_const_a               = "0.3515625";
+*-  ds_const_b               = "-45.000000";
+*-  ds_scaling_unit          = "WindowEndAngle_Type";
 *-  description              = "es_knock.KnockWindowLength";
 *-}
 

@@ -39,7 +39,7 @@ extern const Multiplier_0_to_2                     K_ADESC_Scl_Multi;
  *---  Knock Window Placement  ---*
 \*--------------------------------*/
 
-extern const T_MILLISECONDSb     FSTPWD[RPM_400to6400by400_Steps];
+extern const CrankAngleInDeg_W     FSTPWD[RPM_400to6400by400_Steps];
 extern const CrankAngleInDeg_W   FSTRTWD[kPa_60to100by10_Steps][RPM_400to6400by400_Steps];
 
 /*  -------------------------------------------------  *\
@@ -70,8 +70,8 @@ extern const Volt0to5Volts_B               K_ESCAverageMin;
  *  Amplifier gain determination                       *
 \*  -------------------------------------------------  */
 
-extern const Volt0to5Volts_W               K_ESCAverageUppThreshold;
-extern const Volt0to5Volts_W               K_ESCAverageLowThreshold;
+//extern const Volt0to5Volts_W               K_ESCAverageUppThreshold;
+//extern const Volt0to5Volts_W               K_ESCAverageLowThreshold;
 
 
 /*  -------------------------------------------------  *\

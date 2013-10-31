@@ -36,6 +36,7 @@ extern const uint8_t       KyHWIO_Num58xGapsUsingCamForSync;
 extern const T_CRANK_ANGLE      KfHWIO_phi_BoundaryFraction;
 
 //knock
+extern const T_COUNT_BYTE KyHWIO_Knock_Preshift;
 extern const uint32_t  DSP_LOW_PASS_FILTER_IIR_COEFF[] ;
 extern const uint32_t DSP_KNOCK_CENTER_FREQUENCY_IIR_COEFF1[];
 extern  const uint32_t DSP_KNOCK_CENTER_FREQUENCY_IIR_COEFF2[];

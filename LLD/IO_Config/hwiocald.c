@@ -213,6 +213,24 @@ const   uint8_t     KyHWIO_Num58xGapsUsingCamForSync = 12;
 *| }
 */
 
+/*===========================================================================*\
+ * /-----------------------------------------------------------------------\
+ * | Knock Calibrations
+ * \-----------------------------------------------------------------------/
+\*===========================================================================*/
+
+const T_COUNT_BYTE KyHWIO_Knock_Preshift = 0;
+
+/*
+*| hwiocald.{
+*|   KyHWIO_Knock_Preshift {
+*|     : is_calconst;
+*|     : description = "Preshift for the DSP Knock intensity value";
+*|     : type = types.t_count_byte;
+*|     : units = "count";
+*|   }
+*| }
+*/
 const uint32_t  DSP_LOW_PASS_FILTER_IIR_COEFF[] =
 {
  // decim coeffs: 
