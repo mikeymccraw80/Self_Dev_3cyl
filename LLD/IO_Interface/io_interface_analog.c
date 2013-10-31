@@ -121,6 +121,9 @@
 
  //PPS2 
   LLD_atd_input_table[LLD_ATD_PEDAL_2].LLD_atd_val = HAL_Analog_Get_PPS2VI_Value()>>2;
+
+   //Protect Battery 
+  LLD_atd_input_table[LLD_ATD_BATTERY_1].LLD_atd_val = HAL_Analog_Get_PBATTVI_Value()>>2;
   
 
   

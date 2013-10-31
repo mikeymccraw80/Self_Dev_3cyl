@@ -24,6 +24,9 @@ uint16_t HLS_OXYGEN_Value;
 bool  HLS_OXYGEN_Status;
 uint16_t HLS_BATT_Value;
 bool  HLS_BATT_Status;
+
+uint16_t HLS_PBATT_Value;
+bool  HLS_PBATT_Status;
 uint16_t HLS_TA_Value;
 bool  HLS_TA_Status;
 uint16_t HLS_ECT_Value;
@@ -154,6 +157,7 @@ T_MILLISECONDSb PfKNOC_phi_FinalWindow2_length;
 	//HLS_ECT_Status = LLD_atd_input_table[LLD_ATD_ECT].LLD_atd_status;
 	HLS_TPS_Value = LLD_atd_input_table[LLD_ATD_THROTTLE_1].LLD_atd_val;
 	//HLS_TPS_Status = LLD_atd_input_table[LLD_ATD_THROTTLE_1].LLD_atd_status;
+	HLS_PBATT_Value = LLD_atd_input_table[LLD_ATD_BATTERY_1].LLD_atd_val;
 
 }
 

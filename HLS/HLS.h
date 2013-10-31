@@ -396,6 +396,7 @@ extern uint16_t	DTCs_SID07[SY_FCMTSIZE];		/* DTCs for service 07*/
 #define LLD_ATD_PEDAL_2 LLD_AN10
 #define LLD_ATD_FRONT_EVAP_TEMP LLD_AN11
 #define LLD_ATD_AC_PRESSURE  LLD_AN12
+#define LLD_ATD_BATTERY_1   LLD_AN13
 
 /*chery DI*/
 /* DI Index */
