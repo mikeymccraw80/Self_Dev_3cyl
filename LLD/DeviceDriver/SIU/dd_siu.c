@@ -429,7 +429,7 @@ void SIU_GPIO_Initialize_Device( void )
          SIU.PCR[siu_channel].F.PA = SIU_GPIO_PIN_ASSIGNMENT_GPIO; // GPIO
          SIU.PCR[siu_channel].F.OBE = true;   // GPIO OUT
          SIU.PCR[siu_channel].F.IBE = false;   // GPIO OUT
-         SIU.GPDO[siu_channel].F.PDO = true;
+         SIU.GPDO[siu_channel].F.PDO = false;
       }
 }
 

@@ -345,7 +345,7 @@ void KNOCK_Cylinder_Event_MultiKnock(void)
          MCD5406_Set_Parameter(RQOME_TPU_INDEX, WINGATE_RQOME, RQOM_PARAMETER_START_EVENT, tcr1_current );
         
          // set init pin state = 1
-         MCD5406_Set_Flag(RQOME_TPU_INDEX, WINGATE_RQOME,RQOM_FLAG_START_EVENT_ACTIVE_STATE,false);
+         MCD5406_Set_Flag(RQOME_TPU_INDEX, WINGATE_RQOME,RQOM_FLAG_START_EVENT_ACTIVE_STATE,true);
          // set use start event = true
          MCD5406_Set_Flag(RQOME_TPU_INDEX, WINGATE_RQOME,RQOM_FLAG_USE_START_EVENT,true);
          // set use end event
@@ -361,7 +361,7 @@ void KNOCK_Cylinder_Event_MultiKnock(void)
          // array 0 use abs time
          MCD5406_Set_Array_Flag(RQOME_TPU_INDEX, WINGATE_RQOME,NULL,0,RQOM_ARRAY_FLAG_ABSOLUTE_MATCH_EVENT,false);
          // array 0 pin state 0
-         MCD5406_Set_Array_Flag(RQOME_TPU_INDEX, WINGATE_RQOME,NULL,0,RQOM_ARRAY_FLAG_ACTIVE_STATE,true);
+         MCD5406_Set_Array_Flag(RQOME_TPU_INDEX, WINGATE_RQOME,NULL,0,RQOM_ARRAY_FLAG_ACTIVE_STATE,false);
          // array 0 store time
          MCD5406_Set_Array_Flag(RQOME_TPU_INDEX, WINGATE_RQOME,NULL,0,RQOM_ARRAY_FLAG_STORE_TIMER,false);
          // array 0 request interrupt
@@ -375,7 +375,7 @@ void KNOCK_Cylinder_Event_MultiKnock(void)
          // array 1 use abs time
          MCD5406_Set_Array_Flag(RQOME_TPU_INDEX, WINGATE_RQOME,NULL,1,RQOM_ARRAY_FLAG_ABSOLUTE_MATCH_EVENT,true);
          // array 1 pin state 0
-         MCD5406_Set_Array_Flag(RQOME_TPU_INDEX, WINGATE_RQOME,NULL,1,RQOM_ARRAY_FLAG_ACTIVE_STATE,false);
+         MCD5406_Set_Array_Flag(RQOME_TPU_INDEX, WINGATE_RQOME,NULL,1,RQOM_ARRAY_FLAG_ACTIVE_STATE,true);
 
          MCD5406_Set_Array_Flag(RQOME_TPU_INDEX, WINGATE_RQOME,NULL,1,RQOM_ARRAY_FLAG_REQUEST_INTERRUPT,false);
          // array 1 store time
@@ -389,7 +389,7 @@ void KNOCK_Cylinder_Event_MultiKnock(void)
          // array 1 use abs time
          MCD5406_Set_Array_Flag(RQOME_TPU_INDEX, WINGATE_RQOME,NULL,2,RQOM_ARRAY_FLAG_ABSOLUTE_MATCH_EVENT,true);
          // array 1 pin state 0
-         MCD5406_Set_Array_Flag(RQOME_TPU_INDEX, WINGATE_RQOME,NULL,2,RQOM_ARRAY_FLAG_ACTIVE_STATE,true);
+         MCD5406_Set_Array_Flag(RQOME_TPU_INDEX, WINGATE_RQOME,NULL,2,RQOM_ARRAY_FLAG_ACTIVE_STATE,false);
 
          MCD5406_Set_Array_Flag(RQOME_TPU_INDEX, WINGATE_RQOME,NULL,2,RQOM_ARRAY_FLAG_END_SEQUENCE,true);
          // array 2 request interrupt

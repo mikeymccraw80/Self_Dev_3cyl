@@ -73,7 +73,7 @@ typedef union
 typedef uint16_t               CrankAngleInDeg_W ;
 #define Prec_CrankAngleInDeg_W                ( 1.0 /64.0 )
 #define Min_CrankAngleInDeg_W                        ( -512.0 )
-#define Max_CrankAngleInDeg_W         ( 65535 * 90.0 / 256 )
+#define Max_CrankAngleInDeg_W         ( 65535 /64.0-512.0 )
 
 /* T_MILLISECONDSb: Range [0ms, 1024ms) Res: 0.015625ms */
 //typedef FIXED_UW_06                              T_MILLISECONDSb;
