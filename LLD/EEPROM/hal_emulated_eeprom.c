@@ -939,7 +939,7 @@ void EEPROM_Restore_Vehicle_NVRAM_Block(HWIO_Reset_Status_T status_poweron)
    op_return = Get_EEP_NVRAM_Active_Page();
    pf_kksum = Get_KKSUM_checksum();
 
-   if( EEPROM_ACTIVE_PAGE_NOT_FOUND == op_return)
+   if(( EEPROM_ACTIVE_PAGE_NOT_FOUND == op_return) || HAL_OS_Get_Battery_Remove())
    {
       EEP_NVRAM_Erase(EEP_NVRAM_BANK0);
       EEP_NVRAM_Erase(EEP_NVRAM_BANK1);
