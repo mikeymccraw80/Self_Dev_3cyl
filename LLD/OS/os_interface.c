@@ -76,7 +76,9 @@ void MngOSTK_5msTasks(void)
 void MngOSTK_10msTasks(void)
 {
     /* call device driver layer functions */
+#ifndef ENABLE_ETC_SOH_MODULE
     SWT_Service_WatchDog();
+#endif
     VSEP_SPI_SCHEDULER_10MS();
     VSEP_Fault_Task_10MS();
     L9958_FAULT_Diagnose_Update();
