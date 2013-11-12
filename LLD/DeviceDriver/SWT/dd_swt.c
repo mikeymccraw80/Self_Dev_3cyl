@@ -26,28 +26,26 @@ SWT_T SWT;
 //=============================================================================
 // SWT_Initialize_Device
 //=============================================================================
-void SWT_Set_Timeout_Value(uint32_t   in_time)
+void SWT_Set_Timeout_Value(uint32_t in_time)
 {
+	SWT_MCR_T temp_MCR;
 
-   SWT_MCR_T temp_MCR;
-   
-   if(!(SWT.SWT_MCR.F.HLK))                            //exit on hard lock
-   {
-       if(SWT.SWT_MCR.F.SLK == SWT_SOFT_LOCK_ENABLE)
-       {
-          SWT.SWT_SR.U32 = SWT_UNLOCK_SEQ_A;
-          SWT.SWT_SR.U32 = SWT_UNLOCK_SEQ_B;       //SWT is unlocked
-       }
-	   
-	 SWT.SWT_MCR.F.WEN = SWT_DISABLE;  
-        temp_MCR.U32 = SWT.SWT_MCR.U32;
-	 temp_MCR.F.KEY = SWT_KEYED_SERVICE_MODE;   //Keyed Service Mode, two pseudorandom key values are used to service the watchdog
-	 SWT.SWT_TO = in_time;                               //timeout_value updated  here
-        temp_MCR.F.SLK = SWT_SOFT_LOCK_ENABLE;                 //SWT_CR, SWT_TO, SWT_WN and SWT_SK are read-only registers
-        temp_MCR.F.CSL = SWT_OSCILLATOR_CLOCK; 
-	 temp_MCR.F.WEN = SWT_ENABLE;
-	 SWT.SWT_MCR.U32 = temp_MCR.U32;
-   }
+	if (!(SWT.SWT_MCR.F.HLK)) //exit on hard lock
+	{
+		if (SWT.SWT_MCR.F.SLK == SWT_SOFT_LOCK_ENABLE) {
+			SWT.SWT_SR.U32 = SWT_UNLOCK_SEQ_A;
+			SWT.SWT_SR.U32 = SWT_UNLOCK_SEQ_B; //SWT is unlocked
+		}
+
+		SWT.SWT_MCR.F.WEN = SWT_DISABLE;
+		temp_MCR.U32 = SWT.SWT_MCR.U32;
+		temp_MCR.F.KEY = SWT_KEYED_SERVICE_MODE; //Keyed Service Mode, two pseudorandom key values are used to service the watchdog
+		SWT.SWT_TO = in_time; //timeout_value updated  here
+		temp_MCR.F.SLK = SWT_SOFT_LOCK_ENABLE; //SWT_CR, SWT_TO, SWT_WN and SWT_SK are read-only registers
+		temp_MCR.F.CSL = SWT_OSCILLATOR_CLOCK;
+		temp_MCR.F.WEN = SWT_ENABLE;
+		SWT.SWT_MCR.U32 = temp_MCR.U32;
+	}
 }
 
 //=============================================================================
@@ -56,33 +54,31 @@ void SWT_Set_Timeout_Value(uint32_t   in_time)
 
 void SWT_Service_WatchDog(void)
 {
-   uint32_t SWT_KEY_Val;
-   uint32_t SWT_SR_Val1;
-   uint32_t SWT_SR_Val2;
-	 uint32_t cs;
+	uint32_t SWT_KEY_Val;
+	uint32_t SWT_SR_Val1;
+	uint32_t SWT_SR_Val2;
+	// uint32_t cs;
 
-   if(SWT.SWT_MCR.F.KEY == SWT_KEYED_SERVICE_MODE)         //check for fixed or random service mode
-   {
-		 cs = Enter_Critical_Section();
+	/* check for fixed or random service mode */
+	if (SWT.SWT_MCR.F.KEY == SWT_KEYED_SERVICE_MODE) {
+		// cs = Enter_Critical_Section();
 
-			// Read Key Value
-      SWT_KEY_Val = SWT.SWT_SK.U32;
+		// Read Key Value
+		SWT_KEY_Val = SWT.SWT_SK.U32;
 
-      // Generate Keys
-      SWT_SR_Val1 = SWT_Get_PseudoRandom_Key(SWT_KEY_Val);
-      SWT_SR_Val2 = SWT_Get_PseudoRandom_Key(SWT_SR_Val1);
+		// Generate Keys
+		SWT_SR_Val1 = SWT_Get_PseudoRandom_Key(SWT_KEY_Val);
+		SWT_SR_Val2 = SWT_Get_PseudoRandom_Key(SWT_SR_Val1);
 
-      // Service Watchdog
-      SWT.SWT_SR.U32 = SWT_SR_Val1;
-      SWT.SWT_SR.U32 = SWT_SR_Val2;
+		// Service Watchdog
+		SWT.SWT_SR.U32 = SWT_SR_Val1;
+		SWT.SWT_SR.U32 = SWT_SR_Val2;
 
-			Leave_Critical_Section(cs);
-   }
-   else
-   {
-      SWT.SWT_SR.U32 = SWT_SERVICE_KEY_A;
-      SWT.SWT_SR.U32 = SWT_SERVICE_KEY_B;
-   }
+		// Leave_Critical_Section(cs);
+	} else {
+		SWT.SWT_SR.U32 = SWT_SERVICE_KEY_A;
+		SWT.SWT_SR.U32 = SWT_SERVICE_KEY_B;
+	}
 }
 
 
