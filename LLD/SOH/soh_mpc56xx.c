@@ -167,33 +167,25 @@ void SOH_Service_Watchdog(bool iseven)
 	uint32_t SWT_KEY_Val;
 	uint32_t SWT_SR_Val1;
 	uint32_t SWT_SR_Val2;
-	uint32_t cs;
-	if(SWT.SWT_MCR.F.KEY == SWT_KEYED_SERVICE_MODE) 				//check for fixed or random service mode
-	{ 
-		 //cs = Enter_Critical_Section();
-		 // Read Key Value
-		 SWT_KEY_Val = SWT.SWT_SK.U32;
-	
-		 // Generate Keys
-		 SWT_SR_Val1 = SWT_Get_PseudoRandom_Key(SWT_KEY_Val);
-		 SWT_SR_Val2 = SWT_Get_PseudoRandom_Key(SWT_SR_Val1);
-	
-		 // Service Watchdog
-		 SWT.SWT_SR.U32 = SWT_SR_Val1;
-		 SWT.SWT_SR.U32 = SWT_SR_Val2;
 
-		 //Leave_Critical_Section(cs);
-	}
-	else
-	{
-		if (iseven) 
-    {
-        SWT.SWT_SR.U32 = SWT_SERVICE_KEY_B;
-    }
-    else 
-    {
-        SWT.SWT_SR.U32 = SWT_SERVICE_KEY_A;
-    }
+	//check for fixed or random service mode
+	if (SWT.SWT_MCR.F.KEY == SWT_KEYED_SERVICE_MODE) {
+		// Read Key Value
+		SWT_KEY_Val = SWT.SWT_SK.U32;
+
+		// Generate Keys
+		SWT_SR_Val1 = SWT_Get_PseudoRandom_Key(SWT_KEY_Val);
+		SWT_SR_Val2 = SWT_Get_PseudoRandom_Key(SWT_SR_Val1);
+
+		// Service Watchdog
+		SWT.SWT_SR.U32 = SWT_SR_Val1;
+		SWT.SWT_SR.U32 = SWT_SR_Val2;
+	} else {
+		if (iseven) {
+			SWT.SWT_SR.U32 = SWT_SERVICE_KEY_B;
+		} else {
+			SWT.SWT_SR.U32 = SWT_SERVICE_KEY_A;
+		}
 	}
 }
 
