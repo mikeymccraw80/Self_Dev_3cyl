@@ -11,6 +11,7 @@ del ERROR.err
 
 rem The real thing
 set TARGET=HWIO
+set ETCSOH=ENABLE
 ..\tools\utility\gnumake 2>&1 | ..\tools\utility\mtee.exe /t/d/+ build.log
 pause
 

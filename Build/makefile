@@ -312,6 +312,9 @@ PPC_DIAB_OPTS   =     -g2 -XO\
 CDEBUG= -Xpass-source
 CX_OUTPUT= -ce$(subst /,\,$(OBJ_DIR)) -co$(subst /,\,$(OBJ_DIR)) -cl$(subst /,\,$(OBJ_DIR))
 
+ifeq ($(ETCSOH),ENABLE)
+    PPC_DIAB_OPTS += -DENABLE_ETC_SOH_MODULE
+endif
 
 export CC= $(COMP_DIR)\$(COMPILER) $(PPC_DIAB_OPTS) $(CDEBUG) $(PPC_DIAB_TARGET) $(INCLUDE_DIR) 
 
