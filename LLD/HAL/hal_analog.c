@@ -48,7 +48,7 @@
 //=============================================================================
   uint16_t HAL_Analog_Get_TPS1VI_Value(void) 
  {
-     return  QADC_Analog_Get_Value(AD_TPS1VI_Channel);
+     return  QADC_Analog_FIFO1_Get_Value(AD_TPS1VI_Channel);
  }
 
 //=============================================================================
@@ -56,7 +56,7 @@
 //=============================================================================
   uint16_t HAL_Analog_Get_TPS2VI_Value(void) 
  {
-     return  QADC_Analog_Get_Value(AD_TPS2VI_Channel);
+     return  QADC_Analog_FIFO1_Get_Value(AD_TPS2VI_Channel);
  }
 
 //=============================================================================

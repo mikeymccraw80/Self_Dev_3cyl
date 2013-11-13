@@ -43,8 +43,8 @@ typedef enum
   AD_MAPVI_Channel,
   AD_ACPREVI_Channel,
   AD_LEGRFBVI_Channel,
-  AD_TPS1VI_Channel,
-  AD_TPS2VI_Channel,
+//  AD_TPS1VI_Channel,
+//  AD_TPS2VI_Channel,
   AD_PPS1VI_Channel,
   AD_PPS2VI_Channel,
   AD_FLVVI_Channel,
@@ -74,6 +74,18 @@ typedef enum
   AD_ANALOG_MAX_SIGNAL_NAMES
 
 } AD_Analog_T;
+
+//=============================================================================
+// Analog_Channel_T | Defines an enumeration that contains all the analog
+//=============================================================================
+typedef enum
+{
+
+  AD_TPS1VI_Channel,
+  AD_TPS2VI_Channel,
+  AD_ANALOG_FIFO1_MAX_SIGNAL_NAMES
+ 
+} AD_FIFO1_Analog_T;
 
 //The eQADC Module Configuration Register (EQADC_MCR) contains bits used to control how the
 //eQADC responds to a debug mode entry request, and to enable the eQADC SSI interface.
@@ -109,6 +121,7 @@ extern const QADC_ETDFR_T QADC_INITIAL_ETDFR;
 extern const ADC_ACR_T  QADC_INITIAL_ACR1;
 
 extern const ADC_CCMF_T  QADC_CMD_Timebase[AD_ANALOG_MAX_SIGNAL_NAMES];
+extern const ADC_CCMF_T  QADC_CMD_FIFO1[AD_ANALOG_FIFO1_MAX_SIGNAL_NAMES];
 
 
 extern const ADC_CCMF_T  QADC_CALIBRATION_ADC1_REF75[ADC_CONVERTER_MAX];

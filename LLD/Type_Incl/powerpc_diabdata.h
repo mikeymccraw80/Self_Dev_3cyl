@@ -372,6 +372,11 @@ asm void Leave_Critical_Section_asm( interrupt_state_t in_interrupt_state )
 //=============================================================================
  interrupt_state_t Enter_Critical_Section( void );
 
+//=============================================================================
+// Disable/Enable HWIO_MasterIRQ
+//=============================================================================
+ interrupt_state_t Enter_Critical_Enable_Section( void );
+
  void Leave_Critical_Section( interrupt_state_t in_interrupt_state );
 
 #endif // POWERPC_DIABDATA_H

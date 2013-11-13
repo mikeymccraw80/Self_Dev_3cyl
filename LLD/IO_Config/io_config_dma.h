@@ -13,6 +13,40 @@
 //=============================================================================
 // Initialization Constant for DMA Group Priority
 //=============================================================================
+//=============================================================================
+// DMA_QADC_CFFF_1
+//=============================================================================
+#define DMA_QADC_CFFF_1_Source_Address  (uint32_t)&QADC_CMD_FIFO1
+#define DMA_QADC_CFFF_1_Dest_Address   (uint32_t)&(QADC.CFPR[1])
+#define DMA_QADC_CFFF_1_SIZE ( sizeof(QADC_CMD_FIFO1)/sizeof(uint32_t) )
+#define DMA_QADC_CFFF_1_Slast -( DMA_QADC_CFFF_1_SIZE*sizeof(uint32_t) )
+#define DMA_QADC_CFFF_1_Dlast 0
+
+extern DMA_Second_32Bit_T DMA_QADC_CFFF_1_Second_32Bit;
+
+extern DMA_Third_32Bit_T DMA_QADC_CFFF_1_Third_32Bit;
+
+extern DMA_Sixth_32Bit_T DMA_QADC_CFFF_1_Sixth_32Bit;
+
+extern DMA_Eighth_32Bit_T DMA_QADC_CFFF_1_Eighth_32Bit;
+
+//=============================================================================
+// DMA_QADC_RFDF_1
+//=============================================================================
+#define DMA_QADC_RFDF_1_Source_Address  (uint32_t)&(QADC.RFPR[1].U16[1])
+#define DMA_QADC_RFDF_1_Dest_Address     (uint32_t)&QADC_Queue_Result_1
+#define DMA_QADC_RFDF_1_SIZE     ( sizeof(QADC_Queue_Result_1)/sizeof(uint16_t) )
+#define DMA_QADC_RFDF_1_Slast   0
+#define DMA_QADC_RFDF_1_Dlast   -( DMA_QADC_RFDF_1_SIZE*sizeof(uint16_t) )
+
+extern DMA_Second_32Bit_T DMA_QADC_RFDF_1_Second_32Bit;
+
+extern DMA_Third_32Bit_T DMA_QADC_RFDF_1_Third_32Bit;
+
+extern DMA_Sixth_32Bit_T DMA_QADC_RFDF_1_Sixth_32Bit;
+
+extern DMA_Eighth_32Bit_T DMA_QADC_RFDF_1_Eighth_32Bit ;
+
 
 //=============================================================================
 // DMA_QADC_CFFF_0
