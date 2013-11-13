@@ -31,6 +31,21 @@ void DMA_Initialize_Device( void  )
    //  within a major loop - i.e. will break SPI messages and Analog queues,
    //  etc. - anything that uses the eDMA has potential to copy data
    //  incorrectly.
+   //DMA_CHANNEL_QADC_FISR1_CFFF_1
+   DMA_A.CPR[DMA_CHANNEL_QADC_FISR1_CFFF_1].U8 =0;
+   //Enable Channel Preemption
+   //Channel n can be temporarily suspended by the service request of a higher priority channel.
+   DMA_A.CPR[DMA_CHANNEL_QADC_FISR1_CFFF_1].F.ECP =false;
+   //Channel priority when fixed-priority arbitration is enabled.
+   DMA_A.CPR[DMA_CHANNEL_QADC_FISR1_CFFF_1].F.CHPRI = DMA_CHANNEL_PRIORITY_2;
+      //DMA_CHANNEL_QADC_FISR1_RFDF_1
+   DMA_A.CPR[DMA_CHANNEL_QADC_FISR1_RFDF_1].U8 =0;
+   //Enable Channel Preemption
+   //Channel n can be temporarily suspended by the service request of a higher priority channel.
+   DMA_A.CPR[DMA_CHANNEL_QADC_FISR1_RFDF_1].F.ECP =false;
+   //Channel priority when fixed-priority arbitration is enabled.
+   DMA_A.CPR[DMA_CHANNEL_QADC_FISR1_RFDF_1].F.CHPRI = DMA_CHANNEL_PRIORITY_3;
+
    
    //DMA_CHANNEL_QADC_FISR4_CFFF_4
    DMA_A.CPR[DMA_CHANNEL_QADC_FISR4_CFFF_4].U8 =0;
