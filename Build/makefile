@@ -300,6 +300,7 @@ PPC_DIAB_OPTS   =     -g2 -XO\
                       -Xsize-opt\
                       -Xlicense-wait\
                       -Xinline=0\
+                      -Xnested-interrupts\
                       -Xinline-explicit-force\
                       -Xbss-common-off\
                       -Xenum-is-best\
@@ -328,6 +329,7 @@ export CC= $(COMP_DIR)\$(COMPILER) $(PPC_DIAB_OPTS) $(CDEBUG) $(PPC_DIAB_TARGET)
                       -Xsize-opt\
                       -Xlicense-wait\
                       -Xinline=0\
+                      -Xnested-interrupts\
                       -Xinline-explicit-force\
                       -Xbss-common-off\
                       -Xlist-file\
