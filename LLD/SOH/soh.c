@@ -137,17 +137,6 @@ bool VbHWIO_VSEP_Initialized;
 static Soh_Fault_Log_T Soh_FaultLogNVM;
 #pragma section DATA " " ".bss"
 
-uint16_t soh_get_fault_log(void)
-{
-	return Soh_FaultLog.Word;
-}
-
-uint16_t soh_get_fault_log_nvram(void)
-{
-	return Soh_FaultLogNVM.Word;
-}
-
-
 void RequestIO_Software_Reset( void )
 {
    INTC_EXCEPTION_Halt();

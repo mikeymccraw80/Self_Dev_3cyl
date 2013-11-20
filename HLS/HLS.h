@@ -197,8 +197,8 @@ typedef union {
 	} Bits;
 } Soh_Fault_Log_Type;
 
-extern uint16_t soh_get_fault_log(void);
-extern uint16_t soh_get_fault_log_nvram(void);
+extern uint16_t SOH_ETC_Get_Fault_Log(void);
+extern void SOH_ETC_Clear_Fault_Log(void);
 
 typedef enum
 {
