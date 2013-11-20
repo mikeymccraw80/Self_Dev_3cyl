@@ -39,7 +39,7 @@ typedef struct{
 
 /* DI data structure */
 typedef struct{
-	uint8_t DebounceTimes; // HLS can set it in initialization, other wise it¡¯s 0
+	uint8_t DebounceTimes; // HLS can set it in initialization, otherwise it is 0
 	uint8_t value ; /* Input level to return,1 or 0 */
 	status_bits status ; /* Status when electrical diagnostics are available, otherwise no use */
 }LLD_di_item;
@@ -175,6 +175,30 @@ typedef struct {
 } etc_signals;
 
 extern etc_signals etc_sig;
+
+/* soh fault log interface */
+typedef union {
+	uint16_t Word; /* ETC SOH fault code */
+	struct {
+		uint16_t	SysClkFail 		    : 1; /* System clock frequency error */
+		uint16_t	SohIrqSrcFail       : 1; /* Interrupt source error */
+		uint16_t	SysTmrFail		    : 1; /* System timer error */
+		uint16_t	SohSeqFail          : 1; /* Test sequence error */
+		uint16_t	RtiFreqFail         : 1; /* RTI frequency error */
+		uint16_t	LoopSeqFail		    : 1; /* CPU loop sequence error */
+		uint16_t	CRCounterLow        : 1; /* SOH C&R counter value low */
+		uint16_t	ShutOffTimeExpire   : 1; /* Shutoff timer expired */
+		uint16_t	SPIFail             : 1; /* SPI error */
+		uint16_t	SPICommFail         : 1; /* SPI communication error */
+		uint16_t	CRDisarmed          : 1; /* SOH C&R disarmed */
+		uint16_t	CRTimeoutFail       : 1; /* SOH C&R timeout */
+		uint16_t	CRCounterFail	    : 1; /* SOH C&R counter value zero */
+		uint16_t						: 3;
+	} Bits;
+} Soh_Fault_Log_Type;
+
+extern uint16_t soh_get_fault_log(void);
+extern uint16_t soh_get_fault_log_nvram(void);
 
 typedef enum
 {

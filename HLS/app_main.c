@@ -111,6 +111,10 @@ uint16_t angle_crank_cam_outlet;
 //ETC
 etc_signals etc_sig;
 
+//soh fault
+Soh_Fault_Log_Type soh_fault;
+Soh_Fault_Log_Type soh_fault_nvram;
+
 #define START_SECTION_static_volatile_SlowRam_32bit
 #include "PRAGMA_CHERY.h"
 uint32_t hlsbss_test0;
@@ -221,6 +225,8 @@ void HLS_Task_20ms(void)
 
 void HLS_Task_200ms(void)
 {
+	soh_fault.Word = soh_get_fault_log();
+	soh_fault_nvram.Word = soh_get_fault_log_nvram();
 }
 /* Call back function for 1000ms task */
 void HLS_Task_1000ms(void)
@@ -232,7 +238,7 @@ void HLS_Task_1000ms(void)
 
 void HLS_afterrun(void)
 {
-    //sys_cmd.B_after_run_end = true;
+    sys_cmd.B_after_run_end = true;
 }
 
 /*HLS initialization function.*/

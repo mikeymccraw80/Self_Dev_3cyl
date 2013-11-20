@@ -50,13 +50,11 @@
 #include "soh_mpc56xx.h"
 #include "soh_cald.h"
 #include "soh.h"
-#include "soh_nvm.h"
 #include "dd_dma.h"
 #include "dd_VSEP_soh.h"
 #include "hal_soh.h"
 #include "dd_siu.h"
 #include "dd_stm.h"
-
 
 /*===========================================================================*\
  * Cofingrable Marcos
@@ -89,14 +87,32 @@
 
 #define SOH_TEST_NO_ERR					   	    ( 0x0000 )
 
+const TPU_CHANNEL_Configuration_T   SOH_INTERNAL_TIME_BASE_CONFIG =
+{
+   0,   //   Set the desired value for TPU configuration
+   0,                                   //      PWM Update Mode 1- Coherent,0- synchronus
+   0,                                   //     Refernce channel number
+   0,            //     Channel
+   0,                                   //    Channel Function Mode1
+   TPU_TCR1_TIME_BASE,                                     //   Channel Function Mode0
+   0,                                      //  Entry Table Condition Select
+   0,  //1  //Interrupt Request Enable
+   0,   //Transfer Request Enable
+   0,  // Channel Priority Index
+   0,  //    Active state of channel
+   0,            //       8   Output Disable
+   0,                 //   Host Service Request Type
+   0          //   TPU Primitives or Channel function Select
+  
+};
 
-Soh_Test_Result_T        Soh_TestResult;
-Soh_Test_Result_T        Soh_TestErr;
-Soh_Test_Completion_T    Soh_TestComp;
-Soh_CnR_Value_T          Soh_CnRValue;
-Soh_CnR_Status_T         Soh_CnRStatus;
-Soh_Fault_Log_T          Soh_FaultLog;
-bool                     Soh_RecoverMode;  /* 0: ETC SOH recovery completed or not in recovery mode
+static Soh_Test_Result_T        Soh_TestResult;
+static Soh_Test_Result_T        Soh_TestErr;
+static Soh_Test_Completion_T    Soh_TestComp;
+static Soh_CnR_Value_T          Soh_CnRValue;
+static Soh_CnR_Status_T         Soh_CnRStatus;
+static Soh_Fault_Log_T          Soh_FaultLog;
+static bool                     Soh_RecoverMode;  /* 0: ETC SOH recovery completed or not in recovery mode
                                               1: start ETC SOH recovery */
 
 
@@ -116,24 +132,20 @@ static uint32_t       Soh_LstIrq_Time;
 bool VbHWIO_SOH_Running;
 bool VbHWIO_VSEP_Initialized;
 
-const TPU_CHANNEL_Configuration_T   SOH_INTERNAL_TIME_BASE_CONFIG =
+#pragma section DATA " " ".nc_nvram"
+/* ETC SOH fault log (history) */
+static Soh_Fault_Log_T Soh_FaultLogNVM;
+#pragma section DATA " " ".bss"
+
+uint16_t soh_get_fault_log(void)
 {
-   0,   //   Set the desired value for TPU configuration
-   0,                                   //      PWM Update Mode 1- Coherent,0- synchronus
-   0,                                   //     Refernce channel number
-   0,            //     Channel
-   0,                                   //    Channel Function Mode1
-   TPU_TCR1_TIME_BASE,                                     //   Channel Function Mode0
-   0,                                      //  Entry Table Condition Select
-   0,  //1  //Interrupt Request Enable
-   0,   //Transfer Request Enable
-   0,  // Channel Priority Index
-   0,  //    Active state of channel
-   0,            //       8   Output Disable
-   0,                 //   Host Service Request Type
-   0          //   TPU Primitives or Channel function Select
-  
-};
+	return Soh_FaultLog.Word;
+}
+
+uint16_t soh_get_fault_log_nvram(void)
+{
+	return Soh_FaultLogNVM.Word;
+}
 
 
 void RequestIO_Software_Reset( void )
