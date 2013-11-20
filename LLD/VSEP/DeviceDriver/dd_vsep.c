@@ -341,12 +341,14 @@ void VSEP_Initialize_Device(void)
 	VSEP_LEDMODE_Initialize_Device();
 	VSEP_PULSE_VR_Initialize_Device();
 
-     //Check VSEP SPI Comm before Send Initialize Msg.	
-  Update_VSEP_SOH_Status_Immediate(MTSA_CONFIG_VSEP_DEVICE_0);
+#ifdef ENABLE_ETC_SOH_MODULE
+	//Check VSEP SPI Comm before Send Initialize Msg.	
+	Update_VSEP_SOH_Status_Immediate(MTSA_CONFIG_VSEP_DEVICE_0);
 	if (HAL_SOH_VsepSPI_High_Low_Error(true))
 	{
 		spi_comm_err = true;
 	}
+#endif
 
 	// Hardware Test uses its own method to initialize the VSEP
 	// Send the Init message to the VSEP. This will setup all the faults/slews/est select information/
@@ -354,10 +356,13 @@ void VSEP_Initialize_Device(void)
 	VSEP_SPI_Immediate_Transfer(VSEP_Set_Device_Index(0, VSEP_INDEX_0 ), VSEP_MESSAGE_INIT );
 	// Need to check why redundant operation is needed, without it, no spark injection
 	VSEP_SPI_Immediate_Transfer(VSEP_Set_Device_Index(0, VSEP_INDEX_0 ), VSEP_MESSAGE_INIT );
-	//VSEP_Disable_SOH();
+#ifndef ENABLE_ETC_SOH_MODULE
+	VSEP_Disable_SOH();
+#endif
 	VSEP_EST_Select_Set_Mode(VSEP_INDEX_0,EST_MODE_SIMULTANEOUS_SINGLE_ENABLE); 
 	VSEP_EST_Select_Set_Channel(VSEP_INDEX_0,EST_SELECT_CYLINDER_A);
-	
+
+#ifdef ENABLE_ETC_SOH_MODULE
 	//Check VSEP SPI Comm after Send Initialize Msg.	
 	Update_VSEP_SOH_Status_Immediate(MTSA_CONFIG_VSEP_DEVICE_0);
 	if (HAL_SOH_VsepSPI_High_Low_Error(true))
@@ -375,6 +380,7 @@ void VSEP_Initialize_Device(void)
 		VbHWIO_SOH_Running = true;
 		VbHWIO_VSEP_Initialized = true;	
 	}
+#endif
 }
 
 

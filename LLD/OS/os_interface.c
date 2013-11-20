@@ -132,7 +132,9 @@ void OS_Free_Time_Tasks_Hook(void)
 //=============================================================================
 void OS_TimeBasedTask1ms(void)
 {
+#ifdef ENABLE_ETC_SOH_MODULE
     SOH_ETC_Update_RTI_Array();
+#endif
     HAL_OS_1ms_Task();
 }
 

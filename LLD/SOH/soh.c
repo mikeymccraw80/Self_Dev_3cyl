@@ -1053,6 +1053,7 @@ void SOH_ETC_ISR(void)
  \*===========================================================================*/
 void SOH_ETC_Initialize(bool power_on_reset_status)
 {
+#ifdef ENABLE_ETC_SOH_MODULE
     uint8_t i;
     uint32_t time,RTI_Period;
 
@@ -1127,6 +1128,21 @@ void SOH_ETC_Initialize(bool power_on_reset_status)
     /* setup ETC SOH interrupt */
     HAL_SOH_Setup_Interrupt(V_SOH_TMR_MSEC_T(SOH_IRQ_PERIOD_MS));
     SOH_Start_DMA_For_External_Ref();
+#else
+	/* enable GEN signal */
+	SOH_Set_GEN_Enable_Request(true);	//mz38cg
+	/* request enable of fuel, spark and ETC */
+	SOH_Set_FSE_Enable_Request(true);	//mz38cg
+
+	/* SOH C&R SPI exchange */
+	/* receive next challenge value and status */
+	Soh_CnRValue.Word = 0;
+
+	/* do not clear SOH C&R timeout fault bit (buffered output) */
+	HAL_SOH_CnR_Clear_Timeout_Fault(false);
+	Soh_CnRValue.Bits.Challenge = HAL_SOH_CnR_Get_Challenge();
+	Soh_CnRStatus.Word = HAL_SOH_CnR_Get_Status(false);
+#endif
 }
 
 /*===========================================================================*\
