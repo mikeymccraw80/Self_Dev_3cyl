@@ -18,42 +18,31 @@
 #include "io_config_swt.h"
 #include "io_config_dma.h"
 #include "io_config_pit.h"
-
 #include "hal_emulated_eeprom.h"
 #include "dd_pit_interface.h"
-
 #include "dd_l9958.h"
 #include "dd_vsep_est_select.h"
 #include "dd_stm.h"
 
 
+/* private variable define */
+static bool BatteryRemoved;
 
-//=============================================================================
-// SPI Device Includes
-//=============================================================================
-
-//static uint32_t CHALLENGE_TEMP;
-//static uint32_t RESPONSE_TEMP;
-
+/* global variable define */
 CPU_Info_T CPU_Info;
 FLASH_MODULE_T Flash_Info;
 HWIO_Reset_Status_T Reset_Status;
-bool BatteryRemoved;
 
-
+/* global variable reference */
+//The address of these variables are the size numbers because these variables are calculated by the linker
 extern char HWIO_DATA_ROM_START[];
 extern char HWIO_DATA_RAM_START[];
 extern char HWIO_BSS_START[];
-
-//The address of these variables are the size numbers because these variables 
-// are calculated by the linker
 extern uint16_t HWIO_DATA_SIZE;
 extern uint16_t HWIO_BSS_SIZE;
 
-
+/* private function define */
 void CPU_DIAB_Set_Data_Area_Pointers(void);
-
-
  
 void CPU_DIAB_Copy_Table( void )
 {
@@ -175,7 +164,7 @@ void InitializeHardwareRegisters(void)
 
 	MIOS_Initialize_Device();
 
-	TPU_Initialize_Device();   
+	// TPU_Initialize_Device();   
 
 	DSPI_B_Initialize_Device();
 
@@ -226,9 +215,9 @@ void InitializeHardwareRegisters(void)
 	HAL_CAN_Initialize();
 
 	L9958_Device_Initialize();
-
-	InitializeComplexIO();
-
+// TPU_Initialize_Device();
+	// InitializeComplexIO();
+// TPU_Initialize_Device();
 	//Prepare Vsep clock
 	IO_Pulse_VSEP_CLK_Enable();
 	// Enable FSE pin
@@ -256,7 +245,7 @@ void InitializeHardwareLast(void)
 
 	EEPROM_Operation_Status_T op_Return; 
 	HAL_GPIO_DI_Active_Status_Init();
-
+// TPU_Initialize_Device();
 	if(!HAL_GPIO_GET_Reset_DIO_Status())
 	{
 		BatteryRemoved =  true;
@@ -286,6 +275,12 @@ void InitializeHardwareLast(void)
 
 	EEPROM_Restore_Vehicle_NVRAM_Block(Reset_Status);  
 	op_Return = EEPROM_Restore_MFG_NVM_Block();  // restore Pfalsh MFG if it is valid
+	
+	
+	
+	TPU_Initialize_Device();
+	InitializeComplexIO();
+	
 	INST_Initialize_Calibration_Pages();
 	HAL_GPIO_SET_Reset_DIO_Enable(true);
 	SOH_ETC_Initialize(true);
