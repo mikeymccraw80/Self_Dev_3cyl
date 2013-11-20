@@ -43,19 +43,19 @@
 /*===========================================================================*\
  * Standard Header Files
  \*===========================================================================*/
-#include "soh_common.h"
-//#include "io_scale.h"
+#include "io_conversion.h"
 #include "io_config_tpu.h"
+#include "io_config_siu.h"
+#include "soh_common.h"
 #include "soh_mpc56xx.h"
 #include "soh_cald.h"
-#include "io_conversion.h"
 #include "soh.h"
+#include "soh_nvm.h"
 #include "dd_dma.h"
 #include "dd_VSEP_soh.h"
-#include "soh_nvm.h"
 #include "hal_soh.h"
-#include "io_config_siu.h"
 #include "dd_siu.h"
+#include "dd_stm.h"
 
 
 /*===========================================================================*\
@@ -1052,7 +1052,7 @@ void SOH_ETC_ISR(void)
 void SOH_ETC_Initialize(bool power_on_reset_status)
 {
     uint8_t i;
-    static uint32_t time,RTI_Period;
+    uint32_t time,RTI_Period;
 
     if(VbHWIO_VSEP_Initialized)  //Do not set GEN and FSE_EN when VSEP initialize fail
     {
@@ -1301,4 +1301,11 @@ void SOH_ETC_Clear_Fault_Log(void)
 	HAL_SOH_CnR_Set_Response(Soh_CnRValue.Bits.FSE_DisReq, Soh_CnRValue.Bits.Response);
 	Soh_CnRStatus.Word = HAL_SOH_CnR_Get_Status(false);
 //	PORTK_PK6 = !PORTK_PK6;
+}
+
+
+void STM0_SOH_20MS_INT(void)
+{
+	STM_INTERRUPT_Clear_Pending(STM_CHANNEL_0);
+	HAL_SOH_ETC_ISR();
 }
