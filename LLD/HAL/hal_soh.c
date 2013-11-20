@@ -254,30 +254,6 @@ void HAL_SOH_Setup_Interrupt(SOH_TMR_MSEC_T irq_period)
 }
 
 /*===========================================================================*\
- * FUNCTION: HAL_SOH_ETC_ISR
- *===========================================================================
- * RETURN VALUE:
- * None.
- *
- * PARAMETERS:
- * None.
- *
- * EXTERNAL REFERENCES:
- * None.
- *
- * DEVIATIONS FROM STANDARDS:
- * None.
- *
- * --------------------------------------------------------------------------
- * ABSTRACT:
- * --------------------------------------------------------------------------
- * This ETC SOH interrupt service routine handler executes the ETC SOH tests.
-\*===========================================================================*/
-void HAL_SOH_ETC_ISR(void)
-{
-    SOH_ETC_ISR();
-}
-/*===========================================================================*\
  * FUNCTION: HAL_SOH_CnR_Get_Status
  *===========================================================================
  * RETURN VALUE:

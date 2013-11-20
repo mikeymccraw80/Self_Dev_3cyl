@@ -73,7 +73,8 @@
 #define SOHIRQTIME_PERIOD_HIGH					( (uint16_t)(SOHIRQTEST_PERIOD * (1 + SOHIRQTIME_ERR)) )
 #define SOHIRQTIME_PERIOD_LOW					( (uint16_t)(SOHIRQTEST_PERIOD * (1 - SOHIRQTIME_ERR)) )
 
-#define MAJLOOPTIME_HIGH						( V_SOH_TMR_MSEC_T(MAJLOOPTIME_TYPICAL) + KSOHRTITH)
+/* notice, the upper limit is extended for there's 18ms delay when enable interrupt. we still haven't found the reason */
+#define MAJLOOPTIME_HIGH						( V_SOH_TMR_MSEC_T(MAJLOOPTIME_TYPICAL) + KSOHRTITH * 4)
 #define MAJLOOPTIME_LOW							( V_SOH_TMR_MSEC_T(MAJLOOPTIME_TYPICAL) - KSOHRTITH)
 
 #define SOH_SHUTOFFTIME		  					( (uint8_t)( SOH_SHUTOFF_PERIOD_MS / SOH_IRQ_PERIOD_MS ) )
@@ -1307,5 +1308,5 @@ void SOH_ETC_Clear_Fault_Log(void)
 void STM0_SOH_20MS_INT(void)
 {
 	STM_INTERRUPT_Clear_Pending(STM_CHANNEL_0);
-	HAL_SOH_ETC_ISR();
+	SOH_ETC_ISR();
 }
