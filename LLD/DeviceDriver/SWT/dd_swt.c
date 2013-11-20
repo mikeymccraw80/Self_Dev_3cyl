@@ -39,7 +39,7 @@ void SWT_Set_Timeout_Value(uint32_t in_time)
 
 		SWT.SWT_MCR.F.WEN = SWT_DISABLE;
 		temp_MCR.U32 = SWT.SWT_MCR.U32;
-		temp_MCR.F.KEY = SWT_KEYED_SERVICE_MODE; //Keyed Service Mode, two pseudorandom key values are used to service the watchdog
+		temp_MCR.F.KEY = SWT_FIXED_SERVICE_MODE; //Keyed Service Mode, two pseudorandom key values are used to service the watchdog
 		SWT.SWT_TO = in_time; //timeout_value updated  here
 		temp_MCR.F.SLK = SWT_SOFT_LOCK_ENABLE; //SWT_CR, SWT_TO, SWT_WN and SWT_SK are read-only registers
 		temp_MCR.F.CSL = SWT_OSCILLATOR_CLOCK;
