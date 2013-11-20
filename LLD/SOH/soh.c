@@ -74,7 +74,7 @@
 #define SOHIRQTIME_PERIOD_LOW					( (uint16_t)(SOHIRQTEST_PERIOD * (1 - SOHIRQTIME_ERR)) )
 
 /* notice, the upper limit is extended for there's 18ms delay when enable interrupt. we still haven't found the reason */
-#define MAJLOOPTIME_HIGH						( V_SOH_TMR_MSEC_T(MAJLOOPTIME_TYPICAL) + KSOHRTITH * 4)
+#define MAJLOOPTIME_HIGH						( V_SOH_TMR_MSEC_T(MAJLOOPTIME_TYPICAL) + KSOHRTITH)
 #define MAJLOOPTIME_LOW							( V_SOH_TMR_MSEC_T(MAJLOOPTIME_TYPICAL) - KSOHRTITH)
 
 #define SOH_SHUTOFFTIME		  					( (uint8_t)( SOH_SHUTOFF_PERIOD_MS / SOH_IRQ_PERIOD_MS ) )
