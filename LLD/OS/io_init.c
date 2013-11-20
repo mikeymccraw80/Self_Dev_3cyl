@@ -111,10 +111,6 @@ void InitializeHardwareRegisters(void)
 	}
 	flash_init_sucess = flash_memory_interface->FLASH_Memory_Initial();
 
-	// must initial calibartion page after NVM restore and before EMS core initialization function
-	// lots of calibartion data used to perform initialization
-	//   MMU_MAS_Initialize_Device();
-	// flash_memory_interface->FLASH_Memory_Initial();
 	Reset_Status = SIU_RESET_Get_Status();
 
 	SIU_Initialize_Device();
@@ -164,8 +160,6 @@ void InitializeHardwareRegisters(void)
 
 	MIOS_Initialize_Device();
 
-	// TPU_Initialize_Device();   
-
 	DSPI_B_Initialize_Device();
 
 	DMA_Initialize_Channel(
@@ -178,7 +172,6 @@ void InitializeHardwareRegisters(void)
 	DMA_DSPIB_SR_TFFF_Sixth_32Bit,
 	DMA_DSPIB_SR_TFFF_Dlast,
 	DMA_DSPIB_SR_TFFF_Eighth_32Bit);
-
 
 	DMA_Initialize_Channel(
 	DMA_CHANNEL_DSPI_B_SR_RFDF,
@@ -206,25 +199,22 @@ void InitializeHardwareRegisters(void)
 
 	STM_Set_Timer_Enable(true);
 
-	FlexCAN_A_Initialize_Device();
-
 	QADC_ANALOG_Calibrate_Converter(ADC_CONVERTER_0);
 	QADC_ANALOG_Calibrate_Converter(ADC_CONVERTER_1); 
 
-	/* init ccp can id and channel */
+	/* init can device and ccp can id and channel */
+	FlexCAN_A_Initialize_Device();
+	CCP_Initialize();
 	HAL_CAN_Initialize();
 
 	L9958_Device_Initialize();
-// TPU_Initialize_Device();
-	// InitializeComplexIO();
-// TPU_Initialize_Device();
+
 	//Prepare Vsep clock
 	IO_Pulse_VSEP_CLK_Enable();
 	// Enable FSE pin
 	HAL_GPIO_SET_GEN_Enable(false);
 	// Enable the IOEN line to enable the IO pins
 	HAL_GPIO_SET_FSE_Enable(false);
-
 	VSEP_Initialize_Device();
 }
 
@@ -242,48 +232,32 @@ void RefreshHardwareRegisters(void)
 //=============================================================================
 void InitializeHardwareLast(void)
 {
+	EEPROM_Operation_Status_T op_Return;
 
-	EEPROM_Operation_Status_T op_Return; 
 	HAL_GPIO_DI_Active_Status_Init();
-// TPU_Initialize_Device();
-	if(!HAL_GPIO_GET_Reset_DIO_Status())
-	{
+	if(!HAL_GPIO_GET_Reset_DIO_Status()) {
 		BatteryRemoved =  true;
-	}
-	else
-	{
+	} else {
 		BatteryRemoved =  false; 
 	}
 
 	HAL_GPIO_Reset_DIO_Output_Confige(true);
 
 	// only LCI will do the instrumentation operation
-	if(CPU_LCI == CPU_Info)
-	{
+	if(CPU_LCI == CPU_Info) {
 		// resotre cal backup to ram
 		INST_Restore_Working_Page(Reset_Status);
 	}
-	//EBI Available only on the calibration system package 
-	//  if (CPU_VERTICAL == CPU_Info) 
-	//   {
-	//      VERTICAL_Config_MMU();
-	//   EBI_Initialize_Device(0);
-	//    INST_Restore_Working_Page(HWIO_reset_status);
-	//  }
-	// restore NVRAM first, beacuse it will restore MFG from EEE too(always zero, when MFG in pflash is not full)
-	// it will be overwrited by next MFG restore function
+	HAL_GPIO_SET_Reset_DIO_Enable(true);
 
 	EEPROM_Restore_Vehicle_NVRAM_Block(Reset_Status);  
 	op_Return = EEPROM_Restore_MFG_NVM_Block();  // restore Pfalsh MFG if it is valid
-	
-	
-	
+	INST_Initialize_Calibration_Pages();
+
+	/* init tpu device, this part must placed behind nvram erase */
 	TPU_Initialize_Device();
 	InitializeComplexIO();
-	
-	INST_Initialize_Calibration_Pages();
-	HAL_GPIO_SET_Reset_DIO_Enable(true);
-	SOH_ETC_Initialize(true);
+	FI_Initialize();
 }
 
 
@@ -292,6 +266,6 @@ void InitializeHardwareLast(void)
 //=============================================================================
 bool Get_BatteryRemove_Status(void)
 {
-  return BatteryRemoved;
+	return BatteryRemoved;
 }
 
