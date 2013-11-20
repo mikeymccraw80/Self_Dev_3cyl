@@ -181,11 +181,11 @@ void SOH_Service_Watchdog(bool iseven)
 		SWT.SWT_SR.U32 = SWT_SR_Val1;
 		SWT.SWT_SR.U32 = SWT_SR_Val2;
 	} else {
-		if (iseven) {
+		//if (iseven) {
 			SWT.SWT_SR.U32 = SWT_SERVICE_KEY_B;
-		} else {
+		//} else {
 			SWT.SWT_SR.U32 = SWT_SERVICE_KEY_A;
-		}
+		//}
 	}
 }
 
