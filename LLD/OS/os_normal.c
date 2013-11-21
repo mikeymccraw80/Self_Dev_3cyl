@@ -61,12 +61,13 @@ void StartOS_Task_Normal(void)
 	OS_Startup_Hook();
 	/* init throughput related data */
 	Init_InitThroughputData();
-	/* turn on interrupts */
-	Enable_Interrupts();
 
 	// Set watchdog timeout to 62ms during normal operation
 	SWT_Set_Timeout_Value(SWT_TIMEOUT_VALUE_NORMAL) ;
 	SWT_Service_WatchDog();
+
+	/* turn on interrupts and start real os */
+	Enable_Interrupts();
 
 	/* do until application indicates shutdown */
 	while (!HAL_OS_Get_Shutdown()) {
