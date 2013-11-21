@@ -71,15 +71,23 @@ void MngOSTK_5msTasks(void)
 //=============================================================================
 //MngOSTK_10msTasks
 //=============================================================================
+static int soh_service_cnt_30ms;
 void MngOSTK_10msTasks(void)
 {
     /* call device driver layer functions */
-#ifndef ENABLE_ETC_SOH_MODULE
-    SWT_Service_WatchDog();
-#endif
     VSEP_SPI_SCHEDULER_10MS();
     VSEP_Fault_Task_10MS();
     L9958_FAULT_Diagnose_Update();
+
+#ifndef ENABLE_ETC_SOH_MODULE
+    SWT_Service_WatchDog();
+    /* call soh service */
+    soh_service_cnt_30ms++;
+    if (soh_service_cnt_30ms == 3) {
+        soh_service_cnt_30ms=0;
+        SOH_VSEP_CR_Service();
+    }
+#endif
     
     /* call hal layer callback functions */
     HAL_OS_10ms_Task(); 
@@ -100,7 +108,6 @@ void MngOSTK_10msTasks(void)
 // MngOSTK_100msTasks
 //=============================================================================	
 static uint16_t test_cnt_500ms;
-uint8_t abcd;
 void MngOSTK_100msTasks(void)
 {
     FI_Update_Count_Time();
@@ -116,8 +123,6 @@ void MngOSTK_100msTasks(void)
     
     /* update ems parameters */
     Intr_16msTasks();
-
-	// scib.write(abcd);
 }
 //=============================================================================
 // OS_Free_Time_Tasks_Hook
