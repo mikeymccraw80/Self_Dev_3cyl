@@ -12,6 +12,7 @@ del ERROR.err
 rem The real thing
 set TARGET=HWIO
 set ETCSOH=DISABLE
+soh_cfg.exe hwio_without_soh
 ..\tools\utility\gnumake 2>&1 | ..\tools\utility\mtee.exe /t/d/+ build.log
 pause
 
