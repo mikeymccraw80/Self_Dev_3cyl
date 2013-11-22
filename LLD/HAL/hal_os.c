@@ -23,6 +23,7 @@
 #include "epsdpapi.h"
 #include "es_knock.h"
 #include "hal_soh.h"
+#include "io_config_siu.h"
 
 //extern void Update_DiagStatus_10ms(void);
 //=============================================================================
@@ -34,6 +35,18 @@
    temp_msr = ESYS_READ_MSR_VALUE();
 
    Disable_Interrupts();
+   return temp_msr;
+}
+
+//=============================================================================
+// Disable/Enable HWIO_MasterIRQ
+//=============================================================================
+ interrupt_state_t Enter_Critical_Enable_Section( void )
+{
+   uint32_t temp_msr;
+   temp_msr = ESYS_READ_MSR_VALUE();
+
+   Enable_Interrupts();
    return temp_msr;
 }
 
@@ -202,9 +215,15 @@ void HAL_OS_Init_Task(void)
 //=============================================================================
 void HAL_OS_SYN_Task(void)
 {
+
+   interrupt_state_t       interrupt_status;
+   
     IO_Eng_Cyl_Update();
      KnockControl58XReferenceLogic();
+    //Enter critical section
+    interrupt_status = Enter_Critical_Enable_Section();
     HLS_syn();
+    Leave_Critical_Section(interrupt_status);
     //app fuel update
     IO_Fuel_Syn_Update();
     //  app spark update
