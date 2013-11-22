@@ -145,15 +145,15 @@ void L9958_Clear_Device(void)
 //=============================================================================
 // L9958_SPI_Immediate_Transfer
 //=============================================================================
-bool enable_INTC_P=1;
 void L9958_SPI_Immediate_Transfer(void)
 {
-		uint32_t cs;
-    if(enable_INTC_P)
-		{cs = Enter_Critical_Section();}
-		L9958_Rxd.Value = DSPI_B_Exchange_Data1(ETC_CHIP_SELECT, ETC_CTAR_SELECT, DSPI_CTAR_FMSZ_16, L9958_Txd.Value, 1);
-    if(enable_INTC_P)
-		{Leave_Critical_Section(cs);}
+	uint32_t cs;
+
+	cs = Enter_Critical_Section();
+ 	// Disable_Interrupts();
+	L9958_Rxd.Value = DSPI_B_Exchange_Data1(ETC_CHIP_SELECT, ETC_CTAR_SELECT, DSPI_CTAR_FMSZ_16, L9958_Txd.Value, 1);
+	// Enable_Interrupts();
+	Leave_Critical_Section(cs);
 }
 
 
