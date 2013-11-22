@@ -32,6 +32,9 @@ static bool VbOSTK_ThruPutData_FirstTime[NUMBER_OF_CeOSTK_SEG];
 //=============================================================================
 void OS_RTI_1ms_INT(void)
 {
+	uint32_t  cs;
+
+	cs = Enter_Critical_Section();
 	PIT_INTERRUPT_Clear_Pending(PIT_CHANNEL_RTI);
 
 	OS_RTI_1ms_Count = (OS_RTI_1ms_Count >= 10)? 1 : OS_RTI_1ms_Count++;
@@ -65,6 +68,7 @@ void OS_RTI_1ms_INT(void)
 		OS_TimeBasedTask10ms();
 		Leave_OSThroughputMeasure(CeOSTK_SEG_10msTIMEBASE);
 	}
+	Leave_Critical_Section(cs);
 }
 
 /*===========================================================================*\
