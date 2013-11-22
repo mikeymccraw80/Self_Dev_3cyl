@@ -123,6 +123,28 @@ void InitializeHardwareRegisters(void)
 	ECSM_Initialize_Device();
 
 	DMA_Initialize_Device();
+	DMA_Initialize_Channel(
+	DMA_CHANNEL_QADC_FISR1_CFFF_1,
+	DMA_QADC_CFFF_1_Source_Address,
+	DMA_QADC_CFFF_1_Second_32Bit,
+	DMA_QADC_CFFF_1_Third_32Bit,
+	DMA_QADC_CFFF_1_Slast,
+	DMA_QADC_CFFF_1_Dest_Address,
+	DMA_QADC_CFFF_1_Sixth_32Bit,
+	DMA_QADC_CFFF_1_Dlast,
+	DMA_QADC_CFFF_1_Eighth_32Bit);
+
+
+	DMA_Initialize_Channel(
+	DMA_CHANNEL_QADC_FISR1_RFDF_1,
+	DMA_QADC_RFDF_1_Source_Address,
+	DMA_QADC_RFDF_1_Second_32Bit,
+	DMA_QADC_RFDF_1_Third_32Bit,
+	DMA_QADC_RFDF_1_Slast,
+	DMA_QADC_RFDF_1_Dest_Address,
+	DMA_QADC_RFDF_1_Sixth_32Bit,
+	DMA_QADC_RFDF_1_Dlast,
+	DMA_QADC_RFDF_1_Eighth_32Bit);
 
 	DMA_Initialize_Channel(
 	DMA_CHANNEL_QADC_FISR4_CFFF_4,
