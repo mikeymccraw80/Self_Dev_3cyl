@@ -24,26 +24,24 @@
 //=============================================================================
 void OS_Startup_Hook(void)
 {
-    // set up os loop time 10ms
-    PIT_TIMER_Set_Value( PIT_CHANNEL_RTI, RTI_LOAD_VALUE_1MS);
-    PIT_INTERRUPT_Set_Enable(PIT_CHANNEL_RTI, true);
-
-    // turn on Time Off Delay signal 
-    //Activate_TimeOffDelay
     HAL_GPIO_SET_TODO_Enable(true);
 
-    HAL_OS_Init_Task();   
-
-    FI_Initialize();
-
-    CCP_Initialize();
+    HAL_OS_Init_Task();
 
     KeywordExecutive(CwKW2000_Initializes);
+
     /* update ems initial parameters */
     Init_IntrParameter();
 
     /* init power source status */
     InitializePowerSource();
+
+    /* init soh part, this part must placed behind nvram erase */
+    SOH_ETC_Initialize(true);
+
+    // set up os loop time 10ms
+    PIT_TIMER_Set_Value( PIT_CHANNEL_RTI, RTI_LOAD_VALUE_1MS);
+    PIT_INTERRUPT_Set_Enable(PIT_CHANNEL_RTI, true);
 }
 //=============================================================================
 //MngOSTK_1msTasks
