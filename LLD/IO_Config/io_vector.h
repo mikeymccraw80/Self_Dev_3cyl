@@ -30,8 +30,7 @@ void HAL_CAN_RX_B10_INT(void);
 void HAL_CAN_RX_B11_INT(void);
 void HAL_CAN_RX_B12_INT(void);
 void  DMA_DECFIL_DRAIN_BUF_A_Transfer_Complete(void );
-void IO_STM0_20ms_INT(void);
-void IO_SOH_818HZ_INT(void);
+void STM0_SOH_20MS_INT(void);
 void DD_SCIB_INT(void);
 
 //=============================================================================
@@ -543,13 +542,8 @@ void DD_SCIB_INT(void);
 #endif
 
 #if  INTC_CHANNEL_SYSTEM_TIMER_MODULE_0 ==  USED_IRQ
-#define INTC_CHANNEL_SYSTEM_TIMER_MODULE_0_HANDLER      IO_STM0_20ms_INT
+#define INTC_CHANNEL_SYSTEM_TIMER_MODULE_0_HANDLER      STM0_SOH_20MS_INT
 #define INTC_CHANNEL_SYSTEM_TIMER_MODULE_0_PRIORITY      INTC_PRIORITY_7
-#endif
-
-#if  INTC_CHANNEL_MIOS_CH4 ==  USED_IRQ
-#define INTC_CHANNEL_MIOS_CH4_HANDLER      IO_SOH_818HZ_INT
-#define INTC_CHANNEL_MIOS_CH4_PRIORITY      INTC_PRIORITY_7
 #endif
 
 #if INTC_CHANNEL_SCI_B  == USED_IRQ
