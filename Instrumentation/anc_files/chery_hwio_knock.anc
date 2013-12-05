@@ -1064,6 +1064,17 @@
 *-  description              = "es_knock.MAD_Filtering_Enabled";
 *-}
 
+*-es_knock.ESC_Enabled_State{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ESCEnabled";
+*-  variable_location.symbol = es_knock.ESC_Enabled_State;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "es_knock.ESC_Enabled_State";
+*-}
 
 *-es_knock.TipIn_Conditions_Detected{
 *-  OBJECTS_CLASS: parameter_es_class;

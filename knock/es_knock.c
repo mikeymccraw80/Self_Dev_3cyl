@@ -71,6 +71,7 @@ bool Multiplier_Delta_RPM;
 bool Multiplier_Delta_TPS;
 bool MAD_Transient_Detected;
 bool MAD_Filtering_Enabled;
+static bool ESC_Enabled_State;
 
 
 /* ============================================================================ *\
@@ -610,11 +611,13 @@ static void DetermineESCEnabled( void )
    {
       /*  knock control enabled */
       EnableESC() ;
+	ESC_Enabled_State = true;
    }
    else
    {
        /*  knock control is disabled */
        DisableESC() ;
+	ESC_Enabled_State = false;
    }
 } /* End DetermineESCEnabled */
 
