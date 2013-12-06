@@ -2959,11 +2959,12 @@ typedef SHORTCARD                                            Degrees_C_Per_Sec;
 /*---   Angle Fixed Types  ---*/
 /*---                      ---*/
 /*----------------------------*/
-
+#if 0
 typedef CARDINAL                                             CrankAngleInDeg_W;
 #define Prec_CrankAngleInDeg_W                                     (90.0 / 256)
 #define Min_CrankAngleInDeg_W                                             (0.0)
 #define Max_CrankAngleInDeg_W                              (65535 * 90.0 / 256)
+#endif
 
 typedef SHORTCARD                                            CrankAngleInDeg_B;
 #define Prec_CrankAngleInDeg_B                                     (90.0 / 256)
