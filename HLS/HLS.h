@@ -89,7 +89,7 @@ typedef struct {
 } cam_signals;
 
 typedef struct {
-	uint16_t period; // Vehicle Speed Period
+	uint32_t period; // Vehicle Speed Period
 	status_bits status;
 } veh_spd_signals;
 

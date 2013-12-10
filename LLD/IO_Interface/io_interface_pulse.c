@@ -117,7 +117,7 @@ void IO_Pulse_VSS_Update_500ms(void)
 		|| (GetVIOS_EngSt() == CeENG_POWEROFFDELAY)
 		|| (Pulse_VSS_Count == Pulse_VSS_Count_Previous))
 	{
-		veh_spd_sig.period = 0xFFFF;
+		veh_spd_sig.period = 0xFFFFFFFF;
 	}
 	else
 	{
