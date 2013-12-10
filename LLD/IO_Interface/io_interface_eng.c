@@ -127,12 +127,12 @@ void IO_Eng_Update_System_Time_Background(void)
 	if(!K_Can_Meter_TACH_Disable) {
 		if(crank_sig.engine_rpm >0) {
 			//vsep pwm period scale is 1/64ms, duty scale is 1/32768
-			// HAL_Pulse_TACH_Set_Period_Duty((uint32_t)(crank_sig.segment_time*2*64)/1000, 32768/2 );
-			HAL_Pulse_TACH_Set_Period_Duty((uint32_t)(crank_sig.segment_time*64)/1000, 32768/2 );
+			// crank_sig.segment_time is 0.8us, formula is: (segment_time * 0.8 us)/((1/64)ms)
+			HAL_Pulse_TACH_Set_Period_Duty((uint32_t)(crank_sig.segment_time*64)/1250, 32768/2 );
 		} else {
 			//vsep pwm period scale is 1/64ms, duty scale is 1/32768
-			// HAL_Pulse_TACH_Set_Period_Duty((uint32_t)(crank_sig.segment_time*2*64)/1000, 0 );
-			HAL_Pulse_TACH_Set_Period_Duty((uint32_t)(crank_sig.segment_time*64)/1000, 0 );
+			// crank_sig.segment_time is 0.8us, formula is: (segment_time * 0.8 us)/((1/64)ms)
+			HAL_Pulse_TACH_Set_Period_Duty((uint32_t)(crank_sig.segment_time*64)/1250, 0 );
 		}
 	}
 }
