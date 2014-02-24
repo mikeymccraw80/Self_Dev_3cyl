@@ -935,11 +935,28 @@ void EEPROM_Restore_Vehicle_NVRAM_Block(HWIO_Reset_Status_T status_poweron)
 
    nvram_start_addr = (uint32_t *)MIRROR_RAM_START_ADDR;
    mfg_data_start_addr = (uint32_t *)RAM_MFG_START_ADDR;
+
+   /* detect the battery remove before */
+   if (HAL_OS_Get_Battery_Remove()) {
+      erase_time = STM_Timer_Get_Value();
+      EEP_NVRAM_Erase(EEP_NVRAM_BANK0);
+      erase_time = STM_Timer_Get_Value() - erase_time;
+      EEP_NVRAM_Erase(EEP_NVRAM_BANK1);
+      Clear_Vehicle_NVRAM_In_Mirror();
+      EEPROM_Write_Block((uint32_t*)nvram_start_addr,0,0);
+      if(1 == EEP_NVM_full_flg)
+      {
+         No_active_page_flg = 1;
+      }
+      EEP_NVM_Fault = true;
+      return;
+   }
+
    op_return = Get_EEP_NVM_Active_Page();
    op_return = Get_EEP_NVRAM_Active_Page();
    pf_kksum = Get_KKSUM_checksum();
 
-   if(( EEPROM_ACTIVE_PAGE_NOT_FOUND == op_return) || HAL_OS_Get_Battery_Remove())
+   if( EEPROM_ACTIVE_PAGE_NOT_FOUND == op_return)
    {
       EEP_NVRAM_Erase(EEP_NVRAM_BANK0);
       EEP_NVRAM_Erase(EEP_NVRAM_BANK1);
