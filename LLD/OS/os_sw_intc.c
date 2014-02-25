@@ -7,6 +7,8 @@
 #include "os_type.h"
 #include "dd_pfi_interface.h"
 #include "io_conversion.h"
+#include "dd_ecsm.h"
+#include "hal_emulated_eeprom.h"
 
 void OS_LoResTasks_Hook(void);
 void OS_KnockEvntTasks_Hook(void);
@@ -159,6 +161,38 @@ void OS_SW_INTC_Control( void)
 		//  OS_VCPC_camX_Task00_Hook();
 		APPLICATION_VCP0_TASK = false;
 	}
+}
+
+//=============================================================================
+// Service_ECSM_Error, Flash ECC service routine, called by core excepiton
+//=============================================================================
+#pragma section DATA " " ".nc_nvram"
+uint32_t HAL_Last_ECC_Address;
+#pragma section DATA " " ".bss"
+
+void Service_ECSM_Error(void)
+{
+   uint32_t *address;
+
+   if ( (bitfield8_t)1 == ECSM.ESR.F.RNCE )
+   {
+      HAL_Last_ECC_Address = ECSM.REAR;
+      // Fix RAM ECC error
+      address = (uint32_t *)HAL_Last_ECC_Address;
+      *address = 0;
+      ECSM.ESR.F.RNCE = 1;
+   }
+   else if ((bitfield8_t)1 == ECSM.ESR.F.FNCE )
+   {
+      HAL_Last_ECC_Address = ECSM.FEAR;
+      EEPROM_Fix_ECC_Error(HAL_Last_ECC_Address);
+      INST_Fix_Backup_Page_ECC_Error(HAL_Last_ECC_Address);
+      ECSM.ESR.F.FNCE = 1;
+   }
+   else
+   {
+      // Not Implemented
+   }
 }
 
 
