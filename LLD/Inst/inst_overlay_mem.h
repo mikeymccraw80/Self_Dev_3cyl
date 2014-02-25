@@ -27,6 +27,16 @@ bool Get_Working_Page_RAM_Validation(void);
 void INST_Backup_Working_Page(void);
 
 /*=============================================================================
+ * INST_Fix_Backup_Page_ECC_Error
+ * @func  Clear Backup page for the ECC Error
+ *
+ * @parm
+ *
+ * @rdesc 
+ *===========================================================================*/
+void INST_Fix_Backup_Page_ECC_Error(uint32_t err_addr);
+
+/*=============================================================================
  * INST_Restore_Working_Page
  * @func  restore mirror ram of working page from FLASH
  *

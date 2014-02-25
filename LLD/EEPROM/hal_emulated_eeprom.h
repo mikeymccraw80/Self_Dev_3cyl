@@ -168,6 +168,14 @@ EEPROM_Operation_Status_T EEPROM_Restore_MFG_NVM_Block(void);
  *===========================================================================*/
  EEPROM_Operation_Status_T EEPROM_Restore_MFG_NVM_Block_Again(void);
 
+/*=============================================================================
+ * EEPROM_Fix_ECC_Error
+ * @func Fix ECC error of eeprom
+ * @parm   addresses
+ * @rdesc  none
+ *===========================================================================*/
+void EEPROM_Fix_ECC_Error(uint32_t err_addr);
+
 
 #endif /* HAL_EMULATED_EEPROM_H */
 

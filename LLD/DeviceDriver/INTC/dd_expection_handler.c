@@ -7,9 +7,6 @@
 #include "dd_ecsm.h"
 #include "hw_sprs_cu.h"
 
-
-
-
 typedef enum
 {
    Exception_Critical_Input = 0,
@@ -109,6 +106,14 @@ void Exception_Machine_Check_ISR( void )
    }
    else
    {
+
+      if ( ECSM.ESR.F.RNCE || ECSM.ESR.F.FNCE ) 
+      {
+#ifndef HWTEST
+        Service_ECSM_Error();
+#endif
+      }
+
       /* Not caused by a Cache Parity error so capture data and halt. */
 
       /* Save the cause of the exception.  */

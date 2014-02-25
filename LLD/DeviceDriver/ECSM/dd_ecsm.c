@@ -35,7 +35,7 @@ void ECSM_Initialize_Device(void)
    //                            is enabled
 
    
-   ECSM.ECR.F.ER1BR =0;
+   ECSM.ECR.F.ER1BR = 1;
 
    //-----------------------------------------------------------------------------
    // EF1BR      4       rw    Enable Flash 1-bit reporting.
@@ -44,7 +44,7 @@ void ECSM_Initialize_Device(void)
    //                          1 Reporting of single-bit platform flash  
    //                            corrections is enabled.
 
-  ECSM.ECR.F.EF1BR   =0;
+  ECSM.ECR.F.EF1BR   = 1;
 
   //-----------------------------------------------------------------------------
   // ERNCR      1       rw    Enable platform RAM non-correctable reporting. The
@@ -59,7 +59,7 @@ void ECSM_Initialize_Device(void)
   //                          1 Reporting of non-correctable RAM errors
   //                            is enabled.
 
- ECSM.ECR.F.ERNCR   =0;
+ ECSM.ECR.F.ERNCR   =1;
   //-----------------------------------------------------------------------------
   // EFNCR      0       rw    Enable platform Flash non-correctable reporting. 
   //                          The occurrence of a non-correctable multi-bit
@@ -73,7 +73,7 @@ void ECSM_Initialize_Device(void)
   //                          1 Reporting of non-correctable Flash errors
   //                            is enabled.
 
-  ECSM.ECR.F.EFNCR   =0;
+  ECSM.ECR.F.EFNCR   =1;
    //=============================================================================
    // 3) Write the EEGR control field for the desired  EEGR value.
    //=============================================================================

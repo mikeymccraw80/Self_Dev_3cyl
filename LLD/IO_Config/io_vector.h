@@ -33,6 +33,7 @@ void  DMA_DECFIL_DRAIN_BUF_A_Transfer_Complete(void );
 void IO_ETC_PWM_INT_Handler(void);
 void STM0_SOH_20MS_INT(void);
 void DD_SCIB_INT(void);
+void Service_ECSM_Error(void);
 
 //=============================================================================
 //
@@ -556,5 +557,10 @@ void DD_SCIB_INT(void);
 #if INTC_CHANNEL_SCI_B  == USED_IRQ
 #define INTC_CHANNEL_SCI_B_HANDLER                     DD_SCIB_INT
 #define INTC_CHANNEL_SCI_B_PRIORITY                    INTC_PRIORITY_5
+#endif
+
+#if INTC_CHANNEL_ECSM_RAM_FLASH_ERROR  == USED_IRQ
+#define INTC_CHANNEL_ECSM_RAM_FLASH_ERROR_HANDLER                     Service_ECSM_Error
+#define INTC_CHANNEL_ECSM_RAM_FLASH_ERROR_PRIORITY                    INTC_PRIORITY_5
 #endif
 

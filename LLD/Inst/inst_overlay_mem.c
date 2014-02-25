@@ -181,6 +181,28 @@ void INST_Backup_Working_Page(void)
 }
 
 /*=============================================================================
+ * INST_Fix_Backup_Page_ECC_Error
+ * @func  Clear Backup page for the ECC Error
+ *
+ * @parm
+ *
+ * @rdesc 
+ *===========================================================================*/
+void INST_Fix_Backup_Page_ECC_Error(uint32_t err_addr)
+{
+   interrupt_state_t      context;  
+   if(INST_WORKING_PAGE_FLASH_BACKUP_START_ADDRESS<=err_addr<(INST_WORKING_PAGE_FLASH_BACKUP_START_ADDRESS+FLASH_KB(512)))
+   {
+      context = Enter_Critical_Section();
+      flash_memory_interface->FLASH_Set_Lock((uint32_t)INST_WORKING_PAGE_FLASH_BACKUP_START_ADDRESS,0);
+      flash_memory_interface->FLASH_Erase_Memory((uint32_t)INST_WORKING_PAGE_FLASH_BACKUP_START_ADDRESS,INST_Operation_CALLBACK);
+      flash_memory_interface->FLASH_Set_Lock((uint32_t)INST_WORKING_PAGE_FLASH_BACKUP_START_ADDRESS,1);
+      Leave_Critical_Section( context );
+   }
+
+}
+
+/*=============================================================================
  * INST_Restore_Working_Page
  * @func  restore mirror ram of working page from FLASH
  *
