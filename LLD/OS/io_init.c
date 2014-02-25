@@ -97,17 +97,12 @@ void InitializeHardwareRegisters(void)
 	CPU_Info =  SIU_Get_CPU_Information();
 	Flash_Info = Get_FLASH_Driver_Mode();
 
-	if(CPU_LCI == CPU_Info)
-	{
+	if(CPU_LCI == CPU_Info) {
 		MPC5644_FLASH_Initialize_Normal();
 		XBAR_MPC5644A_Initialize_Device();
-		//flash_init_sucess = C90FL_Initialize();
-	}
-	else
-	{
+	} else {
 		MPC5634_FLASH_Initialize_Normal();
 		XBAR_MPC5634M_Initialize_Device();
-		// flash_init_sucess =	  C90LC_Initialize();
 	}
 	flash_init_sucess = flash_memory_interface->FLASH_Memory_Initial();
 
@@ -121,6 +116,8 @@ void InitializeHardwareRegisters(void)
 	STM_Initialize_Device();
 
 	ECSM_Initialize_Device();
+
+	Enable_MachineCheck(); // enable machine check exception to capture ECC
 
 	DMA_Initialize_Device();
 	DMA_Initialize_Channel(
@@ -209,15 +206,15 @@ void InitializeHardwareRegisters(void)
 	DSPI_B_Enable_Transfer(true);
 
 	DMA_Initialize_Channel(
-		DMA_CHANNEL_MIOS_EMIOSFLAG_4,
-		DMA_EMIOSFLAG_4_Source_Address,
-		DMA_EMIOSFLAG_4_Second_32Bit,
-		DMA_EMIOSFLAG_4_Third_32Bit,
-		DMA_EMIOSFLAG_4_Slast,
-		DMA_EMIOSFLAG_4_Dest_Address,
-		DMA_EMIOSFLAG_4_Sixth_32Bit,
-		DMA_EMIOSFLAG_4_Dlast,
-		DMA_EMIOSFLAG_4_Eighth_32Bit);
+	DMA_CHANNEL_MIOS_EMIOSFLAG_4,
+	DMA_EMIOSFLAG_4_Source_Address,
+	DMA_EMIOSFLAG_4_Second_32Bit,
+	DMA_EMIOSFLAG_4_Third_32Bit,
+	DMA_EMIOSFLAG_4_Slast,
+	DMA_EMIOSFLAG_4_Dest_Address,
+	DMA_EMIOSFLAG_4_Sixth_32Bit,
+	DMA_EMIOSFLAG_4_Dlast,
+	DMA_EMIOSFLAG_4_Eighth_32Bit);
 
 	STM_Set_Timer_Enable(true);
 
@@ -289,3 +286,27 @@ bool Get_BatteryRemove_Status(void)
 	return BatteryRemoved;
 }
 
+//=============================================================================
+// exit
+//=============================================================================
+void exit(void)
+{
+	// Set the watchdog timeout to 300ms for flash erase/program
+	SWT_Set_Timeout_Value(SWT_TIMEOUT_VALUE_INIT) ;
+	SWT_Service_WatchDog();
+
+	EEPROM_Backup_MFG_NVM_Block( true );
+	EEPROM_Backup_Vehicle_NVRAM_Block();
+
+	// only LCI will do the instrumentation operation, backup cal 
+	if(CPU_LCI == CPU_Info) {
+		INST_Backup_Working_Page();
+	}
+
+	//Set TOD low now since all power down processing is complete
+	HAL_GPIO_SET_TODO_Enable(false);
+
+	INTC_EXCEPTION_Halt();
+	// Wait in an infinite loop for the power supply to shutdown
+	do {} while (true);
+}
