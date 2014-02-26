@@ -420,16 +420,16 @@ extern uint16_t	DTCs_SID07[SY_FCMTSIZE];		/* DTCs for service 07*/
 #define LLD_DI_POWER_STEERING_DebTime 10
 
 /* Corresponding PIN number of connector */
-#define LLD_DO_FAN1 LLD_DO00 //index of digital output channel 0
-#define LLD_DO_FAN2 LLD_DO01 //index of digital output channel 1
-#define LLD_DO_FUEL_PUMP LLD_DO02 //index of digital output channel 2
-#define LLD_DO_MAIN_RELAY LLD_DO03 //index of digital output channel 3
-#define LLD_DO_MIL_LAMP LLD_DO04 //index of digital output channel 4
-#define LLD_DO_SVS_LAMP LLD_DO05 //index of digital output channel 5
-#define LLD_DO_AC_CLUTCH LLD_DO06 //index of digital output channel 6
-#define LLD_DO_R_LINE LLD_DO07 //index of digital output channel 7
-#define LLD_DO_START_MOTR_RLY LLD_DO08 //index of digital output channel 8
-#define LLD_DO_VIS_SWITCH LLD_DO09 //index of digital output channel 9
+#define LLD_DO_FAN1             LLD_DO00 //index of digital output channel 0
+#define LLD_DO_FAN2             LLD_DO01 //index of digital output channel 1
+#define LLD_DO_FUEL_PUMP        LLD_DO02 //index of digital output channel 2
+#define LLD_DO_MAIN_RELAY       LLD_DO03 //index of digital output channel 3
+#define LLD_DO_MIL_LAMP         LLD_DO04 //index of digital output channel 4
+#define LLD_DO_SVS_LAMP         LLD_DO05 //index of digital output channel 5
+#define LLD_DO_AC_CLUTCH        LLD_DO06 //index of digital output channel 6
+#define LLD_DO_R_LINE           LLD_DO07 //index of digital output channel 7
+#define LLD_DO_START_MOTR_RLY   LLD_DO08 //index of digital output channel 8
+#define LLD_DO_VIS_SWITCH       LLD_DO09 //index of digital output channel 9
 
 #define LLD_PWM_O2_HEATER_1      LLD_PWM00      //VSEP,  PWM OUTPUT CH00
 #define LLD_PWM_O2_HEATER_2      LLD_PWM06      //VSEP,  PWM OUTPUT CH01

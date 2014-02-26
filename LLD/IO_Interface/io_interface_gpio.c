@@ -42,26 +42,23 @@ uint8_t LLD_di_samplecnt[LLD_DI_MAX_CHANNEL];
 //=============================================================================
 //IO_GPIO_DO_Task
 //=============================================================================
- void IO_GPIO_DO_Task(void) 
+void IO_GPIO_DO_Task(void) 
 {
- //DO
- HAL_GPIO_SET_FAN1_Enable((bool) LLD_do_table[LLD_DO_FAN1].value);
- HAL_GPIO_SET_FAN2_Enable((bool) LLD_do_table[LLD_DO_FAN2].value);
- HAL_GPIO_SET_FPR_Enable((bool) LLD_do_table[LLD_DO_FUEL_PUMP].value);
- HAL_GPIO_SET_MPR_Enable((bool) LLD_do_table[LLD_DO_MAIN_RELAY].value);
- if(!K_Can_Meter_MIL_Disable)
- {
-   HAL_GPIO_SET_MIL_Enable((bool) LLD_do_table[LLD_DO_MIL_LAMP].value);
- }  
- HAL_GPIO_SET_SVS_Enable((bool) LLD_do_table[LLD_DO_SVS_LAMP].value);
- HAL_GPIO_SET_ACClutch_Enable((bool) LLD_do_table[LLD_DO_AC_CLUTCH].value);
- HAL_GPIO_SET_IMMOREQ_Enable((bool) LLD_do_table[LLD_DO_R_LINE].value);
- HAL_GPIO_SET_SMR_Enable((bool) LLD_do_table[LLD_DO_START_MOTR_RLY].value);
- //HAL_GPIO_SET_VGIS1_Enable((bool) LLD_do_table[LLD_DO_VIS_SWITCH].value);
-
-
-//test
- //HAL_GPIO_SET_VGIS2_Enable((bool) LLD_do_table[LLD_DO_VIS_SWITCH].value);
+	HAL_GPIO_SET_FAN1_Enable((bool) LLD_do_table[LLD_DO_FAN1].value);
+	HAL_GPIO_SET_FAN2_Enable((bool) LLD_do_table[LLD_DO_FAN2].value);
+	HAL_GPIO_SET_FPR_Enable((bool) LLD_do_table[LLD_DO_FUEL_PUMP].value);
+	HAL_GPIO_SET_MPR_Enable((bool) LLD_do_table[LLD_DO_MAIN_RELAY].value);
+	HAL_GPIO_SET_ACClutch_Enable((bool) LLD_do_table[LLD_DO_AC_CLUTCH].value);
+	HAL_GPIO_SET_IMMOREQ_Enable((bool) LLD_do_table[LLD_DO_R_LINE].value);
+	HAL_GPIO_SET_SMR_Enable((bool) LLD_do_table[LLD_DO_START_MOTR_RLY].value);
+	
+	/* for meter signal output */
+	if (!K_Can_Meter_MIL_Disable) {
+		HAL_GPIO_SET_MIL_Enable((bool) LLD_do_table[LLD_DO_MIL_LAMP].value);
+	}
+	if (!K_Can_Meter_SVS_Disable) {
+		HAL_GPIO_SET_SVS_Enable((bool) LLD_do_table[LLD_DO_SVS_LAMP].value);
+	}
 }
 
 

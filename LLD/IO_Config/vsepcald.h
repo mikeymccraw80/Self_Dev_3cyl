@@ -164,10 +164,5 @@ extern const  uint16_t KsVSEP_Diagnostic_Counter_Thd;
 
 extern const uint8_t KSOHCRTH;
 
-extern const bool K_Can_Meter_MIL_Disable;
-extern const bool K_Can_Meter_TACH_Disable;
-extern const bool K_Can_Meter_Fuel_Consum_Disable;
-
-
 #endif
 

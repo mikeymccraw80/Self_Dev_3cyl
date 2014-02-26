@@ -120,6 +120,14 @@
 #define GetVIOS_MILD_Presnt()              (CbTRUE)
 
 /******************************************************************************
+ * PSVI Fault reading for MIL Lamp diagnostic 
+ ******************************************************************************/
+#define GetVIOS_SVSD_FaultShortHi()    (GetShortFault(DISCRETE_OUT_SES_LAMP))
+#define GetVIOS_SVSD_FaultShortLo()    (GetOpenFault(DISCRETE_OUT_SES_LAMP))
+#define GetVIOS_SVSD_FaultAny()        (GetAnyFault(DISCRETE_OUT_SES_LAMP))
+#define GetVIOS_SVSD_Presnt()              (CbTRUE)
+
+/******************************************************************************
  * PSVI Fault reading for CCP diagnostic 
  ******************************************************************************/
 #define GetHWIO_PurgeSolOutputFault()        (GetAnyFault(PULSE_OUT_CANISTER_PURGE))

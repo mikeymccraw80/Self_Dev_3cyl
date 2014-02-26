@@ -10,6 +10,7 @@
 // extern variable
 //=============================================================================
 extern const bool K_Can_Meter_MIL_Disable;
+extern const bool K_Can_Meter_SVS_Disable ;
 extern const bool K_Can_Meter_TACH_Disable;
 extern const bool K_Can_Meter_Fuel_Consum_Disable;
 

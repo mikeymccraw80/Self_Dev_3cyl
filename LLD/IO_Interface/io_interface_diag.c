@@ -5,6 +5,7 @@
 #include "hal_diag.h"
 #include "io_interface_diag.h"
 #include "io_config_vsep.h"
+#include "vehicle_can_cald.h"
 
 /*===========================================================================*\
  * Local variable define
@@ -127,6 +128,27 @@ static void Diag_Digital_Output_Faults(void)
 			Diag_MIL_Status = Diag_MIL_Status | OUT_FAIL;
 		} else {
 			Diag_MIL_Status = OUT_FAULT_CLEAR;
+		}
+	}
+
+	/* SVS */
+	if (!K_Can_Meter_SVS_Disable) {
+		if (GetVIOS_SVSD_FaultShortHi()) {
+			Diag_SVS_Status = Diag_SVS_Status | OUT_SHORT_HIGH;
+		} else {
+			Diag_SVS_Status = Diag_SVS_Status & ~OUT_SHORT_HIGH;
+		}
+
+		if (GetVIOS_SVSD_FaultShortLo()) {
+			Diag_SVS_Status = Diag_SVS_Status | OUT_SHORT_LOW;
+		} else {
+			Diag_SVS_Status = Diag_SVS_Status & ~OUT_SHORT_LOW;
+		}
+
+		if ( Diag_SVS_Status & OUT_FAIL_MASK ) {
+			Diag_SVS_Status = Diag_SVS_Status | OUT_FAIL;
+		} else {
+			Diag_SVS_Status = OUT_FAULT_CLEAR;
 		}
 	}
 

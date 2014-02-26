@@ -14,6 +14,17 @@ const bool    K_Can_Meter_MIL_Disable = false ;
 
 /*
 *| vehicle_can_cald.{
+*|    K_Can_Meter_SVS_Disable {
+*|       :is_calconst;
+*|       :units = "BOOLEAN";
+*|       :description = "Disable SVS output on ECM pin";
+*|    }
+*|   }
+*/
+const bool    K_Can_Meter_SVS_Disable = false ;
+
+/*
+*| vehicle_can_cald.{
 *|    K_Can_Meter_TACH_Disable {
 *|       :is_calconst;
 *|       :units = "BOOLEAN";
