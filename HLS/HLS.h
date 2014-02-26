@@ -400,24 +400,26 @@ extern uint16_t	DTCs_SID07[SY_FCMTSIZE];		/* DTCs for service 07*/
 
 /*chery DI*/
 /* DI Index */
-#define LLD_DI_AC_REQUEST_INPUT LLD_DI00
-#define LLD_DI_AC_PRESSURE_SWITCH LLD_DI01
-#define LLD_DI_CAM_1 LLD_DI02
-#define LLD_DI_IGN_ON_OFF_SW LLD_DI03
-#define LLD_DI_HEAD_LAMP LLD_DI04
-#define LLD_DI_POWER_STEERING LLD_DI05
-#define LLD_DI_BRAKE_LAMP LLD_DI06
-#define LLD_DI_BRAKE_SWITCH LLD_DI07
-#define LLD_DI_CLUTCH_TOP LLD_DI08
+#define LLD_DI_AC_REQUEST_INPUT     LLD_DI00
+#define LLD_DI_AC_PRESSURE_SWITCH   LLD_DI01
+#define LLD_DI_CAM_1                LLD_DI02
+#define LLD_DI_IGN_ON_OFF_SW        LLD_DI03
+#define LLD_DI_HEAD_LAMP            LLD_DI04
+#define LLD_DI_POWER_STEERING       LLD_DI05
+#define LLD_DI_BRAKE_LAMP           LLD_DI06
+#define LLD_DI_BRAKE_SWITCH         LLD_DI07
+#define LLD_DI_CLUTCH_TOP           LLD_DI08
+#define LLD_DI_CRANK_REQUEST        LLD_DI09
 
 /*debounce time*/
 /*Debounce time for all digital inputs are tentatively defined as 10ms. It could be changed later.*/
-#define LLD_DI_AC_REQUEST_INPUT_DebTime 10 /*ms*/
+#define LLD_DI_AC_REQUEST_INPUT_DebTime   10 /*ms*/
 #define LLD_DI_AC_PRESSURE_SWITCH_DebTime 10
-#define LLD_DI_CAM_1_DebTime 10
-#define LLD_DI_IGN_ON_OFF_SW_DebTime 10
-#define LLD_DI_HEAD_LAMP_DebTime 10
-#define LLD_DI_POWER_STEERING_DebTime 10
+#define LLD_DI_CAM_1_DebTime              10
+#define LLD_DI_IGN_ON_OFF_SW_DebTime      10
+#define LLD_DI_HEAD_LAMP_DebTime          10
+#define LLD_DI_POWER_STEERING_DebTime     10
+#define LLD_DI_CRANK_REQUEST_DebTime      10
 
 /* Corresponding PIN number of connector */
 #define LLD_DO_FAN1             LLD_DO00 //index of digital output channel 0

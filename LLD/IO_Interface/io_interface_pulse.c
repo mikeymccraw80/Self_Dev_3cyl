@@ -39,6 +39,20 @@ void  IO_Pulse_Update_Function(void)
 										   0);
 	}
 
+	//MIOS channel: fuel consumption
+	//period in us
+	//duty resoultion is 1/1000
+	if(LLD_pwm_out_table[LLD_PWM_FUEL_CONSUMPTION].B_enable)
+	{
+		HAL_Pulse_FUELCONCTL_Set_Period_Duty((uint32_t)LLD_pwm_out_table[LLD_PWM_FUEL_CONSUMPTION].period*1000,
+										  (uint16_t)LLD_pwm_out_table[LLD_PWM_FUEL_CONSUMPTION].duty*1000/255);
+	}
+	else
+	{
+		HAL_Pulse_FUELCONCTL_Set_Period_Duty((uint32_t)LLD_pwm_out_table[LLD_PWM_FUEL_CONSUMPTION].period*1000,
+										   0);
+	}
+
 	//VSEP channel: period resoultion is 1/64ms; duty resoultion is 1/32768
 	//VSEP channel :CCP
 	if(LLD_pwm_out_table[LLD_PWM_PURGE].B_enable)

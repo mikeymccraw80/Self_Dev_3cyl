@@ -16,27 +16,27 @@ uint8_t LLD_di_samplecnt[LLD_DI_MAX_CHANNEL];
 //=============================================================================
 //  IO_GPIO_DI_Task
 //=============================================================================
-  void IO_GPIO_DI_Task(void)
+void IO_GPIO_DI_Task(void)
 {
+	// DI
+	LLD_di_table[LLD_DI_IGN_ON_OFF_SW].value =(HAL_Analog_Get_IGNVI_Value() >4094)? 0x01: 0x00;
 
-  // DI
- LLD_di_table[LLD_DI_IGN_ON_OFF_SW].value =(HAL_Analog_Get_IGNVI_Value() >4094)? 0x01: 0x00;
+	LLD_di_table[LLD_DI_AC_REQUEST_INPUT].value = (uint8_t)HAL_GPIO_GET_ACRequest_Status();
 
- LLD_di_table[LLD_DI_AC_REQUEST_INPUT].value = (uint8_t)HAL_GPIO_GET_ACRequest_Status();
+	LLD_di_table[LLD_DI_AC_PRESSURE_SWITCH].value = (uint8_t)HAL_GPIO_GET_MIDAC_Status();
 
- LLD_di_table[LLD_DI_POWER_STEERING].value = (uint8_t)HAL_GPIO_GET_PSPS_Status();
+	LLD_di_table[LLD_DI_HEAD_LAMP].value = (uint8_t)HAL_GPIO_GET_ELOAD2_Status();
 
- LLD_di_table[LLD_DI_AC_PRESSURE_SWITCH].value = (uint8_t)HAL_GPIO_GET_MIDAC_Status();
-  
- LLD_di_table[LLD_DI_HEAD_LAMP].value = (uint8_t)HAL_GPIO_GET_ELOAD1_Status();
-  
- LLD_di_table[LLD_DI_BRAKE_LAMP].value = (uint8_t)HAL_GPIO_GET_BRKLMPDI_Status();
+	LLD_di_table[LLD_DI_BRAKE_LAMP].value = (uint8_t)HAL_GPIO_GET_BRKLMPDI_Status();
 
- LLD_di_table[LLD_DI_BRAKE_SWITCH].value = (uint8_t)HAL_GPIO_GET_BRKSWDI_Status();
+	LLD_di_table[LLD_DI_BRAKE_SWITCH].value = (uint8_t)HAL_GPIO_GET_BRKSWDI_Status();
 
- LLD_di_table[LLD_DI_CLUTCH_TOP].value = (uint8_t)HAL_GPIO_GET_ELOAD2_Status();
+	/* crank request input channel */
+	LLD_di_table[LLD_DI_CRANK_REQUEST].value = (uint8_t)HAL_GPIO_GET_ELOAD1_Status();
 
-
+	/* power steering and clutch share some input channel */
+	LLD_di_table[LLD_DI_CLUTCH_TOP].value = (uint8_t)HAL_GPIO_GET_PSPS_Status();
+	LLD_di_table[LLD_DI_POWER_STEERING].value = (uint8_t)HAL_GPIO_GET_PSPS_Status();
 }
 
 //=============================================================================
