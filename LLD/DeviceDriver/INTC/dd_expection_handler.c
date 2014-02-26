@@ -143,7 +143,9 @@ void Exception_Data_Storage_ISR( void )
    /* Check to see if data storage exception caused by ECC Error Detection. */
    if ( ( temp_ESR & 0x00000001 ) && ( ECSM.ESR.F.RNCE || ECSM.ESR.F.FNCE ) )
    {
-      //Service_ECSM_Error();
+#ifndef HWTEST
+     Service_ECSM_Error();
+#endif
    }
    /* Check to see if exception was caused by MMU write protect access. */
    else if ( ( temp_ESR & 0x00800080 ) &&
