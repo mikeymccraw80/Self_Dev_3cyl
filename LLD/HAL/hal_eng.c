@@ -26,6 +26,7 @@ TeENG_RunModeTran     VeVIOS_RunModeTran;
 TeENG_STATE           VeVIOS_EngSt;
 Every_Loop_Sec_W      VaVIOS_t_PowerdownDelayTimer;
 T_COUNT_WORD          NfVIOS_t_EngRunTime;
+volatile TbBOOLEAN  Engine_Truning_Flag;
 
 /******************************************************************************
 *  Local Function declarations

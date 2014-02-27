@@ -123,6 +123,9 @@ void IO_Eng_Update_System_Time_Background(void)
 		crank_sig.segment_time = 300000;//100rpm,300ms
 	}
 
+	/* update engine turning flag */
+	SetEngineTurning(crank_sig.engine_rpm);
+
 	//TACH output 
 	if(!K_Can_Meter_TACH_Disable) {
 		if(crank_sig.engine_rpm >0) {

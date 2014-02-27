@@ -28,6 +28,14 @@ typedef enum {
  *****************************************************************************/
 extern TeENG_STATE     VeVIOS_EngSt;
 extern T_COUNT_WORD    NfVIOS_t_EngRunTime;
+
+/**********************************************************************/
+/***  Return cumulative total tooth error counts during 58x synchronization. ***/
+/**********************************************************************/
+extern volatile TbBOOLEAN  Engine_Truning_Flag;
+#define GetEngineTurning()				( Engine_Truning_Flag )
+#define SetEngineTurning(s)				( Engine_Truning_Flag = (s>0)? true:false)
+
 /*****************************************************************************
  *  Function Declarations
  *****************************************************************************/
