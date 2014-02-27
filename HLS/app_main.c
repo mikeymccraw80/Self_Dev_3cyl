@@ -130,6 +130,15 @@ Percent_B            DuCyPgOut;
 
 Percent_Plus_Fraction  TpPosl;
 
+/* IUPR part, defined in HLS*/
+uint16_t NcDGDM_RM_OFVC_IgnCycleCntr;
+uint16_t NcDGDM_RM_Generic_Denom;
+uint16_t NcDGDM_RM_ICMD_B1_Numrtr;
+uint16_t NcDGDM_RM_ICMD_B1_Denom;
+uint16_t NcDGDM_RM_EOSD_B1_S1_Numrtr;
+uint16_t NcDGDM_RM_EOSD_B1_S1_Denom;
+uint16_t NcDGDM_RM_EOSD_B1_S2_Numrtr;
+uint16_t NcDGDM_RM_EOSD_B1_S2_Denom;
 
 /*VCPC*/
 uint16_t angle_crank_cam_inlet;

@@ -520,19 +520,13 @@ extern  const uint16_t VAL_uTpsMx;
 extern  const uint16_t VAL_uTpsMn;
 extern  const uint16_t VAL_uTmMx;
 extern  const uint16_t VAL_uTmMn;
-extern const uint16_t VAL_uTaMx;
+extern  const uint16_t VAL_uTaMx;
 extern  const uint16_t VAL_uTaMn;
 extern  const uint16_t VAL_uPmapMx;
 extern  const uint16_t VAL_uPmapMn;
 extern  const uint16_t VAL_uLsbMx;
 extern  const uint16_t VAL_uLsbMn;
 extern  const uint8_t  VAL_LmDgFofDly;
-
-/* IAC calibration */
-extern  const uint8_t VAL_StepPosMx;
-extern  const uint8_t VAL_dNStepLrn;
-
-extern  const uint8_t VAL_TsStPos;
 
 extern unsigned char  TpPos_b;
 extern unsigned char  Pmap_b;
@@ -575,18 +569,27 @@ extern uint8_t Gr;
 extern uint8_t Maf_b;
 extern  unsigned short       Pmap;
 
-/* defined in HLS */
+/* knock part, defined in HLS */
 extern bool knock_flag_a;
 extern bool knock_flag_b;
 extern bool knock_flag_c;
 extern bool knock_flag_d;
 
-/* define in LLD */
+/* knock part, define in LLD */
 extern uint16_t IntegratorAverage[LLD_MAX_IGN_CHANNEL];      /* filtered value */
 extern uint16_t KnockThreshold[LLD_MAX_IGN_CHANNEL];         /* knock threshold */
 
+/* IUPR part, defined in HLS*/
+extern uint16_t NcDGDM_RM_OFVC_IgnCycleCntr;
+extern uint16_t NcDGDM_RM_Generic_Denom;
+extern uint16_t NcDGDM_RM_ICMD_B1_Numrtr;
+extern uint16_t NcDGDM_RM_ICMD_B1_Denom;
+extern uint16_t NcDGDM_RM_EOSD_B1_S1_Numrtr;
+extern uint16_t NcDGDM_RM_EOSD_B1_S1_Denom;
+extern uint16_t NcDGDM_RM_EOSD_B1_S2_Numrtr;
+extern uint16_t NcDGDM_RM_EOSD_B1_S2_Denom;
 
-/*VCPC*/
+/*VVT part, VCPC*/
 extern uint16_t angle_crank_cam_inlet;
 extern uint16_t angle_crank_cam_outlet;
 
