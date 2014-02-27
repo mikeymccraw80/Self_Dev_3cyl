@@ -379,6 +379,29 @@ extern bool	B_DiagInfoClrReq;		/*condition: request to clear diagnostic informat
 extern uint8_t 	count_DTCs_SID07;				/* DTC counter for service 07 */
 extern uint16_t	DTCs_SID07[SY_FCMTSIZE];		/* DTCs for service 07*/
 
+/*the flowing is ISO14230 service 0x31&0x32 */
+// extern uint8_t  SupFlagC0[4];    /* 0xC0  ID Support Flag($C1-$E0) */
+// extern uint8_t  SupFlagE0[4];    /* 0xE0  ID Support Flag($E1-$FF) */
+extern bool     B_Inj0Req;       /* 0xCC  KDS request #1cylinder injector test  */
+extern bool     B_Inj0Stp;       /* 0xCC  KDS stop #1cylinder injector test  */
+extern bool     B_Inj1Req;       /* 0xCD  KDS request #2cylinder injector test */
+extern bool     B_Inj1Stp;       /* 0xCD  KDS stop #2cylinder injector test  */
+extern bool     B_Inj2Req;       /* 0xCE  KDS request #3cylinder injector test  */
+extern bool     B_Inj2Stp;       /* 0xCE  KDS stop #3cylinder injector test  */
+extern bool     B_FulPReq;       /* 0xD4  KDS demand fuel pump test  */
+extern bool     B_FulPStp;       /* 0xD4  KDS request fuel pump test   */
+extern bool     B_Ign0Req;       /* 0xD5  KDS request #1cylinder ignition coil test */
+extern bool     B_Ign0Stp;       /* 0xD5  KDS stop #1cylinder ignition coil test  */
+extern bool     B_Ign1Req;       /* 0xD6  KDS request #2cylinder ignition coil test */
+extern bool     B_Ign1Stp;       /* 0xD6  KDS stop #2cylinder ignition coil test*/
+extern bool     B_Ign2Req;       /* 0xD7  KDS request #3cylinder ignition coil test  */
+extern bool     B_Ign2Stp;       /* 0xD7  KDS stop #3cylinder ignition coil test  */
+extern bool     B_Fan1Req;       /* 0xE5  KDS request low fan test  */
+extern bool     B_Fan1Stp;       /* 0xE5  KDS stop low fan test   */
+extern bool     B_CpgVReq;       /* 0xE8  KDS request canister purge valve test  */
+extern bool     B_CpgVStp;       /* 0xE8  KDS stop canister purge valve test  */
+extern bool     B_ISCReq;        /* 0xDD  KDS request ISC initialize test  */
+
 /* ==========================================================================*\
  * Exported INLINE functions and #define function-like macros.
 \* ==========================================================================*/

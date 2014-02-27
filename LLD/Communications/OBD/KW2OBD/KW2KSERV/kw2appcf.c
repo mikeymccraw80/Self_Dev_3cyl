@@ -38,6 +38,7 @@
 #include "kw2srv23.h"
 #include "kw2srv27.h"
 #include "kw2srv31.h"
+#include "kw2srv32.h"
 #include "kw2srv34.h"
 #include "kw2srv36.h"
 #include "kw2srv37.h"
@@ -191,6 +192,12 @@ const SERVICE_DEFINITION_ARRAY_TYPE CaServiceDefinition[ ]=
    {
       sirStartRoutineByLocalIdentifier,
       KwJ14230StartRoutineByLocalIdentifier ,
+      KwNoMultiModeAval
+   },
+   /* Service 0x32 */
+   {
+      sirStopRoutineByLocalIdentifier,
+      KwJ14230StopRoutineByLocalIdentifier ,
       KwNoMultiModeAval
    },
    /* Service 0x34 */
