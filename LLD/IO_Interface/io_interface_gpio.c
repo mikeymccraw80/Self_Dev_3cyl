@@ -27,9 +27,11 @@ void IO_GPIO_DI_Task(void)
 
 	LLD_di_table[LLD_DI_HEAD_LAMP].value = (uint8_t)HAL_GPIO_GET_ELOAD2_Status();
 
-	LLD_di_table[LLD_DI_BRAKE_LAMP].value = (uint8_t)HAL_GPIO_GET_BRKLMPDI_Status();
+	/* brake switch input, notice, this is high active but it is alway connected, so we reverse it */
+	LLD_di_table[LLD_DI_BRAKE_SWITCH].value = (HAL_GPIO_GET_BRKSWDI_Status()?false:true);
 
-	LLD_di_table[LLD_DI_BRAKE_SWITCH].value = (uint8_t)HAL_GPIO_GET_BRKSWDI_Status();
+	/* this channel is changed to AD channel */
+	// LLD_di_table[LLD_DI_BRAKE_LAMP].value = (uint8_t)HAL_GPIO_GET_BRKLMPDI_Status();
 
 	/* crank request input channel */
 	LLD_di_table[LLD_DI_CRANK_REQUEST].value = (uint8_t)HAL_GPIO_GET_ELOAD1_Status();

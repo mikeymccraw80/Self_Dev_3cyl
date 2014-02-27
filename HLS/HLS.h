@@ -407,19 +407,20 @@ extern bool     B_ISCReq;        /* 0xDD  KDS request ISC initialize test  */
 \* ==========================================================================*/
 /*chery ATD*/
 /* ATD Index */
-#define LLD_ATD_MAP LLD_AN01
-#define LLD_ATD_VBATT_SW LLD_AN02
-#define LLD_ATD_OXYGEN_SENSOR_1 LLD_AN03
-#define LLD_ATD_OXYGEN_SENSOR_2 LLD_AN04
-#define LLD_ATD_TA LLD_AN05
-#define LLD_ATD_ECT LLD_AN06
-#define LLD_ATD_THROTTLE_1 LLD_AN07
-#define LLD_ATD_THROTTLE_2 LLD_AN08
-#define LLD_ATD_PEDAL_1 LLD_AN09
-#define LLD_ATD_PEDAL_2 LLD_AN10
-#define LLD_ATD_FRONT_EVAP_TEMP LLD_AN11
-#define LLD_ATD_AC_PRESSURE  LLD_AN12
-#define LLD_ATD_BATTERY_1   LLD_AN13
+#define LLD_ATD_MAP                 LLD_AN01
+#define LLD_ATD_VBATT_SW            LLD_AN02
+#define LLD_ATD_OXYGEN_SENSOR_1     LLD_AN03
+#define LLD_ATD_OXYGEN_SENSOR_2     LLD_AN04
+#define LLD_ATD_TA                  LLD_AN05
+#define LLD_ATD_ECT                 LLD_AN06
+#define LLD_ATD_THROTTLE_1          LLD_AN07
+#define LLD_ATD_THROTTLE_2          LLD_AN08
+#define LLD_ATD_PEDAL_1             LLD_AN09
+#define LLD_ATD_PEDAL_2             LLD_AN10
+#define LLD_ATD_FRONT_EVAP_TEMP     LLD_AN11
+#define LLD_ATD_AC_PRESSURE         LLD_AN12
+#define LLD_ATD_BATTERY_1           LLD_AN13
+#define LLD_ATD_BRAKE_LAMP          LLD_AN14
 
 /*chery DI*/
 /* DI Index */

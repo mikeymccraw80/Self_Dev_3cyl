@@ -56,6 +56,7 @@
   {
    LLD_atd_input_table[LLD_ATD_THROTTLE_2].LLD_atd_val =HAL_Analog_Get_TPS2VI_Value()>>2;;
   }//chery requirement
+  
 }
 
 //=============================================================================
@@ -125,6 +126,7 @@
    //Protect Battery 
   LLD_atd_input_table[LLD_ATD_BATTERY_1].LLD_atd_val = HAL_Analog_Get_PBATTVI_Value()>>2;
   
-
+  //fuel level input, used by brake lamp input
+  LLD_atd_input_table[LLD_ATD_BRAKE_LAMP].LLD_atd_val =HAL_Analog_Get_FLVVI_Value()>>2;;
   
 }
