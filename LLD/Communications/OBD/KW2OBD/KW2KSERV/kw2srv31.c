@@ -50,13 +50,11 @@
 #define KHI_INJ0_Request                    (0xCC)
 #define KHI_INJ1_Request                    (0xCD)
 #define KHI_INJ2_Request                    (0xCE)
+#define KHI_INJ3_Request                    (0xCF)
 #define KHI_FuelPump_Request                (0xD4)
-#define KHI_IGN0_Request                    (0xD5)
-#define KHI_IGN1_Request                    (0xD6)
-#define KHI_IGN2_Request                    (0xD7)
 #define KHI_Fan1_Request                    (0xE5)
+#define KHI_Fan2_Request                    (0xE6)
 #define KHI_CpgV_Request                    (0xE8)
-#define KHI_ISC_Request                     (0xDD)
 
 
 /******************************************************************************
@@ -127,34 +125,42 @@ void KwJ14230StartRoutineByLocalIdentifier( void )
 					B_Inj2Req = 1;
 					khi_last_test = khi_local_id;
 					break;
+				case KHI_INJ3_Request:
+					B_Inj3Req = 1;
+					khi_last_test = khi_local_id;
+					break;
 				case KHI_FuelPump_Request:
 					B_FulPReq = 1;
 					khi_last_test = khi_local_id;
 					break;
-				case KHI_IGN0_Request:
-					B_Ign0Req = 1;
-					khi_last_test = khi_local_id;
-					break;
-				case KHI_IGN1_Request:
-					B_Ign1Req = 1;
-					khi_last_test = khi_local_id;
-					break;
-				case KHI_IGN2_Request:
-					B_Ign2Req = 1;
-					khi_last_test = khi_local_id;
-					break;
+				// case KHI_IGN0_Request:
+					// B_Ign0Req = 1;
+					// khi_last_test = khi_local_id;
+					// break;
+				// case KHI_IGN1_Request:
+					// B_Ign1Req = 1;
+					// khi_last_test = khi_local_id;
+					// break;
+				// case KHI_IGN2_Request:
+					// B_Ign2Req = 1;
+					// khi_last_test = khi_local_id;
+					// break;
 				case KHI_Fan1_Request:
 					B_Fan1Req = 1;
+					khi_last_test = khi_local_id;
+					break;
+				case KHI_Fan2_Request:
+					B_Fan2Req = 1;
 					khi_last_test = khi_local_id;
 					break;
 				case KHI_CpgV_Request:
 					B_CpgVReq = 1;
 					khi_last_test = khi_local_id;
 					break;
-				case KHI_ISC_Request:  //stepper motor self study
-					B_ISCReq = 1;
-					khi_last_test = khi_local_id;
-					break;
+				// case KHI_ISC_Request:  //stepper motor self study
+					// B_ISCReq = 1;
+					// khi_last_test = khi_local_id;
+					// break;
 				// case KHI_SUPPORT_FLAG_C0:
 					// WrtKw2000ServiceData(SupFlagC0[0], TrBytes++);
 					// WrtKw2000ServiceData(SupFlagC0[1], TrBytes++);

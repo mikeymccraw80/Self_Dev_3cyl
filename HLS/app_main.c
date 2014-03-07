@@ -93,19 +93,17 @@ bool     B_Inj1Req;       /* 0xCD  KDS request #2cylinder injector test */
 bool     B_Inj1Stp;       /* 0xCD  KDS stop #2cylinder injector test  */
 bool     B_Inj2Req;       /* 0xCE  KDS request #3cylinder injector test  */
 bool     B_Inj2Stp;       /* 0xCE  KDS stop #3cylinder injector test  */
+bool     B_Inj3Req;       /* 0xCF  KDS request #4cylinder injector test  */
+bool     B_Inj3Stp;       /* 0xCF  KDS stop #4cylinder injector test  */
 bool     B_FulPReq;       /* 0xD4  KDS demand fuel pump test  */
 bool     B_FulPStp;       /* 0xD4  KDS request fuel pump test   */
-bool     B_Ign0Req;       /* 0xD5  KDS request #1cylinder ignition coil test */
-bool     B_Ign0Stp;       /* 0xD5  KDS stop #1cylinder ignition coil test  */
-bool     B_Ign1Req;       /* 0xD6  KDS request #2cylinder ignition coil test */
-bool     B_Ign1Stp;       /* 0xD6  KDS stop #2cylinder ignition coil test*/
-bool     B_Ign2Req;       /* 0xD7  KDS request #3cylinder ignition coil test  */
-bool     B_Ign2Stp;       /* 0xD7  KDS stop #3cylinder ignition coil test  */
 bool     B_Fan1Req;       /* 0xE5  KDS request low fan test  */
 bool     B_Fan1Stp;       /* 0xE5  KDS stop low fan test   */
+bool     B_Fan2Req;       /* 0xE6  KDS request low fan test  */
+bool     B_Fan2Stp;       /* 0xE6  KDS stop low fan test   */
 bool     B_CpgVReq;       /* 0xE8  KDS request canister purge valve test  */
 bool     B_CpgVStp;       /* 0xE8  KDS stop canister purge valve test  */
-bool     B_ISCReq;        /* 0xDD  KDS request ISC initialize test  */
+
 
 uint8_t Gr;
 uint8_t Maf_b;
@@ -139,6 +137,10 @@ uint16_t NcDGDM_RM_EOSD_B1_S1_Numrtr;
 uint16_t NcDGDM_RM_EOSD_B1_S1_Denom;
 uint16_t NcDGDM_RM_EOSD_B1_S2_Numrtr;
 uint16_t NcDGDM_RM_EOSD_B1_S2_Denom;
+uint16_t NcDGDM_RM_VVT1_Numrtr;
+uint16_t NcDGDM_RM_VVT1_Denom;
+uint16_t NcDGDM_RM_VVT2_Numrtr;
+uint16_t NcDGDM_RM_VVT2_Denom;
 
 /*VCPC*/
 uint16_t angle_crank_cam_inlet;

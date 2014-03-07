@@ -33,13 +33,15 @@
 #define KHI_INJ0_Request                    (0xCC)
 #define KHI_INJ1_Request                    (0xCD)
 #define KHI_INJ2_Request                    (0xCE)
+#define KHI_INJ3_Request                    (0xCF)
 #define KHI_FuelPump_Request                (0xD4)
-#define KHI_IGN0_Request                    (0xD5)
-#define KHI_IGN1_Request                    (0xD6)
-#define KHI_IGN2_Request                    (0xD7)
+// #define KHI_IGN0_Request                    (0xD5)
+// #define KHI_IGN1_Request                    (0xD6)
+// #define KHI_IGN2_Request                    (0xD7)
 #define KHI_Fan1_Request                    (0xE5)
+#define KHI_Fan2_Request                    (0xE6)
 #define KHI_CpgV_Request                    (0xE8)
-#define KHI_ISC_Request                     (0xDD)
+// #define KHI_ISC_Request                     (0xDD)
 
 /* global variable decaire */
 extern uint8_t khi_last_test;
@@ -63,30 +65,36 @@ void KwJ14230StopRoutineByLocalIdentifier( void )
 			case KHI_INJ2_Request:
 				B_Inj2Stp = 1;
 				break;
+			case KHI_INJ3_Request:
+				B_Inj3Stp = 1;
+				break;
 			case KHI_FuelPump_Request:
 				B_FulPStp = 1;
 				break;
-			case KHI_IGN0_Request:
-				B_Ign0Stp = 1;
-				break;
-			case KHI_IGN1_Request:
-				B_Ign1Stp = 1;
-				break;
-			case KHI_IGN2_Request:
-				B_Ign2Stp = 1;
-				break;
+			// case KHI_IGN0_Request:
+				// B_Ign0Stp = 1;
+				// break;
+			// case KHI_IGN1_Request:
+				// B_Ign1Stp = 1;
+				// break;
+			// case KHI_IGN2_Request:
+				// B_Ign2Stp = 1;
+				// break;
 			case KHI_Fan1_Request:
 				B_Fan1Stp = 1;
+				break;
+			case KHI_Fan2_Request:
+				B_Fan2Stp = 1;
 				break;
 			case KHI_CpgV_Request:
 				B_CpgVStp = 1;
 				break;
-			case KHI_ISC_Request:  //stepper motor self study
-				if (B_ISCReq) {  // don't support this stop command
-					SendStandardNegativeAnswer(nrcGeneralReject);
-					return;
-				}
-				break;
+			// case KHI_ISC_Request:  //stepper motor self study
+				// if (B_ISCReq) {  // don't support this stop command
+					// SendStandardNegativeAnswer(nrcGeneralReject);
+					// return;
+				// }
+				// break;
 			default:
 				khi_last_test = 0;
 				SendStandardNegativeAnswer(nrcGeneralReject);
