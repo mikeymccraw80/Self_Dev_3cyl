@@ -94,6 +94,27 @@
    MIOS_PWM_Set_Period_And_DutyCycle_US(MIOS_VVT2CTL_CH, in_period, in_duty);  
    
 }
+
+//=============================================================================
+//HAL_Pulse_VVT2CTL_Get_Duty_Cycle
+//=============================================================================
+ uint32_t HAL_Pulse_VVT2CTL_Get_Duty_Cycle(void) 
+{
+
+    return MIOS_PWM_Get_Duty_Cycle(MIOS_VVT2CTL_CH);
+
+}
+
+//=============================================================================
+//HAL_Pulse_VVT2CTL_Set_Duty_Cycle
+//=============================================================================
+ void HAL_Pulse_VVT2CTL_Set_Duty_Cycle(uint32_t duty_cycle) 
+{
+
+    MIOS_PWM_Set_Duty_Cycle(MIOS_VVT2CTL_CH, duty_cycle);
+
+}
+
 //=============================================================================
 //HAL_Pulse_VVT1CTL_Enable
 //=============================================================================
@@ -113,6 +134,27 @@
    MIOS_PWM_Set_Period_And_DutyCycle_US(MIOS_VVT1CTL_CH, in_period, in_duty);  
    
 }
+
+//=============================================================================
+//HAL_Pulse_VVT1CTL_Get_Duty_Cycle
+//=============================================================================
+ uint32_t HAL_Pulse_VVT1CTL_Get_Duty_Cycle(void) 
+{
+
+    return MIOS_PWM_Get_Duty_Cycle(MIOS_VVT1CTL_CH);
+
+}
+
+//=============================================================================
+//HAL_Pulse_VVT1CTL_Set_Duty_Cycle
+//=============================================================================
+ void HAL_Pulse_VVT1CTL_Set_Duty_Cycle(uint32_t duty_cycle) 
+{
+
+    MIOS_PWM_Set_Duty_Cycle(MIOS_VVT1CTL_CH, duty_cycle);
+
+}
+
 //=============================================================================
 //HAL_Pulse_FUELCONCTL_Enable
 //=============================================================================
@@ -132,6 +174,27 @@
    MIOS_PWM_Set_Period_And_DutyCycle_US(MIOS_FUELCONCTL_CH, in_period, in_duty);  
    
 }
+
+//=============================================================================
+//HAL_Pulse_FUELCONCTL_Get_Duty_Cycle
+//=============================================================================
+ uint32_t HAL_Pulse_FUELCONCTL_Get_Duty_Cycle(void) 
+{
+
+    return MIOS_PWM_Get_Duty_Cycle(MIOS_FUELCONCTL_CH);
+
+}
+
+//=============================================================================
+//HAL_Pulse_FUELCONCTL_Set_Duty_Cycle
+//=============================================================================
+ void HAL_Pulse_FUELCONCTL_Set_Duty_Cycle(uint32_t duty_cycle) 
+{
+
+    MIOS_PWM_Set_Duty_Cycle(MIOS_FUELCONCTL_CH, duty_cycle);
+
+}
+
 
 //=============================================================================
 // HAL_Pulse_CCP_Set_Period_Duty

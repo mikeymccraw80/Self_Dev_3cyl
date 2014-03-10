@@ -16,13 +16,14 @@ void  IO_Pulse_Update_Function(void)
 	//duty resoultion is 1/1000
 	if(LLD_pwm_out_table[LLD_PWM_VVT1].B_enable)
 	{
+		if (LLD_pwm_out_table[LLD_PWM_VVT1].period == 0)
+			return;
 		HAL_Pulse_VVT1CTL_Set_Period_Duty((uint32_t)LLD_pwm_out_table[LLD_PWM_VVT1].period*1000,
 										  (uint16_t)LLD_pwm_out_table[LLD_PWM_VVT1].duty*1000/255);
 	}
 	else
 	{
-		HAL_Pulse_VVT1CTL_Set_Period_Duty((uint32_t)LLD_pwm_out_table[LLD_PWM_VVT1].period*1000,
-										   0);
+		HAL_Pulse_VVT1CTL_Set_Duty_Cycle(0);
 	}
 
 	//MIOS channel: VVT2
@@ -30,13 +31,14 @@ void  IO_Pulse_Update_Function(void)
 	//duty resoultion is 1/1000
 	if(LLD_pwm_out_table[LLD_PWM_VVT2].B_enable)
 	{
+		if (LLD_pwm_out_table[LLD_PWM_VVT2].period == 0)
+			return;
 		HAL_Pulse_VVT2CTL_Set_Period_Duty((uint32_t)LLD_pwm_out_table[LLD_PWM_VVT2].period*1000,
 										  (uint16_t)LLD_pwm_out_table[LLD_PWM_VVT2].duty*1000/255);
 	}
 	else
 	{
-		HAL_Pulse_VVT2CTL_Set_Period_Duty((uint32_t)LLD_pwm_out_table[LLD_PWM_VVT2].period*1000,
-										   0);
+		HAL_Pulse_VVT2CTL_Set_Duty_Cycle(0);
 	}
 
 	//MIOS channel: fuel consumption
@@ -44,13 +46,14 @@ void  IO_Pulse_Update_Function(void)
 	//duty resoultion is 1/1000
 	if(LLD_pwm_out_table[LLD_PWM_FUEL_CONSUMPTION].B_enable)
 	{
+		if (LLD_pwm_out_table[LLD_PWM_FUEL_CONSUMPTION].period == 0)
+			return;
 		HAL_Pulse_FUELCONCTL_Set_Period_Duty((uint32_t)LLD_pwm_out_table[LLD_PWM_FUEL_CONSUMPTION].period*1000,
 										  (uint16_t)LLD_pwm_out_table[LLD_PWM_FUEL_CONSUMPTION].duty*1000/255);
 	}
 	else
 	{
-		HAL_Pulse_FUELCONCTL_Set_Period_Duty((uint32_t)LLD_pwm_out_table[LLD_PWM_FUEL_CONSUMPTION].period*1000,
-										   0);
+		HAL_Pulse_FUELCONCTL_Set_Duty_Cycle(0);
 	}
 
 	//VSEP channel: period resoultion is 1/64ms; duty resoultion is 1/32768
