@@ -219,6 +219,7 @@ void Test_DO_Toggle_Function(void)
 	LLD_do_table[LLD_DO_AC_CLUTCH].value = !LLD_do_table[LLD_DO_AC_CLUTCH].value;
 	LLD_do_table[LLD_DO_R_LINE].value = !LLD_do_table[LLD_DO_R_LINE].value;
 	LLD_do_table[LLD_DO_START_MOTR_RLY].value = !LLD_do_table[LLD_DO_START_MOTR_RLY].value;
+	LLD_do_table[LLD_DO_VIS_SWITCH].value = !LLD_do_table[LLD_DO_VIS_SWITCH].value;
 	etc_sig.etc_direction  = ~etc_sig.etc_direction ;
 }
 
@@ -384,6 +385,7 @@ void HLS_ini(void)
 	LLD_do_table[LLD_DO_AC_CLUTCH].value = false;
 	LLD_do_table[LLD_DO_R_LINE].value = true;
 	LLD_do_table[LLD_DO_START_MOTR_RLY].value = true;
+	LLD_do_table[LLD_DO_VIS_SWITCH].value = true;
 
 	PfKNOC_phi_FinalWindow2Begin = V_CRANK_ANGLEa(0);
 	PfKNOC_phi_FinalWindow2End =  V_CRANK_ANGLEa(24);

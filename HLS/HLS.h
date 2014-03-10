@@ -259,11 +259,6 @@ typedef enum
    LLD_DO07,
    LLD_DO08,
    LLD_DO09,
-   LLD_DO10,
-   LLD_DO11,
-   LLD_DO12,
-   LLD_DO13,
-   LLD_DO14,
    LLD_DO_MAX_CHANNEL 
 }  LLD_DO_T;
 
