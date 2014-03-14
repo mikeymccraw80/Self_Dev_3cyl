@@ -76,7 +76,7 @@ bool                 B_AcOn;
  int8_t IntLcDwnI;
  uint8_t SsCatDwnM;
  uint8_t MxGrdLsaFit_b;
-Freeze_Frame_Elem  DIAG_STATUS_FREEZE_FRAME;
+Freeze_Frame_Elem  DIAG_STATUS_FREEZE_FRAME[3];
 tele_type telem_data;
 uint8_t 	count_DTCs_SID03;
 uint16_t	DTCs_SID03[SY_FCMTSIZE];
@@ -294,7 +294,7 @@ void HLS_ini(void)
 	LLD_di_table[LLD_DI_CAM_1].DebounceTimes = LLD_DI_CAM_1_DebTime;
 	LLD_di_table[LLD_DI_IGN_ON_OFF_SW].DebounceTimes = LLD_DI_IGN_ON_OFF_SW_DebTime ;
 	LLD_di_table[LLD_DI_HEAD_LAMP].DebounceTimes = LLD_DI_HEAD_LAMP_DebTime ;
-
+#if 0
 	/* pulse output enable/disable set */
 	LLD_pwm_out_table[LLD_PWM_O2_HEATER_1].B_enable = true;
 	LLD_pwm_out_table[LLD_PWM_O2_HEATER_2].B_enable = true;
@@ -325,7 +325,7 @@ void HLS_ini(void)
 	LLD_pwm_out_table[LLD_PWM_VVT1].period = 10;
 	LLD_pwm_out_table[LLD_PWM_VVT2].period = 10;
 	LLD_pwm_out_table[LLD_PWM_FUEL_CONSUMPTION].period = 10;
-
+#endif
 
 	/* injection enable set */
 	inj_enable.B_inj_A = (uint8_t)true;

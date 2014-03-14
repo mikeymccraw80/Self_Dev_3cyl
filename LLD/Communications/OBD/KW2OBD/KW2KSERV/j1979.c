@@ -104,7 +104,7 @@ static BYTE                            Vi1979_Mode09_CurrMsgIdx ;
 /*                                                                   */
 /*********************************************************************/
 #define J1979_MODE_01_MSG_LENGTH (2) 
-#define Cy1979_Mode_01_MaxInfoType      (0x50)
+#define Cy1979_Mode_01_MaxInfoType      (0x60)
 #define CyInfoType               (1)
 BYTE    Vy1979_InfoType ;
 
@@ -443,8 +443,8 @@ void J1979Mode2Handler (void)
 			case Cy1979_PID21:
 				/*Freezeframe number*/
 				WrtServiceData( frame_index , Li1979_DataIdx++ ) ;
-				WrtServiceData(  Hi8Of16(DIAG_STATUS_FREEZE_FRAME.Ffm_KmQ6Mil), Li1979_DataIdx++ ) ;
-				WrtServiceData(  Lo8Of16(DIAG_STATUS_FREEZE_FRAME.Ffm_KmQ6Mil) , Li1979_DataIdx++ ) ;
+				WrtServiceData(  Hi8Of16(DIAG_STATUS_FREEZE_FRAME[frame_index].Ffm_KmQ6Mil), Li1979_DataIdx++ ) ;
+				WrtServiceData(  Lo8Of16(DIAG_STATUS_FREEZE_FRAME[frame_index].Ffm_KmQ6Mil) , Li1979_DataIdx++ ) ;
 				break;
 
 			case Cy1979_PID40:
@@ -463,8 +463,8 @@ void J1979Mode2Handler (void)
 			case Cy1979_PID42:
 				/*Freezeframe number*/
 				WrtServiceData( frame_index , Li1979_DataIdx++ ) ;
-				WrtServiceData(  Hi8Of16(DIAG_STATUS_FREEZE_FRAME.Ffm_Ub_b), Li1979_DataIdx++ ) ;
-				WrtServiceData(  Lo8Of16(DIAG_STATUS_FREEZE_FRAME.Ffm_Ub_b) , Li1979_DataIdx++ ) ;
+				WrtServiceData(  Hi8Of16(DIAG_STATUS_FREEZE_FRAME[frame_index].Ffm_Ub_b), Li1979_DataIdx++ ) ;
+				WrtServiceData(  Lo8Of16(DIAG_STATUS_FREEZE_FRAME[frame_index].Ffm_Ub_b) , Li1979_DataIdx++ ) ;
 				break;
 
 			default: 

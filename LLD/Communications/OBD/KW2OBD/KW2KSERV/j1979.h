@@ -138,7 +138,8 @@
 #define Cy1979_PID44             0x44
 #define Cy1979_PID45              0x45
 #define Cy1979_PID46             0x46
-
+#define Cy1979_PID51             0x51
+#define Cy1979_PID5A             0x5A
 
 
 
