@@ -276,76 +276,73 @@ typedef enum {
 }  LLD_PWM_T;
 
 
-typedef enum{
-CYLINDER_0=0,
-CYLINDER_1,
-CYLINDER_2,
-CYLINDER_3
+typedef enum {
+	CYLINDER_0=0,
+	CYLINDER_1,
+	CYLINDER_2,
+	CYLINDER_3
 } current_channel_num;
 
 
+/*the flowing is SAEJ1979 service 0x01 */
 typedef struct {
-	uint8_t  tele_Monitor_status[4];      /*0x01  Monitor status since DTCs cleared */
-	//uint8_t   tele_Monitor_status_2;      /*0x02  Monitor status since DTCs cleared */
-	//uint8_t   tele_Monitor_status_3;      /*0x03  Monitor status since DTCs cleared */
-	//uint8_t   tele_Monitor_status_4;      /*0x04 Monitor status since DTCs cleared */
-	uint16_t tele_Cause_Frame_Pcode;  /* 0x02 DTC that caused required freeze frame data storage */
-	uint8_t  tele_B_FuelStatus;      /* 0x03  fuel supply system status*/		                         
-	uint8_t  tele_CsMaf;	           /* 0x04  Calculated LOAD Value	*/
-	uint8_t  tele_TmLin;   	   /* 0x05  Engine Coolant Temperature	*/
-	uint8_t  tele_fLc;	           /* 0x06  Short Term Fuel Trim Bank 1 	*/
-	uint8_t  tele_fLcAd;	           /* 0x07  Long Term Fuel Trim Bank 1	*/
-	uint8_t  tele_Pmap;	           /* 0x0B  Intake Manifold Absolute Pressure	*/
-	uint16_t tele_N;	           /* 0x0C  Engine RPM	*/
-	uint8_t  tele_Vsp;	           /* 0x0D  Vehicle Speed Sensor	*/
-	uint8_t  tele_IgaOut;	           /* 0x0E  Ignition Timing Advance for #1 Cylinder	*/
-	uint8_t  tele_TaLin;	           /* 0x0F  Intake Air Temperature	*/
-	uint8_t  tele_TpPos;	           /* 0x11  Absolute Throttle Position	*/
-	uint8_t  tele_O2SPos;	           /* 0x13  Location of Oxygen Sensors	*/
-	uint8_t  tele_uLsb;	           /* 0x14  Sensor Output Voltage	*/
-	uint8_t  tele_uLsbfLc;           /* 0x14  Short Term Fuel Trim (B1-S1)	*/
-	uint8_t  tele_uLsa;	           /* 0x15  Sensor Output Voltage	*/
-	uint8_t  tele_uLsafLc;           /* 0x15  Short Term Fuel Trim (B1-S2)	*/
-	uint8_t  tele_obd_Type;          /* 0x1C  OBD requirements to which vehicle is designed 	*/
-	uint16_t tele_tStaEnd;           /* 0x1F  Time Since Engine Start	*/
-	uint16_t tele_KmQ6Mil;           /* 0x21  Distance Travelled While MIL is Activated	*/
-	uint8_t  tele_DuCyPgOut;         /* 0x2E  Command Evaporative Purge	*/
-	uint8_t  tele_fuel;	           /* 0x2F  Fuel Level Input	*/
-	uint8_t  tele_WmuCntVal;         /* 0x30  Number of warm-ups since diagnostic trouble codescleared	*/
-	uint8_t  tele_Pam;	           /* 0x33  Ambient air Pressure	*/
-	uint16_t tele_TcatMain;          /* 0x3C  Catalyst Temperature	*/
-	uint16_t tele_Ub_b;	           /* 0x42  System voltage	*/
-	uint8_t  tele_Tam;	           /* 0x46  Ambient air temperature	*/
-}tele_type;
+	uint8_t  tele_Monitor_status[4];		/* 0x01  Monitor status since DTCs cleared */
+	uint16_t tele_Cause_Frame_Pcode;		/* 0x02 DTC that caused required freeze frame data storage */
+	uint8_t  tele_B_FuelStatus;				/* 0x03  fuel supply system status*/
+	uint8_t  tele_CsMaf;					/* 0x04 Calculated LOAD Value */
+	uint8_t  tele_TmLin;					/* 0x05 Engine Coolant Temperature */
+	uint8_t  tele_fLc;						/* 0x06 Short Term Fuel Trim Bank 1 */
+	uint8_t  tele_fLcAd;					/* 0x07 Long Term Fuel Trim Bank 1 */
+	uint8_t  tele_Pmap;						/* 0x0B Intake Manifold Absolute Pressure */
+	uint16_t tele_N;						/* 0x0C Engine RPM*/
+	uint8_t  tele_Vsp;						/* 0x0D Vehicle Speed Sensor */
+	uint8_t  tele_IgaOut;					/* 0x0E Ignition Timing Advance for #1 Cylinder */
+	uint8_t  tele_TaLin;					/* 0x0F Intake Air Temperature */
+	uint8_t  tele_uLsb;						/* 0x14 Sensor Output Voltage */
+	uint8_t  tele_uLsbfLc;					/* 0x14 Short Term Fuel Trim (B1-S1) */
+	uint8_t  tele_uLsa;						/* 0x15 Sensor Output Voltage */
+	uint8_t  tele_uLsafLc;					/* 0x15 Short Term Fuel Trim (B1-S2) */
+	uint8_t  tele_obd_Type;					/* 0x1C OBD requirements to which vehicle is designed */
+	uint8_t  tele_O2SPos;					/* 0x1D Location of Oxygen Sensors */
+	uint16_t tele_tStaEnd;					/* 0x1F Time Since Engine Start */
+	uint16_t tele_KmQ6Mil;					/* 0x21 Distance Travelled While MIL is Activated */
+	uint8_t  tele_DuCyPgOut;				/* 0x2E Command Evaporative Purge */
+	uint8_t  tele_WmuCntVal;				/* 0x30 Number of warm-ups since diagnostic trouble codescleared */
+	uint8_t  tele_Pam;						/* 0x33 Ambient air Pressure */
+	uint16_t tele_TcatPre_b;				/* 0x3C Catalyst Temperature */
+	uint16_t tele_Ub_b;						/* 0x42 System voltage */
+	uint8_t  tele_TpPos;					/* 0x45 Relaitve throttle position */
+	uint8_t  tele_Tam;						/* 0x46 Ambient air temperature */
+	uint8_t  tele_FuelType;					/* 0x51 Type of fuel currently being utilized by the vehicle */
+	uint8_t  tele_PedPos ;					/* 0x5A Relative accelerate pedal position */
+} tele_type;
 extern tele_type telem_data;
-
 
 /*the flowing is SAEJ1979 service 0x02 */
 typedef struct {
-	uint16_t Ffm_Frame_Pcode;   /* 0x02  indicates no freeze frame data)  */
-	uint8_t  Ffm_B_FuelStatus; /* 0x03fuel supply system status*/                        
-	uint8_t	Ffm_CsMaf;	  /* 0x04	Calculated LOAD Value!	*/
-	uint8_t	Ffm_TmLin;     /* 0x05	Engine Coolant Temperature	*/
-	uint8_t	Ffm_fLc;	      /* 0x06	Short Term Fuel Trim Bank	*/
-	uint8_t	Ffm_fLcAd;     /* 0x07	Long Term Fuel Trim Bank 	*/
-	uint8_t	Ffm_Pmap;      /* 0x0B	Intake Manifold Absolute pressure	*/
-	uint16_t Ffm_N;	      /* 0x0C	Engine RPM	*/
-	uint8_t	Ffm_Vsp;	      /* 0x0D	Vehicle Speed Sensor	*/
-	uint8_t	Ffm_IgaOut;    /* 0x0E	Ignition Timing Advance for #1 Cylinder	*/
-	uint8_t	Ffm_TaLin;	  /* 0x0F	Intake Air Temperature	*/
-	uint8_t	Ffm_TpPos;     /* 0x11	Absolute Throttle Position	*/
-	uint16_t Ffm_KmQ6Mil;  /* 0x21	Distance Travelled While MIL is Activated	*/
-	uint16_t Ffm_Ub_b;	  /* 0x42	System voltage	*/
+	uint16_t Ffm_Frame_Pcode;				/* 0x02 indicates no freeze frame data */
+	uint8_t  Ffm_B_FuelStatus;				/* 0x03 fuel supply system status*/
+	uint8_t  Ffm_CsMaf;						/* 0x04 Calculated LOAD Value! */
+	uint8_t  Ffm_TmLin;						/* 0x05 Engine Coolant Temperature */
+	uint8_t  Ffm_fLc;						/* 0x06 Short Term Fuel Trim Bank */
+	uint8_t  Ffm_fLcAd;						/* 0x07 Long Term Fuel Trim Bank */
+	uint8_t  Ffm_Pmap;						/* 0x0B Intake Manifold Absolute pressure */
+	uint16_t Ffm_N;							/* 0x0C Engine RPM */
+	uint8_t  Ffm_Vsp;						/* 0x0D Vehicle Speed Sensor */
+	uint8_t  Ffm_IgaOut;					/* 0x0E Ignition Timing Advance for #1 Cylinder */
+	uint8_t  Ffm_TaLin;						/* 0x0F Intake Air Temperature */
+	uint8_t  Ffm_TpPos;						/* 0x45 Relative Throttle Position */
+	uint16_t Ffm_KmQ6Mil;					/* 0x21 Distance Travelled While MIL is Activated */
+	uint16_t Ffm_Ub_b;						/* 0x42 System voltage */
+	uint8_t  Ffm_PedPos_b;					/* 0x5A Relative accelerate pedal position */
 } Freeze_Frame_Elem;
-extern Freeze_Frame_Elem  DIAG_STATUS_FREEZE_FRAME;
-
+extern Freeze_Frame_Elem DIAG_STATUS_FREEZE_FRAME[3];
 
 typedef struct {
-	uint8_t   VIN[17];				/*Vehicle Identification Number*/
-	uint8_t   CALID[16];			/*Calibration Identifications*/
-	uint8_t   CVN[4];				/*Calibration Verification Numbers*/
+	uint8_t  VIN[17];						/*Vehicle Identification Number*/
+	uint8_t  CALID[16];						/*Calibration Identifications*/
 }VehicleInformation;
-
+extern VehicleInformation scnVehInfo;
 
 #define SCN_ECUID_SWVERNUM_LENGHT	16
 #define SCN_ECUID_HWVERNUM_LENGHT	4
@@ -364,13 +361,13 @@ typedef struct ECU_Identification {
 extern ECU_Identification scnEcuId;
 
 
-#define			SY_FCMTSIZE			5
+#define			SY_FCMTSIZE			8
 extern uint8_t 	count_DTCs_SID03;				/* DTC counter for service 03 */
 extern uint16_t	DTCs_SID03[SY_FCMTSIZE];		/* DTCs for service 03*/
 
 extern bool	B_DiagInfoClrReq;		/*condition: request to clear diagnostic information */
 
-#define			SY_FCMTSIZE			5
+#define			SY_FCMTSIZE			8
 extern uint8_t 	count_DTCs_SID07;				/* DTC counter for service 07 */
 extern uint16_t	DTCs_SID07[SY_FCMTSIZE];		/* DTCs for service 07*/
 

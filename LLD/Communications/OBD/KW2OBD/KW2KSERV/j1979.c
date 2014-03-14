@@ -189,14 +189,6 @@ void J1979Mode1Handler (void)
 				WrtServiceData( telem_data.tele_TaLin,Li1979_DataIdx++);
 				break;
 
-			case Cy1979_PID11:
-				WrtServiceData( telem_data.tele_TpPos,Li1979_DataIdx++);
-				break;
-
-			case Cy1979_PID13:
-				WrtServiceData( telem_data.tele_O2SPos,Li1979_DataIdx++);
-				break;
-
 			case Cy1979_PID14:
 				WrtServiceData( telem_data.tele_uLsb,Li1979_DataIdx++);
 				WrtServiceData( telem_data.tele_uLsbfLc,Li1979_DataIdx++);
@@ -209,6 +201,10 @@ void J1979Mode1Handler (void)
 
 			case Cy1979_PID1C:
 				WrtServiceData( telem_data.tele_obd_Type,Li1979_DataIdx++);
+				break;
+
+			case Cy1979_PID1D:
+				WrtServiceData( telem_data.tele_O2SPos,Li1979_DataIdx++);
 				break;
 
 			case Cy1979_PID1F:
@@ -237,10 +233,6 @@ void J1979Mode1Handler (void)
 				WrtServiceData( telem_data.tele_DuCyPgOut,Li1979_DataIdx++);
 				break;
 
-			case Cy1979_PID2F:
-				WrtServiceData( telem_data.tele_fuel,Li1979_DataIdx++);
-				break;
-
 			case Cy1979_PID30:
 				WrtServiceData( telem_data.tele_WmuCntVal,Li1979_DataIdx++);
 				break;
@@ -250,8 +242,8 @@ void J1979Mode1Handler (void)
 				break;
 
 			case Cy1979_PID3C:
-				WrtServiceData( Hi8Of16(telem_data.tele_TcatMain),Li1979_DataIdx++);
-				WrtServiceData( Lo8Of16(telem_data.tele_TcatMain),Li1979_DataIdx++);
+				WrtServiceData( Hi8Of16(telem_data.tele_TcatPre_b),Li1979_DataIdx++);
+				WrtServiceData( Lo8Of16(telem_data.tele_TcatPre_b),Li1979_DataIdx++);
 				break;
 
 			case Cy1979_PID40:
@@ -271,8 +263,20 @@ void J1979Mode1Handler (void)
 				WrtServiceData(  Lo8Of16(telem_data.tele_Ub_b),Li1979_DataIdx++);
 				break;
 
+			case Cy1979_PID45:
+				WrtServiceData( telem_data.tele_TpPos,Li1979_DataIdx++);
+				break;
+
 			case Cy1979_PID46:
 				WrtServiceData( telem_data.tele_Tam,Li1979_DataIdx++);
+				break;
+
+			case Cy1979_PID51:
+				WrtServiceData( telem_data.tele_FuelType,Li1979_DataIdx++);
+				break;
+
+			case Cy1979_PID5A:
+				WrtServiceData( telem_data.tele_PedPos,Li1979_DataIdx++);
 				break;
 
 			default: 
@@ -316,31 +320,28 @@ void J1979Mode1Handler (void)
 #define CyReqPIDNumberMode2      (1)
 #define Cy1979_FramePosition     (2)
 #define Cy1979FrameReqZero       (0)
+#define Cy1979FrameReqMax        (3)
 
 void J1979Mode2Handler (void)
 {
-	BYTE LyFound;
-	BYTE Ly1979_MsgIdx ;
-	BYTE Li1979_DataIdx ;
-	Li1979_DataIdx = CyInfoType;
-	LyFound  = 0;
+	BYTE LyFound = 0, Li1979_DataIdx = CyInfoType;
+	BYTE frame_index, info_index;
 
 	if ( GetServiceDataLength() == J1979_MODE_02_MSG_LENGTH ) {
-		Vy1979_InfoType =  GetServiceData(CyInfoType);
+		info_index =  GetServiceData(CyInfoType);
+		frame_index = GetKw2000ServiceData ( Cy1979_FramePosition );
 
-		if( ( Vy1979_InfoType < Cy1979_Mode_01_MaxInfoType )&&
-			(GetKw2000ServiceData ( Cy1979_FramePosition ) == Cy1979FrameReqZero ))
-		{
+		if( ( info_index < Cy1979_Mode_02_MaxInfoType )&& (frame_index < Cy1979FrameReqMax )) {
 			Li1979_DataIdx = 1;
-			WrtServiceData( Vy1979_InfoType , Li1979_DataIdx++ );
+			WrtServiceData( info_index , Li1979_DataIdx++ );
 
 			LyFound = CbTRUE ;
 
-			switch (Vy1979_InfoType) {
+			switch (info_index) {
 
 			case Cy1979_PID00:  /*PID 00*/
 				/*Freezeframe number*/
-				WrtServiceData( Cy1979FrameReqZero , Li1979_DataIdx++ ) ;
+				WrtServiceData( frame_index , Li1979_DataIdx++ ) ;
 				/*support PID(01~08) 01, 02,03, 04,05, 06, 07*/
 				WrtServiceData( 0x7E , Li1979_DataIdx++ ) ;
 				/*support PID(09~10) 0B, 0C,0D, 0E,0F*/
@@ -353,82 +354,82 @@ void J1979Mode2Handler (void)
 
 			case Cy1979_PID02:
 				/*Freezeframe number*/
-				WrtServiceData( Cy1979FrameReqZero , Li1979_DataIdx++ ) ;
-				WrtServiceData( Hi8Of16(DIAG_STATUS_FREEZE_FRAME.Ffm_Frame_Pcode), Li1979_DataIdx++ ) ;
-				WrtServiceData( Lo8Of16(DIAG_STATUS_FREEZE_FRAME.Ffm_Frame_Pcode) , Li1979_DataIdx++ ) ;
+				WrtServiceData( frame_index , Li1979_DataIdx++ ) ;
+				WrtServiceData( Hi8Of16(DIAG_STATUS_FREEZE_FRAME[frame_index].Ffm_Frame_Pcode), Li1979_DataIdx++ ) ;
+				WrtServiceData( Lo8Of16(DIAG_STATUS_FREEZE_FRAME[frame_index].Ffm_Frame_Pcode) , Li1979_DataIdx++ ) ;
 				break;
 
 			case Cy1979_PID03:
 				/*Freezeframe number*/
-				WrtServiceData( Cy1979FrameReqZero , Li1979_DataIdx++ ) ;
-				WrtServiceData( DIAG_STATUS_FREEZE_FRAME.Ffm_B_FuelStatus, Li1979_DataIdx++ ) ;
+				WrtServiceData( frame_index , Li1979_DataIdx++ ) ;
+				WrtServiceData( DIAG_STATUS_FREEZE_FRAME[frame_index].Ffm_B_FuelStatus, Li1979_DataIdx++ ) ;
 				//  WrtServiceData( 0x00 , Li1979_DataIdx++ ) ;
 				break;
 
 			case Cy1979_PID04:
 				/*Freezeframe number*/
-				WrtServiceData( Cy1979FrameReqZero , Li1979_DataIdx++ ) ;
-				WrtServiceData( DIAG_STATUS_FREEZE_FRAME.Ffm_CsMaf, Li1979_DataIdx++ ) ;
+				WrtServiceData( frame_index , Li1979_DataIdx++ ) ;
+				WrtServiceData( DIAG_STATUS_FREEZE_FRAME[frame_index].Ffm_CsMaf, Li1979_DataIdx++ ) ;
 				break;
 
 			case Cy1979_PID05:
 				/*Freezeframe number*/
-				WrtServiceData( Cy1979FrameReqZero , Li1979_DataIdx++ ) ;
-				WrtServiceData( DIAG_STATUS_FREEZE_FRAME.Ffm_TmLin, Li1979_DataIdx++ ) ;
+				WrtServiceData( frame_index , Li1979_DataIdx++ ) ;
+				WrtServiceData( DIAG_STATUS_FREEZE_FRAME[frame_index].Ffm_TmLin, Li1979_DataIdx++ ) ;
 				break;
 
 			case Cy1979_PID06:
 				/*Freezeframe number*/
-				WrtServiceData( Cy1979FrameReqZero , Li1979_DataIdx++ ) ;
-				WrtServiceData( DIAG_STATUS_FREEZE_FRAME.Ffm_fLc, Li1979_DataIdx++ ) ;
+				WrtServiceData( frame_index , Li1979_DataIdx++ ) ;
+				WrtServiceData( DIAG_STATUS_FREEZE_FRAME[frame_index].Ffm_fLc, Li1979_DataIdx++ ) ;
 				break;
 
 			case Cy1979_PID07:
 				/*Freezeframe number*/
-				WrtServiceData( Cy1979FrameReqZero , Li1979_DataIdx++ ) ;
-				WrtServiceData( DIAG_STATUS_FREEZE_FRAME.Ffm_fLcAd, Li1979_DataIdx++ ) ;
+				WrtServiceData( frame_index , Li1979_DataIdx++ ) ;
+				WrtServiceData( DIAG_STATUS_FREEZE_FRAME[frame_index].Ffm_fLcAd, Li1979_DataIdx++ ) ;
 				break;
 
 			case Cy1979_PID0B:
 				/*Freezeframe number*/
-				WrtServiceData( Cy1979FrameReqZero , Li1979_DataIdx++ ) ;
-				WrtServiceData( DIAG_STATUS_FREEZE_FRAME.Ffm_Pmap, Li1979_DataIdx++ ) ;
+				WrtServiceData( frame_index , Li1979_DataIdx++ ) ;
+				WrtServiceData( DIAG_STATUS_FREEZE_FRAME[frame_index].Ffm_Pmap, Li1979_DataIdx++ ) ;
 				break;
 
 			case Cy1979_PID0C:
 				/*Freezeframe number*/
-				WrtServiceData( Cy1979FrameReqZero , Li1979_DataIdx++ ) ;
-				WrtServiceData(  Hi8Of16(DIAG_STATUS_FREEZE_FRAME.Ffm_N), Li1979_DataIdx++ ) ;
-				WrtServiceData(  Lo8Of16(DIAG_STATUS_FREEZE_FRAME.Ffm_N) , Li1979_DataIdx++ ) ;
+				WrtServiceData( frame_index , Li1979_DataIdx++ ) ;
+				WrtServiceData(  Hi8Of16(DIAG_STATUS_FREEZE_FRAME[frame_index].Ffm_N), Li1979_DataIdx++ ) ;
+				WrtServiceData(  Lo8Of16(DIAG_STATUS_FREEZE_FRAME[frame_index].Ffm_N) , Li1979_DataIdx++ ) ;
 				break;
 
 			case Cy1979_PID0D:
 				/*Freezeframe number*/
-				WrtServiceData( Cy1979FrameReqZero , Li1979_DataIdx++ ) ;
-				WrtServiceData( DIAG_STATUS_FREEZE_FRAME.Ffm_Vsp, Li1979_DataIdx++ ) ;
+				WrtServiceData( frame_index , Li1979_DataIdx++ ) ;
+				WrtServiceData( DIAG_STATUS_FREEZE_FRAME[frame_index].Ffm_Vsp, Li1979_DataIdx++ ) ;
 				break;
 
 			case Cy1979_PID0E:
 				/*Freezeframe number*/
-				WrtServiceData( Cy1979FrameReqZero , Li1979_DataIdx++ ) ;
-				WrtServiceData( DIAG_STATUS_FREEZE_FRAME.Ffm_IgaOut, Li1979_DataIdx++ ) ;
+				WrtServiceData( frame_index , Li1979_DataIdx++ ) ;
+				WrtServiceData( DIAG_STATUS_FREEZE_FRAME[frame_index].Ffm_IgaOut, Li1979_DataIdx++ ) ;
 				break;
 
 			case Cy1979_PID0F:
 				/*Freezeframe number*/
-				WrtServiceData( Cy1979FrameReqZero , Li1979_DataIdx++ ) ;
-				WrtServiceData( DIAG_STATUS_FREEZE_FRAME.Ffm_TaLin, Li1979_DataIdx++ ) ;
+				WrtServiceData( frame_index , Li1979_DataIdx++ ) ;
+				WrtServiceData( DIAG_STATUS_FREEZE_FRAME[frame_index].Ffm_TaLin, Li1979_DataIdx++ ) ;
 				break;
 
 			case Cy1979_PID11:
 				/*Freezeframe number*/
-				WrtServiceData( Cy1979FrameReqZero , Li1979_DataIdx++ ) ;
-				WrtServiceData( DIAG_STATUS_FREEZE_FRAME.Ffm_TpPos, Li1979_DataIdx++ ) ;
+				WrtServiceData( frame_index , Li1979_DataIdx++ ) ;
+				WrtServiceData( DIAG_STATUS_FREEZE_FRAME[frame_index].Ffm_TpPos, Li1979_DataIdx++ ) ;
 				break;
 
 			case Cy1979_PID20:
 				/*Freezeframe number*/
-				WrtServiceData( Cy1979FrameReqZero , Li1979_DataIdx++ ) ;
+				WrtServiceData( frame_index , Li1979_DataIdx++ ) ;
 				/*support PID(21~28) 21*/
 				WrtServiceData( 0x80 , Li1979_DataIdx++ ) ;
 				/*support PID(29~30) */
@@ -441,14 +442,14 @@ void J1979Mode2Handler (void)
 
 			case Cy1979_PID21:
 				/*Freezeframe number*/
-				WrtServiceData( Cy1979FrameReqZero , Li1979_DataIdx++ ) ;
+				WrtServiceData( frame_index , Li1979_DataIdx++ ) ;
 				WrtServiceData(  Hi8Of16(DIAG_STATUS_FREEZE_FRAME.Ffm_KmQ6Mil), Li1979_DataIdx++ ) ;
 				WrtServiceData(  Lo8Of16(DIAG_STATUS_FREEZE_FRAME.Ffm_KmQ6Mil) , Li1979_DataIdx++ ) ;
 				break;
 
 			case Cy1979_PID40:
 				/*Freezeframe number*/
-				WrtServiceData( Cy1979FrameReqZero , Li1979_DataIdx++ ) ;
+				WrtServiceData( frame_index , Li1979_DataIdx++ ) ;
 				/*support PID(41~48) 42*/
 				WrtServiceData( 0x40 , Li1979_DataIdx++ ) ;
 				/*support PID(49~50) */
@@ -461,7 +462,7 @@ void J1979Mode2Handler (void)
 
 			case Cy1979_PID42:
 				/*Freezeframe number*/
-				WrtServiceData( Cy1979FrameReqZero , Li1979_DataIdx++ ) ;
+				WrtServiceData( frame_index , Li1979_DataIdx++ ) ;
 				WrtServiceData(  Hi8Of16(DIAG_STATUS_FREEZE_FRAME.Ffm_Ub_b), Li1979_DataIdx++ ) ;
 				WrtServiceData(  Lo8Of16(DIAG_STATUS_FREEZE_FRAME.Ffm_Ub_b) , Li1979_DataIdx++ ) ;
 				break;
