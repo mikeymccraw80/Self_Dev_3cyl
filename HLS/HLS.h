@@ -137,9 +137,10 @@ typedef struct {
 } sys_status_bits;
 
 typedef struct {
-	uint8_t B_SW_Pwf : 1; /*HLS commanded power fail */
+	uint8_t B_SW_Pwf : 1;       /* HLS commanded power fail */
 	uint8_t B_after_run_end: 1; /* HLS after-run end */
-	uint8_t B_rsv : 6; /* reserved bits */
+	uint8_t B_ResetEtsm: 1;     /* information SW-reset from cyclic RAM-check*/
+	uint8_t B_rsv : 5;          /* reserved bits */
 } sys_cmmd_bits;
 
 /* ETC interface */
@@ -530,8 +531,9 @@ extern uint16_t fLc;
 extern uint16_t fLcAd;
 extern uint8_t Pmap_b;
 extern uint16_t N;
-extern uint8_t Vsp_b;
+extern uint16_t VspRaw;
 extern int8_t IgaOut;
+extern uint8_t TaLin;
 extern uint16_t Tpp;
 extern uint16_t uLsb;
 extern uint16_t uLsa;
@@ -542,13 +544,21 @@ extern uint16_t uTm;
 extern uint8_t uTa;
 extern uint16_t uPmap;
 extern uint16_t uTps;
+extern uint16_t Fl;
 extern uint16_t Ti;
-extern uint8_t NDsrIdc;
+extern uint8_t Nstat;
+extern int16_t dN;
+extern uint16_t dTqLosAd;
+extern int8_t dIgaKncDyn;
+extern uint8_t B_Knk;
 extern uint8_t Ld_b;
 extern uint16_t fAlt;
 extern int16_t  dTqIdcP;
 extern int16_t dTqIdcI;
-extern uint8_t StepPosDsr;
+extern int8_t dIgaKnc[4];
+extern uint16_t FtCntEmis;
+extern uint16_t FtCntEmisCyl[4];
+extern int16_t RounFon;
 extern bool  B_Fan1;
 extern bool  B_Fan2; 
 extern bool  B_AcOn;
@@ -558,7 +568,41 @@ extern uint8_t SsCatDwnM;
 extern uint8_t MxGrdLsaFit_b;
 extern uint8_t Gr;
 extern uint8_t Maf_b;
-extern  unsigned short       Pmap;
+extern uint16_t Pmap;
+extern uint8_t B_LsaRdy;
+extern int8_t Acl_b;
+extern uint16_t TcatInPre;
+extern uint16_t uTp1;
+extern uint16_t uTp2;
+extern uint16_t TpPosDpc;
+extern int16_t TpPos;
+extern uint16_t dpcpids;
+extern uint8_t B_dpcPids;
+extern uint16_t uPed1;
+extern uint16_t uPed2;
+extern uint8_t PedPos_b;
+extern uint16_t AngCamOvlapAdj;
+extern uint8_t fctCamOvlapIn_b;
+extern uint8_t fctCamOvlapOut_b;
+extern uint16_t DyCyPsIn;
+extern uint16_t DyCyPsOut;
+extern uint16_t DuCyPgOut;
+extern int16_t FlPg;
+extern uint16_t fPgRatDsr;
+extern int16_t fPgAdp;
+extern uint8_t Tam;
+extern uint8_t StcEtcAdpt;
+extern uint8_t ScSpr;
+extern uint8_t ScAntiIce;
+extern uint8_t ScLrn;
+extern uint8_t B_LrnSuc;
+extern uint16_t uTp1Lw;
+extern uint16_t uTp2Lw;
+extern uint16_t TpPosNlp;
+extern uint8_t FrBitsEtsm;
+extern uint8_t B_FofEtsm;
+
+ 
 
 /* knock part, defined in HLS */
 extern bool knock_flag_a;
