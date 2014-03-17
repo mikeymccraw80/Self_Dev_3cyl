@@ -131,7 +131,11 @@ void  HAL_OS_10ms_Task(void)
 	}
 	MngChery_Can_10ms();
 	Update_DiagStatus_10ms();
+	
+	/* update vss counter per 10ms */
 	IO_Pulse_VSS_Update_10ms();
+	/* check the hls reset request status */
+	IO_OS_Perform_Reset_Task();
 
 	/* update engine state machine */
 	UpdateVIOS_EngSpdThrsh();
