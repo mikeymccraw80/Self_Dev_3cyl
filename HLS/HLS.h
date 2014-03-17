@@ -479,6 +479,7 @@ extern LLD_pwm_out_item LLD_pwm_out_table[LLD_PWM_MAX_CHANNEL]; /* The index mea
 extern crank_signals crank_sig;
 extern cam_signals cam1_sig, cam2_sig;
 extern veh_spd_signals veh_spd_sig;
+extern uint16_t NumVspPulse;
 extern current_channel_num LLD_cyl_num;
 extern ign_enable_bits ign_enable;
 extern ign_signals ign_sig[LLD_MAX_IGN_CHANNEL];

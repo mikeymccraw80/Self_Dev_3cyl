@@ -146,6 +146,15 @@ void IO_Pulse_VSS_Update_500ms(void)
 }
 
 //=============================================================================
+// IO_Pulse_VSS_Update_10ms
+//=============================================================================
+uint16_t NumVspPulse;
+void IO_Pulse_VSS_Update_10ms(void)
+{
+	NumVspPulse = (uint16_t) HAL_Pulse_Get_VSS_Count();
+}
+
+//=============================================================================
 // IO_Pulse_Update_Function_1ms
 //=============================================================================
 void  IO_Pulse_Update_Function_1ms(void) 
