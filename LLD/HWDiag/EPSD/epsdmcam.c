@@ -56,20 +56,25 @@ T_COUNT_BYTE  VcEPSD_CamCylEventCntr;
 *  Static Data Define
 ******************************************************************************/
 TbBOOLEAN  SbEPSD_CamNoSigEnblCriteriaMet;
-TbBOOLEAN  SbEPSD_CamNoSigTestComplete;
-// #pragma section [nvram] 
-TbBOOLEAN  SbEPSD_CamNoSigTestFailed;
-// #pragma section [] 
+TbBOOLEAN  SbEPSD_Cam1NoSigTestComplete;
+
 TbBOOLEAN  SbEPSD_CamRatnlyEnblCriteriaMet;
-TbBOOLEAN  SbEPSD_CamRatnlyTestComplete;
-// #pragma section [nvram] 
-TbBOOLEAN  SbEPSD_CamRatnlyTestFailed;
-// #pragma section [] 
+TbBOOLEAN  SbEPSD_Cam1RatnlyTestComplete;
 T_COUNT_WORD  ScEPSD_CamNoSigCylEventCntr;
 T_COUNT_WORD  ScEPSD_CamRatnlyFailCntr;
 T_COUNT_WORD  ScEPSD_CamRatnlyPassCntr;
 TbBOOLEAN  SbEPSD_CamNoSigTestComplete_Internal;
 TbBOOLEAN  SbEPSD_CamRatnlyTestComplete_Internal;
+
+TbBOOLEAN  SbEPSD_Cam2NoSigTestComplete;
+TbBOOLEAN  SbEPSD_Cam2RatnlyTestComplete;
+
+#pragma section DATA " " ".nc_nvram"
+TbBOOLEAN  SbEPSD_Cam1RatnlyTestFailed;
+TbBOOLEAN  SbEPSD_Cam1NoSigTestFailed;
+TbBOOLEAN  SbEPSD_Cam2RatnlyTestFailed;
+TbBOOLEAN  SbEPSD_Cam2NoSigTestFailed;
+#pragma section DATA " " ".bss"
 
 /******************************************************************************
 *  Local Function declarations
@@ -112,7 +117,7 @@ void InitEPSD_CamCrankToStall(void)
 {
 	InitEPSD_CamComParms();
 	SbEPSD_CamNoSigTestComplete_Internal = CbFALSE;
-	// SbEPSD_CamNoSigTestFailed = CbFALSE;
+	// SbEPSD_Cam1NoSigTestFailed = CbFALSE;
 	VbEPSD_CamNoSigFailCriteriaMet = CbFALSE;
 
 	ScEPSD_CamNoSigCylEventCntr = V_COUNT_WORD(0);
@@ -142,10 +147,10 @@ void InitEPSD_CamRunToPowerOffDelay(void)
 FAR_COS void InitEPSD_CamRstTo_Keyoff(void)
 {
     SbEPSD_CamNoSigTestComplete_Internal = CbFALSE;
-   // SbEPSD_CamNoSigTestFailed = CbFALSE;
-   // SbEPSD_CamRatnlyTestComplete = CbFALSE;
+   // SbEPSD_Cam1NoSigTestFailed = CbFALSE;
+   // SbEPSD_Cam1RatnlyTestComplete = CbFALSE;
     SbEPSD_CamRatnlyTestComplete_Internal = CbFALSE;
-   // SbEPSD_CamRatnlyTestFailed = CbFALSE;
+   // SbEPSD_Cam1RatnlyTestFailed = CbFALSE;
 
     ScEPSD_CamNoSigCylEventCntr = V_COUNT_WORD(0);
     ScEPSD_CamRatnlyFailCntr = V_COUNT_WORD(0);
@@ -166,10 +171,10 @@ static void InitEPSD_CamComParms(void)
 	SbEPSD_CamNoSigEnblCriteriaMet  = CbFALSE;
 	SbEPSD_CamRatnlyEnblCriteriaMet = CbFALSE;
 	VbEPSD_CamRatnlyFailCriteriaMet = CbFALSE;
-	SbEPSD_CamRatnlyTestComplete    = CbFALSE;
-	SbEPSD_CamNoSigTestComplete = CbFALSE;
+	SbEPSD_Cam1RatnlyTestComplete    = CbFALSE;
+	SbEPSD_Cam1NoSigTestComplete = CbFALSE;
 	SbEPSD_CamRatnlyTestComplete_Internal = CbFALSE;
-	// SbEPSD_CamRatnlyTestFailed      = CbFALSE;
+	// SbEPSD_Cam1RatnlyTestFailed      = CbFALSE;
 
 	ScEPSD_CamRatnlyFailCntr = V_COUNT_WORD(0);
 	ScEPSD_CamRatnlyPassCntr = V_COUNT_WORD(0);
@@ -190,10 +195,10 @@ void MngEPSD_CamEventTasks(void)
 {
 	ProcessEPSD_CamFaultsEnblCriteria();
 	ProcessEPSD_CamNoSigFaultCntrEval();
-	SbEPSD_CamNoSigTestComplete |=SbEPSD_CamNoSigTestComplete_Internal;
+	SbEPSD_Cam1NoSigTestComplete |=SbEPSD_CamNoSigTestComplete_Internal;
 	ProcessEPSD_CamRatnlyFaultEval();
 	ProcessEPSD_CamRatnlyCntrEval();
-	SbEPSD_CamRatnlyTestComplete |= SbEPSD_CamRatnlyTestComplete_Internal;
+	SbEPSD_Cam1RatnlyTestComplete |= SbEPSD_CamRatnlyTestComplete_Internal;
 }
 
 /*****************************************************************************
@@ -223,7 +228,7 @@ static void ProcessEPSD_CamFaultsEnblCriteria(void)
 		}
 
 /* check Cam_Rationality enable conditions */
-		if (SbEPSD_CamNoSigTestFailed == CbFALSE)
+		if (SbEPSD_Cam1NoSigTestFailed == CbFALSE)
 		{
 			SbEPSD_CamRatnlyEnblCriteriaMet = CbTRUE;
 		}
@@ -281,7 +286,7 @@ static void ProcessEPSD_CamNoSigFaultCntrEval(void)
 		ScEPSD_CamNoSigCylEventCntr++;
 		if (ScEPSD_CamNoSigCylEventCntr >= KcEPSD_CamNoSignalCylEvent)
 		{
-			SbEPSD_CamNoSigTestFailed = CbTRUE;
+			SbEPSD_Cam1NoSigTestFailed = CbTRUE;
 			SbEPSD_CamNoSigTestComplete_Internal = CbTRUE;
 			ScEPSD_CamNoSigCylEventCntr = V_COUNT_WORD(0);
 		}
@@ -292,7 +297,7 @@ static void ProcessEPSD_CamNoSigFaultCntrEval(void)
 	}
 	else if (SbEPSD_CamNoSigEnblCriteriaMet)
 	{
-		SbEPSD_CamNoSigTestFailed = CbFALSE;
+		SbEPSD_Cam1NoSigTestFailed = CbFALSE;
 		SbEPSD_CamNoSigTestComplete_Internal = CbTRUE;
 		ScEPSD_CamNoSigCylEventCntr = V_COUNT_WORD(0);
 	}
@@ -366,7 +371,7 @@ static void ProcessEPSD_CamRatnlyCntrEval(void)
 {
 	if (SbEPSD_CamRatnlyTestComplete_Internal)
 	{
-		//SbEPSD_CamRatnlyTestFailed = CbFALSE;
+		//SbEPSD_Cam1RatnlyTestFailed = CbFALSE;
 		SbEPSD_CamRatnlyTestComplete_Internal = CbFALSE;
 		ScEPSD_CamRatnlyFailCntr = V_COUNT_WORD(0);
 		ScEPSD_CamRatnlyPassCntr = V_COUNT_WORD(0);
@@ -378,7 +383,7 @@ static void ProcessEPSD_CamRatnlyCntrEval(void)
 
 		if (ScEPSD_CamRatnlyFailCntr >= KcEPSD_CamRationalityFailThrsh)
 		{
-			SbEPSD_CamRatnlyTestFailed = CbTRUE;
+			SbEPSD_Cam1RatnlyTestFailed = CbTRUE;
 			SbEPSD_CamRatnlyTestComplete_Internal = CbTRUE;
 		}
 		else
@@ -391,7 +396,7 @@ static void ProcessEPSD_CamRatnlyCntrEval(void)
 		ScEPSD_CamRatnlyPassCntr++;
 		if (ScEPSD_CamRatnlyPassCntr >= KcEPSD_CamRationalityPassThrsh)
 		{
-			SbEPSD_CamRatnlyTestFailed = CbFALSE;
+			SbEPSD_Cam1RatnlyTestFailed = CbFALSE;
 			SbEPSD_CamRatnlyTestComplete_Internal = CbTRUE;
 		}
 		else
