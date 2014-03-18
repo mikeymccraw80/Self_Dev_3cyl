@@ -75,6 +75,13 @@ extern const T_COUNT_WORD         KcEMSD_MILDShortLoFailThrsh;
 
 extern const T_COUNT_WORD         KcEMSD_MILDShortSmplThrsh;
 
+/* ===========================================================================
+ * GIS sub-subsystem calibrations export 
+ * ==========================================================================*/
+extern const T_COUNT_WORD         KcEMSD_GISDShortHiFailThrsh;
+extern const T_COUNT_WORD         KcEMSD_GISDShortLoFailThrsh;
+
+extern const T_COUNT_WORD         KcEMSD_GISDShortSmplThrsh;
 
 /* ===========================================================================
  * Fanx sub-subsystem calibrations export 

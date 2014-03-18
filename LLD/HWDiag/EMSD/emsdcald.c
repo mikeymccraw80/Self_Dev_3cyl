@@ -287,6 +287,59 @@ const T_COUNT_WORD      KcEMSD_MILDShortLoFailThrsh  = V_COUNT_WORD (10) ;
 */
 const T_COUNT_WORD      KcEMSD_MILDShortSmplThrsh  = V_COUNT_WORD (20) ;
 
+/*===============================================================================
+ *  VGIS
+ *===============================================================================*/
+/*===========================================================================*/
+
+/* GIS fault determination counter
+ * threshhold equal to or above which a failure is
+ * reported to the Data Manager */
+/*
+*| emsdcald.{
+*|   KcEMSD_GISDShortHiFailThrsh {
+*|     : is_calconst ;
+*|     : description = "GIS PSVI ShortHi Fault determination "
+*| "counter threshhold equal to or above which a ShortHi failure is"
+*| "reported to the Data Manager.";
+*|     : type = fixed.emsd_t_count_word ;
+*|     : units = "count" ;
+*|   }
+*| }
+*/
+const T_COUNT_WORD      KcEMSD_GISDShortHiFailThrsh  = V_COUNT_WORD (10) ;
+/*============================================================================*/
+/* GIS fault determination counter
+ * threshhold equal to or above which a failure is
+ * reported to the Data Manager */
+/*
+*| emsdcald.{
+*|   KcEMSD_MILDShortLoFailThrsh {
+*|     : is_calconst ;
+*|     : description = "GIS PSVI ShortLo Fault determination "
+*| "counter threshhold equal to or below which a ShortLo failure is"
+*| "reported to the Data Manager.";
+*|     : type = fixed.emsd_t_count_word ;
+*|     : units = "count" ;
+*|   }
+*| }
+*/
+const T_COUNT_WORD      KcEMSD_GISDShortLoFailThrsh  = V_COUNT_WORD (10) ;
+/*===========================================================================*/
+/* GIS fault sample counter threshhold equal to
+ * or above which a pass is reported to the Data Manager */
+/*
+*| emsdcald.{
+*|   KcEMSD_GISDShortSmplThrsh  {
+*|     : is_calconst ;
+*|     : description = "GIS PSVI pass counter threshold "
+*| "equal to or above which a pass is reported to the Data Manager.";
+*|     : type = fixed.emsd_t_count_word ;
+*|     : units = "count" ;
+*|   }
+*| }
+*/
+const T_COUNT_WORD      KcEMSD_GISDShortSmplThrsh  = V_COUNT_WORD (20) ;
 
 /*===============================================================================
  *  Fanx diagnostic

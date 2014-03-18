@@ -120,6 +120,14 @@
 #define GetVIOS_MILD_Presnt()              (CbTRUE)
 
 /******************************************************************************
+ * PSVI Fault reading for GIS Lamp diagnostic 
+ ******************************************************************************/
+#define GetVIOS_GISD_FaultShortHi()    (GetShortFault(DISCRETE_OUT_VIS_OUTPUT1))
+#define GetVIOS_GISD_FaultShortLo()    (GetOpenFault(DISCRETE_OUT_VIS_OUTPUT1))
+#define GetVIOS_GISD_FaultAny()        (GetAnyFault(DISCRETE_OUT_VIS_OUTPUT1))
+#define GetVIOS_GISD_Presnt()              (CbTRUE)
+
+/******************************************************************************
  * PSVI Fault reading for MIL Lamp diagnostic 
  ******************************************************************************/
 #define GetVIOS_SVSD_FaultShortHi()    (GetShortFault(DISCRETE_OUT_SES_LAMP))
