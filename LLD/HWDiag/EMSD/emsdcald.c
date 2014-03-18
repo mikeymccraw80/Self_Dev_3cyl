@@ -288,6 +288,60 @@ const T_COUNT_WORD      KcEMSD_MILDShortLoFailThrsh  = V_COUNT_WORD (10) ;
 const T_COUNT_WORD      KcEMSD_MILDShortSmplThrsh  = V_COUNT_WORD (20) ;
 
 /*===============================================================================
+ *  SVS
+ *===============================================================================*/
+/*===========================================================================*/
+
+/* SVS fault determination counter
+ * threshhold equal to or above which a failure is
+ * reported to the Data Manager */
+/*
+*| emsdcald.{
+*|   KcEMSD_MILDShortHiFailThrsh {
+*|     : is_calconst ;
+*|     : description = "SVS PSVI ShortHi Fault determination "
+*| "counter threshhold equal to or above which a ShortHi failure is"
+*| "reported to the Data Manager.";
+*|     : type = fixed.emsd_t_count_word ;
+*|     : units = "count" ;
+*|   }
+*| }
+*/
+const T_COUNT_WORD      KcEMSD_SVSDShortHiFailThrsh  = V_COUNT_WORD (10) ;
+/*============================================================================*/
+/* SVS fault determination counter
+ * threshhold equal to or above which a failure is
+ * reported to the Data Manager */
+/*
+*| emsdcald.{
+*|   KcEMSD_SVSDShortLoFailThrsh {
+*|     : is_calconst ;
+*|     : description = "SVS PSVI ShortLo Fault determination "
+*| "counter threshhold equal to or below which a ShortLo failure is"
+*| "reported to the Data Manager.";
+*|     : type = fixed.emsd_t_count_word ;
+*|     : units = "count" ;
+*|   }
+*| }
+*/
+const T_COUNT_WORD      KcEMSD_SVSDShortLoFailThrsh  = V_COUNT_WORD (10) ;
+/*===========================================================================*/
+/* SVS fault sample counter threshhold equal to
+ * or above which a pass is reported to the Data Manager */
+/*
+*| emsdcald.{
+*|   KcEMSD_MILDShortSmplThrsh  {
+*|     : is_calconst ;
+*|     : description = "SVS PSVI pass counter threshold "
+*| "equal to or above which a pass is reported to the Data Manager.";
+*|     : type = fixed.emsd_t_count_word ;
+*|     : units = "count" ;
+*|   }
+*| }
+*/
+const T_COUNT_WORD      KcEMSD_SVSDShortSmplThrsh  = V_COUNT_WORD (20) ;
+
+/*===============================================================================
  *  VGIS
  *===============================================================================*/
 /*===========================================================================*/

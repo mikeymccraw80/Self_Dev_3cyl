@@ -180,6 +180,8 @@ void HAL_OS_100ms_Task(void)
 		MngEMSD_MainRelay200msTasks();
 		MngEMSD_FuelPump200msTasks();
 		MngEMSD_MIL200msTasks();
+		MngEMSD_SVS200msTasks();
+		MngEMSD_GIS200msTasks();
 		MngEMSD_FanA200msTasks();
 		MngEMSD_FanB200msTasks();
 		MngEMSD_FileROM200msTasks();

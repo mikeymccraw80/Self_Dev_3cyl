@@ -76,6 +76,22 @@ extern const T_COUNT_WORD         KcEMSD_MILDShortLoFailThrsh;
 extern const T_COUNT_WORD         KcEMSD_MILDShortSmplThrsh;
 
 /* ===========================================================================
+ * SVS sub-subsystem calibrations export 
+ * ==========================================================================*/
+extern const T_COUNT_WORD         KcEMSD_SVSDShortHiFailThrsh;
+extern const T_COUNT_WORD         KcEMSD_SVSDShortLoFailThrsh;
+
+extern const T_COUNT_WORD         KcEMSD_SVSDShortSmplThrsh;
+
+/* ===========================================================================
+ * SVS sub-subsystem calibrations export 
+ * ==========================================================================*/
+extern const T_COUNT_WORD         KcEMSD_SVSDShortHiFailThrsh;
+extern const T_COUNT_WORD         KcEMSD_SVSDShortLoFailThrsh;
+
+extern const T_COUNT_WORD         KcEMSD_SVSDShortSmplThrsh;
+
+/* ===========================================================================
  * GIS sub-subsystem calibrations export 
  * ==========================================================================*/
 extern const T_COUNT_WORD         KcEMSD_GISDShortHiFailThrsh;
