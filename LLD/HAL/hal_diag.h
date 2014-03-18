@@ -152,6 +152,17 @@
    ( DD_GetDiscreteDiagStatus(PULSE_OUT_O2_HEATER_12,OUTPUT_OPEN_CKT_FAULT) )
 
 /******************************************************************************
+ * PSVI Fault reading for VVT diagnostic 
+ ******************************************************************************/
+#define GetHWIO_VVT1OutputFault()        (GetAnyFault(PULSE_OUT_VCPS_B1_INTK))
+#define GetHWIO_VVT1OutputFaultShortLo() (GetOpenFault(PULSE_OUT_VCPS_B1_INTK))
+#define GetHWIO_VVT1OutputFaultShortHi() (GetShortFault(PULSE_OUT_VCPS_B1_INTK))
+
+#define GetHWIO_VVT2OutputFault()        (GetAnyFault(PULSE_OUT_VCPS_B1_EXH))
+#define GetHWIO_VVT2OutputFaultShortLo() (GetOpenFault(PULSE_OUT_VCPS_B1_EXH))
+#define GetHWIO_VVT2OutputFaultShortHi() (GetShortFault(PULSE_OUT_VCPS_B1_EXH))
+
+/******************************************************************************
  * IO Diagnostic Clear
  ******************************************************************************/
 #define Clear_IO_Pulse_Diag_EST_A( diagnostic ) \

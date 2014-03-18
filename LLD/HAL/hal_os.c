@@ -24,6 +24,7 @@
 #include "es_knock.h"
 #include "hal_soh.h"
 #include "io_config_siu.h"
+#include "vvtdpapi.h"
 
 //extern void Update_DiagStatus_10ms(void);
 //=============================================================================
@@ -100,6 +101,7 @@ void  HAL_OS_5ms_Task(void)
 		MngEOSD_O2_11_Htr125msTasks();
 		MngEOSD_O2_12_Htr125msTasks();
 		MngPRGD_Purge_125msTasks();
+		MngVVTD_125msTasks();
 		OS_5ms_CNT = 0;
 	}
 }
