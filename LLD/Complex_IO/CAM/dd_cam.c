@@ -8,6 +8,7 @@
 #include "io_config_cam.h"
 #include "io_config_tpu.h"
 #include "io_conversion.h"
+#include "hal_cam.h"
 
 //=============================================================================
 //   Type declaration
@@ -23,6 +24,8 @@ uint8_t        CAM_Stuck;                          // bit packed array
 uint8_t        CAM_EdgeDetected;                   // bit packed array
 bool           CAM_Sensor_State;
 bool           CAM_Previous_State;
+bool           CAM2_Sensor_State;
+bool           CAM2_Previous_State;
 bool           CAM_Not_Synched;
 bool           CAM_Stuck_At_Gap2;
 bool           CAM_Estimated_State;
@@ -161,6 +164,7 @@ void CAM_Update_State( void )
 
 	//Get CAM state at current tooth
 	CAM_Sensor_State = (bool)( cam_history & 0x01);
+	CAM2_Sensor_State = (bool)HAL_Get_CAM_Level(CAM2);;
 	cam_active_state  = CAM_Initialization_Parameters->CAM_Active_State[CAM_Sensor_In_Use];
 
 	CAM_Crank_Number_Gaps_Detected = CRANK_Get_Parameter( CRANK_PARAMETER_NUMBER_OF_GAPS_DETECTED, 0, 0);
@@ -170,6 +174,15 @@ void CAM_Update_State( void )
 	} else {
 		//  CAM_Crank_Number_Gaps_Detected >= 3 || CAM_Crank_Number_Gaps_Detected <= 1
 		CAM_Stuck_At_Gap2 = false;  
+	}
+
+	/* cam2 stuck diagnose */
+	if (CAM2_Sensor_State != CAM2_Previous_State) {
+		CAM_Stuck = Insert_Bits( CAM_Stuck, false, CAM2, 1 );
+		// Update previous cam state with current state
+		CAM2_Previous_State = CAM2_Sensor_State;
+	} else {
+		CAM_Stuck = Insert_Bits( CAM_Stuck, true, CAM2, 1 );
 	}
 
 	if ( use_cam_toggle ) {

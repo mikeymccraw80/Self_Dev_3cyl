@@ -261,8 +261,7 @@ static void ProcessEPSD_CamNoSigFaultCntrEval(void)
  *      successive synchronization checks, therefore the Cam
  *      would have had no signal for two revolutions. */
 
-	if ( (SbEPSD_CamNoSigEnblCriteriaMet))
-		 // && (GetVIOS_CamStuck()) )
+	if (SbEPSD_CamNoSigEnblCriteriaMet && GetVIOS_Cam1Stuck())
 	{
 		VbEPSD_CamNoSigFailCriteriaMet = CbTRUE;
 	}

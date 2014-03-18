@@ -36,6 +36,7 @@
 #include "hal_eng.h"
 #include "hal_diag.h"
 #include "hal_analog.h"
+#include "dd_cam_interface.h"
 
 /* ============================================================================ *\
  * Other header files.
@@ -627,7 +628,8 @@ extern EOBD_PERCENTa   EOBD_CcpDutyCycle;
 // #define GetVIOS_CCESC_Enabled_EMS()           		( EscFlag.EscEnabled )
 // #define GetVIOS_CamOccurred()                           ( CamSensorFlags.CamOccurred )
 #define GetVIOS_CamOccurred()                           (1)
-// #define GetVIOS_CamStuck()                              ( CamSensorFlags.CamStuck )
+#define GetVIOS_Cam1Stuck()                              CAM_Get_Stuck(CAM1)
+#define GetVIOS_Cam2Stuck()                              CAM_Get_Stuck(CAM2)
 
 // #if CcSYST_NUM_OF_CYLINDERS ==3
 // #define  GetFUEL_AllCylsOn()                   (inj_enable.B_inj_A &&\
