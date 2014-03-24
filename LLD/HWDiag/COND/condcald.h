@@ -37,67 +37,7 @@
 #include "condstyp.h"   /* For COND Local type definitions    */
 #include "condptyp.h"   /* For global type definitions        */
 
-#if ( ( config_CPU_Type == option_M68HC12 ) \
- && ( config_Compiler_Vendor == option_COSMIC )  )
-#pragma section const {CAL_COND}
-#endif
 
-
-/******************************************************************************
-* Calibration definitions for condcald.c
-******************************************************************************/
-#if XeSYST_LOAD_CNTRL_TYPE == CeSYST_TORQUE
-extern const T_COUNT_WORD    CAL0ADDR KcCOND_SequencingCntUp;
-extern const T_COUNT_WORD    CAL0ADDR KcCOND_SequencingFailThrsh;
-extern const TwTIME_t_R125ms CAL0ADDR KfCOND_t_SequencingDecTim;
-#endif
-
-#if XeSYST_LOAD_CNTRL_TYPE == CeSYST_ELECTRONIC_THROT
-#if XeSYST_ETC_WatchdogCPU_HW == CeSYST_ETC_WatchdogCPU_Present
-/******************************************************************************
-* Calibration definitions for WD throttle circuit diagnostic (condmwdt.c)
-******************************************************************************/
-extern const T_COUNT_BYTE CAL0ADDR KcCOND_ThrotCircuitFailThrsh;
-extern const T_COUNT_BYTE CAL0ADDR KcCOND_ThrotCircuitSampleThrsh;
-
-extern const T_COUNT_BYTE CAL0ADDR KcCOND_DsblThrotCirFailThrsh;
-extern const T_COUNT_BYTE CAL0ADDR KcCOND_DsblThrotCirSampleThrsh;
-#endif /* XeSYST_ETC_WatchdogCPU_HW */
-
-#endif /* XeSYST_LOAD_CNTRL_TYPE */
-
-/******************************************************************************
-* Calibration definitions for software version diagnostic (condmswv.c)
-******************************************************************************/
-#if XeCOND_ETC_CHECKING_CPU_TYPE == CeCOND_ETC_CHECKING_CPU_IS_PIC
-extern const T_COUNT_BYTE CAL0ADDR KyCOND_ETC_CheckSW_Version1;
-extern const T_COUNT_BYTE CAL0ADDR KyCOND_ETC_CheckSW_Version2;
-extern const T_COUNT_BYTE CAL0ADDR KyCOND_ETC_CheckSW_Version3;
-#endif /* XeCOND_ETC_CHECKING_CPU_TYPE */
-
-#if XeCOND_AD_INPUT_VALIDATION_METHOD == CeCOND_AD_INPUT_CORRELATION
-extern const T_COUNT_WORD         CAL0ADDR  KcCOND_AD_CorrCntDwn;
-extern const T_COUNT_WORD         CAL0ADDR  KcCOND_AD_CorrCntUp;
-extern const T_VOLTb              CAL0ADDR  KfCOND_U_AD_CorrIgnLoDisable;
-extern const T_VOLTb              CAL0ADDR  KfCOND_U_AD_CorrIgnHiDisable;
-extern const T_PERCENTa           CAL0ADDR  KaCOND_Pct_AD_CorrThrshStdy[2];
-extern const T_PERCENTa           CAL0ADDR  KaCOND_K_AD_CorrDynamicGain[2];
-extern const T_PERCENTa           CAL0ADDR  KaCOND_Pct_AD_CorrDecayDelt[2];
-extern const T_COUNT_WORD         CAL0ADDR  KcCOND_AD_CorrSampleThrsh;
-extern const T_COUNT_WORD         CAL0ADDR  KaCOND_AD_CorrCountMaxAnlg[2];
-#elif XeCOND_AD_INPUT_VALIDATION_METHOD == CeCOND_AD_INPUT_RESPONSE
-extern const T_VOLTb              CAL0ADDR  KfCOND_U_AD_RespIgnLoDsbl;
-extern const T_VOLTb              CAL0ADDR  KfCOND_U_AD_RespIgnHiDsbl;
-extern const T_PERCENTa           CAL0ADDR  KfCOND_Pct_AD_RespAPS_PreShortMin;
-extern const T_PERCENTa           CAL0ADDR  KfCOND_Pct_AD_RespAPS_ShortedMax;
-extern const T_PERCENTa           CAL0ADDR  KfCOND_Pct_AD_RespRecDeltaAPS1_Max;
-extern const T_PERCENTa           CAL0ADDR  KfCOND_Pct_AD_RespRecDeltaAPS2_Max;
-extern const T_PERCENTa           CAL0ADDR  KfCOND_Pct_AD_RespDeltaAPS2_Max;
-extern const T_COND_TIME_SEC_0_16 CAL0ADDR  KfCOND_t_AD_RespTstInterval;
-extern const T_COND_TIME_SEC_0_16 CAL0ADDR  KfCOND_t_AD_RespShortSettleMin;
-extern const T_COND_TIME_SEC_0_16 CAL0ADDR  KfCOND_t_AD_RespRecSettleMin;
-extern const TsOBDU_DiagTstCals   CAL0ADDR  KsCOND_AD_RespTstCals;
-#endif /* XeCOND_AD_INPUT_VALIDATION_METHOD */
 
 #if XeSYST_CONTROLLER_DIAG == CeSYST_AVAILABLE
 extern const T_VOLTb      CAL0ADDR KfCOND_U_SystemThrshHi;

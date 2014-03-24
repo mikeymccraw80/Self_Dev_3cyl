@@ -157,6 +157,7 @@ extern void SOH_ETC_Initialize(bool power_on_reset_status);
 extern void SOH_ETC_ISR(void);
 extern void SOH_ETC_Update_Loop_Sequence_Array(const uint8_t ID_tag);
 extern uint16_t SOH_ETC_Get_Fault_Log(void);
+extern void SOH_ETC_Clear_Fault_Log(void);
 
 /*===========================================================================*\
  * Exported Inline Function Definitions and #define Function-Like Macros
