@@ -30,14 +30,8 @@
 /*****************************************************************************
  *  Include Files                                                            *
  *****************************************************************************/
-#include "condfcfg.h"   /* For COND Local Configuration       */
-#include "condfexi.h"   /* For global inputs                  */
-#include "condcald.h"   /* For Definition-Declaration check   */
-#include "condstyp.h"   /* For COND Local type definitions    */
-#include "condptyp.h"   /* For global type definitions        */
+#include "condcald.h" /* For Generic data types                            */
 
-
-#if XeSYST_CONTROLLER_DIAG == CeSYST_AVAILABLE
 /*
 *| condcald.{
 *|   KfCOND_U_SystemThrshHi {
@@ -49,7 +43,7 @@
 *|   }
 *| }
 */
-const T_VOLTb CAL0ADDR KfCOND_U_SystemThrshHi = V_VOLTb(16.0);
+const T_VOLTb KfCOND_U_SystemThrshHi = V_VOLTb(16.0);
 
 /*
 *| condcald.{
@@ -62,66 +56,8 @@ const T_VOLTb CAL0ADDR KfCOND_U_SystemThrshHi = V_VOLTb(16.0);
 *|   }
 *| }
 */
-const T_VOLTb CAL0ADDR KfCOND_U_SystemThrshLo = V_VOLTb(11.0);
+const T_VOLTb KfCOND_U_SystemThrshLo = V_VOLTb(11.0);
 
-/*
-*| condcald.{
-*|   KaCOND_t_EnableDelayTime {
-*|     : is_calconst;
-*|     : description = "Time threshold used to indicate sufficient time to "
-*| "enable a diagnostic";
-*|     : annotation = anns.io_device;
-*|     : type = array.array_dim10_seconds;
-*|     : units = "milliseconds";
-*|   }
-*| }
-*/
-const T_SECONDS CAL0ADDR KaCOND_t_EnableDelayTime[CcCOND_NumOf_IO_Device] =
-{
-
-  V_SECONDS(0.5), V_SECONDS(0.5), V_SECONDS(0.5), V_SECONDS(0.5), V_SECONDS(0.5),
-  V_SECONDS(0.5), V_SECONDS(0.5), V_SECONDS(0.5), V_SECONDS(0.5), V_SECONDS(0.5)
-  };
-
-/*
-*| condcald.{
-*|   KaCOND_Cnt_FailThrsh {
-*|     : is_calconst;
-*|     : description ="COND fail counter threshold equal to or above "
-*| "which a fail is reported to the Data Manager "
-*| "Engineering Range: 0 to 255 Resolution: 1 / Count ";
-*|     : annotation = anns.io_device;
-*|     : type = array.array_dim10_count_byte;
-*|     : units = "";
-*|   }
-*| }
-*/
-const T_COUNT_BYTE CAL0ADDR KaCOND_Cnt_FailThrsh[CcCOND_NumOf_IO_Device] =
-{
-  V_COUNT_BYTE(1), V_COUNT_BYTE(1), V_COUNT_BYTE(1), V_COUNT_BYTE(40), V_COUNT_BYTE(40),
-  V_COUNT_BYTE(40), V_COUNT_BYTE(40), V_COUNT_BYTE(40), V_COUNT_BYTE(40),  V_COUNT_BYTE(1)
-};
-
-/*
-*| condcald.{
-*|   KaCOND_Cnt_SampleThrsh {
-*|     : is_calconst;
-*|     : description ="COND sample counter threshold equal to or above"
-*| "which a fail is reported to the Data Manager "
-*| "Engineering Range: 0 to 255 Resolution: 1 / Count ";
-*|     : annotation = anns.io_device;
-*|     : type = array.array_dim10_count_byte;
-*|     : units = "";
-*|   }
-*| }
-*/
-const T_COUNT_BYTE CAL0ADDR KaCOND_Cnt_SampleThrsh[CcCOND_NumOf_IO_Device] =
-{
-  V_COUNT_BYTE(80), V_COUNT_BYTE(80), V_COUNT_BYTE(80), V_COUNT_BYTE(80), V_COUNT_BYTE(80),
-  V_COUNT_BYTE(80), V_COUNT_BYTE(80), V_COUNT_BYTE(80), V_COUNT_BYTE(80),  V_COUNT_BYTE(80)
-};
-
-#endif
 
 /******************************************************************************
 *

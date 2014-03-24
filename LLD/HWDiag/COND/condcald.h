@@ -32,25 +32,10 @@
 /*****************************************************************************
  *  Include Files                                                            *
  *****************************************************************************/
-#include "condfcfg.h"   /* For COND Local Configuration       */
-#include "condfexi.h"   /* For global inputs                  */
-#include "condstyp.h"   /* For COND Local type definitions    */
-#include "condptyp.h"   /* For global type definitions        */
+#include "t_gentypes.h" /* For Generic data types                            */
 
-
-
-#if XeSYST_CONTROLLER_DIAG == CeSYST_AVAILABLE
-extern const T_VOLTb      CAL0ADDR KfCOND_U_SystemThrshHi;
-extern const T_VOLTb      CAL0ADDR KfCOND_U_SystemThrshLo;
-extern const T_SECONDS    CAL0ADDR KaCOND_t_EnableDelayTime[CcCOND_NumOf_IO_Device];
-extern const T_COUNT_BYTE CAL0ADDR KaCOND_Cnt_FailThrsh[CcCOND_NumOf_IO_Device];
-extern const T_COUNT_BYTE CAL0ADDR KaCOND_Cnt_SampleThrsh[CcCOND_NumOf_IO_Device];
-#endif /*XeSYST_CONTROLLER_DIAG */
-
-#if ( ( config_CPU_Type == option_M68HC12 ) \
- && ( config_Compiler_Vendor == option_COSMIC )  )
- #pragma section const {}
-#endif
+extern const T_VOLTb      KfCOND_U_SystemThrshHi;
+extern const T_VOLTb      KfCOND_U_SystemThrshLo;
 
 #endif
 

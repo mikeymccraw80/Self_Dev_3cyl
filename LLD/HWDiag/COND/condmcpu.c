@@ -16,13 +16,6 @@
  * Static Functions Defined:
  *                    DtrmnCOND_CPU_DiagFaultPresent
  *                    PerformCOND_CPU_ReInitOfCommsWithPIC
- *                    DtrmnCOND_CPU_PIC_CommsVltgStabInitDelay
- *                    PerformCOND_CPU_PIC_DataProcessing
- *                    DtrmnCOND_CPU_PIC_ProblemDetected
- *                    PerformCOND_CheckCPU_PIC_ResetKeyOn
- *                    PerformCOND_CheckCPU_PIC_PwrdnDlyToKeyOn
- *                    PerformCOND_CheckCPU_PIC_ShutDnToKeyOn
- *                    PerformCOND_CheckCPU_PIC_OFVC_Clear
  *                    PerformCOND_CPU_SOH_DataProcessing
  *                    DtrmnCOND_CPU_SOH_ProblemDetected
  *                    InitCOND_CheckCPU_SOH_CommonZero
@@ -54,47 +47,24 @@
 #include "condcald.h"   /* For local calibration declarations */
 #include "hal_soh.h"    /* For SOH_ETC_Clear_Fault_Log()      */
 #include "soh.h"
+#include "hal_eng.h"
 
 /**********************************************************************/
 /* Global Variable Definitions                                        */
 /**********************************************************************/
-#if XeCOND_ETC_CHECKING_CPU_TYPE == CeCOND_ETC_CHECKING_CPU_IS_PIC
-TbBOOLEAN                VOL0ADDR VbCOND_MainCPU_FltByCheckTstFld;
-TbBOOLEAN                VOL0ADDR VbCOND_MainCPU_FltByCheckTstCmp;
-TbBOOLEAN                VOL0ADDR VbCOND_CheckCPU_FltByMainTstFld;
-TbBOOLEAN                VOL0ADDR VbCOND_CheckCPU_FltByMainTstCmp;
-TeSINGLE_TEST_STATUS     VOL0ADDR VeCOND_MainCPU_FltByCkTstStRpt;
-TeSINGLE_TEST_STATUS     VOL0ADDR VeCOND_CheckCPU_FltByMnTstStRpt;
-TsCOND_CheckCPU_Status   VOL0ADDR VsCOND_CheckCPU_Status;
-TeCOND_CHECKCPU_OPSTATUS VOL0ADDR VeCOND_CheckCPU_OpStatus;
-#endif
+#pragma section DATA " " ".nc_nvram"
+WORD         NwCOND_SOH_FltLongTermHist;
+T_COUNT_WORD NcCOND_SOH_FltCntLongTerm;
 
-/**********************************************************************/
-/* Private Variable Definitions                                        */
-/**********************************************************************/
-#if XeCOND_ETC_CHECKING_CPU_TYPE == CeCOND_ETC_CHECKING_CPU_IS_PIC
-static T_COUNT_WORD          VOL0ADDR ScCOND_SU_BattVltgStabilizedCntr;
-#elif XeCOND_ETC_CHECKING_CPU_TYPE == CeCOND_ETC_CHECKING_CPU_IS_SOH
-static TbBOOLEAN             VOL0ADDR SbCOND_SOH_MainCPU_Flt;
-static TbBOOLEAN             VOL0ADDR SbCOND_SOH_CommFlt;
-static TbBOOLEAN             VOL0ADDR SbCOND_SOH_CheckingCPU_Flt;
-static TbBOOLEAN             VOL0ADDR SbCOND_SOH_FltPrsnt;
+TbBOOLEAN    SbCOND_SOH_MainCPU_Flt;
+TbBOOLEAN    SbCOND_SOH_CommFlt;
+TbBOOLEAN    SbCOND_SOH_CheckingCPU_Flt;
+TbBOOLEAN    SbCOND_SOH_FltPrsnt;
+#pragma section DATA " " ".bss"
 
-static TbBOOLEAN             VOL0ADDR SbCOND_SOH_MainCPU_TstFld;
-static TbBOOLEAN             VOL0ADDR SbCOND_SOH_MainCPU_TstCmp;
-static TbBOOLEAN             VOL0ADDR SbCOND_SOH_CommTstFld;
-static TbBOOLEAN             VOL0ADDR SbCOND_SOH_CommTstCmp;
-static TbBOOLEAN             VOL0ADDR SbCOND_SOH_CheckingCPU_TstFld;
-static TbBOOLEAN             VOL0ADDR SbCOND_SOH_CheckingCPU_TstCmp;
-
-static TeSINGLE_TEST_STATUS  VOL0ADDR SeCOND_SOH_MainCPU_TstStRpt;
-static TeSINGLE_TEST_STATUS  VOL0ADDR SeCOND_SOH_CommTstStRpt;
-static TeSINGLE_TEST_STATUS  VOL0ADDR SeCOND_SOH_CheckingCPU_TstStRpt;
-#endif
-
-/**********************************************************************/
-/* Function Definitions                                               */
-/**********************************************************************/
+TbBOOLEAN    SbCOND_SOH_MainCPU_TstCmp;
+TbBOOLEAN    SbCOND_SOH_CommTstCmp;
+TbBOOLEAN    SbCOND_SOH_CheckingCPU_TstCmp;
 
 /******************************************************************************
  *
@@ -115,17 +85,15 @@ static void PerformCOND_CPU_SOH_DataProcessing(void)
   /* of the HWIO ETC SOH fault data within the rest of the function   */
   LwCOND_ETC_SOH_FltLog = SOH_ETC_Get_Fault_Log();
 
-  if ( GetVIOS_EngSt_PwrOffDly()
-    && (GetVIOS_PwrdownDelayTimer() > KfCOND_t_PwrDwnClr) )
+  if (VeVIOS_EngSt == CeENG_POWEROFFDELAY)
   {
-    // SbCOND_SOH_MainCPU_Flt     = CbFALSE;
-    // SbCOND_SOH_CommFlt         = CbFALSE;
-    // SbCOND_SOH_CheckingCPU_Flt = CbFALSE;
+    SbCOND_SOH_MainCPU_Flt     = CbFALSE;
+    SbCOND_SOH_CommFlt         = CbFALSE;
+    SbCOND_SOH_CheckingCPU_Flt = CbFALSE;
     
-    // SOH_ETC_Clear_Fault_Log(); 	 /* to clear Soh_FaultLogNVM */
+    SOH_ETC_Clear_Fault_Log(); 	 /* to clear Soh_FaultLogNVM */
   }
-  else if ( GetHWIO_ETC_SOH_FltActnTaken(LwCOND_ETC_SOH_FltLog)
-        && (! GetCOND_MainCPU_ClockPerfTestFailed()) )
+  else if ( GetHWIO_ETC_SOH_FltActnTaken(LwCOND_ETC_SOH_FltLog) )
   {
     if ( GetHWIO_ETC_SOH_Comm_FltPrsnt(LwCOND_ETC_SOH_FltLog)
       && (! SbCOND_SOH_MainCPU_Flt) )
@@ -157,7 +125,7 @@ static void PerformCOND_CPU_SOH_DataProcessing(void)
 
     if ( ! SbCOND_SOH_FltPrsnt )
     {
-      NcCOND_SOH_FltCntLongTerm = INCusp( NcCOND_SOH_FltCntLongTerm );
+      NcCOND_SOH_FltCntLongTerm ++;
     }
 
     SbCOND_SOH_FltPrsnt = CbTRUE;
@@ -166,59 +134,12 @@ static void PerformCOND_CPU_SOH_DataProcessing(void)
   {
     SbCOND_SOH_FltPrsnt = CbFALSE;
   }
+
+  SbCOND_SOH_MainCPU_TstCmp    = CbFALSE;
+  SbCOND_SOH_CommTstCmp   = CbFALSE;
+  SbCOND_SOH_CheckingCPU_TstCmp   = CbFALSE;
 }
 
-/******************************************************************************
- *
- * Function:    DtrmnCOND_CPU_SOH_ProblemDetected
- * Description: This function performs CPU ETC SOH faults determinations.
- *
- * Parameters:  None
- * Return:      None
- *****************************************************************************/
-static void DtrmnCOND_CPU_SOH_ProblemDetected(void)
-{
-  if ( (GetVIOS_EngSt_PwrOffDly())
-     &&(GetVIOS_PwrdownDelayTimer() > KfCOND_t_PwrDwnClr) )
-  {
-    SbCOND_SOH_MainCPU_TstFld     = CbFALSE;
-    SbCOND_SOH_MainCPU_TstCmp     = CbFALSE;
-    SbCOND_SOH_CommTstFld         = CbFALSE;
-    SbCOND_SOH_CommTstCmp         = CbFALSE;
-    SbCOND_SOH_CheckingCPU_TstFld = CbFALSE;
-    SbCOND_SOH_CheckingCPU_TstCmp = CbFALSE;
-  }
-
-  if ( GetDGDM_DTC_FaultType(CeDGDM_COND_ETC_SOH_MainCPU) != CeDGDM_FAULT_TYPE_Z )
-  {
-    DtrmnCOND_CPU_DiagFaultPresent(
-                            &SbCOND_SOH_MainCPU_TstFld,
-                            &SbCOND_SOH_MainCPU_TstCmp,
-                            &SeCOND_SOH_MainCPU_TstStRpt,
-                            SbCOND_SOH_MainCPU_Flt,
-                            CeDGDM_COND_ETC_SOH_MainCPU );
-  }
-
-  if ( GetDGDM_DTC_FaultType(CeDGDM_COND_ETC_SOH_Comm) != CeDGDM_FAULT_TYPE_Z )
-  {
-    DtrmnCOND_CPU_DiagFaultPresent(
-                            &SbCOND_SOH_CommTstFld,
-                            &SbCOND_SOH_CommTstCmp,
-                            &SeCOND_SOH_CommTstStRpt,
-                            SbCOND_SOH_CommFlt,
-                            CeDGDM_COND_ETC_SOH_Comm );
-  }
-
-  if ( GetDGDM_DTC_FaultType(CeDGDM_COND_ETC_SOH_CheckingCPU) != CeDGDM_FAULT_TYPE_Z )
-  {
-    DtrmnCOND_CPU_DiagFaultPresent(
-                            &SbCOND_SOH_CheckingCPU_TstFld,
-                            &SbCOND_SOH_CheckingCPU_TstCmp,
-                            &SeCOND_SOH_CheckingCPU_TstStRpt,
-                            SbCOND_SOH_CheckingCPU_Flt,
-                            CeDGDM_COND_ETC_SOH_CheckingCPU );
-  }
-}
 
 /******************************************************************************
  *
@@ -231,35 +152,13 @@ static void DtrmnCOND_CPU_SOH_ProblemDetected(void)
  *****************************************************************************/
 static void InitCOND_CheckCPU_SOH_CommonZero(void)
 {
-  SbCOND_SOH_MainCPU_Flt       = CbFALSE;
-  SbCOND_SOH_MainCPU_TstFld    = CbFALSE;
+  // SbCOND_SOH_MainCPU_Flt       = CbFALSE;
   SbCOND_SOH_MainCPU_TstCmp    = CbFALSE;
-  SeCOND_SOH_MainCPU_TstStRpt  = CeSINGLE_NULL;
-
-  SbCOND_SOH_CommFlt      = CbFALSE;
-  SbCOND_SOH_CommTstFld   = CbFALSE;
+  // SbCOND_SOH_CommFlt      = CbFALSE;
   SbCOND_SOH_CommTstCmp   = CbFALSE;
-  SeCOND_SOH_CommTstStRpt = CeSINGLE_NULL;
-
-  SbCOND_SOH_CheckingCPU_Flt      = CbFALSE;
-  SbCOND_SOH_CheckingCPU_TstFld   = CbFALSE;
+  // SbCOND_SOH_CheckingCPU_Flt      = CbFALSE;
   SbCOND_SOH_CheckingCPU_TstCmp   = CbFALSE;
-  SeCOND_SOH_CheckingCPU_TstStRpt = CeSINGLE_NULL;
-
-  SbCOND_SOH_FltPrsnt = CbFALSE;
-}
-
-/******************************************************************************
- *
- * Function:    InitCOND_CheckCPU_SOH_CommonNonZero
- * Description: This function contains common COND ETC SOH code
- *               for nonzero-initializations.
- *
- * Parameters:  None
- * Return:      None
- *****************************************************************************/
-INLINE void InitCOND_CheckCPU_SOH_CommonNonZero(void)
-{
+  // SbCOND_SOH_FltPrsnt = CbFALSE;
 }
 
 /******************************************************************************
@@ -271,19 +170,10 @@ INLINE void InitCOND_CheckCPU_SOH_CommonNonZero(void)
  * Parameters:  None
  * Return:      None
  *****************************************************************************/
-static void PerformCOND_CheckCPU_SOH_ResetKeyOn(void)
+void PerformCOND_CheckCPU_SOH_ResetKeyOn(void)
 {
- #if XeSYST_RAM_CLEAR == CeSYST_RAM_CLEAR_UNAVAILABLE
   InitCOND_CheckCPU_SOH_CommonZero();
- #endif
-  InitCOND_CheckCPU_SOH_CommonNonZero();
 
-  if ( GetFILE_NVM_LTM_Failure() && (!GetFILE_EMS_LrnRstRqst()))
-  {
-    NcCOND_SOH_FltCntLongTerm  = V_COUNT_WORD(0);
-    NwCOND_SOH_FltLongTermHist = (WORD )0;
-  }
-  
   SOH_ETC_Clear_Fault_Log(); 	 /* to clear Soh_FaultLogNVM */
 }
 
@@ -296,10 +186,9 @@ static void PerformCOND_CheckCPU_SOH_ResetKeyOn(void)
  * Parameters:  None
  * Return:      None
  *****************************************************************************/
-static void PerformCOND_CheckCPU_SOH_PwrdnDlyToKeyOn(void)
+void PerformCOND_CheckCPU_SOH_PwrdnDlyToKeyOn(void)
 {
   InitCOND_CheckCPU_SOH_CommonZero();
-  InitCOND_CheckCPU_SOH_CommonNonZero();
 }
 
 /******************************************************************************
@@ -311,10 +200,9 @@ static void PerformCOND_CheckCPU_SOH_PwrdnDlyToKeyOn(void)
  * Parameters:  None
  * Return:      None
  *****************************************************************************/
-static void PerformCOND_CheckCPU_SOH_ShutDnToKeyOn(void)
+void PerformCOND_CheckCPU_SOH_ShutDnToKeyOn(void)
 {
   InitCOND_CheckCPU_SOH_CommonZero();
-  InitCOND_CheckCPU_SOH_CommonNonZero();
 }
 
 /******************************************************************************
@@ -326,103 +214,11 @@ static void PerformCOND_CheckCPU_SOH_ShutDnToKeyOn(void)
  * Parameters:  None
  * Return:      None
  *****************************************************************************/
-static void PerformCOND_CheckCPU_SOH_OFVC_Clear(void)
+void PerformCOND_CheckCPU_SOH_OFVC_Clear(void)
 {
   InitCOND_CheckCPU_SOH_CommonZero();
-  InitCOND_CheckCPU_SOH_CommonNonZero();
   
   SOH_ETC_Clear_Fault_Log(); 	 /* to clear Soh_FaultLogNVM */
-}
-
-#endif /* XeCOND_ETC_CHECKING_CPU_TYPE */
-
-/******************************************************************************
- *
- * Function:    PerformCOND_CheckCPU_ResetKeyOn
- * Description: This function defines COND CheckCPU
- *               CONTROLLER_RESET_COMPLETE_To_KEY_ON event handler.
- *
- * Parameters:  None
- * Return:      None
- *****************************************************************************/
-void PerformCOND_CheckCPU_ResetKeyOn(void)
-{
- #if XeCOND_ETC_CHECKING_CPU_TYPE == CeCOND_ETC_CHECKING_CPU_IS_PIC
-  PerformCOND_CheckCPU_PIC_ResetKeyOn();
- #elif XeCOND_ETC_CHECKING_CPU_TYPE == CeCOND_ETC_CHECKING_CPU_IS_SOH
-  PerformCOND_CheckCPU_SOH_ResetKeyOn();
- #endif
-}
-
-/******************************************************************************
- *
- * Function:    PerformCOND_CheckCPU_PwrdnDlyToKeyOn
- * Description: This function defines COND CheckCPU
- *               POWER_OFF_DELAY_To_KEY_ON event handler.
- *
- * Parameters:  None
- * Return:      None
- *****************************************************************************/
-void PerformCOND_CheckCPU_PwrdnDlyToKeyOn(void)
-{
- #if XeCOND_ETC_CHECKING_CPU_TYPE == CeCOND_ETC_CHECKING_CPU_IS_PIC
-  PerformCOND_CheckCPU_PIC_PwrdnDlyToKeyOn();
- #elif XeCOND_ETC_CHECKING_CPU_TYPE == CeCOND_ETC_CHECKING_CPU_IS_SOH
-  PerformCOND_CheckCPU_SOH_PwrdnDlyToKeyOn();
- #endif
-}
-
-/******************************************************************************
- *
- * Function:    PerformCOND_CheckCPU_ShutDnToKeyOn
- * Description: This function defines COND CheckCPU
- *               SHUTDOWN_IN_PROGRESS_To_KEY_ON event handler.
- *
- * Parameters:  None
- * Return:      None
- *****************************************************************************/
-void PerformCOND_CheckCPU_ShutDnToKeyOn(void)
-{
- #if XeCOND_ETC_CHECKING_CPU_TYPE == CeCOND_ETC_CHECKING_CPU_IS_PIC
-  PerformCOND_CheckCPU_PIC_ShutDnToKeyOn();
- #elif XeCOND_ETC_CHECKING_CPU_TYPE == CeCOND_ETC_CHECKING_CPU_IS_SOH
-  PerformCOND_CheckCPU_SOH_ShutDnToKeyOn();
- #endif
-}
-
-/******************************************************************************
- *
- * Function:    PerformCOND_CheckCPU_OFVC_Clear
- * Description: This function defines COND CheckCPU
- *               OFVC_CLEAR event handler.
- *
- * Parameters:  None
- * Return:      None
- *****************************************************************************/
-void PerformCOND_CheckCPU_OFVC_Clear(void)
-{
- #if XeCOND_ETC_CHECKING_CPU_TYPE == CeCOND_ETC_CHECKING_CPU_IS_PIC
-  PerformCOND_CheckCPU_PIC_OFVC_Clear();
- #elif XeCOND_ETC_CHECKING_CPU_TYPE == CeCOND_ETC_CHECKING_CPU_IS_SOH
-  PerformCOND_CheckCPU_SOH_OFVC_Clear();
- #endif
-}
-
-/******************************************************************************
- *
- * Function:    MngCOND_CheckCPU_15p6Tasks
- * Description: This function manages COND CheckCPU 15.6 ms Tasks
- *
- * Parameters:  None
- * Return:      None
- *****************************************************************************/
-void MngCOND_CheckCPU_15p6Tasks(void)
-{
- #if XeCOND_ETC_CHECKING_CPU_TYPE == CeCOND_ETC_CHECKING_CPU_IS_PIC
-  DtrmnCOND_CPU_PIC_CommsVltgStabInitDelay();
-  PerformCOND_CPU_ReInitOfCommsWithPIC();
-  PerformCOND_CPU_PIC_DataProcessing();
- #endif
 }
 
 /******************************************************************************
@@ -435,28 +231,8 @@ void MngCOND_CheckCPU_15p6Tasks(void)
  *****************************************************************************/
 void MngCOND_CheckCPU_31p2Tasks(void)
 {
- #if XeCOND_ETC_CHECKING_CPU_TYPE == CeCOND_ETC_CHECKING_CPU_IS_SOH
   PerformCOND_CPU_SOH_DataProcessing();
-  DtrmnCOND_CPU_SOH_ProblemDetected();
- #endif
 }
-
-/******************************************************************************
- *
- * Function:    MngCOND_CheckCPU_125Tasks
- * Description: This function manages COND CheckCPU 125 ms Tasks
- *
- * Parameters:  None
- * Return:      None
- *****************************************************************************/
-void MngCOND_CheckCPU_125Tasks(void)
-{
- #if XeCOND_ETC_CHECKING_CPU_TYPE == CeCOND_ETC_CHECKING_CPU_IS_PIC
-  DtrmnCOND_CPU_PIC_ProblemDetected();
- #endif
-}
-
-#endif /* XeCOND_ETC_CHECKING_CPU_TYPE != CeCOND_ETC_CHECKING_CPU_IS_NONE */
 
 /******************************************************************************
 *

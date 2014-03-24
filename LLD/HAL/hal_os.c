@@ -25,6 +25,7 @@
 #include "hal_soh.h"
 #include "io_config_siu.h"
 #include "vvtdpapi.h"
+#include "condpapi.h"
 
 //extern void Update_DiagStatus_10ms(void);
 //=============================================================================
@@ -187,6 +188,7 @@ void HAL_OS_100ms_Task(void)
 		MngEMSD_FanA200msTasks();
 		MngEMSD_FanB200msTasks();
 		MngEMSD_FileROM200msTasks();
+		MngCOND_CheckCPU_31p2Tasks();
 	}
 	MngChery_Can_100ms();
 }
