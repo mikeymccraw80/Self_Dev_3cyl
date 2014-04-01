@@ -18,6 +18,11 @@ void MIOS_Interrupt_Clear_Flag(
 void MIOS_Interrupt_Clear_Pending(
    MIOS_Channel_T channel );
 
+void IO_ETC_Init(void)
+{
+	/* synchronize hardware output and etc direction variable */
+	HAL_GPIO_SET_ETCDIR_Enable(!(bool) etc_sig.etc_direction);
+}
 
 //=============================================================================
 // IO_ETC_Update_Function_1msIO_ETC_Update_Function_1ms

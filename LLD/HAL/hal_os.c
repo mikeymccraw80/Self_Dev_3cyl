@@ -14,6 +14,7 @@
 #include "io_interface_gpio.h"
 #include "io_interface_can.h"
 #include "io_interface_cam.h"
+#include "io_interface_etc.h"
 #include "hal_cam.h"
 #include "hal_eng.h"
 #include "emsdpapi.h"
@@ -203,6 +204,8 @@ void HAL_OS_Init_Task(void)
 	//chery init
 	HLS_ini();
 	HLS_inisyn();
+	//init etc direction output
+	IO_ETC_Init();
 	//app fuel setup
 	IO_Fuel_Syn_Init();
 	//app spark setup
