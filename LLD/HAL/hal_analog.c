@@ -250,13 +250,13 @@
 #define QADC_CONVERSION_TOLERANCE (0.05)
 #define QADC_REFERENCE_VOLTAGE (5.0)
 #define QADC_VDD33_VOLTAGE (3.3)
-#define MAX_HALF_WORD (0xFFFF)
+#define MAX_HALF_WORD (0x0FFF)
 
 void HAL_Analog_ADC_Diag_10ms(void)
 {
    static uint16_t LcVDD33_Volt;
 
-   LcVDD33_Volt = HAL_Analog_Get_VDD3V3_Value();
+   LcVDD33_Volt = HAL_Analog_Get_VDD3V3_Value() >> 2;
 
    // if ( (false == QADC.FISR[QADC_FIFO_Get_Index(MTSA_TIME_BASED_FIFO.Configuration)].F.EOQF) ||
    if((LcVDD33_Volt < (uint16_t)(QADC_VDD33_VOLTAGE*MAX_HALF_WORD/QADC_REFERENCE_VOLTAGE*(1-QADC_CONVERSION_TOLERANCE)) ) ||
