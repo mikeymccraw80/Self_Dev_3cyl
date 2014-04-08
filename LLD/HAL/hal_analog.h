@@ -138,6 +138,8 @@
 // HAL_Analog_Get_VDD3V3_Value
 //=============================================================================
   uint16_t HAL_Analog_Get_VDD3V3_Value(void) ;
+  
+void HAL_Analog_ADC_Diag_10ms(void);
 
 #endif
 

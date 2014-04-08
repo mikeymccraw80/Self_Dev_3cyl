@@ -38,6 +38,7 @@
  *  Function Prototypes
  *****************************************************************************/
 void MngCOND_CheckCPU_31p2Tasks(void);
+void MngCOND_ADC0(void);
 
 /*****************************************************************************
  *  Variable/Calibration Exports

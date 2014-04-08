@@ -24,6 +24,7 @@
 #include "epsdpapi.h"
 #include "es_knock.h"
 #include "hal_soh.h"
+#include "hal_analog.h"
 #include "io_config_siu.h"
 #include "vvtdpapi.h"
 #include "condpapi.h"
@@ -105,6 +106,7 @@ void  HAL_OS_5ms_Task(void)
 		MngPRGD_Purge_125msTasks();
 		MngVVTD_125msTasks();
 		OS_5ms_CNT = 0;
+		MngCOND_ADC0();
 	}
 }
 //=============================================================================
@@ -140,6 +142,8 @@ void  HAL_OS_10ms_Task(void)
 	IO_Pulse_VSS_Update_10ms();
 	/* check the hls reset request status */
 	IO_OS_Perform_Reset_Task();
+	/* update analog diagnose */
+	HAL_Analog_ADC_Diag_10ms();
 
 	/* update engine state machine */
 	UpdateVIOS_EngSpdThrsh();
