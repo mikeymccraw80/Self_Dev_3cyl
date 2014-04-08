@@ -33,9 +33,11 @@
  *  Include Files                                                            *
  *****************************************************************************/
 #include "t_gentypes.h" /* For Generic data types                            */
+#include "timepcvc.h"
 
 extern const T_VOLTb      KfCOND_U_SystemThrshHi;
 extern const T_VOLTb      KfCOND_U_SystemThrshLo;
+extern const TwTIME_t_R125ms KfCOND_t_ADC0EnblDlyTmrThrsh;
 
 #endif
 

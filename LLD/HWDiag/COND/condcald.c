@@ -58,6 +58,18 @@ const T_VOLTb KfCOND_U_SystemThrshHi = V_VOLTb(16.0);
 */
 const T_VOLTb KfCOND_U_SystemThrshLo = V_VOLTb(11.0);
 
+/*
+*| condcald.{
+*|   KfCOND_t_ADC0EnblDlyTmrThrsh {
+*|     : is_calconst;
+*|     : description ="Enable delay timer threshold for ADC0.";
+*|     : type = fixed.t_time_sec_p125;
+*|     : units = "sec";
+*|   }
+*| }
+*/
+const TwTIME_t_R125ms KfCOND_t_ADC0EnblDlyTmrThrsh = C_R125ms16(0);
+
 
 /******************************************************************************
 *
