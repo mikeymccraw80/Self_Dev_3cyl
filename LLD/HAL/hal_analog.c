@@ -2,6 +2,7 @@
  * Header Files
 \*===========================================================================*/
 #include "dd_qadc_interface.h"
+#include "hal_diag.h"
 
 //=============================================================================
 // HAL_Analog_Get_ESC1HI_Value
@@ -234,5 +235,37 @@
  {
      return  QADC_Analog_Get_Value(AD_CPUTemp_Channel);
  }
+ 
+//=============================================================================
+// HAL_Analog_Get_VDD3V3_Value
+//=============================================================================
+  uint16_t HAL_Analog_Get_VDD3V3_Value(void)
+  {
+     return  QADC_Analog_Get_Value(AD_VDD3V3_Channel);
+  }
 
+//=============================================================================
+// HAL_Analog_ADC_Diag_10ms()
+//=============================================================================
+#define QADC_CONVERSION_TOLERANCE (0.05)
+#define QADC_REFERENCE_VOLTAGE (5.0)
+#define QADC_VDD33_VOLTAGE (3.3)
+#define MAX_HALF_WORD (0xFFFF)
 
+void HAL_Analog_ADC_Diag_10ms(void)
+{
+   static uint16_t LcVDD33_Volt;
+
+   LcVDD33_Volt = HAL_Analog_Get_VDD3V3_Value();
+
+   // if ( (false == QADC.FISR[QADC_FIFO_Get_Index(MTSA_TIME_BASED_FIFO.Configuration)].F.EOQF) ||
+   if((LcVDD33_Volt < (uint16_t)(QADC_VDD33_VOLTAGE*MAX_HALF_WORD/QADC_REFERENCE_VOLTAGE*(1-QADC_CONVERSION_TOLERANCE)) ) ||
+    (LcVDD33_Volt > (uint16_t)(QADC_VDD33_VOLTAGE*MAX_HALF_WORD/QADC_REFERENCE_VOLTAGE*(1+QADC_CONVERSION_TOLERANCE)) ) )
+   {
+      HAL_Diag.Bits.ADC_AUTOSCAN_ERR = true;
+   }
+   else
+   {
+      // nothing
+   }
+}

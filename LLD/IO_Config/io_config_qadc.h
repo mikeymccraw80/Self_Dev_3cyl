@@ -71,6 +71,7 @@ typedef enum
   AD_HWCFGVI_Channel,
   AD_VCC2_Channel,
   AD_CPUTemp_Channel,
+  AD_VDD3V3_Channel,
   AD_ANALOG_MAX_SIGNAL_NAMES
 
 } AD_Analog_T;

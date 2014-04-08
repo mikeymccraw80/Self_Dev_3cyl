@@ -747,6 +747,22 @@ const ADC_CCMF_T  QADC_CMD_Timebase[AD_ANALOG_MAX_SIGNAL_NAMES]=
    QADC_CHANNEL_CONVERSION_FORMAT_RIGHT_JUSTIFIED_UNSIGNED,   //FMT         
    QADC_CHANNEL_AN128_TEMP_SENSOR,    // CHANNEL 
    0
+},
+
+// AD_VDD3V3_Channel
+{
+   true,    //EOQ      
+   0,    //PAUSE 
+   0,    // REP     
+   0,    //EB   
+   ADC_CONVERTER_1,    //BN    
+   true,   // CAL  
+   QADC_FIFO_4,   //MESSAGE_TAG 
+   QADC_SAMPLE_CYCLES_8,   //LST        
+   0,   //TSR       
+   QADC_CHANNEL_CONVERSION_FORMAT_RIGHT_JUSTIFIED_UNSIGNED,   //FMT         
+   QADC_CHANNEL_AN196_VDD33,    // CHANNEL 
+   0
 }
 
  };

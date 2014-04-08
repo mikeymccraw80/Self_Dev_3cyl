@@ -31,6 +31,38 @@
 #include "dd_vsep_fault_config.h"
 #include "dd_vsep_fault.h"
 
+/*===========================================================================*\
+ * Exported Type Declarations
+\*===========================================================================*/
+typedef union HAL_Diag_Tag
+{
+	uint16_t Word; /* HWIO diagnostic error flag */
+	struct
+	{
+		uint8_t LoByte;
+		uint8_t HiByte;
+	} Bytes;
+	struct
+	{
+		bitfield16_t	DFLASH_SGLBIT_ERR			: 1; /* Dflash Single bit error */
+		bitfield16_t	DFLASH_DBLBIT_ERR			: 1; /* Dflash Double bit error */
+		bitfield16_t	PFLASH_SGLBIT_ERR			: 1; /* Pflash Single bit error */
+		bitfield16_t	PFLASH_DBLBIT_ERR			: 1; /* Pflash Double bit error */
+		bitfield16_t	SRAM_DRAM_PERR				: 1; /* SRAM parity error in Data RAM */
+		bitfield16_t	SRAM_SCRATCHPAD_PERR		: 1; /* SRAM parity error in ScratchPad */
+		bitfield16_t	SRAM_PROGTAG_PERR			: 1; /* SRAM parity error Program Tag */
+		bitfield16_t	SRAM_CANMEM_PERR			: 1; /* SRAM parity error in CAN memory */
+		bitfield16_t	ADC_AUTOSCAN_ERR			: 1; /* ADC Auto-scan error */
+		bitfield16_t	CPU_PLL_CLKERR 				: 1; /* CPU PLL clock (loss lock) error */
+		bitfield16_t	CPU_COP_ERR					: 1; /* CPU COP error */
+		bitfield16_t	EXTERN_COP_ERR				: 1; /* External COP error */
+		bitfield16_t	CPU_COP_TESTED       	: 1; /* CPU COP tested */
+		bitfield16_t	EXTERN_COP_TESTED    	: 1; /* External COP tested */
+		bitfield16_t									: 2;
+	} Bits;
+} HAL_Diag_T;
+
+extern HAL_Diag_T HAL_Diag;
 
 /******************************************************************************
  * To test injectors A,B,C,D 
@@ -272,5 +304,7 @@
  
 
 uint16_t HAL_Diag_Get_L9958_HWDiag_Status(void);
+bool Get_IO_Discrete_Diag_ADC_0(EMS_Diagnostic_T diagnostic);
+void Clear_IO_Discrete_Diag_ADC_0(EMS_Diagnostic_T diagnostic);
  
 #endif
