@@ -30,6 +30,7 @@
 #include "hal.h"
 #include "dd_vsep_fault_config.h"
 #include "dd_vsep_fault.h"
+#include "dd_siu_hwinfo.h"
 
 /*===========================================================================*\
  * Exported Type Declarations
@@ -306,5 +307,8 @@ extern HAL_Diag_T HAL_Diag;
 uint16_t HAL_Diag_Get_L9958_HWDiag_Status(void);
 bool Get_IO_Discrete_Diag_ADC_0(EMS_Diagnostic_T diagnostic);
 void Clear_IO_Discrete_Diag_ADC_0(EMS_Diagnostic_T diagnostic);
+bool Get_IO_Discrete_Diag_CPU_Clock(EMS_Diagnostic_T diagnostic);
+void Clear_IO_Discrete_Diag_CPU_Clock(EMS_Diagnostic_T diagnostic);
+void HAL_ResetDiag_Log_Parameters(HWIO_Reset_Status_T reset_cause, uint32_t reset_address );
  
 #endif

@@ -107,11 +107,21 @@ TbBOOLEAN VOL0ADDR  VbCOND_MainCPU_AD_TestFailed;
 TbBOOLEAN VOL0ADDR  VbCOND_MainCPU_ClockPerfTestFailed;
 TbBOOLEAN VOL0ADDR  VbCOND_ComputerOperatingProperlyFailed;
 
-TbBOOLEAN VOL0ADDR  VbCOND_HWIO_ClockFailed;
-TbBOOLEAN VOL0ADDR  VbCOND_HWIO_ClockTested;
 TbBOOLEAN VOL0ADDR  VbCOND_HWIO_COPFailed;
 TbBOOLEAN VOL0ADDR  VbCOND_HWIO_COPTested;
 #endif
+
+#pragma section DATA " " ".nc_nvram"
+TbBOOLEAN    VbCOND_HWIO_ClockFailed;
+TbBOOLEAN    VbCOND_HWIO_ClockTstComplete;
+#pragma section DATA " " ".bss"
+TbBOOLEAN    VbCOND_HWIO_ClockTested;
+TbBOOLEAN    VbCOND_HWIO_ClockEnblCritMet;
+TbBOOLEAN    VbCOND_HWIO_ClockFailCritMet;
+
+static TeCOND_MainCPUClock_TstEnblStatus  SeCOND_Clock_EnblStatus;
+static TwTIME_t_R125ms                    SfCOND_t_ClockEnblDlyTmr;
+static TbBOOLEAN                          SbCOND_Clock_OneTimeTstCmpt;
 
 #pragma section DATA " " ".nc_nvram"
 TbBOOLEAN    VbCOND_HWIO_ADC0Failed;
@@ -120,8 +130,6 @@ TbBOOLEAN    VbCOND_HWIO_ADC0TstComplete;
 TbBOOLEAN    VbCOND_HWIO_ADC0Tested;
 TbBOOLEAN    VbCOND_HWIO_ADC0EnblCritMet;
 TbBOOLEAN    VbCOND_HWIO_ADC0FailCritMet;
-T_COUNT_WORD VbCOND_HWIO_ADC0FailCntr;
-T_COUNT_WORD VbCOND_HWIO_ADC0SampleCntr;
 
 static TeCOND_ADC_TstEnblStatus  SeCOND_ADC0_EnblStatus;
 static TwTIME_t_R125ms           SfCOND_t_ADC0EnblDlyTmr;
@@ -130,16 +138,9 @@ static TwTIME_t_R125ms           SfCOND_t_ADC0EnblDlyTmr;
 /*****************************************************************************
  *  Static Variable declarations
  *****************************************************************************/
-static TeCOND_MainCPUClock_TstEnblStatus  SeCOND_Clock_EnblStatus;
+
 static TeCOND_COP_TstEnblStatus    SeCOND_COP_EnblStatus;
-
-static TbBOOLEAN SbCOND_Clock_OneTimeTstCmpt;
 static TbBOOLEAN SbCOND_COP_OneTimeTstCmpt;
-
-
-#if XeCOND_STATUS_MEMORY_TYPE == XeCOND_VOLATILE
-static T_COUNT_BYTE              NaCOND_Cnt_FailCntr[CcCOND_NumOf_IO_Device];
-#endif
 
 /*****************************************************************************
  *  Static Function declarations
@@ -169,27 +170,26 @@ void InitCOND_Variables(void)
   VbCOND_HWIO_ADC0EnblCritMet = CbFALSE;
   VbCOND_HWIO_ADC0FailCritMet = CbFALSE;
   VbCOND_HWIO_ADC0TstComplete = CbFALSE;
-  VbCOND_HWIO_ADC0FailCntr    = V_COUNT_WORD(0);
-  VbCOND_HWIO_ADC0SampleCntr  = V_COUNT_WORD(0);
   SeCOND_ADC0_EnblStatus      = CeCOND_ADC_InitialState;
   SfCOND_t_ADC0EnblDlyTmr     = C_R125ms16(0);
 
+  VbCOND_HWIO_ClockFailed     = CbFALSE;
+  VbCOND_HWIO_ClockTstComplete= CbFALSE;
+  VbCOND_HWIO_ClockTested     = CbFALSE;
+  VbCOND_HWIO_ClockEnblCritMet= CbFALSE;
+  VbCOND_HWIO_ClockFailCritMet= CbFALSE;
+  SeCOND_Clock_EnblStatus     = CeCOND_Clock_InitialState;
+  SfCOND_t_ClockEnblDlyTmr    = C_R125ms16(0);
+  SbCOND_Clock_OneTimeTstCmpt = CbFALSE;
+  
 #if 0
   SeCOND_COP_EnblStatus = CeCOND_COP_InitialState;
   NsCOND_COPTstData.TstStRpt = CeSINGLE_NULL;
   NfCOND_t_COPEnblDlyTmr = V_TIME_SEC_P125(0);
   VbCOND_HWIO_COPFailed = CbFALSE;
   VbCOND_HWIO_COPTested = CbFALSE;
-  SeCOND_Clock_EnblStatus = CeCOND_Clock_InitialState;
-  NsCOND_ClockTstData.TstFailed = CbFALSE;
-  NsCOND_ClockTstData.TstStRpt = CeSINGLE_NULL;
-  NfCOND_t_ClockEnblDlyTmr = V_TIME_SEC_P125(0);
   VbCOND_HWIO_ClockFailed = CbFALSE;
   VbCOND_HWIO_ClockTested = CbFALSE;
-
-  VbCOND_MainCPU_AD_TestFailed = CbFALSE;
-  VbCOND_MainCPU_ClockPerfTestFailed = CbFALSE;
-  VbCOND_ComputerOperatingProperlyFailed = CbFALSE;
 #endif
 }
 
@@ -281,7 +281,6 @@ void MngCOND_ADC0(void)
     }
 }
 
-#if 0
 /*****************************************************************************
  * Function:        MngCOND_MainCPUClock
  * Description:     This function is called at 125ms rate for Main CPU Clock diagnostics.
@@ -293,101 +292,50 @@ void MngCOND_MainCPUClock(void)
 {
 
     /* Read THE HWIO Tested and Failed Flags */
-    VbCOND_HWIO_ClockFailed =  GetIO_DiscreteOutputDiagStatus(DEVICE_CPU_CLOCK, OUTPUT_GEN_FLT_PRESENT);
-    VbCOND_HWIO_ClockTested =  GetIO_DiscreteOutputDiagStatus(DEVICE_CPU_CLOCK, OUTPUT_GEN_FLT_TESTED);
+    VbCOND_HWIO_ClockFailed =  Get_IO_Discrete_Diag_CPU_Clock(OUTPUT_GEN_FLT_PRESENT);
+    VbCOND_HWIO_ClockTested =  Get_IO_Discrete_Diag_CPU_Clock(OUTPUT_GEN_FLT_TESTED);
 
-    EvalCOND_Clock_EnblCritMet();
-
-    if(NsCOND_ClockTstData.EnblCritMet)
-    {
-       EvalCOND_Clock_FailCritMet();
-       SbCOND_Clock_OneTimeTstCmpt = CbTRUE;
-       ProcessOBDU_StandardAlgorithm (CeDGDM_COND_ClockFault,
-                                   &NsCOND_ClockTstData,
-                                   &KaCOND_ClockSampleFailCtrThrsh,
-                                   CbTRUE);
-       /* RESET THE HWIO TESTED AND FAILED FLAGS*/
-       VbCOND_HWIO_ClockFailed = CbFALSE;
-       VbCOND_HWIO_ClockTested = CbFALSE;
-        
-        /* CLEAR HWIO FLAGS */
-       ClearIO_DiscreteOutputDiagStatus(DEVICE_CPU_CLOCK, OUTPUT_GEN_FLT_PRESENT);
-       ClearIO_DiscreteOutputDiagStatus(DEVICE_CPU_CLOCK, OUTPUT_GEN_FLT_TESTED);
-       VbCOND_MainCPU_ClockPerfTestFailed = (TbBOOLEAN)(NsCOND_ClockTstData.TstFailed);
+   /* Eval enable criteria */
+    if(!SbCOND_Clock_OneTimeTstCmpt) {
+        if(CeIGN_ON == GetVIOS_IgnSt()) {
+            if(VbCOND_HWIO_ClockTested) {
+                 if(SfCOND_t_ClockEnblDlyTmr >= KfCOND_t_ClockEnblDlyTmrThrsh) {
+                    VbCOND_HWIO_ClockEnblCritMet = CbTRUE;
+                    SeCOND_Clock_EnblStatus = CeCOND_Clock_EnblCritMet;
+                 } else {
+                    SeCOND_Clock_EnblStatus = CeCOND_Clock_DelayTimerActive;
+                    SfCOND_t_ClockEnblDlyTmr = Inc(SfCOND_t_ClockEnblDlyTmr);
+                    VbCOND_HWIO_ClockEnblCritMet = CbFALSE;
+                 }
+             } else {
+                    SeCOND_Clock_EnblStatus = CeCOND_Clock_NotTestedByHWIO;
+                    VbCOND_HWIO_ClockEnblCritMet = CbFALSE;
+                    SfCOND_t_ClockEnblDlyTmr = C_R125ms16(0); 
+            }
+        } else {
+            SeCOND_Clock_EnblStatus = CeCOND_Clock_IgnNotOn;
+            VbCOND_HWIO_ClockEnblCritMet = CbFALSE;
+            SfCOND_t_ClockEnblDlyTmr = C_R125ms16(0);
+        }
+    } else {
+        SeCOND_Clock_EnblStatus = CeCOND_Clock_TestComplete;
+        VbCOND_HWIO_ClockEnblCritMet = CbFALSE;
+        SfCOND_t_ClockEnblDlyTmr = C_R125ms16(0);
     }
 
+    if(VbCOND_HWIO_ClockEnblCritMet) {
+        SbCOND_Clock_OneTimeTstCmpt = CbTRUE;
+
+        /* RESET THE HWIO TESTED AND FAILED FLAGS*/
+        VbCOND_HWIO_ClockTstComplete = VbCOND_HWIO_ClockTested;
+        
+        /* CLEAR HWIO FLAGS */
+       Clear_IO_Discrete_Diag_CPU_Clock(OUTPUT_GEN_FLT_PRESENT);
+       Clear_IO_Discrete_Diag_CPU_Clock(OUTPUT_GEN_FLT_TESTED);
+    }
 }
 
-/*****************************************************************************
- * Function:        EvalCOND_Clock_EnblCritMet
- * Description:     This function checks if enable criteria met for Main CPU Clock diagnostics.
- * Parameters:      None
- * Return:          None
- *****************************************************************************/
-static void EvalCOND_Clock_EnblCritMet(void)
-{
-   /* check if Diagnostic Type Z*/
-   if(GetDGDM_DTC_FaultType(CeDGDM_COND_ClockFault)!= CeDGDM_FAULT_TYPE_Z)
-   {
-       if(!SbCOND_Clock_OneTimeTstCmpt)
-       {
-          if(CeIGN_ON == GetVIOS_IgnSt())
-          {
-              if(VbCOND_HWIO_ClockTested)
-              {
-                 if(NfCOND_t_ClockEnblDlyTmr >= KfCOND_t_ClockEnblDlyTmrThrsh)
-                 {
-                    NsCOND_ClockTstData.EnblCritMet = CbTRUE;
-                    SeCOND_Clock_EnblStatus = CeCOND_Clock_EnblCritMet;
-                 }
-                 else
-                 {
-                    SeCOND_Clock_EnblStatus = CeCOND_Clock_DelayTimerActive;
-                    NfCOND_t_ClockEnblDlyTmr = INCusp(NfCOND_t_ClockEnblDlyTmr);
-                    NsCOND_ClockTstData.EnblCritMet = CbFALSE;
-                 }
-
-              }
-              else
-              {
-                 SeCOND_Clock_EnblStatus = CeCOND_Clock_NotTestedByHWIO;
-                 NsCOND_ClockTstData.EnblCritMet = CbFALSE;
-                 NfCOND_t_ClockEnblDlyTmr = V_TIME_SEC_P125(0); 
-              }
-          }
-          else
-          {
-              SeCOND_Clock_EnblStatus = CeCOND_Clock_IgnNotOn;
-              NsCOND_ClockTstData.EnblCritMet = CbFALSE;
-              NfCOND_t_ClockEnblDlyTmr = V_TIME_SEC_P125(0);
-          }
-       }
-       else
-       {
-          SeCOND_Clock_EnblStatus = CeCOND_Clock_TestComplete;
-          NsCOND_ClockTstData.EnblCritMet = CbFALSE;
-          NfCOND_t_ClockEnblDlyTmr = V_TIME_SEC_P125(0);
-       }
-   }
-   else
-   {
-       SeCOND_Clock_EnblStatus = CeCOND_Clock_DiagTypeZ;
-       NsCOND_ClockTstData.EnblCritMet = CbFALSE;
-       NfCOND_t_ClockEnblDlyTmr = V_TIME_SEC_P125(0);
-   }
-}
-
-/*****************************************************************************
- * Function:        EvalCOND_Clock_FailCritMet
- * Description:     This function checks if fail criteria met for Main CPU Clock diagnostics.
- * Parameters:      None
- * Return:          None
- *****************************************************************************/
-static void EvalCOND_Clock_FailCritMet(void)
-{
-   NsCOND_ClockTstData.FailCritMet = VbCOND_HWIO_ClockFailed;
-}
-
+#if 0
 /*****************************************************************************
  * Function:        MngCOND_MainCPUClock
  * Description:     This function is called at 125ms rate for Watchdog Timer(COP)

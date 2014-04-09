@@ -6,12 +6,17 @@
 
 typedef struct SIU_RESET_Status 
 {
-   bitfield8_t Power_On_Reset    : 1;     // Last reset was an externally triggered power on reset
-   bitfield8_t External_Reset    : 1;     // Last reset was an externally triggered exteranl reset
-   bitfield8_t Loss_Lock_Reset   : 1;     // Last reset was an internally triggered loss of lock reset
-   bitfield8_t Loss_Clock_Reset  : 1;     // Last reset was an internally triggered loss of clock reset
-   bitfield8_t Watchdog_Reset    : 1;     // Last reset was a watchdog triggered reset
-   bitfield8_t CheckStop_Reset   : 1;     // Last reset was a checkstop triggered reset
+   bitfield16_t Power_On_Reset          : 1;     // Last reset was an externally triggered power on reset
+   bitfield16_t External_Reset          : 1;     // Last reset was an externally triggered exteranl reset
+   bitfield16_t Loss_Lock_Reset         : 1;     // Last reset was an internally triggered loss of lock reset
+   bitfield16_t Loss_Clock_Reset        : 1;     // Last reset was an internally triggered loss of clock reset
+   bitfield16_t Watchdog_Reset          : 1;     // Last reset was a watchdog triggered reset
+   bitfield16_t CheckStop_Reset         : 1;     // Last reset was a checkstop triggered reset
+   bitfield16_t SoftwareWDTimer_Reset   : 1;     // Last reset was a Software Watchdog Timer Reset
+   bitfield16_t SoftwareSystem_Reset    : 1;     // Last reset was a Software System Reset
+
+   bitfield16_t SoftwareExternal_Reset  : 1;     // Software External Reset
+   bitfield16_t                         : 7;     // Reserved
 } HWIO_Reset_Status_T;
 
 //===========================================================================

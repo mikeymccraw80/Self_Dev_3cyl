@@ -70,6 +70,18 @@ const T_VOLTb KfCOND_U_SystemThrshLo = V_VOLTb(11.0);
 */
 const TwTIME_t_R125ms KfCOND_t_ADC0EnblDlyTmrThrsh = C_R125ms16(0);
 
+/*
+*| condcald.{
+*|   KfCOND_t_ClockEnblDlyTmrThrsh {
+*|     : is_calconst;
+*|     : description ="Enable delay timer threshold for Main CPU Clock.";
+*|     : type = fixed.t_time_sec_p125;
+*|     : units = "sec";
+*|   }
+*| }
+*/
+const TwTIME_t_R125ms KfCOND_t_ClockEnblDlyTmrThrsh = C_R125ms16(0);
+
 
 /******************************************************************************
 *

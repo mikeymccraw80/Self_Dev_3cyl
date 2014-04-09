@@ -84,6 +84,8 @@ void InitializeHardwareRegisters(void)
 {
 	bool flash_init_sucess;
 
+	Reset_Status = SIU_RESET_Get_Status();
+
 	FMPLL_Initialize_Device();
 
 	// Set the watchdog timeout for 400ms during initialization
@@ -105,8 +107,6 @@ void InitializeHardwareRegisters(void)
 		XBAR_MPC5634M_Initialize_Device();
 	}
 	flash_init_sucess = flash_memory_interface->FLASH_Memory_Initial();
-
-	Reset_Status = SIU_RESET_Get_Status();
 
 	SIU_Initialize_Device();
 	SIU_GPIO_Initialize_Device();
@@ -250,6 +250,8 @@ void RefreshHardwareRegisters(void)
 void InitializeHardwareLast(void)
 {
 	EEPROM_Operation_Status_T op_Return;
+
+	HAL_ResetDiag_Log_Parameters(Reset_Status, 0x41400);
 
 	HAL_GPIO_DI_Active_Status_Init();
 	if(!HAL_GPIO_GET_Reset_DIO_Status()) {
