@@ -32,13 +32,14 @@
 /*****************************************************************************
  *  Include Files                                                            *
  *****************************************************************************/
-#include "t_gentypes.h" /* For Generic data types                            */
+#include "condptyp.h"
 #include "timepcvc.h"
 
 extern const T_VOLTb      KfCOND_U_SystemThrshHi;
 extern const T_VOLTb      KfCOND_U_SystemThrshLo;
 extern const TwTIME_t_R125ms KfCOND_t_ADC0EnblDlyTmrThrsh;
 extern const TwTIME_t_R125ms KfCOND_t_ClockEnblDlyTmrThrsh;
+extern const T_COND_TIME_SEC_0_16 KfCOND_t_AD_RespTstInterval;
 #endif
 
 /******************************************************************************

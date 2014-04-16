@@ -53,6 +53,9 @@ extern TbBOOLEAN    SbCOND_SOH_MainCPU_TstCmp;
 extern TbBOOLEAN    SbCOND_SOH_CommTstCmp;
 extern TbBOOLEAN    SbCOND_SOH_CheckingCPU_TstCmp;
 
+extern TbBOOLEAN    VbCOND_HWIO_ClockFailed;
+#define GetCOND_MainCPU_ClockPerfTestFailed() (VbCOND_HWIO_ClockFailed)
+
 #endif /* CONDPAPI_H */
 
 /******************************************************************************
