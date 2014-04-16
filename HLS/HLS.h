@@ -337,7 +337,7 @@ typedef struct {
 	uint8_t	 Ffm_TpPos;             /* 0x45	Relative Throttle Position	*/
     uint8_t  Ffm_PedPos_b;          /* 0x5A   Relative accelerate pedal position */
 }Freeze_Frame_Elem;										
-extern Freeze_Frame_Elem  DIAG_STATUS_FREEZE_FRAME[3]
+extern Freeze_Frame_Elem  DIAG_STATUS_FREEZE_FRAME[3];
 
 typedef struct {
 	uint8_t  VIN[17];						/*Vehicle Identification Number*/
