@@ -846,7 +846,7 @@ static void CalculateKnockMultiplier( void )
           if ( MAD_Mult_RPM_Timer == 0 )
           {
              EscFlag.MultiplierDeltaRPM = (bitfield8_t) false ;
-             Multiplier_Delta_TPS = false;
+             Multiplier_Delta_RPM = false;
           }
       }
       EscOldMultiplierRPM = ( Hi_Res_Engine_Speed_W() ) ;
