@@ -56,6 +56,18 @@ static uint8_t                SPARK_Set_Min_Angle_For_Rise_InToothCount;
 IO_Spark_Initialization_Parameters_T  *SPARK_Init_Parameters_Ptr;
 
 Crank_Cylinder_T  SPARK_Cylinder_Event_ID_test;
+
+/* ============================================================================ *\
+ *  Local Constant Definitions
+\* ============================================================================ */
+static const uint8_t CeVSEP_EST_CylinderID_Mapping[] = 
+{
+ CRANK_CYLINDER_C,
+ CRANK_CYLINDER_D,
+ CRANK_CYLINDER_A,
+ CRANK_CYLINDER_B
+};
+
 //=============================================================================
 //  Function Definitions
 //=============================================================================
@@ -357,6 +369,7 @@ void SPARK_Set_Min_Duration(
 // SPARK_Set_Duration
 //=============================================================================
 void SPARK_Set_Duration(
+   uint8_t     in_channel,
    uint32_t    in_duration,
    uint8_t     in_time_precision,
    uint8_t     in_time_resolution )
@@ -367,15 +380,15 @@ void SPARK_Set_Duration(
    //the number of extra pulses is reset to zero.
    SPARK_Number_Of_Extra_Pulses = 0;
 
-   SPARK_Duration[0][SPARK_DWELL_INDEX_MAIN_PULSE].on_time = IO_Convert_Time_To_Count(
+   SPARK_Duration[in_channel][SPARK_DWELL_INDEX_MAIN_PULSE].on_time = IO_Convert_Time_To_Count(
       in_duration,
       base_frequency ,
       in_time_precision,
       in_time_resolution );
 
-   if(  SPARK_Duration[0][SPARK_DWELL_INDEX_MAIN_PULSE].on_time > INT24_MAX )
+   if(  SPARK_Duration[in_channel][SPARK_DWELL_INDEX_MAIN_PULSE].on_time > INT24_MAX )
    {
-      SPARK_Duration[0][SPARK_DWELL_INDEX_MAIN_PULSE].on_time = INT24_MAX;
+      SPARK_Duration[in_channel][SPARK_DWELL_INDEX_MAIN_PULSE].on_time = INT24_MAX;
    }
 
 }
@@ -591,11 +604,11 @@ void SPARK_Force_Pulse(
    // Setup EST channel Select lines
    //C2MIO_EST_Select_Set_Channel
    //EST_Select_Set_Channel(&MTSA_EST_SELECT_DEVICE, (EST_Select_Cylinder_T)in_cylinder);
-   VSEP_EST_Select_Set_Channel( MTSA_CONFIG_VSEP_DEVICE_0, (EST_Select_Cylinder_T)in_cylinder );
+   VSEP_EST_Select_Set_Channel( MTSA_CONFIG_VSEP_DEVICE_0, CeVSEP_EST_CylinderID_Mapping[in_cylinder]);
 
    // Setup pulse width and 0 duration for start now
-   SPARK_Set_Duration( in_duration, in_time_precision, in_time_resolution);
-   MCD5412_Set_Duration(MPTAC_TPU_INDEX,SPARK_Mptac[ spark_select ], SPARK_Duration[0][SPARK_DWELL_INDEX_MAIN_PULSE].on_time );
+   SPARK_Set_Duration(in_cylinder, in_duration, in_time_precision, in_time_resolution);
+   MCD5412_Set_Duration(MPTAC_TPU_INDEX,SPARK_Mptac[ spark_select ], SPARK_Duration[spark_select][SPARK_DWELL_INDEX_MAIN_PULSE].on_time );
 
    // start time cannot equal 0, special case
    start_time = CRANK_Get_Parameter( CRANK_PARAMETER_TIMER_VALUE_RAW, 0, 0 ) - 1;
@@ -729,7 +742,7 @@ static void SPARK_Update_Duration_Values( Spark_Control_Select_T in_spark_select
 uint32_t    base_frequency = TPU_TIMER_Get_Base_Frequency(MPTAC_TPU_INDEX,  SPARK_Mptac[ SPARK_CONTROL_0 ] );
 
    MCD5412_Set_Min_Duration(MPTAC_TPU_INDEX, SPARK_Mptac[ in_spark_select ], SPARK_Min_Duration );
-   MCD5412_Set_Duration(MPTAC_TPU_INDEX, SPARK_Mptac[ in_spark_select ], SPARK_Duration[0][SPARK_DWELL_INDEX_MAIN_PULSE].on_time );
+   MCD5412_Set_Duration(MPTAC_TPU_INDEX, SPARK_Mptac[ in_spark_select ], SPARK_Duration[in_spark_select][SPARK_DWELL_INDEX_MAIN_PULSE].on_time );
    MCD5412_Set_Max_Duration(MPTAC_TPU_INDEX,  SPARK_Mptac[ in_spark_select ], SPARK_Max_Duration );
 
    SPARK_Set_Max_Fall_Angle_InToothCount = (uint8_t)SPARK_DWELL_MPTAC_MAX_FALL_ANGLE_IN_TOOTHCOUNT;
@@ -753,10 +766,10 @@ uint32_t    base_frequency = TPU_TIMER_Get_Base_Frequency(MPTAC_TPU_INDEX,  SPAR
    //If extra pulses are required, update On/Off times for extra pulses
    if(SPARK_Number_Of_Extra_Pulses)
    {	  	
-      MCD5412_Set_Min_Off_Time( MPTAC_TPU_INDEX, SPARK_Mptac[ in_spark_select ], SPARK_Duration[0][SPARK_DWELL_INDEX_MAIN_PULSE].off_time);
-      MCD5412_Set_On_Time_2( MPTAC_TPU_INDEX, SPARK_Duration[0][SPARK_DWELL_INDEX_EXTRA_PULSE_1].on_time);
-      MCD5412_Set_Off_Time_2( MPTAC_TPU_INDEX, SPARK_Duration[0][SPARK_DWELL_INDEX_EXTRA_PULSE_1].off_time );
-      MCD5412_Set_On_Time_3( MPTAC_TPU_INDEX, SPARK_Duration[0][SPARK_DWELL_INDEX_EXTRA_PULSE_2].on_time );
+      MCD5412_Set_Min_Off_Time( MPTAC_TPU_INDEX, SPARK_Mptac[ in_spark_select ], SPARK_Duration[in_spark_select][SPARK_DWELL_INDEX_MAIN_PULSE].off_time);
+      MCD5412_Set_On_Time_2( MPTAC_TPU_INDEX, SPARK_Duration[in_spark_select][SPARK_DWELL_INDEX_EXTRA_PULSE_1].on_time);
+      MCD5412_Set_Off_Time_2( MPTAC_TPU_INDEX, SPARK_Duration[in_spark_select][SPARK_DWELL_INDEX_EXTRA_PULSE_1].off_time );
+      MCD5412_Set_On_Time_3( MPTAC_TPU_INDEX, SPARK_Duration[in_spark_select][SPARK_DWELL_INDEX_EXTRA_PULSE_2].on_time );
    }		 
 }
 
@@ -812,81 +825,8 @@ void SPARK_Process_Interrupt(
    //
    if( SPARK_Enable )
    {
-#if 0
-
-      // Normally, the next spark will be this number of cylinder events away:
-      scheduled_cylinder_events_compensated = SPARK_Control_Select_Max;
-
-      if( SPARK_Spark_Scheduled )
-      {
-         // Cylinder event has NOT occured since last interrupt
-         cylinder_event_complensation     = 0;
-      }
-      else
-      {
-         // Cylinder event HAS occured since last interrupt: decriment the cylinder event
-         cylinder_event_complensation     = -1;
-      }
-
-      // If the spark dwell occurs across a lo res event, the cylinder ID is indexed before
-      // this end of dwell interrupt is serviced.  If this end of dwell interrupt is
-      // serviced before the Lo Res event (i.e. a coil fault that prematurely ends spark)
-      // then the next spark must be setup for the proper cylinder, thus the +1.
-      if ( SPARK_Cylinder_Event_Occured )
-      {
-         if( SPARK_Spark_Scheduled )
-         {
-            SPARK_Cylinder_Event_Occured = false;
-         }
-      }
-      else
-      {
-         cylinder_event_complensation     += 1;
-      }
       // For the diagnostic routine
-      cylinder = CRANK_Increment_Cylinder_ID(
-         SPARK_Cylinder_Event_ID,
-         cylinder_event_complensation );
-
-      // Diagnostic conversion from pulse accumulated angle to Cylinder TDC referenced angle.
-      SPARK_Delivered_End_Angle[cylinder] = SPARK_Convert_PaCounts_To_End_Angle( cylinder_event_complensation, actual_angle_in_pa_counts );
-
-      // For the next scheduled Spark Event
-      scheduled_cylinder_events_compensated += cylinder_event_complensation;
-      cylinder = CRANK_Increment_Cylinder_ID(
-         SPARK_Cylinder_Event_ID,
-         scheduled_cylinder_events_compensated );
-
-
-      control_select = SPARK_Control_Select_Map[cylinder];
-
-      // If there is a channel without a fault, update its values and set it up:
-      if( SPARK_Get_Channel_Enable( cylinder ) )
-      {
-
-         // Set the channel number in the selected EST Select Device
-         //EST_Select_Set_Channel( &MTSA_EST_SELECT_DEVICE, (EST_Select_Cylinder_T)cylinder );
-         VSEP_EST_Select_Set_Channel(MTSA_CONFIG_VSEP_DEVICE_0,(EST_Select_Cylinder_T)cylinder  );
-
-         // Setup the pulse to be delivered:
-         end_angle = SPARK_Calculate_End_Angle_In_Counts( cylinder, (uint8_t)control_select, SPARK_CALC_POSITION_Isr );
-         SPARK_Schedule_Next_Event( cylinder, end_angle );
-         SPARK_ISR_PulseRequested = true;
-
-      }
-      else
-      {
-         SPARK_Set_Enable( false );
-      }
-
-      // Update the dwell values:
-      SPARK_Update_Duration_Values( control_select );
-
-#endif
-
-      // For the diagnostic routine
-      SPARK_Cylinder_Event_ID_test = CRANK_Increment_Cylinder_ID(
-         SPARK_Cylinder_Event_ID_test, 1    );
+      SPARK_Cylinder_Event_ID_test = CRANK_Increment_Cylinder_ID(SPARK_Cylinder_Event_ID_test, 1);
       cylinder = SPARK_Cylinder_Event_ID_test;
       
       control_select = SPARK_Control_Select_Map[cylinder];
@@ -896,7 +836,7 @@ void SPARK_Process_Interrupt(
 
          // Set the channel number in the selected EST Select Device
          //EST_Select_Set_Channel( &MTSA_EST_SELECT_DEVICE, (EST_Select_Cylinder_T)cylinder );
-         VSEP_EST_Select_Set_Channel(MTSA_CONFIG_VSEP_DEVICE_0,(EST_Select_Cylinder_T)cylinder  );
+         VSEP_EST_Select_Set_Channel(MTSA_CONFIG_VSEP_DEVICE_0, CeVSEP_EST_CylinderID_Mapping[cylinder]);
 
          // Setup the pulse to be delivered:
          end_angle = SPARK_Calculate_End_Angle_In_Counts( cylinder, (uint8_t)control_select, SPARK_CALC_POSITION_Isr );
@@ -971,7 +911,7 @@ void SPARK_Process_Cylinder_Event( void )
                // Put the cylinder ID for this est control to the correct value
                //C2MIO_EST_Select_Set_Channel
                //EST_Select_Set_Channel( &MTSA_EST_SELECT_DEVICE, (EST_Select_Cylinder_T)channel );
-               VSEP_EST_Select_Set_Channel(MTSA_CONFIG_VSEP_DEVICE_0,(EST_Select_Cylinder_T)channel  );
+               VSEP_EST_Select_Set_Channel(MTSA_CONFIG_VSEP_DEVICE_0, CeVSEP_EST_CylinderID_Mapping[channel]);
                end_angle = SPARK_Calculate_End_Angle_In_Counts( channel, (uint8_t)counter, SPARK_CALC_POSITION_Ref );
 		  // Update the end angle information:(
                SPARK_Schedule_Next_Event( channel, end_angle );
@@ -990,51 +930,7 @@ void SPARK_Process_Cylinder_Event( void )
                // Update current spark:
                 SPARK_Update_Current_Pulse( SPARK_Cylinder_Event_ID, 0 );
 
-	   }	
-        #if 0
-         //
-         // If the spark channel's interrupt has not been previously enabled, do it now.
-         //
-         if ( SPARK_ISR_PulseRequested )
-         {
-            SPARK_ISR_PulseRequested = false;
-	      // Update the dwell values:
-	      spark_select =  SPARK_Control_Select_Map[SPARK_Cylinder_Event_ID];
-           // SPARK_Update_Duration_Values( spark_select );
-           /MCD5412_Set_Host_Interrupt_Enable(MPTAC_TPU_INDEX,&TPU,  SPARK_Mptac[0], true );
-            // Update current spark:
-            SPARK_Update_Current_Pulse( SPARK_Cylinder_Event_ID, 0 );
-
-	  
-         }
-         else if ( MCD5412_Get_Host_Interrupt_Enable( MPTAC_TPU_INDEX,&TPU, SPARK_Mptac[ SPARK_Control_Select_Map[SPARK_Cylinder_Event_ID] ] ) == false )
-         {
-            SPARK_Previous_Cylinder_Event_ID = (uint32_t)SPARK_Cylinder_Event_ID;
-            for( counter = 0; counter < SPARK_Control_Select_Max; counter++ )
-            {
-               // Enable interrupts:
-               channel = CRANK_Get_Future_Cylinder_ID( (uint8_t)counter );
-    	       MCD5412_Set_Host_Interrupt_Enable(MPTAC_TPU_INDEX,&TPU, SPARK_Mptac[counter], true );
-               spark_select =  SPARK_Control_Select_Map[channel];
-	       SPARK_Update_Duration_Values(spark_select);
-               // Setup the initial cylinders for normal operation:
-               // Put the cylinder ID for this est control to the correct value
-               //C2MIO_EST_Select_Set_Channel
-               //EST_Select_Set_Channel( &MTSA_EST_SELECT_DEVICE, (EST_Select_Cylinder_T)channel );
-               VSEP_EST_Select_Set_Channel(MTSA_CONFIG_VSEP_DEVICE_0,(EST_Select_Cylinder_T)channel  );
-               end_angle = SPARK_Calculate_End_Angle_In_Counts( channel, (uint8_t)counter, SPARK_CALC_POSITION_Ref );
-		  // Update the end angle information:(
-               SPARK_Schedule_Next_Event( channel, end_angle );
-
-            }
-
-         }
-         else
-         {
-            // nothing
-         }
-
-	#endif	 
+	   }
       }
       else
       {
@@ -1042,26 +938,6 @@ void SPARK_Process_Cylinder_Event( void )
          SPARK_Cylinder_Event_Occured = false;
       }
    }
-        #if 0
-   if ( SPARK_Cylinder_Event_ID == CRANK_CYLINDER_A )
-   {
-      cylinder_event_id = SPARK_Number_Of_Cylinders;
-   }
-   else
-   {
-      cylinder_event_id = SPARK_Cylinder_Event_ID;
-   }
-
-   if ( ( cylinder_event_id - SPARK_Previous_Cylinder_Event_ID ) > 1 )
-   {
-      for( counter = 0; counter < SPARK_Control_Select_Max; counter++ )
-      {
-         channel = CRANK_Get_Future_Cylinder_ID( (uint8_t)counter );
-		 //C2MIO_EST_Select_Set_Channel
-         VSEP_EST_Select_Set_Channel( MTSA_CONFIG_VSEP_DEVICE_0, (EST_Select_Cylinder_T)channel );
-      }
-   }
-#endif
    SPARK_Previous_Cylinder_Event_ID = (uint32_t)SPARK_Cylinder_Event_ID;
 
 }
