@@ -369,7 +369,6 @@ void SPARK_Set_Min_Duration(
 // SPARK_Set_Duration
 //=============================================================================
 void SPARK_Set_Duration(
-   uint8_t     in_channel,
    uint32_t    in_duration,
    uint8_t     in_time_precision,
    uint8_t     in_time_resolution )
@@ -380,15 +379,15 @@ void SPARK_Set_Duration(
    //the number of extra pulses is reset to zero.
    SPARK_Number_Of_Extra_Pulses = 0;
 
-   SPARK_Duration[in_channel][SPARK_DWELL_INDEX_MAIN_PULSE].on_time = IO_Convert_Time_To_Count(
+   SPARK_Duration[0][SPARK_DWELL_INDEX_MAIN_PULSE].on_time = IO_Convert_Time_To_Count(
       in_duration,
       base_frequency ,
       in_time_precision,
       in_time_resolution );
 
-   if(  SPARK_Duration[in_channel][SPARK_DWELL_INDEX_MAIN_PULSE].on_time > INT24_MAX )
+   if(  SPARK_Duration[0][SPARK_DWELL_INDEX_MAIN_PULSE].on_time > INT24_MAX )
    {
-      SPARK_Duration[in_channel][SPARK_DWELL_INDEX_MAIN_PULSE].on_time = INT24_MAX;
+      SPARK_Duration[0][SPARK_DWELL_INDEX_MAIN_PULSE].on_time = INT24_MAX;
    }
 
 }
@@ -607,8 +606,8 @@ void SPARK_Force_Pulse(
    VSEP_EST_Select_Set_Channel( MTSA_CONFIG_VSEP_DEVICE_0, CeVSEP_EST_CylinderID_Mapping[in_cylinder]);
 
    // Setup pulse width and 0 duration for start now
-   SPARK_Set_Duration(in_cylinder, in_duration, in_time_precision, in_time_resolution);
-   MCD5412_Set_Duration(MPTAC_TPU_INDEX,SPARK_Mptac[ spark_select ], SPARK_Duration[spark_select][SPARK_DWELL_INDEX_MAIN_PULSE].on_time );
+   SPARK_Set_Duration(in_duration, in_time_precision, in_time_resolution);
+   MCD5412_Set_Duration(MPTAC_TPU_INDEX,SPARK_Mptac[ spark_select ], SPARK_Duration[0][SPARK_DWELL_INDEX_MAIN_PULSE].on_time );
 
    // start time cannot equal 0, special case
    start_time = CRANK_Get_Parameter( CRANK_PARAMETER_TIMER_VALUE_RAW, 0, 0 ) - 1;
@@ -742,7 +741,7 @@ static void SPARK_Update_Duration_Values( Spark_Control_Select_T in_spark_select
 uint32_t    base_frequency = TPU_TIMER_Get_Base_Frequency(MPTAC_TPU_INDEX,  SPARK_Mptac[ SPARK_CONTROL_0 ] );
 
    MCD5412_Set_Min_Duration(MPTAC_TPU_INDEX, SPARK_Mptac[ in_spark_select ], SPARK_Min_Duration );
-   MCD5412_Set_Duration(MPTAC_TPU_INDEX, SPARK_Mptac[ in_spark_select ], SPARK_Duration[in_spark_select][SPARK_DWELL_INDEX_MAIN_PULSE].on_time );
+   MCD5412_Set_Duration(MPTAC_TPU_INDEX, SPARK_Mptac[ in_spark_select ], SPARK_Duration[0][SPARK_DWELL_INDEX_MAIN_PULSE].on_time );
    MCD5412_Set_Max_Duration(MPTAC_TPU_INDEX,  SPARK_Mptac[ in_spark_select ], SPARK_Max_Duration );
 
    SPARK_Set_Max_Fall_Angle_InToothCount = (uint8_t)SPARK_DWELL_MPTAC_MAX_FALL_ANGLE_IN_TOOTHCOUNT;
@@ -766,10 +765,10 @@ uint32_t    base_frequency = TPU_TIMER_Get_Base_Frequency(MPTAC_TPU_INDEX,  SPAR
    //If extra pulses are required, update On/Off times for extra pulses
    if(SPARK_Number_Of_Extra_Pulses)
    {	  	
-      MCD5412_Set_Min_Off_Time( MPTAC_TPU_INDEX, SPARK_Mptac[ in_spark_select ], SPARK_Duration[in_spark_select][SPARK_DWELL_INDEX_MAIN_PULSE].off_time);
-      MCD5412_Set_On_Time_2( MPTAC_TPU_INDEX, SPARK_Duration[in_spark_select][SPARK_DWELL_INDEX_EXTRA_PULSE_1].on_time);
-      MCD5412_Set_Off_Time_2( MPTAC_TPU_INDEX, SPARK_Duration[in_spark_select][SPARK_DWELL_INDEX_EXTRA_PULSE_1].off_time );
-      MCD5412_Set_On_Time_3( MPTAC_TPU_INDEX, SPARK_Duration[in_spark_select][SPARK_DWELL_INDEX_EXTRA_PULSE_2].on_time );
+      MCD5412_Set_Min_Off_Time( MPTAC_TPU_INDEX, SPARK_Mptac[ in_spark_select ], SPARK_Duration[0][SPARK_DWELL_INDEX_MAIN_PULSE].off_time);
+      MCD5412_Set_On_Time_2( MPTAC_TPU_INDEX, SPARK_Duration[0][SPARK_DWELL_INDEX_EXTRA_PULSE_1].on_time);
+      MCD5412_Set_Off_Time_2( MPTAC_TPU_INDEX, SPARK_Duration[0][SPARK_DWELL_INDEX_EXTRA_PULSE_1].off_time );
+      MCD5412_Set_On_Time_3( MPTAC_TPU_INDEX, SPARK_Duration[0][SPARK_DWELL_INDEX_EXTRA_PULSE_2].on_time );
    }		 
 }
 
