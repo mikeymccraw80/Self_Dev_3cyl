@@ -117,16 +117,7 @@ void SPARK_Force_Pulse(
    uint32_t          in_duration,
    uint8_t           in_time_precision,
    uint8_t           in_time_resolution );
-//=============================================================================
-// SPARK_Set_Duration
-//=============================================================================
-void SPARK_Set_Durations(
-   uint8_t              in_cylinder,
-   Spark_Durations_T   *in_durations,
-   uint8_t              in_array_size,
-   uint8_t              in_time_precision,
-   uint8_t              in_time_resolution,
-   uint8_t              in_number_of_pulses );
+
 //=============================================================================
 // SPARK_Reset_Parameters
 //=============================================================================

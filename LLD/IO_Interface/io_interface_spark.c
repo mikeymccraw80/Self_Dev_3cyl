@@ -51,25 +51,8 @@ void  IO_Spark_Syn_Update(void)
     }
 
     // realize the enable interface
-    switch (LLD_cyl_num) {
-    case CYLINDER_0:
-        if (ign_enable.B_ign_A == 0)
-            SetHWIO_DwellTime(0);
-        break;
-    case CYLINDER_1:
-        if (ign_enable.B_ign_B == 0)
-            SetHWIO_DwellTime(0);
-        break;
-    case CYLINDER_2:
-        if (ign_enable.B_ign_C == 0)
-            SetHWIO_DwellTime(0);
-        break;
-        break;
-    case CYLINDER_3:
-        if (ign_enable.B_ign_D == 0)
-            SetHWIO_DwellTime(0);
-        break;
-    default:
-        break;
-    }
+    SetHWIO_EST_Channel_State(CYLINDER_0, ign_enable.B_ign_A);
+    SetHWIO_EST_Channel_State(CYLINDER_1, ign_enable.B_ign_B);
+    SetHWIO_EST_Channel_State(CYLINDER_2, ign_enable.B_ign_C);
+    SetHWIO_EST_Channel_State(CYLINDER_3, ign_enable.B_ign_D);
 }

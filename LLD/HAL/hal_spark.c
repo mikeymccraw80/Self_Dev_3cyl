@@ -39,6 +39,14 @@ void EnableHWIO_EST( void )
 }
 
 //=============================================================================
+// DisableHWIO_EST_Channel
+//=============================================================================
+void SetHWIO_EST_Channel_State(uint8_t  in_cylinder, bool in_state)
+{
+    SPARK_Set_Channel_Enable(in_cylinder, in_state );
+}
+
+//=============================================================================
 // GetHWIO_t_DeliveredDwell
 //=============================================================================
 T_MILLISECONDSb GetHWIO_t_DeliveredDwell( void )
@@ -257,4 +265,3 @@ void SetIO_SPRK_BT_WakeUpDelay(T_MILLISECONDSb in_wakeup_delay )
 {
    SetHWIO_Min_OffTime(in_wakeup_delay);
 }
-
