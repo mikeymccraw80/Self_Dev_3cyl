@@ -390,15 +390,19 @@ void HLS_ini(void)
 	ign_enable.B_ign_C = (uint8_t)true;
 	ign_enable.B_ign_D = (uint8_t)true;
 
-	ign_sig[LLD_IGN_CHANNEL_A].dwell_time = 8000;
-	ign_sig[LLD_IGN_CHANNEL_B].dwell_time = 8000;
-	ign_sig[LLD_IGN_CHANNEL_C].dwell_time = 8000;
-	ign_sig[LLD_IGN_CHANNEL_D].dwell_time = 8000;
+	ign_sig[LLD_IGN_CHANNEL_A].dwell_time = 4000;
+	ign_sig[LLD_IGN_CHANNEL_B].dwell_time = 4000;
+	ign_sig[LLD_IGN_CHANNEL_C].dwell_time = 4000;
+	ign_sig[LLD_IGN_CHANNEL_D].dwell_time = 4000;
 
 	ign_sig[LLD_IGN_CHANNEL_A].ign_angle = -16;
 	ign_sig[LLD_IGN_CHANNEL_B].ign_angle = -16;
 	ign_sig[LLD_IGN_CHANNEL_C].ign_angle = -16;
 	ign_sig[LLD_IGN_CHANNEL_D].ign_angle = -16;
+
+	ign_sig[LLD_IGN_CHANNEL_A].follow_up_sparks = 2;
+	ign_sig[LLD_IGN_CHANNEL_A].dwell_time_of_follow_up_sparks = 1000;
+	ign_sig[LLD_IGN_CHANNEL_A].break_time_of_follow_up_sparks = 500;
 
 	 /*sys_cmd.B_after_run_end= false;
 	 sys_cmd.B_SW_Pwf = false;
