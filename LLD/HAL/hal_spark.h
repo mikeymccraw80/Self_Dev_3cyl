@@ -47,10 +47,32 @@ uint8_t GetHWIO_Num58xGapsBeforeSeqn (void);
 // SetHWIO_DualEST_AlternatingMode
 //=============================================================================
 void SetHWIO_DualEST_AlternatingMode( void );
+
 //=============================================================================
-// SetHWIO_DwellTime
+// SetHWIO_MainPulse_DwellTime
 //=============================================================================
-void SetHWIO_DwellTime(T_MILLISECONDSb in_dwell_time );
+void SetHWIO_MainPulse_DwellTime(uint8_t cylinder, T_MILLISECONDSb in_dwell_time );
+
+//=============================================================================
+// SetHWIO_ExtraPulse1_DwellTime
+//=============================================================================
+void SetHWIO_ExtraPulse1_DwellTime(uint8_t cylinder, T_MILLISECONDSb in_break_time, T_MILLISECONDSb in_dwell_time);
+
+//=============================================================================
+// SetHWIO_ExtraPulse2_DwellTime
+//=============================================================================
+void SetHWIO_ExtraPulse2_DwellTime(uint8_t cylinder, T_MILLISECONDSb in_break_time, T_MILLISECONDSb in_dwell_time);
+
+//=============================================================================
+// SetHWIO_Spark_State
+//=============================================================================
+void SetHWIO_Spark_State(uint8_t cylinder, bool state);
+
+//=============================================================================
+// SetHWIO_Spark_ExtraPulse_Count
+//=============================================================================
+void SetHWIO_Spark_ExtraPulse_Count(uint8_t cylinder, uint8_t extra_pulse);
+
 //=============================================================================
 // SetHWIO_MaxDwell
 //=============================================================================
@@ -75,7 +97,8 @@ void SetHWIO_SingleChannelEST_Mode( void );
 //=============================================================================
 // SetHWIO_SpkAngle
 //=============================================================================
-void SetHWIO_SpkAngle( T_ANGLEa * in_spark_angle );
+void SetHWIO_SpkAngle(uint8_t in_cylinder, T_ANGLEa advance_spark_count);
+
 //=============================================================================
 // SetHWIO_SprkMinBurn
 //=============================================================================

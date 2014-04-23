@@ -102,12 +102,43 @@ void SetHWIO_DualEST_AlternatingMode( void )
 }
 
 //=============================================================================
-// SetHWIO_DwellTime
+// SetHWIO_MainPulse_DwellTime
 //=============================================================================
-void SetHWIO_DwellTime(T_MILLISECONDSb in_dwell_time )
+void SetHWIO_MainPulse_DwellTime(uint8_t cylinder, T_MILLISECONDSb in_dwell_time)
 {
-   SPARK_Set_Duration(  in_dwell_time, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
+    SPARK_Set_Duration(cylinder, in_dwell_time, S_MILLISECONDSb, MILLISECOND_RESOLUTION);
+}
 
+//=============================================================================
+// SetHWIO_ExtraPulse1_DwellTime
+//=============================================================================
+void SetHWIO_ExtraPulse1_DwellTime(uint8_t cylinder,  T_MILLISECONDSb in_break_time, T_MILLISECONDSb in_dwell_time)
+{
+    SPARK_Set_Duration_Extra_P1(cylinder, in_break_time, in_dwell_time, S_MILLISECONDSb, MILLISECOND_RESOLUTION);
+}
+
+//=============================================================================
+// SetHWIO_ExtraPulse2_DwellTime
+//=============================================================================
+void SetHWIO_ExtraPulse2_DwellTime(uint8_t cylinder, T_MILLISECONDSb in_break_time, T_MILLISECONDSb in_dwell_time)
+{
+    SPARK_Set_Duration_Extra_P2(cylinder, in_break_time, in_dwell_time, S_MILLISECONDSb, MILLISECOND_RESOLUTION);
+}
+
+//=============================================================================
+// SetHWIO_Spark_State
+//=============================================================================
+void SetHWIO_Spark_State(uint8_t cylinder, bool state)
+{
+    SPARK_Set_State(cylinder, state);
+}
+
+//=============================================================================
+// SetHWIO_Spark_ExtraPulse_Count
+//=============================================================================
+void SetHWIO_Spark_ExtraPulse_Count(uint8_t cylinder, uint8_t extra_pulse)
+{
+    SPARK_Set_ExtraPulse_Count(cylinder, extra_pulse);
 }
 
 //=============================================================================
@@ -150,46 +181,36 @@ void SetHWIO_SingleChannelEST_Mode( void )
 {
    SPARK_Set_Mode(  SPARK_SINGLE_CHANNEL_MODE );
 }
-    uint32_t temp_count;
-    Crank_Angle_T spark_angle[8];
-    T_ANGLEa signed_angle;
-	uint32_t unsigned_angle;
 
 //=============================================================================
 // SetHWIO_SpkAngle
 //=============================================================================
-void SetHWIO_SpkAngle( T_ANGLEa * in_spark_angle )
+void SetHWIO_SpkAngle(uint8_t in_cylinder, T_ANGLEa advance_spark_count)
 {
-    uint32_t counter;
+    uint32_t temp_count, unsigned_angle;
+    Crank_Angle_T spark_angle;
+    T_ANGLEa signed_angle;
 
-    uint32_t number_of_clinders = CRANK_Get_Number_Of_Cylinders();
+    signed_angle = advance_spark_count;
+    unsigned_angle = (uint32_t) signed_angle;
 
-
-    for ( counter = 0; counter < number_of_clinders; counter++)
+    if (signed_angle < 0 )
     {
-        signed_angle = in_spark_angle[counter];
+        unsigned_angle = ( 0 - unsigned_angle );
 
-        unsigned_angle = (uint32_t) signed_angle;
+        temp_count = CRANK_Convert_Angle_To_uCrank_Angle(unsigned_angle,S_ANGLEa);
 
-        if (signed_angle < 0 )
-        {
-            unsigned_angle = ( 0 - unsigned_angle );
+        spark_angle = (Crank_Angle_T)( ( temp_count > CRANK_ANGLE_MAX ) ? CRANK_ANGLE_MIN : -((int32_t)temp_count) );
+    }
+    else
+    {
 
-            temp_count = CRANK_Convert_Angle_To_uCrank_Angle(unsigned_angle,S_ANGLEa);
+        temp_count = CRANK_Convert_Angle_To_uCrank_Angle(unsigned_angle,S_ANGLEa);
 
-            spark_angle[counter] = (Crank_Angle_T)( ( temp_count > CRANK_ANGLE_MAX ) ? CRANK_ANGLE_MIN : -((int32_t)temp_count) );
-        }
-        else
-        {
-
-            temp_count = CRANK_Convert_Angle_To_uCrank_Angle(unsigned_angle,S_ANGLEa);
-
-            spark_angle[counter] = (Crank_Angle_T)( ( temp_count > CRANK_ANGLE_MAX ) ? CRANK_ANGLE_MAX : temp_count );
-        }
+        spark_angle = (Crank_Angle_T)( ( temp_count > CRANK_ANGLE_MAX ) ? CRANK_ANGLE_MAX : temp_count );
     }
 
-    SPARK_Set_Angle_In_Counts(spark_angle);
-
+    SPARK_Set_Angle_In_Counts(in_cylinder, spark_angle);
 }
 
 //=============================================================================

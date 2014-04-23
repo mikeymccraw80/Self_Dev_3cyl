@@ -52,8 +52,7 @@ bool SPARK_Get_Channel_Enable(
 //=============================================================================
 // SPARK_Set_Angle
 //=============================================================================
-void SPARK_Set_Angle_In_Counts(
-   Crank_Angle_T *in_spark_count_array);
+void SPARK_Set_Angle_In_Counts(Crank_Cylinder_T in_cylinder, Crank_Angle_T advance_spark_count);
 
 //=============================================================================
 // SPARK_Set_Min_Duration
@@ -74,10 +73,27 @@ void SPARK_Set_Min_Duration(
 //=============================================================================
 // SPARK_Set_Duration
 //=============================================================================
-void SPARK_Set_Duration(
-   uint32_t    in_duration,
-   uint8_t     in_time_precision,
-   uint8_t     in_time_resolution );
+void SPARK_Set_Duration(uint8_t cylinder, uint32_t duration, uint8_t time_precision, uint8_t time_resolution);
+
+//=============================================================================
+// SPARK_Set_Duration_Extra_P1
+//=============================================================================
+void SPARK_Set_Duration_Extra_P1(uint8_t cylinder, uint32_t breaktime, uint32_t duration, uint8_t time_precision, uint8_t time_resolution);
+
+//=============================================================================
+// SPARK_Set_Duration_Extra_P2
+//=============================================================================
+void SPARK_Set_Duration_Extra_P2(uint8_t cylinder, uint32_t breaktime, uint32_t duration, uint8_t time_precision, uint8_t time_resolution);
+
+//=============================================================================
+// SPARK_Set_State
+//=============================================================================
+void SPARK_Set_State(uint8_t cylinder, bool state);
+
+//=============================================================================
+// SPARK_Set_ExtraPulse_Count
+//=============================================================================
+void SPARK_Set_ExtraPulse_Count(uint8_t cylinder, uint8_t extra_pulse);
 
 //=============================================================================
 // SPARK_Set_Mode
