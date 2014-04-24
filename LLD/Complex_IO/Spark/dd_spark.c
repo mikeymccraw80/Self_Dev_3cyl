@@ -57,7 +57,7 @@ uint32_t                      SPARK_Number_Of_Extra_Pulses;
 static bool                   SPARK_ISR_PulseRequested;
 static uint8_t                SPARK_Set_Max_Fall_Angle_InToothCount;
 static uint8_t                SPARK_Set_Min_Angle_For_Rise_InToothCount;
-static bool                   SPARK_Pulse_Edge_Scheduled;
+static volatile bool          SPARK_Pulse_Edge_Scheduled;
 
 IO_Spark_Initialization_Parameters_T  *SPARK_Init_Parameters_Ptr;
 
@@ -770,16 +770,12 @@ static void SPARK_Update_Duration_Values(Spark_Control_Select_T in_spark_select,
 
 void SPARK_Process_Interrupt(Spark_Control_Select_T in_spark_select )
 {
-    uint8_t                 faults                                 = 0;
-    uint8_t                 scheduled_cylinder_events_compensated;
     Crank_Cylinder_T        cylinder = 0;
     Spark_Control_Select_T  control_select;
-    uCrank_Angle_T          actual_angle_in_pa_counts;
     uCrank_Angle_T          end_angle;
 
     // Get the amount of EST dwell which was delivered:
     SPARK_Actual_Duration = MCD5412_Get_Actual_Duration(MPTAC_TPU_INDEX, SPARK_Mptac[ in_spark_select ]);
-    actual_angle_in_pa_counts = MCD5412_Get_Actual_End_Angle( MPTAC_TPU_INDEX, SPARK_Mptac[ in_spark_select ] );
 
     // Calculate the next EST channel, and output the
     // EST control signals and the SEL1/0 signals:
@@ -838,13 +834,18 @@ void SPARK_Process_Cylinder_Event( void )
             SPARK_ISR_PulseRequested = true;
         } else {
             if (SPARK_Pulse_Edge_Scheduled == false) {
+                MCD5412_Request_Abort(MPTAC_TPU_INDEX, SPARK_Mptac[0]);
+                MCD5412_Set_Host_Interrupt_Status(MPTAC_TPU_INDEX, &TPU,  SPARK_Mptac[0], false);
+                MCD5412_Set_Host_Interrupt_Enable(MPTAC_TPU_INDEX, &TPU, SPARK_Mptac[0], false );
+                SPARK_ISR_PulseRequested = false;
                 /* lost spark pulse edge interrupt, setup new pulse */
-                VSEP_EST_Select_Set_Channel(MTSA_CONFIG_VSEP_DEVICE_0, CeVSEP_EST_CylinderID_Mapping[SPARK_Cylinder_Event_ID]);
-                end_angle = SPARK_Calculate_End_Angle_In_Counts( SPARK_Cylinder_Event_ID, (uint8_t)0, SPARK_CALC_POSITION_Ref );
-                SPARK_Schedule_Next_Event( SPARK_Cylinder_Event_ID, end_angle );
+                // VSEP_EST_Select_Set_Channel(MTSA_CONFIG_VSEP_DEVICE_0, CeVSEP_EST_CylinderID_Mapping[SPARK_Cylinder_Event_ID]);
+                // SPARK_Update_Duration_Values(SPARK_CONTROL_0, SPARK_Cylinder_Event_ID);
+                // end_angle = SPARK_Calculate_End_Angle_In_Counts( SPARK_Cylinder_Event_ID, (uint8_t)0, SPARK_CALC_POSITION_Ref );
+                // SPARK_Schedule_Next_Event( SPARK_Cylinder_Event_ID, end_angle );
             } else {
                 /* clear spark edge schedule flag */
-                SPARK_Pulse_Edge_Scheduled == false;
+                SPARK_Pulse_Edge_Scheduled = false;
             }
         }
     }
