@@ -36,11 +36,19 @@
 /******************************************************************************
 *  Include Files 
 *****************************************************************************/ 
-#include "knodfexi.h"   /* For global resources definitions   */
+// #include "knodfexi.h"   /* For global resources definitions   */
 #include "knodcald.h"   /* For Definition-Declaration check   */
 #include "knodpapi.h"   /* For Definition-Declaration check   */
 
-
+#pragma section DATA " " ".nc_nvram"
+TbBOOLEAN            SbKNKD_SystemTestFailed;
+TbBOOLEAN            SbKNKD_SystemTestLoFailed;
+TbBOOLEAN            SbKNKD_SystemTestHiFailed;
+TbBOOLEAN            SbKNKD_SensorTestFailed;
+#pragma section DATA " " ".bss"
+TbBOOLEAN            SbKNKD_SensorTestComplete;
+  
+#if 0
 /*********************************************************************
 * Module Variables
 **********************************************************************/
@@ -455,6 +463,7 @@ static TbBOOLEAN EvalKNKD_SensorProcessing(void)
                            (LfKNKD_ESCGainMin > KfKNKD_FaultDetectGain));
 
 }
+#endif
 
 /******************************************************************************
 *

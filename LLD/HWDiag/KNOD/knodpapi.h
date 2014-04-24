@@ -40,8 +40,8 @@ Include Files
 /*********************************************************************
 * exported functions
 **********************************************************************/
-FAR_COS void MngKNKD_125msTasks(void);
-FAR_COS void MngKNKD_CylEventTasks(void);
+void MngKNKD_125msTasks(void);
+void MngKNKD_CylEventTasks(void);
 //FAR_COS void InitKNKD_RstToKeyOff(void);
 
 /*********************************************************************

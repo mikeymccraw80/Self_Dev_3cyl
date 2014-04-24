@@ -46,6 +46,14 @@
 #include "intr_ems.h"
 #include "v_power.h"
 
+#pragma section DATA " " ".nc_nvram"
+TbBOOLEAN  SbEPSD_CrankNoisySigTestFailed;
+TbBOOLEAN  SbEPSD_CrankNoSigTestFailed;
+#pragma section DATA " " ".bss"
+
+TbBOOLEAN  SbEPSD_CrankNoSigTestComplete;
+TbBOOLEAN  SbEPSD_CrankNoisySigTestComplete;
+
 #if 0
 /*****************************************************************************
 *  Type declaration
