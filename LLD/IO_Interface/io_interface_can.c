@@ -48,6 +48,8 @@ uint8_t  VsCAN_CHERY_ID310[8];
 uint8_t  VsCAN_CHERY_ID391[8];
 uint8_t  VsCAN_CHERY_ID3C0[8];
 uint8_t  VsCAN_CHERY_ID430[8];
+uint8_t  VsCAN_CHERY_ID1AE[8];
+uint8_t  VsCAN_CHERY_ID300[8];
 
 void MngChery_Can_10ms(void)
 {

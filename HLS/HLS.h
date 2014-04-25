@@ -652,6 +652,8 @@ extern uint8_t  VsCAN_CHERY_ID310[8];
 extern uint8_t  VsCAN_CHERY_ID391[8];
 extern uint8_t  VsCAN_CHERY_ID3C0[8];
 extern uint8_t  VsCAN_CHERY_ID430[8];
+extern uint8_t  VsCAN_CHERY_ID1AE[8];
+extern uint8_t  VsCAN_CHERY_ID300[8];
 
 /*===========================================================================*\
  * Exported Function Prototypes
