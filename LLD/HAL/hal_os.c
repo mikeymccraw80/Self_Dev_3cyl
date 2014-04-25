@@ -154,6 +154,7 @@ void  HAL_OS_10ms_Task(void)
 	MngEOSD_O2_11_Htr10msTasks();
 	MngEOSD_O2_12_Htr10msTasks();
 	MngESTD_7p81msTasks();
+	MngEPSD_Crank7p81msTasks();
 }
 
 //=============================================================================
@@ -225,6 +226,7 @@ void HAL_OS_Init_Task(void)
 
 	/*Initialize the Engine State value at power up. */
 	InitVIOS_EngSt();
+	InitEPSD_CrankRstToKeyOn();
 }
 
 
@@ -444,7 +446,7 @@ void Sinit_CrankToRun(void)
 void Sinit_CrankToStall (void)
 {
     // InitEPSD_CamCrankToStall();
-    // InitEPSD_CrankCrankToStall();
+    InitEPSD_CrankCrankToStall();
 }
 
 /*****************************************************************************
@@ -459,7 +461,7 @@ void Sinit_CrankToStall (void)
 void Sinit_RunToPowerOffDelay(void)
 {
 	// InitEPSD_CamRunToPowerOffDelay();
-	// InitEPSD_CrankRunToPowerOffDelay();
+	InitEPSD_CrankRunToPowerOffDelay();
 	// Sinit_KeyOffDelay();
 }
 
@@ -517,7 +519,7 @@ void Sinit_StallToCrank(void)
 ******************************************************************************/
 void Sinit_PowerOffDelayToKeyOn(void)
 {
-    
+    InitEPSD_CrankRstToKeyOn();
 }
 
 /*****************************************************************************
@@ -559,5 +561,5 @@ void Sinit_ShutdownInProcessToKeyOff(void)
 ******************************************************************************/
 void Sinit_ShutdownInProcessToKeyOn(void)
 {
- 
+    InitEPSD_CrankRstToKeyOn();
 }

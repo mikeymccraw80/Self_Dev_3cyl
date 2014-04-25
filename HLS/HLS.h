@@ -522,6 +522,7 @@ extern  const uint8_t  VAL_LmDgFofDly;
 
 extern unsigned char  TpPos_b;
 extern unsigned char  Pmap_b;
+extern unsigned short Pim;
 extern unsigned char  Tm;
 extern unsigned char  TmLin;
 extern unsigned char  Ta;

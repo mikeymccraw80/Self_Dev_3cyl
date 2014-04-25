@@ -41,20 +41,9 @@
 ******************************************************************************/
 #include "epsdpapi.h"  /* For EPSD Declration-Definition Check */
 #include "epsdcald.h"  /* For EPSD Calibration File */
-#include "mall_lib.h"
-#include "timclib.h"
+#include "hal_cam.h"
 #include "intr_ems.h"
-#include "v_power.h"
 
-#pragma section DATA " " ".nc_nvram"
-TbBOOLEAN  SbEPSD_CrankNoisySigTestFailed;
-TbBOOLEAN  SbEPSD_CrankNoSigTestFailed;
-#pragma section DATA " " ".bss"
-
-TbBOOLEAN  SbEPSD_CrankNoSigTestComplete;
-TbBOOLEAN  SbEPSD_CrankNoisySigTestComplete;
-
-#if 0
 /*****************************************************************************
 *  Type declaration
 ******************************************************************************/
@@ -80,10 +69,10 @@ TbBOOLEAN  VbEPSD_CrankNoisySigFailCriteriaMet;
 TbBOOLEAN  SbEPSD_CrankNoisySigEnblCriteriaMet;
 TbBOOLEAN  SbEPSD_CrankNoisySigTestComplete;
 TbBOOLEAN  SbEPSD_CrankNoisySigTestComplete_Internal;
-// #pragma section [nvram]
+#pragma section DATA " " ".nc_nvram"
 TbBOOLEAN  SbEPSD_CrankNoisySigTestFailed;
 TbBOOLEAN  SbEPSD_CrankNoSigTestFailed;
-// #pragma section [] 
+#pragma section DATA " " ".bss"
 TbBOOLEAN  VbEPSD_CrankNoSigFailCriteriaMet;
 TbBOOLEAN  SbEPSD_CrankNoSigEnblCriteriaMet;
 TbBOOLEAN  SbEPSD_CrankNoSigTestComplete;
@@ -94,7 +83,6 @@ T_COUNT_WORD  ScEPSD_CrankNoisySigSampleCntr;
 T_COUNT_WORD  ScEPSD_CrankNoisySigFailCntr;
 TbON  SeEPSD_CamPrevState;        /* Should be TbHIGH per DDE */
 T_COUNT_WORD  SfEPSD_CrankRefToothErrCnt;
-TbBOOLEAN  SbEPSD_CamBNDLActFaultPresent;
 T_KPAa  SfEPSD_MnfdPresAtKeyOn;
 
 /******************************************************************************
@@ -123,8 +111,8 @@ static void PerformEPSD_CrankNoisySigXofYEval(void);
  *****************************************************************************/
 void InitEPSD_CrankRstToKeyOn(void)
 {
-	// SeEPSD_CamPrevState = GetIO_DiscreteInputStateImmediate(DISCRETE_IN_CAM1);
-	// SfEPSD_MnfdPresAtKeyOn = GetVIOS_p_MnfdPresFiltd();
+	SeEPSD_CamPrevState = HAL_Get_CAM_Level(CAM1);
+	SfEPSD_MnfdPresAtKeyOn = GetVIOS_p_MnfdPresFiltd();
 }
 
 /*****************************************************************************
@@ -140,10 +128,10 @@ void InitEPSD_CrankCrankToStall(void)
 	InitEPSD_CrankComParms();
 
 	HaltTIMC_StopWatch(VaEPSD_7p8TimerEnbl,CeEPSD_CrankNoSigTimer);
-	SetTIMC_StopWatch16(VaEPSD_t_7p8TimerArray,\
+	SetTIMC_StopWatch16(VaEPSD_t_7p8TimerArray,
 						CeEPSD_CrankNoSigTimer,C_R7p8125ms16(0));
 	HaltTIMC_StopWatch(VaEPSD_7p8TimerEnbl,CeEPSD_CrankNoSigResetTimer);
-	SetTIMC_StopWatch16(VaEPSD_t_7p8TimerArray,\
+	SetTIMC_StopWatch16(VaEPSD_t_7p8TimerArray,
 						CeEPSD_CrankNoSigResetTimer,C_R7p8125ms16(0));
 }
 
@@ -160,10 +148,10 @@ void InitEPSD_CrankRunToPowerOffDelay(void)
 	SbEPSD_CrankNoSigTestComplete = CbFALSE; //changed by daowei
 	SbEPSD_CrankNoSigTestComplete_Internal = CbFALSE;
 	HaltTIMC_StopWatch(VaEPSD_7p8TimerEnbl,CeEPSD_CrankNoSigTimer);
-	SetTIMC_StopWatch16(VaEPSD_t_7p8TimerArray,\
+	SetTIMC_StopWatch16(VaEPSD_t_7p8TimerArray,
 						CeEPSD_CrankNoSigTimer,C_R7p8125ms16(0));
 	HaltTIMC_StopWatch(VaEPSD_7p8TimerEnbl,CeEPSD_CrankNoSigResetTimer);
-	SetTIMC_StopWatch16(VaEPSD_t_7p8TimerArray,\
+	SetTIMC_StopWatch16(VaEPSD_t_7p8TimerArray,
 						CeEPSD_CrankNoSigResetTimer,C_R7p8125ms16(0));
 
 	InitEPSD_CrankComParms();
@@ -211,6 +199,7 @@ static void InitEPSD_CrankComParms(void)
 	ScEPSD_CrankCylEventEnblCntr   = V_COUNT_BYTE(0);
 }
 
+#if 0
 /*****************************************************************************
  *
  * Function:            MngEPSD_CrankEventTasks
@@ -239,7 +228,7 @@ void MngEPSD_CrankEventTasks(void)
 	}
 }
 
-
+#endif
 
 /*****************************************************************************
  *
@@ -279,16 +268,12 @@ static void ProcessEPSD_CrankNoSigEnblCriteria(void)
    can have only positive values. Hence the two subtractions below
    are of the kind usSUB_us_usp. */
 
-	if (
-		(((GetVIOS_EngSt() == CeENG_KEYON)
+	if ((((GetVIOS_EngSt() == CeENG_KEYON)
 			|| (GetVIOS_EngSt() == CeENG_STALL)
 			|| (GetVIOS_EngSt() == CeENG_CRANK) )
-			&& ( ! SbEPSD_CamBNDLActFaultPresent )
-			&& ( ! GetVIOS_CAM_CrankBackupActive() )
-			&& (GetIO_DiscreteInputStateImmediate(DISCRETE_IN_CAM1) != SeEPSD_CamPrevState))
+			&& (HAL_Get_CAM_Level(CAM1) != SeEPSD_CamPrevState))
 		|| \
 		(((GetVIOS_EngSt() == CeENG_KEYON) || (GetVIOS_EngSt() == CeENG_CRANK))
-			&& (! GetVIOS_CAM_CrankBackupActive())
 			&& (FixSubAbs(SfEPSD_MnfdPresAtKeyOn, GetVIOS_p_MnfdPresFiltd(), EOBD_KPAa)
 				> KfEPSD_p_CrankDeltaMAP_Thrsh)
 			&& (FixSubAbs(GetVIOS_U_IgnVoltageAtKeyOn(), GetVIOS_U_IgnVolt(), EOBD_VOLTb)
@@ -301,7 +286,7 @@ static void ProcessEPSD_CrankNoSigEnblCriteria(void)
 		SbEPSD_CrankNoSigEnblCriteriaMet = CbFALSE;
 	}
 
-	SeEPSD_CamPrevState = GetIO_DiscreteInputStateImmediate(DISCRETE_IN_CAM1);
+	SeEPSD_CamPrevState = HAL_Get_CAM_Level(CAM1);
 }
 
 
@@ -369,12 +354,19 @@ static void ProcessEPSD_CrankNoSigFaultTmrEval(void)
 			if (GetVIOS_EngSt() == CeENG_RUN) //added by daowei
 				SbEPSD_CrankNoSigTestFailed = CbFALSE; //added by daowei
 			SbEPSD_CrankNoSigTestComplete_Internal = CbFALSE;
-			HaltTIMC_StopWatch(VaEPSD_7p8TimerEnbl, CeEPSD_CrankNoSigTimer);
+			
+			/* stop and reset no signal timer */
+			// HaltTIMC_StopWatch(VaEPSD_7p8TimerEnbl, CeEPSD_CrankNoSigTimer);
 			SetTIMC_StopWatch16(VaEPSD_t_7p8TimerArray, CeEPSD_CrankNoSigTimer, C_R7p8125ms16(0));
+			
+			/* stop and reset reset timer */
 			HaltTIMC_StopWatch(VaEPSD_7p8TimerEnbl, CeEPSD_CrankNoSigResetTimer);
+			SetTIMC_StopWatch16(VaEPSD_t_7p8TimerArray, CeEPSD_CrankNoSigResetTimer, C_R7p8125ms16(0));
 		} else {
 			ResumeTIMC_StopWatch(VaEPSD_7p8TimerEnbl, CeEPSD_CrankNoSigResetTimer);
 		}
+		/* stop no signal timer increase */
+		HaltTIMC_StopWatch(VaEPSD_7p8TimerEnbl, CeEPSD_CrankNoSigTimer);
 	}
 }
 
@@ -391,6 +383,7 @@ static void ProcessEPSD_CrankNoSigFaultTmrEval(void)
  * Parameters:          None
  * Return:              None
  *****************************************************************************/
+ #if 0
 static void ProcessEPSD_CrankNoisySigEnblCriteria(void)
 {
 	if ( (GetVIOS_EngSt() == CeENG_RUN)
@@ -473,7 +466,6 @@ static void PerformEPSD_CrankNoisySigXofYEval(void)
 	}
 }
 #endif
-
 /******************************************************************************
 *
 * Revision History:

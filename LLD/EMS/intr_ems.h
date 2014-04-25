@@ -343,8 +343,8 @@ static INLINE void ConvertIntrParam_IgnKeyOn(void)
 // extern EOBD_T_PERCENT                   EOBD_Pct_RawBRPre;
 // #define GetVIOS_Pct_RawMnfdPres()\
                     // (EOBD_Pct_RawMAP)
-// #define GetVIOS_p_MnfdPresFiltd()\
-                    // (FixConvert(Pim, CHERY_KPAa, EOBD_KPAa))
+#define GetVIOS_p_MnfdPresFiltd()\
+                    (FixConvert(Pim, CHERY_KPAa, EOBD_KPAa))
 // #define GetVIOS_p_UndefMnfdPresFiltd()\
                     // (EOBD_UndefMnfdPresFiltd)
 // #define GetVIOS_p_AltdCompMnfdPres()\
@@ -612,7 +612,7 @@ extern EOBD_PERCENTa   EOBD_CcpDutyCycle;
 // #define GetFUEL_CL_Enable()                             (B_Lc)
 // #define GetVIOS_HiResReferencePeriod()                  (ReferencePeriod_HighRes)
 
-// #define EMS_ZERO_RPM                              	(60.0)
+#define EMS_ZERO_RPM                              	(60.0)
 // #define NbAcClutchStates                                ( 2 )
 // #define GetEMS_ShutdownComplete()\
                      // ( (sys_cmd.B_after_run_end) || (B_after_run_end_abnormal) )
