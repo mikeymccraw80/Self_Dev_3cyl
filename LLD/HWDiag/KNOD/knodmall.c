@@ -47,6 +47,7 @@ TbBOOLEAN            SbKNKD_SystemTestHiFailed;
 TbBOOLEAN            SbKNKD_SensorTestFailed;
 #pragma section DATA " " ".bss"
 TbBOOLEAN            SbKNKD_SensorTestComplete;
+TbBOOLEAN            SbKNKD_SystemTestComplete;
   
 #if 0
 /*********************************************************************
