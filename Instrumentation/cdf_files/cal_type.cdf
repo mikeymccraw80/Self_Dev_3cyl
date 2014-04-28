@@ -251,8 +251,8 @@ types
     .RPM_W
     {
        : kind = fixed;
-       : precision = ( 50/256 );
-       : range = ( 0.000000 ) TO ( 65535 * 50/256 );
+       : precision = ( 1.0/8.0 );
+       : range = ( 0.000000 ) TO ( 65535 * 1.0/8.0 );
     }
 
    .uint8_t
