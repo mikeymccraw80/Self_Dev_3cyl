@@ -487,7 +487,32 @@ void HLS_syn(void)
     inj_sig[INJ_CHANNEL_C].post_inj_time =1000;
     inj_sig[INJ_CHANNEL_D].B_post_inj = true;
     inj_sig[INJ_CHANNEL_D].post_inj_time =1000;
-     /* PerfmKNOC_VIOS_WingateSetup */
+
+    /* ignition test interface */
+    // if(LLD_cyl_num == 0) {
+        // ign_sig[0].ign_angle = 40;
+        // ign_sig[1].ign_angle = -40;
+        // ign_sig[2].ign_angle = 0;
+        // ign_sig[3].ign_angle = 80;//
+    // }
+    // if(LLD_cyl_num == 1) {
+        // ign_sig[0].ign_angle = -40;
+        // ign_sig[1].ign_angle = 0;
+        // ign_sig[2].ign_angle = 0;//
+        // ign_sig[3].ign_angle = 40;
+    // }
+    // if(LLD_cyl_num == 2) {
+        // ign_sig[0].ign_angle = 0;
+        // ign_sig[1].ign_angle = -30;//
+        // ign_sig[2].ign_angle = 40;
+        // ign_sig[3].ign_angle = -40;
+    // }
+    // if(LLD_cyl_num == 3) {
+        // ign_sig[0].ign_angle = -20;//
+        // ign_sig[1].ign_angle = 40;
+        // ign_sig[2].ign_angle = -40;
+        // ign_sig[3].ign_angle = 0;
+    // }
 
   //SetIO_MultiKnock_Window_Start(MULTIKNOCK_WINDOW_2, PfKNOC_phi_FinalWindow2Begin);
   //SetIO_MultiKnock_Window_End(MULTIKNOCK_WINDOW_2, PfKNOC_phi_FinalWindow2End);
