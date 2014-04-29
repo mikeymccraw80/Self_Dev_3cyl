@@ -66,13 +66,7 @@ Crank_Cylinder_T  SPARK_Cylinder_Event_ID_test;
 /* ============================================================================ *\
  *  Local Constant Definitions
 \* ============================================================================ */
-// static const uint8_t CeVSEP_EST_CylinderID_Mapping[] = {
-    // CRANK_CYLINDER_A,
-    // CRANK_CYLINDER_B,
-    // CRANK_CYLINDER_C,
-    // CRANK_CYLINDER_D
-// };
-
+/* local est channel remap, simulate PF mode by software */
 static const uint8_t CeVSEP_EST_CylinderID_Mapping[] = {
     CRANK_CYLINDER_A,
     CRANK_CYLINDER_B,
@@ -794,17 +788,13 @@ void SPARK_Process_Interrupt(Spark_Control_Select_T in_spark_select )
         control_select = SPARK_Control_Select_Map[cylinder];
         // If there is a channel without a fault, update its values and set it up:
         if( SPARK_Get_Channel_Enable(cylinder) && (SPARK_Scheduled_SynControl < 2)) {
-            /* Set the channel number in the selected EST Select Device */
+            /* Set the channel number, if disabled, swith it to channel D */
             if (SPARK_Channel[cylinder].state == true) {
-                // VSEP_EST_Set_PF_Mode(VSEP_INDEX_0,VSEP_EST_SELECT_PAIRED_FIRE_MODE_ENABLED);
                 VSEP_EST_Select_Set_Channel(MTSA_CONFIG_VSEP_DEVICE_0, CeVSEP_EST_CylinderID_Mapping[cylinder]);
-                // VSEP_EST_Select_Set_Channel(MTSA_CONFIG_VSEP_DEVICE_0, CeVSEP_EST_CylinderID_Mapping[CRANK_CYLINDER_C]);
             } else {
-                // VSEP_EST_Set_PF_Mode(VSEP_INDEX_0,VSEP_EST_SELECT_PAIRED_FIRE_MODE_DISABLED);
-                // VSEP_EST_Select_Set_Channel(MTSA_CONFIG_VSEP_DEVICE_0, CeVSEP_EST_CylinderID_Mapping[CRANK_CYLINDER_D]);
                 VSEP_EST_Select_Set_Channel(MTSA_CONFIG_VSEP_DEVICE_0, CRANK_CYLINDER_D);
             }
-            // VSEP_EST_Select_Set_Channel(MTSA_CONFIG_VSEP_DEVICE_0, CeVSEP_EST_CylinderID_Mapping[cylinder]);
+
             /* set end angle, the reference tdc is next tdc */
             end_angle = SPARK_Calculate_End_Angle_In_Counts(cylinder, (uint8_t)1, SPARK_CALC_POSITION_Isr );
             SPARK_Update_Duration_Values(control_select, cylinder);
@@ -850,29 +840,18 @@ void SPARK_Process_Cylinder_Event( void )
             SPARK_ISR_PulseRequested = true;
             SPARK_Scheduled_SynControl ++;
         } else {
-            // if (SPARK_Pulse_Edge_Scheduled == false) {
-                // MCD5412_Request_Abort(MPTAC_TPU_INDEX, SPARK_Mptac[0]);
-                // MCD5412_Set_Host_Interrupt_Status(MPTAC_TPU_INDEX, &TPU,  SPARK_Mptac[0], false);
-                // MCD5412_Set_Host_Interrupt_Enable(MPTAC_TPU_INDEX, &TPU, SPARK_Mptac[0], false );
-                // SPARK_ISR_PulseRequested = false;
-                /* lost spark pulse edge interrupt, setup new pulse */
+                /* Set the channel number, if disabled, swith it to channel D */
                 if (SPARK_Channel[SPARK_Cylinder_Event_ID].state == true) {
-                    // VSEP_EST_Set_PF_Mode(VSEP_INDEX_0,VSEP_EST_SELECT_PAIRED_FIRE_MODE_ENABLED);
                     VSEP_EST_Select_Set_Channel(MTSA_CONFIG_VSEP_DEVICE_0, CeVSEP_EST_CylinderID_Mapping[SPARK_Cylinder_Event_ID]);
-                    // VSEP_EST_Select_Set_Channel(MTSA_CONFIG_VSEP_DEVICE_0, CeVSEP_EST_CylinderID_Mapping[CRANK_CYLINDER_C]);
                 } else {
-                    // VSEP_EST_Set_PF_Mode(VSEP_INDEX_0,VSEP_EST_SELECT_PAIRED_FIRE_MODE_DISABLED);
-                    // VSEP_EST_Select_Set_Channel(MTSA_CONFIG_VSEP_DEVICE_0, CeVSEP_EST_CylinderID_Mapping[CRANK_CYLINDER_C]);
                     VSEP_EST_Select_Set_Channel(MTSA_CONFIG_VSEP_DEVICE_0, CRANK_CYLINDER_D);
                 }
                 SPARK_Update_Duration_Values(SPARK_CONTROL_0, SPARK_Cylinder_Event_ID);
                 end_angle = SPARK_Calculate_End_Angle_In_Counts( SPARK_Cylinder_Event_ID, (uint8_t)0, SPARK_CALC_POSITION_Ref );
                 SPARK_Schedule_Next_Event( SPARK_Cylinder_Event_ID, end_angle );
+                
+                /* increase the syncontrol var, if syncontrol==2, multipulse pass next event tooth */
                 SPARK_Scheduled_SynControl ++;
-            // } else {
-                // /* clear spark edge schedule flag */
-                // SPARK_Pulse_Edge_Scheduled = false;
-            // }
         }
     }
 }
