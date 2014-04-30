@@ -144,6 +144,15 @@ void EEPROM_Backup_Vehicle_NVRAM_Block(void);
 void EEPROM_Restore_Vehicle_NVRAM_Block(HWIO_Reset_Status_T status_poweron);
 
 /*=============================================================================
+ * Function:    EEPROM_Clear_Vehicle_NVRAM_Block
+ *
+ * Description: This function is to clear nvram
+ * Parameters:  none
+ * Return:      none
+ *===========================================================================*/
+void EEPROM_Clear_Vehicle_NVRAM_Block(void);
+
+/*=============================================================================
  * MFG_NVM_Backup_Operation
  * @func Write  MFG data in the blank page of the Pflash.
  * @parm  Mfg addresses,page number

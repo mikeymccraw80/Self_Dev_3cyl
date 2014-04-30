@@ -25,6 +25,7 @@
 #include "hal_emulated_eeprom.h"
 #include "hal_eeprom_nvm.h"
 #include "dd_swt_interface.h"
+#include "hal_ucram.h"
 
 /*=============================================================================
  * Marco Definitions
@@ -940,7 +941,7 @@ void EEPROM_Restore_Vehicle_NVRAM_Block(HWIO_Reset_Status_T status_poweron)
    op_return = Get_EEP_NVRAM_Active_Page();
    pf_kksum = Get_KKSUM_checksum();
 
-   if(( EEPROM_ACTIVE_PAGE_NOT_FOUND == op_return) || HAL_OS_Get_Battery_Remove())
+   if(( EEPROM_ACTIVE_PAGE_NOT_FOUND == op_return) || HAL_OS_Get_Battery_Remove() || HAL_uncleard_ram.data[NCRAM_REPROGRAM_FLAG])
    {
       EEP_NVRAM_Erase(EEP_NVRAM_BANK0);
       EEP_NVRAM_Erase(EEP_NVRAM_BANK1);
@@ -1008,6 +1009,32 @@ void EEPROM_Restore_Vehicle_NVRAM_Block(HWIO_Reset_Status_T status_poweron)
 
    }
 
+}
+
+/*******************************************************************************
+ *
+ * Function:    EEPROM_Clear_Vehicle_NVRAM_Block
+ *
+ * Description: This function is to clear nvram
+ * Parameters:  none
+ * Return:      none
+ *
+ *******************************************************************************/
+void EEPROM_Clear_Vehicle_NVRAM_Block(void)
+{
+   uint32_t *             nvram_start_addr;
+
+   nvram_start_addr = (uint32_t *)MIRROR_RAM_START_ADDR;
+
+   EEP_NVRAM_Erase(EEP_NVRAM_BANK0);
+   EEP_NVRAM_Erase(EEP_NVRAM_BANK1);
+   Clear_Vehicle_NVRAM_In_Mirror();
+   EEPROM_Write_Block((uint32_t*)nvram_start_addr,0,0);
+   if(1 == EEP_NVM_full_flg)
+   {
+      No_active_page_flg = 1;
+   }
+   EEP_NVM_Fault = true;
 }
 
 /*******************************************************************************

@@ -13,7 +13,7 @@
 #include "dd_intc_interface.h"
 #include "hal_ucram.h"
 #include "hal.h" //for V_rpm
-
+#include "hal_ucram.h"
 
 
 typedef enum 
@@ -273,7 +273,8 @@ void KW2KCAN_Received_Message( void )
      if(CPU_Info == CPU_LCI)
      {
         INST_Set_Active_Calibration_Page( INST_CALIBRATION_PAGE_REFERENCE );
-     }		
+     }
+      HAL_uncleard_ram.data[NCRAM_REPROGRAM_FLAG] = true;
       Force_Stay_In_Boot(0xBEEF);
 
    }
