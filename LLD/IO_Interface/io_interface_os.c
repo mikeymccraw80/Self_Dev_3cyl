@@ -4,6 +4,7 @@
 #include "HLS.h"
 #include "io_interface_os.h"
 #include "hal_os.h"
+#include "hal_ucram.h"
 
 //=============================================================================
 // define value
@@ -16,8 +17,11 @@
 
  
 //NV_ram
+#pragma section DATA " " ".nc_nvram"
 bool B_SW_Pwf;
 bool B_after_run_end_abnormal;
+#pragma section DATA " " ".bss"
+
 bool VsCAN_CHERY_EMS_ID_Disable_keyoff500ms;
 //=============================================================================
 // global variable
@@ -87,11 +91,30 @@ INLINE void Init_HLS_Crank_Cam_Status(void)
        if (true == B_SW_Pwf)
        {
          sys_status.B_Pwf = true;
-	
        }
-       
+       if (true == HAL_uncleard_ram.data[NCRAM_REPROGRAM_FLAG])
+       {
+         sys_status.B_Pwf = true;
+         HAL_uncleard_ram.data[NCRAM_REPROGRAM_FLAG] = false;
+       }
   } 
 
+}
+
+//=============================================================================
+// IO_OS_Powerdown_Callback
+//=============================================================================
+void IO_OS_Powerdown_Callback(void)
+{
+    B_SW_Pwf = sys_cmd.B_SW_Pwf;
+}
+
+//=============================================================================
+// IO_OS_PowerFail_Flag
+//=============================================================================
+bool IO_OS_PowerFail_Flag(void)
+{
+    return B_SW_Pwf;
 }
 
 //=============================================================================

@@ -47,6 +47,7 @@ void MngOSTK_5msTasks(void);
 void MngOSTK_10msTasks(void);
 void MngOSTK_100msTasks(void);
 void OS_Free_Time_Tasks_Hook(void);
+void OS_Powerdown_Callback(void);
 //=============================================================================
 // Local variable
 //=============================================================================
@@ -124,7 +125,7 @@ void StartOS_Task_Normal(void)
 	SWT_Set_Timeout_Value(SWT_TIMEOUT_VALUE_INIT) ;
 	SWT_Service_WatchDog();
 
-	//OS_Powerdown_Callback();
+	OS_Powerdown_Callback();
 }
 
 

@@ -255,6 +255,13 @@ void OS_Engine_First_Gap(void)
    HAL_OS_KNOCK_WINGATE_OFF();
 }
 
+//=============================================================================
+// OS_Powerdown_Callback
+//=============================================================================
+OS_Powerdown_Callback(void)
+{
+    HAL_OS_Powerdown_Callback();
+}
 
  
 

@@ -68,6 +68,16 @@ void HAL_OS_Engine_Stall_Reset(void);
 // HAL_OS_Get_Battery_Remove
 //=============================================================================
  bool HAL_OS_Get_Battery_Remove(void) ;
+ 
+//=============================================================================
+// HAL_OS_Powerdown_Callback
+//=============================================================================
+void HAL_OS_Powerdown_Callback(void);
+
+//=============================================================================
+// HAL_OS_Get_PowerFail_Flag
+//=============================================================================
+bool HAL_OS_Get_PowerFail_Flag(void);
 
 // interrupt control routines
 void Disable_1ms_interrupt(void) ;

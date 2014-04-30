@@ -23,6 +23,7 @@
 #include "dd_l9958.h"
 #include "dd_vsep_est_select.h"
 #include "dd_stm.h"
+#include "hal_os.h"
 
 
 /* private variable define */
@@ -269,7 +270,9 @@ void InitializeHardwareLast(void)
 	}
 	HAL_GPIO_SET_Reset_DIO_Enable(true);
 
-	EEPROM_Restore_Vehicle_NVRAM_Block(Reset_Status);  
+	EEPROM_Restore_Vehicle_NVRAM_Block(Reset_Status);
+	if (HAL_OS_Get_PowerFail_Flag)
+		EEPROM_Clear_Vehicle_NVRAM_Block();
 	op_Return = EEPROM_Restore_MFG_NVM_Block();  // restore Pfalsh MFG if it is valid
 	INST_Initialize_Calibration_Pages();
 
