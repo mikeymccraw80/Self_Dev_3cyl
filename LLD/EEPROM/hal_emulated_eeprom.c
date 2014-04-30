@@ -1023,8 +1023,13 @@ void EEPROM_Restore_Vehicle_NVRAM_Block(HWIO_Reset_Status_T status_poweron)
 void EEPROM_Clear_Vehicle_NVRAM_Block(void)
 {
    uint32_t *             nvram_start_addr;
+   uint16_t               pf_kksum;
+   EEPROM_ACTIVE_PAGE_T   op_return;
 
    nvram_start_addr = (uint32_t *)MIRROR_RAM_START_ADDR;
+   op_return = Get_EEP_NVM_Active_Page();
+   op_return = Get_EEP_NVRAM_Active_Page();
+   pf_kksum = Get_KKSUM_checksum();
 
    EEP_NVRAM_Erase(EEP_NVRAM_BANK0);
    EEP_NVRAM_Erase(EEP_NVRAM_BANK1);
