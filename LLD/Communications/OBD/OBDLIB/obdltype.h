@@ -47,6 +47,11 @@
 /*********************************************************************/
 #include "obdsbase.h"
 
+/*********************************************************************/
+/*            EQUATES                                                */
+/*********************************************************************/
+#define UDWORD unsigned long
+
 /******************************************************************************
 * OBD Lib Service Include Files
 ******************************************************************************/
@@ -95,6 +100,46 @@ typedef enum
 /*********************************************************************/
 /* GLOBAL DATA TYPE DECLARATIONS                                     */
 /*********************************************************************/
+
+/*********************************************************************/
+/* GLOBAL DATA TYPE DECLARATIONS                                     */
+/*********************************************************************/
+
+typedef struct
+{
+  BYTE  Byte_Two;
+  BYTE  Byte_One;
+} WORD_TO_BYTE_ACCESS_TYPE;
+
+typedef struct
+{
+  BYTE  Byte_Four;
+  BYTE  Byte_Three;
+  BYTE  Byte_Two;
+  BYTE  Byte_One;
+} LWORD_TO_BYTE_ACCESS_TYPE;
+
+typedef struct
+{
+  WORD  Word_Two;
+  WORD  Word_One;
+} LWORD_TO_WORD_ACCESS_TYPE;
+
+
+typedef union
+{
+  LWORD_TO_BYTE_ACCESS_TYPE    Byte_Access;
+  LWORD_TO_WORD_ACCESS_TYPE    Word_Access;
+  UDWORD                       DWord_Access;
+} FOUR_BYTE_DATA_TYPE;
+
+
+typedef union
+{
+  WORD_TO_BYTE_ACCESS_TYPE   Byte_Access;
+  WORD                      Word_Access;
+} TWO_BYTE_DATA_TYPE;
+
 
 /*****************************************************************************
  *  Local Types

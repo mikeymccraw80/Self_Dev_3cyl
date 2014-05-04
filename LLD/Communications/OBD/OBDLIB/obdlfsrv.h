@@ -332,6 +332,23 @@
 #define CcEndOfScalingTable           (0xFF)
 #define CcScalingSize                 (42)
 
+/* Define boundaries for start and end of ram */
+#define CyRAM_SectionStart          (0x40000000)
+#define CyRAM_SectionEnd            (0x400177FF)
+
+/*--- (####PPC5634 hard-coded for now) ---*/
+#define BootBaseL                   ((uint32_t) 0x00004000L)
+#define BootEndL                    ((uint32_t) 0x0000FFFFL)
+
+#define FlashBaseL                  ((uint32_t) 0x00040000L)
+#define FlashEndL                   ((uint32_t) 0x0017FFFFL)
+
+#define CyCal_SectionStart          (0x00020000)
+#define CyCal_SectionEnd            (0x0003FFFF)
+
+#define CyEEPROM_SectionStart       (0x00000000)
+#define CyEEPROM_SectionEnd         (0x00003FFF)
+
 /*********************************************************************
 * FUNCTION:     GetSrvc12MinPID                                      *
 * DESCRIPTION:  get min PID table counter                            *
@@ -461,27 +478,6 @@
 #define SystemNameOrEngineTypeSize         (6)/*not used*/
 #define InstrumentationDatasetIDSize       (4)
 #define StaticInstrumentDataSize           (1)
-
-/* Define boundaries for start and end of ram */
-#define      CyRAM_SectionStart    (0xD0000000)
-#define      CyRAM_SectionEnd      (0xD000DFFC)
-
-#define      CgScratch_RAM_SectionStart    (0xC0000000)
-#define      CgScratch_RAM_SectionEnd      (0xC0003FFF)
-
-#define      RAM_START (BYTE *)    CyRAM_SectionStart
-#define      RAM_END   (BYTE *)    CyRAM_SectionEnd
-#define      CpRAM_Scratch_START (BYTE *)    CgScratch_RAM_SectionStart
-#define      CpRAM_Scratch_END   (BYTE *)    CgScratch_RAM_SectionEnd
-
-#define      CyCal_SectionStart    (0xA0020000)
-#define      CyCal_SectionEnd      (0xA003FFFF)
-
-#define      CpHWIO_ROM_CalibrationStart   CyCal_SectionStart
-#define      CpHWIO_ROM_CalibrationEnd     CyCal_SectionEnd
-
-#define      CyEEPROM_SectionStart    (0xd000d000)
-#define      CyEEPROM_SectionEnd      (0xD000DFFC)
 #endif
 /*********************************************************************/
 /*                  GLOBAL VARIABLES DECLARATIONS                    */
@@ -515,7 +511,7 @@ extern FAR_COS void   SendStandardPositiveAnswer( BYTE in_msg_size );
 //WORD   Get_Key( void );
 //void   PerformReset ( void );
 //TbBOOLEAN  Address_Is_Validkw( LONGWORD , BYTE );
-//TbBOOLEAN  Srv23Address_Is_Validkw( LONGWORD , BYTE );
+TbBOOLEAN  Srv23Address_Is_Validkw( LONGWORD , BYTE );
 extern FAR_COS  TbBOOLEAN GetCommunicationEstablishedState( void );
 extern FAR_COS  void OBD_ByKW2000( void );
 void OBD_ByCAN( void );

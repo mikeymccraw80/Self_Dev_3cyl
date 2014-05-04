@@ -117,6 +117,7 @@
 // #include "kw2srv10.h" /*Init2CCommVariables*/
 // #include "kw2srv10m.h"
 #include "obdssvio.h"
+#include "kw2api.h"
 
 /*********************************************************************/
 /*            Global  Variable                                             */
@@ -278,11 +279,11 @@ void InitAppLvlCommVariables(void)
 /***   run the service 38 in diagnostic mode. Application has to   ***/
 /**    include the logic to test the conditions.                   ***/
 /*********************************************************************/
+#if 0
 TbBOOLEAN CheckIfConditionsCorrectToRunInDiagMode ( void )
 {
    return ( CbTRUE );
 }
-
 
 /*********************************************************************/
 /** This function does required actions before doing a reset.  It    */
@@ -292,7 +293,7 @@ TbBOOLEAN CheckIfConditionsCorrectToRunInDiagMode ( void )
 /*********************************************************************/
 void DoNecessaryActionsBeforeReset ( void )
 {
-#if 0
+
   WORD *Pointer ;
 
    for ( Pointer = ( WORD *) &CpHWIO_RAM_NVM_CriticalStartAddress ;
@@ -308,5 +309,76 @@ void DoNecessaryActionsBeforeReset ( void )
    {
       *Pointer = 0 ;
    }
-#endif
 }
+#endif
+/*********************************************************************/
+/** FUNCTION:     Srv23Address_Is_Validkw()                          */
+/**                                                                  */
+/** Type:         global                                             */
+/**                                                                  */
+/** DESCRIPTION:  This procedure validates the passed address for    */
+/**               service 23.                                        */
+/**                                                                  */
+/** PARAMETERS:   FOUR_BYTE_DATA_TYPE                                */
+/**                                                                  */
+/** RETURN:       None                                               */
+/**                                                                  */
+/** Global Variables Updated: None                                   */
+/*********************************************************************/
+TbBOOLEAN Srv23Address_Is_Validkw(LONGWORD Address, BYTE Size)
+{
+   TbBOOLEAN LyRtnVal;
+
+   if ( ((Address >= CyRAM_SectionStart )                  &&
+      ((Address + (Size-1)) <= CyRAM_SectionEnd ) )
+      ||
+    ( ( Address >= ( LONGWORD ) CpHWIO_ROM_CalibrationStart ) &&
+      ((Address + (Size-1)) <=
+                      ( LONGWORD ) CpHWIO_ROM_CalibrationEnd ))
+      ||
+    (( ( Address >= ( LONGWORD ) CyEEPROM_SectionStart ) &&
+      ((Address + (Size-1)) <=
+                      ( LONGWORD ) CyEEPROM_SectionEnd )))
+         // && ((GetVIOS_ManufactEnableCounter() > V_COUNT_BYTE(0))
+             // || (GetVIOS_VehInDev())))
+   )
+   {
+      LyRtnVal = CbTRUE;
+   }
+   else
+   {
+      LyRtnVal = CbFALSE;
+   }
+   return(LyRtnVal);
+
+}
+
+/*********************************************************************/
+/* FUNCTION:     Address_Is_Validkw()                                */
+/*                                                                   */
+/* Type:         global                                              */
+/*                                                                   */
+/* DESCRIPTION:  This procedure validates the passed address.        */
+/*                                                                   */
+/* PARAMETERS:   FOUR_BYTE_DATA_TYPE                                 */
+/*                                                                   */
+/* RETURN:       None                                                */
+/*                                                                   */
+/* Global Variables Updated: None                                    */
+/*********************************************************************/
+TbBOOLEAN Address_Is_Validkw( LONGWORD Address, BYTE Size )
+{
+ TbBOOLEAN LyRtnVal;
+
+ if ( ((Address >= CyRAM_SectionStart )                  &&
+      ((Address + (Size-1)) <= CyRAM_SectionEnd )) )
+   {
+      LyRtnVal = CbTRUE;
+   }
+   else
+   {
+      LyRtnVal = CbFALSE;
+   }
+   return(LyRtnVal);
+}
+

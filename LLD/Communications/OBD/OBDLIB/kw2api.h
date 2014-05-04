@@ -33,7 +33,7 @@
 #include "intr_ems.h"
 
 /*  application specific functions */
-
+#if 0
 /* Define boundrys for start and end of ram */
 #define CyRAM_SectionStart    0x7000
 #define CyRAM_SectionEnd      0x7f00
@@ -46,6 +46,27 @@
 
 #define CpHWIO_ROM_CalibrationStart (uint8_t *) 0x4000
 #define CpHWIO_ROM_CalibrationEnd   (uint8_t *) 0x63ff
+#endif
+
+/* Define boundaries for start and end of ram */
+#define CyRAM_SectionStart          (0x40000000)
+#define CyRAM_SectionEnd            (0x400177FF)
+
+/*--- (####PPC5634 hard-coded for now) ---*/
+#define BootBaseL                   ((uint32_t) 0x00004000L)
+#define BootEndL                    ((uint32_t) 0x0000FFFFL)
+
+#define FlashBaseL                  ((uint32_t) 0x00040000L)
+#define FlashEndL                   ((uint32_t) 0x0017FFFFL)
+
+#define CyCal_SectionStart          (0x00020000)
+#define CyCal_SectionEnd            (0x0003FFFF)
+
+#define CyEEPROM_SectionStart       (0x00000000)
+#define CyEEPROM_SectionEnd         (0x00003FFF)
+
+#define DOWNLOADRAM_START     (uint8_t *) CyRAM_SectionStart
+#define DOWNLOADRAM_END       (uint8_t *) CyRAM_SectionEnd
 
 
 /********************************************************************

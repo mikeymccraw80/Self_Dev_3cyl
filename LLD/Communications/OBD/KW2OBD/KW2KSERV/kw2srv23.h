@@ -22,11 +22,24 @@
  *
 \* ============================================================================ */
 
+/**********************************************************************/
+/*  Enumeration of the data byte position in the message.             */
+/**********************************************************************/
 
-void KwJ14230ReadDataByAddress( void );
+typedef  enum
+{
+ CyMemByAddrReq,
+ CyMemAddrHighByte,
+ CyMemAddrMidByte,
+ CyMemAddrLowByte,
+ CyMemSize
+}MemByAddrReq;
+/**********************************************************************/
+/*                  EXTERN FUNCTION DECLARATIONS                      */
+/**********************************************************************/
 
-
-
+void KwJ14230ReadDataByAddress(void);
+uint32_t Expand_Keyword_Memory_Address(uint16_t Start_Index);
 
 /* ============================================================================ *\
  * File revision history (top to bottom, first revision to last revision

@@ -19,78 +19,130 @@
  *   None.
  *
 \* ============================================================================ */
-
-// #include "kw2dll.h"
+#include "kw2type.h"
+#include "kw2dll.h"
 #include "kw2app.h"
-#include "kw2cfg.h"
+#include "kw2api.h"
 #include "kw2srv23.h"
-// #include "instmem.h"
 
 
-#define SyTesterPresentDataLength           1
-#define SyTesterPresentDataLengthWithResp   2
+/* Define the number of data bytes in the service 23 message */
 
-#define MODE_23_MSG_LENGTH                  5
-#define CyAddrBank                          1
-#define CyAddrMSB                           2
-#define CyAddrLSB                           3
-#define CyLength                            4
+#define Sy14230_MODE_23_MSG_LENGTH  5
 
+/***********************************************************************
+* FUNCTION:     Expand_Keyword_Memory_Address                          *
+*                                                                      *
+* TYPE:         Global                                                 *
+*                                                                      *
+* DESCRIPTION:  Get 24-bit address from KW message and translate to    *
+*               32 bits.  High-order nibble of KW byte 2 is expanded   *
+*               to 32-bit address bits 31-24; low-order nibble of KW   *
+*               byte 2 becomes bits 17-23.  Thus A2 01 56 becomes      *
+*               A0020156.                                              *
+*                                                                      *
+***********************************************************************/
+uint32_t Expand_Keyword_Memory_Address(uint16_t Start_Index)
+{
+    FOUR_BYTE_DATA_TYPE LgTempDataPtr;
+    uint8_t             Switch_Index;
+
+    Switch_Index = GetKw2000ServiceData(Start_Index) & 0xf0;
+
+/* for freescale PPC 32 bit MCU */
+    if ((Switch_Index & 0xe0) == 0x00)
+    {
+        /* Start of FLASH  */
+        LgTempDataPtr.Byte_Access.Byte_Four = 0x00;
+        LgTempDataPtr.Byte_Access.Byte_Three = GetKw2000ServiceData(Start_Index);
+    }
+    else if ((Switch_Index == 0x40) || (Switch_Index == 0x41))
+    {
+        /* Start of RAM  */
+        LgTempDataPtr.Byte_Access.Byte_Four = 0x40;
+        LgTempDataPtr.Byte_Access.Byte_Three = (GetKw2000ServiceData(Start_Index) & 0x01);
+    }
+    else
+    {
+        /* Invalid Value */
+        LgTempDataPtr.Byte_Access.Byte_Four = 0x00;
+        LgTempDataPtr.Byte_Access.Byte_Three = GetKw2000ServiceData(Start_Index);
+    }
+    LgTempDataPtr.Byte_Access.Byte_Two = GetKw2000ServiceData( Start_Index + 1 ); 
+    LgTempDataPtr.Byte_Access.Byte_One = GetKw2000ServiceData( Start_Index + 2 );
+
+	return LgTempDataPtr.DWord_Access;
+}
+
+/***********************************************************************
+* FUNCTION:     KwJ14230ReadMemoryByAddress    (SERVICE 23)            *
+*                                                                      *
+* TYPE:         Global                                                 *
+*                                                                      *
+* DESCRIPTION:  Same as the above file description.                    *
+*                                                                      *
+************************************************************************
+* Last modified on: 01/08/99              by: John Zha                 *
+***********************************************************************/
 
 void KwJ14230ReadDataByAddress( void )
 {
-#if 0
-   uint8_t     *pucMemStart ;
-   uint8_t     ucLength ;
-   uint8_t     idx, TrBytes ;
-   dyn_addrType dyn_addr;
-   uint8_t        gpage_buffer;
 
-   if (   (GetKeyword2000ServiceDataLength() != MODE_23_MSG_LENGTH )
-       || ( !IsDevelopment() ) )
+  /* Define the local variables to store the memory size,
+   * Index and to be the pointer.
+   */
+   uint32_t  Physical_Address;
+
+   BYTE                  *LgDataPtr ;
+   BYTE                  LyIdx ;
+   BYTE                  MemSize ;
+
+   /* Check the message data length if it is 5 */
+   if ( Sy14230_MODE_23_MSG_LENGTH ==
+        GetKeyword2000ServiceDataLength() )
    {
-      SendStandardNegativeAnswer( nrcSubFunctionNotSupported_InvalidFormat ) ;
-   }
-   else if ( !Memory_Page_Is_Valid(GetKw2000ServiceData (CyAddrBank))) 
-   {
-      SendStandardNegativeAnswer( nrcRequestOutOfRange ) ;
+	Physical_Address = Expand_Keyword_Memory_Address(CyMemAddrHighByte);
+
+    /* Get the memory size from the message. */
+    MemSize = GetKw2000ServiceData( CyMemSize ); 
+ 
+    /* verify addess plus memory size fit in the user defined
+     * memory block range. 
+     */
+    if(( Srv23Address_Is_Validkw ( Physical_Address , MemSize )) &&
+        (MemSize <= CyMaxMemSize))
+    {
+      /*The address pointer LgdataPtr pointer to the start address */
+      LgDataPtr = (BYTE *)Physical_Address;
+
+     /*Initialize the index to be 1, because the index 0 of the
+       * answer message data should be the service number 23 in 
+       * the answer message.
+       */
+      LyIdx = 1 ;
+ 
+      /* Load to the Transmit buffer with the memory data */     
+      while( LyIdx <= (MemSize) )
+      {  
+       WrtKw2000ServiceData(( *(LgDataPtr++) ), LyIdx++ ) ;
+      }
+
+      /*Send out the data by the SCI transmitter*/
+      SendStandardPositiveAnswer (LyIdx);
+    }
+    else
+    {
+      /* Invalid message length */
+      SendStandardNegativeAnswer( nrcRequestOutOfRange );
+    }
    }
    else
-   { 
-
-      //dyn_addr.g_l.globle_page = GetKw2000ServiceData (CyAddrBank);
-      ucLength = GetKw2000ServiceData (CyLength) ;
-      pucMemStart = (uint8_t*) ( (GetKw2000ServiceData (CyAddrMSB)*256) | GetKw2000ServiceData (CyAddrLSB) );
-       if( ( (PARTID&0xFFC0)!=0xC080)&&
-	       Is_Within_CAL_Range(pucMemStart,ucLength,GetKw2000ServiceData (CyAddrBank))  )
-         {
-            dyn_addr.g_l.globle_page = 0x0F;             
-         }
-         else
-         {
-            dyn_addr.g_l.globle_page = GetKw2000ServiceData (CyAddrBank);
-         }
-      dyn_addr.g_l.local_addr = (uint16_t)pucMemStart;
-      TrBytes = 1;
-      Disable_Interrupts() ;		 
-      /* backup the current value of gpage */
-      gpage_buffer = (uint8_t)_GPAGE.Byte;  
-      /* read memory data to KW2000 service data buffer */
-      for ( idx = 0 ; idx < ucLength ; idx++ )
-      {
-       
-         WrtKw2000ServiceData( ((uint8_t) *dyn_addr.g_pointer++), TrBytes++);
-      }
-      /* restore the value of gpage */
-      _GPAGE.Byte = gpage_buffer;
-      Enable_Interrupts();	  
-      SendStandardPositiveAnswer( TrBytes ) ;
+   {
+     /* Invalid Message format */
+     SendStandardNegativeAnswer( 
+     nrcSubFunctionNotSupported_InvalidFormat  ) ;
    }
-#endif
-} /*** End of KwJ14230TesterPresent ***/
-
-
-
+}
 
 /* ============================================================================ *\
  * File revision history (top to bottom, first revision to last revision
