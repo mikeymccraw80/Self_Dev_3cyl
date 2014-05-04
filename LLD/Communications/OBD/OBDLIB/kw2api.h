@@ -68,6 +68,8 @@
 #define DOWNLOADRAM_START     (uint8_t *) CyRAM_SectionStart
 #define DOWNLOADRAM_END       (uint8_t *) CyRAM_SectionEnd
 
+#define CpHWIO_ROM_CalibrationStart (uint8_t *) 0x4000
+#define CpHWIO_ROM_CalibrationEnd   (uint8_t *) 0x63ff
 
 /********************************************************************
  * J1979 Mode 9 info 6, CRC16 checksum calculation configure step.  *
