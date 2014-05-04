@@ -470,7 +470,7 @@ void SPARK_Set_Mode(Spark_Mode_T   in_spark_mode )
             break;
 
         case SPARK_SEQUENTIAL_MODE:
-            VSEP_EST_Select_Set_Mode(MTSA_CONFIG_VSEP_DEVICE_0,EST_MODE_SEQUENTIAL_MULTIPLE_ENABLE);
+            VSEP_EST_Select_Set_Mode(MTSA_CONFIG_VSEP_DEVICE_0,EST_MODE_SEQUENTIAL_SINGLE_ENABLE);
             break;
 
         default:
