@@ -110,12 +110,21 @@ void IO_OS_Powerdown_Callback(void)
 }
 
 //=============================================================================
-// IO_OS_PowerFail_Flag
+// IO_OS_Get_PowerFail_Flag
 //=============================================================================
-bool IO_OS_PowerFail_Flag(void)
+bool IO_OS_Get_PowerFail_Flag(void)
 {
     return B_SW_Pwf;
 }
+
+//=============================================================================
+// IO_OS_PowerFail_Flag
+//=============================================================================
+void IO_OS_Set_PowerFail_Flag(bool flag)
+{
+    B_SW_Pwf = flag;
+}
+
 
 //=============================================================================
 // IO_OS_BackGround_1ms_Status_Check

@@ -79,6 +79,11 @@ void HAL_OS_Powerdown_Callback(void);
 //=============================================================================
 bool HAL_OS_Get_PowerFail_Flag(void);
 
+//=============================================================================
+// HAL_OS_Set_PowerFail_Flag
+//=============================================================================
+void HAL_OS_Set_PowerFail_Flag(bool flag);
+
 // interrupt control routines
 void Disable_1ms_interrupt(void) ;
 void Enable_1ms_interrupt(void) ;

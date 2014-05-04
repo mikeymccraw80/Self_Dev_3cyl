@@ -361,7 +361,15 @@ void HAL_OS_Powerdown_Callback(void)
 //=============================================================================
 bool HAL_OS_Get_PowerFail_Flag(void)
 {
-    return IO_OS_PowerFail_Flag();
+    return IO_OS_Get_PowerFail_Flag();
+}
+
+//=============================================================================
+// HAL_OS_Set_PowerFail_Flag
+//=============================================================================
+void HAL_OS_Set_PowerFail_Flag(bool flag)
+{
+    IO_OS_Set_PowerFail_Flag(flag);
 }
 
 //=============================================================================
