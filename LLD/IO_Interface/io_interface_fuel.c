@@ -80,7 +80,7 @@ void  IO_Fuel_Syn_Update(void)
      PFI_Set_Pulse_Width(INJ_CHANNEL_B, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
      PFI_Set_Pulse_Width(INJ_CHANNEL_C, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
      PFI_Set_Pulse_Width(INJ_CHANNEL_D, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
-     PFI_Set_Pulse_Width(INJ_CHANNEL_A, 0, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
+     PFI_Set_Pulse_Width(INJ_CHANNEL_A, 0,              S_MILLISECONDSb, MILLISECOND_RESOLUTION );
     }
     /* Cam high means physical cylinder 4,simultaneous inject cyl1,cyl2,cyl3 */
     else
@@ -88,9 +88,9 @@ void  IO_Fuel_Syn_Update(void)
      chery_inj_width =  inj_sig[INJ_CHANNEL_C].inj_time;
      PFI_PulseWidth =Convert_Chery_Inj_Width(chery_inj_width,S_MILLISECONDSb);
      PFI_Set_Pulse_Width(INJ_CHANNEL_A, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
-     PFI_Set_Pulse_Width(INJ_CHANNEL_C, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
+     PFI_Set_Pulse_Width(INJ_CHANNEL_C, 0,              S_MILLISECONDSb, MILLISECOND_RESOLUTION );
      PFI_Set_Pulse_Width(INJ_CHANNEL_B, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
-     PFI_Set_Pulse_Width(INJ_CHANNEL_D, 0, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
+     PFI_Set_Pulse_Width(INJ_CHANNEL_D, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
     }
     PerfmHWIO_SimultaneousFuelDelivery();
 	First_Syn_Flag = true;
