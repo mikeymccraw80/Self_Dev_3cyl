@@ -51,7 +51,6 @@ uCrank_Angle_T                SPARK_Angle_From_Cylinder_Event_To_TDC;
 uCrank_Angle_T                SPARK_Angle_At_Cylinder_Event;
 Crank_Cylinder_T              SPARK_Cylinder_Event_ID;
 uint8_t                       SPARK_Number_Of_Cylinders;
-extern Spark_Control_Select_T SPARK_Control_Select_Map[];
 Spark_Mode_T                  SPARK_Initial_Est_Mode;
 uint32_t                      SPARK_Number_Of_Extra_Pulses;
 static bool                   SPARK_ISR_PulseRequested;
@@ -60,8 +59,6 @@ static uint8_t                SPARK_Set_Min_Angle_For_Rise_InToothCount;
 static volatile uint8_t       SPARK_Scheduled_SynControl;
 
 IO_Spark_Initialization_Parameters_T  *SPARK_Init_Parameters_Ptr;
-
-Crank_Cylinder_T  SPARK_Cylinder_Event_ID_test;
 
 /* ============================================================================ *\
  *  Local Constant Definitions
@@ -207,7 +204,6 @@ void SPARK_Reset_Parameters( void )
 {
     SPARK_Initialize( SPARK_Init_Parameters_Ptr );
     SPARK_ISR_PulseRequested = false;
-    SPARK_Cylinder_Event_ID_test =false;
 }
 
 //=============================================================================
@@ -782,8 +778,7 @@ void SPARK_Process_Interrupt(Spark_Control_Select_T in_spark_select )
     // EST control signals and the SEL1/0 signals:
     if( SPARK_Enable ) {
         // For the diagnostic routine
-        SPARK_Cylinder_Event_ID_test = CRANK_Increment_Cylinder_ID(SPARK_Cylinder_Event_ID_test, 1);
-        cylinder = SPARK_Cylinder_Event_ID_test;
+        cylinder = CRANK_Increment_Cylinder_ID(SPARK_Cylinder_Event_ID, 1);
 
         control_select = SPARK_Control_Select_Map[cylinder];
         // If there is a channel without a fault, update its values and set it up:
@@ -815,7 +810,6 @@ void SPARK_Process_Cylinder_Event( void )
     uint32_t          counter;
     Crank_Cylinder_T  channel;
     uCrank_Angle_T    end_angle;
-    Spark_Control_Select_T spark_select  ;
 
     cs = Enter_Critical_Section();
     SPARK_Cylinder_Event_ID       = CRANK_Get_Cylinder_ID();
@@ -825,17 +819,14 @@ void SPARK_Process_Cylinder_Event( void )
     if( SPARK_Enable ) {
         if(!SPARK_ISR_PulseRequested) {
             for( counter = 0; counter < SPARK_Control_Select_Max; counter++ ) {
-                channel = CRANK_Get_Future_Cylinder_ID( (uint8_t)counter );
+                channel = CRANK_Increment_Cylinder_ID(SPARK_Cylinder_Event_ID, 1);
                 MCD5412_Set_Host_Interrupt_Enable(MPTAC_TPU_INDEX, &TPU, SPARK_Mptac[counter], true );
-                spark_select =  SPARK_Control_Select_Map[channel];
-                SPARK_Update_Duration_Values(spark_select, channel);
-                // Setup the initial cylinders for normal operation:
                 // Put the cylinder ID for this est control to the correct value
                 VSEP_EST_Select_Set_Channel(MTSA_CONFIG_VSEP_DEVICE_0, CeVSEP_EST_CylinderID_Mapping[channel]);
+                // Setup the initial cylinders for normal operation,  Update the end angle information
+                SPARK_Update_Duration_Values(SPARK_CONTROL_0, channel);
                 end_angle = SPARK_Calculate_End_Angle_In_Counts( channel, (uint8_t)counter, SPARK_CALC_POSITION_Ref );
-                // Update the end angle information
-                SPARK_Schedule_Next_Event( channel, end_angle );
-                SPARK_Cylinder_Event_ID_test  = channel;
+                SPARK_Schedule_Next_Event(channel, end_angle);
             }
             SPARK_ISR_PulseRequested = true;
             SPARK_Scheduled_SynControl ++;
@@ -848,7 +839,7 @@ void SPARK_Process_Cylinder_Event( void )
                 }
                 SPARK_Update_Duration_Values(SPARK_CONTROL_0, SPARK_Cylinder_Event_ID);
                 end_angle = SPARK_Calculate_End_Angle_In_Counts( SPARK_Cylinder_Event_ID, (uint8_t)0, SPARK_CALC_POSITION_Ref );
-                SPARK_Schedule_Next_Event( SPARK_Cylinder_Event_ID, end_angle );
+                SPARK_Schedule_Next_Event(SPARK_Cylinder_Event_ID, end_angle);
                 
                 /* increase the syncontrol var, if syncontrol==2, multipulse pass next event tooth */
                 SPARK_Scheduled_SynControl ++;
