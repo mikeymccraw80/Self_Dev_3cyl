@@ -137,15 +137,7 @@ else
 
 		
     /*Convert the engineer value of Chery Injection end angle to Delphi engineer value */
-	if(inj_sig[INJ_CHANNEL_A].inj_end_angle>inj_sig[INJ_CHANNEL_A].abort_angle)
-	{
-	  chery_inj_end_angle_prev = inj_sig[INJ_CHANNEL_A].inj_end_angle;
-	}
-	else
-	{
-         chery_inj_end_angle_prev = inj_sig[INJ_CHANNEL_A].abort_angle;
-	}
-	chery_inj_end_angle = (900 - Convert_Chery_Inj_angle(chery_inj_end_angle_prev,Prec_Inj_end_angle_chery))<<S_CRANK_ANGLE;
+	chery_inj_end_angle = (900 - Convert_Chery_Inj_angle(inj_sig[INJ_CHANNEL_A].inj_end_angle,Prec_Inj_end_angle_chery))<<S_CRANK_ANGLE;
 	chery_inj_end_angle = chery_inj_end_angle -KfHWIO_phi_BoundaryFraction;
     SetHWIO_FuelInjectorEOIT(chery_inj_end_angle);
     SetHWIO_FuelInjectorTrimEOIT(chery_inj_end_angle);
