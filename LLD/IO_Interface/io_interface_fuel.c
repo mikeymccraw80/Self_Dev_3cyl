@@ -103,44 +103,39 @@ void  IO_Fuel_Syn_Update(void)
             PFI_Set_Pulse_Width(INJ_CHANNEL_D, PFI_PulseWidth             , S_MILLISECONDSb, MILLISECOND_RESOLUTION );
         }
         //PerfmHWIO_SimultaneousFuelDelivery();
-
-        First_Syn_Flag = true;
-    }
-
-    //Chery requirement: Do not enable the squence injection until the first two HLS_Syn finished,
-    // if corresponding simultaneous injection happened
-    if ( Startup_Counter <PFI_MAX_CYLINDERS/2) {
-
-
-
-        if(Startup_Counter ==1) {
-
-
-	    //SetHWIO_FuelSqSwitch(true);
+#if 0
+           //SetHWIO_FuelSqSwitch(true);
            /*Convert the engineer value of Chery Injection end angle to Delphi engineer value */
 	    chery_inj_end_angle = (900 - Convert_Chery_Inj_angle(inj_sig[INJ_CHANNEL_A].inj_end_angle,Prec_Inj_end_angle_chery))<<S_CRANK_ANGLE;
 	    chery_inj_end_angle = chery_inj_end_angle -KfHWIO_phi_BoundaryFraction;
            SetHWIO_FuelInjectorEOIT(chery_inj_end_angle);
            SetHWIO_FuelInjectorTrimEOIT(chery_inj_end_angle);
+#endif
+	   if (disable_cyl2_cyl4_flag == true) 
+	     {
 
+		 chery_inj_width =  inj_sig[INJ_CHANNEL_A].inj_time;
+               PFI_PulseWidth =Convert_Chery_Inj_Width(chery_inj_width,S_MILLISECONDSb);
+               PFI_Set_Pulse_Width(INJ_CHANNEL_A, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
+	      }
+	   else
+	      {
 
-        }
-
-        Startup_Counter++;
-
-        inj_sig[INJ_CHANNEL_A].B_post_inj = 0;
-        inj_sig[INJ_CHANNEL_B].B_post_inj = 0;
-        inj_sig[INJ_CHANNEL_C].B_post_inj = 0;
-        inj_sig[INJ_CHANNEL_D].B_post_inj = 0;
-    }
-
+		 chery_inj_width =  inj_sig[INJ_CHANNEL_C].inj_time;
+               PFI_PulseWidth =Convert_Chery_Inj_Width(chery_inj_width,S_MILLISECONDSb);
+               PFI_Set_Pulse_Width(INJ_CHANNEL_C, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
+	   	} 
+         Startup_Counter++;
+        First_Syn_Flag = true;
+ }
 else
 {
    if ( Startup_Counter <255)
    {
      Startup_Counter++;
    }
-			
+
+		
     /*Convert the engineer value of Chery Injection end angle to Delphi engineer value */
 	if(inj_sig[INJ_CHANNEL_A].inj_end_angle>inj_sig[INJ_CHANNEL_A].abort_angle)
 	{

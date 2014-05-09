@@ -367,8 +367,7 @@ uint32_t       desired_pulse_width;
    MCD5417_Update_Boundary( 
          PFI_FUEL_TPU_INDEX,
       PFI_Desfi[ in_channel ],
-      0,
-     // PFI_Desired_Pulse_Width[ in_channel ],
+      PFI_Desired_Pulse_Width[ in_channel ],
       PFI_Boundary_Time[ in_channel ],
       PFI_Normal_Offset,
       PFI_Trim_Offset );
