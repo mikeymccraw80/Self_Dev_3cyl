@@ -9,6 +9,7 @@
 #include "io_conversion.h"
 #include "dd_ecsm.h"
 #include "hal_emulated_eeprom.h"
+#include "os_type.h"
 
 void OS_LoResTasks_Hook(void);
 void OS_KnockEvntTasks_Hook(void);
@@ -131,10 +132,12 @@ void OS_SW_INTC_Control( void)
 	}
 
 	if (APPLICATION_CYLINDER_EVENT_TASK) {
+		Enter_OSThroughputMeasure(CeOSTK_SEG_CYLINDER_EVENT); //measuring cylinder event time
 		OS_LoResTasks_Hook();
 		SPARK_Process_Cylinder_Event();
 		PFI_Process_Cylinder_Event();
 		APPLICATION_CYLINDER_EVENT_TASK = false;
+		Leave_OSThroughputMeasure(CeOSTK_SEG_CYLINDER_EVENT); //measuring cylinder event time
 	}
 
 	if (CAM_CYLINDER_EVENT_TASK) {
