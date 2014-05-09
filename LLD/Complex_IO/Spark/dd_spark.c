@@ -411,7 +411,12 @@ void SPARK_Set_Duration_Extra_P2(uint8_t cylinder, uint32_t breaktime, uint32_t 
 //=============================================================================
 void SPARK_Set_ExtraPulse_Count(uint8_t cylinder, uint8_t extra_pulse)
 {
-    SPARK_Channel[cylinder].extra_pulse = extra_pulse;
+    /* valid extra pulse is no more than 2 */
+    if ((extra_pulse >= 0) && (extra_pulse <= 2) ) {
+        SPARK_Channel[cylinder].extra_pulse = extra_pulse;
+    } else {
+        SPARK_Channel[cylinder].extra_pulse = 0;
+    }
 }
 
 //=============================================================================
@@ -696,8 +701,13 @@ static void SPARK_Update_Duration_Values(Spark_Control_Select_T in_spark_select,
 
     /* set main pulse duration */
     MCD5412_Set_Min_Duration(MPTAC_TPU_INDEX, SPARK_Mptac[ SPARK_CONTROL_0 ], SPARK_Min_Duration );
-    MCD5412_Set_Duration(MPTAC_TPU_INDEX, SPARK_Mptac[ SPARK_CONTROL_0 ], \
-                        SPARK_Channel[in_cylinder].duration[SPARK_DWELL_INDEX_MAIN_PULSE].on_time );
+    if (SPARK_Channel[in_cylinder].duration[SPARK_DWELL_INDEX_MAIN_PULSE].on_time > SPARK_Min_Duration) {
+        MCD5412_Set_Duration(MPTAC_TPU_INDEX, SPARK_Mptac[ SPARK_CONTROL_0 ], \
+                            SPARK_Channel[in_cylinder].duration[SPARK_DWELL_INDEX_MAIN_PULSE].on_time );
+    } else {
+        MCD5412_Set_Duration(MPTAC_TPU_INDEX, SPARK_Mptac[ SPARK_CONTROL_0 ], \
+                            SPARK_Min_Duration );
+    }
     MCD5412_Set_Max_Duration(MPTAC_TPU_INDEX,  SPARK_Mptac[ SPARK_CONTROL_0 ], SPARK_Max_Duration );
 
 
