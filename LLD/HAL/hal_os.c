@@ -242,7 +242,7 @@ void HAL_OS_SYN_Task(void)
      KnockControl58XReferenceLogic();
     //Enter critical section
     interrupt_status = Enter_Critical_Enable_Section();
-    HLS_syn();
+     HLS_syn();
     Leave_Critical_Section(interrupt_status);
     //app fuel update
     IO_Fuel_Syn_Update();

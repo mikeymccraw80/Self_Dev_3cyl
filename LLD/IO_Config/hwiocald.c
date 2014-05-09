@@ -151,7 +151,7 @@ const   T_CRANK_ANGLE    KfHWIO_phi_TopDeadCenter = V_CRANK_ANGLE(102);
 *|   }
 *| }
 */
-const   T_CRANK_ANGLE    KfHWIO_phi_BoundaryFraction = V_CRANK_ANGLE(180);
+const   T_CRANK_ANGLE    KfHWIO_phi_BoundaryFraction = V_CRANK_ANGLE(90);
 
 /*===========================================================================*\
  * Number of Cylinders Calibration

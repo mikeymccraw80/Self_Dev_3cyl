@@ -50,8 +50,8 @@ static void CRANK_Scheduler_Initialize( void )
    //CRANK_SCHEDULER_Assign_Event(  VCP_CYLINDER_EVENT,                  first_cylinder_event,   cylinder_offset,        cylinders );
    // CRANK_SCHEDULER_Assign_Handler_To_Event_ID( SPARK_CYLINDER_EVENT, SPARK_Process_Cylinder_Event    );
    // CRANK_SCHEDULER_Assign_Event(   SPARK_CYLINDER_EVENT,                first_cylinder_event,   cylinder_offset,        cylinders );
-   CRANK_SCHEDULER_Assign_Handler_To_Event_ID( PFI_CYLINDER_EVENT,  PFI_Process_Cylinder_Event          );
-   CRANK_SCHEDULER_Assign_Event(  PFI_CYLINDER_EVENT,                  first_cylinder_event,   cylinder_offset,        cylinders );
+   //CRANK_SCHEDULER_Assign_Handler_To_Event_ID( PFI_CYLINDER_EVENT,  PFI_Process_Cylinder_Event          );
+  // CRANK_SCHEDULER_Assign_Event(  PFI_CYLINDER_EVENT,                  first_cylinder_event,   cylinder_offset,        cylinders );
    CRANK_SCHEDULER_Assign_Handler_To_Event_ID( CYLINDER_EVENT,  OS_SCHEDULER_Cylinder_Event         );
    CRANK_SCHEDULER_Assign_Event(  CYLINDER_EVENT,                      first_cylinder_event,   cylinder_offset,        cylinders );
    CRANK_SCHEDULER_Assign_Handler_To_Event_ID(SIX_X_EVENT,  OS_SCHEDULER_6X_Event         );

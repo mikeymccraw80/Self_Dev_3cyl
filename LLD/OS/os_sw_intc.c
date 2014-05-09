@@ -133,7 +133,7 @@ void OS_SW_INTC_Control( void)
 	if (APPLICATION_CYLINDER_EVENT_TASK) {
 		OS_LoResTasks_Hook();
 		SPARK_Process_Cylinder_Event();
-		// PFI_Process_Cylinder_Event();
+		PFI_Process_Cylinder_Event();
 		APPLICATION_CYLINDER_EVENT_TASK = false;
 	}
 

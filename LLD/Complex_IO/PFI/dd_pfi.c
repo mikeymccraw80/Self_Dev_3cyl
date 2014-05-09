@@ -6,6 +6,9 @@
 #include "io_conversion.h"
 #include "io_config_fuel.h"
 #include "io_config_tpu.h"
+#include "io_interface_eng.h"
+
+#include"t_custom.h"
 
 
 //=============================================================================
@@ -140,6 +143,38 @@ static uint32_t PFI_Calculate_Boundary(
 
    PFI_Time_Per_Boundary_Fraction = angle_per_boundary_frac;
    return PFI_Time_Per_Boundary_Fraction;
+}
+//=============================================================================
+// PFI_Set_Pulse_Width
+//=============================================================================
+void PFI_Set_Pulse_Width(
+   Crank_Cylinder_T  in_channel,
+   uint32_t          in_pulse_width,
+   uint8_t           in_time_precision,
+   uint8_t           in_time_resolution )
+{
+   uint32_t    base_frequency;
+
+   base_frequency = TPU_TIMER_Get_Base_Frequency(PFI_FUEL_TPU_INDEX,  PFI_Desfi[ in_channel ] );
+
+
+   PFI_Desired_Pulse_Width[ in_channel ] = IO_Convert_Time_To_Count(
+      in_pulse_width,
+      base_frequency,
+      in_time_precision,
+      in_time_resolution ); 
+
+   if( PFI_Flags.Update_Enabled )
+   {
+     MCD5417_Update_Channel(  
+	 	                PFI_FUEL_TPU_INDEX, 
+	 	                PFI_Desfi[ in_channel ],
+                              PFI_Desired_Pulse_Width[ in_channel ],
+                              PFI_Boundary_Time[ in_channel ],
+                              PFI_Normal_Offset,
+                              PFI_Trim_Offset );
+   }
+
 }
 
 //=============================================================================
@@ -302,6 +337,7 @@ static void PFI_Perform_Boundary_Logic(
 {
 uint32_t period;
 EPPwMT_Coherent_Edge_Time_And_Count_T edge_time_and_count;
+uint32_t       desired_pulse_width;
 
   MCD5408_Get_Coherent_Edge_Time_And_Count(EPPWMT_TPU_INDEX,
                                                                                      TPU_CONFIG_IC_EPPWMT,
@@ -316,11 +352,23 @@ EPPwMT_Coherent_Edge_Time_And_Count_T edge_time_and_count;
       edge_time_and_count.Count,
       period );
 
+   if(Startup_Counter<8)
+   	{
+   	  desired_pulse_width =0;
+	  PFI_Set_Pulse_Width(in_channel,0,    S_MILLISECONDSb, MILLISECOND_RESOLUTION );
+
+   	}
+   else
+   	{
+          desired_pulse_width = PFI_Desired_Pulse_Width[ in_channel ];
+   	}
+
    // Update boundary:
    MCD5417_Update_Boundary( 
          PFI_FUEL_TPU_INDEX,
       PFI_Desfi[ in_channel ],
-      PFI_Desired_Pulse_Width[ in_channel ],
+      0,
+     // PFI_Desired_Pulse_Width[ in_channel ],
       PFI_Boundary_Time[ in_channel ],
       PFI_Normal_Offset,
       PFI_Trim_Offset );
@@ -366,9 +414,9 @@ void PFI_Process_Cylinder_Event(void)
       PFI_IX_Boundary = PFI_Cylinder_Event_ID;
 
       cylinder_event_period = CRANK_Get_Parameter( CRANK_PARAMETER_LO_RES_REFERENCE_PERIOD, 0, 0 );
-
-      for( channel = 0; channel < PFI_Number_Of_Cylinders; channel++ )
-      {
+      channel=CRANK_Get_Cylinder_ID();
+     // for( channel = 0; channel < PFI_Number_Of_Cylinders; channel++ )
+      //{
          // Do an update for all fuel channels:
          MCD5417_Update_Channel(   PFI_FUEL_TPU_INDEX,
                                  PFI_Desfi[ channel ],
@@ -376,7 +424,7 @@ void PFI_Process_Cylinder_Event(void)
                                  PFI_Boundary_Time[ channel ],
                                  PFI_Normal_Offset,
                                  PFI_Trim_Offset );
-      }
+     // }
    }
 
 
@@ -568,38 +616,6 @@ void PFI_Set_Injector_Offset(
    MCD5417_Set_Kinj( PFI_FUEL_TPU_INDEX, conversion_time );
 }
 
-//=============================================================================
-// PFI_Set_Pulse_Width
-//=============================================================================
-void PFI_Set_Pulse_Width(
-   Crank_Cylinder_T  in_channel,
-   uint32_t          in_pulse_width,
-   uint8_t           in_time_precision,
-   uint8_t           in_time_resolution )
-{
-   uint32_t    base_frequency;
-
-   base_frequency = TPU_TIMER_Get_Base_Frequency(PFI_FUEL_TPU_INDEX,  PFI_Desfi[ in_channel ] );
-
-
-   PFI_Desired_Pulse_Width[ in_channel ] = IO_Convert_Time_To_Count(
-      in_pulse_width,
-      base_frequency,
-      in_time_precision,
-      in_time_resolution ); 
-
-   if( PFI_Flags.Update_Enabled )
-   {
-     MCD5417_Update_Channel(  
-	 	                PFI_FUEL_TPU_INDEX, 
-	 	                PFI_Desfi[ in_channel ],
-                              PFI_Desired_Pulse_Width[ in_channel ],
-                              PFI_Boundary_Time[ in_channel ],
-                              PFI_Normal_Offset,
-                              PFI_Trim_Offset );
-   }
-
-}
 
 //=============================================================================
 // PFI_Set_Pulse_Width
