@@ -85,6 +85,7 @@ void Init_InitThroughputData(void)
 	VbOSTK_ThruPutData_FirstTime[CeOSTK_SEG_2msTIMEBASE] = true;
 	VbOSTK_ThruPutData_FirstTime[CeOSTK_SEG_5msTIMEBASE] = true;
 	VbOSTK_ThruPutData_FirstTime[CeOSTK_SEG_10msTIMEBASE] = true;
+	VbOSTK_ThruPutData_FirstTime[CeOSTK_SEG_CYLINDER_EVENT] = true;
 }
 
 
