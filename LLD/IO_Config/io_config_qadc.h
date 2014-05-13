@@ -32,7 +32,6 @@
 //
 #define QADC_ADC_1_CR_INIT_VALUE  ((uint16_t) (0x8000 | (ADCx_CLK_PS & 0x1F)))
 
-
 //=============================================================================
 // Analog_Channel_T | Defines an enumeration that contains all the analog
 //=============================================================================
@@ -120,6 +119,9 @@ extern const QADC_SSICR_T  QADC_INITIAL_SSICR;
 extern const QADC_ETDFR_T QADC_INITIAL_ETDFR;
 
 extern const ADC_ACR_T  QADC_INITIAL_ACR1;
+
+extern const ADC_PUDCR_T  QADC_ENABLE_PUDCR7;
+extern const ADC_PUDCR_T  QADC_DISABLE_PUDCR7;
 
 extern const ADC_CCMF_T  QADC_CMD_Timebase[AD_ANALOG_MAX_SIGNAL_NAMES];
 extern const ADC_CCMF_T  QADC_CMD_FIFO1[AD_ANALOG_FIFO1_MAX_SIGNAL_NAMES];

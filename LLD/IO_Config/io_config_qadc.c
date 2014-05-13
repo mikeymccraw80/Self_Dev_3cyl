@@ -99,11 +99,21 @@ const ADC_ACR_T  QADC_INITIAL_ACR1 =
 
 };
 
+const ADC_PUDCR_T  QADC_ENABLE_PUDCR7 =
+{
+   QADC_PULL_DOWN,
+   QADC_PULL_5K
+};
 
+const ADC_PUDCR_T  QADC_DISABLE_PUDCR7 =
+{
+   QADC_NO_PULL,
+   QADC_PULL_200K
+};
 
 const ADC_CCMF_T  QADC_CMD_FIFO1[AD_ANALOG_FIFO1_MAX_SIGNAL_NAMES]=
 {
-
+    // AD_TPS1VI_Channel 
    {
      false,    //EOQ      
      0,    //PAUSE 
@@ -118,7 +128,7 @@ const ADC_CCMF_T  QADC_CMD_FIFO1[AD_ANALOG_FIFO1_MAX_SIGNAL_NAMES]=
      QADC_CHANNEL_AN5_DAN_2_N,    // CHANNEL 
      0
    },
-
+    //AD_TPS2VI_Channel 
    {
      true,    //EOQ      
      0,    //PAUSE 

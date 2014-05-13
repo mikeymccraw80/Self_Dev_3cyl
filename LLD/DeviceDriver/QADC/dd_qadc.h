@@ -905,6 +905,30 @@ typedef enum QADC_Register_Address_Tag
 
 }  QADC_Register_Address_T;
 
+//=============================================================================
+// @enum QADC_PULL_TYPE_T | 
+//=============================================================================
+typedef enum
+{
+   QADC_NO_PULL = 0,
+   QADC_PULL_UP,
+   QADC_PULL_DOWN,
+   QADC_PULL_UP_DOWN,
+   QADC_PULL_TYPE_MAX
+}  QADC_PULL_TYPE_T;
+
+//=============================================================================
+// @enum QADC_PULL_VALUE_T | 
+//=============================================================================
+typedef enum
+{
+   QADC_PULL_RESV = 0,
+   QADC_PULL_200K,
+   QADC_PULL_100K,
+   QADC_PULL_5K,
+   QADC_PULL_STRENGTH_MAX
+}  QADC_PULL_STRENGTH_T;
+
 // @enum QADC_Sample_Cycles_T | Sample Cycles for the converter 
 typedef enum QADC_Sample_Cycles_Tag
 {

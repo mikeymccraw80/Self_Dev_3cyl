@@ -104,7 +104,10 @@ void QADC_Initialize_Device(void )
 //////////////////////////////////////////////////////////////////////////
       //Set FIFO 0 to software triggered mode
    QADC.CFCR[QADC_FIFO_0].F.MODE = QADC_TRIGGER_MODE_SOFTWARE_TRIGGER_Single_Scan;
-	  
+
+   /* this command fifo is just for config command */
+   QADC.CFCR[QADC_FIFO_3].F.MODE = QADC_TRIGGER_MODE_SOFTWARE_TRIGGER_Single_Scan;
+
     //eQADC CFIFO Push Registers (EQADC_CFPR)
     QADC.CFPR[QADC_FIFO_0] =  CMF_temp.U32;
 
@@ -175,6 +178,42 @@ void QADC_Initialize_Device(void )
  QADC.CFCR[QADC_FIFO_4].F.MODE = QADC_TRIGGER_MODE_FALLING_EDGE_EXTERNAL_TRIGGER_Continuous_Scan;
 
 
+}
+
+//=============================================================================
+// QADC_Enable_APS1_Diag
+//=============================================================================
+void  QADC_Enable_APS1_Diag(void)
+{
+    ADC_CMF_T CMF_temp;
+
+    //ADC_PUDCR7
+    CMF_temp.U32 = 0x00000000;   
+    CMF_temp.WF.EOQ = 0x1;
+    CMF_temp.WF.BN= ADC_CONVERTER_1;
+    CMF_temp.WF.R_W = QADC_READ_WRITE_FLAG_WRITE;
+    CMF_temp.WF.REG_DATA = QADC_ENABLE_PUDCR7.U16;
+    CMF_temp.WF.REG_ADDRESS = QADC_REGISTER_ADDRESS_PULL_UP_DOWN_CONTROL_8_REGISTER;
+    QADC.CFPR[QADC_FIFO_3] =  CMF_temp.U32;
+    QADC.CFCR[QADC_FIFO_3].F.SSE = 1;
+}
+
+//=============================================================================
+// QADC_Enable_APS1_Diag
+//=============================================================================
+void  QADC_Disable_APS1_Diag(void)
+{
+    ADC_CMF_T CMF_temp;
+
+    //ADC_PUDCR7
+    CMF_temp.U32 = 0x00000000;   
+    CMF_temp.WF.EOQ = 0x1;
+    CMF_temp.WF.BN= ADC_CONVERTER_1;
+    CMF_temp.WF.R_W = QADC_READ_WRITE_FLAG_WRITE;
+    CMF_temp.WF.REG_DATA = QADC_DISABLE_PUDCR7.U16;
+    CMF_temp.WF.REG_ADDRESS = QADC_REGISTER_ADDRESS_PULL_UP_DOWN_CONTROL_8_REGISTER;
+    QADC.CFPR[QADC_FIFO_3] = CMF_temp.U32;
+    QADC.CFCR[QADC_FIFO_3].F.SSE = 1;
 }
 
 
