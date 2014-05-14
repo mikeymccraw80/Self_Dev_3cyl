@@ -76,10 +76,10 @@
 *-  description              = "EMSD MPR Output diag system short high test fail";
 *-}
 
-*-emsdmprd.SbEMSD_MPRDShortHiTestFailed{
+*-emsdmprd.SbEMSD_MPRDShortLoTestFailed{
 *-  OBJECTS_CLASS: parameter_es_class;
 *-  label                    = "MPRTSTFALO";
-*-  variable_location.symbol = emsdmprd.SbEMSD_MPRDShortHiTestFailed;
+*-  variable_location.symbol = emsdmprd.SbEMSD_MPRDShortLoTestFailed;
 *-  ds_scaling_unit          = "Boolean";
 *-  ds_precision             = "2.0";
 *-  ds_scaling_mode          = "Ax + B";
