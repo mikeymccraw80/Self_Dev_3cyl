@@ -49,6 +49,8 @@ extern const T_PERCENTa           KfCOND_Pct_AD_RespDeltaAPS2_Max;
 extern const T_COND_TIME_SEC_0_16 KfCOND_t_AD_RespShortSettleMin;
 extern const T_COND_TIME_SEC_0_16 KfCOND_t_AD_RespRecSettleMin;
 extern const T_PERCENTa           KfCOND_Pct_AD_RespRecDeltaAPS2_Max;
+extern const T_COND_TIME_SEC_0_16 KfETCI_t_APS_MinLrnDsblDly;
+extern const T_COND_TIME_SEC_0_16 KfETCI_t_AD_NotShortSettleMin;
 
 #endif
 

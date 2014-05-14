@@ -57,9 +57,11 @@ extern TbBOOLEAN VbCOND_HWIO_ClockFailed;
 #define GetCOND_MainCPU_ClockTestFailed() (VbCOND_HWIO_ClockFailed)
 
 /* ad input response task */
+void InitCOND_AD_InputRespRstKeyOn(void);
 void MngCOND_AD_InputResp15p6msTasksA(void);
 void MngCOND_AD_InputResp15p6msTasksB(void);
 TbBOOLEAN  GetCOND_AD_RespETC_DoNotUseAPS_Data(void);
+TbBOOLEAN  GetCOND_AD_RespETC_LrnDwnDsblCritMet(void);
 
 #endif /* CONDPAPI_H */
 

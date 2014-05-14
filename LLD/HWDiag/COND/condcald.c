@@ -192,7 +192,7 @@ const T_PERCENTa     KfCOND_Pct_AD_RespDeltaAPS2_Max = V_PERCENTa(100);
 *|   }
 *| }
 */
-const T_COND_TIME_SEC_0_16     KfCOND_t_AD_RespTstInterval = V_COND_TIME_SEC_0_16(0.3);
+const T_COND_TIME_SEC_0_16     KfCOND_t_AD_RespTstInterval = V_COND_TIME_SEC_0_16(3);
 
 /*
 *| condcald.{
@@ -237,6 +237,20 @@ const T_COND_TIME_SEC_0_16 \
 */
 const T_COND_TIME_SEC_0_16 \
                      KfETCI_t_AD_NotShortSettleMin = V_COND_TIME_SEC_0_16(0.008);
+
+/*
+*| etcicaps.{
+*|   KfETCI_t_APS_MinLrnDsblDly {
+*|    : is_calconst;
+*|    : description = "Time APS Min Learn is disabled after APS1 short to ground is removed. "
+*| "Engineering Range: [0, 16), Resolution: 0.000244140625 s / Count ";
+*|    : type = apptypes.t_cond_time_sec_0_16;
+*|    : units = "s";
+*|   }
+*| }
+*/
+const T_COND_TIME_SEC_0_16 \
+                     KfETCI_t_APS_MinLrnDsblDly = V_COND_TIME_SEC_0_16(0.5);
 
 /******************************************************************************
 *

@@ -155,6 +155,7 @@ void  HAL_OS_10ms_Task(void)
 	MngEOSD_O2_12_Htr10msTasks();
 	MngESTD_7p81msTasks();
 	MngEPSD_Crank7p81msTasks();
+    MngCOND_AD_InputResp15p6msTasksA();
 }
 
 //=============================================================================
@@ -227,6 +228,7 @@ void HAL_OS_Init_Task(void)
 	/*Initialize the Engine State value at power up. */
 	InitVIOS_EngSt();
 	InitEPSD_CrankRstToKeyOn();
+	InitCOND_AD_InputRespRstKeyOn();
 }
 
 
@@ -545,6 +547,7 @@ void Sinit_StallToCrank(void)
 void Sinit_PowerOffDelayToKeyOn(void)
 {
     InitEPSD_CrankRstToKeyOn();
+    InitCOND_AD_InputRespRstKeyOn();
 }
 
 /*****************************************************************************

@@ -53,19 +53,6 @@ typedef enum
   CeCOND_AD_RESP_STEP_POST_SHORT   /* 3 */
 } TeCOND_AD_RESP_STEPS;
 
-typedef struct
-{
-  T_COUNT_WORD          FailCntr;
-  T_COUNT_WORD          SampleCntr;
-  WORD                  Unused      : 1;  /* available for future use */
-  WORD                  PassBlocker : 1;  /* TbBOOLEAN                */
-  WORD                  EnblCritMet : 1;  /* TbBOOLEAN                */
-  WORD                  FailCritMet : 1;  /* TbBOOLEAN                */
-  WORD                  TstComplete : 1;  /* TbBOOLEAN                */
-  WORD                  TstFailed   : 1;  /* TbBOOLEAN                */
-  WORD                  TstStRpt    : 2;  /* TeSINGLE_TEST_STATUS     */
-} TsOBDU_DiagTstData;
-
 typedef T_W_RANGE_0_16                   T_COND_TIME_SEC_0_16;
 #define V_COND_TIME_SEC_0_16(val)        V_W_RANGE_0_16(val)
 #define S_COND_TIME_SEC_0_16             S_W_RANGE_0_16
@@ -81,6 +68,11 @@ TbBOOLEAN  VbCOND_AD_RespAPS_ShortTogether;
 #define CfCOND_TIME_SEC_MAX        ((T_COND_TIME_SEC_0_16 )0xFFFF)
 #define GetETCI_Pct_BuffRawAPS_1() (HAL_Analog_Get_PPS1VI_Value()<<1)
 #define GetETCI_Pct_BuffRawAPS_2() (HAL_Analog_Get_PPS2VI_Value()<<1)
+
+#define GetCOND_AD_RespAPS1_SlowRec() \
+      (VbCOND_AD_RespAPS1_SlowRec)
+#define GetCOND_AD_RespAPS_ShortTogether() \
+      (VbCOND_AD_RespAPS_ShortTogether)
 
 /******************************************************************************
  *  Local Variable Definitions
@@ -109,7 +101,6 @@ static T_PERCENTa            SfCOND_Pct_APS2_PostShort;
 TbBOOLEAN    VbCOND_AD_RespFailed;
 TbBOOLEAN    VbCOND_AD_RespTstComplete;
 #pragma section DATA " " ".bss"
-TbBOOLEAN    VbCOND_AD_RespTested;
 TbBOOLEAN    VbCOND_AD_RespEnblCritMet;
 TbBOOLEAN    VbCOND_AD_RespFailCritMet;
 
@@ -159,7 +150,6 @@ static void InitCOND_ADR_CommonZero(void)
   VbCOND_AD_RespAPS1_SlowRec = CbFALSE;
   VbCOND_AD_RespAPS_ShortTogether = CbFALSE;
 
-  VbCOND_AD_RespTested = CbFALSE;
   VbCOND_AD_RespEnblCritMet = CbFALSE;
   VbCOND_AD_RespFailCritMet = CbFALSE;
 }
@@ -300,15 +290,13 @@ static TeCOND_AD_RESP_STEPS PerfmCOND_AD_InputRespCntrlTestSteps(void)
     {
       LeCOND_AD_RespTestStep = SeCOND_AD_RespTestStep;
 
-      // SfCOND_Pct_APS1_PreShort = GetIO_Pct_BufferedAnalogValue( AD_PEDAL_POSITION_1 ) >> 1;
-      // SfCOND_Pct_APS2_PreShort = GetIO_Pct_BufferedAnalogValue( AD_PEDAL_POSITION_2 ) >> 1;
       SfCOND_Pct_APS1_PreShort = GetETCI_Pct_BuffRawAPS_1();
       SfCOND_Pct_APS2_PreShort = GetETCI_Pct_BuffRawAPS_2();
 
-      // SetIO_DiscreteOutputEnable( DISCRETE_OUT_APS1_DIAG );
-
+      /* reset interval time to zero */
       SfCOND_dt_AD_RespTstIntervalTime = V_COND_TIME_SEC_0_16(0);
 
+      /* set aps status for other EMS status */
       SbCOND_ETC_DoNotUseAPS_Data = CbTRUE;
 
       /* !!Disable Interrupts!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
@@ -334,9 +322,6 @@ static TeCOND_AD_RESP_STEPS PerfmCOND_AD_InputRespCntrlTestSteps(void)
       context = Enter_Critical_Section();
       /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 
-      // SfCOND_Pct_APS1_Shorted = GetIO_Pct_BufferedAnalogValue( AD_PEDAL_POSITION_1 ) >> 1;
-      // SfCOND_Pct_APS2_Shorted = GetIO_Pct_BufferedAnalogValue( AD_PEDAL_POSITION_2 ) >> 1;
-      // LfCOND_t_AD_CnvrsnTime  = GetHWIO_AD_CnvrsnTime();
       SfCOND_Pct_APS1_Shorted = GetETCI_Pct_BuffRawAPS_1();
       SfCOND_Pct_APS2_Shorted = GetETCI_Pct_BuffRawAPS_2();
       LfCOND_t_AD_CnvrsnTime = HAL_Eng_Get_Sys_Timer();
@@ -458,7 +443,7 @@ TbBOOLEAN  EvalCOND_AD_InputRespTestData(
                             TbBOOLEAN  *LpCOND_RespFailCritMet )
 {
   TbBOOLEAN  LbCOND_RespFailCritMet;
-  TbBOOLEAN  LbCOND_SkipDiagTst;
+  TbBOOLEAN  LbCOND_RespFailed;
 
   /* execution of the function only in case                   */
   /* SeCOND_AD_RespTestStep == CeCOND_AD_RESP_STEP_POST_SHORT */
@@ -466,17 +451,17 @@ TbBOOLEAN  EvalCOND_AD_InputRespTestData(
   if ( SfCOND_Pct_APS1_Shorted < KfCOND_Pct_AD_RespAPS_ShortedMax )
   {
     LbCOND_RespFailCritMet = CbFALSE;
-    LbCOND_SkipDiagTst     = CbFALSE;
+    LbCOND_RespFailed     = CbFALSE;
   }
   else if ( SfCOND_dt_APS_ShortSettlingTime > KfCOND_t_AD_RespShortSettleMin )
   {
     LbCOND_RespFailCritMet = CbTRUE;
-    LbCOND_SkipDiagTst     = CbFALSE;
+    LbCOND_RespFailed     = CbTRUE;
   }
   else
   {
     LbCOND_RespFailCritMet = CbFALSE;
-    LbCOND_SkipDiagTst     = CbTRUE;
+    LbCOND_RespFailed     = CbFALSE;
   }
 
   if (  FixSubAbs(SfCOND_Pct_APS1_PreShort, KfCOND_Pct_AD_RespRecDeltaAPS1_Max, T_PERCENTa) < SfCOND_Pct_APS1_PostShort )
@@ -505,7 +490,7 @@ TbBOOLEAN  EvalCOND_AD_InputRespTestData(
 
   *LpCOND_RespFailCritMet = LbCOND_RespFailCritMet;
 
-  return LbCOND_SkipDiagTst;
+  return LbCOND_RespFailed;
 }
 
 /*****************************************************************************
@@ -519,42 +504,16 @@ TbBOOLEAN  EvalCOND_AD_InputRespTestData(
  ******************************************************************************/
 void MngCOND_AD_InputResp15p6msTasksA(void)
 {
-  TbBOOLEAN  LbCOND_TstRstCondsMet;
-  TbBOOLEAN  LbCOND_SkipDiagTst;
-  TbBOOLEAN  LbCOND_FailCritMet;
+    TbBOOLEAN  LbCOND_TstRstCondsMet;
 
     VbCOND_AD_RespEnblCritMet = EvalCOND_AD_InputRespEnblCritMet();
 
     SeCOND_AD_RespTestStep = PerfmCOND_AD_InputRespCntrlTestSteps();
 
-    if ( VbCOND_AD_RespEnblCritMet
-      && (SeCOND_AD_RespTestStep == CeCOND_AD_RESP_STEP_POST_SHORT) )
+    if ( VbCOND_AD_RespEnblCritMet && (SeCOND_AD_RespTestStep == CeCOND_AD_RESP_STEP_POST_SHORT) )
     {
-      LbCOND_SkipDiagTst =
-                    EvalCOND_AD_InputRespTestData(
-                        &LbCOND_FailCritMet );
-
-      VbCOND_AD_RespFailCritMet = LbCOND_FailCritMet;
-
-      // if ( ! LbCOND_SkipDiagTst )
-      // {
-        // if ( GetVIOS_EngSt_PwrOffDly()
-          // && (GetVIOS_PwrdownDelayTimer() > KfCOND_t_PwrDwnClr) )
-        // {
-          // LbCOND_TstRstCondsMet = CbTRUE;
-        // }
-        // else
-        // {
-          // LbCOND_TstRstCondsMet = CbFALSE;
-        // }
-
-        // ExecOBDU_UpdtEvalRprtDiagTst(
-                      // CeDGDM_COND_AD_InputResp,
-                      // LbCOND_TstRstCondsMet,
-                      // &KsCOND_AD_RespTstCals,
-                      // &SsCOND_AD_RespTstData );
-      // }
-      /* skip the diagnostic part */
+      VbCOND_AD_RespFailed = EvalCOND_AD_InputRespTestData(&VbCOND_AD_RespFailCritMet);
+      VbCOND_AD_RespTstComplete = CbTRUE;
     }
     /* else do nothing */
 }
@@ -574,7 +533,6 @@ void MngCOND_AD_InputResp15p6msTasksB(void)
   {
     SeCOND_AD_RespTestStep = PerfmCOND_AD_InputRespCntrlTestSteps();
   }
-  /* else do nothing */
 }
 
 /*****************************************************************************
@@ -597,19 +555,18 @@ TbBOOLEAN  GetCOND_AD_RespTstFld(void)
  * Description:  This function returns the A/D input response diagnostic
  *               ETC learing down disable criteria met flag.
  *
- * Parameters:   T_COND_TIME_SEC_0_16 LfCOND_t_ETC_APS_MinLrnDsblDly (input)
+ * Parameters:   T_COND_TIME_SEC_0_16 (input)
  * Return:       LbCOND_ETC_LrnDwnDsblCritMet
  ******************************************************************************/
-TbBOOLEAN  GetCOND_AD_RespETC_LrnDwnDsblCritMet(
-                       const T_COND_TIME_SEC_0_16 LfCOND_t_ETC_APS_MinLrnDsblDly )
+TbBOOLEAN  GetCOND_AD_RespETC_LrnDwnDsblCritMet(void)
 {
   TbBOOLEAN  LbCOND_ETC_LrnDwnDsblCritMet;
 
   if ( (SeCOND_AD_RespTestStep == CeCOND_AD_RESP_STEP_DISABLED)
-    && (SfCOND_dt_AD_RespTstIntervalTime > LfCOND_t_ETC_APS_MinLrnDsblDly))
-    // && (! GetCOND_AD_RespTstFld())
-    // && (! GetCOND_AD_RespAPS1_SlowRec())
-    // && (! GetCOND_AD_RespAPS_ShortTogether()) )
+    && (SfCOND_dt_AD_RespTstIntervalTime > KfETCI_t_APS_MinLrnDsblDly)
+    && (! GetCOND_AD_RespTstFld())
+    && (! GetCOND_AD_RespAPS1_SlowRec())
+    && (! GetCOND_AD_RespAPS_ShortTogether()) )
   {
     LbCOND_ETC_LrnDwnDsblCritMet = CbFALSE;
   }
