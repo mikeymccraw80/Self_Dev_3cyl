@@ -117,11 +117,13 @@
  //AC PRESSURE 
   LLD_atd_input_table[LLD_ATD_AC_PRESSURE].LLD_atd_val = HAL_Analog_Get_ACPREVI_Value()>>2;
 
-   //PPS1
-  LLD_atd_input_table[LLD_ATD_PEDAL_1].LLD_atd_val = HAL_Analog_Get_PPS1VI_Value()>>2;
+  if (GetCOND_AD_RespETC_DoNotUseAPS_Data() == false) {
+      //PPS1
+      LLD_atd_input_table[LLD_ATD_PEDAL_1].LLD_atd_val = HAL_Analog_Get_PPS1VI_Value()>>2;
 
- //PPS2 
-  LLD_atd_input_table[LLD_ATD_PEDAL_2].LLD_atd_val = HAL_Analog_Get_PPS2VI_Value()>>2;
+      //PPS2 
+      LLD_atd_input_table[LLD_ATD_PEDAL_2].LLD_atd_val = HAL_Analog_Get_PPS2VI_Value()>>2;
+  }
 
    //Protect Battery 
   LLD_atd_input_table[LLD_ATD_BATTERY_1].LLD_atd_val = HAL_Analog_Get_PBATTVI_Value()>>2;
