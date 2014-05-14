@@ -1,0 +1,125 @@
+/*============================================================================*/
+/*                                                                            */
+/* KNOD Subsystem APPLICATION ANCILLARY FILE                                  */
+/*                                                                            */
+/*============================================================================*/
+
+*-emsdgisd.VcEMSD_GISDSampleCntr{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "GISSMPLCNT";
+*-  variable_location.symbol = emsdgisd.VcEMSD_GISDSampleCntr;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "VGIS Output diag sample counter";
+*-}
+
+*-emsdgisd.ScEMSD_GISDShortHiFailCntr{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "GISFAHICNT";
+*-  variable_location.symbol = emsdgisd.ScEMSD_GISDShortHiFailCntr;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "VGIS Output diag short high fail counter";
+*-}
+
+*-emsdgisd.ScEMSD_GISDShortLoFailCntr{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "GISFALOCNT";
+*-  variable_location.symbol = emsdgisd.ScEMSD_GISDShortLoFailCntr;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "VGIS Output diag fail counter";
+*-}
+
+*-emsdgisd.SbEMSD_GISDEnblCriteriaMet{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "GISENLCRMT";
+*-  variable_location.symbol = emsdgisd.SbEMSD_GISDEnblCriteriaMet;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "VGIS Output diag system enable criteria met";
+*-}
+
+*-emsdgisd.SbEMSD_GISDTestComplete{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "GISTSTCMPL";
+*-  variable_location.symbol = emsdgisd.SbEMSD_GISDTestComplete;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "VGIS Output diag system test complete";
+*-}
+
+*-emsdgisd.SbEMSD_GISDShortHiTestFailed{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "GISTSTFAHI";
+*-  variable_location.symbol = emsdgisd.SbEMSD_GISDShortHiTestFailed;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "VGIS Output diag system short high test fail";
+*-}
+
+*-emsdgisd.SbEMSD_GISDShortLoTestFailed{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "GISTSTFALO";
+*-  variable_location.symbol = emsdgisd.SbEMSD_GISDShortLoTestFailed;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "VGIS Output diag system short low test fail";
+*-}
+
+*-emsdgisd.SbEMSD_GISDShortHiFailCriteriaMet{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "GISSHHIMET";
+*-  variable_location.symbol = emsdgisd.SbEMSD_GISDShortHiFailCriteriaMet;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "VGIS Output diag system test High fail condition meet";
+*-}
+
+*-emsdgisd.SbEMSD_GISDShortLoFailCriteriaMet{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "GISSHLOMET";
+*-  variable_location.symbol = emsdgisd.SbEMSD_GISDShortLoFailCriteriaMet;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "VGIS Output diag system test low fail condition meet";
+*-}
+
+
+/*============================================================================*/
+/* CHANGE LOG                                                                 */
+/*                                                                            */
+/*                                                                            */
+/* REV.   DATE     USER  RSM    DESCRIPTION                                   */
+/*                               */
+/*                                                                            */
+/* end of module                                                              */
+/*                                                                            */
+/*============================================================================*/
