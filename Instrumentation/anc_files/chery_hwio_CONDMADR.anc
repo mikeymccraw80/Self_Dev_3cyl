@@ -1,0 +1,263 @@
+/******************************************************************************/
+/*                                                                            */
+/* Filename:          10005387_COND.anc                                       */
+/*                                                                            */
+/* Description:       Private ancillary definitions file                      */
+/*                    for COND subsystem.                                     */
+/*                                                                            */
+/* Global Functions Defined:                                                  */
+/*                    None                                                    */
+/* Static Functions Defined:                                                  */
+/*                    None                                                    */
+/* Inline Functions Defined:                                                  */
+/*                    None                                                    */
+/*                                                                            */
+/* Forward Engine Management Systems                                          */
+/*                                                                            */
+/* Copyright 2003-2008, Delphi Technologies, Inc.                             */
+/* All rights reserved.                                                       */
+/*                                                                            */
+/******************************************************************************/
+
+*-condmadr.VbCOND_AD_RespFailed{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CADRTF";
+*-  variable_location.symbol = condmadr.VbCOND_AD_RespFailed;
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  bit_mask                 = 0x1;
+*-  description              = " COND AD response diagnose";
+*-  ds_scaling_unit          = "boolean";
+*-}
+
+*-condmadr.VbCOND_AD_RespTstComplete{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CADRTC";
+*-  variable_location.symbol = condmadr.VbCOND_AD_RespTstComplete;
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  bit_mask                 = 0x1;
+*-  description              = " COND AD response diagnose";
+*-  ds_scaling_unit          = "boolean";
+*-}
+
+*-condmadr.VbCOND_AD_RespEnblCritMet{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CADRCRM";
+*-  variable_location.symbol = condmadr.VbCOND_AD_RespEnblCritMet;
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  bit_mask                 = 0x1;
+*-  description              = " COND AD response diagnose";
+*-  ds_scaling_unit          = "boolean";
+*-}
+
+*-condmadr.VbCOND_AD_RespFailCritMet{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CADRFCRM";
+*-  variable_location.symbol = condmadr.VbCOND_AD_RespFailCritMet;
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  bit_mask                 = 0x1;
+*-  description              = " COND AD response diagnose";
+*-  ds_scaling_unit          = "boolean";
+*-}
+
+*-condmadr.SeCOND_AD_RespTestStep{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CADRSTEP";
+*-  variable_location.symbol = condmadr.SeCOND_AD_RespTestStep;
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "State variable for managing the A/D input response test. 0=disabled, 1=pre-short, 2=shorted, 3=post short";
+*-  ds_scaling_unit          = "enum";
+*-}
+
+*-condmadr.SbCOND_ETC_DoNotUseAPS_Data_bit_0{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CADRNAPS";
+*-  variable_location.symbol = condmadr.SbCOND_ETC_DoNotUseAPS_Data;
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  bit_mask                 = 0x1;
+*-  description              = "True = APS1 not used for control because time since A/D input response diagnostic test ran is too short.";
+*-  ds_scaling_unit          = "boolean";
+*-}
+
+*-condmadr.SfCOND_t_APS_ShortToGndTime{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CADRSHTM";
+*-  variable_location.symbol = condmadr.SfCOND_t_APS_ShortToGndTime;
+*-  ds_precision             = "5.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "Time APS1 was shorted to ground. Uses CPU system time in microseconds.";
+*-  ds_scaling_unit          = "us";
+*-}
+
+*-condmadr.SfCOND_t_APS_NotShortTime{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CADRNSTM";
+*-  variable_location.symbol = condmadr.SfCOND_t_APS_NotShortTime;
+*-  ds_precision             = "5.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "Time APS1 short to ground ended. Uses CPU system time in microseconds.";
+*-  ds_scaling_unit          = "us";
+*-}
+
+*-condmadr.SfCOND_dt_AD_RespTstIntervalTime{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CADRTITM";
+*-  variable_location.symbol = condmadr.SfCOND_dt_AD_RespTstIntervalTime;
+*-  ds_precision             = "5.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.000244140625";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "The A/D input response diagnostic test interval timer.";
+*-  ds_scaling_unit          = "s";
+*-}
+
+*-condmadr.SfCOND_dt_APS_ShortSettlingTime{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CADRSSTM";
+*-  variable_location.symbol = condmadr.SfCOND_dt_APS_ShortSettlingTime;
+*-  ds_precision             = "5.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.000244140625";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "APS1 short to ground settling time. (time of latest A/D read - time short was applied).";
+*-  ds_scaling_unit          = "s";
+*-}
+
+*-condmadr.SfCOND_dt_APS_NotShortSettlingTime{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CADRNSST";
+*-  variable_location.symbol = condmadr.SfCOND_dt_APS_NotShortSettlingTime;
+*-  ds_precision             = "5.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.000244140625";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "APS1 after short settling time. (time of latest A/D read - time short was removed).";
+*-  ds_scaling_unit          = "s";
+*-}
+
+*-condmadr.SfCOND_Pct_APS1_PreShort{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CADRA1PR";
+*-  variable_location.symbol = condmadr.SfCOND_Pct_APS1_PreShort;
+*-  ds_precision             = "4.1";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.0030517578125";
+*-  ds_const_b               = "0.0000000000000";
+*-  description              = "Raw APS1 A/D value before short to ground applied.";
+*-  ds_scaling_unit          = "%";
+*-}
+
+*-condmadr.SfCOND_Pct_APS2_PreShort{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CADRA2PR";
+*-  variable_location.symbol = condmadr.SfCOND_Pct_APS2_PreShort;
+*-  ds_precision             = "4.1";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.0030517578125";
+*-  ds_const_b               = "0.0000000000000";
+*-  description              = "Raw APS2 A/D value before short to ground applied.";
+*-  ds_scaling_unit          = "%";
+*-}
+
+*-condmadr.SfCOND_Pct_APS1_Shorted{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CADRA1SH";
+*-  variable_location.symbol = condmadr.SfCOND_Pct_APS1_Shorted;
+*-  ds_precision             = "4.1";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.0030517578125";
+*-  ds_const_b               = "0.0000000000000";
+*-  description              = "Raw APS1 A/D value while short to ground applied.";
+*-  ds_scaling_unit          = "%";
+*-}
+
+*-condmadr.SfCOND_Pct_APS2_Shorted{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CADRA2SH";
+*-  variable_location.symbol = condmadr.SfCOND_Pct_APS2_Shorted;
+*-  ds_precision             = "4.1";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.0030517578125";
+*-  ds_const_b               = "0.0000000000000";
+*-  description              = "Raw APS2 A/D value while short to ground applied.";
+*-  ds_scaling_unit          = "%";
+*-}
+
+*-condmadr.SfCOND_Pct_APS1_PostShort{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CADRA1PS";
+*-  variable_location.symbol = condmadr.SfCOND_Pct_APS1_PostShort;
+*-  ds_precision             = "4.1";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.0030517578125";
+*-  ds_const_b               = "0.0000000000000";
+*-  description              = "Raw APS1 A/D value after short to ground removed.";
+*-  ds_scaling_unit          = "%";
+*-}
+
+*-condmadr.SfCOND_Pct_APS2_PostShort{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CADRA2PS";
+*-  variable_location.symbol = condmadr.SfCOND_Pct_APS2_PostShort;
+*-  ds_precision             = "4.1";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.0030517578125";
+*-  ds_const_b               = "0.0000000000000";
+*-  description              = "Raw APS2 A/D value after short to ground removed.";
+*-  ds_scaling_unit          = "%";
+*-}
+
+*-condmadr.VbCOND_AD_RespAPS1_SlowRec_bit_0{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CADRSLOW";
+*-  variable_location.symbol = condmadr.VbCOND_AD_RespAPS1_SlowRec;
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  bit_mask                 = 0x1;
+*-  description              = "A/D input response diagnostic indicates APS1 signal is slow to recover from short to ground. Passed to APS1 range diagnostic.";
+*-  ds_scaling_unit          = "boolean";
+*-}
+
+*-condmadr.VbCOND_AD_RespAPS_ShortTogether_bit_0{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CADRSHRT";
+*-  variable_location.symbol = condmadr.VbCOND_AD_RespAPS_ShortTogether;
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  bit_mask                 = 0x1;
+*-  description              = "A/D input response diagnostic indicates APS1 and APS2 signals are electrically coupled. Passed to APS correlation diagnostic.";
+*-  ds_scaling_unit          = "boolean";
+*-}
+
+
+/******************************************************************************/
+/*                                                                            */
+/* Revision History:                                                          */
+/*                                                                            */
+/* Rev.   YYMMDD Who RSM  Changes                                             */
+/*============================================================================*/
