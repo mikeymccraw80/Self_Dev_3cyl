@@ -42,14 +42,15 @@
 #include "condcald.h"   /* For COND Local Configuration       */
 #include "intr_ems.h"
 #include "hal_eng.h"
-#if 0
+#include "hal_analog.h"
+#include "condpapi.h"
+
 typedef enum
 {
   CeCOND_AD_RESP_STEP_DISABLED,    /* 0 */
   CeCOND_AD_RESP_STEP_PRE_SHORT,   /* 1 */
   CeCOND_AD_RESP_STEP_SHORTED,     /* 2 */
   CeCOND_AD_RESP_STEP_POST_SHORT   /* 3 */
-
 } TeCOND_AD_RESP_STEPS;
 
 typedef struct
@@ -77,12 +78,13 @@ TbBOOLEAN  VbCOND_AD_RespAPS_ShortTogether;
 /******************************************************************************
  *  Preprocessor Definitions
  *****************************************************************************/
-#define CfCOND_TIME_SEC_MAX ((T_COND_TIME_SEC_0_16 )0xFFFF)
+#define CfCOND_TIME_SEC_MAX        ((T_COND_TIME_SEC_0_16 )0xFFFF)
+#define GetETCI_Pct_BuffRawAPS_1() (HAL_Analog_Get_PPS1VI_Value()<<1)
+#define GetETCI_Pct_BuffRawAPS_2() (HAL_Analog_Get_PPS2VI_Value()<<1)
 
 /******************************************************************************
  *  Local Variable Definitions
  *****************************************************************************/
-static TbBOOLEAN             SbCOND_AD_RespEnblCritMet;
 static TbBOOLEAN             SbCOND_AD_RespFltTypeDsbl;
                             
 static TeCOND_AD_RESP_STEPS  SeCOND_AD_RespTestStep;
@@ -101,8 +103,16 @@ static T_PERCENTa            SfCOND_Pct_APS2_Shorted;
 static T_PERCENTa            SfCOND_Pct_APS1_PostShort;
 static T_PERCENTa            SfCOND_Pct_APS2_PostShort;
                             
-static TsOBDU_DiagTstData    SsCOND_AD_RespTstData;
-                            
+// static TsOBDU_DiagTstData    SsCOND_AD_RespTstData;
+
+#pragma section DATA " " ".nc_nvram"
+TbBOOLEAN    VbCOND_AD_RespFailed;
+TbBOOLEAN    VbCOND_AD_RespTstComplete;
+#pragma section DATA " " ".bss"
+TbBOOLEAN    VbCOND_AD_RespTested;
+TbBOOLEAN    VbCOND_AD_RespEnblCritMet;
+TbBOOLEAN    VbCOND_AD_RespFailCritMet;
+
 static T_MICROSECONDS        SfCOND_t_AD_FreeRunningTimerOld;
 
 /*****************************************************************************
@@ -110,8 +120,7 @@ static T_MICROSECONDS        SfCOND_t_AD_FreeRunningTimerOld;
 *****************************************************************************/
 static void InitCOND_ADR_CommonZero(void);
 static void InitCOND_ADR_CommonNonZero(void);
-static T_COND_TIME_SEC_0_16 CalcCOND_AD_RespTimeDelt(T_MICROSECONDS ,
-                                                     T_MICROSECONDS  );
+static T_COND_TIME_SEC_0_16 CalcCOND_AD_RespTimeDelt(T_MICROSECONDS , T_MICROSECONDS);
 static TeCOND_AD_RESP_STEPS PerfmCOND_AD_InputRespCntrlTestSteps(void);
 
 
@@ -130,7 +139,7 @@ static TeCOND_AD_RESP_STEPS PerfmCOND_AD_InputRespCntrlTestSteps(void);
  *****************************************************************************/
 static void InitCOND_ADR_CommonZero(void)
 {
-  SbCOND_AD_RespEnblCritMet = CbFALSE;
+  VbCOND_AD_RespEnblCritMet = CbFALSE;
   SbCOND_AD_RespFltTypeDsbl = CbFALSE;
 
   SbCOND_ETC_DoNotUseAPS_Data = CbFALSE;
@@ -150,12 +159,9 @@ static void InitCOND_ADR_CommonZero(void)
   VbCOND_AD_RespAPS1_SlowRec = CbFALSE;
   VbCOND_AD_RespAPS_ShortTogether = CbFALSE;
 
-  SsCOND_AD_RespTstData.FailCritMet = CbFALSE;
-  SsCOND_AD_RespTstData.TstComplete = CbFALSE;
-  SsCOND_AD_RespTstData.TstFailed   = CbFALSE;
-  SsCOND_AD_RespTstData.TstStRpt    = CeSINGLE_NULL;
-  SsCOND_AD_RespTstData.FailCntr    = V_COUNT_WORD(0);
-  SsCOND_AD_RespTstData.SampleCntr  = V_COUNT_WORD(0);
+  VbCOND_AD_RespTested = CbFALSE;
+  VbCOND_AD_RespEnblCritMet = CbFALSE;
+  VbCOND_AD_RespFailCritMet = CbFALSE;
 }
 
 /******************************************************************************
@@ -232,7 +238,7 @@ static T_COND_TIME_SEC_0_16 CalcCOND_AD_RespTimeDelt(
  * Parameters:  None
  * Return:      TbBOOLEAN  LbCOND_AD_RespEnblCritMet
  ******************************************************************************/
-CMPLX_INLINE TbBOOLEAN EvalCOND_AD_InputRespEnblCritMet(void)
+TbBOOLEAN EvalCOND_AD_InputRespEnblCritMet(void)
 {
   TbBOOLEAN  LbCOND_AD_RespEnblCritMet;
 
@@ -241,10 +247,8 @@ CMPLX_INLINE TbBOOLEAN EvalCOND_AD_InputRespEnblCritMet(void)
     && ( (GetVIOS_IgnSt() == CeIGN_ON)
       && (GetVIOS_U_IgnVolt() > KfCOND_U_AD_RespIgnLoDsbl)
       && (GetVIOS_U_IgnVolt() < KfCOND_U_AD_RespIgnHiDsbl) )
-    // && (GetCOND_VREF_A_RngeDataFailCnt() == V_COUNT_WORD(0))
-    // && (GetCOND_VREF_B_RngeDataFailCnt() == V_COUNT_WORD(0))
     && (GetETCI_Pct_BuffRawAPS_1() > KfCOND_Pct_AD_RespAPS_PreShortMin)
-    && (! GetCOND_MainCPU_ClockPerfTestFailed()) )
+    && (! GetCOND_MainCPU_ClockTestFailed()) )
   {
     LbCOND_AD_RespEnblCritMet = CbTRUE;
   }
@@ -283,12 +287,12 @@ CMPLX_INLINE TbBOOLEAN EvalCOND_AD_InputRespEnblCritMet(void)
 static TeCOND_AD_RESP_STEPS PerfmCOND_AD_InputRespCntrlTestSteps(void)
 {
   TeCOND_AD_RESP_STEPS  LeCOND_AD_RespTestStep;
-  LONGWORD              LgCOND_StatRegrCopy;
+  uint32_t context;
   T_MICROSECONDS        LfCOND_t_AD_CnvrsnTime;
   T_MICROSECONDS        LfCOND_t_FreeRunningTmr;
   T_COND_TIME_SEC_0_16  LfCOND_dt_CyclTimeDelt;
 
-  if ( SbCOND_AD_RespEnblCritMet )
+  if ( VbCOND_AD_RespEnblCritMet )
   {
     LeCOND_AD_RespTestStep = SeCOND_AD_RespTestStep;
 
@@ -296,24 +300,29 @@ static TeCOND_AD_RESP_STEPS PerfmCOND_AD_InputRespCntrlTestSteps(void)
     {
       LeCOND_AD_RespTestStep = SeCOND_AD_RespTestStep;
 
-      SfCOND_Pct_APS1_PreShort = GetIO_Pct_BufferedAnalogValue( AD_PEDAL_POSITION_1 ) >> 1;
-      SfCOND_Pct_APS2_PreShort = GetIO_Pct_BufferedAnalogValue( AD_PEDAL_POSITION_2 ) >> 1;
+      // SfCOND_Pct_APS1_PreShort = GetIO_Pct_BufferedAnalogValue( AD_PEDAL_POSITION_1 ) >> 1;
+      // SfCOND_Pct_APS2_PreShort = GetIO_Pct_BufferedAnalogValue( AD_PEDAL_POSITION_2 ) >> 1;
+      SfCOND_Pct_APS1_PreShort = GetETCI_Pct_BuffRawAPS_1();
+      SfCOND_Pct_APS2_PreShort = GetETCI_Pct_BuffRawAPS_2();
 
-      SetIO_DiscreteOutputEnable( DISCRETE_OUT_APS1_DIAG );
+      // SetIO_DiscreteOutputEnable( DISCRETE_OUT_APS1_DIAG );
 
       SfCOND_dt_AD_RespTstIntervalTime = V_COND_TIME_SEC_0_16(0);
 
       SbCOND_ETC_DoNotUseAPS_Data = CbTRUE;
 
       /* !!Disable Interrupts!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
-      LgCOND_StatRegrCopy = StartOSTK_CriticalSection();
+      // LgCOND_StatRegrCopy = StartOSTK_CriticalSection();
+      context = Enter_Critical_Section();
       /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 
-      SetIO_DirectDiscreteImmediate( DISCRETE_OUT_APS1_DIAG, CbENABLED );
+      // SetIO_DirectDiscreteImmediate( DISCRETE_OUT_APS1_DIAG, CbENABLED );
+      QADC_Enable_APS1_Diag();
       SfCOND_t_APS_ShortToGndTime = HAL_Eng_Get_Sys_Timer();
 
       /* !!Enable Interrupts!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
-      EndOSTK_CriticalSection( LgCOND_StatRegrCopy );
+      // EndOSTK_CriticalSection( LgCOND_StatRegrCopy );
+      Leave_Critical_Section(context);
       /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
     }
     else if ( LeCOND_AD_RespTestStep == CeCOND_AD_RESP_STEP_PRE_SHORT )
@@ -321,15 +330,20 @@ static TeCOND_AD_RESP_STEPS PerfmCOND_AD_InputRespCntrlTestSteps(void)
       LeCOND_AD_RespTestStep  = CeCOND_AD_RESP_STEP_SHORTED;
 
       /* !!Disable Interrupts!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
-      LgCOND_StatRegrCopy = StartOSTK_CriticalSection();
+      // LgCOND_StatRegrCopy = StartOSTK_CriticalSection();
+      context = Enter_Critical_Section();
       /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 
-      SfCOND_Pct_APS1_Shorted = GetIO_Pct_BufferedAnalogValue( AD_PEDAL_POSITION_1 ) >> 1;
-      SfCOND_Pct_APS2_Shorted = GetIO_Pct_BufferedAnalogValue( AD_PEDAL_POSITION_2 ) >> 1;
-      LfCOND_t_AD_CnvrsnTime  = GetHWIO_AD_CnvrsnTime();
+      // SfCOND_Pct_APS1_Shorted = GetIO_Pct_BufferedAnalogValue( AD_PEDAL_POSITION_1 ) >> 1;
+      // SfCOND_Pct_APS2_Shorted = GetIO_Pct_BufferedAnalogValue( AD_PEDAL_POSITION_2 ) >> 1;
+      // LfCOND_t_AD_CnvrsnTime  = GetHWIO_AD_CnvrsnTime();
+      SfCOND_Pct_APS1_Shorted = GetETCI_Pct_BuffRawAPS_1();
+      SfCOND_Pct_APS2_Shorted = GetETCI_Pct_BuffRawAPS_2();
+      LfCOND_t_AD_CnvrsnTime = HAL_Eng_Get_Sys_Timer();
 
       /* !!Enable Interrupts!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
-      EndOSTK_CriticalSection( LgCOND_StatRegrCopy );
+      // EndOSTK_CriticalSection( LgCOND_StatRegrCopy );
+      Leave_Critical_Section(context);
       /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 
       SfCOND_dt_APS_ShortSettlingTime =
@@ -338,14 +352,17 @@ static TeCOND_AD_RESP_STEPS PerfmCOND_AD_InputRespCntrlTestSteps(void)
                             SfCOND_t_APS_ShortToGndTime );
 
       /* !!Disable Interrupts!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
-      LgCOND_StatRegrCopy = StartOSTK_CriticalSection();
+      // LgCOND_StatRegrCopy = StartOSTK_CriticalSection();
+      context = Enter_Critical_Section();
       /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 
-      SetIO_DirectDiscreteImmediate( DISCRETE_OUT_APS1_DIAG, CbDISABLED );
+      // SetIO_DirectDiscreteImmediate( DISCRETE_OUT_APS1_DIAG, CbDISABLED );
+      QADC_Disable_APS1_Diag();
       SfCOND_t_APS_NotShortTime = HAL_Eng_Get_Sys_Timer();
 
       /* !!Enable Interrupts!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
-      EndOSTK_CriticalSection( LgCOND_StatRegrCopy );
+      // EndOSTK_CriticalSection( LgCOND_StatRegrCopy );
+      Leave_Critical_Section(context);
       /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
     }
     else if ( LeCOND_AD_RespTestStep == CeCOND_AD_RESP_STEP_SHORTED )
@@ -353,15 +370,20 @@ static TeCOND_AD_RESP_STEPS PerfmCOND_AD_InputRespCntrlTestSteps(void)
       LeCOND_AD_RespTestStep    = CeCOND_AD_RESP_STEP_POST_SHORT;
 
       /* !!Disable Interrupts!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
-      LgCOND_StatRegrCopy = StartOSTK_CriticalSection();
+      // LgCOND_StatRegrCopy = StartOSTK_CriticalSection();
+      context = Enter_Critical_Section();
       /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 
-      SfCOND_Pct_APS1_PostShort = GetIO_Pct_BufferedAnalogValue( AD_PEDAL_POSITION_1 ) >> 1;
-      SfCOND_Pct_APS2_PostShort = GetIO_Pct_BufferedAnalogValue( AD_PEDAL_POSITION_2 ) >> 1;
-      LfCOND_t_AD_CnvrsnTime    = GetHWIO_AD_CnvrsnTime();
+      // SfCOND_Pct_APS1_PostShort = GetIO_Pct_BufferedAnalogValue( AD_PEDAL_POSITION_1 ) >> 1;
+      // SfCOND_Pct_APS2_PostShort = GetIO_Pct_BufferedAnalogValue( AD_PEDAL_POSITION_2 ) >> 1;
+      // LfCOND_t_AD_CnvrsnTime    = GetHWIO_AD_CnvrsnTime();
+      SfCOND_Pct_APS1_PostShort = GetETCI_Pct_BuffRawAPS_1();
+      SfCOND_Pct_APS2_PostShort = GetETCI_Pct_BuffRawAPS_2();
+      LfCOND_t_AD_CnvrsnTime = HAL_Eng_Get_Sys_Timer();
 
       /* !!Enable Interrupts!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
-      EndOSTK_CriticalSection( LgCOND_StatRegrCopy );
+      // EndOSTK_CriticalSection( LgCOND_StatRegrCopy );
+      Leave_Critical_Section(context);
       /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 
       SfCOND_dt_APS_NotShortSettlingTime =
@@ -369,20 +391,23 @@ static TeCOND_AD_RESP_STEPS PerfmCOND_AD_InputRespCntrlTestSteps(void)
                             LfCOND_t_AD_CnvrsnTime,
                             SfCOND_t_APS_NotShortTime );
 
-      SetIO_DirectDiscreteImmediate( DISCRETE_OUT_APS1_DIAG, CbDISABLED );
+      // SetIO_DirectDiscreteImmediate( DISCRETE_OUT_APS1_DIAG, CbDISABLED );
+      QADC_Disable_APS1_Diag();
     }
     else /* Post short or illegal value */
     {
       LeCOND_AD_RespTestStep = CeCOND_AD_RESP_STEP_DISABLED;
 
-      SetIO_DirectDiscreteImmediate( DISCRETE_OUT_APS1_DIAG, CbDISABLED );
+      // SetIO_DirectDiscreteImmediate( DISCRETE_OUT_APS1_DIAG, CbDISABLED );
+      QADC_Disable_APS1_Diag();
     }
   }
   else /* not enabled */
   {
     LeCOND_AD_RespTestStep = SeCOND_AD_RespTestStep; // keep the old value
 
-    SetIO_DirectDiscreteImmediate( DISCRETE_OUT_APS1_DIAG, CbDISABLED );
+    // SetIO_DirectDiscreteImmediate( DISCRETE_OUT_APS1_DIAG, CbDISABLED );
+    QADC_Disable_APS1_Diag();
   }
 
   LfCOND_t_FreeRunningTmr = HAL_Eng_Get_Sys_Timer();
@@ -392,13 +417,7 @@ static TeCOND_AD_RESP_STEPS PerfmCOND_AD_InputRespCntrlTestSteps(void)
                         LfCOND_t_FreeRunningTmr,
                         SfCOND_t_AD_FreeRunningTimerOld );
 
-  SfCOND_dt_AD_RespTstIntervalTime =
-                    usADD_us_usp(
-                        SfCOND_dt_AD_RespTstIntervalTime,
-                        LfCOND_dt_CyclTimeDelt,
-                        S_COND_TIME_SEC_0_16,
-                        S_COND_TIME_SEC_0_16,
-                        S_COND_TIME_SEC_0_16 );
+  SfCOND_dt_AD_RespTstIntervalTime = SfCOND_dt_AD_RespTstIntervalTime + LfCOND_dt_CyclTimeDelt;
 
   SfCOND_t_AD_FreeRunningTimerOld = LfCOND_t_FreeRunningTmr;
 
@@ -435,7 +454,7 @@ static TeCOND_AD_RESP_STEPS PerfmCOND_AD_InputRespCntrlTestSteps(void)
  * Parameters:  TbBOOLEAN  *LpCOND_RespFailCritMet (output)
  * Return:      TbBOOLEAN   LbCOND_SkipDiagTst
  ******************************************************************************/
-CMPLX_INLINE TbBOOLEAN  EvalCOND_AD_InputRespTestData(
+TbBOOLEAN  EvalCOND_AD_InputRespTestData(
                             TbBOOLEAN  *LpCOND_RespFailCritMet )
 {
   TbBOOLEAN  LbCOND_RespFailCritMet;
@@ -460,26 +479,11 @@ CMPLX_INLINE TbBOOLEAN  EvalCOND_AD_InputRespTestData(
     LbCOND_SkipDiagTst     = CbTRUE;
   }
 
-  if ( usSUB_us_usp(
-           SfCOND_Pct_APS1_PreShort,
-           KfCOND_Pct_AD_RespRecDeltaAPS1_Max,
-           S_PERCENTa,
-           S_PERCENTa,
-           S_PERCENTa)
-     < SfCOND_Pct_APS1_PostShort )
+  if (  FixSubAbs(SfCOND_Pct_APS1_PreShort, KfCOND_Pct_AD_RespRecDeltaAPS1_Max, T_PERCENTa) < SfCOND_Pct_APS1_PostShort )
   {
     VbCOND_AD_RespAPS1_SlowRec = CbFALSE;
   }
-  else if ( (usABS_ssp(
-                 ssSUB_us_usp(
-                     SfCOND_Pct_APS2_PostShort,
-                     SfCOND_Pct_APS2_PreShort,
-                     S_PERCENTa,
-                     S_PERCENTa,
-                     S_PERCENT_DIFFa),
-                 S_PERCENT_DIFFa,
-                 S_PERCENTa)
-           < KfCOND_Pct_AD_RespRecDeltaAPS2_Max)
+  else if (( FixSubAbs(SfCOND_Pct_APS2_PostShort,SfCOND_Pct_APS2_PreShort,T_PERCENTa) < KfCOND_Pct_AD_RespRecDeltaAPS2_Max)
          && (SfCOND_dt_APS_NotShortSettlingTime > KfCOND_t_AD_RespRecSettleMin) )
   {
     VbCOND_AD_RespAPS1_SlowRec = CbTRUE;
@@ -489,20 +493,8 @@ CMPLX_INLINE TbBOOLEAN  EvalCOND_AD_InputRespTestData(
     VbCOND_AD_RespAPS1_SlowRec = CbFALSE;
   }
 
-  if ( (usSUB_us_usp(
-            SfCOND_Pct_APS2_PreShort,
-            SfCOND_Pct_APS2_Shorted,
-            S_PERCENTa,
-            S_PERCENTa,
-            S_PERCENTa)
-      > KfCOND_Pct_AD_RespDeltaAPS2_Max)
-    && (usSUB_us_usp(
-            SfCOND_Pct_APS2_PostShort,
-            SfCOND_Pct_APS2_Shorted,
-            S_PERCENTa,
-            S_PERCENTa,
-            S_PERCENTa)
-      > KfCOND_Pct_AD_RespDeltaAPS2_Max) )
+  if ( (FixSubAbs(SfCOND_Pct_APS2_PreShort, SfCOND_Pct_APS2_Shorted, T_PERCENTa) > KfCOND_Pct_AD_RespDeltaAPS2_Max)
+    && (FixSubAbs(SfCOND_Pct_APS2_PostShort, SfCOND_Pct_APS2_Shorted, T_PERCENTa) > KfCOND_Pct_AD_RespDeltaAPS2_Max) )
   {
     VbCOND_AD_RespAPS_ShortTogether = CbTRUE;
   }
@@ -525,43 +517,43 @@ CMPLX_INLINE TbBOOLEAN  EvalCOND_AD_InputRespTestData(
  * Parameters:   None
  * Return:       None
  ******************************************************************************/
-FARFUNC void MngCOND_AD_InputResp15p6msTasksA(void)
+void MngCOND_AD_InputResp15p6msTasksA(void)
 {
   TbBOOLEAN  LbCOND_TstRstCondsMet;
   TbBOOLEAN  LbCOND_SkipDiagTst;
   TbBOOLEAN  LbCOND_FailCritMet;
 
-    SbCOND_AD_RespEnblCritMet = EvalCOND_AD_InputRespEnblCritMet();
+    VbCOND_AD_RespEnblCritMet = EvalCOND_AD_InputRespEnblCritMet();
 
     SeCOND_AD_RespTestStep = PerfmCOND_AD_InputRespCntrlTestSteps();
 
-    if ( SbCOND_AD_RespEnblCritMet
+    if ( VbCOND_AD_RespEnblCritMet
       && (SeCOND_AD_RespTestStep == CeCOND_AD_RESP_STEP_POST_SHORT) )
     {
       LbCOND_SkipDiagTst =
                     EvalCOND_AD_InputRespTestData(
                         &LbCOND_FailCritMet );
 
-      SsCOND_AD_RespTstData.FailCritMet = LbCOND_FailCritMet;
+      VbCOND_AD_RespFailCritMet = LbCOND_FailCritMet;
 
-      if ( ! LbCOND_SkipDiagTst )
-      {
-        if ( GetVIOS_EngSt_PwrOffDly()
-          && (GetVIOS_PwrdownDelayTimer() > KfCOND_t_PwrDwnClr) )
-        {
-          LbCOND_TstRstCondsMet = CbTRUE;
-        }
-        else
-        {
-          LbCOND_TstRstCondsMet = CbFALSE;
-        }
+      // if ( ! LbCOND_SkipDiagTst )
+      // {
+        // if ( GetVIOS_EngSt_PwrOffDly()
+          // && (GetVIOS_PwrdownDelayTimer() > KfCOND_t_PwrDwnClr) )
+        // {
+          // LbCOND_TstRstCondsMet = CbTRUE;
+        // }
+        // else
+        // {
+          // LbCOND_TstRstCondsMet = CbFALSE;
+        // }
 
-        ExecOBDU_UpdtEvalRprtDiagTst(
-                      CeDGDM_COND_AD_InputResp,
-                      LbCOND_TstRstCondsMet,
-                      &KsCOND_AD_RespTstCals,
-                      &SsCOND_AD_RespTstData );
-      }
+        // ExecOBDU_UpdtEvalRprtDiagTst(
+                      // CeDGDM_COND_AD_InputResp,
+                      // LbCOND_TstRstCondsMet,
+                      // &KsCOND_AD_RespTstCals,
+                      // &SsCOND_AD_RespTstData );
+      // }
       /* skip the diagnostic part */
     }
     /* else do nothing */
@@ -576,7 +568,7 @@ FARFUNC void MngCOND_AD_InputResp15p6msTasksA(void)
  * Parameters:   None
  * Return:       None
  ******************************************************************************/
-FARFUNC void MngCOND_AD_InputResp15p6msTasksB(void)
+void MngCOND_AD_InputResp15p6msTasksB(void)
 {
   if ( ! SbCOND_AD_RespFltTypeDsbl )
   {
@@ -594,9 +586,9 @@ FARFUNC void MngCOND_AD_InputResp15p6msTasksB(void)
  * Parameters:   None
  * Return:       SsCOND_AD_RespTstData.TstFailed
  ******************************************************************************/
-FARFUNC TbBOOLEAN  GetCOND_AD_RespTstFld(void)
+TbBOOLEAN  GetCOND_AD_RespTstFld(void)
 {
-  return (TbBOOLEAN)SsCOND_AD_RespTstData.TstFailed;
+  return (TbBOOLEAN)VbCOND_AD_RespFailed;
 }
 
 /*****************************************************************************
@@ -608,17 +600,16 @@ FARFUNC TbBOOLEAN  GetCOND_AD_RespTstFld(void)
  * Parameters:   T_COND_TIME_SEC_0_16 LfCOND_t_ETC_APS_MinLrnDsblDly (input)
  * Return:       LbCOND_ETC_LrnDwnDsblCritMet
  ******************************************************************************/
-FARFUNC TbBOOLEAN  GetCOND_AD_RespETC_LrnDwnDsblCritMet(
+TbBOOLEAN  GetCOND_AD_RespETC_LrnDwnDsblCritMet(
                        const T_COND_TIME_SEC_0_16 LfCOND_t_ETC_APS_MinLrnDsblDly )
 {
   TbBOOLEAN  LbCOND_ETC_LrnDwnDsblCritMet;
 
   if ( (SeCOND_AD_RespTestStep == CeCOND_AD_RESP_STEP_DISABLED)
-    && (SfCOND_dt_AD_RespTstIntervalTime
-      > LfCOND_t_ETC_APS_MinLrnDsblDly)
-    && (! GetCOND_AD_RespTstFld())
-    && (! GetCOND_AD_RespAPS1_SlowRec())
-    && (! GetCOND_AD_RespAPS_ShortTogether()) )
+    && (SfCOND_dt_AD_RespTstIntervalTime > LfCOND_t_ETC_APS_MinLrnDsblDly))
+    // && (! GetCOND_AD_RespTstFld())
+    // && (! GetCOND_AD_RespAPS1_SlowRec())
+    // && (! GetCOND_AD_RespAPS_ShortTogether()) )
   {
     LbCOND_ETC_LrnDwnDsblCritMet = CbFALSE;
   }
@@ -641,8 +632,7 @@ FARFUNC TbBOOLEAN  GetCOND_AD_RespETC_LrnDwnDsblCritMet(
  * Parameters:   T_COND_TIME_SEC_0_16 LfCOND_t_ETC_NotShortSettleMin (input)
  * Return:       SbCOND_ETC_DoNotUseAPS_Data
  ******************************************************************************/
-FARFUNC TbBOOLEAN  GetCOND_AD_RespETC_DoNotUseAPS_Data(
-                       const T_COND_TIME_SEC_0_16 LfCOND_t_ETC_NotShortSettleMin )
+TbBOOLEAN  GetCOND_AD_RespETC_DoNotUseAPS_Data(void)
 {
   T_COND_TIME_SEC_0_16  LfCOND_dt_APS_TimeSinceShortRemoved;
 
@@ -651,11 +641,11 @@ FARFUNC TbBOOLEAN  GetCOND_AD_RespETC_DoNotUseAPS_Data(
   {
     LfCOND_dt_APS_TimeSinceShortRemoved =
                 CalcCOND_AD_RespTimeDelt(
-                    GetHWIO_AD_CnvrsnTime(),
+                    HAL_Eng_Get_Sys_Timer(),
                     SfCOND_t_APS_NotShortTime );
 
     if ( LfCOND_dt_APS_TimeSinceShortRemoved
-       > LfCOND_t_ETC_NotShortSettleMin )
+       > KfETCI_t_AD_NotShortSettleMin )
     {
       SbCOND_ETC_DoNotUseAPS_Data = CbFALSE;
     }
@@ -663,7 +653,7 @@ FARFUNC TbBOOLEAN  GetCOND_AD_RespETC_DoNotUseAPS_Data(
 
   return SbCOND_ETC_DoNotUseAPS_Data;
 }
-#endif
+
 /******************************************************************************
 *
 * Revision History:

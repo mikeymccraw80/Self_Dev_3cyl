@@ -223,6 +223,21 @@ const T_COND_TIME_SEC_0_16     KfCOND_t_AD_RespShortSettleMin = V_COND_TIME_SEC_
 const T_COND_TIME_SEC_0_16 \
                      KfCOND_t_AD_RespRecSettleMin = V_COND_TIME_SEC_0_16(0.008);
 
+/*
+*| etcicaps.{
+*|   KfETCI_t_AD_NotShortSettleMin {
+*|    : is_calconst;
+*|    : description = "A/D settling time after APS1 short to ground is removed "
+*| "below which APS1 value is not used for control and diagnostics. "
+*| "Engineering Range: [0, 16), Resolution: 0.000244140625 s / Count ";
+*|    : type = apptypes.t_cond_time_sec_0_16;
+*|    : units = "s";
+*|   }
+*| }
+*/
+const T_COND_TIME_SEC_0_16 \
+                     KfETCI_t_AD_NotShortSettleMin = V_COND_TIME_SEC_0_16(0.008);
+
 /******************************************************************************
 *
 * Revision History:

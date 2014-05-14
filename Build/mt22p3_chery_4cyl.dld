@@ -35,6 +35,7 @@ SECTIONS
       injdcald.o(.text_vle)
       prgdcald.o(.text_vle)
       vvtdcald.o(.text_vle)
+      condcald.o(.text_vle)
       CalVariable.o (.text_vle)
       end_of_calrom = .;
   } > cal

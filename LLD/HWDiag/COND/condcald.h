@@ -35,11 +35,21 @@
 #include "condptyp.h"
 #include "timepcvc.h"
 
-extern const T_VOLTb      KfCOND_U_SystemThrshHi;
-extern const T_VOLTb      KfCOND_U_SystemThrshLo;
-extern const TwTIME_t_R125ms KfCOND_t_ADC0EnblDlyTmrThrsh;
-extern const TwTIME_t_R125ms KfCOND_t_ClockEnblDlyTmrThrsh;
+extern const T_VOLTb              KfCOND_U_SystemThrshHi;
+extern const T_VOLTb              KfCOND_U_SystemThrshLo;
+extern const TwTIME_t_R125ms      KfCOND_t_ADC0EnblDlyTmrThrsh;
+extern const TwTIME_t_R125ms      KfCOND_t_ClockEnblDlyTmrThrsh;
 extern const T_COND_TIME_SEC_0_16 KfCOND_t_AD_RespTstInterval;
+extern const T_VOLTb              KfCOND_U_AD_RespIgnLoDsbl;
+extern const T_VOLTb              KfCOND_U_AD_RespIgnHiDsbl;
+extern const T_PERCENTa           KfCOND_Pct_AD_RespAPS_PreShortMin;
+extern const T_PERCENTa           KfCOND_Pct_AD_RespAPS_ShortedMax;
+extern const T_PERCENTa           KfCOND_Pct_AD_RespRecDeltaAPS1_Max;
+extern const T_PERCENTa           KfCOND_Pct_AD_RespDeltaAPS2_Max;
+extern const T_COND_TIME_SEC_0_16 KfCOND_t_AD_RespShortSettleMin;
+extern const T_COND_TIME_SEC_0_16 KfCOND_t_AD_RespRecSettleMin;
+extern const T_PERCENTa           KfCOND_Pct_AD_RespRecDeltaAPS2_Max;
+
 #endif
 
 /******************************************************************************

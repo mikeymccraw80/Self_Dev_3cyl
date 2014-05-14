@@ -53,8 +53,13 @@ extern TbBOOLEAN    SbCOND_SOH_MainCPU_TstCmp;
 extern TbBOOLEAN    SbCOND_SOH_CommTstCmp;
 extern TbBOOLEAN    SbCOND_SOH_CheckingCPU_TstCmp;
 
-extern TbBOOLEAN    VbCOND_HWIO_ClockFailed;
-#define GetCOND_MainCPU_ClockPerfTestFailed() (VbCOND_HWIO_ClockFailed)
+extern TbBOOLEAN VbCOND_HWIO_ClockFailed;
+#define GetCOND_MainCPU_ClockTestFailed() (VbCOND_HWIO_ClockFailed)
+
+/* ad input response task */
+void MngCOND_AD_InputResp15p6msTasksA(void);
+void MngCOND_AD_InputResp15p6msTasksB(void);
+TbBOOLEAN  GetCOND_AD_RespETC_DoNotUseAPS_Data(void);
 
 #endif /* CONDPAPI_H */
 
