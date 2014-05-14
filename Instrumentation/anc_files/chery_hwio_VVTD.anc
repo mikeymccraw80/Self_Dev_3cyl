@@ -1,0 +1,187 @@
+/*============================================================================*/
+/*                                                                            */
+/* VVTD Subsystem APPLICATION ANCILLARY FILE                                  */
+/*                                                                            */
+/*============================================================================*/
+
+*-vvtdmall.ScVVTD_VVT1_SampleCntr{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "VT1SMPLCNT";
+*-  variable_location.symbol = vvtdmall.ScVVTD_VVT1_SampleCntr;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "VVT1 Output diag sample counter";
+*-}
+
+*-vvtdmall.ScVVTD_VVT1_FailCntr{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "VT1FAILCNT";
+*-  variable_location.symbol = vvtdmall.ScVVTD_VVT1_FailCntr;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "VVT1 Output diag fail counter";
+*-}
+
+
+*-vvtdmall.SbVVTD_DisableFltPresent{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "VVTSLPRET";
+*-  variable_location.symbol = vvtdmall.SbVVTD_DisableFltPresent;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "VVT Output diag disable key on fault";
+*-}
+
+*-vvtdmall.SbVVTD_EnblCritMet{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "VVTENLCRMT";
+*-  variable_location.symbol = vvtdmall.SbVVTD_EnblCritMet;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "VVT Output diag system enable criteria met";
+*-}
+
+*-vvtdmall.SbVVTD_VVT1_TestComplete{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "VT1TSTCMPL";
+*-  variable_location.symbol = vvtdmall.SbVVTD_VVT1_TestComplete;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "VVT1 Output diag system test complete";
+*-}
+
+*-vvtdmall.SbVVTD_VVT1_TestFailed{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "VT1TSTFAIL";
+*-  variable_location.symbol = vvtdmall.SbVVTD_VVT1_TestFailed;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "VVT1 Output diag system test fail";
+*-}
+
+*-vvtdmall.SbVVTD_VVT1_ShortLoCritMet{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "VT1SHLOMET";
+*-  variable_location.symbol = vvtdmall.SbVVTD_VVT1_ShortLoCritMet;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "VVT1 Output diag system test low fail condition meet";
+*-}
+
+*-vvtdmall.SbVVTD_VVT1_ShortHiCritMet{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "VT1SHHIMET";
+*-  variable_location.symbol = vvtdmall.SbVVTD_VVT1_ShortHiCritMet;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "VVT1 Output diag system test high fail condition meet";
+*-}
+
+
+*-vvtdmall.ScVVTD_VVT2_SampleCntr{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "VT2SMPLCNT";
+*-  variable_location.symbol = vvtdmall.ScVVTD_VVT2_SampleCntr;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "VVT2 Output diag sample counter";
+*-}
+
+*-vvtdmall.ScVVTD_VVT2_FailCntr{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "VT2FAILCNT";
+*-  variable_location.symbol = vvtdmall.ScVVTD_VVT2_FailCntr;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "VVT2 Output diag fail counter";
+*-}
+
+*-vvtdmall.SbVVTD_VVT2_TestComplete{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "VT2TSTCMPL";
+*-  variable_location.symbol = vvtdmall.SbVVTD_VVT2_TestComplete;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "VVT2 Output diag system test complete";
+*-}
+
+*-vvtdmall.SbVVTD_VVT2_TestFailed{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "VT2TSTFAIL";
+*-  variable_location.symbol = vvtdmall.SbVVTD_VVT1_TestFailed;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "VVT2 Output diag system test fail";
+*-}
+
+*-vvtdmall.SbVVTD_VVT2_ShortLoCritMet{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "VT2SHLOMET";
+*-  variable_location.symbol = vvtdmall.SbVVTD_VVT2_ShortLoCritMet;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "VVT2 Output diag system test low fail condition meet";
+*-}
+
+*-vvtdmall.SbVVTD_VVT2_ShortHiCritMet{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "VT2SHHIMET";
+*-  variable_location.symbol = vvtdmall.SbVVTD_VVT2_ShortHiCritMet;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "VVT2 Output diag system test high fail condition meet";
+*-}
+
+
+/*============================================================================*/
+/* CHANGE LOG                                                                 */
+/*                                                                            */
+/*                                                                            */
+/* REV.   DATE     USER  RSM    DESCRIPTION                                   */
+/*                               */
+/*                                                                            */
+/* end of module                                                              */
+/*                                                                            */
+/*============================================================================*/
