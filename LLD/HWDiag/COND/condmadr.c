@@ -288,7 +288,7 @@ static TeCOND_AD_RESP_STEPS PerfmCOND_AD_InputRespCntrlTestSteps(void)
 
     if ( LeCOND_AD_RespTestStep == CeCOND_AD_RESP_STEP_DISABLED )
     {
-      LeCOND_AD_RespTestStep = SeCOND_AD_RespTestStep;
+      LeCOND_AD_RespTestStep = CeCOND_AD_RESP_STEP_PRE_SHORT;
 
       SfCOND_Pct_APS1_PreShort = GetETCI_Pct_BuffRawAPS_1();
       SfCOND_Pct_APS2_PreShort = GetETCI_Pct_BuffRawAPS_2();
