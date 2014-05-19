@@ -1,0 +1,120 @@
+/******************************************************************************/
+/*                                                                            */
+/* Filename:          10005387_COND.anc                                       */
+/*                                                                            */
+/* Description:       Private ancillary definitions file                      */
+/*                    for COND subsystem.                                     */
+/*                                                                            */
+/* Global Functions Defined:                                                  */
+/*                    None                                                    */
+/* Static Functions Defined:                                                  */
+/*                    None                                                    */
+/* Inline Functions Defined:                                                  */
+/*                    None                                                    */
+/*                                                                            */
+/* Forward Engine Management Systems                                          */
+/*                                                                            */
+/* Copyright 2003-2008, Delphi Technologies, Inc.                             */
+/* All rights reserved.                                                       */
+/*                                                                            */
+/******************************************************************************/
+
+*-condmcpu.SbCOND_SOH_MainCPU_Flt_bit_0{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CDMAINF";
+*-  variable_location.symbol = condmcpu.SbCOND_SOH_MainCPU_Flt;
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  bit_mask                 = 0x1;
+*-  ds_scaling_unit          = "boolean";
+*-  description              = "A failure related to operation of the Main CPU was detected by ETC_SOH s/w in the Main CPU. Fuel, spark, and ETC outputs have been disabled.";
+*-}
+
+*-condmcpu.SbCOND_SOH_CommFlt_bit_0{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CDCOMMF";
+*-  variable_location.symbol = condmcpu.SbCOND_SOH_CommFlt;
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  bit_mask                 = 0x1;
+*-  ds_scaling_unit          = "boolean";
+*-  description              = "A failure in communication between the Main CPU and the ETC Checking CPU was detected. Fuel, spark, and ETC outputs have been disabled.";
+*-}
+
+*-condmcpu.SbCOND_SOH_CheckingCPU_Flt_bit_0{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CDCHEKF";
+*-  variable_location.symbol = condmcpu.SbCOND_SOH_CheckingCPU_Flt;
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  bit_mask                 = 0x1;
+*-  ds_scaling_unit          = "boolean";
+*-  description              = "A failure in the ETC Checking CPU or a functional problem in the Main CPU was detected by the Checking CPU. Fuel, spark, and ETC outputs have been disabled.";
+*-}
+
+*-condmcpu.SbCOND_SOH_FltPrsnt_bit_0{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CDSOHFP";
+*-  variable_location.symbol = condmcpu.SbCOND_SOH_FltPrsnt;
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  bit_mask                 = 0x1;
+*-  ds_scaling_unit          = "boolean";
+*-  description              = "True if any of the test results in SOH_ETC_Get_Fault_Log were failed this loop.";
+*-}
+
+*-condmcpu.SbCOND_SOH_MainCPU_TstCmp{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CDMAINTC";
+*-  variable_location.symbol = condmcpu.SbCOND_SOH_MainCPU_TstCmp;
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  bit_mask                 = 0x1;
+*-  ds_scaling_unit          = "boolean";
+*-  description              = "True if ETC State of Health Main CPU fault detected by Main CPU completed.";
+*-}
+
+*-condmcpu.SbCOND_SOH_CommTstCmp{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CDCOMMTC";
+*-  variable_location.symbol = condmcpu.SbCOND_SOH_CommTstCmp;
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  bit_mask                 = 0x1;
+*-  ds_scaling_unit          = "boolean";
+*-  description              = "True if ETC State of Communication fault detected by Main CPU completed.";
+*-}
+
+*-condmcpu.SbCOND_SOH_CheckingCPU_TstCmp{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CDCHEKTF";
+*-  variable_location.symbol = condmcpu.SbCOND_SOH_CheckingCPU_TstCmp;
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  bit_mask                 = 0x1;
+*-  ds_scaling_unit          = "boolean";
+*-  description              = "True if ETC State of Health Checking CPU fault detected by Main CPU completed.";
+*-}
+
+
+/******************************************************************************/
+/*                                                                            */
+/* Revision History:                                                          */
+/*                                                                            */
+/* Rev.   YYMMDD Who RSM  Changes                                             */
+/* ------ ------ --- ---- ----------------------------------------------------*/
+/*============================================================================*/
