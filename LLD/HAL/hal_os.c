@@ -29,6 +29,8 @@
 #include "vvtdpapi.h"
 #include "condpapi.h"
 
+static int hls_task_state;
+
 //extern void Update_DiagStatus_10ms(void);
 //=============================================================================
 // Disable/Enable HWIO_MasterIRQ
@@ -67,6 +69,14 @@ bool HAL_OS_Get_Shutdown(void)
 
 	shutdown_status = IO_OS_Get_Shutdown();
 	return shutdown_status;
+}
+
+//=============================================================================
+// HAL_Set_HLS_Task_State
+//=============================================================================
+void HAL_Set_HLS_Task_State(int state)
+{
+	hls_task_state = state;
 }
 
 //=============================================================================
@@ -114,7 +124,7 @@ void  HAL_OS_5ms_Task(void)
 //=============================================================================
 uint16_t OS_10ms_Cnt0;
 uint16_t OS_10ms_Cnt1;
-void  HAL_OS_10ms_Task(void) 
+void  HAL_OS_10ms_Task(void)
 {
 	OS_10ms_Cnt0++;
 	IO_GPIO_DI_Task();
@@ -122,7 +132,12 @@ void  HAL_OS_10ms_Task(void)
 	IO_Eng_Update_System_Time_Background();
 	Calculate_HiRes_Engine_Speed();
 	Calculate_Esc_Input_10ms();
-	HLS_Task_10ms();
+	if ((hls_task_state == HLS_TASK_NORMAL) || (hls_task_state == HLS_TASK_100MS)) {
+		HLS_Task_10ms();
+	} else if (hls_task_state == HLS_TASK_10MS) {
+		HLS_Task_10ms();
+		HAL_Set_HLS_Task_State(HLS_TASK_100MS);
+	}
 	HAL_SOH_Update_Loop_Sequence_10MS();
 	IO_GPIO_DO_Task();
 	IO_Pulse_Update_Function();
@@ -167,7 +182,12 @@ void HAL_OS_100ms_Task(void)
 	OS_100ms_Cnt++;
 	Calculate_Esc_Input_1000ms();
 	ScheduleKnockSlowBckgLogic();
-	HLS_Task_100ms();
+	if (hls_task_state == HLS_TASK_NORMAL) {
+		HLS_Task_100ms();
+	} else if (hls_task_state == HLS_TASK_100MS) {
+		HLS_Task_100ms();
+		HAL_Set_HLS_Task_State(HLS_TASK_NORMAL);
+	}
 	if(OS_100ms_Cnt ==5) {
 		IO_Pulse_VSS_Update_500ms();
 	}
