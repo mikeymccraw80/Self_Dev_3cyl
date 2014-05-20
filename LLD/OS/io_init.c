@@ -181,29 +181,6 @@ void InitializeHardwareRegisters(void)
 	MIOS_Initialize_Device();
 
 	DSPI_B_Initialize_Device();
-
-	DMA_Initialize_Channel(
-	DMA_CHANNEL_DSPI_B_SR_TFFF,
-	DMA_DSPIB_SR_TFFF_Source_Address,
-	DMA_DSPIB_SR_TFFF_Second_32Bit,
-	DMA_DSPIB_SR_TFFF_Third_32Bit,
-	DMA_DSPIB_SR_TFFF_Slast,
-	DMA_DSPIB_SR_TFFF_Dest_Address,
-	DMA_DSPIB_SR_TFFF_Sixth_32Bit,
-	DMA_DSPIB_SR_TFFF_Dlast,
-	DMA_DSPIB_SR_TFFF_Eighth_32Bit);
-
-	DMA_Initialize_Channel(
-	DMA_CHANNEL_DSPI_B_SR_RFDF,
-	DMA_DSPIB_SR_RFDF_Source_Address,
-	DMA_DSPIB_SR_RFDF_Second_32Bit,
-	DMA_DSPIB_SR_RFDF_Third_32Bit,
-	DMA_DSPIB_SR_RFDF_Slast,
-	DMA_DSPIB_SR_RFDF_Dest_Address,
-	DMA_DSPIB_SR_RFDF_Sixth_32Bit,
-	DMA_DSPIB_SR_RFDF_Dlast,
-	DMA_DSPIB_SR_RFDF_Eighth_32Bit);
-
 	DSPI_B_Enable_Transfer(true);
 
 	DMA_Initialize_Channel(
