@@ -80,13 +80,26 @@ void HAL_Set_HLS_Task_State(int state)
 }
 
 //=============================================================================
-// HAL_OS_1ms_Task
+// HAL_OS_1ms_TimeBasedTask
+// called in RTI 1ms interrupt
 //=============================================================================
-void  HAL_OS_1ms_Task(void) 
+void  HAL_OS_1ms_TimeBasedTask(void) 
 {
 	IO_Analog_1ms_Update();
 	HLS_Task_1ms();
 	IO_ETC_Update_1msTimeBase();
+	// IO_OS_BackGround_1ms_Status_Check();
+}
+
+//=============================================================================
+// HAL_OS_1ms_Task
+// 
+//=============================================================================
+void  HAL_OS_1ms_Task(void) 
+{
+	// IO_Analog_1ms_Update();
+	// HLS_Task_1ms();
+	// IO_ETC_Update_1msTimeBase();
 	IO_OS_BackGround_1ms_Status_Check();
 }
 
