@@ -1,0 +1,112 @@
+/*============================================================================*/
+/*                                                                            */
+/* KNOD Subsystem APPLICATION ANCILLARY FILE                                  */
+/*                                                                            */
+/*============================================================================*/
+
+*-condmain.VbCOND_HWIO_ClockEnblCritMet{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "MCLKCRMT";
+*-  variable_location.symbol = condmain.VbCOND_HWIO_ClockEnblCritMet;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "cond main clock diag system enable criteria met";
+*-}
+
+*-condmain.VbCOND_HWIO_ClockTstComplete{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "MCLKCMPL";
+*-  variable_location.symbol = condmain.VbCOND_HWIO_ClockTstComplete;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "cond main clock diag system test complete";
+*-}
+
+*-condmain.VbCOND_HWIO_ClockFailed{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "MCLKFAIL";
+*-  variable_location.symbol = condmain.VbCOND_HWIO_ClockFailed;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "cond main clock diag system test fail";
+*-}
+
+*-condmain.VbCOND_HWIO_ClockFailCritMet{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "MCLKFCMET";
+*-  variable_location.symbol = condmain.VbCOND_HWIO_ClockFailCritMet;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "cond main clock diag system test High fail condition meet";
+*-}
+
+*-condmain.VbCOND_HWIO_ADC0EnblCritMet{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ADC0CRMT";
+*-  variable_location.symbol = condmain.VbCOND_HWIO_ADC0EnblCritMet;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "cond ADC0 diag system enable criteria met";
+*-}
+
+*-condmain.VbCOND_HWIO_ADC0TstComplete{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ADC0CMPL";
+*-  variable_location.symbol = condmain.VbCOND_HWIO_ADC0TstComplete;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "ADC0 diag system test complete";
+*-}
+
+*-condmain.VbCOND_HWIO_ADC0Failed{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ADC0FAIL";
+*-  variable_location.symbol = condmain.VbCOND_HWIO_ADC0Failed;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "ADC0 diag system test fail";
+*-}
+
+*-condmain.VbCOND_HWIO_ADC0FailCritMet{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ADC0FCMET";
+*-  variable_location.symbol = condmain.VbCOND_HWIO_ADC0FailCritMet;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "ADC0 diag system test High fail condition meet";
+*-}
+
+/*============================================================================*/
+/* CHANGE LOG                                                                 */
+/*                                                                            */
+/*                                                                            */
+/* REV.   DATE     USER  RSM    DESCRIPTION                                   */
+/*                               */
+/*                                                                            */
+/* end of module                                                              */
+/*                                                                            */
+/*============================================================================*/
