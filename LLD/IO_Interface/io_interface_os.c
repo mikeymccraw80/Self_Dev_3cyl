@@ -141,8 +141,10 @@ void  IO_OS_BackGround_1ms_Status_Check(void)
 			/* Initilize the Chery flag bit */
 			crank_sig.crank_status.B_crank_no_sync = ( bitfield16_t )true ;
 		}
-		/* disable hls task schedule */
-		HAL_Set_HLS_Task_State(HLS_TASK_SHUTDOWN);
+		if(crank_sig.engine_rpm < MIN_RPM_CHERY) {
+			/* disable hls task schedule */
+			HAL_Set_HLS_Task_State(HLS_TASK_SHUTDOWN);
+		}
 	} else {
 		IgnitionOffTimeVar = 0;
 	}
