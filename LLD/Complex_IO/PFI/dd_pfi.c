@@ -51,6 +51,8 @@ uCrank_Angle_T             PFI_Trim_EOIT;
 volatile uint32_t PFI_Time_Per_Boundary_Fraction;
 
 
+//tempoary
+
 //=============================================================================
 //  Function Definitions
 //=============================================================================
@@ -352,10 +354,9 @@ uint32_t       desired_pulse_width;
       edge_time_and_count.Count,
       period );
 
-   if(Startup_Counter<8)
+   if(Startup_Counter<PFI_MAX_CYLINDERS+1)
    	{
-   	  desired_pulse_width =0;
-	  PFI_Set_Pulse_Width(in_channel,0,    S_MILLISECONDSb, MILLISECOND_RESOLUTION );
+           desired_pulse_width =0;
 
    	}
    else
@@ -367,7 +368,8 @@ uint32_t       desired_pulse_width;
    MCD5417_Update_Boundary( 
          PFI_FUEL_TPU_INDEX,
       PFI_Desfi[ in_channel ],
-      PFI_Desired_Pulse_Width[ in_channel ],
+      //PFI_Desired_Pulse_Width[ in_channel ],
+      desired_pulse_width,
       PFI_Boundary_Time[ in_channel ],
       PFI_Normal_Offset,
       PFI_Trim_Offset );
@@ -424,6 +426,7 @@ void PFI_Process_Cylinder_Event(void)
                                  PFI_Normal_Offset,
                                  PFI_Trim_Offset );
      // }
+    		
    }
 
 

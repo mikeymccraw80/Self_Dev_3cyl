@@ -214,6 +214,9 @@ T_CRANK_ANGLEa PfKNOC_phi_FinalWindow2Begin;/* Start angle of  knock window 2 */
 T_CRANK_ANGLEa PfKNOC_phi_FinalWindow2End;/* End angle of  knock window 2 */
 T_MILLISECONDSb PfKNOC_phi_FinalWindow2_length;
 
+
+extern bool     First_Syn_Flag;
+
 /* ============================================================================ *\
  * Local FUNCTION.
 \* ============================================================================ */
@@ -374,15 +377,15 @@ void HLS_ini(void)
 	inj_enable.B_inj_C = (uint8_t)true;
 	inj_enable.B_inj_D = (uint8_t)true;
 
-	inj_sig[INJ_CHANNEL_A].inj_time = 20000;
-	inj_sig[INJ_CHANNEL_B].inj_time = 20000;
-	inj_sig[INJ_CHANNEL_C].inj_time = 20000;
-	inj_sig[INJ_CHANNEL_D].inj_time = 20000;
+	inj_sig[INJ_CHANNEL_A].inj_time = 80000;
+	inj_sig[INJ_CHANNEL_B].inj_time = 80000;
+	inj_sig[INJ_CHANNEL_C].inj_time = 80000;
+	inj_sig[INJ_CHANNEL_D].inj_time = 80000;
 
-	inj_sig[INJ_CHANNEL_A].inj_end_angle = 200;
-	inj_sig[INJ_CHANNEL_B].inj_end_angle = 200;
-	inj_sig[INJ_CHANNEL_C].inj_end_angle = 200;
-	inj_sig[INJ_CHANNEL_D].inj_end_angle = 200;
+	inj_sig[INJ_CHANNEL_A].inj_end_angle = 127;
+	inj_sig[INJ_CHANNEL_B].inj_end_angle = 127;
+	inj_sig[INJ_CHANNEL_C].inj_end_angle = 127;
+	inj_sig[INJ_CHANNEL_D].inj_end_angle = 127;
 
 
 	ign_enable.B_ign_A = (uint8_t)true;     
@@ -460,25 +463,53 @@ void HLS_inisyn(void)
 {
 
 }
-
+uint16_t test_count;
 /*will be called when the synch is lost/reset, this is an event trigged function call*/
 void HLS_rstsyn(void)
 {
-
+test_count =0;
 }
 /*will be called when the first Synchronization (first gap) is confirmed, this is an event trigged function call*/
 void HLS_firstsyn(void)
 {
 
+
 }
 /*will be called for every segment (at Software reference mark)*/
+
 void HLS_syn(void)
 {
-    inj_sig[INJ_CHANNEL_A].inj_time = 10000;
-    inj_sig[INJ_CHANNEL_B].inj_time = 10000;
-    inj_sig[INJ_CHANNEL_C].inj_time = 10000;
-    inj_sig[INJ_CHANNEL_D].inj_time = 10000;
 
+
+if(First_Syn_Flag==0)
+{
+    inj_sig[INJ_CHANNEL_A].inj_time = 40000;
+    inj_sig[INJ_CHANNEL_B].inj_time = 40000;
+    inj_sig[INJ_CHANNEL_C].inj_time =40000;
+    inj_sig[INJ_CHANNEL_D].inj_time = 40000;
+
+}
+else
+{
+
+if(LLD_cyl_num==INJ_CHANNEL_A)
+{
+    inj_sig[INJ_CHANNEL_A].inj_time = 10000;
+}
+if(LLD_cyl_num==INJ_CHANNEL_B)
+{
+    inj_sig[INJ_CHANNEL_B].inj_time = 10000;
+}
+if(LLD_cyl_num==INJ_CHANNEL_C)
+{
+    inj_sig[INJ_CHANNEL_C].inj_time = 10000;
+}	
+if(LLD_cyl_num==INJ_CHANNEL_D)
+{	
+    inj_sig[INJ_CHANNEL_D].inj_time = 10000;
+}
+}
+#if 0
     inj_sig[INJ_CHANNEL_A].B_post_inj = true;
     inj_sig[INJ_CHANNEL_A].post_inj_time =1000;
     inj_sig[INJ_CHANNEL_B].B_post_inj = true;
@@ -487,7 +518,7 @@ void HLS_syn(void)
     inj_sig[INJ_CHANNEL_C].post_inj_time =1000;
     inj_sig[INJ_CHANNEL_D].B_post_inj = true;
     inj_sig[INJ_CHANNEL_D].post_inj_time =1000;
-
+#endif	
     /* ignition test interface */
     // if(LLD_cyl_num == 0) {
         // ign_sig[0].ign_angle = 40;

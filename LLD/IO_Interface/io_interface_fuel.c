@@ -10,9 +10,6 @@
 #include "HLS.h"
 #include "hwiocald.h"
 
-//#include "io_config_tpu.h"
-
-
 //=============================================================================
 // Chery fuel Variable
 //=============================================================================
@@ -39,7 +36,6 @@ void  IO_Fuel_Syn_Init(void)
     SetHWIO_MinInjectorOffTime(V_MILLISECONDSb(0.25));
     SetHWIO_SimultaneousFuelMode();    //make sure in sequential mode
 }
-
 //=============================================================================
 // IO_Fuel_Syn_Update
 //=============================================================================
@@ -66,26 +62,18 @@ void  IO_Fuel_Syn_Update(void)
             SetHWIO_PrimePulseComplete();
             SetHWIO_FuelSqSwitch(false);
 			
-	    //enable post injection
-            PFI_Enable_Trim_Pulses(INJ_CHANNEL_A);
-            PFI_Enable_Trim_Pulses(INJ_CHANNEL_B);
-            PFI_Enable_Trim_Pulses(INJ_CHANNEL_C);
-            PFI_Enable_Trim_Pulses(INJ_CHANNEL_D);
+
 			
         // Chery requirement: Determine which cylinder should be arranged simultaneous injection
         //Cam low means physical cylinder 1,simultaneous inject cyl2,cyl3,cyl4
         if (CAM_Get_Sensor_State(0) == false) {
             // Chery requirement: Disable squence injection of cyl2,cyl4 if corresponding simultaneous injection happened
             disable_cyl2_cyl4_flag = true;
-        }
-        //Cam high means physical cylinder 4,simultaneous inject cyl1,cyl2,cyl3
-        else {
-            // Chery requirement: Disable squence injection of cyl1,cyl3 if corresponding simultaneous injection happened
-            disable_cyl2_cyl4_flag = false;
-        }
-
-        /* Cam low means physical cylinder 1,simultaneous inject cyl2,cyl3,cyl4 */
-        if (disable_cyl2_cyl4_flag == true) {
+				    //enable post injection
+            PFI_Enable_Trim_Pulses(INJ_CHANNEL_B);
+            PFI_Enable_Trim_Pulses(INJ_CHANNEL_C);
+            PFI_Enable_Trim_Pulses(INJ_CHANNEL_D);
+			
             chery_inj_width =  inj_sig[INJ_CHANNEL_A].inj_time;
             PFI_PulseWidth =Convert_Chery_Inj_Width(chery_inj_width,S_MILLISECONDSb);
             PFI_Set_Pulse_Width(INJ_CHANNEL_A, 0,              S_MILLISECONDSb, MILLISECOND_RESOLUTION );
@@ -93,30 +81,41 @@ void  IO_Fuel_Syn_Update(void)
             PFI_Set_Pulse_Width(INJ_CHANNEL_C, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
             PFI_Set_Pulse_Width(INJ_CHANNEL_D, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
         }
-        /* Cam high means physical cylinder 4,simultaneous inject cyl1,cyl2,cyl3 */
+        //Cam high means physical cylinder 4,simultaneous inject cyl1,cyl2,cyl3
         else {
+            // Chery requirement: Disable squence injection of cyl1,cyl3 if corresponding simultaneous injection happened
+            disable_cyl2_cyl4_flag = false;
+							    //enable post injection
+            PFI_Enable_Trim_Pulses(INJ_CHANNEL_A);
+            PFI_Enable_Trim_Pulses(INJ_CHANNEL_B);
+            PFI_Enable_Trim_Pulses(INJ_CHANNEL_D);
+			
             chery_inj_width =  inj_sig[INJ_CHANNEL_C].inj_time;
             PFI_PulseWidth =Convert_Chery_Inj_Width(chery_inj_width,S_MILLISECONDSb);
             PFI_Set_Pulse_Width(INJ_CHANNEL_A, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
             PFI_Set_Pulse_Width(INJ_CHANNEL_B, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
             PFI_Set_Pulse_Width(INJ_CHANNEL_C, 0,              S_MILLISECONDSb, MILLISECOND_RESOLUTION );
             PFI_Set_Pulse_Width(INJ_CHANNEL_D, PFI_PulseWidth             , S_MILLISECONDSb, MILLISECOND_RESOLUTION );
+
         }
+
+
         //PerfmHWIO_SimultaneousFuelDelivery();
-#if 0
+
            //SetHWIO_FuelSqSwitch(true);
            /*Convert the engineer value of Chery Injection end angle to Delphi engineer value */
 	    chery_inj_end_angle = (900 - Convert_Chery_Inj_angle(inj_sig[INJ_CHANNEL_A].inj_end_angle,Prec_Inj_end_angle_chery))<<S_CRANK_ANGLE;
 	    chery_inj_end_angle = chery_inj_end_angle -KfHWIO_phi_BoundaryFraction;
            SetHWIO_FuelInjectorEOIT(chery_inj_end_angle);
            SetHWIO_FuelInjectorTrimEOIT(chery_inj_end_angle);
-#endif
+
 	   if (disable_cyl2_cyl4_flag == true) 
 	     {
 
 		 chery_inj_width =  inj_sig[INJ_CHANNEL_A].inj_time;
                PFI_PulseWidth =Convert_Chery_Inj_Width(chery_inj_width,S_MILLISECONDSb);
                PFI_Set_Pulse_Width(INJ_CHANNEL_A, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
+
 	      }
 	   else
 	      {
@@ -124,7 +123,9 @@ void  IO_Fuel_Syn_Update(void)
 		 chery_inj_width =  inj_sig[INJ_CHANNEL_C].inj_time;
                PFI_PulseWidth =Convert_Chery_Inj_Width(chery_inj_width,S_MILLISECONDSb);
                PFI_Set_Pulse_Width(INJ_CHANNEL_C, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
+
 	   	} 
+
          Startup_Counter++;
         First_Syn_Flag = true;
  }
@@ -137,15 +138,7 @@ else
 
 		
     /*Convert the engineer value of Chery Injection end angle to Delphi engineer value */
-	if(inj_sig[INJ_CHANNEL_A].inj_end_angle>inj_sig[INJ_CHANNEL_A].abort_angle)
-	{
-	  chery_inj_end_angle_prev = inj_sig[INJ_CHANNEL_A].inj_end_angle;
-	}
-	else
-	{
-         chery_inj_end_angle_prev = inj_sig[INJ_CHANNEL_A].abort_angle;
-	}
-	chery_inj_end_angle = (900 - Convert_Chery_Inj_angle(chery_inj_end_angle_prev,Prec_Inj_end_angle_chery))<<S_CRANK_ANGLE;
+	chery_inj_end_angle = (900 - Convert_Chery_Inj_angle(inj_sig[INJ_CHANNEL_A].inj_end_angle,Prec_Inj_end_angle_chery))<<S_CRANK_ANGLE;
 	chery_inj_end_angle = chery_inj_end_angle -KfHWIO_phi_BoundaryFraction;
     SetHWIO_FuelInjectorEOIT(chery_inj_end_angle);
     SetHWIO_FuelInjectorTrimEOIT(chery_inj_end_angle);
@@ -155,6 +148,7 @@ else
     if(CRANK_Get_Cylinder_ID() != INJ_CHANNEL_A) {
         if(inj_sig[INJ_CHANNEL_A].B_post_inj) {
             Chery_Post_Injection[INJ_CHANNEL_A]+=inj_sig[INJ_CHANNEL_A].post_inj_time; 
+	     PFI_Enable_Trim_Pulses(INJ_CHANNEL_A);
         }
     } else {
         Chery_Post_Injection[INJ_CHANNEL_A] = 0;
@@ -173,6 +167,7 @@ else
     if(CRANK_Get_Cylinder_ID() != INJ_CHANNEL_B) {
         if(inj_sig[INJ_CHANNEL_B].B_post_inj) {
             Chery_Post_Injection[INJ_CHANNEL_B]+=inj_sig[INJ_CHANNEL_B].post_inj_time;
+		     PFI_Enable_Trim_Pulses(INJ_CHANNEL_B);
         }
     } else {
         Chery_Post_Injection[INJ_CHANNEL_B] = 0;
@@ -193,6 +188,7 @@ else
     if(CRANK_Get_Cylinder_ID() != INJ_CHANNEL_C) {
         if(inj_sig[INJ_CHANNEL_C].B_post_inj) {
             Chery_Post_Injection[INJ_CHANNEL_C]+=inj_sig[INJ_CHANNEL_C].post_inj_time;
+				     PFI_Enable_Trim_Pulses(INJ_CHANNEL_C);
         }
     } else {
         Chery_Post_Injection[INJ_CHANNEL_C] = 0;
@@ -212,6 +208,7 @@ else
     if(CRANK_Get_Cylinder_ID() != INJ_CHANNEL_D) {
         if(inj_sig[INJ_CHANNEL_D].B_post_inj) {
             Chery_Post_Injection[INJ_CHANNEL_D]+=inj_sig[INJ_CHANNEL_D].post_inj_time;
+				     PFI_Enable_Trim_Pulses(INJ_CHANNEL_D);
         }
     } else {
         Chery_Post_Injection[INJ_CHANNEL_D] = 0;
