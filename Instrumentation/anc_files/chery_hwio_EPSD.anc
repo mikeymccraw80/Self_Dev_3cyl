@@ -188,10 +188,21 @@
 *-  ds_const_b               = "0.000000000000";
 *-}
 
-*-epsdmcam._SbEPSD_CamNoSigTestFailed_bit_0{
+*-epsdmcam.SbEPSD_Cam1NoSigTestFailed{
 *-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "CAMNFAIL";
-*-  variable_location.symbol = epsdmcam._SbEPSD_CamNoSigTestFailed;
+*-  label                    = "CAM1NFAIL";
+*-  variable_location.symbol = epsdmcam.SbEPSD_Cam1NoSigTestFailed;
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  bit_mask                 = 0x1;
+*-}
+
+*-epsdmcam.SbEPSD_Cam2NoSigTestFailed{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CAM2NFAIL";
+*-  variable_location.symbol = epsdmcam.SbEPSD_Cam2NoSigTestFailed;
 *-  ds_precision             = "4.0";
 *-  ds_scaling_mode          = "Ax + B";
 *-  ds_const_a               = "1.000000000000";
@@ -221,16 +232,28 @@
 *-  bit_mask                 = 0x1;
 *-}
 
-*-epsdmcam._SbEPSD_CamNoSigTestComplete_bit_0{
+*-epsdmcam.SbEPSD_Cam1NoSigTestComplete{
 *-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "CAMNSTC";
-*-  variable_location.symbol = epsdmcam._SbEPSD_CamNoSigTestComplete;
+*-  label                    = "CAM1NSTC";
+*-  variable_location.symbol = epsdmcam.SbEPSD_Cam1NoSigTestComplete;
 *-  ds_precision             = "4.0";
 *-  ds_scaling_mode          = "Ax + B";
 *-  ds_const_a               = "1.000000000000";
 *-  ds_const_b               = "0.000000000000";
 *-  bit_mask                 = 0x1;
 *-}
+
+*-epsdmcam.SbEPSD_Cam2NoSigTestComplete{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CAM2NSTC";
+*-  variable_location.symbol = epsdmcam.SbEPSD_Cam2NoSigTestComplete;
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  bit_mask                 = 0x1;
+*-}
+
 *-epsdmcnk._SeEPSD_CamPrevState_bit_0{
 *-  OBJECTS_CLASS: parameter_es_class;
 *-  label                    = "CAMPRVST";
@@ -242,16 +265,28 @@
 *-  bit_mask                 = 0x1;
 *-}
 
-*-epsdmcam._SbEPSD_CamRatnlyTestFailed_bit_0{
+*-epsdmcam.SbEPSD_Cam1RatnlyTestFailed{
 *-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "CAMRFAIL";
-*-  variable_location.symbol = epsdmcam._SbEPSD_CamRatnlyTestFailed;
+*-  label                    = "CAM1RFAIL";
+*-  variable_location.symbol = epsdmcam.SbEPSD_Cam1RatnlyTestFailed;
 *-  ds_precision             = "4.0";
 *-  ds_scaling_mode          = "Ax + B";
 *-  ds_const_a               = "1.000000000000";
 *-  ds_const_b               = "0.000000000000";
 *-  bit_mask                 = 0x1;
 *-}
+
+*-epsdmcam.SbEPSD_Cam2RatnlyTestFailed{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CAM2RFAIL";
+*-  variable_location.symbol = epsdmcam.SbEPSD_Cam2RatnlyTestFailed;
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  bit_mask                 = 0x1;
+*-}
+
 
 *-epsdmcam._SbEPSD_CamRatnlyEnblCriteriaMe_bit_0{
 *-  OBJECTS_CLASS: parameter_es_class;
@@ -264,16 +299,28 @@
 *-  bit_mask                 = 0x1;
 *-}
 
-*-epsdmcam._SbEPSD_CamRatnlyTestComplete_bit_0{
+*-epsdmcam.SbEPSD_Cam1RatnlyTestComplete{
 *-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "CAMRYTC";
-*-  variable_location.symbol = epsdmcam._SbEPSD_CamRatnlyTestComplete;
+*-  label                    = "CAM1RYTC";
+*-  variable_location.symbol = epsdmcam.SbEPSD_Cam1RatnlyTestComplete;
 *-  ds_precision             = "4.0";
 *-  ds_scaling_mode          = "Ax + B";
 *-  ds_const_a               = "1.000000000000";
 *-  ds_const_b               = "0.000000000000";
 *-  bit_mask                 = 0x1;
 *-}
+
+*-epsdmcam.SbEPSD_Cam2RatnlyTestComplete{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CAM2RYTC";
+*-  variable_location.symbol = epsdmcam.SbEPSD_Cam2RatnlyTestComplete;
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  bit_mask                 = 0x1;
+*-}
+
 
 *-epsdmcnk._SbEPSD_CrankNoSigEnblCriteriaM_bit_0{
 *-  OBJECTS_CLASS: parameter_es_class;
