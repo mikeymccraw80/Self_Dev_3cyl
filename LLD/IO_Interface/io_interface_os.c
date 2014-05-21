@@ -152,8 +152,7 @@ void  IO_OS_BackGround_1ms_Status_Check(void)
 	/* Doing the software reset as the chery requirement */
 	if ((B_HLS_afterrun == true) && 
 		(!Is_IGN_Off()) &&
-		(crank_sig.engine_rpm < MIN_RPM_CHERY) &&
-		(B_KeyOn == true))
+		(crank_sig.engine_rpm < MIN_RPM_CHERY))
 	{           
 		/* Stop the all task containers */
 		Disable_Interrupts( );
