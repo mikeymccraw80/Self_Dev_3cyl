@@ -8,20 +8,40 @@
 /*                                                      */
 /********************************************************/
 
-*-_VcEPSD_CamCylEventCntr{
+*-epsdmcam.VcEPSD_Cam1CylEventCntr{
 *-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "CAMCYLEV";
-*-  variable_location.symbol = _VcEPSD_CamCylEventCntr;
+*-  label                    = "CAM1CYLEV";
+*-  variable_location.symbol = epsdmcam.VcEPSD_Cam1CylEventCntr;
 *-  ds_precision             = "4.0";
 *-  ds_scaling_mode          = "Ax + B";
 *-  ds_const_a               = "1.000000000000";
 *-  ds_const_b               = "0.000000000000";
 *-}
 
-*-epsdmcam._ScEPSD_CamNoSigCylEventCntr{
+*-epsdmcam.VcEPSD_Cam2CylEventCntr{
 *-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "CAMNSCTR";
-*-  variable_location.symbol = epsdmcam._ScEPSD_CamNoSigCylEventCntr;
+*-  label                    = "CAM2CYLEV";
+*-  variable_location.symbol = epsdmcam.VcEPSD_Cam2CylEventCntr;
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-}
+
+*-epsdmcam.ScEPSD_Cam1NoSigCylEventCntr{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CAM1NSCTR";
+*-  variable_location.symbol = epsdmcam.ScEPSD_Cam1NoSigCylEventCntr;
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-}
+
+*-epsdmcam.ScEPSD_Cam2NoSigCylEventCntr{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CAM2NSCTR";
+*-  variable_location.symbol = epsdmcam.ScEPSD_Cam2NoSigCylEventCntr;
 *-  ds_precision             = "4.0";
 *-  ds_scaling_mode          = "Ax + B";
 *-  ds_const_a               = "1.000000000000";
@@ -38,20 +58,40 @@
 *-  ds_const_b               = "0.000000000000";
 *-}
 
-*-epsdmcam._ScEPSD_CamRatnlyFailCntr{
+*-epsdmcam.ScEPSD_Cam1RatnlyFailCntr{
 *-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "CAMRYFC";
-*-  variable_location.symbol = epsdmcam._ScEPSD_CamRatnlyFailCntr;
+*-  label                    = "CAM1RYFC";
+*-  variable_location.symbol = epsdmcam.ScEPSD_Cam1RatnlyFailCntr;
 *-  ds_precision             = "4.0";
 *-  ds_scaling_mode          = "Ax + B";
 *-  ds_const_a               = "1.000000000000";
 *-  ds_const_b               = "0.000000000000";
 *-}
 
-*-epsdmcam._ScEPSD_CamRatnlyPassCntr{
+*-epsdmcam.ScEPSD_Cam2RatnlyFailCntr{
 *-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "CAMRYPC";
-*-  variable_location.symbol = epsdmcam._ScEPSD_CamRatnlyPassCntr;
+*-  label                    = "CAM2RYFC";
+*-  variable_location.symbol = epsdmcam.ScEPSD_Cam2RatnlyFailCntr;
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-}
+
+*-epsdmcam.ScEPSD_Cam1RatnlyPassCntr{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CAM1RYPC";
+*-  variable_location.symbol = epsdmcam.ScEPSD_Cam1RatnlyPassCntr;
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-}
+
+*-epsdmcam.ScEPSD_Cam2RatnlyPassCntr{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CAM2RYPC";
+*-  variable_location.symbol = epsdmcam.ScEPSD_Cam2RatnlyPassCntr;
 *-  ds_precision             = "4.0";
 *-  ds_scaling_mode          = "Ax + B";
 *-  ds_const_a               = "1.000000000000";
@@ -221,10 +261,21 @@
 *-  bit_mask                 = 0x1;
 *-}
 
-*-_VbEPSD_CamNoSigFailCriteriaMet_bit_0{
+*-epsdmcam.VbEPSD_Cam1NoSigFailCriteriaMet{
 *-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "CAMNSFCM";
-*-  variable_location.symbol = _VbEPSD_CamNoSigFailCriteriaMet;
+*-  label                    = "CAM1NSFCM";
+*-  variable_location.symbol = epsdmcam.VbEPSD_Cam1NoSigFailCriteriaMet;
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  bit_mask                 = 0x1;
+*-}
+
+*-epsdmcam.VbEPSD_Cam2NoSigFailCriteriaMet{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CAM2NSFCM";
+*-  variable_location.symbol = epsdmcam.VbEPSD_Cam2NoSigFailCriteriaMet;
 *-  ds_precision             = "4.0";
 *-  ds_scaling_mode          = "Ax + B";
 *-  ds_const_a               = "1.000000000000";
@@ -288,10 +339,21 @@
 *-}
 
 
-*-epsdmcam._SbEPSD_CamRatnlyEnblCriteriaMe_bit_0{
+*-epsdmcam.SbEPSD_Cam1RatnlyEnblCriteriaMet{
 *-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "CAMRYECM";
-*-  variable_location.symbol = epsdmcam._SbEPSD_CamRatnlyEnblCriteriaMe;
+*-  label                    = "CAM1RYECM";
+*-  variable_location.symbol = epsdmcam.SbEPSD_Cam1RatnlyEnblCriteriaMet;
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  bit_mask                 = 0x1;
+*-}
+
+*-epsdmcam.SbEPSD_Cam2RatnlyEnblCriteriaMet{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CAM2RYECM";
+*-  variable_location.symbol = epsdmcam.SbEPSD_Cam2RatnlyEnblCriteriaMet;
 *-  ds_precision             = "4.0";
 *-  ds_scaling_mode          = "Ax + B";
 *-  ds_const_a               = "1.000000000000";
@@ -421,10 +483,21 @@
 *-  bit_mask                 = 0x1;
 *-}
 
-*-_VbEPSD_CamRatnlyFailCriteriaMet_bit_0{
+*-epsdmcam.VbEPSD_Cam1RatnlyFailCriteriaMet{
 *-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "CAMRFCM";
-*-  variable_location.symbol = _VbEPSD_CamRatnlyFailCriteriaMet;
+*-  label                    = "CAM1RFCM";
+*-  variable_location.symbol = epsdmcam.VbEPSD_Cam1RatnlyFailCriteriaMet;
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  bit_mask                 = 0x1;
+*-}
+
+*-epsdmcam.VbEPSD_Cam2RatnlyFailCriteriaMet{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CAM2RFCM";
+*-  variable_location.symbol = epsdmcam.VbEPSD_Cam2RatnlyFailCriteriaMet;
 *-  ds_precision             = "4.0";
 *-  ds_scaling_mode          = "Ax + B";
 *-  ds_const_a               = "1.000000000000";

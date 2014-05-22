@@ -627,7 +627,8 @@ extern EOBD_PERCENTa   EOBD_CcpDutyCycle;
 // /* for KNOCK */
 // #define GetVIOS_CCESC_Enabled_EMS()           		( EscFlag.EscEnabled )
 // #define GetVIOS_CamOccurred()                           ( CamSensorFlags.CamOccurred )
-#define GetVIOS_CamOccurred()                           (1)
+#define GetVIOS_Cam1Occurred()                           (1)
+#define GetVIOS_Cam2Occurred()                           (1)
 #define GetVIOS_Cam1Stuck()                              CAM_Get_Stuck(CAM1)
 #define GetVIOS_Cam2Stuck()                              CAM_Get_Stuck(CAM2)
 
