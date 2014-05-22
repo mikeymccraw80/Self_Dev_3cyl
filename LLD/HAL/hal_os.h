@@ -6,12 +6,18 @@
 //=============================================================================
 #include "reuse.h"
 
-enum {
+typedef enum {
 	HLS_TASK_NORMAL = 0,
-	HLS_TASK_SHUTDOWN,
+	HLS_TASK_1MS,
+	HLS_TASK_2MS,
+	HLS_TASK_5MS,
 	HLS_TASK_10MS,
-	HLS_TASK_100MS
-};
+	HLS_TASK_20MS,
+	HLS_TASK_50MS,
+	HLS_TASK_100MS,
+	HLS_TASK_200MS,
+	HLS_TASK_1000MS
+}HLS_TASK_STATE_T;
 
 //=============================================================================
 // HAL_Set_HLS_Task_State
