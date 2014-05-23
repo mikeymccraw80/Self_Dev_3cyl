@@ -53,6 +53,7 @@ uint32_t odometer;
 /* LLD variable to inform HLS turn on the mil light */
 /* Attention: Do not defined as hls_bss variable */
 uint32_t Sys_time;
+uint32_t Tooth_time;
 bool CAN_MIL_Status;
 /*===========================================================================*/
 /* File revision history (top to bottom, first revision to last revision     */

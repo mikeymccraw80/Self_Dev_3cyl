@@ -506,6 +506,7 @@ extern uint32_t odometer;
 
 /* Attention: Do not defined as hls_bss variable */
 extern uint32_t Sys_time;
+extern uint32_t Tooth_time;
 
 /* chery requirement*/
 extern  const uint16_t VAL_uTpsMx;
