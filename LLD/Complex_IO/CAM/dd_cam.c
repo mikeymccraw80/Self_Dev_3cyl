@@ -109,6 +109,15 @@ void CAM_Lo_Res_Event_Tasks(void)
 }
 
 //=============================================================================
+// CAM_Application_Event_Tasks
+//=============================================================================
+void CAM_Application_Event_Tasks(void)
+{
+	/* clear cam occurred flag for cam rational diagnose */
+	CAM_State_Change_Occurred = Insert_Bits( CAM_State_Change_Occurred, false, CAM_Sensor_In_Use, 1 );
+}
+
+//=============================================================================
 // CAM_SetStuck
 //=============================================================================
 void CAM_Set_Stuck(CAM_Sensors_T  in_sensor, bool in_stuck )

@@ -43,6 +43,7 @@
 #include "timclib.h"
 #include "intr_ems.h"
 #include "v_power.h"
+#include "dd_cam_interface.h"
 
 #define CcSYST_NUM_OF_CYLINDERS 4
 /******************************************************************************
@@ -355,7 +356,7 @@ static void ProcessEPSD_CamRatnlyFaultEval(void)
 	if (SbEPSD_Cam1RatnlyEnblCriteriaMet)
 	{
 		VcEPSD_Cam1CylEventCntr++;
-		if (GetVIOS_Cam1Occurred())
+		if (CAM_Get_State_Change_Occurred(CAM1))
 		{
 			if (VcEPSD_Cam1CylEventCntr == CcSYST_NUM_OF_CYLINDERS )
 			{

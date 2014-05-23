@@ -136,12 +136,13 @@ void OS_SW_INTC_Control( void)
 		OS_LoResTasks_Hook();
 		SPARK_Process_Cylinder_Event();
 		PFI_Process_Cylinder_Event();
+		CAM_Application_Event_Tasks();
 		APPLICATION_CYLINDER_EVENT_TASK = false;
 		Leave_OSThroughputMeasure(CeOSTK_SEG_CYLINDER_EVENT); //measuring cylinder event time
 	}
 
 	if (CAM_CYLINDER_EVENT_TASK) {
-		CAM_Lo_Res_Event_Tasks();
+		//CAM_Lo_Res_Event_Tasks();
 		CAM_CYLINDER_EVENT_TASK = false;
 	}
 

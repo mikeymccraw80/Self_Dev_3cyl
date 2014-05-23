@@ -151,7 +151,7 @@ const T_COUNT_WORD  KcEPSD_CamNoSignalCylEvent = V_COUNT_WORD (10);
 *|   }
 *| }
 */
-const T_COUNT_WORD  KcEPSD_CamRationalityFailThrsh = V_COUNT_WORD (10);
+const T_COUNT_WORD  KcEPSD_CamRationalityFailThrsh = V_COUNT_WORD (50);
 
 /*
 *| epsdcald.{

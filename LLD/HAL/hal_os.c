@@ -384,25 +384,25 @@ void HAL_OS_Init_Task(void)
 //=============================================================================
 void HAL_OS_SYN_Task(void)
 {
+	interrupt_state_t       interrupt_status;
 
-   interrupt_state_t       interrupt_status;
-   
-    IO_Eng_Cyl_Update();
-     KnockControl58XReferenceLogic();
-    //Enter critical section
-    interrupt_status = Enter_Critical_Enable_Section();
-     HLS_syn();
-    Leave_Critical_Section(interrupt_status);
-    //app fuel update
-    IO_Fuel_Syn_Update();
-    //  app spark update
-    IO_Spark_Syn_Update();
+	IO_Eng_Cyl_Update();
+	KnockControl58XReferenceLogic();
+	//Enter critical section
+	interrupt_status = Enter_Critical_Enable_Section();
+	HLS_syn();
+	Leave_Critical_Section(interrupt_status);
+	//app fuel update
+	IO_Fuel_Syn_Update();
+	//  app spark update
+	IO_Spark_Syn_Update();
 
 	/* update engine state machine */
 	DtrmnVIOS_RunModeCount();
 
 	/* hardware diagnosis */
 	MngESTD_RefEventTasks();
+	MngEPSD_CamEventTasks();
 }
 
 //=============================================================================
