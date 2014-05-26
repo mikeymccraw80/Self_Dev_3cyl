@@ -4,112 +4,112 @@
 /*                                                                            */
 /*============================================================================*/
 
-*-emsdmild.VcEMSD_MILDSampleCntr{
+*-emsdsvsd.VcEMSD_SVSDSampleCntr{
 *-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "MILSMPLCNT";
-*-  variable_location.symbol = emsdmild.VcEMSD_MILDSampleCntr;
+*-  label                    = "SVSSMPLCNT";
+*-  variable_location.symbol = emsdsvsd.VcEMSD_SVSDSampleCntr;
 *-  ds_scaling_unit          = "count";
 *-  ds_precision             = "4.0";
 *-  ds_scaling_mode          = "Ax + B";
 *-  ds_const_a               = "1.000000000000";
 *-  ds_const_b               = "0.000000000000";
-*-  description              = "EMSD MIL Output diag sample counter";
+*-  description              = "EMSD SVS Output diag sample counter";
 *-}
 
-*-emsdmild.ScEMSD_MILDShortHiFailCntr{
+*-emsdsvsd.ScEMSD_SVSDShortHiFailCntr{
 *-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "MILFAHICNT";
-*-  variable_location.symbol = emsdmild.ScEMSD_MILDShortHiFailCntr;
+*-  label                    = "SVSFAHICNT";
+*-  variable_location.symbol = emsdsvsd.ScEMSD_SVSDShortHiFailCntr;
 *-  ds_scaling_unit          = "count";
 *-  ds_precision             = "4.0";
 *-  ds_scaling_mode          = "Ax + B";
 *-  ds_const_a               = "1.000000000000";
 *-  ds_const_b               = "0.000000000000";
-*-  description              = "EMSD MIL Output diag short high fail counter";
+*-  description              = "EMSD SVS Output diag short high fail counter";
 *-}
 
-*-emsdmild.ScEMSD_MILDShortLoFailCntr{
+*-emsdsvsd.ScEMSD_SVSDShortLoFailCntr{
 *-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "MILFALOCNT";
-*-  variable_location.symbol = emsdmild.ScEMSD_MILDShortLoFailCntr;
+*-  label                    = "SVSFALOCNT";
+*-  variable_location.symbol = emsdsvsd.ScEMSD_SVSDShortLoFailCntr;
 *-  ds_scaling_unit          = "count";
 *-  ds_precision             = "4.0";
 *-  ds_scaling_mode          = "Ax + B";
 *-  ds_const_a               = "1.000000000000";
 *-  ds_const_b               = "0.000000000000";
-*-  description              = "EMSD MIL Output diag fail counter";
+*-  description              = "EMSD SVS Output diag fail counter";
 *-}
 
-*-emsdmild.SbEMSD_MILDEnblCriteriaMet{
+*-emsdsvsd.SbEMSD_SVSDEnblCriteriaMet{
 *-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "MILENLCRMT";
-*-  variable_location.symbol = emsdmild.SbEMSD_MILDEnblCriteriaMet;
+*-  label                    = "SVSENLCRMT";
+*-  variable_location.symbol = emsdsvsd.SbEMSD_SVSDEnblCriteriaMet;
 *-  ds_scaling_unit          = "Boolean";
 *-  ds_precision             = "2.0";
 *-  ds_scaling_mode          = "Ax + B";
 *-  ds_const_a               = "1.000000000000";
 *-  ds_const_b               = "0.000000000000";
-*-  description              = "EMSD MIL Output diag system enable criteria met";
+*-  description              = "EMSD SVS Output diag system enable criteria met";
 *-}
 
-*-emsdmild.SbEMSD_MILDTestComplete{
+*-emsdsvsd.SbEMSD_SVSDTestComplete{
 *-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "MILTSTCMPL";
-*-  variable_location.symbol = emsdmild.SbEMSD_MILDTestComplete;
+*-  label                    = "SVSTSTCMPL";
+*-  variable_location.symbol = emsdsvsd.SbEMSD_SVSDTestComplete;
 *-  ds_scaling_unit          = "Boolean";
 *-  ds_precision             = "2.0";
 *-  ds_scaling_mode          = "Ax + B";
 *-  ds_const_a               = "1.000000000000";
 *-  ds_const_b               = "0.000000000000";
-*-  description              = "EMSD MIL Output diag system test complete";
+*-  description              = "EMSD SVS Output diag system test complete";
 *-}
 
-*-emsdmild.SbEMSD_MILDShortHiTestFailed{
+*-emsdsvsd.SbEMSD_SVSDShortHiTestFailed{
 *-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "MILTSTFAHI";
-*-  variable_location.symbol = emsdmild.SbEMSD_MILDShortHiTestFailed;
+*-  label                    = "SVSTSTFAHI";
+*-  variable_location.symbol = emsdsvsd.SbEMSD_SVSDShortHiTestFailed;
 *-  ds_scaling_unit          = "Boolean";
 *-  ds_precision             = "2.0";
 *-  ds_scaling_mode          = "Ax + B";
 *-  ds_const_a               = "1.000000000000";
 *-  ds_const_b               = "0.000000000000";
-*-  description              = "EMSD MIL Output diag system short high test fail";
+*-  description              = "EMSD SVS Output diag system short high test fail";
 *-}
 
-*-emsdmild.SbEMSD_MILDShortLoTestFailed{
+*-emsdsvsd.SbEMSD_SVSDShortLoTestFailed{
 *-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "MILTSTFALO";
-*-  variable_location.symbol = emsdmild.SbEMSD_MILDShortLoTestFailed;
+*-  label                    = "SVSTSTFALO";
+*-  variable_location.symbol = emsdsvsd.SbEMSD_SVSDShortLoTestFailed;
 *-  ds_scaling_unit          = "Boolean";
 *-  ds_precision             = "2.0";
 *-  ds_scaling_mode          = "Ax + B";
 *-  ds_const_a               = "1.000000000000";
 *-  ds_const_b               = "0.000000000000";
-*-  description              = "EMSD MIL Output diag system short low test fail";
+*-  description              = "EMSD SVS Output diag system short low test fail";
 *-}
 
-*-emsdmild.SbEMSD_MILDShortHiFailCriteriaMet{
+*-emsdsvsd.SbEMSD_SVSDShortHiFailCriteriaMet{
 *-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "MILSHHIMET";
-*-  variable_location.symbol = emsdmild.SbEMSD_MILDShortHiFailCriteriaMet;
+*-  label                    = "SVSSHHIMET";
+*-  variable_location.symbol = emsdsvsd.SbEMSD_SVSDShortHiFailCriteriaMet;
 *-  ds_scaling_unit          = "Boolean";
 *-  ds_precision             = "2.0";
 *-  ds_scaling_mode          = "Ax + B";
 *-  ds_const_a               = "1.000000000000";
 *-  ds_const_b               = "0.000000000000";
-*-  description              = "EMSD MIL Output diag system test High fail condition meet";
+*-  description              = "EMSD SVS Output diag system test High fail condition meet";
 *-}
 
-*-emsdmild.SbEMSD_MILDShortLoFailCriteriaMet{
+*-emsdsvsd.SbEMSD_SVSDShortLoFailCriteriaMet{
 *-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "MILSHLOMET";
-*-  variable_location.symbol = emsdmild.SbEMSD_MILDShortLoFailCriteriaMet;
+*-  label                    = "SVSSHLOMET";
+*-  variable_location.symbol = emsdsvsd.SbEMSD_SVSDShortLoFailCriteriaMet;
 *-  ds_scaling_unit          = "Boolean";
 *-  ds_precision             = "2.0";
 *-  ds_scaling_mode          = "Ax + B";
 *-  ds_const_a               = "1.000000000000";
 *-  ds_const_b               = "0.000000000000";
-*-  description              = "EMSD MIL Output diag system test low fail condition meet";
+*-  description              = "EMSD SVS Output diag system test low fail condition meet";
 *-}
 
 

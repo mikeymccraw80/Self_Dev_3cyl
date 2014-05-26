@@ -77,6 +77,30 @@
 *-  description              = "VVT1 Output diag system test fail";
 *-}
 
+*-vvtdmall.SbVVTD_VVT1_TestFailedHi{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "VT1SHHITF";
+*-  variable_location.symbol = vvtdmall.SbVVTD_VVT1_TestFailedHi;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "VVT1 Output diag system short high test fail";
+*-}
+
+*-vvtdmall.SbVVTD_VVT1_TestFailedLo{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "VT1SHLOTF";
+*-  variable_location.symbol = vvtdmall.SbVVTD_VVT1_TestFailedLo;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "VVT1 Output diag system short low test fail";
+*-}
+
 *-vvtdmall.SbVVTD_VVT1_ShortLoCritMet{
 *-  OBJECTS_CLASS: parameter_es_class;
 *-  label                    = "VT1SHLOMET";

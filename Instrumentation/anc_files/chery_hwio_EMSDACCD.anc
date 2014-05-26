@@ -76,10 +76,10 @@
 *-  description              = "emsdaccd Output diag system short high test fail";
 *-}
 
-*-emsdaccd.SbEMSD_ACCDShortHiTestFailed{
+*-emsdaccd.SbEMSD_ACCDShortLoTestFailed{
 *-  OBJECTS_CLASS: parameter_es_class;
 *-  label                    = "ACCTSTFALO";
-*-  variable_location.symbol = emsdaccd.SbEMSD_ACCDShortHiTestFailed;
+*-  variable_location.symbol = emsdaccd.SbEMSD_ACCDShortLoTestFailed;
 *-  ds_scaling_unit          = "Boolean";
 *-  ds_precision             = "2.0";
 *-  ds_scaling_mode          = "Ax + B";

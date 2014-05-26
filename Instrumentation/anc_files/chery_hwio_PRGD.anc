@@ -77,6 +77,30 @@
 *-  description              = "Purge Output diag system test fail";
 *-}
 
+*-prgdmall.SbPRGD_Purge_TestFailedHi{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "PRGTSTFAIL";
+*-  variable_location.symbol = prgdmall.SbPRGD_Purge_TestFailedHi;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "Purge Output diag system short high test fail";
+*-}
+
+*-prgdmall.SbPRGD_Purge_TestFailedLo{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "PRGTSTFAIL";
+*-  variable_location.symbol = prgdmall.SbPRGD_Purge_TestFailedLo;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "Purge Output diag system short low test fail";
+*-}
+
 *-prgdmall.SbPRGD_Purge_ShortLoCritMet{
 *-  OBJECTS_CLASS: parameter_es_class;
 *-  label                    = "PRGSHLOMET";

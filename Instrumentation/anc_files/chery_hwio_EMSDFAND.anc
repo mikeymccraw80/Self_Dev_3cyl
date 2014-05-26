@@ -76,10 +76,10 @@
 *-  description              = "EMSD FANA Output diag system short high test fail";
 *-}
 
-*-emsdfand.SbEMSD_FANAShortHiTestFailed{
+*-emsdfand.SbEMSD_FANAShortLoTestFailed{
 *-  OBJECTS_CLASS: parameter_es_class;
 *-  label                    = "FANATSFALO";
-*-  variable_location.symbol = emsdfand.SbEMSD_FANAShortHiTestFailed;
+*-  variable_location.symbol = emsdfand.SbEMSD_FANAShortLoTestFailed;
 *-  ds_scaling_unit          = "Boolean";
 *-  ds_precision             = "2.0";
 *-  ds_scaling_mode          = "Ax + B";
@@ -185,10 +185,10 @@
 *-  description              = "EMSD FANB Output diag system short high test fail";
 *-}
 
-*-emsdfand.SbEMSD_FANBShortHiTestFailed{
+*-emsdfand.SbEMSD_FANBShortLoTestFailed{
 *-  OBJECTS_CLASS: parameter_es_class;
 *-  label                    = "FANBTSFALO";
-*-  variable_location.symbol = emsdfand.SbEMSD_FANBShortHiTestFailed;
+*-  variable_location.symbol = emsdfand.SbEMSD_FANBShortLoTestFailed;
 *-  ds_scaling_unit          = "Boolean";
 *-  ds_precision             = "2.0";
 *-  ds_scaling_mode          = "Ax + B";
