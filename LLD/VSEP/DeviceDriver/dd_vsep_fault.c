@@ -475,7 +475,7 @@ void VSEP_EST_Fault_SYNC_Interface(EST_Select_Cylinder_T curent_spark_cylinder)
 	//****************************************
 	interrupt_state_t     irq_state;
 	uint8_t               index, transmint_length;
-	uint8_t               index_transmint,idex_receive,x;
+	uint8_t               index_transmint,index_receive,x;
 	VSEP_Fault_PCH_T      vsep_pch_fault;
 	static uint8_t        CurrentEstLine;
 	static uint8_t        PreviousEstLine;
@@ -485,20 +485,22 @@ void VSEP_EST_Fault_SYNC_Interface(EST_Select_Cylinder_T curent_spark_cylinder)
 	//for the first time, how to determine the PreviousEstCylinder?
 	PreviousEstLine = CurrentEstLine;
 
-	if( CeWasteEST == GetSPRK_SparkDeliveryMode() ){
-		Cylinder_numbers = CRANK_CONFIG_NUMBER_OF_CYLINDERS/2;
-		if (curent_spark_cylinder == EST_SELECT_CYLINDER_A || curent_spark_cylinder == EST_SELECT_CYLINDER_C) {
-			CurrentEstLine= 1;
-		} else {
-			CurrentEstLine =0;
-		}
-	} else {
+	// if( CeWasteEST == GetSPRK_SparkDeliveryMode() ){
+		// Cylinder_numbers = CRANK_CONFIG_NUMBER_OF_CYLINDERS/2;
+		// if (curent_spark_cylinder == EST_SELECT_CYLINDER_A || curent_spark_cylinder == EST_SELECT_CYLINDER_C) {
+			// CurrentEstLine= 1;
+		// } else {
+			// CurrentEstLine =0;
+		// }
+	// } else {
 		CurrentEstLine = curent_spark_cylinder;
 		Cylinder_numbers = CRANK_CONFIG_NUMBER_OF_CYLINDERS;
-	}
+	// }
 
-	VSEP_EST_Fault_SYNC_Txd[VSEP_EST_FAULT_SYNC_TXD_MESSAGE_SYNC_BYTE2] = VSEP_Msg_EST_Set_EST1CEN_BYTE_FORMAT(VSEP_EST_Fault_SYNC_Txd[VSEP_EST_FAULT_SYNC_TXD_MESSAGE_SYNC_BYTE2],true);
-	VSEP_EST_Fault_SYNC_Txd[VSEP_EST_FAULT_SYNC_TXD_MESSAGE_SYNC_BYTE2] = VSEP_Msg_EST_Set_EST1C_BYTE_FORMAT(VSEP_EST_Fault_SYNC_Txd[VSEP_EST_FAULT_SYNC_TXD_MESSAGE_SYNC_BYTE2],curent_spark_cylinder);
+	VSEP_EST_Fault_SYNC_Txd[VSEP_EST_FAULT_SYNC_TXD_MESSAGE_SYNC_BYTE2] = \
+			VSEP_Msg_EST_Set_EST1CEN_BYTE_FORMAT(VSEP_EST_Fault_SYNC_Txd[VSEP_EST_FAULT_SYNC_TXD_MESSAGE_SYNC_BYTE2],true);
+	VSEP_EST_Fault_SYNC_Txd[VSEP_EST_FAULT_SYNC_TXD_MESSAGE_SYNC_BYTE2] = \
+			VSEP_Msg_EST_Set_EST1C_BYTE_FORMAT(VSEP_EST_Fault_SYNC_Txd[VSEP_EST_FAULT_SYNC_TXD_MESSAGE_SYNC_BYTE2],curent_spark_cylinder);
 
 
 	//**************************************************
@@ -509,57 +511,17 @@ void VSEP_EST_Fault_SYNC_Interface(EST_Select_Cylinder_T curent_spark_cylinder)
 	abort a transmission in progress and force the SPI system into idle state.
 	0 Sampling of data occurs at odd edges (1,3,5,...) of the SCK clock.
 	1 Sampling of data occurs at even edges (2,4,6,...) of the SCK clock.*/
-	// DD_SetDiscrete( DISCRETE_OUT_VSEP_CSS, false );//need revise for all chip, so far only support vsep
 
-	for ( index_transmint = 0,idex_receive =0; index_transmint <VSEP_EST_FAULT_SYNC_TXD_MESSAGE_MAX_BYTE; index_transmint++,idex_receive++)
+	for ( index_transmint = 0,index_receive =0; index_transmint <VSEP_EST_FAULT_SYNC_TXD_MESSAGE_MAX_BYTE; index_transmint++,index_receive++)
 	{
-		//for byte transfer algorithem       
-		//	VSEP_EST_Fault_SYNC_Rxd[vsep_index][idex_receive] = 
-
-		//        DSPI_B_Exchange_Data(VSEP_CHIP_SELECT,
-		//                              VSEP_CTAR_SELECT,
-		//                              DSPI_CTAR_FMSZ_8,
-		//                              (uint16_t)VSEP_EST_Fault_SYNC_Txd[vsep_index][index_transmint]);
+		// for byte transfer algorithem       
+		VSEP_EST_Fault_SYNC_Rxd[index_receive] =  \
+						(uint8_t)DSPI_B_Exchange_Data1(VSEP_CHIP_SELECT,
+												VSEP_CTAR_SELECT,
+												DSPI_CTAR_FMSZ_8,
+												(uint16_t)VSEP_EST_Fault_SYNC_Txd[index_transmint],
+												(index_transmint == (VSEP_EST_FAULT_SYNC_TXD_MESSAGE_MAX_BYTE-1)? true:false));
 	}
-
-
-	transmint_length = VSEP_EST_FAULT_SYNC_TXD_MESSAGE_MAX_BYTE;
-	index = 0;
-
-	DMA_Clear_Request(DMA_CHANNEL_DSPI_B_SR_TFFF);
-	DMA_Clear_Request(DMA_CHANNEL_DSPI_B_SR_RFDF);
-
-	 DSPI_B_Initialize_Message_8bits(VSEP_CHIP_SELECT, VSEP_CTAR_SELECT,
-													&(VSEP_EST_Fault_SYNC_Txd[index_transmint]),transmint_length);
-	
-	DMA_Set_Channel_Transfer_Count( DMA_CHANNEL_DSPI_B_SR_TFFF,transmint_length);
-	DMA_Set_Channel_Source_Address( DMA_CHANNEL_DSPI_B_SR_TFFF, DMA_DSPIB_SR_TFFF_Source_Address);
-
-	DMA_Set_Channel_Transfer_Count( DMA_CHANNEL_DSPI_B_SR_RFDF,transmint_length);
-	DMA_Set_Channel_Destination_Address( DMA_CHANNEL_DSPI_B_SR_RFDF, DMA_DSPIB_SR_RFDF_Dest_Address);
-	//Clean up the DSPI module to be ready for next transfer
-	DSPI_B_Clear_FIFO();
-	//This flag will trigger the DMA channel for transmit
-	DSPI_B_Clear_TCF();
-
-	DMA_Enable_Request(DMA_CHANNEL_DSPI_B_SR_RFDF);
-	DMA_Enable_Request(DMA_CHANNEL_DSPI_B_SR_TFFF);
-   
-	DSPI_B_Enable_Transfer(true);
-
-
-	while(DSPI_B.SR.F.EOQF== false)
-	{
-	//do nothing
-	}
-
-	DMA_Clear_Request(DMA_CHANNEL_DSPI_B_SR_TFFF);
-	DMA_Clear_Request(DMA_CHANNEL_DSPI_B_SR_RFDF);
-
-	//This flag will start the SPI device transfer
-	//Very important to clear the EOQF flag after DMA has been disabled.
-	DSPI_B_Clear_EOQF();
-	DSPI_B_Copy_Receive_Data_8bits(& (VSEP_EST_Fault_SYNC_Rxd[idex_receive] ),transmint_length);
 
 	Set_Interrupt_State(irq_state) ;
 	//****************************************

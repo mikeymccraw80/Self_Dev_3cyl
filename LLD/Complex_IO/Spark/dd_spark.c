@@ -10,6 +10,7 @@
 #include "dd_vsep_est_select.h"
 #include "dd_mcd5408_interface.h"
 #include "dd_siu_interface.h"
+#include "dd_vsep_fault.h"
 
 
 typedef enum {
@@ -805,6 +806,8 @@ void SPARK_Process_Interrupt(Spark_Control_Select_T in_spark_select )
             SPARK_Update_Duration_Values(control_select, cylinder);
             /* start next pulse request */
             SPARK_Schedule_Next_Event(cylinder, end_angle );
+            /* check the est load fault status */
+            VSEP_EST_Fault_SYNC_Interface(SPARK_Cylinder_Event_ID);
         }
         SPARK_Scheduled_SynControl = 0;
     }
