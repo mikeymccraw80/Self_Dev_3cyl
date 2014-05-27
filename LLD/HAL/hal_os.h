@@ -7,16 +7,16 @@
 #include "reuse.h"
 
 typedef enum {
-	HLS_TASK_NORMAL = 0,
-	HLS_TASK_1MS,
-	HLS_TASK_2MS,
-	HLS_TASK_5MS,
-	HLS_TASK_10MS,
-	HLS_TASK_20MS,
-	HLS_TASK_50MS,
-	HLS_TASK_100MS,
-	HLS_TASK_200MS,
-	HLS_TASK_1000MS
+	HLS_TASK_NORMAL = 0x0000,
+	HLS_TASK_1MS    = 0x0001,
+	HLS_TASK_2MS    = 0x0002,
+	HLS_TASK_5MS    = 0x0004,
+	HLS_TASK_10MS   = 0x0008,
+	HLS_TASK_20MS   = 0x0010,
+	HLS_TASK_50MS   = 0x0020,
+	HLS_TASK_100MS  = 0x0040,
+	HLS_TASK_200MS  = 0x0080,
+	HLS_TASK_1000MS = 0x0100
 }HLS_TASK_STATE_T;
 
 //=============================================================================

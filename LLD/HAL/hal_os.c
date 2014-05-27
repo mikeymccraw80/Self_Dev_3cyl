@@ -29,6 +29,31 @@
 #include "vvtdpapi.h"
 #include "condpapi.h"
 
+#define HLS_TASK_2MS_PATTERN (HLS_TASK_5MS   | HLS_TASK_10MS  | \
+							  HLS_TASK_20MS  | HLS_TASK_50MS  | \
+							  HLS_TASK_100MS | HLS_TASK_200MS | \
+							  HLS_TASK_1000MS)
+
+#define HLS_TASK_5MS_PATTERN (HLS_TASK_10MS  | HLS_TASK_20MS  | \
+							  HLS_TASK_50MS  | HLS_TASK_100MS | \
+							  HLS_TASK_200MS | HLS_TASK_1000MS)
+
+#define HLS_TASK_10MS_PATTERN (HLS_TASK_20MS  | HLS_TASK_50MS | \
+							   HLS_TASK_100MS | HLS_TASK_200MS| \
+							   HLS_TASK_1000MS)
+
+#define HLS_TASK_20MS_PATTERN (HLS_TASK_50MS  | HLS_TASK_100MS | \
+							   HLS_TASK_200MS | HLS_TASK_1000MS)
+
+#define HLS_TASK_50MS_PATTERN (HLS_TASK_100MS | HLS_TASK_200MS | \
+							   HLS_TASK_1000MS)
+
+#define HLS_TASK_100MS_PATTERN (HLS_TASK_200MS | HLS_TASK_1000MS)
+
+#define HLS_TASK_200MS_PATTERN (HLS_TASK_1000MS)
+
+#define HLS_TASK_1000MS_PATTERN (0)
+
 static HLS_TASK_STATE_T hls_task_state;
 
 //extern void Update_DiagStatus_10ms(void);
@@ -110,23 +135,11 @@ void  HAL_OS_1ms_Task(void)
 void  HAL_OS_2ms_Task(void) 
 {
 	/* schedule hls task, insure its' sequence */
-	switch (hls_task_state) {
-	case HLS_TASK_NORMAL:
-	case HLS_TASK_5MS:
-	case HLS_TASK_10MS:
-	case HLS_TASK_20MS:
-	case HLS_TASK_50MS:
-	case HLS_TASK_100MS:
-	case HLS_TASK_200MS:
-	case HLS_TASK_1000MS:
+	if ((hls_task_state == HLS_TASK_NORMAL) || (hls_task_state & HLS_TASK_2MS_PATTERN)) {
 		HLS_Task_2ms();
-		break;
-	case HLS_TASK_2MS:
+	} else if (hls_task_state == HLS_TASK_2MS) {
 		HLS_Task_2ms();
 		HAL_Set_HLS_Task_State(HLS_TASK_5MS);
-		break;
-	default:
-		break;
 	}
 }
 
@@ -138,22 +151,11 @@ void  HAL_OS_5ms_Task(void)
 	static uint32_t OS_5ms_CNT = 0;
 
 	/* schedule hls task, insure its' sequence */
-	switch (hls_task_state) {
-	case HLS_TASK_NORMAL:
-	case HLS_TASK_10MS:
-	case HLS_TASK_20MS:
-	case HLS_TASK_50MS:
-	case HLS_TASK_100MS:
-	case HLS_TASK_200MS:
-	case HLS_TASK_1000MS:
+	if ((hls_task_state == HLS_TASK_NORMAL) || (hls_task_state & HLS_TASK_5MS_PATTERN)) {
 		HLS_Task_5ms();
-		break;
-	case HLS_TASK_5MS:
+	} else if (hls_task_state == HLS_TASK_5MS) {
 		HLS_Task_5ms();
 		HAL_Set_HLS_Task_State(HLS_TASK_10MS);
-		break;
-	default:
-		break;
 	}
 
 	/* hw diagnosis update functions */
@@ -183,21 +185,11 @@ void  HAL_OS_10ms_Task(void)
 	Calculate_Esc_Input_10ms();
 
 	/* schedule hls task, insure its' sequence */
-	switch (hls_task_state) {
-	case HLS_TASK_NORMAL:
-	case HLS_TASK_20MS:
-	case HLS_TASK_50MS:
-	case HLS_TASK_100MS:
-	case HLS_TASK_200MS:
-	case HLS_TASK_1000MS:
+	if ((hls_task_state == HLS_TASK_NORMAL) || (hls_task_state & HLS_TASK_10MS_PATTERN)) {
 		HLS_Task_10ms();
-		break;
-	case HLS_TASK_10MS:
+	} else if (hls_task_state == HLS_TASK_10MS) {
 		HLS_Task_10ms();
 		HAL_Set_HLS_Task_State(HLS_TASK_20MS);
-		break;
-	default:
-		break;
 	}
 
 	HAL_SOH_Update_Loop_Sequence_10MS();
@@ -206,38 +198,21 @@ void  HAL_OS_10ms_Task(void)
 	if(OS_10ms_Cnt1&1) {
 		ScheduleKnockFastBckgLogic();
 		/* schedule hls task, insure its' sequence */
-		switch (hls_task_state) {
-		case HLS_TASK_NORMAL:
-		case HLS_TASK_50MS:
-		case HLS_TASK_100MS:
-		case HLS_TASK_200MS:
-		case HLS_TASK_1000MS:
+		if ((hls_task_state == HLS_TASK_NORMAL) || (hls_task_state & HLS_TASK_20MS_PATTERN)) {
 			HLS_Task_20ms();
-			break;
-		case HLS_TASK_20MS:
+		} else if (hls_task_state == HLS_TASK_20MS) {
 			HLS_Task_20ms();
 			HAL_Set_HLS_Task_State(HLS_TASK_50MS);
-			break;
-		default:
-			break;
 		}
 	}
 	OS_10ms_Cnt1++;
 	if(OS_10ms_Cnt0 ==5) {
 		/* schedule hls task, insure its' sequence */
-		switch (hls_task_state) {
-		case HLS_TASK_NORMAL:
-		case HLS_TASK_100MS:
-		case HLS_TASK_200MS:
-		case HLS_TASK_1000MS:
+		if ((hls_task_state == HLS_TASK_NORMAL) || (hls_task_state & HLS_TASK_50MS_PATTERN)) {
 			HLS_Task_50ms();
-			break;
-		case HLS_TASK_50MS:
+		} else if (hls_task_state == HLS_TASK_50MS) {
 			HLS_Task_50ms();
 			HAL_Set_HLS_Task_State(HLS_TASK_100MS);
-			break;
-		default:
-			break;
 		}
 
 		OS_10ms_Cnt0 = 0;
@@ -275,33 +250,20 @@ void HAL_OS_100ms_Task(void)
 	Calculate_Esc_Input_1000ms();
 	ScheduleKnockSlowBckgLogic();
 	/* schedule hls task, insure its' sequence */
-	switch (hls_task_state) {
-	case HLS_TASK_NORMAL:
-	case HLS_TASK_200MS:
-	case HLS_TASK_1000MS:
+	if ((hls_task_state == HLS_TASK_NORMAL) || (hls_task_state & HLS_TASK_100MS_PATTERN)) {
 		HLS_Task_100ms();
-		break;
-	case HLS_TASK_100MS:
+	} else if (hls_task_state == HLS_TASK_100MS) {
 		HLS_Task_100ms();
 		HAL_Set_HLS_Task_State(HLS_TASK_200MS);
-		break;
-	default:
-		break;
 	}
 
 	if(!(OS_100ms_Cnt&0x01)) {
 		/* schedule hls task, insure its' sequence */
-		switch (hls_task_state) {
-		case HLS_TASK_NORMAL:
-		case HLS_TASK_1000MS:
+		if ((hls_task_state == HLS_TASK_NORMAL) || (hls_task_state & HLS_TASK_200MS_PATTERN)) {
 			HLS_Task_200ms();
-			break;
-		case HLS_TASK_200MS:
+		} else if (hls_task_state == HLS_TASK_200MS) {
 			HLS_Task_200ms();
 			HAL_Set_HLS_Task_State(HLS_TASK_1000MS);
-			break;
-		default:
-			break;
 		}
 
 		/* hw diagnosis update functions */
@@ -322,16 +284,11 @@ void HAL_OS_100ms_Task(void)
 	}
 	if(OS_100ms_Cnt == 10) {
 		/* schedule hls task, insure its' sequence */
-		switch (hls_task_state) {
-		case HLS_TASK_NORMAL:
+		if ((hls_task_state == HLS_TASK_NORMAL) || (hls_task_state & HLS_TASK_1000MS_PATTERN)) {
 			HLS_Task_1000ms();
-			break;
-		case HLS_TASK_1000MS:
+		} else if (hls_task_state == HLS_TASK_1000MS) {
 			HLS_Task_1000ms();
 			HAL_Set_HLS_Task_State(HLS_TASK_NORMAL);
-			break;
-		default:
-			break;
 		}
 
 		IO_Pulse_VSS_Update_500ms();
