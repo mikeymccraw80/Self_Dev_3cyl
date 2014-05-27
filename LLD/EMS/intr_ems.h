@@ -739,11 +739,17 @@ extern EOBD_PERCENTa   EOBD_CcpDutyCycle;
 // /******************************************************************************
  // * To test EST A,B 
  // ******************************************************************************/
-#define GetESTAShortFaultStatus()   false//(GetShortFault(PULSE_OUT_EST_A)||GetEstLine1HighCurrentFlag())        						
-#define GetESTAOpenFaultStatus()   false// (GetOpenFault(PULSE_OUT_EST_A))			
+// #define GetESTAShortFaultStatus()   (GetShortFault(PULSE_OUT_EST_A)||GetEstLine1HighCurrentFlag())
+// #define GetESTAOpenFaultStatus()    (GetOpenFault(PULSE_OUT_EST_A))
 
-#define GetESTBShortFaultStatus()   false//(GetShortFault(PULSE_OUT_EST_B)||GetEstLine2HighCurrentFlag())			
-#define GetESTBOpenFaultStatus()   false// (GetOpenFault(PULSE_OUT_EST_B))			
+#define GetESTAShortFaultStatus()   (GetShortFault(PULSE_OUT_EST_A))
+#define GetESTAOpenFaultStatus()    (GetOpenFault(PULSE_OUT_EST_A))
+
+// #define GetESTBShortFaultStatus()   (GetShortFault(PULSE_OUT_EST_B)||GetEstLine2HighCurrentFlag())
+// #define GetESTBOpenFaultStatus()    (GetOpenFault(PULSE_OUT_EST_B))
+
+#define GetESTBShortFaultStatus()   (GetShortFault(PULSE_OUT_EST_B))
+#define GetESTBOpenFaultStatus()    (GetOpenFault(PULSE_OUT_EST_B))
 
 INLINE TeEST_CIRCUIT_STATE GetAPI_EST_CircuitState(uint8_t active_estline)
 {

@@ -31,6 +31,7 @@
 #include "timclib.h"
 #include "intr_ems.h"
 #include "v_power.h"
+#include "hal_eng.h"
 
 #define CcSYST_NUM_OF_EST_OUTPUTS 4
 
@@ -169,10 +170,7 @@ void MngESTD_RefEventTasks(void)
 	UpdateESTD_FaultCounters();
 	PerfmESTD_CounterEvaluation();
 
-	for (LcESTD_EST_Count = 0;
-	LcESTD_EST_Count < CcSYST_NUM_OF_EST_OUTPUTS;
-	LcESTD_EST_Count++)
-	{
+	for (LcESTD_EST_Count = 0; LcESTD_EST_Count < CcSYST_NUM_OF_EST_OUTPUTS; LcESTD_EST_Count++) {
 		SaESTD_FaultTestComplete[LcESTD_EST_Count] |= \
 			SaESTD_FaultTestComplete_Internal[LcESTD_EST_Count];
 	}
@@ -256,7 +254,7 @@ static void EvalESTD_EnableCriteria(void)
  *****************************************************************************/
 static void DtrmnESTD_EST_OutputNumber(void)
 {
-	ScESTD_EST_OutputNumber = GetVIOS_EstActiveLine();
+	ScESTD_EST_OutputNumber = HAL_Eng_Get_Cyl_Number();
 }
 
 
