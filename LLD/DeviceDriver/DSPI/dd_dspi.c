@@ -595,7 +595,7 @@ uint16_t   DSPI_B_Exchange_Data1(
       
    tx_data_buffer.U32 = tx_data_buffer.U32| (uint16_t)in_tx_data;
   
-   DSPI_B.CTAR[in_ctar_msg].F.FMSZ ;
+   DSPI_B.CTAR[in_ctar_msg].F.FMSZ = FMSize;
 
   // DSPI_B_Clear_TCF();
    DSPI_B_Clear_RFDF();
