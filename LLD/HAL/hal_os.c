@@ -22,6 +22,7 @@
 #include "prgdpapi.h"
 #include "estdpapi.h"
 #include "epsdpapi.h"
+#include "knodpapi.h"
 #include "es_knock.h"
 #include "hal_soh.h"
 #include "hal_analog.h"
@@ -166,6 +167,7 @@ void  HAL_OS_5ms_Task(void)
 		MngEOSD_O2_12_Htr125msTasks();
 		MngPRGD_Purge_125msTasks();
 		MngVVTD_125msTasks();
+		MngKNKD_125msTasks();
 		OS_5ms_CNT = 0;
 		MngCOND_ADC0();
 	}
@@ -360,6 +362,7 @@ void HAL_OS_SYN_Task(void)
 	/* hardware diagnosis */
 	MngESTD_RefEventTasks();
 	MngEPSD_CamEventTasks();
+	MngKNKD_CylEventTasks();
 }
 
 //=============================================================================
