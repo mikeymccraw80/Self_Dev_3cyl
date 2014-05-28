@@ -228,6 +228,11 @@ typedef enum {
 #define NumOfPrevTPEntries             ((uint8_t) (0.132/0.0078125))
 #define Number_of_Cells                (22)
 #define EOBD_BLM_CELLS                 (Number_of_Cells)
+
+typedef uint16_t               kPa_W_EOBD ;
+#define Prec_kPa_W_EOBD                       ( 1.0 / 256 )
+#define Min_kPa_W_EOBD                              ( 0.0 )
+#define Max_kPa_W_EOBD        ( 65535.0 * Prec_kPa_W_EOBD )
 /* ============================================================================ *\
  * Exported variables.
 \* ============================================================================ */
@@ -379,6 +384,24 @@ static INLINE void ConvertIntrParam_IgnKeyOn(void)
 
 //}
 
+/***********************************************************************
+ *************************    Vacuum    ********************************
+ ***********************************************************************/
+extern kPa_W_EOBD                           EOBD_Vacuum_W_;
+#define GetVIOS_p_MnfdVac()\
+                      ( EOBD_Vacuum_W_ )
+INLINE void ConvertIntrParam_Vacuum(void)
+{
+    if (Pam >= Pim)
+    {
+       EOBD_Vacuum_W_ = Pam - Pim;
+    }
+    else
+    {
+       EOBD_Vacuum_W_ = FixDefConst(0, kPa_W_EOBD);
+    }
+}
+
 
 /***********************************************************************
  **************    Coolant Temperature  ********************************
@@ -502,33 +525,35 @@ extern int16_t           EOBD_CoolTemp;
 /***********************************************************************
  ********************   Knock Parameter           **********************
  ***********************************************************************/
-// extern T_DECIBELS			    EOBD_ESCGain[num_cyl];
-// extern Percent0To200_Plus_Fraction          EOBD_IntegratorAverage[num_cyl] ;      /* filtered value */
-// extern Percent0To200_Plus_Fraction          EOBD_ADESC[num_cyl] ;                  /* raw data */
-// #define GetKNOC_ESCGain(num_cyl)\
-                           // EOBD_ESCGain[num_cyl]
-// #define GetVIOS_Pct_CCESC_IntensAverage_EMS(x)\
- 	   	           // EOBD_IntegratorAverage[x]
-// #define GetVIOS_Pct_CCESC_IntUnfilt_EMS(x)\
-                           // EOBD_ADESC[x]
-// INLINE void ConvertIntrParam_KnockParam(void)
-// {
-// uint8_t loop_counter;
+#define CcSYST_NUM_OF_CYLINDERS 4
+// extern BPFGain_Type           ESCGain[num_cyl];                 /* gain for this cylinder */
+extern Volt0to5Volts_W   ADESC[CcSYST_NUM_OF_CYLINDERS] ; 
+extern Volt0to5Volts_W   ADESC_Average_Wingateoff[CcSYST_NUM_OF_CYLINDERS] ; 
 
-    // for( loop_counter = 0; loop_counter < num_cyl; loop_counter++ )
-       // {
-         // /* it would be more effiecncy to divide 2 instead of useing mutily macro*/
-	   // EOBD_ADESC[loop_counter] = (Percent0To200_Plus_Fraction)( ADESC[loop_counter] / 2 );
-	   // EOBD_IntegratorAverage[loop_counter] = (Percent0To200_Plus_Fraction)( ADESC_Average_Wingateoff[loop_counter] / 2 );
-	   // /* EOBD_ESCGain resolution:0.25, range [-8192,8192)
-	      // ESCGain resolution: 6,range [0,4]
-	      // ESCGain is limited to 24E(=4N), the convert is safe.
-	   // */
-	   // EOBD_ESCGain[loop_counter] = FixConvert(ESCGain[loop_counter],
-	                                           // BPFGain_Type,
-	                                           // T_DECIBELS);
-       // }
-// }
+extern T_DECIBELS        EOBD_ESCGain[CcSYST_NUM_OF_CYLINDERS];
+extern uint16_t          EOBD_IntegratorAverage[CcSYST_NUM_OF_CYLINDERS] ;      /* filtered value */
+extern uint16_t          EOBD_ADESC[CcSYST_NUM_OF_CYLINDERS] ;                  /* raw data */
+#define GetKNOC_ESCGain(x)\
+                           EOBD_ESCGain[x]
+#define GetVIOS_Pct_CCESC_IntensAverage_EMS(x)\
+                           EOBD_IntegratorAverage[x]
+#define GetVIOS_Pct_CCESC_IntUnfilt_EMS(x)\
+                           EOBD_ADESC[x]
+static INLINE void ConvertIntrParam_KnockParam(void)
+{
+	uint8_t loop_counter;
+
+	for( loop_counter = 0; loop_counter < CcSYST_NUM_OF_CYLINDERS; loop_counter++ ) {
+		/* it would be more effiecncy to divide 2 instead of useing mutily macro*/
+		EOBD_ADESC[loop_counter] = (uint16_t)( ADESC[loop_counter] / 2 );
+		EOBD_IntegratorAverage[loop_counter] = (uint16_t)( ADESC_Average_Wingateoff[loop_counter] / 2 );
+		/* EOBD_ESCGain resolution:0.25, range [-8192,8192)
+			ESCGain resolution: 6,range [0,4]
+			ESCGain is limited to 24E(=4N), the convert is safe.
+		*/
+		// EOBD_ESCGain[loop_counter] = FixConvert(ESCGain[loop_counter], BPFGain_Type, T_DECIBELS);
+	}
+}
 
 
 /***********************************************************************
@@ -625,7 +650,7 @@ extern EOBD_PERCENTa   EOBD_CcpDutyCycle;
 // #define GetIDLE_Pct_Airflow()   			(EOBD_dm_Airflow)
 
 // /* for KNOCK */
-// #define GetVIOS_CCESC_Enabled_EMS()           		( EscFlag.EscEnabled )
+// #define GetVIOS_CCESC_Enabled_EMS()                     ( EscFlag.EscEnabled )
 // #define GetVIOS_CamOccurred()                           ( CamSensorFlags.CamOccurred )
 #define GetVIOS_Cam1Occurred()                           (1)
 #define GetVIOS_Cam2Occurred()                           (1)
@@ -818,9 +843,9 @@ INLINE void ClrVIOS_CrankRefToothErrCnt( void )
 	// ToothErrCnt = FixDefConst( 0.0, Fixed_Shortcard );
 }
 
-// #define GetKNKD_Disable_Fault()   \
-	// (LLD_atd_input_table[LLD_ATD_MAP].LLD_atd_status.B_max||\
-	// LLD_atd_input_table[LLD_ATD_MAP].LLD_atd_status.B_min)
+#define GetKNKD_Disable_Fault()   \
+	(LLD_atd_input_table[LLD_ATD_MAP].LLD_atd_status.B_max||\
+	LLD_atd_input_table[LLD_ATD_MAP].LLD_atd_status.B_min)
 
 void Intr_16msTasks(void);
 void Init_IntrParameter(void);

@@ -40,6 +40,11 @@ EOBD_PERCENTa                        EOBD_CcpDutyCycle;
 EOBD_VOLTb                           EOBD_Ignition_Voltage;
 EOBD_VOLTb                           EOBD_IgnVoltageAtKeyOn;
 
+kPa_W_EOBD                           EOBD_Vacuum_W_;
+uint16_t                             EOBD_ADESC[CcSYST_NUM_OF_CYLINDERS] ;                  /* raw data */
+uint16_t                             EOBD_IntegratorAverage[CcSYST_NUM_OF_CYLINDERS] ;      /* filtered value */
+T_DECIBELS                           EOBD_ESCGain[CcSYST_NUM_OF_CYLINDERS];
+
 
 void Init_IntrParameter(void)
 {
@@ -62,8 +67,8 @@ void Intr_16msTasks(void)
     // ConvertIntrParam_Baro();
     // /* Convert MAP */
     // ConvertIntrParam_MAP();
-    // /* Convert Vacuum */
-    // ConvertIntrParam_Vacuum();
+    /* Convert Vacuum */
+    ConvertIntrParam_Vacuum();
     // /* Convert Engine Coolant Temperature */
     // ConvertIntrParam_ECT();
     // /* Convert Intake Air Temperature */
@@ -86,8 +91,8 @@ void Intr_16msTasks(void)
     // ConvertIntrParam_BPW();
     // /* Convert Catalyst Temperature */
     // ConvertIntrParam_ConverterTemp();
-    // /* Convert Knock Parameters */
-    // ConvertIntrParam_KnockParam();
+    /* Convert Knock Parameters */
+    ConvertIntrParam_KnockParam();
     // /* Convert CCP solenoid PWM duty cycle */
     // ConvertIntrParam_CcpDC();
     // /* Convert TPS */
