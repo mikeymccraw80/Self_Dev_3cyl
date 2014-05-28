@@ -39,7 +39,20 @@
 // #include "knodfexi.h"   /* For global resources definitions   */
 #include "knodcald.h"   /* For Definition-Declaration check   */
 #include "knodpapi.h"   /* For Definition-Declaration check   */
+#include "intr_ems.h"
+#include "hal_eng.h"
+#include "timclib.h"  /* DefTIMC_StopWatches16                       */
+#include "mall_lib.h"
+#include "es_knock.h"
 
+typedef unsigned short                                                   RPM_W;
+#define Prec_RPM_W                                                    (1.0 / 8)
+#define Min_RPM_W                                                         (0.0)
+#define Max_RPM_W                                          (65535 * Prec_RPM_W)
+ 
+/*********************************************************************
+* Module Variables
+**********************************************************************/
 #pragma section DATA " " ".nc_nvram"
 TbBOOLEAN            SbKNKD_SystemTestFailed;
 TbBOOLEAN            SbKNKD_SystemTestLoFailed;
@@ -48,36 +61,23 @@ TbBOOLEAN            SbKNKD_SensorTestFailed;
 #pragma section DATA " " ".bss"
 TbBOOLEAN            SbKNKD_SensorTestComplete;
 TbBOOLEAN            SbKNKD_SystemTestComplete;
-  
-#if 0
-/*********************************************************************
-* Module Variables
-**********************************************************************/
 
-T_COUNT_WORD                ScKNKD_SensorFailCounter;
-T_COUNT_WORD                VcKNKD_SensorSampleCounter;
-T_COUNT_WORD                VcKNKD_SystemFailLoCounter;
-T_COUNT_WORD                VcKNKD_SystemFailHiCounter;
-T_COUNT_WORD                VcKNKD_SystemSampleCounter;
-T_DECIBELS             	    LfKNKD_ESCGainMin;
+T_COUNT_WORD         ScKNKD_SensorFailCounter;
+T_COUNT_WORD         VcKNKD_SensorSampleCounter;
+T_COUNT_WORD         VcKNKD_SystemFailLoCounter;
+T_COUNT_WORD         VcKNKD_SystemFailHiCounter;
+T_COUNT_WORD         VcKNKD_SystemSampleCounter;
+T_DECIBELS           LfKNKD_ESCGainMin;
 
- TbBOOLEAN            SbKNKD_DsblgKeyOnFaultPresent;
- TbBOOLEAN            SbKNKD_SystemEnableCriteriaMet;
- TbBOOLEAN            SbKNKD_CommonEnableCriteriaMet;
- TbBOOLEAN            SbKNKD_SystemFailCriteriaMet;
- TbBOOLEAN            SbKNKD_SystemTestComplete;
-  #pragma section [nvram] 
- TbBOOLEAN            SbKNKD_SystemTestFailed;
- TbBOOLEAN            SbKNKD_SystemTestLoFailed;
- TbBOOLEAN            SbKNKD_SystemTestHiFailed;
-  TbBOOLEAN            SbKNKD_SensorTestFailed;
-  #pragma section [] 
- TbBOOLEAN            SbKNKD_SensorEnableCriteriaMet;
- TbBOOLEAN            SbKNKD_SensorTestComplete;
- T_PERCENTa           SfKNKD_Pct_ADESC_Delta;/* Max(ADESC) - Min(ADESC)*/
+TbBOOLEAN            SbKNKD_DsblgKeyOnFaultPresent;
+TbBOOLEAN            SbKNKD_SystemEnableCriteriaMet;
+TbBOOLEAN            SbKNKD_CommonEnableCriteriaMet;
+TbBOOLEAN            SbKNKD_SystemFailCriteriaMet;
+TbBOOLEAN            SbKNKD_SensorEnableCriteriaMet;
+T_PERCENTa           SfKNKD_Pct_ADESC_Delta;/* Max(ADESC) - Min(ADESC)*/
 
-  TbBOOLEAN            SbKNKD_SystemTestComplete_Internal;
- TbBOOLEAN            SbKNKD_SensorTestComplete_Internal;
+TbBOOLEAN            SbKNKD_SystemTestComplete_Internal;
+TbBOOLEAN            SbKNKD_SensorTestComplete_Internal;
 
 /*****************************************************************************
  * KNKD Constansts for diagnostic checking
@@ -289,14 +289,11 @@ static void EvalKNKD_EnableCriteria(void)
     * fail and vice versa. 
     */
 
-	SbKNKD_DsblgKeyOnFaultPresent = GetVIOS_KNKD_Disable_Fault();
+    SbKNKD_DsblgKeyOnFaultPresent = GetKNKD_Disable_Fault();
 
- // if (GetVIOS_p_MnfdVac() <= usLookup_xy_us (&KtKNKD_p_EngVacThrsh,
-      //                                      GetVIOS_9a_RPM_Rescale() ) 
-     if( (GetVIOS_p_MnfdVac() <= Lookup_2D_W(GetVIOS_n_EngSpd(), 
-	 	                                 RPM_W, 0, 0, 6400, 800, KtKNKD_p_EngVacThrsh))
-     && (GetVIOS_CCESC_Enabled() != CbFALSE)
-     && (SbKNKD_DsblgKeyOnFaultPresent == CbFALSE) 
+    // if( (GetVIOS_p_MnfdVac() <= Lookup_2D_W(GetVIOS_n_EngSpd(), RPM_W, 0, 0, 6400, 800, KtKNKD_p_EngVacThrsh))
+     if ((ESCEnabled()) \
+     && (SbKNKD_DsblgKeyOnFaultPresent == CbFALSE) \
      && (GetVIOS_IgnSt() == CeIGN_ON))
   {
      SbKNKD_CommonEnableCriteriaMet = CbTRUE; 
@@ -341,7 +338,7 @@ static void EvalKNKD_EnableCriteria(void)
      SbKNKD_SystemEnableCriteriaMet = CbFALSE;
      SbKNKD_SensorEnableCriteriaMet = CbFALSE;
   }
-}  
+}
 
 /********************************************************************
 *
@@ -363,7 +360,7 @@ static TbBOOLEAN EvalKNKD_SystemShort(void)
    /*  first, since max must equal at least one of the intensities,
        assume that the first is the one and set it to the first  */
 
-   LfKNKD_Pct_MaxESC = GetVIOS_Pct_CCESC_IntensAverage(V_COUNT_BYTE(0));
+   LfKNKD_Pct_MaxESC = GetVIOS_Pct_CCESC_IntensAverage_EMS(V_COUNT_BYTE(0));
 
    /*  second, compare to the rest of the intensities, and reset the
        value depending on which exceed the previous ones.  */
@@ -372,11 +369,11 @@ static TbBOOLEAN EvalKNKD_SystemShort(void)
         LcKNKD_CylIndex < CcSYST_NUM_OF_CYLINDERS;
         LcKNKD_CylIndex++)
    {
-     if (GetVIOS_Pct_CCESC_IntensAverage(LcKNKD_CylIndex)
+     if (GetVIOS_Pct_CCESC_IntensAverage_EMS(LcKNKD_CylIndex)
                                       > LfKNKD_Pct_MaxESC)
      {
        LfKNKD_Pct_MaxESC =
-                   GetVIOS_Pct_CCESC_IntensAverage(LcKNKD_CylIndex);
+                   GetVIOS_Pct_CCESC_IntensAverage_EMS(LcKNKD_CylIndex);
      }
    }
    return (LfKNKD_Pct_MaxESC < KfKNKD_Pct_SystemIntensThrshLo);
@@ -397,9 +394,8 @@ static TbBOOLEAN EvalKNKD_SystemShort(void)
 *********************************************************************/
 static TbBOOLEAN EvalKNKD_SystemHigh(void)
 {
-     return ( GetVIOS_Pct_CCESC_IntensAverage( GetVIOS_CylNumZeroBased() ) >
+     return ( GetVIOS_Pct_CCESC_IntensAverage_EMS(GetVIOS_CylNum()) >
               KfKNKD_Pct_SystemIntnsAvThrshHi );
-//return (CbTRUE);
 }
 
 /********************************************************************
@@ -427,7 +423,7 @@ static TbBOOLEAN EvalKNKD_SensorProcessing(void)
        both to the first  */
 
    LcKNKD_IntensUnfltThrshMax =
-                   GetVIOS_Pct_CCESC_IntUnfilt( V_COUNT_BYTE(0) );
+                   GetVIOS_Pct_CCESC_IntUnfilt_EMS( V_COUNT_BYTE(0) );
    LcKNKD_IntensUnfltThrshMin = LcKNKD_IntensUnfltThrshMax;
    LfKNKD_ESCGainMin = V_DECIBELS(26);
    /*  second, compare the max and the min to the each of the rest of
@@ -438,33 +434,32 @@ static TbBOOLEAN EvalKNKD_SensorProcessing(void)
         LcKNKD_CylIndex < CcSYST_NUM_OF_CYLINDERS;
         LcKNKD_CylIndex++)
         {
-          if (GetVIOS_Pct_CCESC_IntUnfilt(LcKNKD_CylIndex) >
+          if (GetVIOS_Pct_CCESC_IntUnfilt_EMS(LcKNKD_CylIndex) >
                                         LcKNKD_IntensUnfltThrshMax)
           {
             LcKNKD_IntensUnfltThrshMax =
-                      GetVIOS_Pct_CCESC_IntUnfilt(LcKNKD_CylIndex);
+                      GetVIOS_Pct_CCESC_IntUnfilt_EMS(LcKNKD_CylIndex);
           }
           else
           {
-             if (GetVIOS_Pct_CCESC_IntUnfilt(LcKNKD_CylIndex) <
+             if (GetVIOS_Pct_CCESC_IntUnfilt_EMS(LcKNKD_CylIndex) <
                                           LcKNKD_IntensUnfltThrshMin)
              {
               LcKNKD_IntensUnfltThrshMin =
-                        GetVIOS_Pct_CCESC_IntUnfilt(LcKNKD_CylIndex);
+                        GetVIOS_Pct_CCESC_IntUnfilt_EMS(LcKNKD_CylIndex);
              }
              else
              {
                 /* do nothing */
              }
           }
-          LfKNKD_ESCGainMin = Min( LfKNKD_ESCGainMin, GetKNOC_ESCGain(LcKNKD_CylIndex) );
+          LfKNKD_ESCGainMin = Min(LfKNKD_ESCGainMin, GetKNOC_ESCGain(LcKNKD_CylIndex));
         }
    SfKNKD_Pct_ADESC_Delta = LcKNKD_IntensUnfltThrshMax - LcKNKD_IntensUnfltThrshMin;
    return ( TbBOOLEAN )((SfKNKD_Pct_ADESC_Delta < KfKNKD_Pct_SensorIntnsDeltThrsh) &&
                            (LfKNKD_ESCGainMin > KfKNKD_FaultDetectGain));
 
 }
-#endif
 
 /******************************************************************************
 *

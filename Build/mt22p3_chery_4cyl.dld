@@ -36,6 +36,8 @@ SECTIONS
       prgdcald.o(.text_vle)
       vvtdcald.o(.text_vle)
       condcald.o(.text_vle)
+      knodcald.o(.text_vle)
+      estdcald.o(.text_vle)
       CalVariable.o (.text_vle)
       end_of_calrom = .;
   } > cal

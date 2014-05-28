@@ -25,11 +25,10 @@
  * %derived_by:    vzp48z %
  *
  *****************************************************************************/
-#if 0
+
 /******************************************************************************
 *  Include Files 
 *****************************************************************************/ 
-#include "knodfexi.h"   /* For global resources definitions   */
 #include "knodcald.h"   /* For Definition-Declaration check   */
 #include "knodpapi.h"   /* For Definition-Declaration check   */
 
@@ -112,7 +111,7 @@ const T_COUNT_BYTE KcKNKD_SensorFailThrsh = V_COUNT_BYTE(16);
 *|   }
 *| }
 */
-const T_DECIBELS CAL0ADDR KfKNKD_FaultDetectGain = V_DECIBELS(16);
+const T_DECIBELS KfKNKD_FaultDetectGain = V_DECIBELS(16);
  
 /*================================================================*/
    /* Number of samples in the knock sensor test before a 
@@ -240,7 +239,6 @@ const kPa_W_EOBD KtKNKD_p_EngVacThrsh[9] = {
                             V_KPAa(60), V_KPAa(70), V_KPAa(80),
                             V_KPAa(90), V_KPAa(100), V_KPAa(105) };
 
-#endif
 /******************************************************************************
 *
 * Revision history: 

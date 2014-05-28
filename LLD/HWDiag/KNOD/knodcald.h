@@ -29,11 +29,11 @@
  *
  *****************************************************************************/
 
-#if 0
 /******************************************************************************
 *  Include Files 
 *****************************************************************************/ 
-#include "knodfexi.h"   /* For global resources definitions   */
+#include "t_gentypes.h"
+#include "intr_ems.h"
 
 extern const T_COUNT_BYTE KcKNKD_SystemFailLoThrsh;
 
@@ -59,7 +59,7 @@ extern const T_RPMa       KfKNKD_n_EngSpdSensorEnblThrsh;
 
 extern const kPa_W_EOBD      KtKNKD_p_EngVacThrsh[9];
 #endif
-#endif
+
 /******************************************************************************
 *
 * Revision history: 
