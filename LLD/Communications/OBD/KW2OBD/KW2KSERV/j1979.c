@@ -833,6 +833,20 @@ void J1979Mode9Handler( void )
 			LyMultiMode = CbTRUE ;
 			break;
 
+		case Cy1979_InfoType7:
+			WrtServiceData(Cy1979_NumOfMsgsToRptIUPR,Li1979_DataIdx++);
+			break;
+
+		case Cy1979_InfoType8:
+			Vi1979_Mode09_MsgIdx = (Cy1979_NumOfMsgsToRptIUPR);
+			WrtServiceData(++Vi1979_Mode09_CurrMsgIdx,  Li1979_DataIdx++);
+			WrtServiceData(scnVehInfo.IUPR[Vi1979_Mode09_CalCharIdx++], Li1979_DataIdx++);
+			WrtServiceData(scnVehInfo.IUPR[Vi1979_Mode09_CalCharIdx++], Li1979_DataIdx++);
+			WrtServiceData(scnVehInfo.IUPR[Vi1979_Mode09_CalCharIdx++], Li1979_DataIdx++);
+			WrtServiceData(scnVehInfo.IUPR[Vi1979_Mode09_CalCharIdx++], Li1979_DataIdx++);
+			LyMultiMode = CbTRUE ;
+			break;
+
 		default: 
 			/* Send negative responce if PID not supported */
 			LyFound = CbFALSE ;                 
@@ -894,6 +908,12 @@ void FormJ1979_NextMode49( void )
 		case Cy1979_InfoType4:
 			for( Ly1979_MsgIdx = 0; Ly1979_MsgIdx < Cy1979_PerRespMaxChar; Ly1979_MsgIdx++ ) {
 				WrtServiceData(scnVehInfo.CALID[Vi1979_Mode09_CalCharIdx++], Li1979_DataIdx++ );
+			}
+			break;
+
+		case Cy1979_InfoType8:
+			for( Ly1979_MsgIdx = 0; Ly1979_MsgIdx < Cy1979_PerRespMaxChar; Ly1979_MsgIdx++ ) {
+				WrtServiceData(scnVehInfo.IUPR[Vi1979_Mode09_CalCharIdx++], Li1979_DataIdx++ );
 			}
 			break;
 

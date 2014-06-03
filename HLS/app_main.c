@@ -174,18 +174,18 @@ CHERY_TEMP_Ta        TcatInPre;
 Percent_Plus_Fraction  TpPosl;
 
 /* IUPR part, defined in HLS*/
-uint16_t NcDGDM_RM_OFVC_IgnCycleCntr;
-uint16_t NcDGDM_RM_Generic_Denom;
-uint16_t NcDGDM_RM_ICMD_B1_Numrtr;
-uint16_t NcDGDM_RM_ICMD_B1_Denom;
-uint16_t NcDGDM_RM_EOSD_B1_S1_Numrtr;
-uint16_t NcDGDM_RM_EOSD_B1_S1_Denom;
-uint16_t NcDGDM_RM_EOSD_B1_S2_Numrtr;
-uint16_t NcDGDM_RM_EOSD_B1_S2_Denom;
-uint16_t NcDGDM_RM_VVT1_Numrtr;
-uint16_t NcDGDM_RM_VVT1_Denom;
-uint16_t NcDGDM_RM_VVT2_Numrtr;
-uint16_t NcDGDM_RM_VVT2_Denom;
+// uint16_t NcDGDM_RM_OFVC_IgnCycleCntr;  //=>  uint16 NumIgnCyc;
+// uint16_t NcDGDM_RM_Generic_Denom;      //=>  uint16 Dom;
+// uint16_t NcDGDM_RM_ICMD_B1_Numrtr;     //=>  uint16 NmeCat;
+// uint16_t NcDGDM_RM_ICMD_B1_Denom;      //=>  uint16 DomCat;
+// uint16_t NcDGDM_RM_EOSD_B1_S1_Numrtr;  //=>  uint16 NmeLsb;
+// uint16_t NcDGDM_RM_EOSD_B1_S1_Denom;   //=>  uint16 DomLsb;
+// uint16_t NcDGDM_RM_EOSD_B1_S2_Numrtr;  //=>  uint16 NmeLsaAg;
+// uint16_t NcDGDM_RM_EOSD_B1_S2_Denom;   //=>  uint16 DomLsaAg;
+// uint16_t NcDGDM_RM_VVT1_Numrtr;        //=>  uint16 NmeVVTIn;
+// uint16_t NcDGDM_RM_VVT1_Denom;         //=>  uint16 DomVVTIn;
+// uint16_t NcDGDM_RM_VVT2_Numrtr;        //=>  uint16 NmeVVTOut;
+// uint16_t NcDGDM_RM_VVT2_Denom;         //=>  uint16 DomVVTOut;
 
 /*VCPC*/
 uint16_t angle_crank_cam_inlet;

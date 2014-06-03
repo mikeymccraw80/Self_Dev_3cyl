@@ -342,6 +342,7 @@ extern Freeze_Frame_Elem  DIAG_STATUS_FREEZE_FRAME[3];
 typedef struct {
 	uint8_t  VIN[17];						/*Vehicle Identification Number*/
 	uint8_t  CALID[16];						/*Calibration Identifications*/
+	uint8_t  IUPR[32];						/*0x08 In Use performance tracking*/
 }VehicleInformation;
 extern VehicleInformation scnVehInfo;
 
@@ -622,19 +623,18 @@ extern uint16_t IntegratorAverage[LLD_MAX_IGN_CHANNEL];      /* filtered value *
 extern uint16_t KnockThreshold[LLD_MAX_IGN_CHANNEL];         /* knock threshold */
 
 /* IUPR part, defined in HLS*/
-extern uint16_t NcDGDM_RM_OFVC_IgnCycleCntr;
-extern uint16_t NcDGDM_RM_Generic_Denom;
-extern uint16_t NcDGDM_RM_ICMD_B1_Numrtr;
-extern uint16_t NcDGDM_RM_ICMD_B1_Denom;
-extern uint16_t NcDGDM_RM_EOSD_B1_S1_Numrtr;
-extern uint16_t NcDGDM_RM_EOSD_B1_S1_Denom;
-extern uint16_t NcDGDM_RM_EOSD_B1_S2_Numrtr;
-extern uint16_t NcDGDM_RM_EOSD_B1_S2_Denom;
-extern uint16_t NcDGDM_RM_VVT1_Numrtr;
-extern uint16_t NcDGDM_RM_VVT1_Denom;
-extern uint16_t NcDGDM_RM_VVT2_Numrtr;
-extern uint16_t NcDGDM_RM_VVT2_Denom;
-
+// extern uint16_t NcDGDM_RM_OFVC_IgnCycleCntr;  //=>  uint16 NumIgnCyc;
+// extern uint16_t NcDGDM_RM_Generic_Denom;      //=>  uint16 Dom;
+// extern uint16_t NcDGDM_RM_ICMD_B1_Numrtr;     //=>  uint16 NmeCat;
+// extern uint16_t NcDGDM_RM_ICMD_B1_Denom;      //=>  uint16 DomCat;
+// extern uint16_t NcDGDM_RM_EOSD_B1_S1_Numrtr;  //=>  uint16 NmeLsb;
+// extern uint16_t NcDGDM_RM_EOSD_B1_S1_Denom;   //=>  uint16 DomLsb;
+// extern uint16_t NcDGDM_RM_EOSD_B1_S2_Numrtr;  //=>  uint16 NmeLsaAg;
+// extern uint16_t NcDGDM_RM_EOSD_B1_S2_Denom;   //=>  uint16 DomLsaAg;
+// extern uint16_t NcDGDM_RM_VVT1_Numrtr;        //=>  uint16 NmeVVTIn;
+// extern uint16_t NcDGDM_RM_VVT1_Denom;         //=>  uint16 DomVVTIn;
+// extern uint16_t NcDGDM_RM_VVT2_Numrtr;        //=>  uint16 NmeVVTOut;
+// extern uint16_t NcDGDM_RM_VVT2_Denom;         //=>  uint16 DomVVTOut;
 
 /*VVT part, VCPC*/
 extern uint16_t angle_crank_cam_inlet;

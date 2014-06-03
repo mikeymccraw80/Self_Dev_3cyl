@@ -141,17 +141,6 @@
 #define Cy1979_PID51             0x51
 #define Cy1979_PID5A             0x5A
 
-
-
-#define Cy1979_InfoType2             2
-#define Cy1979_InfoType3             3
-#define Cy1979_InfoType4             4
-#define Cy1979_InfoType5             5
-#define Cy1979_InfoType6             6
-#define Cy1979_InfoType7             7
-#define Cy1979_InfoType8             8
-#define Cy1979_InfoType9             9
-
 #define Cy1979_InfoType0             0
 #define Cy1979_InfoType1             1
 #define Cy1979_InfoType2             2
@@ -200,6 +189,7 @@
 #define Cy1979_InfoType_06_BitPosVal 0x04
 #define Cy1979_NumOfMsgsToRptCalID   4
 #define Cy1979_NumOfMsgsToRptCVNs    Cy1979_MaxCalIDs
+#define Cy1979_NumOfMsgsToRptIUPR    8
 #define Cy1979_Mode09_MsgNumLoc      1
 #define Cy1979_InfoTypeDataIdx       1
 #define Cy1979_PerRespMaxChar        4
