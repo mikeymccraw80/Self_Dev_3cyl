@@ -52,6 +52,8 @@
 #define KHI_INJ2_Request                    (0xCE)
 #define KHI_INJ3_Request                    (0xCF)
 #define KHI_FuelPump_Request                (0xD4)
+#define KHI_MIL_Request                     (0xD5)
+#define KHI_SVS_Request                     (0xD6)
 #define KHI_Fan1_Request                    (0xE5)
 #define KHI_Fan2_Request                    (0xE6)
 #define KHI_CpgV_Request                    (0xE8)
@@ -131,6 +133,14 @@ void KwJ14230StartRoutineByLocalIdentifier( void )
 					break;
 				case KHI_FuelPump_Request:
 					B_FulPReq = 1;
+					khi_last_test = khi_local_id;
+					break;
+				case KHI_MIL_Request:
+					B_MILReq = 1;
+					khi_last_test = khi_local_id;
+					break;
+				case KHI_SVS_Request:
+					B_SVSReq = 1;
 					khi_last_test = khi_local_id;
 					break;
 				// case KHI_IGN0_Request:

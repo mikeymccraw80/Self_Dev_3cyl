@@ -139,6 +139,10 @@ bool     B_Inj3Req;       /* 0xCF  KDS request #4cylinder injector test  */
 bool     B_Inj3Stp;       /* 0xCF  KDS stop #4cylinder injector test  */
 bool     B_FulPReq;       /* 0xD4  KDS demand fuel pump test  */
 bool     B_FulPStp;       /* 0xD4  KDS request fuel pump test   */
+bool     B_MILReq;        /* 0xD5  Tester request MIL work 5S */
+bool     B_MILStp;        /* 0xD5  Tester request stop test */
+bool     B_SVSReq;        /* 0xD6  Tester request SVS work 5S */
+bool     B_SVSStp;        /* 0xD6  Tester request stop test */
 bool     B_Fan1Req;       /* 0xE5  KDS request low fan test  */
 bool     B_Fan1Stp;       /* 0xE5  KDS stop low fan test   */
 bool     B_Fan2Req;       /* 0xE6  KDS request low fan test  */
