@@ -96,8 +96,8 @@ void KwJ14230ReadDataByLocalIdentifier( void )
 		switch ( GetKw2000ServiceData(IdxLocalIdentifier) ) {
 			case rdliSnapshot:
 				WrtKw2000ServiceData( GetKw2000ServiceData(IdxLocalIdentifier), TrByteCount++);
-				WrtKw2000ServiceData( 0x61, TrByteCount++); //Read Data By Local Identifier Positive Response
-				WrtKw2000ServiceData( 0x01, TrByteCount++); //Record Local Identifier = snapshot
+				// WrtKw2000ServiceData( 0x61, TrByteCount++); //Read Data By Local Identifier Positive Response
+				// WrtKw2000ServiceData( 0x01, TrByteCount++); //Record Local Identifier = snapshot
 				WrtKw2000ServiceData( FCMEnd, TrByteCount++);
 				WrtKw2000ServiceData( TmLin, TrByteCount++);
 				WrtKw2000ServiceData( Hi8Of16(fLc), TrByteCount++);
