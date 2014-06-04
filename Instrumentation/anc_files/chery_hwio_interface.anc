@@ -248,6 +248,295 @@
 *-  description              = "etc signal enable/disable";
 *-}
 
+*-Reset_Status_plus_0x01{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "RST_PWRON";
+*-  variable_location.symbol = Reset_Status.Power_On_Reset;
+*-  ds_scaling_unit          = "boolean";
+*-  ds_precision             = "1.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "ECU power on reset flag";
+*-}
+
+*-Reset_Status_plus_0x02{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "RST_EXT";
+*-  variable_location.symbol = Reset_Status.External_Reset;
+*-  ds_scaling_unit          = "boolean";
+*-  ds_precision             = "1.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "ECU external reset flag";
+*-}
+
+*-Reset_Status_plus_0x03{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "RST_LLOCK";
+*-  variable_location.symbol = Reset_Status.Loss_Lock_Reset;
+*-  ds_scaling_unit          = "boolean";
+*-  ds_precision             = "1.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "ECU loss lock reset flag";
+*-}
+
+*-Reset_Status_plus_0x04{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "RST_LCLOCK";
+*-  variable_location.symbol = Reset_Status.Loss_Clock_Reset;
+*-  ds_scaling_unit          = "boolean";
+*-  ds_precision             = "1.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "ECU loss clock reset flag";
+*-}
+
+*-Reset_Status_plus_0x05{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "RST_WD";
+*-  variable_location.symbol = Reset_Status.Watchdog_Reset;
+*-  ds_scaling_unit          = "boolean";
+*-  ds_precision             = "1.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "ECU watch dog reset flag";
+*-}
+
+*-Reset_Status_plus_0x06{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "RST_CS";
+*-  variable_location.symbol = Reset_Status.CheckStop_Reset;
+*-  ds_scaling_unit          = "boolean";
+*-  ds_precision             = "1.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "ECU check stop reset flag";
+*-}
+
+*-Reset_Status_plus_0x06{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "RST_SWDT";
+*-  variable_location.symbol = Reset_Status.SoftwareWDTimer_Reset;
+*-  ds_scaling_unit          = "boolean";
+*-  ds_precision             = "1.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "ECU software watch dog timer reset flag";
+*-}
+
+*-Reset_Status_plus_0x07{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "RST_SOFT";
+*-  variable_location.symbol = Reset_Status.SoftwareSystem_Reset;
+*-  ds_scaling_unit          = "boolean";
+*-  ds_precision             = "1.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "ECU software system reset flag";
+*-}
+
+*-Reset_Status_plus_0x08{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "RST_SEXT";
+*-  variable_location.symbol = Reset_Status.SoftwareExternal_Reset;
+*-  ds_scaling_unit          = "boolean";
+*-  ds_precision             = "1.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "ECU Software external reset flag";
+*-}
+
+*-Reset_Status{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "RST_STATUS";
+*-  variable_location.symbol = Reset_Status;
+*-  ds_scaling_unit          = "UWORD";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "ECU reset flag";
+*-}
+
+
+*-Soh_FaultLog_plus_0x01{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "SOH_SCF";
+*-  variable_location.symbol = Soh_FaultLog.Bits.SysClkFail;
+*-  ds_scaling_unit          = "boolean";
+*-  ds_precision             = "1.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "soh system clock fail flag";
+*-}
+
+*-Soh_FaultLog_plus_0x02{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "SOH_SISF";
+*-  variable_location.symbol = Soh_FaultLog.Bits.SohIrqSrcFail;
+*-  ds_scaling_unit          = "boolean";
+*-  ds_precision             = "1.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "soh irq source fail flag";
+*-}
+
+*-Soh_FaultLog_plus_0x03{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "SOH_STF";
+*-  variable_location.symbol = Soh_FaultLog.Bits.SysTmrFail;
+*-  ds_scaling_unit          = "boolean";
+*-  ds_precision             = "1.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "soh system timer fail flag";
+*-}
+
+*-Soh_FaultLog_plus_0x04{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "SOH_SSF";
+*-  variable_location.symbol = Soh_FaultLog.Bits.SohSeqFail;
+*-  ds_scaling_unit          = "boolean";
+*-  ds_precision             = "1.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "soh sequence fail flag";
+*-}
+
+*-Soh_FaultLog_plus_0x05{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "SOH_RFF";
+*-  variable_location.symbol = Soh_FaultLog.Bits.RtiFreqFail;
+*-  ds_scaling_unit          = "boolean";
+*-  ds_precision             = "1.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "soh rti frequence fail flag";
+*-}
+
+*-Soh_FaultLog_plus_0x06{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "SOH_LSF";
+*-  variable_location.symbol = Soh_FaultLog.Bits.LoopSeqFail;
+*-  ds_scaling_unit          = "boolean";
+*-  ds_precision             = "1.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "soh loop sequence fail flag";
+*-}
+
+*-Soh_FaultLog_plus_0x07{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "SOH_CRCNTL";
+*-  variable_location.symbol = Soh_FaultLog.Bits.CRCounterLow;
+*-  ds_scaling_unit          = "boolean";
+*-  ds_precision             = "1.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "soh CR counter low fail flag";
+*-}
+
+*-Soh_FaultLog_plus_0x08{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "SOH_SOTE";
+*-  variable_location.symbol = Soh_FaultLog.Bits.ShutOffTimeExpire;
+*-  ds_scaling_unit          = "boolean";
+*-  ds_precision             = "1.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "soh Shut Off Time Expire fail flag";
+*-}
+
+*-Soh_FaultLog_plus_0x09{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "SOH_SPIF";
+*-  variable_location.symbol = Soh_FaultLog.Bits.SPIFail;
+*-  ds_scaling_unit          = "boolean";
+*-  ds_precision             = "1.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "soh spi fail flag";
+*-}
+
+*-Soh_FaultLog_plus_0x10{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "SOH_SPICF";
+*-  variable_location.symbol = Soh_FaultLog.Bits.SPICommFail;
+*-  ds_scaling_unit          = "boolean";
+*-  ds_precision             = "1.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "soh spi common fail flag";
+*-}
+
+*-Soh_FaultLog_plus_0x11{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "SOH_CRD";
+*-  variable_location.symbol = Soh_FaultLog.Bits.CRDisarmed;
+*-  ds_scaling_unit          = "boolean";
+*-  ds_precision             = "1.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "soh CR Disarmed fail flag";
+*-}
+
+*-Soh_FaultLog_plus_0x12{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "SOH_CRD";
+*-  variable_location.symbol = Soh_FaultLog.Bits.CRTimeoutFail;
+*-  ds_scaling_unit          = "boolean";
+*-  ds_precision             = "1.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "soh CR time out fail flag";
+*-}
+
+*-Soh_FaultLog_plus_0x13{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "SOH_CRCNTF";
+*-  variable_location.symbol = Soh_FaultLog.Bits.CRCounterFail;
+*-  ds_scaling_unit          = "boolean";
+*-  ds_precision             = "1.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "soh CR counter fail flag";
+*-}
+
+*-Soh_FaultLog_plus_0x13{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "SOH_FLOG";
+*-  variable_location.symbol = Soh_FaultLog.Word;
+*-  ds_scaling_unit          = "UWORD";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "soh CR counter fail flag";
+*-}
+
 /******************************************************************************/
 /*                                                                            */
 /* Revision History:                                                          */
