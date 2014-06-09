@@ -2,6 +2,7 @@
 #include "vsep_spi_scheduler.h"
 #include "dd_vsep_msg_config.h"
 #include "dd_vsep.h"
+#include "hal_eng.h"
 
 extern const SPI_Message_Definition_T * VSEP_MESSAGE[VSEP_MESSAGE_MAX+7];
 extern const SPI_Message_Definition_T VSEP_SOH_STATUS_MESSAGE_DEFINITION;
@@ -125,17 +126,16 @@ void VSEP_SPI_SCHEDULER_10MS(void)
 {
     struct list_head *pos;
     SPI_Message_Queue_T *q;
-    static int test[10];
-    int i = 0;
+    uint32_t cs;
 
     list_for_each(pos, &msg_queue) {
-        test[i] += 10;
-        i++;
         q = list_entry(pos, SPI_Message_Queue_T, list);
         q -> time += 10;
-        if ((q->time >= q->interval) & SPI_SCHEDULER_Data.Running){
+        if ((q->time >= q->interval) && SPI_SCHEDULER_Data.Running){
             q->time = 0;
-            VSEP_SPI_Port_Transfer( q->spi_msg);
+            cs = Enter_Critical_Section();
+            VSEP_SPI_Port_Transfer(q->spi_msg);
+            Leave_Critical_Section(cs);
         }
     }
 }
