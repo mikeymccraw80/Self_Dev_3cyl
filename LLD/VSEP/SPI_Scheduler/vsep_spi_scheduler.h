@@ -15,7 +15,7 @@ typedef struct {
     SPI_Message_Definition_T const * spi_msg;
     uint32_t                  interval;
     uint32_t                  time;
-    struct list_head          list;
+    // struct list_head          list;
 } SPI_Message_Queue_T;
 
 //=============================================================================

@@ -18,63 +18,19 @@ typedef struct
 
 static SPI_SCHEDULER_DATA_T SPI_SCHEDULER_Data = { 0, 0 };
 
-static SPI_Message_Queue_T msg_queue_soh = {
-    &VSEP_SOH_STATUS_MESSAGE_DEFINITION,
-    10,
+static SPI_Message_Queue_T msg_queue_array[11] = {
+	{&VSEP_SOH_STATUS_MESSAGE_DEFINITION, 10},
+	{&VSEP_PWM_MESSAGE_DEFINITION[0], 10},
+	{&VSEP_PWM_MESSAGE_DEFINITION[1], 10},
+	{&VSEP_PWM_MESSAGE_DEFINITION[2], 10},
+	{&VSEP_PWM_MESSAGE_DEFINITION[3], 10},
+	{&VSEP_PWM_MESSAGE_DEFINITION[4], 10},
+	{&VSEP_PWM_MESSAGE_DEFINITION[5], 10},
+	{&VSEP_PWM_MESSAGE_DEFINITION[6], 10},
+	{&VSEP_PWM_MESSAGE_DEFINITION[7], 10},
+	{&VSEP_PCH_MESSAGE_DEFINITION,    10},
+	{&VSEP_FAULT_MESSAGE_DEFINITION,  10}
 };
-
-static SPI_Message_Queue_T msg_queue_pwm1 = {
-    &VSEP_PWM_MESSAGE_DEFINITION[0],
-    10,
-};
-
-static SPI_Message_Queue_T msg_queue_pwm2 = {
-    &VSEP_PWM_MESSAGE_DEFINITION[1],
-    10,
-};
-
-static SPI_Message_Queue_T msg_queue_pwm3 = {
-    &VSEP_PWM_MESSAGE_DEFINITION[2],
-    10,
-};
-
-static SPI_Message_Queue_T msg_queue_pwm4 = {
-    &VSEP_PWM_MESSAGE_DEFINITION[3],
-    10,
-};
-
-static SPI_Message_Queue_T msg_queue_pwm5 = {
-    &VSEP_PWM_MESSAGE_DEFINITION[4],
-    10,
-};
-
-static SPI_Message_Queue_T msg_queue_pwm6 = {
-    &VSEP_PWM_MESSAGE_DEFINITION[5],
-    10,
-};
-
-static SPI_Message_Queue_T msg_queue_pwm7 = {
-    &VSEP_PWM_MESSAGE_DEFINITION[6],
-    10,
-};
-
-static SPI_Message_Queue_T msg_queue_pwm8 = {
-    &VSEP_PWM_MESSAGE_DEFINITION[7],
-    10,
-};
-
-static SPI_Message_Queue_T msg_queue_pch_mpio = {
-    &VSEP_PCH_MESSAGE_DEFINITION,
-    10,
-};
-
-static SPI_Message_Queue_T msg_queue_fault = {
-    &VSEP_FAULT_MESSAGE_DEFINITION,
-    10,
-};
-
-static LIST_HEAD(msg_queue);
-
 
 //=============================================================================
 // SPI_SCHEDULER_Initialize
@@ -84,19 +40,7 @@ void VSEP_SPI_SCHEDULER_Initialize(void)
     SPI_SCHEDULER_Data.Number_Of_Periodical_Messages     = 0;
     SPI_SCHEDULER_Data.Running                           = false;
 
-    VSEP_SPI_SCHEDULER_Set_Enable( true );
-
-    list_add(&msg_queue_soh.list, &msg_queue);
-    list_add(&msg_queue_pwm1.list, &msg_queue);
-    list_add(&msg_queue_pwm2.list, &msg_queue);
-    list_add(&msg_queue_pwm3.list, &msg_queue);
-    list_add(&msg_queue_pwm4.list, &msg_queue);
-    list_add(&msg_queue_pwm5.list, &msg_queue);
-    list_add(&msg_queue_pwm6.list, &msg_queue);
-    list_add(&msg_queue_pwm7.list, &msg_queue);
-    list_add(&msg_queue_pwm8.list, &msg_queue);
-    list_add(&msg_queue_pch_mpio.list, &msg_queue);
-    list_add(&msg_queue_fault.list, &msg_queue);
+    VSEP_SPI_SCHEDULER_Set_Enable(true);
 }
 
 //=============================================================================
@@ -124,18 +68,17 @@ bool VSEP_SPI_SCHEDULER_Get_Status( void )
 //=============================================================================
 void VSEP_SPI_SCHEDULER_10MS(void)
 {
-    struct list_head *pos;
-    SPI_Message_Queue_T *q;
-    uint32_t cs;
-
-    list_for_each(pos, &msg_queue) {
-        q = list_entry(pos, SPI_Message_Queue_T, list);
-        q -> time += 10;
-        if ((q->time >= q->interval) && SPI_SCHEDULER_Data.Running){
-            q->time = 0;
-            cs = Enter_Critical_Section();
-            VSEP_SPI_Port_Transfer(q->spi_msg);
-            Leave_Critical_Section(cs);
-        }
-    }
+	int i;
+	SPI_Message_Queue_T *q;
+	uint32_t cs;
+	for(i = 0; i < 11; i++) {
+		q = &msg_queue_array[i];
+		q -> time += 10;
+		if ((q->time >= q->interval) && SPI_SCHEDULER_Data.Running){
+			q->time = 0;
+			cs = Enter_Critical_Section();
+			VSEP_SPI_Port_Transfer( q->spi_msg);
+			Leave_Critical_Section(cs);
+		}
+	}
 }
