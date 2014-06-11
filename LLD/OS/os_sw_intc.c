@@ -27,7 +27,6 @@ bool APPLICATION_CYLINDER_EVENT_TASK;
 bool APPLICATION_TDC_EVENT_TASK;
 bool APPLICATION_KNOCK_WINDOW_CLOSED_TASK;
 bool APPLICATION_KNOCK_CYL_EVENT_TASK;
-bool CAM_CYLINDER_EVENT_TASK;
 
 
 //=============================================================================
