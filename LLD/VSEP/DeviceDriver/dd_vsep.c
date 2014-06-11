@@ -248,44 +248,38 @@ transmit the corresponding message, input VSEP_MESSAGE
 
 void  VSEP_SPI_Port_Transfer(SPI_Message_Definition_T  const *def)
 {
-	uint8_t   index, transmint_length;
-	uint16_t  transmit_size;
-	uint8_t   index_transmint,idex_receive;
-	bool      end;
-	uint32_t cs;
+	uint8_t receive_length, transmit_length;
+	uint8_t index_transmit, index_receive;
+	bool    end;
+	// uint32_t cs;
 
-	   cs = Enter_Critical_Section();
+	// cs = Enter_Critical_Section();
 
-	for (index_transmint = 0,idex_receive =0; index_transmint < def->length_of_transmit_message; index_transmint++,idex_receive++) {
+	transmit_length = def->length_of_transmit_message;
+	receive_length  = def->length_of_receive_message;
+
+	for (index_transmit = 0,index_receive = 0; index_transmit < transmit_length; index_transmit++,index_receive++) {
 		//for word transfer algorithem
-		if ((idex_receive<def->length_of_receive_message) && ((((uint16_t*)def->transmit_data)[0] & 0xF00) != 0x0F00) ) {
-			if(index_transmint == def->length_of_transmit_message-1) {
-				end = 1;
-			} else {
-				end = 0;
-			}
-			((uint16_t*)def->receive_data)[idex_receive] = DSPI_B_Exchange_Data1(
+		if ((index_receive < receive_length) && ((((uint16_t*)def->transmit_data)[0] & 0xF00) != 0x0F00)) {
+			end = (index_transmit == (transmit_length - 1)) ? 1:0;
+			((uint16_t*)def->receive_data)[index_receive] = DSPI_B_Exchange_Data1(
 					 VSEP_CHIP_SELECT,
 					 VSEP_CTAR_SELECT,
 					 DSPI_CTAR_FMSZ_16,
-					 ((uint16_t*)def->transmit_data)[index_transmint],
+					 ((uint16_t*)def->transmit_data)[index_transmit],
 					 end);
 		} else {
-			if(index_transmint == def->length_of_transmit_message-1) {
-				end = 1;
-			} else {
-				end = 0;
-			}
+			end = (index_transmit == (transmit_length - 1)) ? 1:0;
 			DSPI_B_Exchange_Data1(
 					VSEP_CHIP_SELECT,
 					VSEP_CTAR_SELECT,
 					DSPI_CTAR_FMSZ_16,
-					((uint16_t*)def->transmit_data)[index_transmint],
+					((uint16_t*)def->transmit_data)[index_transmit],
 					end);
 		}
 	}
 
-	Leave_Critical_Section(cs);
+	// Leave_Critical_Section(cs);
 }
 
 
@@ -295,6 +289,9 @@ void  VSEP_SPI_Port_Transfer(SPI_Message_Definition_T  const *def)
 void VSEP_SPI_Immediate_Transfer(IO_Configuration_T in_configuration, VSEP_Message_T in_message)
 {
 	VSEP_PWM_Channel_T pwm_channel;
+	uint32_t cs;
+
+	cs = Enter_Critical_Section();
 
 	switch (in_message) {
 	case VSEP_MESSAGE_INIT:
@@ -305,7 +302,7 @@ void VSEP_SPI_Immediate_Transfer(IO_Configuration_T in_configuration, VSEP_Messa
 	case VSEP_MESSAGE_DEPS:
 	case VSEP_MESSAGE_PCH_MPIO:
 	case VSEP_MESSAGE_EST_SELECT:
-	case VSEP_MESSAGE_EST_FAULT:		
+	case VSEP_MESSAGE_EST_FAULT:
 	case VSEP_MESSAGE_SOH:
 	case VSEP_MESSAGE_SOH_STATUS:
 		VSEP_SPI_Port_Transfer(VSEP_MESSAGE[in_message]);
@@ -313,11 +310,13 @@ void VSEP_SPI_Immediate_Transfer(IO_Configuration_T in_configuration, VSEP_Messa
 	case VSEP_MESSAGE_PWM:
 		pwm_channel = VSEP_PWM_Get_Channel(in_configuration);
 		if(pwm_channel != VSEP_PWM_CHANNEL_MAX)
-		VSEP_SPI_Port_Transfer(VSEP_MESSAGE[VSEP_MESSAGE_PWM + pwm_channel]);
+			VSEP_SPI_Port_Transfer(VSEP_MESSAGE[VSEP_MESSAGE_PWM + pwm_channel]);
 		break;
 	default:
 		break;
 	}
+
+	Leave_Critical_Section(cs);
 }
 
 
