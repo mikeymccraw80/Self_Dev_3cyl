@@ -26,15 +26,9 @@
 // none
 //
 //=============================================================================
-
 #include "dd_vsep_est_select.h"
-
-
-#ifdef VSEP_TCB_COMPLEX_IO
-
 #include "dd_spark.h"
 #include "dd_spark_interface.h"
-
 
 uint16_t VSEP_EST_Select_Txd[VSEP_EST_SELECT_TXD_MESSAGE_MAX];
 uint16_t VSEP_EST_Select_Rxd[VSEP_EST_SELECT_RXD_MESSAGE_MAX];
@@ -52,29 +46,6 @@ uint8_t     VSEP_EST_Number_Of_Cylinders;
 EST_Mode_T  VSEP_EST_Select_Requested_Mode;
 
 static VSEP_EST_Select_State_T VSEP_EST_Select_State;
-#endif
-
-
-#ifndef VSEP_TCB_COMPLEX_IO
-
-//=============================================================================
-// VSEP_PWM_Device_Initialize
-//=============================================================================
-void VSEP_EST_Select_Initialize_Device(void)
-{
-
-#ifdef VSEP_EST_SELECT_STATIC_INITIALIZATION
-
-   VSEP_EST_Select_Txd[ VSEP_EST_SELECT_TXD_MESSAGE_CTRL ]      = VSEP_EST_SELECT_INITIAL[ VSEP_EST_SELECT_TXD_MESSAGE_CTRL ];
-   VSEP_EST_Select_Txd[ VSEP_EST_SELECT_TXD_MESSAGE_EST_CTRL ]  = VSEP_EST_SELECT_INITIAL[ VSEP_EST_SELECT_TXD_MESSAGE_EST_CTRL];
-
-#else
-   VSEP_EST_Select_Txd[ VSEP_EST_SELECT_TXD_MESSAGE_CTRL ] = VSEP_Msg_Set_SDOA( VSEP_EST_Select_Txd[ VSEP_EST_SELECT_TXD_MESSAGE_CTRL ], VSEP_RXD_SDOA_EST_STAT );
-   VSEP_EST_Select_Txd[ VSEP_EST_SELECT_TXD_MESSAGE_CTRL ] = VSEP_Msg_Set_SDIA( VSEP_EST_Select_Txd[ VSEP_EST_SELECT_TXD_MESSAGE_CTRL ], VSEP_TXD_SDIA_EST_CTRL );
-#endif
-}
-
-#else
 
 //=============================================================================
 // VSEP_EST_Select_Manage_Transition
@@ -101,47 +72,6 @@ void VSEP_EST_Select_Initialize_Device(void)
 #endif
 }
 
-#endif
-
-#ifdef LA_VSEP_EST_SELECT_ENABLE
-typedef struct
-{
-   uint8_t  channel;
-   uint8_t  mode;
-   uint8_t  type; 
-
-}  LA_EST_Select_T;
-
-LA_EST_Select_T LA_EST_Select[120];
-uint8_t LA_EST_Select_Counter = 0;
-#endif
-
-#ifdef VSEP_TCB_COMPLEX_IO
-
-#if CcSYST_NUM_OF_CYLINDERS == 3
-//=============================================================================
-// VSEP_EST_Select_Set_Index  change for MT22.1
-//=============================================================================
-void VSEP_EST_Select_Set_Index(
-   IO_Configuration_T        in_configuration,//MTSA_CONFIG_VSEP_DEVICE_0
-   bool						 in_index )//Crank_Cylinder_T
-{
-   bool             index_est  = (bool)in_index;
- 
-  //VSEP_EST_Select_Txd[index][VSEP_EST_SELECT_TXD_MESSAGE_EST_CTRL] = VSEP_Msg_EST_Set_EST1CEN( VSEP_EST_Select_Txd[index][VSEP_EST_SELECT_TXD_MESSAGE_EST_CTRL], true );
-  // VSEP_EST_Select_Txd[index][VSEP_EST_SELECT_TXD_MESSAGE_EST_CTRL] = VSEP_Msg_EST_Set_EST1C( VSEP_EST_Select_Txd[index][VSEP_EST_SELECT_TXD_MESSAGE_EST_CTRL], channel );
-   VSEP_EST_Select_Txd[VSEP_EST_SELECT_TXD_MESSAGE_EST_CTRL] = VSEP_Msg_EST_Set_INDEX( VSEP_EST_Select_Txd[VSEP_EST_SELECT_TXD_MESSAGE_EST_CTRL], index_est ); 
-
-   // send the message
-   //VSEP_SPI_Immediate_Transfer( in_est_select->Configuration, VSEP_MESSAGE_EST_SELECT );
-   VSEP_SPI_Immediate_Transfer( in_configuration, VSEP_MESSAGE_EST_SELECT );
-
-   // disable the counter value
-  // VSEP_EST_Select_Txd[index][VSEP_EST_SELECT_TXD_MESSAGE_EST_CTRL] = VSEP_Msg_EST_Set_EST1CEN( VSEP_EST_Select_Txd[index][VSEP_EST_SELECT_TXD_MESSAGE_EST_CTRL], false );
-  // VSEP_EST_Select_Txd[index][VSEP_EST_SELECT_TXD_MESSAGE_EST_CTRL] = VSEP_Msg_EST_Set_EST2CEN( VSEP_EST_Select_Txd[index][VSEP_EST_SELECT_TXD_MESSAGE_EST_CTRL], false );
-
-}
-#endif
 //=============================================================================
 // VSEP_EST_Select_Set_Channel  change for MT22.1
 //=============================================================================
@@ -176,15 +106,6 @@ void VSEP_EST_Select_Increment_Channel(
    uint16_t index=0;
 //   VSEP_EST_Select_Manage_Transition();
 
-#ifdef LA_VSEP_EST_SELECT_ENABLE
-   if ( LA_EST_Select_Counter < 120 )
-   {
-      LA_EST_Select[LA_EST_Select_Counter].channel = in_channel;
-      LA_EST_Select[LA_EST_Select_Counter].mode = VSEP_EST_Select_Mode;
-      LA_EST_Select[LA_EST_Select_Counter].type = 1; 
-      LA_EST_Select_Counter++;
-   }
-#endif
    //
    // Test if we are using a single est (true) or double.
    //
@@ -305,26 +226,7 @@ void VSEP_EST_Select_Set_Mode(
       //
       VSEP_EST_Select_State.index_pin_select = VSEP_EST_SELECT_INDEX_PIN_SELECT_ESTX_PIN; // VSEP_EST_SELECT_INDEX_PIN_SELECT_SYNC_PIN
       break;
-// must implement this
-#if 0
-   case EST_MODE_MULTIPLE_CHANNEL:
-      VSEP_EST_Select_Mode = in_mode;
-      //
-      // Set PF Mode 0
-      //
-      VSEP_EST_Select_State.paired_fire_mode = VSEP_EST_SELECT_PAIRED_FIRE_MODE_DISABLED; // VSEP_EST_SELECT_PAIRED_FIRE_MODE_ENABLED
 
-      //
-      // Set Index 0
-      //
-      VSEP_EST_Select_State.index_mode = VSEP_EST_SELECT_INCREMENT_INDEX_MODE_ONCE_PER; // VSEP_EST_SELECT_INCREMENT_INDEX_MODE_TWICE_PER
-
-      //
-      // Set Edge 0
-      //
-      VSEP_EST_Select_State.index_pin_select = VSEP_EST_SELECT_INDEX_PIN_SELECT_ESTX_PIN; // VSEP_EST_SELECT_INDEX_PIN_SELECT_SYNC_PIN
-      break;
-#endif
    case EST_MODE_PAIRED_SINGLE_ENABLE:
       VSEP_EST_Select_Mode = in_mode;
       //
@@ -512,8 +414,6 @@ static void VSEP_EST_Select_Manage_Transition( void )
 
 }
 
-
-#endif
 /*===========================================================================*\
  * Revision Log                                                              *
  *===========================================================================*

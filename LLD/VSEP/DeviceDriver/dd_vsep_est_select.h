@@ -28,13 +28,8 @@
 // none
 //
 //=============================================================================
-
 #include "dd_vsep.h"
-#define VSEP_TCB_COMPLEX_IO
-
-#ifdef VSEP_TCB_COMPLEX_IO
 #include "hal.h"
-#endif
 
 //=============================================================================
 // Used for storing local data, not to be mapped onto the configuration word!
@@ -367,22 +362,6 @@ extern uint16_t VSEP_EST_Select_Rxd[VSEP_EST_SELECT_RXD_MESSAGE_MAX];
 extern const uint16_t VSEP_EST_SELECT_INITIAL[VSEP_EST_SELECT_TXD_MESSAGE_MAX];
 #endif
 
-#ifndef VSEP_TCB_COMPLEX_IO
-
-//=============================================================================
-// EST_Select_Initialize_Device_T
-//
-// @func 
-//
-// @parm IO_Configuration_T | in_configuration | .
-//
-// @rdesc none
-//
-// @end
-//=============================================================================
-void VSEP_EST_Select_Initialize_Device(void);
-
-#else
 //=============================================================================
 // EST_Select_Initialize_Device_T
 //
@@ -412,22 +391,6 @@ void VSEP_EST_Select_Set_Channel(
    IO_Configuration_T        in_configuration,
    EST_Select_Cylinder_T   in_channel );
 
-#if CcSYST_NUM_OF_CYLINDERS == 3
-//=============================================================================
-// VSEP_EST_Select_Set_Index
-//
-// @func 
-//
-// @parm
-//
-// @rdesc
-//
-// @end
-//=============================================================================
-void VSEP_EST_Select_Set_Index(
-   IO_Configuration_T        in_configuration,
-   bool					     in_index );
-#endif
 //=============================================================================
 // VSEP_EST_Select_Increment_Channel
 //
@@ -533,7 +496,7 @@ void VSEP_EST_Set_PF_Mode(
    VSEP_EST_Select_Paired_Fire_Mode_T        in_mode );
 
 #endif
-#endif // DD_VSEP_EST_SELECT_H
+
 /*===========================================================================*\
  * Revision Log                                                              *
  *===========================================================================*
