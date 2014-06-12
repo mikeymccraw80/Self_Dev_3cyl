@@ -13,6 +13,7 @@
 #include "dd_fi_interface.h"
 #include "dd_l9958_interface.h"
 #include "dd_vsep_fault_interface.h"
+#include "dd_crank_interface.h"
 #include "v_ignit.h"
 #include "soh.h"
 #include "dd_vsep_est_select.h"
@@ -178,8 +179,16 @@ void OS_TimeBasedTask10ms(void)
 //=============================================================================
 void OS_LoResTasks_Hook(void)
 {
-    //syn of chery
+    /* skip the first gap */
+    if (!CRANK_Get_First_Gap_Flag()) {
+        KnockControl58XReferenceLogic();
+    } else {
+        CRANK_Set_First_Gap_Flag(false);
+    }
+
+    /* call the interface callback, spark fuel... */
     HAL_OS_SYN_Task();
+
     /* CCP LoRes Trigger */
     CCP_Trigger_Event_Channel( 0 );
 }
