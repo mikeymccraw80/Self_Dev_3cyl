@@ -99,6 +99,7 @@ void KwJ14230ReadDataByLocalIdentifier( void )
 				// WrtKw2000ServiceData( 0x61, TrByteCount++); //Read Data By Local Identifier Positive Response
 				// WrtKw2000ServiceData( 0x01, TrByteCount++); //Record Local Identifier = snapshot
 				WrtKw2000ServiceData( FCMEnd, TrByteCount++);
+				WrtKw2000ServiceData( MafTst, TrByteCount++);
 				WrtKw2000ServiceData( TmLin, TrByteCount++);
 				WrtKw2000ServiceData( Hi8Of16(fLc), TrByteCount++);
 				WrtKw2000ServiceData( Lo8Of16(fLc), TrByteCount++);
@@ -145,12 +146,18 @@ void KwJ14230ReadDataByLocalIdentifier( void )
 				WrtKw2000ServiceData( dIgaKnc[1], TrByteCount++);
 				WrtKw2000ServiceData( dIgaKnc[2], TrByteCount++);
 				WrtKw2000ServiceData( dIgaKnc[3], TrByteCount++);
-				WrtKw2000ServiceData( FtCntEmis, TrByteCount++);
-				WrtKw2000ServiceData( FtCntEmisCyl[0], TrByteCount++);
-				WrtKw2000ServiceData( FtCntEmisCyl[1], TrByteCount++);
-				WrtKw2000ServiceData( FtCntEmisCyl[2], TrByteCount++);
-				WrtKw2000ServiceData( FtCntEmisCyl[3], TrByteCount++);
-				WrtKw2000ServiceData( RounFon, TrByteCount++);
+				WrtKw2000ServiceData( Hi8Of16(FtCntEmis), TrByteCount++);
+				WrtKw2000ServiceData( Lo8Of16(FtCntEmis), TrByteCount++);
+				WrtKw2000ServiceData( Hi8Of16(FtCntEmisCyl[0]), TrByteCount++);
+				WrtKw2000ServiceData( Lo8Of16(FtCntEmisCyl[0]), TrByteCount++);
+				WrtKw2000ServiceData( Hi8Of16(FtCntEmisCyl[1]), TrByteCount++);
+				WrtKw2000ServiceData( Lo8Of16(FtCntEmisCyl[1]), TrByteCount++);
+				WrtKw2000ServiceData( Hi8Of16(FtCntEmisCyl[2]), TrByteCount++);
+				WrtKw2000ServiceData( Lo8Of16(FtCntEmisCyl[2]), TrByteCount++);
+				WrtKw2000ServiceData( Hi8Of16(FtCntEmisCyl[3]), TrByteCount++);
+				WrtKw2000ServiceData( Lo8Of16(FtCntEmisCyl[3]), TrByteCount++);
+				WrtKw2000ServiceData( Hi8Of16(RounFon), TrByteCount++);
+				WrtKw2000ServiceData( Lo8Of16(RounFon), TrByteCount++);
 				WrtKw2000ServiceData( B_Fan1, TrByteCount++);
 				WrtKw2000ServiceData( B_Fan2, TrByteCount++);
 				WrtKw2000ServiceData( B_AcOn, TrByteCount++);
