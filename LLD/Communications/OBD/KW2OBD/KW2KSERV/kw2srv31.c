@@ -75,14 +75,13 @@ void KwJ14230StartRoutineByLocalIdentifier( void )
 	uint8_t TrBytes;
 	uint8_t khi_local_id;
 
-	if (Get_EngineTurning()) {
-		SendStandardNegativeAnswer(nrcConditionsNotCorrect_RequestSequenceError);
-	} else {
-		/* write local id to response data frame */
-		WrtKw2000ServiceData(GetKw2000ServiceData (CyLocalId), 1 );
-
-		switch (GetKw2000ServiceData(CyLocalId)) {
-		case CyKW2K_NVM_Reset :
+	switch (GetKw2000ServiceData(CyLocalId)) {
+	case CyKW2K_NVM_Reset :
+		if (Get_EngineTurning()) {
+			SendStandardNegativeAnswer(nrcConditionsNotCorrect_RequestSequenceError);
+		} else {
+			/* write local id to response data frame */
+			WrtKw2000ServiceData(GetKw2000ServiceData (CyLocalId), 1 );
 			if( GetKeyword2000ServiceDataLength() != CyKW2K_NVM_Reset_MsgSize ) {
 				/* Invalid Message format */
 				SendStandardNegativeAnswer(nrcSubFunctionNotSupported_InvalidFormat);
@@ -92,9 +91,15 @@ void KwJ14230StartRoutineByLocalIdentifier( void )
 				NbFILE_NVM_Reset_RequestFromSerial = true;
 				SendStandardPositiveAnswer( CyKW2K_Mode31Msg_Offset );
 			}
-			break;
+		}
+		break;
 
-		case CyKW2K_CopyKernelToRAM :
+	case CyKW2K_CopyKernelToRAM :
+		if (Get_EngineTurning()) {
+			SendStandardNegativeAnswer(nrcConditionsNotCorrect_RequestSequenceError);
+		} else {
+			/* write local id to response data frame */
+			WrtKw2000ServiceData(GetKw2000ServiceData (CyLocalId), 1 );
 			if( GetKeyword2000ServiceDataLength() != CyKW2K_JumpToBootMsgSize ) {
 				/* Invalid Message format */
 				SendStandardNegativeAnswer(nrcSubFunctionNotSupported_InvalidFormat  ) ;
@@ -104,97 +109,97 @@ void KwJ14230StartRoutineByLocalIdentifier( void )
 				SendStandardPositiveAnswer(CyKW2K_Mode31Msg_Offset);
 				SetCopyAndExecuteKernelPending(CbTRUE);
 			}
-			break;
-
-		case KHI_ACTUATOR_TEST:
-			if( GetKeyword2000ServiceDataLength() != KHI_ACTUATOR_TEST_MsgSize ) {
-				SendStandardNegativeAnswer(nrcGeneralReject);
-			} else {
-				TrBytes = 2;
-				// WrtKw2000ServiceData(GetKw2000ServiceData (CyLocalId), 1 );
-				// khi_last_test = GetKw2000ServiceData(CyKHIActuatorTestLocalId);
-				khi_local_id = GetKw2000ServiceData(CyKHIActuatorTestLocalId);
-				switch(khi_local_id) {
-				case KHI_INJ0_Request:
-					B_Inj0Req = 1;
-					khi_last_test = khi_local_id;
-					break;
-				case KHI_INJ1_Request:
-					B_Inj1Req = 1;
-					khi_last_test = khi_local_id;
-					break;
-				case KHI_INJ2_Request:
-					B_Inj2Req = 1;
-					khi_last_test = khi_local_id;
-					break;
-				case KHI_INJ3_Request:
-					B_Inj3Req = 1;
-					khi_last_test = khi_local_id;
-					break;
-				case KHI_FuelPump_Request:
-					B_FulPReq = 1;
-					khi_last_test = khi_local_id;
-					break;
-				case KHI_MIL_Request:
-					B_MILReq = 1;
-					khi_last_test = khi_local_id;
-					break;
-				case KHI_SVS_Request:
-					B_SVSReq = 1;
-					khi_last_test = khi_local_id;
-					break;
-				// case KHI_IGN0_Request:
-					// B_Ign0Req = 1;
-					// khi_last_test = khi_local_id;
-					// break;
-				// case KHI_IGN1_Request:
-					// B_Ign1Req = 1;
-					// khi_last_test = khi_local_id;
-					// break;
-				// case KHI_IGN2_Request:
-					// B_Ign2Req = 1;
-					// khi_last_test = khi_local_id;
-					// break;
-				case KHI_Fan1_Request:
-					B_Fan1Req = 1;
-					khi_last_test = khi_local_id;
-					break;
-				case KHI_Fan2_Request:
-					B_Fan2Req = 1;
-					khi_last_test = khi_local_id;
-					break;
-				case KHI_CpgV_Request:
-					B_CpgVReq = 1;
-					khi_last_test = khi_local_id;
-					break;
-				// case KHI_ISC_Request:  //stepper motor self study
-					// B_ISCReq = 1;
-					// khi_last_test = khi_local_id;
-					// break;
-				// case KHI_SUPPORT_FLAG_C0:
-					// WrtKw2000ServiceData(SupFlagC0[0], TrBytes++);
-					// WrtKw2000ServiceData(SupFlagC0[1], TrBytes++);
-					// WrtKw2000ServiceData(SupFlagC0[2], TrBytes++);
-					// WrtKw2000ServiceData(SupFlagC0[3], TrBytes++);
-					// break;
-				// case KHI_SUPPORT_FLAG_E0:
-					// WrtKw2000ServiceData(SupFlagE0[0], TrBytes++);
-					// WrtKw2000ServiceData(SupFlagE0[1], TrBytes++);
-					// WrtKw2000ServiceData(SupFlagE0[2], TrBytes++);
-					// WrtKw2000ServiceData(SupFlagE0[3], TrBytes++);
-					// break;
-				default:
-					SendStandardNegativeAnswer(nrcGeneralReject);
-					return;
-				}
-				SendStandardPositiveAnswer(TrBytes);
-			}
-			break;
-
-		default :
-			SendStandardNegativeAnswer( nrcSubFunctionNotSupported_InvalidFormat ) ;
-			break ;
 		}
+		break;
+
+	case KHI_ACTUATOR_TEST:
+		/* write local id to response data frame */
+		WrtKw2000ServiceData(GetKw2000ServiceData (CyLocalId), 1 );
+		if( GetKeyword2000ServiceDataLength() != KHI_ACTUATOR_TEST_MsgSize ) {
+			SendStandardNegativeAnswer(nrcGeneralReject);
+		} else {
+			TrBytes = 2;
+			khi_local_id = GetKw2000ServiceData(CyKHIActuatorTestLocalId);
+			switch(khi_local_id) {
+			case KHI_INJ0_Request:
+				B_Inj0Req = 1;
+				khi_last_test = khi_local_id;
+				break;
+			case KHI_INJ1_Request:
+				B_Inj1Req = 1;
+				khi_last_test = khi_local_id;
+				break;
+			case KHI_INJ2_Request:
+				B_Inj2Req = 1;
+				khi_last_test = khi_local_id;
+				break;
+			case KHI_INJ3_Request:
+				B_Inj3Req = 1;
+				khi_last_test = khi_local_id;
+				break;
+			case KHI_FuelPump_Request:
+				B_FulPReq = 1;
+				khi_last_test = khi_local_id;
+				break;
+			case KHI_MIL_Request:
+				B_MILReq = 1;
+				khi_last_test = khi_local_id;
+				break;
+			case KHI_SVS_Request:
+				B_SVSReq = 1;
+				khi_last_test = khi_local_id;
+				break;
+			// case KHI_IGN0_Request:
+				// B_Ign0Req = 1;
+				// khi_last_test = khi_local_id;
+				// break;
+			// case KHI_IGN1_Request:
+				// B_Ign1Req = 1;
+				// khi_last_test = khi_local_id;
+				// break;
+			// case KHI_IGN2_Request:
+				// B_Ign2Req = 1;
+				// khi_last_test = khi_local_id;
+				// break;
+			case KHI_Fan1_Request:
+				B_Fan1Req = 1;
+				khi_last_test = khi_local_id;
+				break;
+			case KHI_Fan2_Request:
+				B_Fan2Req = 1;
+				khi_last_test = khi_local_id;
+				break;
+			case KHI_CpgV_Request:
+				B_CpgVReq = 1;
+				khi_last_test = khi_local_id;
+				break;
+			// case KHI_ISC_Request:  //stepper motor self study
+				// B_ISCReq = 1;
+				// khi_last_test = khi_local_id;
+				// break;
+			// case KHI_SUPPORT_FLAG_C0:
+				// WrtKw2000ServiceData(SupFlagC0[0], TrBytes++);
+				// WrtKw2000ServiceData(SupFlagC0[1], TrBytes++);
+				// WrtKw2000ServiceData(SupFlagC0[2], TrBytes++);
+				// WrtKw2000ServiceData(SupFlagC0[3], TrBytes++);
+				// break;
+			// case KHI_SUPPORT_FLAG_E0:
+				// WrtKw2000ServiceData(SupFlagE0[0], TrBytes++);
+				// WrtKw2000ServiceData(SupFlagE0[1], TrBytes++);
+				// WrtKw2000ServiceData(SupFlagE0[2], TrBytes++);
+				// WrtKw2000ServiceData(SupFlagE0[3], TrBytes++);
+				// break;
+			default:
+				SendStandardNegativeAnswer(nrcGeneralReject);
+				return;
+			}
+			SendStandardPositiveAnswer(TrBytes);
+		}
+		break;
+
+	default :
+		SendStandardNegativeAnswer( nrcSubFunctionNotSupported_InvalidFormat ) ;
+		break ;
 	}
 }
 

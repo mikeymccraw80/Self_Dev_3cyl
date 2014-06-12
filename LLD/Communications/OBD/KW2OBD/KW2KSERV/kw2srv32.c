@@ -50,7 +50,7 @@ extern uint8_t khi_last_test;
 
 void KwJ14230StopRoutineByLocalIdentifier( void )
 {
-	if (GetEngineTurning() && (GetKw2000ServiceData(CyLocalId) != KHI_ACTUATOR_TEST)) {
+	if (GetKw2000ServiceData(CyLocalId) != KHI_ACTUATOR_TEST) {
 		SendStandardNegativeAnswer(nrcGeneralReject) ;
 	} else {
 		/* write local id to response data frame */
