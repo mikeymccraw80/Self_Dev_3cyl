@@ -133,6 +133,9 @@ static Crank_Cylinder_T    CRANK_Cylinder_ID_Even;
 static uint8_t crank_diag_tooth_cnt;
 Crank_State_T       CRANK_State;
 
+/* this flag is used for knock control schedule */
+static bool                CRANK_First_Gap_Flag;
+
 //=============================================================================
 //   Local Variable Definitions
 //=============================================================================
@@ -279,6 +282,7 @@ void CRANK_Reset_Parameters( void )
 
       // init crank state flags
       CRANK_Internal_State.U32 = CRANK_INITIAL_INTERNAL_STATE;
+      CRANK_First_Gap_Flag = false;
 
       // Disable interrupts
       MCD5408_Disable_Host_Interrupt(
@@ -450,6 +454,7 @@ static bool CRANK_Gap_Cofirm( void )
 			CRANK_Internal_State.U32 = CRANK_Set_First_Sync_Occurred( CRANK_Internal_State.U32, true );
 			CRANK_Internal_State.U32 = CRANK_Set_Sync_First_Revolution( CRANK_Internal_State.U32, true );
 			CRANK_Internal_State.U32 = CRANK_Set_Sync_Second_Revolution( CRANK_Internal_State.U32, false );
+			CRANK_First_Gap_Flag = true;
 
 			// MCD5408_Set_Gap_Count(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT, CRANK_ACTUAL_TEETH_PER_CRANK );
 			CRANK_Current_Event_Tooth = 2;
@@ -1342,6 +1347,18 @@ void CRANK_Set_Diag_Tooth_Cnt(uint8_t cnt)
 	crank_diag_tooth_cnt = cnt;
 }
 
+//=============================================================================
+// CRANK_Get_First_Gap_Flag, called in cylinder event for knock control
+//=============================================================================
+bool CRANK_Get_First_Gap_Flag(void)
+{
+	return CRANK_First_Gap_Flag;
+}
 
-
-
+//=============================================================================
+// CRANK_Set_First_Gap_Flag, called in cylinder event for knock control
+//=============================================================================
+void CRANK_Set_First_Gap_Flag(bool value)
+{
+	CRANK_First_Gap_Flag = value;
+}
