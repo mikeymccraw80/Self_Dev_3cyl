@@ -77,19 +77,19 @@
 \*===========================================================================*/
 typedef enum HWIO_ETC_SOH_FAULT_MASK_Tag
 {
-   CwHWIO_ETC_SOH_SYS_CLK_FREQ_FLT_MASK      = 0x0001,   /* System clock frequency error, main CPU      */
-   CwHWIO_ETC_SOH_INTRT_SRC_FLT_MASK         = 0x0002,   /* Interrupt source error,       main CPU      */
-   CwHWIO_ETC_SOH_SYS_TMR_FLT_MASK           = 0x0004,   /* System timer error,           main CPU      */
-   CwHWIO_ETC_SOH_TST_SEQN_FLT_MASK          = 0x0008,   /* Test sequence error,          main CPU      */
-   CwHWIO_ETC_SOH_RTI_FREQ_FLT_MASK          = 0x0010,   /* RTI frequency error,          main CPU      */
-   CwHWIO_ETC_SOH_CPU_LOOP_SEQN_FLT_MASK     = 0x0020,   /* CPU loop sequence error,      main CPU      */
-   CwHWIO_ETC_SOH_C_AND_R_CNTR_LOW_FLT_MASK  = 0x0040,   /* SOH C&R counter value low,    checking CPU  */
-   CwHWIO_ETC_SOH_SHUTOFF_TMR_EXPRD_FLT_MASK = 0x0080,   /* Shutoff timer expired,        main CPU      */
-   CwHWIO_ETC_SOH_SPI_FLT_MASK               = 0x0100,   /* SPI error,                    communication */
-   CwHWIO_ETC_SOH_SPI_COMM_FLT_MASK          = 0x0200,   /* SPI communication error,      communication */
-   CwHWIO_ETC_SOH_C_AND_R_DISARMD_FLT_MASK   = 0x0400,   /* SOH C&R disarmed,             checking CPU  */
-   CwHWIO_ETC_SOH_C_AND_R_TMOUT_FLT_MASK     = 0x0800,   /* SOH C&R timeout,              checking CPU  */
-   CwHWIO_ETC_SOH_C_AND_R_CNTR_ZERO_FLT_MASK = 0x1000,   /* SOH C&R counter value zero,   checking CPU  */
+   CwHWIO_ETC_SOH_SYS_CLK_FREQ_FLT_MASK      = 0x8000,   /* System clock frequency error, main CPU      */
+   CwHWIO_ETC_SOH_INTRT_SRC_FLT_MASK         = 0x4000,   /* Interrupt source error,       main CPU      */
+   CwHWIO_ETC_SOH_SYS_TMR_FLT_MASK           = 0x2000,   /* System timer error,           main CPU      */
+   CwHWIO_ETC_SOH_TST_SEQN_FLT_MASK          = 0x1000,   /* Test sequence error,          main CPU      */
+   CwHWIO_ETC_SOH_RTI_FREQ_FLT_MASK          = 0x0800,   /* RTI frequency error,          main CPU      */
+   CwHWIO_ETC_SOH_CPU_LOOP_SEQN_FLT_MASK     = 0x0400,   /* CPU loop sequence error,      main CPU      */
+   CwHWIO_ETC_SOH_C_AND_R_CNTR_LOW_FLT_MASK  = 0x0200,   /* SOH C&R counter value low,    checking CPU  */
+   CwHWIO_ETC_SOH_SHUTOFF_TMR_EXPRD_FLT_MASK = 0x0100,   /* Shutoff timer expired,        main CPU      */
+   CwHWIO_ETC_SOH_SPI_FLT_MASK               = 0x0080,   /* SPI error,                    communication */
+   CwHWIO_ETC_SOH_SPI_COMM_FLT_MASK          = 0x0040,   /* SPI communication error,      communication */
+   CwHWIO_ETC_SOH_C_AND_R_DISARMD_FLT_MASK   = 0x0020,   /* SOH C&R disarmed,             checking CPU  */
+   CwHWIO_ETC_SOH_C_AND_R_TMOUT_FLT_MASK     = 0x0010,   /* SOH C&R timeout,              checking CPU  */
+   CwHWIO_ETC_SOH_C_AND_R_CNTR_ZERO_FLT_MASK = 0x0008,   /* SOH C&R counter value zero,   checking CPU  */
 
    CwHWIO_ETC_SOH_MAIN_CPU_FLTS_MASK =
                         CwHWIO_ETC_SOH_SYS_CLK_FREQ_FLT_MASK
