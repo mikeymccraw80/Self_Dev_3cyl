@@ -129,6 +129,8 @@ void KNOCK_Reset_Parameters( void )
 		KNOCK_Last_Intensity_Value1[i] = 0;
 		KNOCK_Last_Intensity_Value2[i] = 0;
 	}
+
+	KNOCK_Status = KNOCK_Status_Default;
 }
 
 //=============================================================================

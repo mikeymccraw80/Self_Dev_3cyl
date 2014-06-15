@@ -183,6 +183,7 @@ void OS_LoResTasks_Hook(void)
     if (!CRANK_Get_First_Gap_Flag()) {
         KnockControl58XReferenceLogic();
     } else {
+		KNOCK_Initialize();
         CRANK_Set_First_Gap_Flag(false);
     }
 
