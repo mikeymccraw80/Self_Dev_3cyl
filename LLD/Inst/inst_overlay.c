@@ -18,11 +18,16 @@ typedef struct
 
 }INST_Overlay_Data_T;
 
+typedef enum {
+	CCP_ACTIVE_CAL_PAGE_REFERENCE,
+	CCP_ACTIVE_CAL_PAGE_WORKING
+} CCP_Cal_Page_T;
 
 //===========================================================================
 // Local Variable declarations
 //===========================================================================
 static INST_Overlay_Data_T INST_Overlay_Data;
+static CCP_Cal_Page_T      CCP_Active_CAL_Page; //indicate current cal page
 
 //===========================================================================
 // INST_Get_NVM_Failure
@@ -53,6 +58,7 @@ void INST_Set_Active_Calibration_Page( INST_Calibration_Page_T in_page )
       if( in_page == INST_CALIBRATION_PAGE_REFERENCE )
       {
          INST_Overlay_Data.Active_CAL_Page = INST_CALIBRATION_PAGE_REFERENCE;
+         CCP_Active_CAL_Page = CCP_ACTIVE_CAL_PAGE_REFERENCE;
 
          //=======================================================================
          // Set internal and external CAL presence patterns to CAL_INST_CALIBRATION_PAGE_REFERENCE_PATTERN
@@ -62,6 +68,7 @@ void INST_Set_Active_Calibration_Page( INST_Calibration_Page_T in_page )
       else
       {
          INST_Overlay_Data.Active_CAL_Page = INST_CALIBRATION_PAGE_WORKING;
+         CCP_Active_CAL_Page = CCP_ACTIVE_CAL_PAGE_WORKING;
 
          //=======================================================================
          // Set internal and external CAL presence patterns to CAL_INST_CALIBRATION_PAGE_WORKING_PATTERN
@@ -72,6 +79,7 @@ void INST_Set_Active_Calibration_Page( INST_Calibration_Page_T in_page )
    else // external RAM not present */
    {
       INST_Overlay_Data.Active_CAL_Page = INST_CALIBRATION_PAGE_REFERENCE;
+      CCP_Active_CAL_Page = CCP_ACTIVE_CAL_PAGE_REFERENCE;
       INST_Internal_Cal_Page_Pattern_NVM = INST_CAL_REFERENCE_PAGE_PATTERN;
    }
 
@@ -137,10 +145,12 @@ void INST_Initialize_Calibration_Pages( void )
    if(  INST_CAL_WORKING_PAGE_PATTERN == INST_Internal_Cal_Page_Pattern_NVM )
    {
       INST_Overlay_Data.Active_CAL_Page = INST_CALIBRATION_PAGE_WORKING;
+      CCP_Active_CAL_Page = CCP_ACTIVE_CAL_PAGE_WORKING;
    }
    else if( INST_CAL_REFERENCE_PAGE_PATTERN == INST_Internal_Cal_Page_Pattern_NVM )
    {
       INST_Overlay_Data.Active_CAL_Page = INST_CALIBRATION_PAGE_REFERENCE;
+      CCP_Active_CAL_Page = CCP_ACTIVE_CAL_PAGE_REFERENCE;
    }
    else
    {
@@ -148,6 +158,7 @@ void INST_Initialize_Calibration_Pages( void )
       // Calibration NVM Failure.  Default to reference page.
       //====================================================================
       INST_Overlay_Data.Active_CAL_Page = INST_CALIBRATION_PAGE_REFERENCE;
+      CCP_Active_CAL_Page = CCP_ACTIVE_CAL_PAGE_REFERENCE;
       INST_Overlay_Data.NVM_Failure     = true;
    }
 

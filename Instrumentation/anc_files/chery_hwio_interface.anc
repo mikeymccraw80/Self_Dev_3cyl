@@ -537,6 +537,19 @@
 *-  description              = "soh CR counter fail flag";
 *-}
 
+*-inst_overlay.CCP_Active_CAL_Page{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CCPCALPAGE";
+*-  variable_location.symbol = inst_overlay.CCP_Active_CAL_Page;
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "indicate current cal page, 0->Reference, 1->Working";
+*-  ds_scaling_unit          = "enum";
+*-}
+
+
 /******************************************************************************/
 /*                                                                            */
 /* Revision History:                                                          */
