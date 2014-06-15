@@ -807,7 +807,7 @@ void SPARK_Process_Interrupt(Spark_Control_Select_T in_spark_select )
             /* start next pulse request */
             SPARK_Schedule_Next_Event(cylinder, end_angle );
             /* check the est load fault status */
-            VSEP_EST_Fault_SYNC_Interface(SPARK_Cylinder_Event_ID);
+            // VSEP_EST_Fault_SYNC_Interface(SPARK_Cylinder_Event_ID);
         }
         SPARK_Scheduled_SynControl = 0;
     }
