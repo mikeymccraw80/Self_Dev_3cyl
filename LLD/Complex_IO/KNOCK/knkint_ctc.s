@@ -2,11 +2,9 @@
 	.text
 	.text_vle
 	.align	4
-       .global asm_knock_ABS_INT
-       .global asm_Enable_SPE_APU
-        
+	.global asm_knock_ABS_INT
+	.global asm_Enable_SPE_APU
 
-        
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; C calling convention ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; r0,      scratch register
 ; r1,      stack pointer
@@ -17,10 +15,7 @@
 ; r14~r31  preserved registers
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-
 ;.globl asm_knock_ABS_INT
-
-
 ;unsigned int  asm_knock_ABS_INT( short int *LpData unsigned int num) 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; arguments ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -42,32 +37,29 @@
 
 asm_knock_ABS_INT:
 
-	li		    r5, 0			
-       evsplati       r8, 0                 
-	
-loop:                                         
-	evlwhosx     r7, r5, r3	       
-	evabs	    r7, r7		       
-	evaddw       r8, r8, r7          
-	addi	           r5, r5, 4	       
-	cmpl	           r5, r4		        
-	blt		    loop		       
-	
-	li		    r5, 0			
-	evmergehi   r3, r5, r8         
-	add             r3,r3, r8  
-	
-	blr                                
+	li           r5, 0
+	evsplati     r8, 0
 
+loop:
+	evlwhosx     r7, r5, r3
+	evabs        r7, r7
+	evaddw       r8, r8, r7
+	addi         r5, r5, 4
+	cmpl         r5, r4
+	blt          loop
+
+	li           r5, 0
+	evmergehi    r3, r5, r8
+	add          r3,r3, r8
+
+	blr
 
 ;__asm void Enable_SPE_APU(void)
 
 asm_Enable_SPE_APU:
 
-   mfmsr   r3            ; Read MSR value
-   oris    r3,r3,0x200   ; Set SPE bit
-   mtmsr   r3            ; Write MSR value
+	mfmsr   r3            ; Read MSR value
+	oris    r3,r3,0x200   ; Set SPE bit
+	mtmsr   r3            ; Write MSR value
 
-   blr
-
-
+	blr
