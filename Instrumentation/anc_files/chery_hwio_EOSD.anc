@@ -10,6 +10,55 @@
 /*                                                      */
 /********************************************************/
 
+*-eosdmhtr.SbEOSD_O2_11_HtrShortLowTestFailed{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "OA11HTFALO";
+*-  variable_location.symbol = eosdmhtr.SbEOSD_O2_11_HtrShortLowTestFailed;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "eosd heater 11 Output diag system short high test fail";
+*-}
+
+*-eosdmhtr.SbEOSD_O2_11_HtrShortHiTestFailed{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "OA11HTFAHI";
+*-  variable_location.symbol = eosdmhtr.SbEOSD_O2_11_HtrShortHiTestFailed;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "eosd heater 11 Output diag system short low test fail";
+*-}
+
+*-eosdmhtr.SbEOSD_O2_12_HtrShortLowTestFailed{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "OA12HTFALO";
+*-  variable_location.symbol = eosdmhtr.SbEOSD_O2_12_HtrShortLowTestFailed;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "eosd heater 12 Output diag system short high test fail";
+*-}
+
+*-eosdmhtr.SbEOSD_O2_12_HtrShortHiTestFailed{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "OA12HTFAHI";
+*-  variable_location.symbol = eosdmhtr.SbEOSD_O2_12_HtrShortHiTestFailed;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "eosd heater 12 Output diag system short low test fail";
+*-}
+
+
 *-_VcEOSD_F_11_SampleCounter{
 *-  OBJECTS_CLASS: parameter_es_class;
 *-  label                    = "OF11SC";
