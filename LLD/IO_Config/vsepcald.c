@@ -162,7 +162,7 @@ const  KsVSEP_Fault_Level_Cals2  KsVSEP_Fault_Level_Initial2= {
 const   KsVSEP_VR1_Setting_Cals  KsVSEP_VR1_Setting_Initial= {
 
                 1, 0, 0, 0,
-                1,0
+                4,0
   
  };
 
