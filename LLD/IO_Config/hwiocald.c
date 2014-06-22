@@ -181,7 +181,7 @@ const uint8_t KyHWIO_NumberOfCylinders = 4;
 *|   }
 *| }
 */
-const uint8_t KyHWIO_NumValidPeriodsBeforeSyncStart = 3;
+const uint8_t KyHWIO_NumValidPeriodsBeforeSyncStart = 15;
 
 /*
 *| hwiocald.{
@@ -205,7 +205,7 @@ const uint16_t KyHWIO_MaxErrorTeethMore = 3;
 *|   }
 *| }
 */
-const uint16_t KyHWIO_MaxErrorTeethLess = 3;
+const uint16_t KyHWIO_MaxErrorTeethLess = 1;
 
 
 //=============================================================================
