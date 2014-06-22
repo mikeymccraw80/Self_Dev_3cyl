@@ -10,6 +10,7 @@
 #include "io_config_crank.h"
 #include "dd_pfi_interface.h"
 #include "dd_spark_interface.h"
+#include "hwiocald.h"
 
 uint8_t crank_b_syn;
 uint16_t crank_rpm;
@@ -23,13 +24,6 @@ uint16_t crank_rpm;
 //=============================================================================
 //   Constant definitions
 //=============================================================================
-typedef struct
-{
-   uint8_t  previous_n_1;
-   uint8_t  previous_1_n;
-
-} IO_Crank_Gap_T;
-
 typedef struct
 {
    bitfield32_t  sync_second_revolution        :  1; // bit 31   @emem 
@@ -285,24 +279,21 @@ void CRANK_Reset_Parameters( void )
       CRANK_First_Gap_Flag = false;
 
       // Disable interrupts
-      MCD5408_Disable_Host_Interrupt(
-         EPPWMT_TPU_INDEX,
-         &TPU,
-         TPU_CONFIG_IC_EPPWMT);
-	  
+      MCD5408_Disable_Host_Interrupt(EPPWMT_TPU_INDEX, &TPU, TPU_CONFIG_IC_EPPWMT);
       CRANK_Internal_State.U32 = CRANK_Set_Sync_Second_Revolution( CRANK_Internal_State.U32, false );
-	  
+
       new_gap_cnt = MCD5408_Get_IRQ_Count_At_Last_Interrupt( EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT, CRANK_EPPE_IRQ_Select ) + CRANK_COUNT_MAX;
-       MCD5408_Set_New_Gap_Count( EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT, new_gap_cnt );
+      MCD5408_Set_New_Gap_Count( EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT, new_gap_cnt );
       MCD5408_Set_Previous_n_1(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT,0);
       MCD5408_Set_Previous_1_n(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT,0);
 
-   // Call the Resync functions based on a stall event:
+      // Call the Resync functions based on a stall event:
       CAM_Reset_Parameters();
       SPARK_Reset_Parameters();
       PFI_Reset_Parameters();
-        //   IO_KNOCK_Reset_Parameters
-      OS_Engine_Stall_Reset();  
+      //   IO_KNOCK_Reset_Parameters
+      OS_Engine_Stall_Reset();
+      KNOCK_Initialize();
 }
 
 
@@ -365,6 +356,25 @@ void CRANK_Manage_Execute_Event( void )
 // |    CRANK SYNCHRONIZATION LOGIC
 // \-----------------------------------------------------------------------/
 //=============================================================================
+
+//=============================================================================
+// CRANK EVENT : Synchronization Error Recovery. .
+//
+// Try to find a correct gap after a missed sync.
+//=============================================================================
+static void CRANK_Recover_From_Synch_Error( void )
+{
+	// Indicate that the synchronization has been missed
+	CRANK_Internal_State.U32 = CRANK_Set_Sync_Error_In_Progress( CRANK_Internal_State.U32, true );
+	CRANK_Internal_State.U32 = CRANK_Set_Resync_Attempt_In_Prog( CRANK_Internal_State.U32, true );
+
+	CRANK_Reset_Parameters();
+
+	CRANK_Internal_State.U32 = CRANK_Set_Run_Reset_Bypass_Filter( CRANK_Internal_State.U32, true );
+	CRANK_Set_Flag( CRANK_FLAG_STALL_DETECTED, true );
+
+	CRANK_Enable_Synchronization();
+}
 
 //=============================================================================
 // CRANK SYNCHRONIZATION :
@@ -473,7 +483,7 @@ static bool CRANK_Gap_Cofirm( void )
 			CAM_Set_Total_Edge(CAM2);
 		} else {
 			//eliminate  the tooth count  difference in each loop
-			if (CRANK_Current_Event_Tooth>CRANK_VIRTUAL_TEETH_PER_CRANK) {
+			if (CRANK_Current_Event_Tooth > CRANK_VIRTUAL_TEETH_PER_CRANK) {
 				tooth_count = CRANK_Current_Event_Tooth - CRANK_VIRTUAL_TEETH_PER_CRANK;
 			} else {
 				tooth_count = CRANK_Current_Event_Tooth;
@@ -566,17 +576,98 @@ static void CRANK_Search_For_First_Gap( void )
    }
 
 }
+
+//=============================================================================
+// CRANK EVENT : Synchronization Validation Event.
+//
+// Check if the synchronization criteria are met
+// This function is called by the scheduler under normal operation.
+//=============================================================================
+uCrank_Count_T tooth_between_gap;
+bool CRANK_Validate_Synchronization( void )
+{
+	uCrank_Count_T previous_n_1;
+	uCrank_Count_T previous_1_n;
+	// uCrank_Count_T tooth_between_gap;
+	bool           gap_confirmed;
+
+	previous_n_1 = MCD5408_Get_Previous_n_1(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT);
+	previous_1_n = MCD5408_Get_Previous_1_n(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT);
+
+	// Perform the gap search
+	/* 1st criterion : gap at expected location,  2nd criterion : gap pattern recognized*/
+	if((CRANK_Next_Event_PA_Content == previous_n_1 ) && ((previous_n_1 - previous_1_n) == 1)) {
+		gap_confirmed = true;
+		crank_test0++;
+	} else {
+		gap_confirmed = false;
+	}
+	crank_test1++;
+	if( gap_confirmed ) {
+		// eliminate, the tooth count  difference in each loop
+		tooth_between_gap = CRANK_Next_Event_PA_Content - CRANK_GAP_COUNT;
+		if (tooth_between_gap == CRANK_VIRTUAL_TEETH_PER_CRANK) {
+			/* Indicate that the synchronization not missed */
+			CRANK_Internal_State.U32 = CRANK_Set_Sync_Error_In_Progress( CRANK_Internal_State.U32, false );
+			CRANK_Internal_State.U32 = CRANK_Set_Resync_Attempt_In_Prog( CRANK_Internal_State.U32, false );
+			/* reset more or less error tooth */
+			CRANK_Error_Count_More = 0;
+			CRANK_Error_Count_Less = 0;
+		} else if (tooth_between_gap > CRANK_VIRTUAL_TEETH_PER_CRANK) {
+			CRANK_Error_Count_More = tooth_between_gap - CRANK_VIRTUAL_TEETH_PER_CRANK;
+			CRANK_Error_Count_Less = 0;
+			/* record worst case, max error tooth */
+			if (CRANK_Error_Count_More > CRANK_Error_Count_More_Max)
+				CRANK_Error_Count_More_Max = CRANK_Error_Count_More;
+		} else {
+			CRANK_Error_Count_Less = CRANK_VIRTUAL_TEETH_PER_CRANK - tooth_between_gap;
+			CRANK_Error_Count_More = 0;
+			/* record worst case, max error tooth */
+			if (CRANK_Error_Count_Less > CRANK_Error_Count_Less_Max)
+				CRANK_Error_Count_Less_Max = CRANK_Error_Count_Less;
+		}
+
+		/* check whether need to recover from synch error */
+		if ((CRANK_Error_Count_Less >= KyHWIO_MaxErrorTeethMore) ||
+			(CRANK_Error_Count_More >= KyHWIO_MaxErrorTeethLess) )
+		{
+			// return false;
+		}
+
+		if(CRANK_Get_Sync_First_Revolution( CRANK_Internal_State.U32 )) {
+			CRANK_Internal_State.U32 = CRANK_Set_Sync_First_Revolution( CRANK_Internal_State.U32, false );
+			CRANK_Internal_State.U32 = CRANK_Set_Sync_Second_Revolution( CRANK_Internal_State.U32, true );
+			CRANK_Current_Event_Tooth = 2;
+		} else {
+			MCD5408_Set_Abs_Edge_Count(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT,2);
+			CRANK_Internal_State.U32 = CRANK_Set_Sync_First_Revolution( CRANK_Internal_State.U32, true );
+			CRANK_Internal_State.U32 = CRANK_Set_Sync_Second_Revolution( CRANK_Internal_State.U32, false );
+			CRANK_Current_Event_Tooth = 62;
+		}
+
+		if(CRANK_Parameters.F.number_of_gaps_detected<0xFF) {
+			CRANK_Parameters.F.number_of_gaps_detected++;
+		}
+
+		CRANK_Internal_State.U32 = CRANK_Set_Sync_Occurred( CRANK_Internal_State.U32, true );
+		MCD5408_Set_Gap_Count(EPPWMT_TPU_INDEX, TPU_CONFIG_IC_EPPWMT,CRANK_ACTUAL_TEETH_PER_CRANK);
+		// record this CRANK_Next_Event_PA_Content
+		CRANK_GAP_COUNT = CRANK_Next_Event_PA_Content;
+	}
+	CRANK_Parameters.F.current_tooth = CRANK_Current_Event_Tooth;
+	return true;
+}
 //=============================================================================
 //
 //  Function:            CRANK_Process_Crank_Event
 //=============================================================================
 void CRANK_Process_Crank_Event( void )  
 {
-	bool             sync_conditions_met;
 	EPPwMT_Coherent_Edge_Time_And_Count_T edgeTimeAndCount;
 	uint32_t  temp_count;
 	uCrank_Count_T actual_irq_count;
 	uCrank_Count_T number_of_teeth_missed;
+	bool           valid_result;
 
 	do{
 		actual_irq_count = MCD5408_Get_IRQ_Count_At_Last_Interrupt(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT, CRANK_EPPE_IRQ_Select );
@@ -599,8 +690,13 @@ void CRANK_Process_Crank_Event( void )
 			// Look for the first synchronization:
 			CRANK_Search_For_First_Gap();
 		} else {
-			if( !CRANK_Gap_Cofirm( )) {
-				CRANK_Manage_Execute_Event();  
+			valid_result = CRANK_Validate_Synchronization();
+			if (valid_result == true) {
+				CRANK_Manage_Execute_Event();
+			} else {
+				//recovery and return
+				CRANK_Recover_From_Synch_Error();
+				return;
 			}
 		}
 
