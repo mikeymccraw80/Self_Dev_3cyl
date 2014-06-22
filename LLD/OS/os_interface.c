@@ -179,14 +179,6 @@ void OS_TimeBasedTask10ms(void)
 //=============================================================================
 void OS_LoResTasks_Hook(void)
 {
-    /* skip the first gap */
-    if (!CRANK_Get_First_Gap_Flag()) {
-        KnockControl58XReferenceLogic();
-    } else {
-		KNOCK_Initialize();
-        CRANK_Set_First_Gap_Flag(false);
-    }
-
     /* call the interface callback, spark fuel... */
     HAL_OS_SYN_Task();
 
