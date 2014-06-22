@@ -421,9 +421,6 @@ static void CRANK_Filter_Crank_Signal( void )
    }
 }
 
-unsigned int crank_test0;
-unsigned int crank_test1;
-
 //=============================================================================
 // CRANK SYNCHRONIZATION :Get conditions met state
 // Determine if the gap has been found.
@@ -453,10 +450,8 @@ static bool CRANK_Gap_Cofirm( void )
 
 	previous_n_1 = MCD5408_Get_Previous_n_1(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT);
 	previous_1_n = MCD5408_Get_Previous_1_n(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT);
-	crank_test1++;
 	/* 1st criterion : gap at expected location,  2nd criterion : gap pattern recognized*/
 	if((CRANK_Next_Event_PA_Content == previous_n_1 ) && ((previous_n_1 - previous_1_n) == 1)) {
-		crank_test0++;
 		if(!CRANK_Get_First_Sync_Occurred( CRANK_Internal_State.U32)) {
 			// 1st GAP found
 			CRANK_Parameters.F.number_of_gaps_detected = 0;    
@@ -583,12 +578,11 @@ static void CRANK_Search_For_First_Gap( void )
 // Check if the synchronization criteria are met
 // This function is called by the scheduler under normal operation.
 //=============================================================================
-uCrank_Count_T tooth_between_gap;
 bool CRANK_Validate_Synchronization( void )
 {
 	uCrank_Count_T previous_n_1;
 	uCrank_Count_T previous_1_n;
-	// uCrank_Count_T tooth_between_gap;
+	uCrank_Count_T tooth_between_gap;
 	bool           gap_confirmed;
 
 	previous_n_1 = MCD5408_Get_Previous_n_1(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT);
@@ -598,11 +592,10 @@ bool CRANK_Validate_Synchronization( void )
 	/* 1st criterion : gap at expected location,  2nd criterion : gap pattern recognized*/
 	if((CRANK_Next_Event_PA_Content == previous_n_1 ) && ((previous_n_1 - previous_1_n) == 1)) {
 		gap_confirmed = true;
-		crank_test0++;
 	} else {
 		gap_confirmed = false;
 	}
-	crank_test1++;
+
 	if( gap_confirmed ) {
 		// eliminate, the tooth count  difference in each loop
 		tooth_between_gap = CRANK_Next_Event_PA_Content - CRANK_GAP_COUNT;
@@ -621,6 +614,9 @@ bool CRANK_Validate_Synchronization( void )
 				CRANK_Error_Count_More_Max = CRANK_Error_Count_More;
 		} else {
 			CRANK_Error_Count_Less = CRANK_VIRTUAL_TEETH_PER_CRANK - tooth_between_gap;
+			if (CRANK_Error_Count_Less >= 3) {
+				CRANK_Error_Count_Less = CRANK_Error_Count_Less - 2; //remove two fake tooth event
+			}
 			CRANK_Error_Count_More = 0;
 			/* record worst case, max error tooth */
 			if (CRANK_Error_Count_Less > CRANK_Error_Count_Less_Max)
@@ -631,7 +627,7 @@ bool CRANK_Validate_Synchronization( void )
 		if ((CRANK_Error_Count_Less >= KyHWIO_MaxErrorTeethMore) ||
 			(CRANK_Error_Count_More >= KyHWIO_MaxErrorTeethLess) )
 		{
-			// return false;
+			return false;
 		}
 
 		if(CRANK_Get_Sync_First_Revolution( CRANK_Internal_State.U32 )) {
