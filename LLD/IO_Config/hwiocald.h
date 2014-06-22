@@ -31,6 +31,8 @@ extern const T_CRANK_ANGLE    KfHWIO_phi_TopDeadCenter;
 extern const uint8_t       KyHWIO_NumberOfCylinders;
 extern const uint8_t       KyHWIO_NumValidPeriodsBeforeSyncStart;
 extern const uint8_t       KyHWIO_Num58xGapsUsingCamForSync;
+extern const uint16_t      KyHWIO_MaxErrorTeethMore;
+extern const uint16_t      KyHWIO_MaxErrorTeethLess;
 
 //pfi
 extern const T_CRANK_ANGLE      KfHWIO_phi_BoundaryFraction;

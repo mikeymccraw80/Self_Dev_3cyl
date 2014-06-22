@@ -183,6 +183,30 @@ const uint8_t KyHWIO_NumberOfCylinders = 4;
 */
 const uint8_t KyHWIO_NumValidPeriodsBeforeSyncStart = 3;
 
+/*
+*| hwiocald.{
+*| KyHWIO_MaxErrorTeethMore {
+*|     : is_calconst;
+*|     : description = "Number of error for 58x diagnose, if beyond this, resynchronize";
+*|     : type = types.t_count_word;
+*|     : units = "count";
+*|   }
+*| }
+*/
+const uint16_t KyHWIO_MaxErrorTeethMore = 3;
+
+/*
+*| hwiocald.{
+*| KyHWIO_MaxErrorTeethLess {
+*|     : is_calconst;
+*|     : description = "Number of error for 58x diagnose, if beyond this, resynchronize";
+*|     : type = types.t_count_word;
+*|     : units = "count";
+*|   }
+*| }
+*/
+const uint16_t KyHWIO_MaxErrorTeethLess = 3;
+
 
 //=============================================================================
 // Number of gaps seen before CAM switches to software toggle.
