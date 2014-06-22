@@ -67,6 +67,54 @@
 *-  description              = "cam inlet phase";
 *-}
 
+*-dd_crank.CRANK_Error_Count_More{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CRKERRTM";
+*-  variable_location.symbol = dd_crank.CRANK_Error_Count_More;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "crank 58x diagnose more tooth counter";
+*-}
+
+*-dd_crank.CRANK_Error_Count_Less{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CRKERRTL";
+*-  variable_location.symbol = dd_crank.CRANK_Error_Count_Less;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "crank 58x diagnose less tooth counter";
+*-}
+
+*-dd_crank.CRANK_Error_Count_More_Max{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CRKERRTMM";
+*-  variable_location.symbol = dd_crank.CRANK_Error_Count_More_Max;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "crank 58x diagnose more tooth counter max";
+*-}
+
+*-dd_crank.CRANK_Error_Count_Less_Max{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CRKERRTLM";
+*-  variable_location.symbol = dd_crank.CRANK_Error_Count_Less_Max;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "crank 58x diagnose less tooth counter max";
+*-}
+
 
 /******************************************************************************/
 /*                                                                            */
