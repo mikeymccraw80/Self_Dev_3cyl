@@ -99,7 +99,7 @@ typedef union
 //=============================================================================
 uCrank_Count_T    CRANK_Current_Event_Tooth; //[1, 120]
 uCrank_Count_T    CRANK_Current_Event_PA_Content;
-uCrank_Count_T     CRANK_Current_Event_Edge_Content;
+uCrank_Count_T    CRANK_Current_Event_Edge_Content;
 uCrank_Count_T    CRANK_Next_Event_PA_Content;
 uCrank_Count_T    CRANK_GAP_COUNT;
 uCrank_Count_T    CRANK_First_Cylinder_Event_Tooth;
@@ -108,7 +108,7 @@ uCrank_Count_T    CRANK_Error_Count_More;
 uCrank_Count_T    CRANK_Error_Count_Less;
 uCrank_Count_T    CRANK_Error_Count_More_Max;
 uCrank_Count_T    CRANK_Error_Count_Less_Max;
-
+uCrank_Count_T    CRANK_GAP_REAL_COUNT;       //not including synthetic
 
 //=============================================================================
 // Local Variable Definitions
@@ -447,6 +447,7 @@ static bool CRANK_Gap_Cofirm( void )
 	uCrank_Count_T previous_1_n;
 	uCrank_Count_T tooth_count;
 	bool           gap_detected = 0;
+	EPPwMT_Coherent_Edge_Time_And_Count_T real_edge_time_count;
 
 	previous_n_1 = MCD5408_Get_Previous_n_1(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT);
 	previous_1_n = MCD5408_Get_Previous_1_n(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT);
@@ -464,6 +465,10 @@ static bool CRANK_Gap_Cofirm( void )
 			// MCD5408_Set_Gap_Count(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT, CRANK_ACTUAL_TEETH_PER_CRANK );
 			CRANK_Current_Event_Tooth = 2;
 			MCD5408_Set_Abs_Edge_Count(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT,2);
+			CRANK_GAP_COUNT = CRANK_Next_Event_PA_Content;
+			/* record gap event real count */
+			MCD5408_BACKUP_MODE_Get_Coherent_Real_Edge_Time_And_Count( EPPWMT_TPU_INDEX, TPU_CONFIG_IC_EPPWMT, &real_edge_time_count);
+			CRANK_GAP_REAL_COUNT = real_edge_time_count.Count;
 
 			// Estimate when previous CylinderEvent would have occurred
 			CRANK_Parameters.F.cylinder_event_reference_time = ( CRANK_Parameters.F.edge_time -
@@ -580,6 +585,7 @@ static void CRANK_Search_For_First_Gap( void )
 //=============================================================================
 bool CRANK_Validate_Synchronization( void )
 {
+	EPPwMT_Coherent_Edge_Time_And_Count_T real_edge_time_count;
 	uCrank_Count_T previous_n_1;
 	uCrank_Count_T previous_1_n;
 	uCrank_Count_T tooth_between_gap;
@@ -598,25 +604,24 @@ bool CRANK_Validate_Synchronization( void )
 
 	if( gap_confirmed ) {
 		// eliminate, the tooth count  difference in each loop
-		tooth_between_gap = CRANK_Next_Event_PA_Content - CRANK_GAP_COUNT;
-		if (tooth_between_gap == CRANK_VIRTUAL_TEETH_PER_CRANK) {
+		MCD5408_BACKUP_MODE_Get_Coherent_Real_Edge_Time_And_Count( EPPWMT_TPU_INDEX, TPU_CONFIG_IC_EPPWMT, &real_edge_time_count);
+		tooth_between_gap = real_edge_time_count.Count - CRANK_GAP_REAL_COUNT;
+
+		if (tooth_between_gap == CRANK_ACTUAL_TEETH_PER_CRANK) {
 			/* Indicate that the synchronization not missed */
 			CRANK_Internal_State.U32 = CRANK_Set_Sync_Error_In_Progress( CRANK_Internal_State.U32, false );
 			CRANK_Internal_State.U32 = CRANK_Set_Resync_Attempt_In_Prog( CRANK_Internal_State.U32, false );
 			/* reset more or less error tooth */
 			CRANK_Error_Count_More = 0;
 			CRANK_Error_Count_Less = 0;
-		} else if (tooth_between_gap > CRANK_VIRTUAL_TEETH_PER_CRANK) {
-			CRANK_Error_Count_More = tooth_between_gap - CRANK_VIRTUAL_TEETH_PER_CRANK;
+		} else if (tooth_between_gap > CRANK_ACTUAL_TEETH_PER_CRANK) {
+			CRANK_Error_Count_More = tooth_between_gap - CRANK_ACTUAL_TEETH_PER_CRANK;
 			CRANK_Error_Count_Less = 0;
 			/* record worst case, max error tooth */
 			if (CRANK_Error_Count_More > CRANK_Error_Count_More_Max)
 				CRANK_Error_Count_More_Max = CRANK_Error_Count_More;
 		} else {
-			CRANK_Error_Count_Less = CRANK_VIRTUAL_TEETH_PER_CRANK - tooth_between_gap;
-			if (CRANK_Error_Count_Less >= 3) {
-				CRANK_Error_Count_Less = CRANK_Error_Count_Less - 2; //remove two fake tooth event
-			}
+			CRANK_Error_Count_Less = CRANK_ACTUAL_TEETH_PER_CRANK - tooth_between_gap;
 			CRANK_Error_Count_More = 0;
 			/* record worst case, max error tooth */
 			if (CRANK_Error_Count_Less > CRANK_Error_Count_Less_Max)
@@ -647,8 +652,9 @@ bool CRANK_Validate_Synchronization( void )
 
 		CRANK_Internal_State.U32 = CRANK_Set_Sync_Occurred( CRANK_Internal_State.U32, true );
 		MCD5408_Set_Gap_Count(EPPWMT_TPU_INDEX, TPU_CONFIG_IC_EPPWMT,CRANK_ACTUAL_TEETH_PER_CRANK);
-		// record this CRANK_Next_Event_PA_Content
+		/* record this CRANK_Next_Event_PA_Content(including synthetic) or real edge count */
 		CRANK_GAP_COUNT = CRANK_Next_Event_PA_Content;
+		CRANK_GAP_REAL_COUNT = real_edge_time_count.Count;
 	}
 	CRANK_Parameters.F.current_tooth = CRANK_Current_Event_Tooth;
 	return true;
@@ -696,7 +702,7 @@ void CRANK_Process_Crank_Event( void )
 			}
 		}
 
-		temp_count =   CRANK_Next_Event_PA_Content;
+		temp_count = CRANK_Next_Event_PA_Content;
 		CRANK_Next_Event_PA_Content++;
 
 		// get current count value   
