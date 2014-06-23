@@ -83,15 +83,4 @@ void CRANK_Set_Diag_Tooth_Cnt(uint8_t cnt);
 //=============================================================================
 uint32_t  CRANK_Get_Tooth_Period( void );
 
-
-//=============================================================================
-// CRANK_Get_First_Gap_Flag, called in cylinder event for knock control
-//=============================================================================
-bool CRANK_Get_First_Gap_Flag(void);
-
-//=============================================================================
-// CRANK_Set_First_Gap_Flag, called in cylinder event for knock control
-//=============================================================================
-void CRANK_Set_First_Gap_Flag(bool value);
-
 #endif // DD_CRANK_INTERFACE_H
