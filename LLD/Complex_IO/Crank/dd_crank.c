@@ -127,6 +127,10 @@ static Crank_Cylinder_T    CRANK_Cylinder_ID_Even;
 static uint8_t crank_diag_tooth_cnt;
 Crank_State_T       CRANK_State;
 
+/* this two variable is to monitor cylinder event schedule */
+static uCrank_Count_T    CRANK_Teeth_In_Syn_Event_COUNT;
+static uCrank_Count_T    CRANK_Previous_Sys_Event_COUNT;
+
 //=============================================================================
 //   Local Variable Definitions
 //=============================================================================
@@ -596,8 +600,8 @@ bool CRANK_Validate_Synchronization( void )
 		}
 
 		/* check whether need to recover from synch error */
-		if ((CRANK_Error_Count_Less >= KyHWIO_MaxErrorTeethMore) ||
-			(CRANK_Error_Count_More >= KyHWIO_MaxErrorTeethLess) )
+		if ((CRANK_Error_Count_Less >= KyHWIO_MaxErrorTeethLess) ||
+			(CRANK_Error_Count_More >= KyHWIO_MaxErrorTeethMore) )
 		{
 			return false;
 		}
@@ -704,6 +708,10 @@ void CRANK_High_Priority_Cylinder_Event( void )
 {
       uint32_t cs;
       cs = Enter_Critical_Section();
+      // record tooth between cylinder event
+      CRANK_Teeth_In_Syn_Event_COUNT = CRANK_Next_Event_PA_Content - CRANK_Previous_Sys_Event_COUNT;
+      CRANK_Previous_Sys_Event_COUNT = CRANK_Next_Event_PA_Content;
+
       // Update Irq tooth count at Cylinder Event
       CRANK_Parameters.F.angle_at_cylinder_event = (CRANK_Current_Event_Edge_Content+1) << uCRANK_ANGLE_PRECISION;
 

@@ -115,6 +115,18 @@
 *-  description              = "crank 58x diagnose less tooth counter max";
 *-}
 
+*-dd_crank.CRANK_Teeth_In_Syn_Event_COUNT{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CTINSECNT";
+*-  variable_location.symbol = dd_crank.CRANK_Teeth_In_Syn_Event_COUNT;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "tooth between cylider event, this var can monitor syn schedule";
+*-}
+
 
 /******************************************************************************/
 /*                                                                            */
