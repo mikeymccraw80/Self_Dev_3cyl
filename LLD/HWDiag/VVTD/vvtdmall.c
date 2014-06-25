@@ -130,9 +130,9 @@ void MngVVTD_125msTasks(void)
 		}
 
 		if ( SbVVTD_VVT1_ShortHiCritMet || SbVVTD_VVT1_ShortLoCritMet ) {
-			ScVVTD_VVT1_FailCntr = CbTRUE;
+			SbVVTD_VVT1_FailCritMet = CbTRUE;
 		} else {
-			ScVVTD_VVT1_FailCntr = CbFALSE;
+			SbVVTD_VVT1_FailCritMet = CbFALSE;
 		}
 	}
 
@@ -153,9 +153,9 @@ void MngVVTD_125msTasks(void)
 		}
 
 		if ( SbVVTD_VVT2_ShortLoCritMet || SbVVTD_VVT2_ShortHiCritMet ) {
-			ScVVTD_VVT2_FailCntr = CbTRUE;
+			SbVVTD_VVT2_FailCritMet = CbTRUE;
 		} else {
-			ScVVTD_VVT2_FailCntr = CbFALSE;
+			SbVVTD_VVT2_FailCritMet = CbFALSE;
 		}
 	}
 
@@ -188,7 +188,7 @@ void MngVVTD_125msTasks(void)
 		}
 		SbVVTD_VVT1_TestComplete_Internal = CbTRUE;
 	}
-	else if ( ( ScVVTD_VVT1_FailCntr >= KcVVTD_VVT1OutSampleThrsh )
+	else if ( ( ScVVTD_VVT1_SampleCntr >= KcVVTD_VVT1OutSampleThrsh )
 		   && ( SbVVTD_VVT1_FailCritMet == CbFALSE ) )
 	{
 		SbVVTD_VVT1_TestFailed = CbFALSE;
@@ -214,7 +214,7 @@ void MngVVTD_125msTasks(void)
 		}
 		SbVVTD_VVT2_TestComplete_Internal = CbTRUE;
 	}
-	else if ( ( ScVVTD_VVT2_FailCntr >= KcVVTD_VVT1OutSampleThrsh )
+	else if ( ( ScVVTD_VVT2_SampleCntr >= KcVVTD_VVT1OutSampleThrsh )
 		   && ( SbVVTD_VVT2_FailCritMet == CbFALSE ) )
 	{
 		SbVVTD_VVT2_TestFailed = CbFALSE;
