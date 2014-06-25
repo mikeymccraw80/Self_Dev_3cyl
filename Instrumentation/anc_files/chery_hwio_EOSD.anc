@@ -19,7 +19,7 @@
 *-  ds_scaling_mode          = "Ax + B";
 *-  ds_const_a               = "1.000000000000";
 *-  ds_const_b               = "0.000000000000";
-*-  description              = "eosd heater 11 Output diag system short high test fail";
+*-  description              = "eosd heater 11 Output diag system short low test fail";
 *-}
 
 *-eosdmhtr.SbEOSD_O2_11_HtrShortHiTestFailed{
@@ -31,7 +31,7 @@
 *-  ds_scaling_mode          = "Ax + B";
 *-  ds_const_a               = "1.000000000000";
 *-  ds_const_b               = "0.000000000000";
-*-  description              = "eosd heater 11 Output diag system short low test fail";
+*-  description              = "eosd heater 11 Output diag system short high test fail";
 *-}
 
 *-eosdmhtr.SbEOSD_O2_12_HtrShortLowTestFailed{
@@ -43,7 +43,7 @@
 *-  ds_scaling_mode          = "Ax + B";
 *-  ds_const_a               = "1.000000000000";
 *-  ds_const_b               = "0.000000000000";
-*-  description              = "eosd heater 12 Output diag system short high test fail";
+*-  description              = "eosd heater 12 Output diag system short low test fail";
 *-}
 
 *-eosdmhtr.SbEOSD_O2_12_HtrShortHiTestFailed{
@@ -55,7 +55,7 @@
 *-  ds_scaling_mode          = "Ax + B";
 *-  ds_const_a               = "1.000000000000";
 *-  ds_const_b               = "0.000000000000";
-*-  description              = "eosd heater 12 Output diag system short low test fail";
+*-  description              = "eosd heater 12 Output diag system short high test fail";
 *-}
 
 
