@@ -549,6 +549,365 @@
 *-  ds_scaling_unit          = "enum";
 *-}
 
+*-os_timebase.VaOSTK_ThruPutData_A01{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "TP1LPAET";
+*-  variable_location.symbol = os_timebase.VaOSTK_ThruPutData[0].t_AvgExecTime;
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "Throughput array, 1ms loop, average execution time";
+*-  ds_scaling_unit          = "t_count_long";
+*-}
+
+*-os_timebase.VaOSTK_ThruPutData_A02{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "TP1LPMXET";
+*-  variable_location.symbol = os_timebase.VaOSTK_ThruPutData[0].t_MaxExecTime;
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "Throughput array, 1ms loop, max execution time";
+*-  ds_scaling_unit          = "t_count_long";
+*-}
+
+*-os_timebase.VaOSTK_ThruPutData_A03{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "TP1LPMIET";
+*-  variable_location.symbol = os_timebase.VaOSTK_ThruPutData[0].t_MinExecTime;
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "Throughput array, 1ms loop, min execution time";
+*-  ds_scaling_unit          = "t_count_long";
+*-}
+
+*-os_timebase.VaOSTK_ThruPutData_A10{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "TP2LPAET";
+*-  variable_location.symbol = os_timebase.VaOSTK_ThruPutData[1].t_AvgExecTime;
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "Throughput array, 2ms loop, average execution time";
+*-  ds_scaling_unit          = "t_count_long";
+*-}
+
+*-os_timebase.VaOSTK_ThruPutData_A11{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "TP2LPMXET";
+*-  variable_location.symbol = os_timebase.VaOSTK_ThruPutData[1].t_MaxExecTime;
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "Throughput array, 2ms loop, max execution time";
+*-  ds_scaling_unit          = "t_count_long";
+*-}
+
+*-os_timebase.VaOSTK_ThruPutData_A12{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "TP2LPMIET";
+*-  variable_location.symbol = os_timebase.VaOSTK_ThruPutData[1].t_MinExecTime;
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "Throughput array, 2ms loop, min execution time";
+*-  ds_scaling_unit          = "t_count_long";
+*-}
+
+*-os_timebase.VaOSTK_ThruPutData_A20{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "TP5LPAET";
+*-  variable_location.symbol = os_timebase.VaOSTK_ThruPutData[2].t_AvgExecTime;
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "Throughput array, 5ms loop, average execution time";
+*-  ds_scaling_unit          = "t_count_long";
+*-}
+
+*-os_timebase.VaOSTK_ThruPutData_A21{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "TP5LPMXET";
+*-  variable_location.symbol = os_timebase.VaOSTK_ThruPutData[2].t_MaxExecTime;
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "Throughput array, 5ms loop, max execution time";
+*-  ds_scaling_unit          = "t_count_long";
+*-}
+
+*-os_timebase.VaOSTK_ThruPutData_A22{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "TP5LPMIET";
+*-  variable_location.symbol = os_timebase.VaOSTK_ThruPutData[2].t_MinExecTime;
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "Throughput array, 5ms loop, min execution time";
+*-  ds_scaling_unit          = "t_count_long";
+*-}
+
+*-os_timebase.VaOSTK_ThruPutData_A30{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "TP10LPAET";
+*-  variable_location.symbol = os_timebase.VaOSTK_ThruPutData[3].t_AvgExecTime;
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "Throughput array, 10ms loop, average execution time";
+*-  ds_scaling_unit          = "t_count_long";
+*-}
+
+*-os_timebase.VaOSTK_ThruPutData_A31{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "TP10LPMXET";
+*-  variable_location.symbol = os_timebase.VaOSTK_ThruPutData[3].t_MaxExecTime;
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "Throughput array, 10ms loop, max execution time";
+*-  ds_scaling_unit          = "t_count_long";
+*-}
+
+*-os_timebase.VaOSTK_ThruPutData_A32{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "TP10LPMIET";
+*-  variable_location.symbol = os_timebase.VaOSTK_ThruPutData[3].t_MinExecTime;
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "Throughput array, 10ms loop, min execution time";
+*-  ds_scaling_unit          = "t_count_long";
+*-}
+
+*-os_timebase.VaOSTK_ThruPutData_A40{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "TP1HLPAET";
+*-  variable_location.symbol = os_timebase.VaOSTK_ThruPutData[4].t_AvgExecTime;
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "Throughput array, 100ms (one-hundred) loop, average execution time";
+*-  ds_scaling_unit          = "t_count_long";
+*-}
+
+*-os_timebase.VaOSTK_ThruPutData_A41{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "TP1HPMXET";
+*-  variable_location.symbol = os_timebase.VaOSTK_ThruPutData[4].t_MaxExecTime;
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "Throughput array, 100ms (one-hundred) loop, max execution time";
+*-  ds_scaling_unit          = "t_count_long";
+*-}
+
+*-os_timebase.VaOSTK_ThruPutData_A42{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "TP1HPMIET";
+*-  variable_location.symbol = os_timebase.VaOSTK_ThruPutData[4].t_MinExecTime;
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "Throughput array, 100ms (one-hundred) loop, min execution time";
+*-  ds_scaling_unit          = "t_count_long";
+*-}
+
+*-os_timebase.VaOSTK_ThruPutData_A50{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "TP1TBPAET";
+*-  variable_location.symbol = os_timebase.VaOSTK_ThruPutData[5].t_AvgExecTime;
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "Throughput array, 1ms time base(execution in interrupt), average execution time";
+*-  ds_scaling_unit          = "t_count_long";
+*-}
+
+*-os_timebase.VaOSTK_ThruPutData_A51{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "TP1TBMXET";
+*-  variable_location.symbol = os_timebase.VaOSTK_ThruPutData[5].t_MaxExecTime;
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "Throughput array, 1ms time base(execution in interrupt), max execution time";
+*-  ds_scaling_unit          = "t_count_long";
+*-}
+
+*-os_timebase.VaOSTK_ThruPutData_A52{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "TP1TBMIET";
+*-  variable_location.symbol = os_timebase.VaOSTK_ThruPutData[5].t_MinExecTime;
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "Throughput array, 1ms time base(execution in interrupt), min execution time";
+*-  ds_scaling_unit          = "t_count_long";
+*-}
+
+*-os_timebase.VaOSTK_ThruPutData_A60{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "TP2TBPAET";
+*-  variable_location.symbol = os_timebase.VaOSTK_ThruPutData[6].t_AvgExecTime;
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "Throughput array, 2ms time base(execution in interrupt), average execution time";
+*-  ds_scaling_unit          = "t_count_long";
+*-}
+
+*-os_timebase.VaOSTK_ThruPutData_A61{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "TP2TBMXET";
+*-  variable_location.symbol = os_timebase.VaOSTK_ThruPutData[6].t_MaxExecTime;
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "Throughput array, 2ms time base(execution in interrupt), max execution time";
+*-  ds_scaling_unit          = "t_count_long";
+*-}
+
+*-os_timebase.VaOSTK_ThruPutData_A62{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "TP2TBMIET";
+*-  variable_location.symbol = os_timebase.VaOSTK_ThruPutData[6].t_MinExecTime;
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "Throughput array, 2ms time base(execution in interrupt), min execution time";
+*-  ds_scaling_unit          = "t_count_long";
+*-}
+
+*-os_timebase.VaOSTK_ThruPutData_A70{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "TP5TBPAET";
+*-  variable_location.symbol = os_timebase.VaOSTK_ThruPutData[7].t_AvgExecTime;
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "Throughput array, 5ms time base(execution in interrupt), average execution time";
+*-  ds_scaling_unit          = "t_count_long";
+*-}
+
+*-os_timebase.VaOSTK_ThruPutData_A71{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "TP5TBMXET";
+*-  variable_location.symbol = os_timebase.VaOSTK_ThruPutData[7].t_MaxExecTime;
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "Throughput array, 5ms time base(execution in interrupt), max execution time";
+*-  ds_scaling_unit          = "t_count_long";
+*-}
+
+*-os_timebase.VaOSTK_ThruPutData_A72{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "TP5TBMIET";
+*-  variable_location.symbol = os_timebase.VaOSTK_ThruPutData[7].t_MinExecTime;
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "Throughput array, 5ms time base(execution in interrupt), min execution time";
+*-  ds_scaling_unit          = "t_count_long";
+*-}
+
+*-os_timebase.VaOSTK_ThruPutData_A80{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "TP10TBPAET";
+*-  variable_location.symbol = os_timebase.VaOSTK_ThruPutData[8].t_AvgExecTime;
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "Throughput array, 10ms time base(execution in interrupt), average execution time";
+*-  ds_scaling_unit          = "t_count_long";
+*-}
+
+*-os_timebase.VaOSTK_ThruPutData_A81{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "TP10TBMXET";
+*-  variable_location.symbol = os_timebase.VaOSTK_ThruPutData[8].t_MaxExecTime;
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "Throughput array, 10ms time base(execution in interrupt), max execution time";
+*-  ds_scaling_unit          = "t_count_long";
+*-}
+
+*-os_timebase.VaOSTK_ThruPutData_A82{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "TP10TBMIET";
+*-  variable_location.symbol = os_timebase.VaOSTK_ThruPutData[8].t_MinExecTime;
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "Throughput array, 10ms time base(execution in interrupt), min execution time";
+*-  ds_scaling_unit          = "t_count_long";
+*-}
+
+*-os_timebase.VaOSTK_ThruPutData_A90{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "TPCLYAET";
+*-  variable_location.symbol = os_timebase.VaOSTK_ThruPutData[9].t_AvgExecTime;
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "Throughput array, cylinder event(execution in interrupt), average execution time";
+*-  ds_scaling_unit          = "t_count_long";
+*-}
+
+*-os_timebase.VaOSTK_ThruPutData_A91{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "TPCLYMXET";
+*-  variable_location.symbol = os_timebase.VaOSTK_ThruPutData[9].t_MaxExecTime;
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "Throughput array, cylinder event(execution in interrupt), max execution time";
+*-  ds_scaling_unit          = "t_count_long";
+*-}
+
+*-os_timebase.VaOSTK_ThruPutData_A92{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "TPCLYMIET";
+*-  variable_location.symbol = os_timebase.VaOSTK_ThruPutData[9].t_MinExecTime;
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "Throughput array, cylinder event(execution in interrupt), min execution time";
+*-  ds_scaling_unit          = "t_count_long";
+*-}
 
 /******************************************************************************/
 /*                                                                            */
