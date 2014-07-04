@@ -38,7 +38,29 @@ void STM_Timer_Set_Value(
 //=============================================================================
 // STM_Timer_Get_Value
 //=============================================================================
-uint32_t STM_Timer_Get_Value(void);
+static INLINE uint32_t STM_Timer_Get_Value(void)
+{
+   return (uint32_t)(STM.CNT);
+}
+
+//=============================================================================
+// STM_Timer_Get_Value
+//=============================================================================
+#define time_get STM_Timer_Get
+static INLINE uint32_t STM_Timer_Get(uint32_t delay)
+{
+   return (uint32_t)(STM.CNT + delay);
+}
+
+//=============================================================================
+// STM_Timer_Get_Value
+//=============================================================================
+#define time_left STM_Timer_Left
+static INLINE int32_t STM_Timer_Left(uint32_t deadline)
+{
+   return (int32_t)(deadline - STM.CNT);
+}
+
 
 //=============================================================================
 // STM_TIMER_Get_Base_Frequency
