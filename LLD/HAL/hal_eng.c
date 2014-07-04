@@ -6,6 +6,7 @@
 #include "hal_os.h"
 #include "hwiocald.h"
 #include "intr_ems.h"
+#include "dd_stm_interface.h"
 
 #define GetVIOS_n_EngTurnThrsh()\
     ( V_RPMa(60.0) )
