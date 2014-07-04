@@ -324,7 +324,7 @@ void HLS_Task_1000ms(void)
 
 void HLS_afterrun(void)
 {
-    sys_cmd.B_after_run_end = true;
+    // sys_cmd.B_after_run_end = true;
 }
 
 /*HLS initialization function.*/
