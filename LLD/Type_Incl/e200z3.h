@@ -50,6 +50,9 @@ void EIEIO(void);
 \*============================================================================*/
 asm void STORE_SPR_VALUE(const uint32_t spr_register, const uint32_t spr_value)
 {
+% con spr_register; reg spr_value
+   mtspr spr_register, spr_value
+#if 0
 % con spr_register; con spr_value
 ! "r3"
    isync
@@ -57,6 +60,24 @@ asm void STORE_SPR_VALUE(const uint32_t spr_register, const uint32_t spr_value)
    addi    r3,r3,spr_value@l
    mtspr   spr_register,r3
    isync
+#endif
+}
+
+/*============================================================================*\
+ * MACRO: READ_MSR_VALUE
+\*============================================================================*/
+asm uint32_t READ_MSR_VALUE(void)
+{
+   mfmsr r3
+}
+
+/*============================================================================*\
+ * MACRO: STORE_MSR_VALUE
+\*============================================================================*/
+asm void STORE_MSR_VALUE(uint32_t msr_value)
+{
+% reg msr_value
+   mtmsr msr_value
 }
 
 /*============================================================================*\
