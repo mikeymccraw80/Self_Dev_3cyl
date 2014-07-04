@@ -503,7 +503,7 @@
 
 *-Soh_FaultLog_plus_0x12{
 *-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "SOH_CRD";
+*-  label                    = "SOH_CRTF";
 *-  variable_location.symbol = Soh_FaultLog.Bits.CRTimeoutFail;
 *-  ds_scaling_unit          = "boolean";
 *-  ds_precision             = "1.0";
