@@ -11,6 +11,7 @@
 #include "dd_mcd5408_interface.h"
 #include "dd_siu_interface.h"
 #include "dd_vsep_fault.h"
+#include "dd_stm_interface.h"
 
 
 typedef enum {
@@ -150,8 +151,7 @@ void SPARK_Set_Mode(Spark_Mode_T   in_spark_mode );
 //=============================================================================
 // SPARK_Initialize
 //=============================================================================
-void SPARK_Initialize(
-    IO_Spark_Initialization_Parameters_T  * const in_initialization_parameters )
+void SPARK_Initialize(IO_Spark_Initialization_Parameters_T  * const in_initialization_parameters )
 {
     uint8_t     counter;
 
@@ -183,10 +183,6 @@ void SPARK_Initialize(
     // EST_Select_Initialize_Device( &MTSA_EST_SELECT_DEVICE );
     VSEP_EST_Select_Initialize_Device();
     SPARK_Set_Mode( SPARK_Initial_Est_Mode );
-
-    //C2MIO_EST_Select_Set_Number_Of_Cylinders
-    //EST_Select_Set_Number_Of_Cylinders( &MTSA_EST_SELECT_DEVICE, SPARK_Number_Of_Cylinders );
-    VSEP_EST_Select_Set_Number_Of_Cylinders(SPARK_Number_Of_Cylinders);
 
     //JPE Enable all spark channels at init.  This functionality should be handled by the algorithm
     // in a later release.  This is part of the temporary HWIO disabling of shorted EST channels.
@@ -776,14 +772,14 @@ static void SPARK_Update_Duration_Values(Spark_Control_Select_T in_spark_select,
 //
 //=============================================================================
 
-void SPARK_Process_Interrupt(Spark_Control_Select_T in_spark_select )
+void SPARK_Process_Interrupt(void)
 {
     Crank_Cylinder_T        cylinder = 0;
     Spark_Control_Select_T  control_select;
     uCrank_Angle_T          end_angle;
 
     // Get the amount of EST dwell which was delivered:
-    SPARK_Actual_Duration = MCD5412_Get_Actual_Duration(MPTAC_TPU_INDEX, SPARK_Mptac[ in_spark_select ]);
+    SPARK_Actual_Duration = MCD5412_Get_Actual_Duration(MPTAC_TPU_INDEX, SPARK_Mptac[SPARK_CONTROL_0]);
 
     // Calculate the next EST channel, and output the
     // EST control signals and the SEL1/0 signals:
@@ -806,6 +802,7 @@ void SPARK_Process_Interrupt(Spark_Control_Select_T in_spark_select )
             SPARK_Update_Duration_Values(control_select, cylinder);
             /* start next pulse request */
             SPARK_Schedule_Next_Event(cylinder, end_angle );
+            MCD5412_Set_Host_Interrupt_Enable(MPTAC_TPU_INDEX, &TPU, SPARK_Mptac[0], false);
             /* check the est load fault status */
             // VSEP_EST_Fault_SYNC_Interface(SPARK_Cylinder_Event_ID);
         }
@@ -857,6 +854,8 @@ void SPARK_Process_Cylinder_Event( void )
                 /* increase the syncontrol var, if syncontrol==2, multipulse pass next event tooth */
                 SPARK_Scheduled_SynControl ++;
         }
+        MCD5412_Set_Host_Interrupt_Status(MPTAC_TPU_INDEX, &TPU, SPARK_Mptac[0], false);
+        MCD5412_Set_Host_Interrupt_Enable(MPTAC_TPU_INDEX, &TPU, SPARK_Mptac[0], true );
     }
 }
 
@@ -874,7 +873,7 @@ void SPARK_Set_Next_Interrupt_EST1( void )
     MCD5412_Set_Host_Interrupt_Status(MPTAC_TPU_INDEX, &TPU, SPARK_Mptac[ 0 ], false);
 
     if( !SPARK_Override_Enabled ) {
-        SPARK_Process_Interrupt( SPARK_CONTROL_0 );
+        SPARK_Process_Interrupt();
     }
 }
 
