@@ -6,7 +6,8 @@
 #include "io_config_swt.h"
 #include "inst_config.h"
 #include "os_type.h"
-#include "dd_stm.h"
+#include "dd_stm_interface.h"
+#include "dd_sswt.h"
 
 //=============================================================================
 //  define
@@ -53,7 +54,6 @@ void OS_Powerdown_Callback(void);
 //=============================================================================
 static uint8_t  Normal_10ms_CNT;
 
-
 //=============================================================================
 // StartOS_Task_Normal
 //=============================================================================
@@ -69,7 +69,11 @@ void StartOS_Task_Normal(void)
 
 	/* turn on interrupts and start real os */
 	Enable_Interrupts();
-
+	// this is core watchdog
+	// hwi_init_watchdog(HWI_WATCHDOG_ENABLE);
+	// hwi_kick_watchdog(70);
+	// hwi_kick_wdg_local();
+	
 	/* do until application indicates shutdown */
 	while (!HAL_OS_Get_Shutdown()) {
 
@@ -99,6 +103,7 @@ void StartOS_Task_Normal(void)
 
 		/* os background 10ms schedule */
 		if (RTI_Flags.bf.TimeFor10ms == 1) {
+			// hwi_kick_wdg_local();
 			Enter_OSThroughputMeasure(CeOSTK_SEG_10msLOOP);
 			MngOSTK_10msTasks();
 			RTI_Flags.bf.TimeFor10ms = 0x00;
