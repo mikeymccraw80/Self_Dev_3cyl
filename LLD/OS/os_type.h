@@ -13,11 +13,14 @@ typedef union
 {
    struct
    {
-      uint8_t TimeFor1ms     : 1 ;
-      uint8_t TimeFor2ms     : 1 ;
-      uint8_t TimeFor5ms     : 1 ;
-      uint8_t TimeFor10ms   : 1 ;
-      uint8_t Unused                : 5 ;
+      uint8_t TimeFor1ms      : 1 ;
+      uint8_t TimeFor2ms      : 1 ;
+      uint8_t TimeFor5ms      : 1 ;
+      uint8_t TimeFor10ms     : 1 ;
+      uint8_t OverFlowFor1ms  : 1 ;
+      uint8_t OverFlowFor2ms  : 1 ;
+      uint8_t OverFlowFor5ms  : 1 ;
+      uint8_t OverFlowFor10ms : 1 ;
    } bf;
    uint8_t byte;
 } RtiFlagsType ;

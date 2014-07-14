@@ -909,6 +909,62 @@
 *-  ds_scaling_unit          = "t_count_long";
 *-}
 
+*-RTI_Flags{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "RTI_FLAG";
+*-  variable_location.symbol = RTI_Flags.byte;
+*-  ds_scaling_unit          = "hex no scale";
+*-  description              = "RTI flag, bit7:1ms, bit6:2ms, bit5:5ms, bit4:10ms, bit3:1ms_miss, bit2:2ms_miss, bit1:5ms_miss, bit0:10ms_miss";
+*-}
+
+*-LOOP_1MS_OF_CNT_Plus_0{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "LP1_OFCNT";
+*-  variable_location.symbol = LOOP_OF_CNT_ARRAY[0];
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.0";
+*-  ds_const_b               = "0.0";
+*-  description              = "1ms loop overflow counter";
+*-}
+
+*-LOOP_2MS_OF_CNT_Plus_1{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "LP2_OFCNT";
+*-  variable_location.symbol = LOOP_OF_CNT_ARRAY[1];
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.0";
+*-  ds_const_b               = "0.0";
+*-  description              = "2ms loop overflow counter";
+*-}
+
+*-LOOP_5MS_OF_CNT_Plus_2{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "LP5_OFCNT";
+*-  variable_location.symbol = LOOP_OF_CNT_ARRAY[2];
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.0";
+*-  ds_const_b               = "0.0";
+*-  description              = "5ms loop overflow counter";
+*-}
+
+*-LOOP_10MS_OF_CNT_Plus_3{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "LP10_OFCNT";
+*-  variable_location.symbol = LOOP_OF_CNT_ARRAY[3];
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.0";
+*-  ds_const_b               = "0.0";
+*-  description              = "10ms loop overflow counter";
+*-}
+
 /******************************************************************************/
 /*                                                                            */
 /* Revision History:                                                          */

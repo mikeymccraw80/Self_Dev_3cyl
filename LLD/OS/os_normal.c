@@ -54,6 +54,9 @@ void OS_Powerdown_Callback(void);
 //=============================================================================
 static uint8_t  Normal_10ms_CNT;
 
+/* record loop flag overflow counter */
+static uint16_t LOOP_OF_CNT_ARRAY[4];
+
 //=============================================================================
 // StartOS_Task_Normal
 //=============================================================================
@@ -80,24 +83,43 @@ void StartOS_Task_Normal(void)
 		/* os background 1ms schedule */
 		if (RTI_Flags.bf.TimeFor1ms == 1) {
 			Enter_OSThroughputMeasure(CeOSTK_SEG_1msLOOP);
-			MngOSTK_1msTasks();
 			RTI_Flags.bf.TimeFor1ms = 0x00;
+			MngOSTK_1msTasks();
+			/* detect overflow event, and record it */
+			if (RTI_Flags.bf.TimeFor1ms == 1) {
+				RTI_Flags.bf.OverFlowFor1ms = 1;
+				LOOP_OF_CNT_ARRAY[CeOSTK_SEG_1msLOOP] ++;
+				/* need not to make compension schedule for 1ms */
+				RTI_Flags.bf.TimeFor1ms = 0x00;
+			}
 			Leave_OSThroughputMeasure(CeOSTK_SEG_1msLOOP);
 		}
 
 		/* os background 2ms schedule */
 		if (RTI_Flags.bf.TimeFor2ms == 1) {
 			Enter_OSThroughputMeasure(CeOSTK_SEG_2msLOOP);
-			MngOSTK_2msTasks();
 			RTI_Flags.bf.TimeFor2ms = 0x00;
+			MngOSTK_2msTasks();
+			/* detect overflow event, and record it */
+			if (RTI_Flags.bf.TimeFor2ms == 1) {
+				RTI_Flags.bf.OverFlowFor2ms = 1;
+				LOOP_OF_CNT_ARRAY[CeOSTK_SEG_2msLOOP] ++;
+				/* need not to make compension schedule for 2ms */
+				RTI_Flags.bf.TimeFor2ms = 0x00;
+			}
 			Leave_OSThroughputMeasure(CeOSTK_SEG_2msLOOP);
 		}
 
 		/* os background 5ms schedule */
 		if (RTI_Flags.bf.TimeFor5ms == 1) {
 			Enter_OSThroughputMeasure(CeOSTK_SEG_5msLOOP);
-			MngOSTK_5msTasks();
 			RTI_Flags.bf.TimeFor5ms = 0x00;
+			MngOSTK_5msTasks();
+			/* detect overflow event, and record it */
+			if (RTI_Flags.bf.TimeFor5ms == 1) {
+				RTI_Flags.bf.OverFlowFor5ms = 1;
+				LOOP_OF_CNT_ARRAY[CeOSTK_SEG_5msLOOP] ++;
+			}
 			Leave_OSThroughputMeasure(CeOSTK_SEG_5msLOOP);
 		}
 
@@ -105,9 +127,14 @@ void StartOS_Task_Normal(void)
 		if (RTI_Flags.bf.TimeFor10ms == 1) {
 			// hwi_kick_wdg_local();
 			Enter_OSThroughputMeasure(CeOSTK_SEG_10msLOOP);
-			MngOSTK_10msTasks();
 			RTI_Flags.bf.TimeFor10ms = 0x00;
+			MngOSTK_10msTasks();
 			Normal_10ms_CNT++;
+			/* detect overflow event, and record it */
+			if (RTI_Flags.bf.TimeFor10ms == 1) {
+				RTI_Flags.bf.OverFlowFor10ms = 1;
+				LOOP_OF_CNT_ARRAY[CeOSTK_SEG_10msLOOP] ++;
+			}
 			Leave_OSThroughputMeasure(CeOSTK_SEG_10msLOOP);
 		}
 
