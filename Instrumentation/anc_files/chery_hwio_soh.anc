@@ -157,6 +157,14 @@
 *-  description              = "ETC SOH fault. (1=error logged, 0=no error)";
 *-}
 
+*-dd_l9958.L9958_Rxd{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "L9958FAULT";
+*-  variable_location.symbol = dd_l9958.L9958_Rxd.Value;
+*-  ds_scaling_unit          = "hex no scale";
+*-  description              = "L9958 hardware fault. (1=error logged, 0=no error)";
+*-}
+
 *-soh.Soh_RecoverMode{
 *-  OBJECTS_CLASS: parameter_es_class;
 *-  label                    = "SOHRECVR";
