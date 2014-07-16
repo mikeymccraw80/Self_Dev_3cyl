@@ -113,8 +113,8 @@ TbBOOLEAN VOL0ADDR  VbCOND_HWIO_COPTested;
 
 #pragma section DATA " " ".nc_nvram"
 TbBOOLEAN    VbCOND_HWIO_ClockFailed;
-TbBOOLEAN    VbCOND_HWIO_ClockTstComplete;
 #pragma section DATA " " ".bss"
+TbBOOLEAN    VbCOND_HWIO_ClockTstComplete;
 TbBOOLEAN    VbCOND_HWIO_ClockTested;
 TbBOOLEAN    VbCOND_HWIO_ClockEnblCritMet;
 TbBOOLEAN    VbCOND_HWIO_ClockFailCritMet;
@@ -125,8 +125,8 @@ static TbBOOLEAN                          SbCOND_Clock_OneTimeTstCmpt;
 
 #pragma section DATA " " ".nc_nvram"
 TbBOOLEAN    VbCOND_HWIO_ADC0Failed;
-TbBOOLEAN    VbCOND_HWIO_ADC0TstComplete;
 #pragma section DATA " " ".bss"
+TbBOOLEAN    VbCOND_HWIO_ADC0TstComplete;
 TbBOOLEAN    VbCOND_HWIO_ADC0Tested;
 TbBOOLEAN    VbCOND_HWIO_ADC0EnblCritMet;
 TbBOOLEAN    VbCOND_HWIO_ADC0FailCritMet;

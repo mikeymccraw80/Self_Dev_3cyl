@@ -99,8 +99,8 @@ static T_PERCENTa            SfCOND_Pct_APS2_PostShort;
 
 #pragma section DATA " " ".nc_nvram"
 TbBOOLEAN    VbCOND_AD_RespFailed;
-TbBOOLEAN    VbCOND_AD_RespTstComplete;
 #pragma section DATA " " ".bss"
+TbBOOLEAN    VbCOND_AD_RespTstComplete;
 TbBOOLEAN    VbCOND_AD_RespEnblCritMet;
 TbBOOLEAN    VbCOND_AD_RespFailCritMet;
 
