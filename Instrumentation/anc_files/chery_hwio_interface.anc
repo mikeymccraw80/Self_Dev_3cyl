@@ -965,6 +965,150 @@
 *-  description              = "10ms loop overflow counter";
 *-}
 
+*-QADC_Queue_Result_4_Plus_0{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "RADMAP";
+*-  variable_location.symbol = QADC_Queue_Result_4[0];
+*-  ds_scaling_unit          = "% Vref";
+*-  ds_precision             = "4.2";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.006103515625";
+*-  ds_const_b               = "0.0";
+*-  description              = "raw map ad input value, 14bit = 12bit(<<2)";
+*-}
+
+*-QADC_Queue_Result_4_Plus_1{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "RADACPRS";
+*-  variable_location.symbol = QADC_Queue_Result_4[1];
+*-  ds_scaling_unit          = "% Vref";
+*-  ds_precision             = "4.2";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.006103515625";
+*-  ds_const_b               = "0.0";
+*-  description              = "raw ac pressure sensor ad input value";
+*-}
+
+*-QADC_Queue_Result_4_Plus_2{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "RADLEGR";
+*-  variable_location.symbol = QADC_Queue_Result_4[2];
+*-  ds_scaling_unit          = "% Vref";
+*-  ds_precision             = "4.2";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.006103515625";
+*-  ds_const_b               = "0.0";
+*-  description              = "raw legr ad input value";
+*-}
+
+*-QADC_Queue_Result_4_Plus_3{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "RADPPS1";
+*-  variable_location.symbol = QADC_Queue_Result_4[3];
+*-  ds_scaling_unit          = "% Vref";
+*-  ds_precision             = "4.2";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.006103515625";
+*-  ds_const_b               = "0.0";
+*-  description              = "raw pps1 ad input value";
+*-}
+
+*-QADC_Queue_Result_4_Plus_4{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "RADPPS2";
+*-  variable_location.symbol = QADC_Queue_Result_4[4];
+*-  ds_scaling_unit          = "% Vref";
+*-  ds_precision             = "4.2";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.006103515625";
+*-  ds_const_b               = "0.0";
+*-  description              = "raw pps2 ad input value";
+*-}
+
+*-QADC_Queue_Result_4_Plus_5{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "RADFLVVI";
+*-  variable_location.symbol = QADC_Queue_Result_4[5];
+*-  ds_scaling_unit          = "% Vref";
+*-  ds_precision             = "4.2";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.006103515625";
+*-  ds_const_b               = "0.0";
+*-  description              = "raw FLVVI ad input value";
+*-}
+
+*-QADC_Queue_Result_4_Plus_6{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "RADSPA1VI";
+*-  variable_location.symbol = QADC_Queue_Result_4[6];
+*-  ds_scaling_unit          = "% Vref";
+*-  ds_precision             = "4.2";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.006103515625";
+*-  ds_const_b               = "0.0";
+*-  description              = "raw SPA1VI ad input value";
+*-}
+
+*-QADC_Queue_Result_4_Plus_7{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "RADO2AVI";
+*-  variable_location.symbol = QADC_Queue_Result_4[7];
+*-  ds_scaling_unit          = "% Vref";
+*-  ds_precision             = "4.2";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.006103515625";
+*-  ds_const_b               = "0.0";
+*-  description              = "raw O2AVI ad input value";
+*-}
+
+*-QADC_Queue_Result_4_Plus_8{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "RADO2BVI";
+*-  variable_location.symbol = QADC_Queue_Result_4[8];
+*-  ds_scaling_unit          = "% Vref";
+*-  ds_precision             = "4.2";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.006103515625";
+*-  ds_const_b               = "0.0";
+*-  description              = "raw O2BVI ad input value, 14bit = 12bit(<<2)";
+*-}
+
+*-QADC_Queue_Result_4_Plus_9{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "RADCRSVI";
+*-  variable_location.symbol = QADC_Queue_Result_4[9];
+*-  ds_scaling_unit          = "% Vref";
+*-  ds_precision             = "4.2";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.006103515625";
+*-  ds_const_b               = "0.0";
+*-  description              = "raw CRSVI ad input value, 14bit";
+*-}
+
+*-QADC_Queue_Result_4_Plus_10{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "RADCLTVI";
+*-  variable_location.symbol = QADC_Queue_Result_4[10];
+*-  ds_scaling_unit          = "% Vref";
+*-  ds_precision             = "4.2";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.006103515625";
+*-  ds_const_b               = "0.0";
+*-  description              = "raw CLTVI ad input value, 14bit";
+*-}
+
+*-QADC_Queue_Result_4_Plus_11{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "RADMATVI";
+*-  variable_location.symbol = QADC_Queue_Result_4[11];
+*-  ds_scaling_unit          = "% Vref";
+*-  ds_precision             = "4.2";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.006103515625";
+*-  ds_const_b               = "0.0";
+*-  description              = "raw MATVI ad input value, 14bit";
+*-}
+
 /******************************************************************************/
 /*                                                                            */
 /* Revision History:                                                          */
