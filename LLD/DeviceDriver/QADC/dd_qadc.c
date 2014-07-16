@@ -43,7 +43,6 @@ static uint16_t QADC_ADC_Calibration_Offset[] =
 //=============================================================================
 void QADC_Initialize_Device(void )
 {
-
    //ADC_WCCMF_F_T WCCMF_temp;
    ADC_CMF_T CMF_temp;
 
@@ -52,38 +51,37 @@ void QADC_Initialize_Device(void )
    //eQADC STAC Client Configuration Register (EQADC_REDLCCR)
    QADC.REDLCCR.U32          = QADC_INITIAL_REDLCCR.U32;
 
-
-// set eQADC CFIFO control register 
-  QADC.CFCR[QADC_FIFO_0].U16 = QADC_CFCR_RESET.U16;  // invalidate all CCW entries in CFIFO0  
-  QADC.CFCR[QADC_FIFO_1].U16 = QADC_CFCR_RESET.U16;  // invalidate all CCW entries in CFIFO1  
-  QADC.CFCR[QADC_FIFO_2].U16 = QADC_CFCR_RESET.U16;  // invalidate all CCW entries in CFIFO2  
-  QADC.CFCR[QADC_FIFO_3].U16 = QADC_CFCR_RESET.U16;  // invalidate all CCW entries in CFIFO3  
-  QADC.CFCR[QADC_FIFO_4].U16 = QADC_CFCR_RESET.U16;  // invalidate all CCW entries in CFIFO4  
-  QADC.CFCR[QADC_FIFO_5].U16 = QADC_CFCR_RESET.U16;  // invalidate all CCW entries in CFIFO5 
+  // set eQADC CFIFO control register 
+   QADC.CFCR[QADC_FIFO_0].U16 = QADC_CFCR_RESET.U16;  // invalidate all CCW entries in CFIFO0  
+   QADC.CFCR[QADC_FIFO_1].U16 = QADC_CFCR_RESET.U16;  // invalidate all CCW entries in CFIFO1  
+   QADC.CFCR[QADC_FIFO_2].U16 = QADC_CFCR_RESET.U16;  // invalidate all CCW entries in CFIFO2  
+   QADC.CFCR[QADC_FIFO_3].U16 = QADC_CFCR_RESET.U16;  // invalidate all CCW entries in CFIFO3  
+   QADC.CFCR[QADC_FIFO_4].U16 = QADC_CFCR_RESET.U16;  // invalidate all CCW entries in CFIFO4  
+   QADC.CFCR[QADC_FIFO_5].U16 = QADC_CFCR_RESET.U16;  // invalidate all CCW entries in CFIFO5 
 
    // set eQADC FIFO and interrupt staus registers
-  QADC.FISR[QADC_FIFO_0].U32 = QADC_FISR_RESET.U32;  // clear all interrupt flags relative to CFIFO0
-  QADC.FISR[QADC_FIFO_1].U32 = QADC_FISR_RESET.U32;  // clear all interrupt flags relative to CFIFO1
-  QADC.FISR[QADC_FIFO_2].U32 = QADC_FISR_RESET.U32;  // clear all interrupt flags relative to CFIFO2
-  QADC.FISR[QADC_FIFO_3].U32 = QADC_FISR_RESET.U32;  // clear all interrupt flags relative to CFIFO3
-  QADC.FISR[QADC_FIFO_4].U32 = QADC_FISR_RESET.U32;  // clear all interrupt flags relative to CFIFO4
-  QADC.FISR[QADC_FIFO_5].U32 = QADC_FISR_RESET.U32;  // clear all interrupt flags relative to CFIFO5
+   QADC.FISR[QADC_FIFO_0].U32 = QADC_FISR_RESET.U32;  // clear all interrupt flags relative to CFIFO0
+   QADC.FISR[QADC_FIFO_1].U32 = QADC_FISR_RESET.U32;  // clear all interrupt flags relative to CFIFO1
+   QADC.FISR[QADC_FIFO_2].U32 = QADC_FISR_RESET.U32;  // clear all interrupt flags relative to CFIFO2
+   QADC.FISR[QADC_FIFO_3].U32 = QADC_FISR_RESET.U32;  // clear all interrupt flags relative to CFIFO3
+   QADC.FISR[QADC_FIFO_4].U32 = QADC_FISR_RESET.U32;  // clear all interrupt flags relative to CFIFO4
+   QADC.FISR[QADC_FIFO_5].U32 = QADC_FISR_RESET.U32;  // clear all interrupt flags relative to CFIFO5
   
-  // set eQADC interrupt and DMA control register
-  QADC.IDCR[QADC_FIFO_0].U16 = 0x0000;  // disable all interrupts and DMA request from CFIFO0
-  QADC.IDCR[QADC_FIFO_1].U16 = 0x0000;  // disable all interrupts and DMA request from CFIFO1
-  QADC.IDCR[QADC_FIFO_2].U16 = 0x0000;  // disable all interrupts and DMA request from CFIFO2
-  QADC.IDCR[QADC_FIFO_3].U16 = 0x0000;  // disable all interrupts and DMA request from CFIFO3
-  QADC.IDCR[QADC_FIFO_4].U16 = 0x0000;  // disable all interrupts and DMA request from CFIFO4
-  QADC.IDCR[QADC_FIFO_5].U16 = 0x0000;  // disable all interrupts and DMA request from CFIFO5
+   // set eQADC interrupt and DMA control register
+   QADC.IDCR[QADC_FIFO_0].U16 = 0x0000;  // disable all interrupts and DMA request from CFIFO0
+   QADC.IDCR[QADC_FIFO_1].U16 = 0x0000;  // disable all interrupts and DMA request from CFIFO1
+   QADC.IDCR[QADC_FIFO_2].U16 = 0x0000;  // disable all interrupts and DMA request from CFIFO2
+   QADC.IDCR[QADC_FIFO_3].U16 = 0x0000;  // disable all interrupts and DMA request from CFIFO3
+   QADC.IDCR[QADC_FIFO_4].U16 = 0x0000;  // disable all interrupts and DMA request from CFIFO4
+   QADC.IDCR[QADC_FIFO_5].U16 = 0x0000;  // disable all interrupts and DMA request from CFIFO5
 
-  // eQADC CFIFO Transfer Counter Registers (EQADC_CFTCR)
-  QADC.CFTCR[QADC_FIFO_0].U16 = 0x0000;  // clear Transfer Counter for CFIFOx 
-  QADC.CFTCR[QADC_FIFO_1].U16 = 0x0000;  // clear Transfer Counter for CFIFOx 
-  QADC.CFTCR[QADC_FIFO_2].U16 = 0x0000;  // clear Transfer Counter for CFIFOx 
-  QADC.CFTCR[QADC_FIFO_3].U16 = 0x0000;  // clear Transfer Counter for CFIFOx 
-  QADC.CFTCR[QADC_FIFO_4].U16 = 0x0000;  // clear Transfer Counter for CFIFOx 
-  QADC.CFTCR[QADC_FIFO_5].U16 = 0x0000;  // clear Transfer Counter for CFIFOx 
+   // eQADC CFIFO Transfer Counter Registers (EQADC_CFTCR)
+   QADC.CFTCR[QADC_FIFO_0].U16 = 0x0000;  // clear Transfer Counter for CFIFOx 
+   QADC.CFTCR[QADC_FIFO_1].U16 = 0x0000;  // clear Transfer Counter for CFIFOx 
+   QADC.CFTCR[QADC_FIFO_2].U16 = 0x0000;  // clear Transfer Counter for CFIFOx 
+   QADC.CFTCR[QADC_FIFO_3].U16 = 0x0000;  // clear Transfer Counter for CFIFOx 
+   QADC.CFTCR[QADC_FIFO_4].U16 = 0x0000;  // clear Transfer Counter for CFIFOx 
+   QADC.CFTCR[QADC_FIFO_5].U16 = 0x0000;  // clear Transfer Counter for CFIFOx 
   
    // set eQADC Null message send format register
    QADC.NMSFR.U32 = 0x00000000;  // Null Message Format
@@ -94,22 +92,22 @@ void QADC_Initialize_Device(void )
    //eQADC SSI Control Register (EQADC_SSICR)
    QADC.SSICR.U32 = QADC_INITIAL_SSICR.U32;
 
-  //ADC0_CR
+   //ADC0_CR
    CMF_temp.U32 = 0x00000000;   
    CMF_temp.WF.BN = ADC_CONVERTER_0;
    CMF_temp.WF.R_W = QADC_READ_WRITE_FLAG_WRITE;
    CMF_temp.WF.REG_DATA = QADC_ADC_0_CR_INIT_VALUE;
    CMF_temp.WF.REG_ADDRESS = QADC_REGISTER_ADDRESS_CONTROL_REGISTER;
 
-//////////////////////////////////////////////////////////////////////////
-      //Set FIFO 0 to software triggered mode
+   //////////////////////////////////////////////////////////////////////////
+   //Set FIFO 0 to software triggered mode
    QADC.CFCR[QADC_FIFO_0].F.MODE = QADC_TRIGGER_MODE_SOFTWARE_TRIGGER_Single_Scan;
 
    /* this command fifo is just for config command */
    QADC.CFCR[QADC_FIFO_3].F.MODE = QADC_TRIGGER_MODE_SOFTWARE_TRIGGER_Single_Scan;
 
-    //eQADC CFIFO Push Registers (EQADC_CFPR)
-    QADC.CFPR[QADC_FIFO_0] =  CMF_temp.U32;
+   //eQADC CFIFO Push Registers (EQADC_CFPR)
+   QADC.CFPR[QADC_FIFO_0] =  CMF_temp.U32;
 
    //ADC1_CR
    CMF_temp.U32 = 0x00000000;   
@@ -154,30 +152,19 @@ void QADC_Initialize_Device(void )
 
 
    //////////////////////////////////////////////////
-   //
    QADC.IDCR[QADC_FIFO_1].F.CFFS = QADC_IDCR_REQUEST_DMA_TRANSFER;
-   QADC.IDCR[QADC_FIFO_1].F.CFFE =  true;
-   //
+   QADC.IDCR[QADC_FIFO_1].F.CFFE = true;
    QADC.IDCR[QADC_FIFO_1].F.RFDS = QADC_IDCR_REQUEST_DMA_TRANSFER;
-   QADC.IDCR[QADC_FIFO_1].F.RFDE=  true;
-   //Set FIFO 0 to software triggered mode
+   QADC.IDCR[QADC_FIFO_1].F.RFDE = true;
+   //Set FIFO 1 to QADC_TRIGGER_MODE_FALLING_EDGE_EXTERNAL_TRIGGER_Continuous_Scan
    QADC.CFCR[QADC_FIFO_1].F.MODE = QADC_TRIGGER_MODE_FALLING_EDGE_EXTERNAL_TRIGGER_Continuous_Scan;
 
-
-
-   //
    QADC.IDCR[QADC_FIFO_4].F.CFFS = QADC_IDCR_REQUEST_DMA_TRANSFER;
-   QADC.IDCR[QADC_FIFO_4].F.CFFE =  true;
-   //
+   QADC.IDCR[QADC_FIFO_4].F.CFFE = true;
    QADC.IDCR[QADC_FIFO_4].F.RFDS = QADC_IDCR_REQUEST_DMA_TRANSFER;
-   QADC.IDCR[QADC_FIFO_4].F.RFDE=  true;
-
-
-   //Set FIFO 0 to software triggered mode
-   //  QADC.CFCR[QADC_FIFO_4].F.MODE = QADC_TRIGGER_MODE_FALLING_EDGE_EXTERNAL_TRIGGER;
- QADC.CFCR[QADC_FIFO_4].F.MODE = QADC_TRIGGER_MODE_FALLING_EDGE_EXTERNAL_TRIGGER_Continuous_Scan;
-
-
+   QADC.IDCR[QADC_FIFO_4].F.RFDE = true;
+   //Set FIFO 4 to QADC_TRIGGER_MODE_FALLING_EDGE_EXTERNAL_TRIGGER_Continuous_Scan
+   QADC.CFCR[QADC_FIFO_4].F.MODE = QADC_TRIGGER_MODE_FALLING_EDGE_EXTERNAL_TRIGGER_Continuous_Scan;
 }
 
 //=============================================================================
