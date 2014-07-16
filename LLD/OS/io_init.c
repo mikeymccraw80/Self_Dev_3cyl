@@ -168,21 +168,24 @@ void InitializeHardwareRegisters(void)
 	DMA_QADC_RFDF_4_Eighth_32Bit);
 
 	QADC_Initialize_Device();
-	PIT_Initialize_Device();
-
-	//set up PIT time 5us
-	PIT_TIMER_Set_Value( PIT_CHANNEL_1, PIT_LOAD_VALUE_20US);
-	PIT_TIMER_Set_Value( PIT_CHANNEL_0, PIT_LOAD_VALUE_5US);
+	QADC_ANALOG_Calibrate_Converter(ADC_CONVERTER_0);
+	QADC_ANALOG_Calibrate_Converter(ADC_CONVERTER_1);
 
 	//enable QADC DMA time base scan
 	DMA_Enable_Request(DMA_CHANNEL_QADC_FISR4_RFDF_4);
 	DMA_Enable_Request(DMA_CHANNEL_QADC_FISR4_CFFF_4);
+
+	//set up PIT time 5us
+	PIT_Initialize_Device();
+	PIT_TIMER_Set_Value( PIT_CHANNEL_1, PIT_LOAD_VALUE_20US);
+	PIT_TIMER_Set_Value( PIT_CHANNEL_0, PIT_LOAD_VALUE_5US);
 
 	MIOS_Initialize_Device();
 
 	DSPI_B_Initialize_Device();
 	DSPI_B_Enable_Transfer(true);
 
+	/* EMIOS DMA Channel for SOH Module */
 	DMA_Initialize_Channel(
 	DMA_CHANNEL_MIOS_EMIOSFLAG_4,
 	DMA_EMIOSFLAG_4_Source_Address,
@@ -195,9 +198,6 @@ void InitializeHardwareRegisters(void)
 	DMA_EMIOSFLAG_4_Eighth_32Bit);
 
 	STM_Set_Timer_Enable(true);
-
-	QADC_ANALOG_Calibrate_Converter(ADC_CONVERTER_0);
-	QADC_ANALOG_Calibrate_Converter(ADC_CONVERTER_1); 
 
 	/* init can device and ccp can id and channel */
 	FlexCAN_A_Initialize_Device();

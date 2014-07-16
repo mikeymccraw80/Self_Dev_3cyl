@@ -44,7 +44,7 @@ void OS_Startup_Hook(void)
     DMA_Enable_Request(DMA_CHANNEL_QADC_FISR1_RFDF_1);
     DMA_Enable_Request(DMA_CHANNEL_QADC_FISR1_CFFF_1);
 
-    // set up os loop time 10ms
+    // set up os loop time 1ms
     PIT_TIMER_Set_Value( PIT_CHANNEL_RTI, RTI_LOAD_VALUE_1MS);
     PIT_INTERRUPT_Set_Enable(PIT_CHANNEL_RTI, true);
 }
