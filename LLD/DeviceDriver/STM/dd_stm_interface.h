@@ -1,5 +1,5 @@
-#ifndef DD_INTERFACE_PIT_H
-#define DD_INTERFACE_PIT_H
+#ifndef DD_INTERFACE_STM_H
+#define DD_INTERFACE_STM_H
 
 //=============================================================================
 // include files
@@ -59,6 +59,16 @@ static INLINE uint32_t STM_Timer_Get(uint32_t delay)
 static INLINE int32_t STM_Timer_Left(uint32_t deadline)
 {
    return (int32_t)(deadline - STM.CNT);
+}
+
+//=============================================================================
+// STM_Timer_Get_Value
+//=============================================================================
+#define time_udelay STM_Timer_UDelay
+static INLINE void STM_Timer_UDelay(uint32_t count)
+{
+   uint32_t deadline = STM.CNT + count;
+   while (((int32_t)(deadline - STM.CNT)) > 0);
 }
 
 

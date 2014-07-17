@@ -172,7 +172,7 @@ typedef struct STM_Timer_Register_Tag
 
 //  Note: STM Registers are not Bit Accessible.
 //=============================================================================
-typedef struct STM_Tag
+typedef volatile struct STM_Tag
 {
    STM_CR_T               CR;                               // 0X0000 - 0X0003
    STM_CNT_T              CNT;                              // 0x0004 - 0x0007
