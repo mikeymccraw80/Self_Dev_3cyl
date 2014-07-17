@@ -21,33 +21,33 @@ DMA_T DMA_A;
 //=============================================================================
 void DMA_Initialize_Device( void  )
 {
-
    DMA_A.CR.F.ERGA = false;  // enable group Fixed priority arbitration
    DMA_A.CR.F.ERCA = false;  // enable channel Fixed priority arbitration
    DMA_A.CR.F.EDBG = false;  // disable debug
    DMA_A.CR.F.EBW  = false;  // The bufferable write signal (hprot[2]) is not
                             // asserted during AMBA AHB writes.
-   // Enabling debug will cause eDMA to stall between minor loops, possibly
-   //  within a major loop - i.e. will break SPI messages and Analog queues,
-   //  etc. - anything that uses the eDMA has potential to copy data
-   //  incorrectly.
-   //DMA_CHANNEL_QADC_FISR1_CFFF_1
+   /* default cr value reset by mcu */
+   // DMA_A.CR.F.GRP0PRI = DMA_GROUP_PRIORITY_0;
+   // DMA_A.CR.F.GRP1PRI = DMA_GROUP_PRIORITY_1;
+   // DMA_A.CR.F.GRP2PRI = DMA_GROUP_PRIORITY_2;
+   // DMA_A.CR.F.GRP3PRI = DMA_GROUP_PRIORITY_3;
+
+   /* DMA_CHANNEL_QADC_FISR1_CFFF_1 */
    DMA_A.CPR[DMA_CHANNEL_QADC_FISR1_CFFF_1].U8 =0;
    //Enable Channel Preemption
    //Channel n can be temporarily suspended by the service request of a higher priority channel.
    DMA_A.CPR[DMA_CHANNEL_QADC_FISR1_CFFF_1].F.ECP =false;
    //Channel priority when fixed-priority arbitration is enabled.
    DMA_A.CPR[DMA_CHANNEL_QADC_FISR1_CFFF_1].F.CHPRI = DMA_CHANNEL_PRIORITY_2;
-      //DMA_CHANNEL_QADC_FISR1_RFDF_1
+
+   /* DMA_CHANNEL_QADC_FISR1_RFDF_1 */
    DMA_A.CPR[DMA_CHANNEL_QADC_FISR1_RFDF_1].U8 =0;
-   //Enable Channel Preemption
    //Channel n can be temporarily suspended by the service request of a higher priority channel.
    DMA_A.CPR[DMA_CHANNEL_QADC_FISR1_RFDF_1].F.ECP =false;
    //Channel priority when fixed-priority arbitration is enabled.
    DMA_A.CPR[DMA_CHANNEL_QADC_FISR1_RFDF_1].F.CHPRI = DMA_CHANNEL_PRIORITY_3;
 
-   
-   //DMA_CHANNEL_QADC_FISR4_CFFF_4
+   /* DMA_CHANNEL_QADC_FISR4_CFFF_4 */
    DMA_A.CPR[DMA_CHANNEL_QADC_FISR4_CFFF_4].U8 =0;
    //Enable Channel Preemption
    //Channel n can be temporarily suspended by the service request of a higher priority channel.
@@ -55,40 +55,20 @@ void DMA_Initialize_Device( void  )
    //Channel priority when fixed-priority arbitration is enabled.
    DMA_A.CPR[DMA_CHANNEL_QADC_FISR4_CFFF_4].F.CHPRI = DMA_CHANNEL_PRIORITY_8;
 
-
-      //DMA_CHANNEL_QADC_FISR4_RFDF_4
+   /* DMA_CHANNEL_QADC_FISR4_RFDF_4 */
    DMA_A.CPR[DMA_CHANNEL_QADC_FISR4_RFDF_4].U8 =0;
-   //Enable Channel Preemption
    //Channel n can be temporarily suspended by the service request of a higher priority channel.
    DMA_A.CPR[DMA_CHANNEL_QADC_FISR4_RFDF_4].F.ECP =false;
    //Channel priority when fixed-priority arbitration is enabled.
    DMA_A.CPR[DMA_CHANNEL_QADC_FISR4_RFDF_4].F.CHPRI = DMA_CHANNEL_PRIORITY_9;
 
-      //DMA_CHANNEL_DSPI_B_SR_TFFF
-   DMA_A.CPR[DMA_CHANNEL_DSPI_B_SR_TFFF].U8 =0;
-   //Enable Channel Preemption
-   //Channel n can be temporarily suspended by the service request of a higher priority channel.
-   DMA_A.CPR[DMA_CHANNEL_DSPI_B_SR_TFFF].F.ECP =false;
-   //Channel priority when fixed-priority arbitration is enabled.
-   DMA_A.CPR[DMA_CHANNEL_DSPI_B_SR_TFFF].F.CHPRI = DMA_CHANNEL_PRIORITY_12;
-
-
-      //DMA_CHANNEL_DSPI_B_SR_RFDF
-   DMA_A.CPR[DMA_CHANNEL_DSPI_B_SR_RFDF].U8 =0;
-   //Enable Channel Preemption
-   //Channel n can be temporarily suspended by the service request of a higher priority channel.
-   DMA_A.CPR[DMA_CHANNEL_DSPI_B_SR_RFDF].F.ECP =false;
-   //Channel priority when fixed-priority arbitration is enabled.
-   DMA_A.CPR[DMA_CHANNEL_DSPI_B_SR_RFDF].F.CHPRI = DMA_CHANNEL_PRIORITY_13;
-	 
-     //DMA_CHANNEL_MIOS_EMIOSFLAG_4
+   /* DMA_CHANNEL_MIOS_EMIOSFLAG_4 */
    DMA_A.CPR[DMA_CHANNEL_MIOS_EMIOSFLAG_4].U8 =0;
    //Enable Channel Preemption
    //Channel n can be temporarily suspended by the service request of a higher priority channel.
    DMA_A.CPR[DMA_CHANNEL_MIOS_EMIOSFLAG_4].F.ECP =false;
    //Channel priority when fixed-priority arbitration is enabled.
    DMA_A.CPR[DMA_CHANNEL_MIOS_EMIOSFLAG_4].F.CHPRI = DMA_CHANNEL_PRIORITY_8;
-
 
    // Disable all DMA requests
    DMA_A.ERQRL.U32 = 0;
@@ -101,7 +81,7 @@ void DMA_Initialize_Device( void  )
 // DMA_Initialize_Channel
 //=============================================================================
 void DMA_Initialize_Channel(
-   DMA_Channel_T           channel,
+   DMA_Channel_T        channel,
    uint32_t             SADDR,
    DMA_Second_32Bit_T   F_2,
    DMA_Third_32Bit_T    F_3,
@@ -131,8 +111,6 @@ void DMA_Initialize_Channel(
    //Beginning ¡°Major¡± Iteration Count (biter)
    //Channel Control/Statusm (bwc, major.linkch, done, active, major.e_link, e_sg, d_req, int_half, int_maj,start)
    DMA_A.TCD[channel].F.F_8 = F_8;
-
-
 }
 
 //=============================================================================
