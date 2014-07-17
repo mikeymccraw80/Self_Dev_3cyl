@@ -19,10 +19,9 @@
 #include "io_config_dma.h"
 #include "io_config_pit.h"
 #include "hal_emulated_eeprom.h"
-#include "dd_pit_interface.h"
 #include "dd_l9958.h"
 #include "dd_vsep_est_select.h"
-#include "dd_stm.h"
+#include "dd_stm_interface.h"
 #include "hal_os.h"
 
 
@@ -96,7 +95,6 @@ void InitializeHardwareRegisters(void)
 	CPU_DIAB_Set_Data_Area_Pointers();
 	CPU_DIAB_Copy_Table();
 
-
 	CPU_Info =  SIU_Get_CPU_Information();
 	Flash_Info = Get_FLASH_Driver_Mode();
 
@@ -114,7 +112,9 @@ void InitializeHardwareRegisters(void)
 
 	INTC_Initialize_Device();
 
+	/* init STM device */
 	STM_Initialize_Device();
+	STM_Set_Timer_Enable(true);
 
 	ECSM_Initialize_Device();
 
@@ -131,7 +131,6 @@ void InitializeHardwareRegisters(void)
 	DMA_QADC_CFFF_1_Sixth_32Bit,
 	DMA_QADC_CFFF_1_Dlast,
 	DMA_QADC_CFFF_1_Eighth_32Bit);
-
 
 	DMA_Initialize_Channel(
 	DMA_CHANNEL_QADC_FISR1_RFDF_1,
@@ -155,7 +154,6 @@ void InitializeHardwareRegisters(void)
 	DMA_QADC_CFFF_4_Dlast,
 	DMA_QADC_CFFF_4_Eighth_32Bit);
 
-
 	DMA_Initialize_Channel(
 	DMA_CHANNEL_QADC_FISR4_RFDF_4,
 	DMA_QADC_RFDF_4_Source_Address,
@@ -167,23 +165,16 @@ void InitializeHardwareRegisters(void)
 	DMA_QADC_RFDF_4_Dlast,
 	DMA_QADC_RFDF_4_Eighth_32Bit);
 
+	/* init adc device and calibrate it */
 	QADC_Initialize_Device();
 	QADC_ANALOG_Calibrate_Converter(ADC_CONVERTER_0);
 	QADC_ANALOG_Calibrate_Converter(ADC_CONVERTER_1);
 
-	//enable QADC DMA time base scan
-	DMA_Enable_Request(DMA_CHANNEL_QADC_FISR4_RFDF_4);
-	DMA_Enable_Request(DMA_CHANNEL_QADC_FISR4_CFFF_4);
-
-	//set up PIT time 5us
+	/* init pit device */
 	PIT_Initialize_Device();
-	PIT_TIMER_Set_Value( PIT_CHANNEL_1, PIT_LOAD_VALUE_20US);
-	PIT_TIMER_Set_Value( PIT_CHANNEL_0, PIT_LOAD_VALUE_5US);
 
+	/* init MIOS device */
 	MIOS_Initialize_Device();
-
-	DSPI_B_Initialize_Device();
-	DSPI_B_Enable_Transfer(true);
 
 	/* EMIOS DMA Channel for SOH Module */
 	DMA_Initialize_Channel(
@@ -197,13 +188,16 @@ void InitializeHardwareRegisters(void)
 	DMA_EMIOSFLAG_4_Dlast,
 	DMA_EMIOSFLAG_4_Eighth_32Bit);
 
-	STM_Set_Timer_Enable(true);
+	/* init DSPI B device */
+	DSPI_B_Initialize_Device();
+	DSPI_B_Enable_Transfer(true);
 
 	/* init can device and ccp can id and channel */
 	FlexCAN_A_Initialize_Device();
 	CCP_Initialize();
 	HAL_CAN_Initialize();
 
+	/* init L9958 device */
 	L9958_Device_Initialize();
 
 	//Prepare Vsep clock
@@ -255,6 +249,15 @@ void InitializeHardwareLast(void)
 	}
 	op_Return = EEPROM_Restore_MFG_NVM_Block();  // restore Pfalsh MFG if it is valid
 	INST_Initialize_Calibration_Pages();
+
+	/* enable QADC DMA time base scan after initialize DMA and QADC */
+	DMA_Enable_Request(DMA_CHANNEL_QADC_FISR1_CFFF_1);
+	DMA_Enable_Request(DMA_CHANNEL_QADC_FISR1_RFDF_1);
+	DMA_Enable_Request(DMA_CHANNEL_QADC_FISR4_CFFF_4);
+	DMA_Enable_Request(DMA_CHANNEL_QADC_FISR4_RFDF_4);
+	/* set up PIT time 5us(ADC FIFO0), 20us(ADC FIFO4) to trigger the adc */
+	PIT_TIMER_Set_Value(PIT_CHANNEL_1, PIT_LOAD_VALUE_20US);
+	PIT_TIMER_Set_Value(PIT_CHANNEL_0, PIT_LOAD_VALUE_5US);
 
 	/* init tpu device, this part must placed behind nvram erase */
 	TPU_Initialize_Device();
