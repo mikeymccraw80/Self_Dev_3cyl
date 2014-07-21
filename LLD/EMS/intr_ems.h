@@ -568,6 +568,18 @@ extern EOBD_PERCENTa   EOBD_CcpDutyCycle;
 // }
 
 /***********************************************************************
+ ********************   ETC                       **********************
+ ***********************************************************************/
+extern EOBD_PERCENTa   EOBD_ETCDutyCycle;
+#define GetEVAP_ETC_DutyCycle()\
+                     (EOBD_ETCDutyCycle)
+INLINE void ConvertIntrParam_ETCDC(void)
+{
+    EOBD_ETCDutyCycle = FixConvert(etc_sig.etc_duty, Percent_Plus_Fraction, EOBD_PERCENTa);
+}
+
+
+/***********************************************************************
  ********************   TPS                       **********************
  ***********************************************************************/
 // extern EOBD_T_PERCENT    EOBD_RawThrotPstn;
@@ -733,6 +745,7 @@ extern EOBD_PERCENTa   EOBD_CcpDutyCycle;
 #define GetVIOS_ACCLUTCH_PowerOK()              ( GetPowerOK(ACClutch) )
 // #define GetVIOS_SVS_PowerOK()                   ( GetPowerOK(SVS) )
 #define GetVIOS_CCP_PowerOK()                   ( GetPowerOK(CCP) )
+#define GetVIOS_ETC_PowerOK()                   ( GetPowerOK(ETC) )
 #define GetVIOS_O2HEATER_PowerOK()              ( GetPowerOK(O2Heater) )
 
 // /******************************************************************************

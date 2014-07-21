@@ -37,6 +37,7 @@
 \* ============================================================================ */
 int16_t                              EOBD_CoolTemp;
 EOBD_PERCENTa                        EOBD_CcpDutyCycle;
+EOBD_PERCENTa                        EOBD_ETCDutyCycle;
 EOBD_VOLTb                           EOBD_Ignition_Voltage;
 EOBD_VOLTb                           EOBD_IgnVoltageAtKeyOn;
 
@@ -95,6 +96,8 @@ void Intr_16msTasks(void)
     ConvertIntrParam_KnockParam();
     // /* Convert CCP solenoid PWM duty cycle */
     // ConvertIntrParam_CcpDC();
+    /* Convert ETC PWM duty cycle */
+    ConvertIntrParam_ETCDC();
     // /* Convert TPS */
     // ConvertIntrParam_TPS();
 }
