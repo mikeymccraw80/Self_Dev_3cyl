@@ -51,6 +51,7 @@ typedef union {
 
 extern l9958_diag_t L9958_Rxd;
 extern l9958_conf_t L9958_Txd;
+#define L9958_HWDIAG_STATUS (L9958_Rxd.Value)
 
 //===========================================================================
 // L9958_Device_Initialize

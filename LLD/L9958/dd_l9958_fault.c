@@ -11,7 +11,7 @@
 #include "dd_l9958.h"
 #include "io_config_l9958.h"
 
-#define L9958_HWDIAG_STATUS (L9958_Rxd.Value)
+//#define L9958_HWDIAG_STATUS (L9958_Rxd.Value)
 
 Fault_Log_T L9958_Fault_Log;
 
@@ -95,7 +95,9 @@ void L9958_FAULT_Diagnose_Update(void)
     }
 
     if (FAULT_Get_Supported_Short_To_Battery(L9958_Fault_Log)) {
-        if (L9958_Msg_Get_Short_to_BAT_in_OFF(L9958_HWDIAG_STATUS))
+        if ((L9958_Msg_Get_Short_to_BAT_in_OFF(L9958_HWDIAG_STATUS)) ||
+            (L9958_Msg_Get_OverCurr_LS1(L9958_HWDIAG_STATUS)) ||
+            (L9958_Msg_Get_OverCurr_LS2(L9958_HWDIAG_STATUS)))
         {
             fault_temp |= FAULT_Set_Occured_Short_To_Battery(fault_temp, true);
         }
@@ -103,7 +105,9 @@ void L9958_FAULT_Diagnose_Update(void)
     }
 
     if (FAULT_Get_Supported_Short_To_Ground(L9958_Fault_Log)) {
-        if (L9958_Msg_Get_Short_to_GND_in_OFF(L9958_HWDIAG_STATUS))
+        if ((L9958_Msg_Get_Short_to_GND_in_OFF(L9958_HWDIAG_STATUS)) ||
+            (L9958_Msg_Get_OverCurr_HS1(L9958_HWDIAG_STATUS)) ||
+            (L9958_Msg_Get_OverCurr_HS2(L9958_HWDIAG_STATUS)))
         {
             fault_temp |= FAULT_Set_Occured_Short_To_Ground(fault_temp, true);
         }

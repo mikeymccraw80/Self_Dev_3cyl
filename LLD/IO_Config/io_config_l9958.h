@@ -12,7 +12,7 @@
                                     L9958_Msg_Set_Voltage_Slew_Control(        0, L9958_VSR_LO                ) | \
                                     L9958_Msg_Set_Current_Slew_Control(        0, L9958_ISR_LO                ) | \
                                     L9958_Msg_Set_Current_Slew_Control_Disable(0, L9958_ISR_DISABLE_FALSE     ) | \
-                                    L9958_Msg_Set_Open_Load_in_ON_Enable(      0, L9958_OPEN_LOAD_ON_DISABLE   ) )
+                                    L9958_Msg_Set_Open_Load_in_ON_Enable(      0, L9958_OPEN_LOAD_ON_ENABLE   ) )
 
 #define L9958_FAULT_LOG_INITIAL    (FAULT_Set_Supported_Open_Circuit(          0, true)   | \
                                     FAULT_Set_Supported_Short_To_Battery(      0, true  ) | \

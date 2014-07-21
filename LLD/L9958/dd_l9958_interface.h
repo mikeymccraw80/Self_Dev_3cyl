@@ -9,6 +9,7 @@
 #include "fault.h"
 #include "dd_l9958_fault.h"
 #include "dd_l9958.h"
+#include "dd_l9958_rxd.h"
 
 //=============================================================================
 // L9958 Interface structures
