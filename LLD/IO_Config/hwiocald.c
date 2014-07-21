@@ -735,4 +735,22 @@ const PowerSourceType K_PowerConfig_Injector =
    IgnitionON
 };
 
+/*
+*| hwiocald.{
+*|    K_PowerConfig_ETC {
+*|       :is_calconst;
+*|       :units = "type";
+*|       :description = "Select the power source for ETC \n"
+*|          "0 = Battery \n"
+*|          "1 = IgnitionON \n"
+*|          "2 = MainPowerRelay \n"
+*|          "3 = FuelPumpRelay ";
+*|    }
+*| }
+*/
+const PowerSourceType K_PowerConfig_ETC =
+{
+   MainPowerRelay
+};
+
 

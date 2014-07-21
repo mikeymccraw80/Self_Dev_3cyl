@@ -134,6 +134,7 @@ void PowerSourceStatus_EveryLoop(void)
 	APPPowerStatus.Bits.SparkCoil = (bitfield16_t) GetVIOS_PowerOK(K_PowerConfig_SparkCoil);
 	APPPowerStatus.Bits.O2Heater  = (bitfield16_t) GetVIOS_PowerOK(K_PowerConfig_O2Heater);
 	APPPowerStatus.Bits.Injector  = (bitfield16_t) GetVIOS_PowerOK(K_PowerConfig_Injector);
+ 	APPPowerStatus.Bits.ETC  = (bitfield16_t) GetVIOS_PowerOK(K_PowerConfig_ETC);
 }
 
 /* ============================================================================ *\

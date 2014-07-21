@@ -54,7 +54,8 @@ typedef union {
 		bitfield16_t SparkCoil       : 1 ;
 		bitfield16_t O2Heater        : 1 ;
 		bitfield16_t Injector        : 1 ;
-		bitfield16_t NotUsed         : 8 ;
+		bitfield16_t ETC        : 1 ;
+		bitfield16_t NotUsed         : 7 ;
 	} Bits;
 	uint16_t Word ;
 }  PowerStatusType ;
@@ -75,6 +76,7 @@ extern  PowerStatusType APPPowerStatus;
 
 #define GetVIOS_PowerOK_FPR()                  ( (bool)APPPowerStatus.Bits.FPR )
 #define GetVIOS_PowerOK_CCP()                  ( (bool)APPPowerStatus.Bits.CCP )
+#define GetVIOS_PowerOK_ETC()                  ( (bool)APPPowerStatus.Bits.ETC )
 #define GetVIOS_PowerOK_FANA()                 ( (bool)APPPowerStatus.Bits.FANA )
 #define GetVIOS_PowerOK_FANB()                 ( (bool)APPPowerStatus.Bits.FANB )
 #define GetVIOS_PowerOK_ACClutch()             ( (bool)APPPowerStatus.Bits.ACClutch )

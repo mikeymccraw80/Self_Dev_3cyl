@@ -73,5 +73,5 @@ extern const PowerSourceType        K_PowerConfig_ACClutch;
 extern const PowerSourceType        K_PowerConfig_SparkCoil;
 extern const PowerSourceType        K_PowerConfig_O2Heater;
 extern const PowerSourceType        K_PowerConfig_Injector;
-
+extern const PowerSourceType        K_PowerConfig_ETC;
 #endif
