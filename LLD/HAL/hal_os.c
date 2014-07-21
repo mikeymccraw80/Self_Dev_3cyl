@@ -28,6 +28,7 @@
 #include "hal_analog.h"
 #include "io_config_siu.h"
 #include "vvtdpapi.h"
+#include "etcdpapi.h"
 #include "condpapi.h"
 
 #define HLS_TASK_2MS_PATTERN (HLS_TASK_5MS   | HLS_TASK_10MS  | \
@@ -167,6 +168,7 @@ void  HAL_OS_5ms_Task(void)
 		MngEOSD_O2_12_Htr125msTasks();
 		MngPRGD_Purge_125msTasks();
 		MngVVTD_125msTasks();
+		MngETCD_125msTasks();
 		MngKNKD_125msTasks();
 		OS_5ms_CNT = 0;
 		MngCOND_ADC0();
