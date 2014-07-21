@@ -6,6 +6,7 @@
 ..\LLD\HWDiag\INJD\injd_type.cdf
 ..\LLD\HWDiag\PRGD\prgd_type.cdf
 ..\LLD\HWDiag\VVTD\vvtd_type.cdf
+..\LLD\HWDiag\ETCD\etcd_type.cdf
 
 -e
 ..\Instrumentation\calsets.c
@@ -19,4 +20,5 @@
 ..\LLD\HWDiag\INJD\injdcald.c
 ..\LLD\HWDiag\PRGD\prgdcald.c
 ..\LLD\HWDiag\VVTD\vvtdcald.c
+..\LLD\HWDiag\ETCD\etcdcald.c
 ..\LLD\SOH\soh_cald.c

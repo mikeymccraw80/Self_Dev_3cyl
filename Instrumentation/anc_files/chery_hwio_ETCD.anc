@@ -1,0 +1,149 @@
+/*============================================================================*/
+/*                                                                            */
+/* ETCD Subsystem APPLICATION ANCILLARY FILE                                  */
+/*                                                                            */
+/*============================================================================*/
+
+*-etcdmall.ScETCD_SampleCntr{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ETCSMPLCNT";
+*-  variable_location.symbol = etcdmall.ScETCD_SampleCntr;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "ETC Output diag sample counter";
+*-}
+
+*-etcdmall.ScETCD_FailCntr{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ETCFAILCNT";
+*-  variable_location.symbol = etcdmall.ScETCD_FailCntr;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "ETC Output diag fail counter";
+*-}
+
+
+*-etcdmall.SbETCD_DisableFltPresent{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ETCSLPRET";
+*-  variable_location.symbol = etcdmall.SbETCD_DisableFltPresent;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "ETC Output diag disable key on fault";
+*-}
+
+*-etcdmall.SbETCD_EnblCritMet{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ETCENLCRMT";
+*-  variable_location.symbol = etcdmall.SbETCD_EnblCritMet;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "ETC Output diag system enable criteria met";
+*-}
+
+*-etcdmall.SbETCD_TestComplete{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ETCTSTCMPL";
+*-  variable_location.symbol = etcdmall.SbETCD_ETC_TestComplete;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "ETC Output diag system test complete";
+*-}
+
+*-etcdmall.SbETCD_TestFailed{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ETCTSTFAIL";
+*-  variable_location.symbol = etcdmall.SbETCD_TestFailed;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "ETC Output diag system test fail";
+*-}
+
+*-etcdmall.SbETCD_TestFailedHi{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ETCSHHITF";
+*-  variable_location.symbol = etcdmall.SbETCD_TestFailedHi;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "ETC Output diag system short high test fail";
+*-}
+
+*-etcdmall.SbETCD_TestFailedLo{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ETCSHLOTF";
+*-  variable_location.symbol = etcdmall.SbETCD_TestFailedLo;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "ETC Output diag system short low test fail";
+*-}
+
+*-etcdmall.SbETCD_ShortLoCritMet{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ETCSHLOMET";
+*-  variable_location.symbol = etcdmall.SbETCD_ShortLoCritMet;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "ETC Output diag system test low fail condition meet";
+*-}
+
+*-etcdmall.SbETCD_ShortHiCritMet{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ETCSHHIMET";
+*-  variable_location.symbol = etcdmall.SbETCD_ShortHiCritMet;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "ETC Output diag system test high fail condition meet";
+*-}
+
+*-EOBD_ETCDutyCycle{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ETCDC";
+*-  variable_location.symbol = EOBD_ETCDutyCycle;
+*-  ds_scaling_unit          = "% Percent";
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.003051757";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "ETC OUT PWM percentage ";
+*-}
+
+/*============================================================================*/
+/* CHANGE LOG                                                                 */
+/*                                                                            */
+/*                                                                            */
+/* REV.   DATE     USER  RSM    DESCRIPTION                                   */
+/*                               */
+/*                                                                            */
+/* end of module                                                              */
+/*                                                                            */
+/*============================================================================*/
