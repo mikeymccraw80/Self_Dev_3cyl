@@ -1,0 +1,89 @@
+/*============================================================================*/
+/*                                                                            */
+/* CAND Subsystem APPLICATION ANCILLARY FILE                                  */
+/*                                                                            */
+/*============================================================================*/
+
+*-candmall.ScCAND_GCU_CommSampleCntr{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CANSMPLCNT";
+*-  variable_location.symbol = candmall.ScCAND_GCU_CommSampleCntr;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "CAN diag sample counter";
+*-}
+
+*-candmall.ScCAND_GCU_CommFailCntr{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CANFAILCNT";
+*-  variable_location.symbol = candmall.ScCAND_GCU_CommFailCntr;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "CAN diag fail counter";
+*-}
+
+
+*-candmall.SbCAND_GCU_CommEnblCritMet{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CANENLCRMT";
+*-  variable_location.symbol = candmall.SbCAND_GCU_CommEnblCritMet;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "CAN diag enable criteria met";
+*-}
+
+*-candmall.SbCAND_GCU_CommTestComplete{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CANTSTCMPL";
+*-  variable_location.symbol = candmall.SbCAND_GCU_CommCAN_TestComplete;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "CAN diag test complete";
+*-}
+
+*-candmall.SbCAND_GCU_CommTestFailed{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CANTSTFAIL";
+*-  variable_location.symbol = candmall.SbCAND_GCU_CommTestFailed;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "CAN diag test fail";
+*-}
+
+*-candmall.SbCAND_GCU_CommFailCritMet{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CANTSTFMET";
+*-  variable_location.symbol = candmall.SbCAND_GCU_CommFailCritMet;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "CAN diag test fail condition meet";
+*-}
+
+/*============================================================================*/
+/* CHANGE LOG                                                                 */
+/*                                                                            */
+/*                                                                            */
+/* REV.   DATE     USER  RSM    DESCRIPTION                                   */
+/*                               */
+/*                                                                            */
+/* end of module                                                              */
+/*                                                                            */
+/*============================================================================*/
