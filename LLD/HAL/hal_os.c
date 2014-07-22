@@ -23,9 +23,11 @@
 #include "estdpapi.h"
 #include "epsdpapi.h"
 #include "knodpapi.h"
+#include "candpapi.h"
 #include "es_knock.h"
 #include "hal_soh.h"
 #include "hal_analog.h"
+#include "hal_can.h"
 #include "io_config_siu.h"
 #include "vvtdpapi.h"
 #include "etcdpapi.h"
@@ -230,6 +232,8 @@ void  HAL_OS_10ms_Task(void)
 	IO_OS_Perform_Reset_Task();
 	/* update analog diagnose */
 	HAL_Analog_ADC_Diag_10ms();
+	/* update can network diagnose */
+	HAL_CAN_Diag_Network_10ms();
 
 	/* update engine state machine */
 	UpdateVIOS_EngSpdThrsh();
@@ -242,6 +246,7 @@ void  HAL_OS_10ms_Task(void)
 	MngESTD_7p81msTasks();
 	MngEPSD_Crank7p81msTasks();
     MngCOND_AD_InputResp15p6msTasksA();
+	MngCAND_31p2msTCU_Tasks();
 }
 
 //=============================================================================
@@ -329,7 +334,7 @@ void HAL_OS_Init_Task(void)
 	IO_Analog_1ms_Update();
 	IO_Analog_10ms_Update();
 	HLS_ini2();
-       //knock init
+	//knock init
 	Calculate_Esc_Input_10ms();
 	InitialiseESC() ;
 
