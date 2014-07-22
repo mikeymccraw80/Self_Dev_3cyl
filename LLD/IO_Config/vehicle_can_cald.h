@@ -23,8 +23,16 @@ extern const bool KbHwio_CheryCanID2C1_Enable;
 extern const bool KbHwio_CheryCanID370_Enable;
 extern const bool KbHwio_CheryCanID378_Enable;
 extern const bool KbHwio_CheryCanID501_Enable;
-extern const bool KbHwio_CheryCanID623_Enable ;
+extern const bool KbHwio_CheryCanID623_Enable;
 extern const bool KbHwio_CheryCanID7C1_Enable;
+
+/* ecu receive cam msg from other vehicle ecus */
+extern const bool KbHwio_CheryCanID1AE_Enable;
+extern const bool KbHwio_CheryCanID2E9_Enable;
+extern const bool KbHwio_CheryCanID310_Enable;
+extern const bool KbHwio_CheryCanID391_Enable;
+extern const bool KbHwio_CheryCanID3C0_Enable;
+extern const bool KbHwio_CheryCanID430_Enable;
 
 #endif
 

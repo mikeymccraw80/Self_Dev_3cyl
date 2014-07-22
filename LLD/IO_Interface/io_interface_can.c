@@ -11,6 +11,7 @@
  * Exported Macro Define
 \* ==========================================================================*/
 // Receive CAN Messages ID
+#define CHERY_CANR_1AE_ID                          0x1ae
 #define CHERY_CANR_2E9_ID                          0x2e9
 #define CHERY_CANR_310_ID                          0x310
 #define CHERY_CANR_391_ID                          0x391

@@ -7,7 +7,7 @@
 #include "dd_flexcan_interface.h"
 #include "io_config_flexcan.h"
 #include "ccp2conf.h"
-
+#include "hal_can.h"
 
 /* ============================================================================ *\
  * Local preprocessor #define commands.
@@ -21,6 +21,9 @@
  */
 uint8_t  CAN_Message_RX_DATA[FLEXCAN_DATA_MAX_BYTES];
 uint32_t CAN_Message_RX_ID;
+
+/* Used to diagnostic can meter */
+CAN_RECEIVE_ERR_TYPE VsCAN_Receive_Err;
 
 //=============================================================================
 // HAL_CAN_RX_B00_Config

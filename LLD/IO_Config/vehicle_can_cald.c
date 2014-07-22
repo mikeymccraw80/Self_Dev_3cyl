@@ -166,4 +166,74 @@ const bool    KbHwio_CheryCanID623_Enable = false ;
 
 const bool    KbHwio_CheryCanID7C1_Enable = false ;
 
+/*
+*| vehicle_can_cald.{
+*|    KbHwio_CheryCanID1AE_Enable {
+*|       :is_calconst;
+*|       :units = "BOOLEAN";
+*|       :description = "enable receive can ID 0x1ae";
+*|    }
+*|   }
+*/
 
+const bool    KbHwio_CheryCanID1AE_Enable = false ;
+
+/*
+*| vehicle_can_cald.{
+*|    KbHwio_CheryCanID2E9_Enable {
+*|       :is_calconst;
+*|       :units = "BOOLEAN";
+*|       :description = "enable receive can ID 0x2e9";
+*|    }
+*|   }
+*/
+
+const bool    KbHwio_CheryCanID2E9_Enable = false ;
+
+/*
+*| vehicle_can_cald.{
+*|    KbHwio_CheryCanID310_Enable {
+*|       :is_calconst;
+*|       :units = "BOOLEAN";
+*|       :description = "enable receive can ID 0x310";
+*|    }
+*|   }
+*/
+
+const bool    KbHwio_CheryCanID310_Enable = false ;
+
+/*
+*| vehicle_can_cald.{
+*|    KbHwio_CheryCanID391_Enable {
+*|       :is_calconst;
+*|       :units = "BOOLEAN";
+*|       :description = "enable receive can ID 0x391";
+*|    }
+*|   }
+*/
+
+const bool    KbHwio_CheryCanID391_Enable = false ;
+
+/*
+*| vehicle_can_cald.{
+*|    KbHwio_CheryCanID3C0_Enable {
+*|       :is_calconst;
+*|       :units = "BOOLEAN";
+*|       :description = "enable receive can ID 0x3c0";
+*|    }
+*|   }
+*/
+
+const bool    KbHwio_CheryCanID3C0_Enable = false ;
+
+/*
+*| vehicle_can_cald.{
+*|    KbHwio_CheryCanID430_Enable {
+*|       :is_calconst;
+*|       :units = "BOOLEAN";
+*|       :description = "enable receive can ID 0x430";
+*|    }
+*|   }
+*/
+
+const bool    KbHwio_CheryCanID430_Enable = false ;
