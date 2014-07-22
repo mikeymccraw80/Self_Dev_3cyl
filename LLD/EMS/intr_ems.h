@@ -826,8 +826,8 @@ INLINE TeEST_CIRCUIT_STATE GetAPI_EST_CircuitState(uint8_t active_estline)
 // /******************************************************************************
  // * for Chery Can Meters 
  // ******************************************************************************/
-// extern bool EOBD_CANH_Msg_NotReceived;
-// #define ReadCANH_Msg_NotReceived()              (EOBD_CANH_Msg_NotReceived)
+extern bool EOBD_CANH_Msg_NotReceived;
+#define ReadCANH_Msg_NotReceived()              (EOBD_CANH_Msg_NotReceived)
 
 // /******************************************************************************
  // * for Chery Can Meters 

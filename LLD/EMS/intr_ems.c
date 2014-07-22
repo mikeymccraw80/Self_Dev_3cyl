@@ -27,6 +27,8 @@
 \* ============================================================================ */
 #include "reuse.h"
 #include "intr_ems.h"
+#include "hal_can.h"
+#include "vehicle_can_cald.h"
 
 /* ============================================================================ *\
  * Exported preprocessor #define commands.
@@ -45,6 +47,7 @@ kPa_W_EOBD                           EOBD_Vacuum_W_;
 uint16_t                             EOBD_ADESC[CcSYST_NUM_OF_CYLINDERS] ;                  /* raw data */
 uint16_t                             EOBD_IntegratorAverage[CcSYST_NUM_OF_CYLINDERS] ;      /* filtered value */
 T_DECIBELS                           EOBD_ESCGain[CcSYST_NUM_OF_CYLINDERS];
+bool                                 EOBD_CANH_Msg_NotReceived;
 
 
 void Init_IntrParameter(void)
@@ -100,6 +103,12 @@ void Intr_16msTasks(void)
     ConvertIntrParam_ETCDC();
     // /* Convert TPS */
     // ConvertIntrParam_TPS();
+    EOBD_CANH_Msg_NotReceived = ((KbHwio_CheryCanID1AE_Enable&&(bool)VsCAN_Receive_Err.CAN_ID2E9_ERR) &&
+                                 (KbHwio_CheryCanID2E9_Enable&&(bool)VsCAN_Receive_Err.CAN_ID2E9_ERR) &&
+                                 (KbHwio_CheryCanID310_Enable&&(bool)VsCAN_Receive_Err.CAN_ID310_ERR) &&
+                                 (KbHwio_CheryCanID391_Enable&&(bool)VsCAN_Receive_Err.CAN_ID391_ERR) &&
+                                 (KbHwio_CheryCanID3C0_Enable&&(bool)VsCAN_Receive_Err.CAN_ID3C0_ERR) &&
+                                 (KbHwio_CheryCanID430_Enable&&(bool)VsCAN_Receive_Err.CAN_ID430_ERR) );
 }
 
 /* ============================================================================ *\
