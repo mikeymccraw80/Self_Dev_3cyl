@@ -53,6 +53,7 @@ extern const T_MILLISECONDSb KfSPRK_t_CrankMaxDwellInit ;
 extern const   bool        KbHWIO_ELOAD1_Active_High;
 extern const   bool        KbHWIO_ELOAD2_Active_High;
 extern const   bool        KbHWIO_BRKLMP_Active_High;
+extern const   bool       KbHWIO_EnableLogMaxHWWDTime;
 
 extern const   bool        K_MainPowerRelayPresent;
 

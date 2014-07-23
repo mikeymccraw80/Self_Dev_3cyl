@@ -171,10 +171,11 @@ extern const SIU_PCR_T SIU_INITIAL_PCR_116;
 //TODO
 extern const SIU_PCR_T SIU_INITIAL_PCR_117;
 #define  HAL_GPIO_TODO_CHANNEL       SIU_GPIO_CHANNEL_117
+
 //etpu04
 //WD
 extern const SIU_PCR_T SIU_INITIAL_PCR_118;
-
+#define  HAL_GPIO_WD_CHANNEL       SIU_GPIO_CHANNEL_118
 
 //etpu05
 //The SIU_PCR119 register controls the function, direction, and static electrical attributes of the

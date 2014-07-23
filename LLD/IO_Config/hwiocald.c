@@ -448,6 +448,18 @@ const   bool        KbHWIO_BRKLMP_Active_High     = true;
 
 /*
 *| hwiocald.{
+*|   KbHWIO_EnableLogMaxHWWDTime {
+*|     : is_calconst;
+*|     : description = "To enable Log Max HWWD toggle high state Interval function in HWIO layer.";
+*|     : type = types.size2_0to1;
+*|     : units = "boolean";
+*|   }
+*| }
+*/
+const bool       KbHWIO_EnableLogMaxHWWDTime  =  false;
+
+/*
+*| hwiocald.{
 *|    K_MainPowerRelayPresent {
 *|       : is_calconst;
 *|       : description = "Main Power Relay is present";
