@@ -1098,6 +1098,7 @@ void SOH_ETC_Initialize(bool power_on_reset_status)
     Soh_CnRStatus.Word = HAL_SOH_CnR_Get_Status(false);
     //SIU.GPDO[129].F.PDO =1; //VGIS, for test code
 
+#if 0
     /* disable fuel, spark and ETC if fault is present */
     if (Soh_FaultLogNVM.Word != SOH_TEST_NO_ERR)
     {
@@ -1107,6 +1108,7 @@ void SOH_ETC_Initialize(bool power_on_reset_status)
         Soh_CnRValue.Bits.FSE_DisReq = true;
         HAL_SOH_CnR_Set_Response(Soh_CnRValue.Bits.FSE_DisReq, Soh_CnRValue.Bits.Response);
     }
+#endif
 
     time = TPU_TIMER_Get_Value_Channel(0,SOH_INTERNAL_TIME_BASE_CONFIG);
     Soh_LstIrq_Time = time; 
