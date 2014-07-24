@@ -26,6 +26,7 @@
 #include "hal_eeprom_nvm.h"
 #include "dd_swt_interface.h"
 #include "hal_ucram.h"
+#include "hal_os.h"
 
 /*=============================================================================
  * Marco Definitions
@@ -573,7 +574,7 @@ static void EEP_Operation_CALLBACK(void)
     //fash key on fucntion can be implemented here
 //#ifndef HWTEST
  SWT_Service_WatchDog(); 
-   // ToggleHWIO_WatchDog();
+ ToggleHWIO_WatchDog();
 //#endif
 }
 /*=============================================================================

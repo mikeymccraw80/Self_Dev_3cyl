@@ -1,4 +1,3 @@
-
 //=============================================================================
 // include files
 //=============================================================================
@@ -18,6 +17,7 @@
 #include "soh.h"
 #include "dd_vsep_est_select.h"
 #include "intr_ems.h"
+#include "hal_os.h"
 
 
 //=============================================================================
@@ -25,24 +25,24 @@
 //=============================================================================
 void OS_Startup_Hook(void)
 {
-    HAL_GPIO_SET_TODO_Enable(true);
+	HAL_GPIO_SET_TODO_Enable(true);
 
-    HAL_OS_Init_Task();
+	HAL_OS_Init_Task();
 
-    KeywordExecutive(CwKW2000_Initializes);
+	KeywordExecutive(CwKW2000_Initializes);
 
-    /* update ems initial parameters */
-    Init_IntrParameter();
+	/* update ems initial parameters */
+	Init_IntrParameter();
 
-    /* init power source status */
-    InitializePowerSource();
+	/* init power source status */
+	InitializePowerSource();
 
-    /* init soh part, this part must placed behind nvram erase */
-    SOH_ETC_Initialize(true);
+	/* init soh part, this part must placed behind nvram erase */
+	SOH_ETC_Initialize(true);
 
-    // set up os loop time 1ms
-    PIT_TIMER_Set_Value( PIT_CHANNEL_RTI, RTI_LOAD_VALUE_1MS);
-    PIT_INTERRUPT_Set_Enable(PIT_CHANNEL_RTI, true);
+	// set up os loop time 1ms
+	PIT_TIMER_Set_Value( PIT_CHANNEL_RTI, RTI_LOAD_VALUE_1MS);
+	PIT_INTERRUPT_Set_Enable(PIT_CHANNEL_RTI, true);
 }
 //=============================================================================
 //MngOSTK_1msTasks
@@ -58,7 +58,7 @@ void MngOSTK_1msTasks(void)
 //=============================================================================
 void MngOSTK_2msTasks(void)
 {
-    HAL_OS_2ms_Task();
+	HAL_OS_2ms_Task();
 }
 
 //=============================================================================
@@ -66,7 +66,7 @@ void MngOSTK_2msTasks(void)
 //=============================================================================
 void MngOSTK_5msTasks(void)
 {
-    HAL_OS_5ms_Task();
+	HAL_OS_5ms_Task();
 }
 
 //=============================================================================
@@ -75,62 +75,65 @@ void MngOSTK_5msTasks(void)
 static int soh_service_cnt_30ms;
 void MngOSTK_10msTasks(void)
 {
-    /* call device driver layer functions */
-    VSEP_SPI_SCHEDULER_10MS();
-    VSEP_Fault_Task_10MS();
-    L9958_FAULT_Diagnose_Update();
+	/* feed tle4471 watchdog */
+	ToggleHWIO_WatchDog();
+
+	/* call device driver layer functions */
+	VSEP_SPI_SCHEDULER_10MS();
+	VSEP_Fault_Task_10MS();
+	L9958_FAULT_Diagnose_Update();
 
 #ifndef ENABLE_ETC_SOH_MODULE
-    SWT_Service_WatchDog();
-    /* call soh service */
-    soh_service_cnt_30ms++;
-    if (soh_service_cnt_30ms == 3) {
-        soh_service_cnt_30ms=0;
-        SOH_VSEP_CR_Service();
-    }
+	SWT_Service_WatchDog();
+	/* call soh service */
+	soh_service_cnt_30ms++;
+	if (soh_service_cnt_30ms == 3) {
+		soh_service_cnt_30ms=0;
+		SOH_VSEP_CR_Service();
+	}
 #endif
-    
-    /* call hal layer callback functions */
-    HAL_OS_10ms_Task(); 
 
-    /* CCP 10ms Trigger */
-    CCP_Trigger_Event_Channel( 10 );
-    /* update kw2000 state machine */
-    KeywordExecutive(CwKW2000_RunMode);
+	/* call hal layer callback functions */
+	HAL_OS_10ms_Task();
 
-    /* update ignition status */
-    UpdateIgnitionState_10MS();
+	/* CCP 10ms Trigger */
+	CCP_Trigger_Event_Channel( 10 );
+	/* update kw2000 state machine */
+	KeywordExecutive(CwKW2000_RunMode);
 
-    /* update power source status */
-    PowerSourceStatus_EveryLoop();
+	/* update ignition status */
+	UpdateIgnitionState_10MS();
+
+	/* update power source status */
+	PowerSourceStatus_EveryLoop();
 }
 
 //=============================================================================
 // MngOSTK_100msTasks
-//=============================================================================	
+//=============================================================================
 static uint16_t test_cnt_500ms;
 void MngOSTK_100msTasks(void)
 {
-    FI_Update_Count_Time();
-    HAL_OS_100ms_Task();
-    /* CCP 125ms Task 0 Trigger */
-    CCP_Trigger_Event_Channel( 11 );
-    test_cnt_500ms++;
-    if (test_cnt_500ms == 5) {
-        test_cnt_500ms=0;
-        /* CCP 500ms Task 0 Trigger */
-        CCP_Trigger_Event_Channel( 25 );
-    }
-    
-    /* update ems parameters */
-    Intr_16msTasks();
+	FI_Update_Count_Time();
+	HAL_OS_100ms_Task();
+	/* CCP 125ms Task 0 Trigger */
+	CCP_Trigger_Event_Channel( 11 );
+	test_cnt_500ms++;
+	if (test_cnt_500ms == 5) {
+		test_cnt_500ms=0;
+		/* CCP 500ms Task 0 Trigger */
+		CCP_Trigger_Event_Channel( 25 );
+	}
+
+	/* update ems parameters */
+	Intr_16msTasks();
 }
 //=============================================================================
 // OS_Free_Time_Tasks_Hook
 //=============================================================================
 void OS_Free_Time_Tasks_Hook(void)
 {
-    CCP_Periodic_Task();
+	CCP_Periodic_Task();
 }
 
 //=============================================================================
@@ -139,9 +142,9 @@ void OS_Free_Time_Tasks_Hook(void)
 void OS_TimeBasedTask1ms(void)
 {
 #ifdef ENABLE_ETC_SOH_MODULE
-    SOH_ETC_Update_RTI_Array();
+	SOH_ETC_Update_RTI_Array();
 #endif
-    HAL_OS_1ms_TimeBasedTask();
+	HAL_OS_1ms_TimeBasedTask();
 }
 
 //=============================================================================
@@ -158,7 +161,7 @@ void OS_TimeBasedTask2ms(void)
 //=============================================================================
 void OS_TimeBasedTask5ms(void)
 {
-    CRANK_EngineStall_PerioCheck();   
+	CRANK_EngineStall_PerioCheck();
 }
 
 
@@ -175,11 +178,11 @@ void OS_TimeBasedTask10ms(void)
 //=============================================================================
 void OS_LoResTasks_Hook(void)
 {
-    /* call the interface callback, spark fuel... */
-    HAL_OS_SYN_Task();
+	/* call the interface callback, spark fuel... */
+	HAL_OS_SYN_Task();
 
-    /* CCP LoRes Trigger */
-    CCP_Trigger_Event_Channel( 0 );
+	/* CCP LoRes Trigger */
+	CCP_Trigger_Event_Channel( 0 );
 }
 
 //=============================================================================
@@ -187,14 +190,14 @@ void OS_LoResTasks_Hook(void)
 //=============================================================================
 void OS_ToothInt_Hook(void)
 {
-    HAL_OS_ToothInt_Hook(); 
+	HAL_OS_ToothInt_Hook();
 }
 //=============================================================================
 // OS_CAM_W_Hook
 //=============================================================================
 void OS_CAM_W_Hook(void)
 {
-    HAL_OS_CAM_W_Hook();
+	HAL_OS_CAM_W_Hook();
 }
 
 
@@ -203,7 +206,7 @@ void OS_CAM_W_Hook(void)
 //=============================================================================
 void OS_CAM_X_Hook(void)
 {
-    HAL_OS_CAM_X_Hook();
+	HAL_OS_CAM_X_Hook();
 }
 
 //=============================================================================
@@ -211,7 +214,7 @@ void OS_CAM_X_Hook(void)
 //=============================================================================
 void OS_CAM_READ_Hook(void)
 {
-    HAL_OS_CAM_READ_Hook();
+	HAL_OS_CAM_READ_Hook();
 }
 
 //=============================================================================
@@ -219,7 +222,7 @@ void OS_CAM_READ_Hook(void)
 //=============================================================================
 void OS_Engine_Stall_Reset(void)
 {
-    HAL_OS_Engine_Stall_Reset();
+	HAL_OS_Engine_Stall_Reset();
 }
 
 //=============================================================================
@@ -227,7 +230,7 @@ void OS_Engine_Stall_Reset(void)
 //=============================================================================
 void OS_Engine_Start_Crank(void)
 {
-    HAL_OS_Engine_Start_Crank();
+	HAL_OS_Engine_Start_Crank();
 }
 
 //=============================================================================
@@ -235,22 +238,22 @@ void OS_Engine_Start_Crank(void)
 //=============================================================================
 void OS_Engine_First_Gap(void)
 {
-    HAL_OS_Engine_First_Gap();
+	HAL_OS_Engine_First_Gap();
 }
 //=============================================================================
 // OS_KnockEvntTasks_Hook
 //=============================================================================
- void OS_KnockEvntTasks_Hook(void) 
+void OS_KnockEvntTasks_Hook(void)
 {
-   HAL_OS_KNOCK_CYL_EVENT();
+	HAL_OS_KNOCK_CYL_EVENT();
 }
 
 //=============================================================================
 // OS_WinGateTasks_Hook
 //=============================================================================
- void OS_WinGateTasks_Hook(void) 
+void OS_WinGateTasks_Hook(void)
 {
-   HAL_OS_KNOCK_WINGATE_OFF();
+	HAL_OS_KNOCK_WINGATE_OFF();
 }
 
 //=============================================================================
@@ -258,9 +261,5 @@ void OS_Engine_First_Gap(void)
 //=============================================================================
 OS_Powerdown_Callback(void)
 {
-    HAL_OS_Powerdown_Callback();
+	HAL_OS_Powerdown_Callback();
 }
-
- 
-
-

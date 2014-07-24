@@ -205,6 +205,9 @@ void InitializeHardwareRegisters(void)
 	HAL_GPIO_SET_GEN_Enable(false);  // Enable FSE pin
 	HAL_GPIO_SET_FSE_Enable(false);  // Enable the IOEN line to enable the IO pins
 	VSEP_Initialize_Device();
+
+	/* feed tle4471 watchdog */
+	SetHWIO_ServiceExtCOP_1Time();
 }
 
 //=============================================================================
@@ -250,6 +253,9 @@ void InitializeHardwareLast(void)
 	op_Return = EEPROM_Restore_MFG_NVM_Block();  // restore Pfalsh MFG if it is valid
 	INST_Initialize_Calibration_Pages();
 
+	/* feed tle4471 watchdog */
+	SetHWIO_ServiceExtCOP_1Time();
+
 	/* enable QADC DMA time base scan after initialize DMA and QADC */
 	DMA_Enable_Request(DMA_CHANNEL_QADC_FISR1_CFFF_1);
 	DMA_Enable_Request(DMA_CHANNEL_QADC_FISR1_RFDF_1);
@@ -263,6 +269,9 @@ void InitializeHardwareLast(void)
 	TPU_Initialize_Device();
 	InitializeComplexIO();
 	FI_Initialize();
+
+	/* feed tle4471 watchdog */
+	SetHWIO_ServiceExtCOP_1Time();
 }
 
 

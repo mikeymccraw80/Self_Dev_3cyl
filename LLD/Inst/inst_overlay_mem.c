@@ -2,6 +2,7 @@
 #include "inst_config.h"
 #include "inst_overlay_mem.h"
 #include "dd_flash_interface.h"
+#include "hal_os.h"
 
 
 
@@ -10,7 +11,7 @@ static void INST_Operation_CALLBACK(void)
 {
     // operation callbak
 
-    //ToggleHWIO_WatchDog();
+     ToggleHWIO_WatchDog();
      SWT_Service_WatchDog(); 
 }
 
