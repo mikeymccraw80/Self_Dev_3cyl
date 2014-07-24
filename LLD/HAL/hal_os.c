@@ -3,6 +3,8 @@
 //=============================================================================
 #include "hal_os.h"
 #include "dd_pit_interface.h"
+#include "dd_swt_interface.h"
+#include "dd_tle4471.h"
 #include "HLS.h"
 #include "io_interface_eng.h"
 #include "io_interface_vcpc.h"
@@ -704,4 +706,39 @@ void Sinit_ShutdownInProcessToKeyOff(void)
 void Sinit_ShutdownInProcessToKeyOn(void)
 {
     InitEPSD_CrankRstToKeyOn();
+}
+
+/*****************************************************************************
+*                                                                            *
+* Function:             ToggleHWIO_WatchDog                                  *
+* Description:          This procedure service the external watch dog        *
+*                                                                            *
+* Parameters:           None                                                 *
+* Return:               None                                                 *
+******************************************************************************/
+void ToggleHWIO_WatchDog( void )
+{
+    TLE4471_WD_Toggle_Immediate();
+}
+
+void ToggleHWIO_WatchDog_ExceedTimer( void )
+{
+    TLE4471_WD_Toggle_Exceed_3ms();
+}
+
+void SetHWIO_ServiceExtCOP_1Time (void) 
+{
+   TLE4471_WD_Feeding();
+}
+
+void ToggleHWIO_WatchDog_In_Critical_Section( void )
+{
+   SWT_Service_WatchDog(); 
+   SetHWIO_ServiceExtCOP_1Time();
+}
+
+void ToggleHWIO_WatchDogDuringInit( void )
+{
+   SWT_Service_WatchDog(); 
+   SetHWIO_ServiceExtCOP_1Time();
 }

@@ -128,5 +128,14 @@ void Sinit_ShutdownInProcessToKeyOn(void);
 void Sinit_StallToCrank(void);
 void Sinit_StallToPowerOffDelay(void);
 
+//=============================================================================
+// ToggleHWIO_WatchDog related APIs
+//=============================================================================
+void ToggleHWIO_WatchDog(void);
+void ToggleHWIO_WatchDog_ExceedTimer(void);
+void SetHWIO_ServiceExtCOP_1Time(void);
+void ToggleHWIO_WatchDogDuringInit(void);
+void ToggleHWIO_WatchDog_In_Critical_Section(void);
+
 #endif
 

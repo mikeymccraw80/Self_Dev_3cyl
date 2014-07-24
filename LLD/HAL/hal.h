@@ -7,14 +7,14 @@
 //=============================================================================
 // define
 //=============================================================================
-  typedef signed char        SHORTINT;
-  typedef unsigned char      BYTE;
-  typedef short signed int   INTEGER;
-  typedef short unsigned int WORD;
-  typedef long signed int    LONGINT;
-  typedef long unsigned int  LONGWORD;
-  typedef signed int         MEDINT;
-  typedef unsigned int       MEDWORD;
+typedef signed char        SHORTINT;
+typedef unsigned char      BYTE;
+typedef short signed int   INTEGER;
+typedef short unsigned int WORD;
+typedef long signed int    LONGINT;
+typedef long unsigned int  LONGWORD;
+typedef signed int         MEDINT;
+typedef unsigned int       MEDWORD;
 
 /* range: [0, 255] */
 typedef BYTE               T_COUNT_BYTE;
