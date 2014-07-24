@@ -75,4 +75,6 @@ extern const PowerSourceType        K_PowerConfig_SparkCoil;
 extern const PowerSourceType        K_PowerConfig_O2Heater;
 extern const PowerSourceType        K_PowerConfig_Injector;
 extern const PowerSourceType        K_PowerConfig_ETC;
+
+extern const T_COUNT_BYTE           KySYST_BrainDeadBOOT_RecovEnbld;
 #endif

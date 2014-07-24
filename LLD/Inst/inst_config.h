@@ -13,7 +13,7 @@
 #define CSA_FILL_PATTERN 0xAA55AA55
 #define USTACK_FILL_PATTERN 0xB1B1
 
-#define APP_CAL_PRESENCE_PATTERN                       (0x6A6A)
+#define APP_CAL_PRESENCE_PATTERN                       (0x3223)
 
 
 #define Cw_SOFTWARE_LEVEL       0x03

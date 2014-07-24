@@ -765,4 +765,24 @@ const PowerSourceType K_PowerConfig_ETC =
    MainPowerRelay
 };
 
-
+/*
+*| hwiocald.{
+*|   KySYST_BrainDeadBOOT_RecovEnbld
+*|   {
+*|     : is_calconst;
+*|     : description = "If TRUE, then check for specific input conditions will "
+*| "occur within BOOT CODE at key-up.  If input conditions are met, BOOT CODE "
+*| "will not vector to application, but will stay in BOOT CODE.  This allows "
+*| "recovery from brain-dead state using flash tools which interface directly "
+*| "with BOOT CODE. "
+*| "Value To Calibrate Out: 00 = FALSE "
+*| "Engineering Values: $AA = TRUE, (not $AA) = FALSE ";
+*|     : type = types.t_count_byte;
+*|     : units = "count";
+*|   }
+*| }
+*/
+#pragma section SECTION_BRAIN_DEAD_CAL address=0x0003FFFA
+#pragma use_section SECTION_BRAIN_DEAD_CAL KySYST_BrainDeadBOOT_RecovEnbld
+const T_COUNT_BYTE KySYST_BrainDeadBOOT_RecovEnbld = 0xAA;
+#pragma section

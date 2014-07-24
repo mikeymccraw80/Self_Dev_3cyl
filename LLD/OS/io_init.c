@@ -20,6 +20,7 @@
 #include "io_config_pit.h"
 #include "hal_emulated_eeprom.h"
 #include "dd_l9958.h"
+#include "dd_tle4471.h"
 #include "dd_vsep_est_select.h"
 #include "dd_stm_interface.h"
 #include "hal_os.h"
@@ -110,6 +111,9 @@ void InitializeHardwareRegisters(void)
 	SIU_Initialize_Device();
 	SIU_GPIO_Initialize_Device();
 
+	/* feed tle4471 watchdog */
+	InitRamVariable_EnableLogMaxHWWDTime();
+	SetHWIO_ServiceExtCOP_1Time();
 	INTC_Initialize_Device();
 
 	/* init STM device */
