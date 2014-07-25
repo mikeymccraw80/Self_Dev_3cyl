@@ -1,7 +1,6 @@
-
+#include "io_type.h"
 #include "io_config_siu.h"
 #include "io_config_fmpll.h"
-
 
 
 //=============================================================================
@@ -417,6 +416,29 @@ const SIU_PCR_T SIU_INITIAL_PCR_110 =
       SIU_GPIO_PULL_UP_Down_DISABLED,  //WPE  Weak pullup/down enable
       SIU_GPIO_PULL_DOWN  //WPS  Weak pullup/down select
 };
+
+//=============================================================================
+// SIU_GPIO_113 - 
+//=============================================================================
+const SIU_PCR_T SIU_INITIAL_PCR_113_LCI = 
+{
+      SIU_GPIO_PIN_ASSIGNMENT_PRIMARY_0,
+      SIU_GPIO_BUFFER_OUT_ENABLED, //OBE  Output buffer enable
+      SIU_GPIO_BUFFER_IN_DISABLED,   //IBE    Input buffer enable
+      SIU_GPIO_DRIVE_STRENGTH_10pF,
+      SIU_GPIO_OPEN_DRAIN_DISABLED,
+      SIU_GPIO_INPUT_HYSTERESIS_DISABLED,
+      SIU_GPIO_SLEW_RATE_MINIMUM,
+      SIU_GPIO_PULL_UP_Down_DISABLED,
+      SIU_GPIO_PULL_DOWN
+};
+
+const SIU_GPDO_T SIU_INITIAL_PDO_113_LCI =
+{
+      IO_INACTIVE
+};
+
+
 
 //The SIU_PCR114 register controls the function, direction, and static electrical attributes of the
 //eTPU_A[0]_eTPU_A[12]_eTPU_A[19]_GPIO[114] pin.
@@ -1422,6 +1444,13 @@ const SIU_PCR_T SIU_INITIAL_PCR_80_LCI =
       SIU_GPIO_PULL_DOWN  //WPS  Weak pullup/down select
 };
 
+//not active LCI for GPIO223
+const SIU_GPDO_T SIU_INITIAL_PDO_80_LCI = 
+{
+      IO_INACTIVE
+};
+
+
 //The SIU_PCR224 register controls the drive strength of the MSEO[0]_eTPU_A[27]_GPIO[224] pin.
 //BRKLMPDI
 const SIU_PCR_T SIU_INITIAL_PCR_224 = 
@@ -1452,6 +1481,13 @@ const SIU_PCR_T SIU_INITIAL_PCR_81_LCI =
       SIU_GPIO_PULL_DOWN  //WPS  Weak pullup/down select
 };
 
+//LCI for GPIO224
+const SIU_GPDO_T SIU_INITIAL_PDO_81_LCI = 
+{
+      IO_INACTIVE
+};
+
+
 
 //The SIU_PCR225 register controls the drive strength of the MSEO[1]_eTPU_A[29]_GPIO[225] pin.
 //ELOAD1DICTL
@@ -1481,6 +1517,13 @@ const SIU_PCR_T SIU_INITIAL_PCR_82_LCI =
       SIU_GPIO_PULL_UP_Down_DISABLED,  //WPE  Weak pullup/down enable
       SIU_GPIO_PULL_DOWN  //WPS  Weak pullup/down select
 };
+
+//LCI for GPIO225
+const SIU_GPDO_T SIU_INITIAL_PDO_82_LCI = 
+{
+      IO_INACTIVE
+};
+
 
 //The SIU_PCR227 register controls the drive strength of the EVTO_eTPU_A[4]_GPIO[227] pin.
 //ELOAD2DICTL

@@ -1377,7 +1377,92 @@ typedef enum SIU_CCR_CRSE_Tag
 
 } SIU_CCR_CRSE_T;
 
+//=============================================================================
+// SIU_GPIO_Set_Pin_Assignment
+//
+// @func Set desired initial data direction for the pin
+//
+// @parm SIU_GPIO_Pin_Assignment_T | x | A <t SIU_GPIO_Pin_Assignment_T> element
+//
+// @rdesc <t IO_Configuration_T> containing the element <t SIU_GPIO_Pin_Assignment_Enable_T>
+//
+// @end
+//=============================================================================
+#define SIU_GPIO_Set_Pin_Assignment(x,y) \
+   (IO_Configuration_T)( Insert_Bits( x, y, SIU_GPIO_CONFIGURATION_POSITION_PIN_ASSIGNMENT, SIU_GPIO_CONFIGURATION_WIDTH_PIN_ASSIGNMENT ) )
 
+//=============================================================================
+// SIU_GPIO_Get_Pin_Assignment
+//
+// @func Get data direction for the pin.
+//
+// @parm IO_Configuration_T | x | A <t IO_Configuration_T> type
+//
+// @rdesc <t SIU_GPIO_Pin_Assignment_T> element decoded from the <t IO_Configuration_T>
+//
+// @end
+//=============================================================================
+#define SIU_GPIO_Get_Pin_Assignment(x) \
+   (SIU_GPIO_Pin_Assignment_T)( Extract_Bits( x, SIU_GPIO_CONFIGURATION_POSITION_PIN_ASSIGNMENT, SIU_GPIO_CONFIGURATION_WIDTH_PIN_ASSIGNMENT ) )
+
+//
+// Set the port value into the configuration. 0x00 to 0x7F
+//
+//=============================================================================
+// SIU_GPIO_Set_Polarity
+//
+// @func Set desired initial data direction for the pin
+//
+// @parm IO_Polarity_T | x | A <t IO_Polarity_T> element
+//
+// @rdesc <t IO_Configuration_T> containing the element <t IO_Polarity_T>
+//
+// @end
+//=============================================================================
+#define SIU_GPIO_Set_Polarity(x,y) \
+   (IO_Configuration_T)( Insert_Bits( x, y, SIU_GPIO_CONFIGURATION_POSITION_POLARITY, SIU_GPIO_CONFIGURATION_WIDTH_POLARITY ) )
+
+//=============================================================================
+// SIU_GPIO_Get_Polarity
+//
+// @func Get data direction for the pin.
+//
+// @parm IO_Configuration_T | x | A <t IO_Configuration_T> type
+//
+// @rdesc <t IO_Polarity_T> element decoded from the <t IO_Configuration_T>
+//
+// @end
+//=============================================================================
+#define SIU_GPIO_Get_Polarity(x) \
+   (IO_Polarity_T)( Extract_Bits( x, SIU_GPIO_CONFIGURATION_POSITION_POLARITY, SIU_GPIO_CONFIGURATION_WIDTH_POLARITY ) )
+
+//=============================================================================
+// SIU_GPIO_Set_Initial_Output_State
+//
+// @func Set desired initial data direction for the pin
+//
+// @parm SIU_GPIO_Initial_Output_State_T | x | A <t SIU_GPIO_Initial_Output_State_T> element
+//
+// @rdesc <t IO_Configuration_T> containing the element <t SIU_GPIO_Initial_Output_State_T>
+//
+// @end
+//=============================================================================
+#define SIU_GPIO_Set_Initial_Output_State(x,y) \
+   (IO_Configuration_T)( Insert_Bits( x, y, SIU_GPIO_CONFIGURATION_POSITION_INITIAL_OUTPUT_STATE, SIU_GPIO_CONFIGURATION_WIDTH_INITIAL_OUTPUT_STATE ) )
+
+//=============================================================================
+// SIU_GPIO_Get_Initial_Output_State
+//
+// @func Get data direction for the pin.
+//
+// @parm IO_Configuration_T | x | A <t IO_Configuration_T> type
+//
+// @rdesc <t SIU_GPIO_Initial_Output_State_T> element decoded from the <t IO_Configuration_T>
+//
+// @end
+//=============================================================================
+#define SIU_GPIO_Get_Initial_Output_State(x) \
+   (SIU_GPIO_Initial_Output_State_T)( Extract_Bits( x, SIU_GPIO_CONFIGURATION_POSITION_INITIAL_OUTPUT_STATE, SIU_GPIO_CONFIGURATION_WIDTH_INITIAL_OUTPUT_STATE ) )
 
 #endif // DD_SIU_H
 

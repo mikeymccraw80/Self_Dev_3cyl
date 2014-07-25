@@ -150,6 +150,10 @@ extern const SIU_PCR_T SIU_INITIAL_PCR_109;
 //DSPI_C_PCS[0] and GPIO functions.
 
 extern const SIU_PCR_T SIU_INITIAL_PCR_110;
+
+extern const SIU_PCR_T SIU_INITIAL_PCR_113_LCI;
+extern const SIU_GPDO_T SIU_INITIAL_PDO_113_LCI;
+
 //etpu00
 //The SIU_PCR114 register controls the function, direction, and static electrical attributes of the
 //eTPU_A[0]_eTPU_A[12]_eTPU_A[19]_GPIO[114] pin.
@@ -550,6 +554,7 @@ extern const SIU_PCR_T SIU_INITIAL_PCR_223;
 
 //not active LCI for GPIO223
 extern const SIU_PCR_T SIU_INITIAL_PCR_80_LCI;
+extern const SIU_GPDO_T SIU_INITIAL_PDO_80_LCI;
 
 
 //The SIU_PCR224 register controls the drive strength of the MSEO[0]_eTPU_A[27]_GPIO[224] pin.
@@ -560,6 +565,7 @@ extern const SIU_PCR_T SIU_INITIAL_PCR_224;
 
 //LCI for GPIO224
 extern const SIU_PCR_T SIU_INITIAL_PCR_81_LCI;
+extern const SIU_GPDO_T SIU_INITIAL_PDO_81_LCI;
 
 #define  HAL_GPIO_BRKLMPDI_CHANNEL_LCI       SIU_GPIO_CHANNEL_RESERVED_81
 
@@ -571,6 +577,7 @@ extern const SIU_PCR_T SIU_INITIAL_PCR_225;
 
 //LCI for GPIO225
 extern const SIU_PCR_T SIU_INITIAL_PCR_82_LCI ;
+extern const SIU_GPDO_T SIU_INITIAL_PDO_82_LCI ;
 
 #define  HAL_GPIO_ELOAD1DICTL_CHANNEL_LCI       SIU_GPIO_CHANNEL_RESERVED_82
 
