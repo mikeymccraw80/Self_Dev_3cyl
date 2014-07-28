@@ -111,7 +111,7 @@ void InitializeHardwareRegisters(void)
 	SIU_Initialize_Device();
 	SIU_GPIO_Initialize_Device();
 
-	/* feed tle4471 watchdog */
+	/* set tle4471 watchdog, , typical expire time is 50ms, min is 35ms */
 	InitRamVariable_EnableLogMaxHWWDTime();
 	SetHWIO_ServiceExtCOP_1Time();
 	INTC_Initialize_Device();
@@ -256,6 +256,11 @@ void InitializeHardwareLast(void)
 	}
 	op_Return = EEPROM_Restore_MFG_NVM_Block();  // restore Pfalsh MFG if it is valid
 	INST_Initialize_Calibration_Pages();
+
+	/* read reset type, set power fail flag */
+	if (Reset_Status.Watchdog_Reset || Reset_Status.CheckStop_Reset) {
+		HAL_OS_Set_PowerFail_Flag(true);
+	}
 
 	/* feed tle4471 watchdog */
 	SetHWIO_ServiceExtCOP_1Time();
