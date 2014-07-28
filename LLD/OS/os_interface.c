@@ -18,6 +18,7 @@
 #include "dd_vsep_est_select.h"
 #include "intr_ems.h"
 #include "hal_os.h"
+#include "dd_sswt.h"
 
 
 //=============================================================================
@@ -77,6 +78,9 @@ void MngOSTK_10msTasks(void)
 {
 	/* feed tle4471 watchdog */
 	ToggleHWIO_WatchDog();
+
+	/* feed e200z3 core watch dog */
+	hwi_kick_wdg_local();
 
 	/* call device driver layer functions */
 	VSEP_SPI_SCHEDULER_10MS();

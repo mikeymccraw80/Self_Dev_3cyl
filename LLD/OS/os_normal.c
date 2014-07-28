@@ -66,17 +66,19 @@ void StartOS_Task_Normal(void)
 	/* init throughput related data */
 	Init_InitThroughputData();
 
-	// Set watchdog timeout to 62ms during normal operation
+	/* Set watchdog timeout to 62ms during normal operation */
 	SWT_Set_Timeout_Value(SWT_TIMEOUT_VALUE_NORMAL) ;
 	SWT_Service_WatchDog();
 
+	/* this is core watchdog */
+	hwi_init_watchdog(HWI_WATCHDOG_ENABLE);
+	// hwi_kick_watchdog(70);
+	hwi_kick_watchdog_position(SSWT_EXPIRATION_TIME_38MS);
+	hwi_kick_wdg_local();
+
 	/* turn on interrupts and start real os */
 	Enable_Interrupts();
-	// this is core watchdog
-	// hwi_init_watchdog(HWI_WATCHDOG_ENABLE);
-	// hwi_kick_watchdog(70);
-	// hwi_kick_wdg_local();
-	
+
 	/* do until application indicates shutdown */
 	while (!HAL_OS_Get_Shutdown()) {
 
@@ -125,7 +127,6 @@ void StartOS_Task_Normal(void)
 
 		/* os background 10ms schedule */
 		if (RTI_Flags.bf.TimeFor10ms == 1) {
-			// hwi_kick_wdg_local();
 			Enter_OSThroughputMeasure(CeOSTK_SEG_10msLOOP);
 			RTI_Flags.bf.TimeFor10ms = 0x00;
 			MngOSTK_10msTasks();
