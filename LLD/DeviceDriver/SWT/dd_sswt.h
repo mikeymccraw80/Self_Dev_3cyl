@@ -84,9 +84,12 @@ typedef enum {
 #define MSR_MACHINE_CHECK_ENABLE  (0x1000U)
 #define MSR_CE_CHECK_ENABLE       (0x20000U)
 
+#define SSWT_EXPIRATION_TIME_38MS (63 - 21) //2 ** 21,
+
 
 void hwi_kick_wdg_local(void);
 void hwi_kick_watchdog(uint32_t timeout);
+void hwi_kick_watchdog_position(uint8_t position);
 void hwi_init_watchdog(HWI_WATCHDOG_STATUS p_l_watchdog_status);
 
 #endif // DD_SWT_H

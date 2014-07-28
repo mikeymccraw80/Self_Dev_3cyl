@@ -109,6 +109,32 @@ void hwi_init_watchdog(HWI_WATCHDOG_STATUS p_l_watchdog_status)
 }
 
 /******************************************************************************/
+/* Function   : hwi_kick_watchdog_position                                    */
+/* Description: service the CPU internal watchdog and reconfigure the period  */
+/*              when needed.                                                  */
+/******************************************************************************/
+
+void hwi_kick_watchdog_position(uint8_t position)
+{
+	union SPR_TCRVAL tcr_temp;
+
+	/* directly set the watchdog exception position */
+	tcr_temp.R = READ_SPR_VALUE(SPR_TCR);
+	tcr_temp.B.WP = position & 3;
+	tcr_temp.B.WPEXT = (position >> 2) & 0xf;
+	STORE_SPR_VALUE (SPR_TCR, tcr_temp.R);
+
+	if (hwi_wdg_disabled == false) {
+		/* Assert processor reset output */
+		/* REM: once set to a non 0 value, WRC cannot be changed */
+		tcr_temp.R = READ_SPR_VALUE(SPR_TCR);
+		tcr_temp.B.WRC = 1;
+		tcr_temp.B.WIE = 1;
+		STORE_SPR_VALUE (SPR_TCR, tcr_temp.R);
+	}
+}
+
+/******************************************************************************/
 /* Function   : hwi_kick_watchdog                                             */
 /* Description: service the CPU internal watchdog and reconfigure the period  */
 /*              when needed.                                                  */
