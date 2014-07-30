@@ -34,8 +34,6 @@
 *****************************************************************************/ 
 #include "t_gentypes.h"
 
-extern const T_PERCENTa    KfVVTD_HiBandDCThrsh;
-extern const T_PERCENTa    KfVVTD_LoBandDCThrsh;
 extern const T_COUNT_WORD  KcVVTD_VVT1OutFailThrsh;
 extern const T_COUNT_WORD  KcVVTD_VVT1OutSampleThrsh;
 extern const T_COUNT_WORD  KcVVTD_VVT2OutFailThrsh;

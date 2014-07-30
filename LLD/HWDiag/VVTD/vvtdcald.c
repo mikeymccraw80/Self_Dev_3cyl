@@ -37,32 +37,6 @@
  *****************************************************************************/
 /*
 *| vvtdcald.{
-*|   KfVVTD_HiBandDCThrsh {
-*|     : is_calconst;
-*|     : description ="DC above which the diagnostic will be enabled and the"
-*| "State 2 flag gets set";
-*|     : type = fixed.vvtd_t_percenta;
-*|     : units = "percent";
-*|   }
-*| }
-*/
-const T_PERCENTa  KfVVTD_HiBandDCThrsh = V_PERCENTa (100);
-
-/*
-*| vvtdcald.{
-*|   KfVVTD_LoBandDCThrsh {
-*|     : is_calconst;
-*|     : description ="DC below which the diagnostic will be enabled and the"
-*| "State 1 flag gets set";
-*|     : type = fixed.vvtd_t_percenta;
-*|     : units = "percent";
-*|   }
-*| }
-*/
-const T_PERCENTa  KfVVTD_LoBandDCThrsh = V_PERCENTa (0);
-
-/*
-*| vvtdcald.{
 *|   KcVVTD_VVT1OutFailThrsh {
 *|     : is_calconst;
 *|     : description ="Indicates the number of samples that can register a"
