@@ -2154,6 +2154,11 @@ typedef LONGCARD                                                         Hertz;
 #define Min_Hertz                                                         (0.0)
 #define Max_Hertz                                   (Max_LONGCARD * Prec_Hertz)
 
+typedef CARDINAL                                                         RPM_W;
+#define Prec_RPM_W                                                    (1.0 / 8)
+#define Min_RPM_W                                                         (0.0)
+#define Max_RPM_W                                          (65535 * Prec_RPM_W)
+
 /*-------------------------------*/
 /*---                         ---*/
 /*---   Pressure Fixed Types  ---*/

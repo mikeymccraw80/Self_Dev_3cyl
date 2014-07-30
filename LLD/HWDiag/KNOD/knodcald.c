@@ -99,20 +99,6 @@ cause a failure to be reported to the Data Manager";
 */
 const T_COUNT_BYTE KcKNKD_SensorFailThrsh = V_COUNT_BYTE(16);
 
-/*
-*| knodcald.{
-*|  KfKNKD_FaultDetectGain {
-*|     : is_calconst;
-*|     : description ="The CCESC  minimum gain value to set knock sensor fail criteria met.  "
-*| "Value MUST be an EVEN number AND between 0 and 26.  "
-*| "Engineering Range:  -8192 to 8192   Resolution: 0.25 /Count";
-*|     : type = fixed.t_decibels;
-*|     : units = "dB";
-*|   }
-*| }
-*/
-const T_DECIBELS KfKNKD_FaultDetectGain = V_DECIBELS(16);
- 
 /*================================================================*/
    /* Number of samples in the knock sensor test before a 
       passing result can be reported. */

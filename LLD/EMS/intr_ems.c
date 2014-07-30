@@ -46,7 +46,6 @@ EOBD_VOLTb                           EOBD_IgnVoltageAtKeyOn;
 kPa_W_EOBD                           EOBD_Vacuum_W_;
 uint16_t                             EOBD_ADESC[CcSYST_NUM_OF_CYLINDERS] ;                  /* raw data */
 uint16_t                             EOBD_IntegratorAverage[CcSYST_NUM_OF_CYLINDERS] ;      /* filtered value */
-T_DECIBELS                           EOBD_ESCGain[CcSYST_NUM_OF_CYLINDERS];
 bool                                 EOBD_CANH_Msg_NotReceived;
 
 

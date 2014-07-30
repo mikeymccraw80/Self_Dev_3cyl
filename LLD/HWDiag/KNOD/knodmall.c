@@ -36,20 +36,15 @@
 /******************************************************************************
 *  Include Files 
 *****************************************************************************/ 
-// #include "knodfexi.h"   /* For global resources definitions   */
 #include "knodcald.h"   /* For Definition-Declaration check   */
 #include "knodpapi.h"   /* For Definition-Declaration check   */
+#include "lux_type.h"
 #include "intr_ems.h"
 #include "hal_eng.h"
 #include "timclib.h"  /* DefTIMC_StopWatches16                       */
 #include "mall_lib.h"
 #include "es_knock.h"
 
-typedef unsigned short                                                   RPM_W;
-#define Prec_RPM_W                                                    (1.0 / 8)
-#define Min_RPM_W                                                         (0.0)
-#define Max_RPM_W                                          (65535 * Prec_RPM_W)
- 
 /*********************************************************************
 * Module Variables
 **********************************************************************/
@@ -291,8 +286,8 @@ static void EvalKNKD_EnableCriteria(void)
 
     SbKNKD_DsblgKeyOnFaultPresent = GetKNKD_Disable_Fault();
 
-    // if( (GetVIOS_p_MnfdVac() <= Lookup_2D_W(GetVIOS_n_EngSpd(), RPM_W, 0, 0, 6400, 800, KtKNKD_p_EngVacThrsh))
-     if ((ESCEnabled()) \
+    if( (GetVIOS_p_MnfdVac() <= Lookup_2D_W(GetVIOS_n_EngSpd(), Prec_RPM_W, 0, 0, 6400, 800, KtKNKD_p_EngVacThrsh)) \
+     && (ESCEnabled()) \
      && (SbKNKD_DsblgKeyOnFaultPresent == CbFALSE) \
      && (GetVIOS_IgnSt() == CeIGN_ON))
   {
@@ -425,7 +420,6 @@ static TbBOOLEAN EvalKNKD_SensorProcessing(void)
    LcKNKD_IntensUnfltThrshMax =
                    GetVIOS_Pct_CCESC_IntUnfilt_EMS( V_COUNT_BYTE(0) );
    LcKNKD_IntensUnfltThrshMin = LcKNKD_IntensUnfltThrshMax;
-   LfKNKD_ESCGainMin = V_DECIBELS(26);
    /*  second, compare the max and the min to the each of the rest of
        the intensities, and reset their values depending on which cylinder
        intensities exceed the previous max and min.  */
@@ -453,11 +447,9 @@ static TbBOOLEAN EvalKNKD_SensorProcessing(void)
                 /* do nothing */
              }
           }
-          LfKNKD_ESCGainMin = Min(LfKNKD_ESCGainMin, GetKNOC_ESCGain(LcKNKD_CylIndex));
         }
    SfKNKD_Pct_ADESC_Delta = LcKNKD_IntensUnfltThrshMax - LcKNKD_IntensUnfltThrshMin;
-   return ( TbBOOLEAN )((SfKNKD_Pct_ADESC_Delta < KfKNKD_Pct_SensorIntnsDeltThrsh) &&
-                           (LfKNKD_ESCGainMin > KfKNKD_FaultDetectGain));
+   return ( TbBOOLEAN )(SfKNKD_Pct_ADESC_Delta < KfKNKD_Pct_SensorIntnsDeltThrsh);
 
 }
 

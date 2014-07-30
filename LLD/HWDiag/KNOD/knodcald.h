@@ -43,8 +43,6 @@ extern const T_COUNT_BYTE KcKNKD_SystemSampleThrsh;
 
 extern const T_COUNT_BYTE KcKNKD_SensorFailThrsh;
 
-extern const T_DECIBELS   KfKNKD_FaultDetectGain;
- 
 extern const T_COUNT_BYTE KcKNKD_SensorSampleThrsh;
 
 extern const T_PERCENTa   KfKNKD_Pct_SystemIntensThrshLo;

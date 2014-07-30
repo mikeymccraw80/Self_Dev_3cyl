@@ -526,15 +526,12 @@ extern int16_t           EOBD_CoolTemp;
  ********************   Knock Parameter           **********************
  ***********************************************************************/
 #define CcSYST_NUM_OF_CYLINDERS 4
-// extern BPFGain_Type           ESCGain[num_cyl];                 /* gain for this cylinder */
 extern Volt0to5Volts_W   ADESC[CcSYST_NUM_OF_CYLINDERS] ; 
 extern Volt0to5Volts_W   ADESC_Average_Wingateoff[CcSYST_NUM_OF_CYLINDERS] ; 
 
-extern T_DECIBELS        EOBD_ESCGain[CcSYST_NUM_OF_CYLINDERS];
 extern uint16_t          EOBD_IntegratorAverage[CcSYST_NUM_OF_CYLINDERS] ;      /* filtered value */
 extern uint16_t          EOBD_ADESC[CcSYST_NUM_OF_CYLINDERS] ;                  /* raw data */
-#define GetKNOC_ESCGain(x)\
-                           EOBD_ESCGain[x]
+
 #define GetVIOS_Pct_CCESC_IntensAverage_EMS(x)\
                            EOBD_IntegratorAverage[x]
 #define GetVIOS_Pct_CCESC_IntUnfilt_EMS(x)\
@@ -547,11 +544,6 @@ static INLINE void ConvertIntrParam_KnockParam(void)
 		/* it would be more effiecncy to divide 2 instead of useing mutily macro*/
 		EOBD_ADESC[loop_counter] = (uint16_t)( ADESC[loop_counter] / 2 );
 		EOBD_IntegratorAverage[loop_counter] = (uint16_t)( ADESC_Average_Wingateoff[loop_counter] / 2 );
-		/* EOBD_ESCGain resolution:0.25, range [-8192,8192)
-			ESCGain resolution: 6,range [0,4]
-			ESCGain is limited to 24E(=4N), the convert is safe.
-		*/
-		// EOBD_ESCGain[loop_counter] = FixConvert(ESCGain[loop_counter], BPFGain_Type, T_DECIBELS);
 	}
 }
 
