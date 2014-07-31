@@ -574,7 +574,8 @@ static void EEP_Operation_CALLBACK(void)
     //fash key on fucntion can be implemented here
 //#ifndef HWTEST
  SWT_Service_WatchDog(); 
- ToggleHWIO_WatchDog();
+ //ToggleHWIO_WatchDog();
+ TLE4471_WD_Toggle_Immediate();
 //#endif
 }
 /*=============================================================================

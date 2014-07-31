@@ -46,6 +46,31 @@
 #define TLE4471_WD_EDEGE_INTERVAL_25US  (25*(SYSTEM_FREQUENCY_HZ/1000000))
 #define TLE4471_WD_TOGGLE_3MS           (3*(SYSTEM_FREQUENCY_HZ/1000))
 
+/* ========================================================================= *\
+ * Toggle TLE4471 WatchDog.
+\* ========================================================================= */
+/* the follow two function is only for tle4471 use */
+static bool TLE4471_SIU_GPIO_DISCRETE_Get_State(SIU_GPIO_Channel_T channel )
+{
+	if(SIU.PCR[channel].F.OBE) {
+		return SIU.GPDO[channel].F.PDO;
+	} else {
+		return SIU.GPDI[channel].F.PDI;
+	}
+}
+
+static void TLE4471_SIU_GPIO_DISCRETE_Toggle_State(SIU_GPIO_Channel_T channel )
+{
+	// Get the current state of the output pin and toggle
+	bool state = ( TLE4471_SIU_GPIO_DISCRETE_Get_State( channel ) == false ) ? true : false;
+
+	// Set output to the toggled state
+	SIU.GPDO[channel].F.PDO = state;
+}
+
+#define TLE4471_WatchDog_Toggle()     TLE4471_SIU_GPIO_DISCRETE_Toggle_State(SIU_GPIO_CHANNEL_118)
+#define TLE4471_WatchDog_Get_State()  TLE4471_SIU_GPIO_DISCRETE_Get_State(SIU_GPIO_CHANNEL_118)
+
 /* ============================================================================ *\
  * Global variables.
 \* ============================================================================ */
