@@ -39,6 +39,7 @@ copy ..\HLS\App_main.c ..\tools\delphilib\outputlib\App_main.c
 copy ..\bin\Engine.mt22p3_chery_4cyl.a2l ..\tools\delphilib\outputlib\Engine.mt22p3_chery_4cyl.a2l
 copy mt22p3_chery_4cyl.dld ..\tools\delphilib\outputlib\mt22p3_chery_4cyl.dld
 copy ..\bin\mt22p3_chery_4cyl.exmap ..\tools\delphilib\outputlib\mt22p3_chery_4cyl.exmap
+copy ..\bin\mt22p3_chery_4cyl.s19 ..\tools\delphilib\outputlib\mt22p3_chery_4cyl.s19
 
 echo +============================================================================+ >> build.log
 echo .                                                                            .
