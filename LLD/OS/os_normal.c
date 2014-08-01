@@ -62,6 +62,8 @@ static uint16_t LOOP_OF_CNT_ARRAY[4];
 //=============================================================================
 void StartOS_Task_Normal(void)
 {
+	union SPR_TSRVAL tsr_temp;
+
 	OS_Startup_Hook();
 	/* init throughput related data */
 	Init_InitThroughputData();
@@ -72,8 +74,7 @@ void StartOS_Task_Normal(void)
 
 	/* this is core watchdog */
 	hwi_init_watchdog(HWI_WATCHDOG_ENABLE);
-	// hwi_kick_watchdog(70);
-	hwi_kick_watchdog_position(SSWT_EXPIRATION_TIME_38MS);
+	hwi_kick_watchdog_position(SSWT_EXPIRATION_TIME_26MS);
 	hwi_kick_wdg_local();
 
 	/* turn on interrupts and start real os */
@@ -81,7 +82,6 @@ void StartOS_Task_Normal(void)
 
 	/* do until application indicates shutdown */
 	while (!HAL_OS_Get_Shutdown()) {
-
 		/* os background 1ms schedule */
 		if (RTI_Flags.bf.TimeFor1ms == 1) {
 			Enter_OSThroughputMeasure(CeOSTK_SEG_1msLOOP);
