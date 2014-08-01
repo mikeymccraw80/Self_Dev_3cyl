@@ -86,6 +86,10 @@ INLINE HWIO_Reset_Status_T SIU_RESET_Get_Status(void)
    status.Loss_Clock_Reset = (*SIU_RSR_Register&0x10000000)?1:0;
    status.Watchdog_Reset   = (*SIU_RSR_Register&0x08000000)?1:0;
    status.CheckStop_Reset  = (*SIU_RSR_Register&0x04000000)?1:0;
+   status.SoftwareWDTimer_Reset   = (*SIU_RSR_Register&0x02000000)?1:0;
+
+   status.SoftwareSystem_Reset  = (*SIU_RSR_Register&0x00020000)?1:0;
+   status.SoftwareExternal_Reset  = (*SIU_RSR_Register&0x00010000)?1:0;
 
    return status;
 }
