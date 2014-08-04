@@ -615,8 +615,10 @@ build_target:	;
 ###############################################################################
 	@$(ECHO) Generating PTP file
 	@cd ..\bin && $(DDUMP)
+ifneq ($(TARGET),HWIO_HLS_INTEGRATION)
 	@cd ..\objs && @if exist *.lst $(COPY) *.lst	$(subst /,\,$(LISTING_DIR))\. >nul
 	@cd ..\objs && @if exist *.lst $(DEL) *.lst
+endif
 
 ###############################################################################
 # Build EXMAP file from elf file target
