@@ -154,6 +154,9 @@ void StartOS_Task_Normal(void)
 	/* disable interrupts */
 	Disable_Interrupts();
 
+	// Disable ppc core watchdog timer
+	hwi_init_watchdog(HWI_WATCHDOG_DISABLE);
+
 	// Set watchdog timeout to 62ms during normal operation
 	SWT_Set_Timeout_Value(SWT_TIMEOUT_VALUE_INIT) ;
 	SWT_Service_WatchDog();
