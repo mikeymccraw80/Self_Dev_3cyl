@@ -88,6 +88,8 @@ typedef enum {
 #define SSWT_EXPIRATION_TIME_26MS  (43) //2 ** 21,
 #define SSWT_EXPIRATION_TIME_52MS  (42) //2 ** 22,
 #define SSWT_EXPIRATION_TIME_104MS (41) //2 ** 23,
+#define SSWT_EXPIRATION_TIME_209MS (40) //2 ** 24,
+#define SSWT_EXPIRATION_TIME_419MS (39) //2 ** 25,
 
 
 void hwi_kick_wdg_local(void);

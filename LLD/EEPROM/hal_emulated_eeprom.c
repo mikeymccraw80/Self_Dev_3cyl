@@ -27,6 +27,7 @@
 #include "dd_swt_interface.h"
 #include "hal_ucram.h"
 #include "hal_os.h"
+#include "dd_sswt.h"
 
 /*=============================================================================
  * Marco Definitions
@@ -576,6 +577,7 @@ static void EEP_Operation_CALLBACK(void)
  SWT_Service_WatchDog(); 
  //ToggleHWIO_WatchDog();
  TLE4471_WD_Toggle_Immediate();
+ hwi_kick_wdg_local();
 //#endif
 }
 /*=============================================================================

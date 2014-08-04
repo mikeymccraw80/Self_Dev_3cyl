@@ -48,6 +48,7 @@ SECTIONS
       start_of_flashcode = .;
       dd_swt.o(.text_vle)
       dd_tle4471.o(.text_vle)
+      dd_sswt.o(.text_vle)
       CFlashDepletionRecover.o (.text_vle) 
       cblankcheck.o  (.text_vle)
       cchecksum.o  (.text_vle)

@@ -24,6 +24,7 @@
 #include "dd_vsep_est_select.h"
 #include "dd_stm_interface.h"
 #include "hal_os.h"
+#include "dd_sswt.h"
 
 
 /* private variable define */
@@ -305,6 +306,10 @@ void exit(void)
 	// Set the watchdog timeout to 300ms for flash erase/program
 	SWT_Set_Timeout_Value(SWT_TIMEOUT_VALUE_INIT) ;
 	SWT_Service_WatchDog();
+
+	// Set ppc core watchdog timer to 419ms
+	hwi_kick_watchdog_position(SSWT_EXPIRATION_TIME_419MS);
+	hwi_kick_wdg_local();
 
 	EEPROM_Backup_MFG_NVM_Block( true );
 	EEPROM_Backup_Vehicle_NVRAM_Block();
