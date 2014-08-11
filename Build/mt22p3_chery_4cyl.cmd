@@ -8,6 +8,7 @@
 ..\LLD\HWDiag\VVTD\vvtd_type.cdf
 ..\LLD\HWDiag\ETCD\etcd_type.cdf
 ..\LLD\HWDiag\CAND\cand_type.cdf
+..\LLD\HWDiag\KNOD\knod_type.cdf
 
 -e
 ..\Instrumentation\calsets.c
@@ -23,4 +24,5 @@
 ..\LLD\HWDiag\VVTD\vvtdcald.c
 ..\LLD\HWDiag\ETCD\etcdcald.c
 ..\LLD\HWDiag\CAND\candcald.c
+..\LLD\HWDiag\KNOD\knodcald.c
 ..\LLD\SOH\soh_cald.c
