@@ -259,11 +259,12 @@ void InitializeHardwareLast(void)
 	INST_Initialize_Calibration_Pages();
 
 	/* read reset type, set power fail flag */
-	if (Reset_Status.Watchdog_Reset \
-	 || Reset_Status.External_Reset \
-	 || Reset_Status.SoftwareSystem_Reset \
-	 || Reset_Status.SoftwareExternal_Reset \
-	 || Reset_Status.CheckStop_Reset)
+	if ((Reset_Status.bits.Power_On_Reset == false) 
+	  && (Reset_Status.bits.Watchdog_Reset \
+	   || Reset_Status.bits.External_Reset \
+	   || Reset_Status.bits.SoftwareSystem_Reset \
+	   || Reset_Status.bits.SoftwareExternal_Reset \
+	   || Reset_Status.bits.CheckStop_Reset))
 	{
 		HAL_OS_Set_PowerFail_Flag(true);
 	}
