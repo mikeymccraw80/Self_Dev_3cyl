@@ -221,7 +221,7 @@ void INST_Restore_Working_Page(HWIO_Reset_Status_T status_poweron)
 
    restore_needed = true;
 
-   if(!status_poweron.Power_On_Reset)   // never power down
+   if(!status_poweron.bits.Power_On_Reset)   // never power down
    {
       if(Get_Working_Page_RAM_Validation())
       {

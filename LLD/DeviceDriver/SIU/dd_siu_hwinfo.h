@@ -4,19 +4,22 @@
 #include "reuse.h"
 
 
-typedef struct SIU_RESET_Status 
+typedef union SIU_RESET_Status
 {
-   bitfield16_t Power_On_Reset          : 1;     // Last reset was an externally triggered power on reset
-   bitfield16_t External_Reset          : 1;     // Last reset was an externally triggered exteranl reset
-   bitfield16_t Loss_Lock_Reset         : 1;     // Last reset was an internally triggered loss of lock reset
-   bitfield16_t Loss_Clock_Reset        : 1;     // Last reset was an internally triggered loss of clock reset
-   bitfield16_t Watchdog_Reset          : 1;     // Last reset was a watchdog triggered reset
-   bitfield16_t CheckStop_Reset         : 1;     // Last reset was a checkstop triggered reset
-   bitfield16_t SoftwareWDTimer_Reset   : 1;     // Last reset was a Software Watchdog Timer Reset
-   bitfield16_t SoftwareSystem_Reset    : 1;     // Last reset was a Software System Reset
-
-   bitfield16_t SoftwareExternal_Reset  : 1;     // Software External Reset
-   bitfield16_t                         : 7;     // Reserved
+   uint16_t word;
+   struct {
+      bitfield16_t Power_On_Reset          : 1;     // Last reset was an externally triggered power on reset
+      bitfield16_t External_Reset          : 1;     // Last reset was an externally triggered exteranl reset
+      bitfield16_t Loss_Lock_Reset         : 1;     // Last reset was an internally triggered loss of lock reset
+      bitfield16_t Loss_Clock_Reset        : 1;     // Last reset was an internally triggered loss of clock reset
+      bitfield16_t Watchdog_Reset          : 1;     // Last reset was a watchdog triggered reset
+      bitfield16_t CheckStop_Reset         : 1;     // Last reset was a checkstop triggered reset
+      bitfield16_t SoftwareWDTimer_Reset   : 1;     // Last reset was a Software Watchdog Timer Reset
+      bitfield16_t SoftwareSystem_Reset    : 1;     // Last reset was a Software System Reset
+   
+      bitfield16_t SoftwareExternal_Reset  : 1;     // Software External Reset
+      bitfield16_t                         : 7;     // Reserved
+   }bits;
 } HWIO_Reset_Status_T;
 
 //===========================================================================
@@ -80,16 +83,16 @@ INLINE HWIO_Reset_Status_T SIU_RESET_Get_Status(void)
 {
    HWIO_Reset_Status_T status;
    volatile uint32_t *SIU_RSR_Register = (volatile uint32_t *)SIU_RSR_ADDRESS;
-   status.Power_On_Reset   = (*SIU_RSR_Register&0x80000000)?1:0;
-   status.External_Reset   = (*SIU_RSR_Register&0x40000000)?1:0;
-   status.Loss_Lock_Reset  = (*SIU_RSR_Register&0x20000000)?1:0;
-   status.Loss_Clock_Reset = (*SIU_RSR_Register&0x10000000)?1:0;
-   status.Watchdog_Reset   = (*SIU_RSR_Register&0x08000000)?1:0;
-   status.CheckStop_Reset  = (*SIU_RSR_Register&0x04000000)?1:0;
-   status.SoftwareWDTimer_Reset   = (*SIU_RSR_Register&0x02000000)?1:0;
+   status.bits.Power_On_Reset   = (*SIU_RSR_Register&0x80000000)?1:0;
+   status.bits.External_Reset   = (*SIU_RSR_Register&0x40000000)?1:0;
+   status.bits.Loss_Lock_Reset  = (*SIU_RSR_Register&0x20000000)?1:0;
+   status.bits.Loss_Clock_Reset = (*SIU_RSR_Register&0x10000000)?1:0;
+   status.bits.Watchdog_Reset   = (*SIU_RSR_Register&0x08000000)?1:0;
+   status.bits.CheckStop_Reset  = (*SIU_RSR_Register&0x04000000)?1:0;
+   status.bits.SoftwareWDTimer_Reset   = (*SIU_RSR_Register&0x02000000)?1:0;
 
-   status.SoftwareSystem_Reset  = (*SIU_RSR_Register&0x00020000)?1:0;
-   status.SoftwareExternal_Reset  = (*SIU_RSR_Register&0x00010000)?1:0;
+   status.bits.SoftwareSystem_Reset  = (*SIU_RSR_Register&0x00020000)?1:0;
+   status.bits.SoftwareExternal_Reset  = (*SIU_RSR_Register&0x00010000)?1:0;
 
    return status;
 }

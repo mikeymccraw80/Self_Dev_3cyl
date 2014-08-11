@@ -74,7 +74,7 @@ void Clear_IO_Discrete_Diag_ADC_0(EMS_Diagnostic_T diagnostic)
 \*===========================================================================*/
 void HAL_ResetDiag_Log_Parameters(HWIO_Reset_Status_T reset_cause, uint32_t reset_address )
 {
-   if (reset_cause.Loss_Lock_Reset || reset_cause.Loss_Clock_Reset)
+   if (reset_cause.bits.Loss_Lock_Reset || reset_cause.bits.Loss_Clock_Reset)
    {
        HAL_Diag.Bits.CPU_PLL_CLKERR = true;
    }

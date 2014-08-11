@@ -977,7 +977,7 @@ void EEPROM_Restore_Vehicle_NVRAM_Block(HWIO_Reset_Status_T status_poweron)
          EEPROM_Set_Mirror_RAM_KKSUM_Checksum((uint32_t*) nvram_start_addr,pf_kksum);
         EEP_NVM_Fault = true;
       }
-      else if((1 == status_poweron.Power_On_Reset) && (pf_kksum == df_kksum))
+      else if((1 == status_poweron.bits.Power_On_Reset) && (pf_kksum == df_kksum))
       {
          EEPROM_Set_Mirror_RAM_KKSUM_Checksum( (uint32_t*) nvram_start_addr,0);
          page = EEP_NVRAM_active_page;
@@ -989,7 +989,7 @@ void EEPROM_Restore_Vehicle_NVRAM_Block(HWIO_Reset_Status_T status_poweron)
 	  EEP_NVM_Fault = false;
 
       }
-      else if((pf_kksum == df_kksum)&&(0 == status_poweron.Power_On_Reset))
+      else if((pf_kksum == df_kksum)&&(0 == status_poweron.bits.Power_On_Reset))
       {
          nvram_check_pattern = EEPROM_Get_Mirror_RAM_check_pattern(nvram_start_addr);
          nvram_check_sum = EEPROM_Get_Mirror_RAM_NV_KKSUM(nvram_start_addr);

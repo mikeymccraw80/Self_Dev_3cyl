@@ -16,12 +16,14 @@
 
 *-io_init.Reset_Status{
 *-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "RESTRESN";
-*-  variable_location.symbol = io_init.Reset_Status;
+*-  label                    = "RSTSTATUS";
+*-  variable_location.symbol = io_init.Reset_Status.word;
+*-  ds_scaling_unit          = "count";
 *-  ds_precision             = "4.0";
 *-  ds_scaling_mode          = "Ax + B";
 *-  ds_const_a               = "1.000000000000";
 *-  ds_const_b               = "0.000000000000";
+*-  description              = "ECU reset status";
 *-}
 
 
