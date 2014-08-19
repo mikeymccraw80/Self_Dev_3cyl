@@ -389,9 +389,11 @@ void HAL_OS_ToothInt_Hook(void)
 void HAL_OS_CAM_W_Hook(void)
 {
 	//syn of chery
-	IO_VCPC_Convert_CAMW();
-	IO_CAMW_Update();
-	HLS_ph1();
+	if (HAL_Eng_Get_Loss_Of_Sync() == false) {
+		IO_VCPC_Convert_CAMW();
+		IO_CAMW_Update();
+		HLS_ph1();
+	}
 	IO_Crank_Status_Update();
 }
 
@@ -402,9 +404,11 @@ void HAL_OS_CAM_W_Hook(void)
 void HAL_OS_CAM_X_Hook(void)
 {
 	//syn of chery
-	IO_VCPC_Convert_CAMX();
-	IO_CAMX_Update();
-	HLS_ph2();
+	if (HAL_Eng_Get_Loss_Of_Sync() == false) {
+		IO_VCPC_Convert_CAMX();
+		IO_CAMX_Update();
+		HLS_ph2();
+	}
 }
 
 //=============================================================================
