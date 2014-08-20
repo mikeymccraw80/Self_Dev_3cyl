@@ -664,7 +664,16 @@ void CRANK_Process_Crank_Event( void )
 			// Look for the first synchronization:
 			CRANK_Search_For_First_Gap();
 		} else {
-			valid_result = CRANK_Validate_Synchronization();
+			valid_result = true;
+			
+			/* confirm gap only in certain range, (55, 65) (115, 5) */
+			if (IS_IN_RANGE(CRANK_Current_Event_Tooth, 55, 65) ||
+				IS_IN_RANGE(CRANK_Current_Event_Tooth, 115, 120) ||
+				IS_IN_RANGE(CRANK_Current_Event_Tooth, 1, 5))
+			{
+				valid_result = CRANK_Validate_Synchronization();
+			}
+			
 			if (valid_result == true) {
 				if (CRANK_Get_Sync_First_Revolution(CRANK_Internal_State.U32)) {
 					if (IS_IN_RANGE(CRANK_Current_Event_Tooth, 3, 58)) {
