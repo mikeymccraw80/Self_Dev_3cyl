@@ -567,7 +567,7 @@ bool CRANK_Validate_Synchronization( void )
 
 	// Perform the gap search
 	/* 1st criterion : gap at expected location,  2nd criterion : gap pattern recognized*/
-	if((CRANK_Next_Event_PA_Content == previous_n_1 ) && ((previous_n_1 - previous_1_n) == 1)) {
+	if((CRANK_Next_Event_PA_Content == previous_n_1 ) && (((uCrank_Count_T)(previous_n_1 - previous_1_n)) == 1)) {
 		gap_confirmed = true;
 	} else {
 		gap_confirmed = false;
