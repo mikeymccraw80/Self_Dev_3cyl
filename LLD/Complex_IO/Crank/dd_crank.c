@@ -452,7 +452,7 @@ static bool CRANK_First_Gap_Cofirm( void )
 	previous_n_1 = MCD5408_Get_Previous_n_1(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT);
 	previous_1_n = MCD5408_Get_Previous_1_n(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT);
 	/* 1st criterion : gap at expected location,  2nd criterion : gap pattern recognized*/
-	if((CRANK_Next_Event_PA_Content == previous_n_1 ) && ((previous_n_1 - previous_1_n) == 1)) {
+	if((CRANK_Next_Event_PA_Content == previous_n_1 ) && (((uCrank_Count_T)(previous_n_1 - previous_1_n)) == 1)) {
 		// 1st GAP found
 		CRANK_Parameters.F.number_of_gaps_detected = 0;    
 		CRANK_Internal_State.U32 = CRANK_Set_Sync_Started( CRANK_Internal_State.U32, false );
