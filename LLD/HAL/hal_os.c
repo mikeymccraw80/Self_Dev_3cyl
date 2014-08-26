@@ -4,6 +4,7 @@
 #include "hal_os.h"
 #include "dd_pit_interface.h"
 #include "dd_swt_interface.h"
+#include "dd_crank_interface.h"
 #include "dd_tle4471.h"
 #include "HLS.h"
 #include "io_interface_eng.h"
@@ -389,7 +390,7 @@ void HAL_OS_ToothInt_Hook(void)
 void HAL_OS_CAM_W_Hook(void)
 {
 	//syn of chery
-	if (HAL_Eng_Get_Loss_Of_Sync() == false) {
+	if (CRANK_Get_First_Sync_Set() == true) {
 		IO_VCPC_Convert_CAMW();
 		IO_CAMW_Update();
 		HLS_ph1();
@@ -404,7 +405,7 @@ void HAL_OS_CAM_W_Hook(void)
 void HAL_OS_CAM_X_Hook(void)
 {
 	//syn of chery
-	if (HAL_Eng_Get_Loss_Of_Sync() == false) {
+	if (CRANK_Get_First_Sync_Set() == true) {
 		IO_VCPC_Convert_CAMX();
 		IO_CAMX_Update();
 		HLS_ph2();
