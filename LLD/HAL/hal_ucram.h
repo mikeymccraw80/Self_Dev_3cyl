@@ -14,7 +14,7 @@ typedef struct HAL_UNCLEARED_RAM_Tag
 extern HAL_UNCLEARED_RAM_T HAL_uncleard_ram;
 
 /* this flag is used to indicate whether the inca re-flash was operated */
-#define NCRAM_REPROGRAM_FLAG 15
+#define NCRAM_REPROGRAM_FLAG 9
 
 
 #endif /* end of include guard: HAL_UCRAM_H */
