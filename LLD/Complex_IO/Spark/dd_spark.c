@@ -12,6 +12,8 @@
 #include "dd_siu_interface.h"
 #include "dd_vsep_fault.h"
 #include "dd_stm_interface.h"
+#include "dd_siu_interface.h"
+#include "io_config_siu.h"
 
 
 typedef enum {
@@ -69,8 +71,8 @@ IO_Spark_Initialization_Parameters_T  *SPARK_Init_Parameters_Ptr;
 static const uint8_t CeVSEP_EST_CylinderID_Mapping[] = {
     CRANK_CYLINDER_A,
     CRANK_CYLINDER_B,
-    CRANK_CYLINDER_A,
-    CRANK_CYLINDER_B
+    CRANK_CYLINDER_C,
+    CRANK_CYLINDER_D
 };
 
 //=============================================================================
@@ -790,11 +792,14 @@ void SPARK_Process_Interrupt(void)
         control_select = SPARK_Control_Select_Map[cylinder];
         // If there is a channel without a fault, update its values and set it up:
         if( SPARK_Get_Channel_Enable(cylinder) && (SPARK_Scheduled_SynControl < 2)) {
-            /* Set the channel number, if disabled, swith it to channel D */
+            VSEP_EST_Select_Set_Channel(MTSA_CONFIG_VSEP_DEVICE_0, CeVSEP_EST_CylinderID_Mapping[cylinder]);
             if (SPARK_Channel[cylinder].state == true) {
-                VSEP_EST_Select_Set_Channel(MTSA_CONFIG_VSEP_DEVICE_0, CeVSEP_EST_CylinderID_Mapping[cylinder]);
+                SIU_GPIO_OpenDrain_Confige(HAL_GPIO_EST1_CHANNEL, false);
             } else {
-                VSEP_EST_Select_Set_Channel(MTSA_CONFIG_VSEP_DEVICE_0, CRANK_CYLINDER_D);
+                /* Set the channel number, if disabled, swith it to channel D */
+                // VSEP_EST_Select_Set_Channel(MTSA_CONFIG_VSEP_DEVICE_0, CRANK_CYLINDER_D);
+                /* set est1 gpio outopen as OD type, so there is no pulse output */
+                SIU_GPIO_OpenDrain_Confige(HAL_GPIO_EST1_CHANNEL, true);
             }
 
             /* set end angle, the reference tdc is next tdc */
@@ -841,16 +846,22 @@ void SPARK_Process_Cylinder_Event( void )
             SPARK_ISR_PulseRequested = true;
             SPARK_Scheduled_SynControl ++;
         } else {
-                /* Set the channel number, if disabled, swith it to channel D */
+                VSEP_EST_Select_Set_Channel(MTSA_CONFIG_VSEP_DEVICE_0, CeVSEP_EST_CylinderID_Mapping[SPARK_Cylinder_Event_ID]);
                 if (SPARK_Channel[SPARK_Cylinder_Event_ID].state == true) {
-                    VSEP_EST_Select_Set_Channel(MTSA_CONFIG_VSEP_DEVICE_0, CeVSEP_EST_CylinderID_Mapping[SPARK_Cylinder_Event_ID]);
+                    SIU_GPIO_OpenDrain_Confige(HAL_GPIO_EST1_CHANNEL, false);
                 } else {
-                    VSEP_EST_Select_Set_Channel(MTSA_CONFIG_VSEP_DEVICE_0, CRANK_CYLINDER_D);
+                    /* Set the channel number, if disabled, swith it to channel D */
+                    // VSEP_EST_Select_Set_Channel(MTSA_CONFIG_VSEP_DEVICE_0, CRANK_CYLINDER_D);
+                    /* set est1 gpio outopen as OD type, so there is no pulse output */
+                    SIU_GPIO_OpenDrain_Confige(HAL_GPIO_EST1_CHANNEL, true);
                 }
                 SPARK_Update_Duration_Values(SPARK_CONTROL_0, SPARK_Cylinder_Event_ID);
                 end_angle = SPARK_Calculate_End_Angle_In_Counts( SPARK_Cylinder_Event_ID, (uint8_t)0, SPARK_CALC_POSITION_Ref );
                 SPARK_Schedule_Next_Event(SPARK_Cylinder_Event_ID, end_angle);
-                
+
+                /* check the est load fault status */
+                VSEP_EST_Fault_SYNC_Interface(SPARK_Cylinder_Event_ID);
+
                 /* increase the syncontrol var, if syncontrol==2, multipulse pass next event tooth */
                 SPARK_Scheduled_SynControl ++;
         }
