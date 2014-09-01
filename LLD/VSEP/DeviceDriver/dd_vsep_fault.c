@@ -519,7 +519,7 @@ void VSEP_EST_Fault_SYNC_Interface(EST_Select_Cylinder_T curent_spark_cylinder)
 						(uint8_t)DSPI_B_Exchange_Data1(VSEP_CHIP_SELECT,
 												VSEP_CTAR_SELECT,
 												DSPI_CTAR_FMSZ_8,
-												(uint16_t)VSEP_EST_Fault_SYNC_Txd[index_transmint],
+												&VSEP_EST_Fault_SYNC_Txd[index_transmint],
 												(index_transmint == (VSEP_EST_FAULT_SYNC_TXD_MESSAGE_MAX_BYTE-1)? true:false));
 	}
 

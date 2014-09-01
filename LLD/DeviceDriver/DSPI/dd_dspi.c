@@ -560,7 +560,7 @@ uint16_t DSPI_B_Exchange_Data1(
         DSPI_CS_T               in_cs_select,
         DSPI_PUSHR_DSICR_CTAS_T in_ctar_msg,
         DSPI_CTAR_FMSZ_T        FMSize,
-        uint16_t                in_tx_data,
+        void *                in_tx_data,
         bool                    in_end)
 {
 	DSPI_PUSHR_T tx_data_buffer;
@@ -576,7 +576,11 @@ uint16_t DSPI_B_Exchange_Data1(
 		tx_data_buffer.F.CTCNT= true;
 	}
 
-	tx_data_buffer.U32 = tx_data_buffer.U32| (uint16_t)in_tx_data;
+	if (FMSize == 8) {
+		tx_data_buffer.U32 = tx_data_buffer.U32| ((*(uint8_t *)in_tx_data) & 0x000000ff);
+	} else {
+		tx_data_buffer.U32 = tx_data_buffer.U32| ((*(uint16_t *)in_tx_data) & 0x0000ffff);
+	}
 
 	DSPI_B.CTAR[in_ctar_msg].F.FMSZ = FMSize;
 

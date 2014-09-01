@@ -266,7 +266,7 @@ void  VSEP_SPI_Port_Transfer(SPI_Message_Definition_T  const *def)
 					 VSEP_CHIP_SELECT,
 					 VSEP_CTAR_SELECT,
 					 DSPI_CTAR_FMSZ_16,
-					 ((uint16_t*)def->transmit_data)[index_transmit],
+					 (&(uint16_t*)def->transmit_data)[index_transmit],
 					 end);
 		} else {
 			end = (index_transmit == (transmit_length - 1)) ? 1:0;
@@ -274,7 +274,7 @@ void  VSEP_SPI_Port_Transfer(SPI_Message_Definition_T  const *def)
 					VSEP_CHIP_SELECT,
 					VSEP_CTAR_SELECT,
 					DSPI_CTAR_FMSZ_16,
-					((uint16_t*)def->transmit_data)[index_transmit],
+					(&(uint16_t*)def->transmit_data)[index_transmit],
 					end);
 		}
 	}

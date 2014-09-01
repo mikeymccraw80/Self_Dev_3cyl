@@ -130,7 +130,7 @@ uint16_t   DSPI_B_Exchange_Data1(
    DSPI_CS_T                in_cs_select,
    DSPI_PUSHR_DSICR_CTAS_T             in_ctar_msg,
    DSPI_CTAR_FMSZ_T FMSize,
-   uint16_t        in_tx_data,
+   void *        in_tx_data,
    bool in_end);
 //=============================================================================
 
