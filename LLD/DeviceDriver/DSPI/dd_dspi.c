@@ -576,9 +576,9 @@ uint16_t DSPI_B_Exchange_Data1(
 		tx_data_buffer.F.CTCNT= true;
 	}
 
-	if (FMSize == 8) {
+	if (FMSize == DSPI_CTAR_FMSZ_8) {
 		tx_data_buffer.U32 = tx_data_buffer.U32| ((*(uint8_t *)in_tx_data) & 0x000000ff);
-	} else {
+	} else if (FMSize == DSPI_CTAR_FMSZ_16) {
 		tx_data_buffer.U32 = tx_data_buffer.U32| ((*(uint16_t *)in_tx_data) & 0x0000ffff);
 	}
 
