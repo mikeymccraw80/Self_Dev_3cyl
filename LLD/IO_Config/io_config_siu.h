@@ -278,7 +278,7 @@ extern const SIU_PCR_T SIU_INITIAL_PCR_130 ;
 //of the eTPU_A[16:19]_GPIO[130:133] pins. This registers allow selection of the eTPU_A and GPIO
 //functions.
 extern const SIU_PCR_T SIU_INITIAL_PCR_131;
-
+#define  HAL_GPIO_EST1_CHANNEL         SIU_GPIO_CHANNEL_131
 
 //etpu18
 //EST SYNC

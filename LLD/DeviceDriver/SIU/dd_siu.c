@@ -409,6 +409,14 @@ void SIU_GPIO_Output_Confige(SIU_GPIO_Channel_T channel, bool enable )
 }
 
 //=============================================================================
+// SIU_GPIO_OpenDrain_Confige
+//=============================================================================
+void SIU_GPIO_OpenDrain_Confige(SIU_GPIO_Channel_T channel, bool enable )
+{
+	SIU.PCR[channel].F.ODE = enable;
+}
+
+//=============================================================================
 // SIU_Knock_Connect_Pin_To_ETPU
 //=============================================================================
 void SIU_Knock_Connect_Pin_To_ETPU(bool state, SIU_GPIO_Channel_T siu_channel)

@@ -37,6 +37,11 @@ extern void SIU_GPIO_DISCRETE_Toggle_State(SIU_GPIO_Channel_T channel );
 // SIU_GPIO_DISCRETE_Get_State_Local
 //=============================================================================
  void SIU_GPIO_Output_Confige(SIU_GPIO_Channel_T channel, bool enable );
+ 
+//=============================================================================
+// SIU_GPIO_OpenDrain_Confige
+//=============================================================================
+ void SIU_GPIO_OpenDrain_Confige(SIU_GPIO_Channel_T channel, bool enable );
 
 //=============================================================================
 // SIU_Knock_Connect_Pin_To_ETPU
