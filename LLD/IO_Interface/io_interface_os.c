@@ -165,6 +165,8 @@ void  IO_OS_BackGround_1ms_Status_Check(void)
 			Clear_Longs(&HWIO_HLSBSS_START[0],(((uint16_t)(&HWIO_HLSBSS_SIZE)+3)/4));
 		}
 		/* Call the chery initialize functions */
+		IO_Analog_1ms_Update();
+		IO_Analog_10ms_Update();
 		HLS_ini();
 		HLS_inisyn();
 		HLS_ini2();                      
