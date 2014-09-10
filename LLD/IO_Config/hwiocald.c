@@ -227,6 +227,128 @@ const   uint8_t     KyHWIO_Num58xGapsUsingCamForSync = 12;
 
 /*
 *| hwiocald.{
+*|  KyHWIO_Number_Of_CAM_Pulses {
+*|     : is_calconst;
+*|     : description = "Number of CAM Pulses corresponding to one engine cycle";
+*|     : type = fixed.t_count_byte;
+*|     : units = "count";
+*|   }
+*| }
+*/
+const   T_COUNT_BYTE     KyHWIO_Number_Of_CAM_Pulses = 4;
+
+/*
+*| hwiocald.{
+*|  KyHWIO_Crank_Angle_Per_CAM_Pulse
+*|   {
+*|     : description = " Crank Angle Per CAM Pulse"
+*| "number of crank pulses corresponding to each CAM pulse";
+*|     : is_calconst;
+*|     : type = fixed.t_count_byte;
+*|     : units = "count";
+*|   }
+*| }
+*/
+const T_COUNT_BYTE    KyHWIO_Crank_Angle_Per_CAM_Pulse[4] =
+{
+   30,//Pulse A
+   30,//Pulse B
+   30,//Pulse C
+   30,//Pulse D
+};
+
+/*
+*| hwiocald.{
+*|  KyHWIO_CAM_Pulse_Duty_Min
+*|   {
+*|     : description = " CAM Pulse Duty Cycle Minimum";
+*|     : is_calconst;
+*|     : type = fixed.t_count_byte;
+*|     : units = "count";
+*|   }
+*| }
+*/
+const T_COUNT_BYTE    KyHWIO_CAM_Pulse_Duty_Min[4] =
+{
+   70, //Pulse A
+   25, //Pulse B
+   25, //Pulse C
+   70, //Pulse D
+};
+
+/*
+*| hwiocald.{
+*|  KyHWIO_CAM_Pulse_Duty_Max
+*|   {
+*|     : description = " CAM Pulse Duty Cycle Maximum";
+*|     : is_calconst;
+*|     : type = fixed.t_count_byte;
+*|     : units = "count";
+*|   }
+*| }
+*/
+const T_COUNT_BYTE    KyHWIO_CAM_Pulse_Duty_Max[4] =
+{
+   75, //Pulse A
+   30, //Pulse B
+   30, //Pulse C
+   75, //Pulse D
+};
+
+//=============================================================================
+// Calibration used by Crank Backup logic
+//=============================================================================
+/*
+*| hwiocald.{
+*|  KyHWIO_Crank_Angle_At_CAM_Pulse_Fall {
+*|     : is_calconst;
+*|     : description = "Crank angle at falling edge of each CAM pulse";
+*|     : type = fixed.t_crank_angle;
+*|     : units = "degree";
+*|   }
+*| }
+*/
+const T_CRANK_ANGLE    KyHWIO_Crank_Angle_At_CAM_Pulse_Fall[4] =
+{
+   V_CRANK_ANGLE(180),//Pulse A Fall Angle
+   V_CRANK_ANGLE(180),//Pulse B Fall Angle
+   V_CRANK_ANGLE(180),//Pulse C Fall Angle
+   V_CRANK_ANGLE(180),//Pulse D Fall Angle
+};
+
+/*===========================================================================*\
+ * The cylinder to fire after the cam pulse E rises
+\*===========================================================================*/
+/*
+*| hwiocald.{
+*|  KyHWIO_CylinderEventAfterCamERising {
+*|     : is_calconst;
+*|     : description = "Cylinder Event to begin after Cam pulse Edge rises";
+*|     : type = fixed.t_count_byte;
+*|     : units = "count";
+*|   }
+*| }
+*/
+const   T_COUNT_BYTE      KyHWIO_CylinderEventAfterCamERising = 0; 
+
+/*===========================================================================*\
+ * The crank angle at first crank tooth
+\*===========================================================================*/
+/*
+*| hwiocald.{
+*|  KyHWIO_Crank_Angle_At_First_Crank_Tooth {
+*|     : is_calconst;
+*|     : description = "Crank angle at first crank tooth";
+*|     : type = fixed.t_crank_angle;
+*|     : units = "degrees";
+*|   }
+*| }
+*/
+const T_CRANK_ANGLE    KyHWIO_Crank_Angle_At_First_Crank_Tooth   = V_CRANK_ANGLE (0);
+
+
+/*
+*| hwiocald.{
 *|    DSP_LOW_PASS_FILTER_IIR_COEFF {
 *|     : is_calconst;
 *|     : description ="Calibratable IIR coefficient for DSP Knock low pass filter  "

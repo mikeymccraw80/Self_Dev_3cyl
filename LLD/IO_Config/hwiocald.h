@@ -32,6 +32,15 @@ extern const T_CRANK_ANGLE    KfHWIO_phi_TopDeadCenter;
 extern const uint8_t       KyHWIO_NumberOfCylinders;
 extern const uint8_t       KyHWIO_NumValidPeriodsBeforeSyncStart;
 extern const uint8_t       KyHWIO_Num58xGapsUsingCamForSync;
+//crank limp home mode
+extern const T_COUNT_BYTE  KyHWIO_Number_Of_CAM_Pulses;
+extern const T_COUNT_BYTE  KyHWIO_Crank_Angle_Per_CAM_Pulse[];
+extern const T_COUNT_BYTE  KyHWIO_CAM_Pulse_Duty_Min[];
+extern const T_COUNT_BYTE  KyHWIO_CAM_Pulse_Duty_Max[];
+extern const T_COUNT_BYTE  KyHWIO_CylinderEventAfterCamERising;
+extern const T_CRANK_ANGLE KyHWIO_Crank_Angle_At_First_Crank_Tooth;
+extern const T_CRANK_ANGLE KyHWIO_Crank_Angle_At_CAM_Pulse_Fall[];
+
 extern const uint16_t      KyHWIO_MaxErrorTeethMore;
 extern const uint16_t      KyHWIO_MaxErrorTeethLess;
 
