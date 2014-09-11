@@ -83,4 +83,9 @@ void CRANK_Set_Diag_Tooth_Cnt(uint8_t cnt);
 //=============================================================================
 uint32_t  CRANK_Get_Tooth_Period( void );
 
+//=============================================================================
+// CRANK_Set_Current_Event_Tooth
+//=============================================================================
+void CRANK_Set_Current_Event_Tooth(uCrank_Count_T tooth_number);
+
 #endif // DD_CRANK_INTERFACE_H

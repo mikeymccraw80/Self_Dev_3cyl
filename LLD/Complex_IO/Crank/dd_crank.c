@@ -1,5 +1,3 @@
-
-
 //=============================================================================
 //   device and simple io include files
 //=============================================================================
@@ -192,11 +190,11 @@ void CRANK_Initialize(
    uint32_t counter;
 
    
-      MCD5408_Initialize_Channel(
-                       EPPWMT_TPU_INDEX,
-                       &TPU,
-                       TPU_CONFIG_IC_EPPWMT,
-                      &EPPWMT_INIT);
+	  MCD5408_Initialize_Channel(
+					   EPPWMT_TPU_INDEX,
+					   &TPU,
+					   TPU_CONFIG_IC_EPPWMT,
+					  &EPPWMT_INIT);
 
    CRANK_Initialization_Parameters = in_initialization_parameters;
 
@@ -212,18 +210,18 @@ void CRANK_Initialize(
    // False selects the Angle Mode, True selects Edge Mode - May need to make selectable.
    MCD5408_Set_Angle_Clock_Mode( EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT, EPPWMT_ANGLE_MODE_PLL );
 
-     // clear the crank schedule table
+	 // clear the crank schedule table
    for( counter = 0; counter < CRANK_VIRTUAL_TEETH_PER_REVOLUTION; counter++ )
    {
-      // clear events for all teeth
-      CRANK_Schedule_Table[ counter ] = 0;
+	  // clear events for all teeth
+	  CRANK_Schedule_Table[ counter ] = 0;
    }
 
    // Initialize Crank filter time
    MCD5408_Set_Filter_Time( EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT,
-          CRANK_Parameters.F.filter_value ); // timer counts
+		  CRANK_Parameters.F.filter_value ); // timer counts
    MCD5408_Set_IRQ_Enable(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT,(EPI_CRANK_GAP_DETECTED_IRQ_ENABLE |\
-         EPI_CRANK_TOOTHPULSE_IRQ_ENABLE_1));   
+		 EPI_CRANK_TOOTHPULSE_IRQ_ENABLE_1));   
 
 
 }
@@ -250,50 +248,50 @@ void CRANK_Reset_Parameters( void )
    uint32_t       time_base;
 
 
-      CRANK_Parameters.F.virtual_teeth_per_cylinder_event = CRANK_VIRTUAL_TEETH_PER_REVOLUTION
-                                               / CRANK_Initialization_Parameters->number_of_cylinders;
+	  CRANK_Parameters.F.virtual_teeth_per_cylinder_event = CRANK_VIRTUAL_TEETH_PER_REVOLUTION
+											   / CRANK_Initialization_Parameters->number_of_cylinders;
 
-      CRANK_Last_Cylinder_Event_Tooth = (uint8_t)( CRANK_Synchronization_Start_Tooth
-                                 + ( (uint32_t)( CRANK_Initialization_Parameters->number_of_cylinders - 1 )
-                                     * CRANK_Parameters.F.virtual_teeth_per_cylinder_event ) );
+	  CRANK_Last_Cylinder_Event_Tooth = (uint8_t)( CRANK_Synchronization_Start_Tooth
+								 + ( (uint32_t)( CRANK_Initialization_Parameters->number_of_cylinders - 1 )
+									 * CRANK_Parameters.F.virtual_teeth_per_cylinder_event ) );
 
 
-      // Initialize Crank reference event related variables
-      CRANK_Cylinder_ID = CRANK_CYLINDER_A;
-      CRANK_Cylinder_ID_Even = CRANK_CYLINDER_A;
-      CRANK_Parameters.F.lo_res_reference_period = 0x00FFFFFF;
-      CRANK_Parameters.F.engine_speed= 0;
-      CRANK_Parameters.F.reference_tooth_error_count = 0;
-      CRANK_Parameters.F.number_of_gaps_detected = 0;
+	  // Initialize Crank reference event related variables
+	  CRANK_Cylinder_ID = CRANK_CYLINDER_A;
+	  CRANK_Cylinder_ID_Even = CRANK_CYLINDER_A;
+	  CRANK_Parameters.F.lo_res_reference_period = 0x00FFFFFF;
+	  CRANK_Parameters.F.engine_speed= 0;
+	  CRANK_Parameters.F.reference_tooth_error_count = 0;
+	  CRANK_Parameters.F.number_of_gaps_detected = 0;
 
-      time_base = TPU_TIMER_Get_Base_Frequency( EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT );
+	  time_base = TPU_TIMER_Get_Base_Frequency( EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT );
 
-      // Magic number 60 is seconds per minute
-      CRANK_Filtered_Min_Tooth_Period =
-         ( time_base / ( ( CRANK_Initialization_Parameters->filter_max_rpm_for_synchronization * CRANK_VIRTUAL_TEETH_PER_CRANK ) / 60 ) );
+	  // Magic number 60 is seconds per minute
+	  CRANK_Filtered_Min_Tooth_Period =
+		 ( time_base / ( ( CRANK_Initialization_Parameters->filter_max_rpm_for_synchronization * CRANK_VIRTUAL_TEETH_PER_CRANK ) / 60 ) );
 
-      CRANK_Filtered_Max_Tooth_Period =
-         ( time_base / ( ( CRANK_Initialization_Parameters->filter_min_rpm_for_synchronization * CRANK_VIRTUAL_TEETH_PER_CRANK ) / 60 ) );
+	  CRANK_Filtered_Max_Tooth_Period =
+		 ( time_base / ( ( CRANK_Initialization_Parameters->filter_min_rpm_for_synchronization * CRANK_VIRTUAL_TEETH_PER_CRANK ) / 60 ) );
 
-      // init crank state flags
-      CRANK_Internal_State.U32 = CRANK_INITIAL_INTERNAL_STATE;
+	  // init crank state flags
+	  CRANK_Internal_State.U32 = CRANK_INITIAL_INTERNAL_STATE;
 
-      // Disable interrupts
-      MCD5408_Disable_Host_Interrupt(EPPWMT_TPU_INDEX, &TPU, TPU_CONFIG_IC_EPPWMT);
-      CRANK_Internal_State.U32 = CRANK_Set_Sync_Second_Revolution( CRANK_Internal_State.U32, false );
+	  // Disable interrupts
+	  MCD5408_Disable_Host_Interrupt(EPPWMT_TPU_INDEX, &TPU, TPU_CONFIG_IC_EPPWMT);
+	  CRANK_Internal_State.U32 = CRANK_Set_Sync_Second_Revolution( CRANK_Internal_State.U32, false );
 
-      new_gap_cnt = MCD5408_Get_IRQ_Count_At_Last_Interrupt( EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT, CRANK_EPPE_IRQ_Select ) + CRANK_COUNT_MAX;
-      MCD5408_Set_New_Gap_Count( EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT, new_gap_cnt );
-      MCD5408_Set_Previous_n_1(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT,0);
-      MCD5408_Set_Previous_1_n(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT,0);
+	  new_gap_cnt = MCD5408_Get_IRQ_Count_At_Last_Interrupt( EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT, CRANK_EPPE_IRQ_Select ) + CRANK_COUNT_MAX;
+	  MCD5408_Set_New_Gap_Count( EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT, new_gap_cnt );
+	  MCD5408_Set_Previous_n_1(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT,0);
+	  MCD5408_Set_Previous_1_n(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT,0);
 
-      // Call the Resync functions based on a stall event:
-      CAM_Reset_Parameters();
-      SPARK_Reset_Parameters();
-      PFI_Reset_Parameters();
-      //   IO_KNOCK_Reset_Parameters
-      OS_Engine_Stall_Reset();
-      KNOCK_Initialize();
+	  // Call the Resync functions based on a stall event:
+	  CAM_Reset_Parameters();
+	  SPARK_Reset_Parameters();
+	  PFI_Reset_Parameters();
+	  //   IO_KNOCK_Reset_Parameters
+	  OS_Engine_Stall_Reset();
+	  KNOCK_Initialize();
 }
 
 
@@ -326,26 +324,26 @@ void CRANK_Manage_Execute_Event( void )
   for( counter = CRANK_EVENT_ID_MAX - 1; counter > -1; counter-- )
    //	for( counter = 0; counter <CRANK_EVENT_ID_MAX; counter++ )
    {
-      // Reduce the mask:
-      mask &= ~(Mask32( counter, 1));
+	  // Reduce the mask:
+	  mask &= ~(Mask32( counter, 1));
 
-      // If the current event is selected (indicated by a '1' in the schedule
-      // table), but the handler routine pointer is empty, a problem has occurred:
-      //
-      if( current_event & ( 0x1 << counter) )
-      {
+	  // If the current event is selected (indicated by a '1' in the schedule
+	  // table), but the handler routine pointer is empty, a problem has occurred:
+	  //
+	  if( current_event & ( 0x1 << counter) )
+	  {
 
-         // Call the handler routine in CRANK_Event_List which corresponds
-         // to this bit in CRANK_Schedule_Table_Ptr[current_event]:
-         //
-         ( *CRANK_Event_List[ counter ] )();
+		 // Call the handler routine in CRANK_Event_List which corresponds
+		 // to this bit in CRANK_Schedule_Table_Ptr[current_event]:
+		 //
+		 ( *CRANK_Event_List[ counter ] )();
 
-         // If there are no more scheduled events on this tooth, exit:
-         if( !( ( current_event ) & mask ) )
-         {
-            break;
-         }
-      }
+		 // If there are no more scheduled events on this tooth, exit:
+		 if( !( ( current_event ) & mask ) )
+		 {
+			break;
+		 }
+	  }
    }
 
 }
@@ -386,38 +384,38 @@ static void CRANK_Filter_Crank_Signal( void )
 {
    if( CRANK_Get_Run_Reset_Bypass_Filter( CRANK_Internal_State.U32 ) )
    {
-      CRANK_Internal_State.U32 = CRANK_Set_Filter_Enabled( CRANK_Internal_State.U32, false );
-      CRANK_Internal_State.U32 = CRANK_Set_Sync_Started( CRANK_Internal_State.U32, true );	
-      CRANK_Internal_State.U32 = CRANK_Set_Run_Reset_Bypass_Filter( CRANK_Internal_State.U32, false );
-     CRANK_Set_Flag( CRANK_FLAG_STALL_DETECTED, false );
+	  CRANK_Internal_State.U32 = CRANK_Set_Filter_Enabled( CRANK_Internal_State.U32, false );
+	  CRANK_Internal_State.U32 = CRANK_Set_Sync_Started( CRANK_Internal_State.U32, true );	
+	  CRANK_Internal_State.U32 = CRANK_Set_Run_Reset_Bypass_Filter( CRANK_Internal_State.U32, false );
+	 CRANK_Set_Flag( CRANK_FLAG_STALL_DETECTED, false );
    }
    else
    {
-      // A tooth is valid if it corresponds to an engine speed
-      // with tooth periods between the given min and max values or
-      // we are measuring a gap tooth so the Max_Tooth_Period is not valid and could cause a stall.
-       if( ( CRANK_Tooth_Duration > CRANK_Filtered_Min_Tooth_Period ) &&
-            ( CRANK_Tooth_Duration< CRANK_Filtered_Max_Tooth_Period ) )
-      
-      {
-         CRANK_Valid_Sync_Period++;
-         // before disabling the filter:
-         //
-         CRANK_Internal_State.U32 = CRANK_Set_Valid_Tooth( CRANK_Internal_State.U32, true );
-         if( CRANK_Valid_Sync_Period >= CRANK_Initialization_Parameters->valid_synchronization_tooth_periods )
-         {
-            CRANK_Internal_State.U32 = CRANK_Set_Engine_Turning( CRANK_Internal_State.U32, true );
-            CRANK_Internal_State.U32 = CRANK_Set_Filter_Enabled( CRANK_Internal_State.U32, false );
-            CRANK_Internal_State.U32 = CRANK_Set_Sync_Started( CRANK_Internal_State.U32, true );
-	     CRANK_Set_Flag( CRANK_FLAG_STALL_DETECTED, false );
-            CRANK_Valid_Sync_Period = 0;
+	  // A tooth is valid if it corresponds to an engine speed
+	  // with tooth periods between the given min and max values or
+	  // we are measuring a gap tooth so the Max_Tooth_Period is not valid and could cause a stall.
+	   if( ( CRANK_Tooth_Duration > CRANK_Filtered_Min_Tooth_Period ) &&
+			( CRANK_Tooth_Duration< CRANK_Filtered_Max_Tooth_Period ) )
 	  
-         }
-      }
-      else
-      {
-         CRANK_Valid_Sync_Period = 0;
-      }
+	  {
+		 CRANK_Valid_Sync_Period++;
+		 // before disabling the filter:
+		 //
+		 CRANK_Internal_State.U32 = CRANK_Set_Valid_Tooth( CRANK_Internal_State.U32, true );
+		 if( CRANK_Valid_Sync_Period >= CRANK_Initialization_Parameters->valid_synchronization_tooth_periods )
+		 {
+			CRANK_Internal_State.U32 = CRANK_Set_Engine_Turning( CRANK_Internal_State.U32, true );
+			CRANK_Internal_State.U32 = CRANK_Set_Filter_Enabled( CRANK_Internal_State.U32, false );
+			CRANK_Internal_State.U32 = CRANK_Set_Sync_Started( CRANK_Internal_State.U32, true );
+		 CRANK_Set_Flag( CRANK_FLAG_STALL_DETECTED, false );
+			CRANK_Valid_Sync_Period = 0;
+	  
+		 }
+	  }
+	  else
+	  {
+		 CRANK_Valid_Sync_Period = 0;
+	  }
    }
 }
 
@@ -506,43 +504,43 @@ static void CRANK_Search_For_First_Gap( void )
    
    if( CRANK_Get_Power_Up( CRANK_Internal_State.U32 ) )
    {
-      //
-      // 1st time a GapSearch is done after powerup No prev. tooth time to get
-      // duration.
-      //
-      CRANK_Internal_State.U32 = CRANK_Set_Power_Up( CRANK_Internal_State.U32, false );
+	  //
+	  // 1st time a GapSearch is done after powerup No prev. tooth time to get
+	  // duration.
+	  //
+	  CRANK_Internal_State.U32 = CRANK_Set_Power_Up( CRANK_Internal_State.U32, false );
    }
    else
    {
-      if ( CRANK_Get_Filter_Enabled( CRANK_Internal_State.U32 ))
-      {
-         //
-         // Filter out any spike due to low signal to noise ratio from the
-         // sensor on the first teeth during crank.
-         //
-         CRANK_Filter_Crank_Signal();
-      }
-      else
-      {
-         CRANK_Internal_State.U32 = CRANK_Set_Engine_Turning( CRANK_Internal_State.U32, true );
-         CRANK_Internal_State.U32 = CRANK_Set_Valid_Tooth( CRANK_Internal_State.U32, true );
-         OS_Engine_Start_Crank();
-         if( !CRANK_Get_Sync_Started( CRANK_Internal_State.U32 ) )
-         {
-            //
-            // 2 intervals are needed for gap identification if the software
-            // filter is disabled.
-            //
-            CRANK_Internal_State.U32 = CRANK_Set_Sync_Started( CRANK_Internal_State.U32, true );
-	      
-         }
-         else
-         {
-            // Perform the gap search
-            sync_conditions_met =  CRANK_First_Gap_Cofirm();
+	  if ( CRANK_Get_Filter_Enabled( CRANK_Internal_State.U32 ))
+	  {
+		 //
+		 // Filter out any spike due to low signal to noise ratio from the
+		 // sensor on the first teeth during crank.
+		 //
+		 CRANK_Filter_Crank_Signal();
+	  }
+	  else
+	  {
+		 CRANK_Internal_State.U32 = CRANK_Set_Engine_Turning( CRANK_Internal_State.U32, true );
+		 CRANK_Internal_State.U32 = CRANK_Set_Valid_Tooth( CRANK_Internal_State.U32, true );
+		 OS_Engine_Start_Crank();
+		 if( !CRANK_Get_Sync_Started( CRANK_Internal_State.U32 ) )
+		 {
+			//
+			// 2 intervals are needed for gap identification if the software
+			// filter is disabled.
+			//
+			CRANK_Internal_State.U32 = CRANK_Set_Sync_Started( CRANK_Internal_State.U32, true );
+		  
+		 }
+		 else
+		 {
+			// Perform the gap search
+			sync_conditions_met =  CRANK_First_Gap_Cofirm();
 
-         }
-      }
+		 }
+	  }
 
    }
 
@@ -648,7 +646,7 @@ void CRANK_Process_Crank_Event( void )
 		CRANK_Parameters.F.edge_time = CRANK_Get_Edge_Time_From_Count(CRANK_Next_Event_PA_Content);
 		CRANK_Parameters.F.edge_angle = CRANK_Convert_Teeth_To_uCrank_Angle( actual_irq_count );
 
-		CRANK_Tooth_Duration =MCD5408_Get_Period(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT);    
+		CRANK_Tooth_Duration = MCD5408_Get_Period(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT);
 		CRANK_Hi_Res_Edge_Time = CRANK_Parameters.F.edge_time;	
 
 		OS_ToothInt_Hook();
@@ -659,36 +657,42 @@ void CRANK_Process_Crank_Event( void )
 			CRANK_Current_Event_Tooth -= ( uCrank_Count_T )CRANK_VIRTUAL_TEETH_PER_REVOLUTION;
 		}
 
-		// Check if first synchronization took place:
-		if (!CRANK_Get_First_Sync_Occurred( CRANK_Internal_State.U32 ) ) {
-			// Look for the first synchronization:
-			CRANK_Search_For_First_Gap();
-		} else {
-			valid_result = true;
-			
-			/* confirm gap only in certain range, (55, 65) (115, 5) */
-			if (IS_IN_RANGE(CRANK_Current_Event_Tooth, 55, 65) ||
-				IS_IN_RANGE(CRANK_Current_Event_Tooth, 115, 120) ||
-				IS_IN_RANGE(CRANK_Current_Event_Tooth, 1, 5))
-			{
-				valid_result = CRANK_Validate_Synchronization();
-			}
-			
-			if (valid_result == true) {
-				if (CRANK_Get_Sync_First_Revolution(CRANK_Internal_State.U32)) {
-					if (IS_IN_RANGE(CRANK_Current_Event_Tooth, 3, 58)) {
-						CRANK_Manage_Execute_Event();
-					}
-				} else if (CRANK_Get_Sync_Second_Revolution(CRANK_Internal_State.U32)) {
-					if (IS_IN_RANGE(CRANK_Current_Event_Tooth, 63, 118)) {
-							CRANK_Manage_Execute_Event();
-					}
-				}
+		/* crank signal is normal */
+		if (CRANK_Get_Flag(CRANK_FLAG_CAM_BACKUP) == false) {
+			// Check if first synchronization took place:
+			if (!CRANK_Get_First_Sync_Occurred( CRANK_Internal_State.U32 ) ) {
+				// Look for the first synchronization:
+				CRANK_Search_For_First_Gap();
 			} else {
-				//recovery and return
-				CRANK_Recover_From_Synch_Error();
-				return;
+				valid_result = true;
+				
+				/* confirm gap only in certain range, (55, 65) (115, 5) */
+				if (IS_IN_RANGE(CRANK_Current_Event_Tooth, 55, 65) ||
+					IS_IN_RANGE(CRANK_Current_Event_Tooth, 115, 120) ||
+					IS_IN_RANGE(CRANK_Current_Event_Tooth, 1, 5))
+				{
+					valid_result = CRANK_Validate_Synchronization();
+				}
+				
+				if (valid_result == true) {
+					if (CRANK_Get_Sync_First_Revolution(CRANK_Internal_State.U32)) {
+						if (IS_IN_RANGE(CRANK_Current_Event_Tooth, 3, 58)) {
+							CRANK_Manage_Execute_Event();
+						}
+					} else if (CRANK_Get_Sync_Second_Revolution(CRANK_Internal_State.U32)) {
+						if (IS_IN_RANGE(CRANK_Current_Event_Tooth, 63, 118)) {
+								CRANK_Manage_Execute_Event();
+						}
+					}
+				} else {
+					//recovery and return
+					CRANK_Recover_From_Synch_Error();
+					return;
+				}
 			}
+		} else {
+		/* crank signal is faulty, so it only can works in backup mode */
+			CRANK_Manage_Execute_Event();
 		}
 
 		temp_count = CRANK_Next_Event_PA_Content;
@@ -715,61 +719,61 @@ void CRANK_Process_Crank_Event( void )
 //=============================================================================
 void CRANK_High_Priority_Cylinder_Event( void )
 {
-      uint32_t cs;
-      cs = Enter_Critical_Section();
-      // record tooth between cylinder event
-      CRANK_Teeth_In_Syn_Event_COUNT = CRANK_Next_Event_PA_Content - CRANK_Previous_Sys_Event_COUNT;
-      CRANK_Previous_Sys_Event_COUNT = CRANK_Next_Event_PA_Content;
+	  uint32_t cs;
+	  cs = Enter_Critical_Section();
+	  // record tooth between cylinder event
+	  CRANK_Teeth_In_Syn_Event_COUNT = CRANK_Next_Event_PA_Content - CRANK_Previous_Sys_Event_COUNT;
+	  CRANK_Previous_Sys_Event_COUNT = CRANK_Next_Event_PA_Content;
 
-      // Update Irq tooth count at Cylinder Event
-      CRANK_Parameters.F.angle_at_cylinder_event = (CRANK_Current_Event_Edge_Content+1) << uCRANK_ANGLE_PRECISION;
+	  // Update Irq tooth count at Cylinder Event
+	  CRANK_Parameters.F.angle_at_cylinder_event = (CRANK_Current_Event_Edge_Content+1) << uCRANK_ANGLE_PRECISION;
 
-      // Update CylinderEvent event period and time
-      CRANK_Parameters.F.lo_res_reference_period =
-         ( CRANK_Parameters.F.edge_time - CRANK_Parameters.F.cylinder_event_reference_time ) & 0x00FFFFFF;
+	  // Update CylinderEvent event period and time
+	  CRANK_Parameters.F.lo_res_reference_period =
+		 ( CRANK_Parameters.F.edge_time - CRANK_Parameters.F.cylinder_event_reference_time ) & 0x00FFFFFF;
 
-      CRANK_Parameters.F.engine_speed = CRANK_Convert_Ref_Period_To_RPM();
+	  CRANK_Parameters.F.engine_speed = CRANK_Convert_Ref_Period_To_RPM();
 
-      CRANK_Parameters.F.cylinder_event_reference_time = CRANK_Parameters.F.edge_time;
+	  CRANK_Parameters.F.cylinder_event_reference_time = CRANK_Parameters.F.edge_time;
 
-      CRANK_Parameters.F.cylinder_event_reference_angle = CRANK_Parameters.F.edge_angle;
+	  CRANK_Parameters.F.cylinder_event_reference_angle = CRANK_Parameters.F.edge_angle;
 
-      //Update real ref period
-      CRANK_Real_Edge_Time_Current = MCD5408_Get_Real_Edge_Time(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT);
+	  //Update real ref period
+	  CRANK_Real_Edge_Time_Current = MCD5408_Get_Real_Edge_Time(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT);
 
-      CRANK_Parameters.F.real_reference_period = (CRANK_Real_Edge_Time_Current - CRANK_Real_Edge_Time_Previous)& 0x00FFFFFF;
-      CRANK_Real_Edge_Time_Previous = CRANK_Real_Edge_Time_Current;
+	  CRANK_Parameters.F.real_reference_period = (CRANK_Real_Edge_Time_Current - CRANK_Real_Edge_Time_Previous)& 0x00FFFFFF;
+	  CRANK_Real_Edge_Time_Previous = CRANK_Real_Edge_Time_Current;
 
-      //Set up stall timeout
+	  //Set up stall timeout
   
-      CRANK_Set_Flag( CRANK_FLAG_STALL_DETECTED, false );
+	  CRANK_Set_Flag( CRANK_FLAG_STALL_DETECTED, false );
 
-      // Updates the crank filter time based on current Cylinder Event period
-      MCD5408_Set_Filter_Time( EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT, CRANK_Parameters.F.filter_value ); // timer counts
+	  // Updates the crank filter time based on current Cylinder Event period
+	  MCD5408_Set_Filter_Time( EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT, CRANK_Parameters.F.filter_value ); // timer counts
 
 	// Perform High Priority Cylinder Event Event tasks
-      //CRANK_Increment_Cylinder_Event_Counter
-      if( CRANK_Cylinder_ID >= (uint16_t) CRANK_Initialization_Parameters->number_of_cylinders - 1 )
-        {
-           CRANK_Cylinder_ID = CRANK_CYLINDER_A;
-         }
-      else
-       {
-           CRANK_Cylinder_ID++;
-       }
+	  //CRANK_Increment_Cylinder_Event_Counter
+	  if( CRANK_Cylinder_ID >= (uint16_t) CRANK_Initialization_Parameters->number_of_cylinders - 1 )
+		{
+		   CRANK_Cylinder_ID = CRANK_CYLINDER_A;
+		 }
+	  else
+	   {
+		   CRANK_Cylinder_ID++;
+	   }
 
-      CRANK_Cylinder_ID_Even = CRANK_Cylinder_ID/2;
+	  CRANK_Cylinder_ID_Even = CRANK_Cylinder_ID/2;
 	  
-      //CRANK_Update_Hi_Res_Reference_Period
-      CRANK_Parameters.F.hi_res_reference_period = (CRANK_Hi_Res_Edge_Time - CRANK_Previous_Hi_Res_Reference_Time) & UINT24_MAX;
+	  //CRANK_Update_Hi_Res_Reference_Period
+	  CRANK_Parameters.F.hi_res_reference_period = (CRANK_Hi_Res_Edge_Time - CRANK_Previous_Hi_Res_Reference_Time) & UINT24_MAX;
 
-      // Save current hi-res ref event time for next event
-     CRANK_Previous_Hi_Res_Reference_Time = CRANK_Hi_Res_Edge_Time;
+	  // Save current hi-res ref event time for next event
+	 CRANK_Previous_Hi_Res_Reference_Time = CRANK_Hi_Res_Edge_Time;
 
    Leave_Critical_Section( cs );
 
-      // Clear fist cylinder event
-      CRANK_Internal_State.U32 = CRANK_Set_First_Cylinder_Event_Occured( CRANK_Internal_State.U32, false );
+	  // Clear fist cylinder event
+	  CRANK_Internal_State.U32 = CRANK_Set_First_Cylinder_Event_Occured( CRANK_Internal_State.U32, false );
 
 
 }
@@ -783,22 +787,22 @@ void CRANK_High_Priority_Cylinder_Event( void )
    uint16_t                          first_tooth_count;
    uint32_t                         cs;
 
-      // Schedule first EPPwMT Primitive crank interrupt on next tooth:
-      MCD5408_Get_Coherent_Edge_Time_And_Count( EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT, &edge_time_and_count );
-      CRANK_Next_Event_PA_Content = edge_time_and_count.Count + 1;
-      first_tooth_count = edge_time_and_count.Count + 1;
+	  // Schedule first EPPwMT Primitive crank interrupt on next tooth:
+	  MCD5408_Get_Coherent_Edge_Time_And_Count( EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT, &edge_time_and_count );
+	  CRANK_Next_Event_PA_Content = edge_time_and_count.Count + 1;
+	  first_tooth_count = edge_time_and_count.Count + 1;
 
-    //  CRANK_Setup_Next_Event( first_tooth_count );
-	    MCD5408_Set_New_IRQ_Count(
-         EPPWMT_TPU_INDEX,
-         TPU_CONFIG_IC_EPPWMT,
-         EPPWMT_IRQ_1, first_tooth_count);
+	//  CRANK_Setup_Next_Event( first_tooth_count );
+		MCD5408_Set_New_IRQ_Count(
+		 EPPWMT_TPU_INDEX,
+		 TPU_CONFIG_IC_EPPWMT,
+		 EPPWMT_IRQ_1, first_tooth_count);
 
-      // Clear the interrupt flag: false == clear
-      MCD5408_Set_Host_Interrupt_Status( EPPWMT_TPU_INDEX,&TPU,TPU_CONFIG_IC_EPPWMT, false );
+	  // Clear the interrupt flag: false == clear
+	  MCD5408_Set_Host_Interrupt_Status( EPPWMT_TPU_INDEX,&TPU,TPU_CONFIG_IC_EPPWMT, false );
 
-      // Enable interrupts
-      MCD5408_Enable_Host_Interrupt( EPPWMT_TPU_INDEX,&TPU,TPU_CONFIG_IC_EPPWMT);
+	  // Enable interrupts
+	  MCD5408_Enable_Host_Interrupt( EPPWMT_TPU_INDEX,&TPU,TPU_CONFIG_IC_EPPWMT);
 
 }
 
@@ -816,20 +820,20 @@ Crank_Angle_T CRANK_Convert_To_Crank_Angle(
 
    if ( in_signed_angle < 0 )
    {
-      unsigned_angle = ( 0 - unsigned_angle );
+	  unsigned_angle = ( 0 - unsigned_angle );
 
-      temp_count = CRANK_Convert_Angle_To_uCrank_Angle( unsigned_angle, in_precision );
+	  temp_count = CRANK_Convert_Angle_To_uCrank_Angle( unsigned_angle, in_precision );
 
-      crank_angle = (Crank_Angle_T)( ( temp_count > CRANK_ANGLE_MAX ) ? CRANK_ANGLE_MIN : -(int32_t)temp_count );
+	  crank_angle = (Crank_Angle_T)( ( temp_count > CRANK_ANGLE_MAX ) ? CRANK_ANGLE_MIN : -(int32_t)temp_count );
    }
    else
    {
-      //
-      // Convert to intermediate value( temp_count ) before converting to Crank_Angle_T
-      //
-      temp_count = CRANK_Convert_Angle_To_uCrank_Angle( unsigned_angle, in_precision );
+	  //
+	  // Convert to intermediate value( temp_count ) before converting to Crank_Angle_T
+	  //
+	  temp_count = CRANK_Convert_Angle_To_uCrank_Angle( unsigned_angle, in_precision );
 
-      crank_angle = (Crank_Angle_T)( ( temp_count > CRANK_ANGLE_MAX ) ? CRANK_ANGLE_MAX : temp_count );
+	  crank_angle = (Crank_Angle_T)( ( temp_count > CRANK_ANGLE_MAX ) ? CRANK_ANGLE_MAX : temp_count );
    }
 
    return( crank_angle );
@@ -865,10 +869,10 @@ uint32_t CRANK_Convert_uCrank_Angle_To_uTime(
    uint32_t time;
 
    time = IO_Convert_uAngle_To_uTime(
-      in_angle,
-      uCRANK_ANGLE_PRECISION,
-      CRANK_Parameters.F.lo_res_reference_period,
-      ( CRANK_NUMBER_OF_DEGREES_PER_REVOLUTION / CRANK_Initialization_Parameters->number_of_cylinders ) );
+	  in_angle,
+	  uCRANK_ANGLE_PRECISION,
+	  CRANK_Parameters.F.lo_res_reference_period,
+	  ( CRANK_NUMBER_OF_DEGREES_PER_REVOLUTION / CRANK_Initialization_Parameters->number_of_cylinders ) );
 
    return ( time );
 }
@@ -882,10 +886,10 @@ int32_t CRANK_Convert_Crank_Angle_To_Time(
    int32_t time;
 
    time = IO_Convert_Angle_To_Time(
-      in_angle,
-      uCRANK_ANGLE_PRECISION,
-      CRANK_Parameters.F.lo_res_reference_period,
-      ( CRANK_NUMBER_OF_DEGREES_PER_REVOLUTION / CRANK_Initialization_Parameters->number_of_cylinders ) );
+	  in_angle,
+	  uCRANK_ANGLE_PRECISION,
+	  CRANK_Parameters.F.lo_res_reference_period,
+	  ( CRANK_NUMBER_OF_DEGREES_PER_REVOLUTION / CRANK_Initialization_Parameters->number_of_cylinders ) );
 
    return ( time );
 }
@@ -894,15 +898,15 @@ int32_t CRANK_Convert_Crank_Angle_To_Time(
 // CRANK_Convert_uTime_To_uCrank_Angle
 //=============================================================================
 uCrank_Angle_T CRANK_Convert_uTime_To_uCrank_Angle(
-    uint32_t in_time )
+	uint32_t in_time )
 {
    uCrank_Angle_T angle;
 
    angle = IO_Convert_uTime_To_uAngle(
-      in_time,
-      uCRANK_ANGLE_PRECISION,
-      CRANK_Parameters.F.lo_res_reference_period,
-      ( CRANK_SCHEDULE_CONFIG_VIRTUAL_TEETH_PER_REVOLUTION / CRANK_Initialization_Parameters->number_of_cylinders ) );
+	  in_time,
+	  uCRANK_ANGLE_PRECISION,
+	  CRANK_Parameters.F.lo_res_reference_period,
+	  ( CRANK_SCHEDULE_CONFIG_VIRTUAL_TEETH_PER_REVOLUTION / CRANK_Initialization_Parameters->number_of_cylinders ) );
 
    return ( angle );
 }
@@ -911,15 +915,15 @@ uCrank_Angle_T CRANK_Convert_uTime_To_uCrank_Angle(
 // CRANK_Convert_Time_To_Crank_Angle
 //=============================================================================
 Crank_Angle_T CRANK_Convert_Time_To_Crank_Angle(
-    int32_t in_time )
+	int32_t in_time )
 {
    Crank_Angle_T angle;
 
    angle = (Crank_Angle_T)IO_Convert_Time_To_Angle(
-      in_time,
-      uCRANK_ANGLE_PRECISION,
-      CRANK_Parameters.F.lo_res_reference_period,
-      (uint8_t)( CRANK_NUMBER_OF_DEGREES_PER_REVOLUTION / CRANK_Initialization_Parameters->number_of_cylinders ) );
+	  in_time,
+	  uCRANK_ANGLE_PRECISION,
+	  CRANK_Parameters.F.lo_res_reference_period,
+	  (uint8_t)( CRANK_NUMBER_OF_DEGREES_PER_REVOLUTION / CRANK_Initialization_Parameters->number_of_cylinders ) );
 
    return ( angle );
 }
@@ -946,10 +950,10 @@ uint32_t CRANK_Convert_uAngle_To_uTime(
    uint32_t time;
 
    time = IO_Convert_uAngle_To_uTime(
-      in_angle,
-      in_precision,
-      CRANK_Parameters.F.lo_res_reference_period,
-      (uint8_t)( CRANK_NUMBER_OF_DEGREES_PER_REVOLUTION / CRANK_Initialization_Parameters->number_of_cylinders ) );
+	  in_angle,
+	  in_precision,
+	  CRANK_Parameters.F.lo_res_reference_period,
+	  (uint8_t)( CRANK_NUMBER_OF_DEGREES_PER_REVOLUTION / CRANK_Initialization_Parameters->number_of_cylinders ) );
 
    return ( time );
 }
@@ -972,10 +976,10 @@ int32_t CRANK_Convert_Angle_To_Time(
    int32_t time;
 
    time = IO_Convert_Angle_To_Time(
-      in_angle,
-      in_precision,
-      CRANK_Parameters.F.lo_res_reference_period,
-      ( CRANK_NUMBER_OF_DEGREES_PER_REVOLUTION / CRANK_Initialization_Parameters->number_of_cylinders ) );
+	  in_angle,
+	  in_precision,
+	  CRANK_Parameters.F.lo_res_reference_period,
+	  ( CRANK_NUMBER_OF_DEGREES_PER_REVOLUTION / CRANK_Initialization_Parameters->number_of_cylinders ) );
 
    return ( time );
 }
@@ -1002,10 +1006,10 @@ uint32_t CRANK_Convert_uTime_To_uAngle(
    uint32_t angle;
 
    angle = IO_Convert_uTime_To_uAngle(
-      in_time,
-      in_precision,
-      CRANK_Parameters.F.lo_res_reference_period,
-      ( CRANK_NUMBER_OF_DEGREES_PER_REVOLUTION / CRANK_Initialization_Parameters->number_of_cylinders ) );
+	  in_time,
+	  in_precision,
+	  CRANK_Parameters.F.lo_res_reference_period,
+	  ( CRANK_NUMBER_OF_DEGREES_PER_REVOLUTION / CRANK_Initialization_Parameters->number_of_cylinders ) );
 
    return ( angle );
 }
@@ -1028,10 +1032,10 @@ int32_t CRANK_Convert_Time_To_Angle(
    int32_t angle;
 
    angle = IO_Convert_Time_To_Angle(
-      in_time,
-      in_precision,
-      CRANK_Parameters.F.lo_res_reference_period,
-      ( CRANK_NUMBER_OF_DEGREES_PER_REVOLUTION / CRANK_Initialization_Parameters->number_of_cylinders ) );
+	  in_time,
+	  in_precision,
+	  CRANK_Parameters.F.lo_res_reference_period,
+	  ( CRANK_NUMBER_OF_DEGREES_PER_REVOLUTION / CRANK_Initialization_Parameters->number_of_cylinders ) );
 
    return ( angle );
 }
@@ -1054,22 +1058,22 @@ static uint32_t CRANK_Convert_Ref_Period_To_RPM( void )
    uint8_t rpm_conv_factor;
 
    tooth_per_lores = CRANK_SCHEDULE_CONFIG_VIRTUAL_TEETH_PER_REVOLUTION 
-   	                               / CRANK_Initialization_Parameters->number_of_cylinders;
+								   / CRANK_Initialization_Parameters->number_of_cylinders;
 
    //The conversion factor is applied to support other crank profiles like 24x,30x etc
    rpm_conv_factor = (CRANK_VIRTUAL_TEETH_PER_CRANK)/tooth_per_lores;
 
   engine_speed = (CRANK_SECONDS_PER_MINUTE*CRANK_Parameters.F.time_base
-  	*CRANK_DEFAULT_RPM_PRECSION)/( CRANK_Parameters.F.lo_res_reference_period*rpm_conv_factor);
+	*CRANK_DEFAULT_RPM_PRECSION)/( CRANK_Parameters.F.lo_res_reference_period*rpm_conv_factor);
 #if 0
    //Check if the reference period is valid
    if((0 < CRANK_Parameters.F.lo_res_reference_period)&&(CRANK_Parameters.F.lo_res_reference_period < 0xFFFFFF))
    {
-      engine_speed = IO_Convert_Counts_To_Frequency(
-         rpm_conv_factor,
-         CRANK_DEFAULT_RPM_PRECSION,
-         CRANK_Parameters.F.time_base,
-         CRANK_Parameters.F.lo_res_reference_period);
+	  engine_speed = IO_Convert_Counts_To_Frequency(
+		 rpm_conv_factor,
+		 CRANK_DEFAULT_RPM_PRECSION,
+		 CRANK_Parameters.F.time_base,
+		 CRANK_Parameters.F.lo_res_reference_period);
    }
    #endif
    return ( engine_speed );
@@ -1140,20 +1144,20 @@ Crank_Cylinder_T CRANK_Increment_Cylinder_ID(
 
    while ( future_cylinder_id < 0 )
    {
-      //
-      // Add number of cylinders so that we can handle any multiple of the cylinder
-      // in the past passed in down to -128
-      //
-      future_cylinder_id += CRANK_Initialization_Parameters->number_of_cylinders;
+	  //
+	  // Add number of cylinders so that we can handle any multiple of the cylinder
+	  // in the past passed in down to -128
+	  //
+	  future_cylinder_id += CRANK_Initialization_Parameters->number_of_cylinders;
    }
 
    if( future_cylinder_id >= CRANK_Initialization_Parameters->number_of_cylinders )
    {
-      //
-      // Do a %= so that we can handle any multiple of the cylinder
-      // in the future passed in up to 127
-      //
-      future_cylinder_id %= CRANK_Initialization_Parameters->number_of_cylinders;
+	  //
+	  // Do a %= so that we can handle any multiple of the cylinder
+	  // in the future passed in up to 127
+	  //
+	  future_cylinder_id %= CRANK_Initialization_Parameters->number_of_cylinders;
    }
 
    return (Crank_Cylinder_T)future_cylinder_id;
@@ -1228,17 +1232,17 @@ static uint32_t IO_PULSE_Convert_Counts_To_Time(
 
    if ( !in_time_precision && !in_time_resolution )
    {
-      time = in_count;
+	  time = in_count;
    }
    else
    {
-      // Convert the raw counts to the values according to the math
-      // library used.
-      time = ( uint32_t )IO_Convert_Count_To_Time(
-         in_count,
-         counts_per_time,
-         in_time_precision,
-         in_time_resolution );
+	  // Convert the raw counts to the values according to the math
+	  // library used.
+	  time = ( uint32_t )IO_Convert_Count_To_Time(
+		 in_count,
+		 counts_per_time,
+		 in_time_precision,
+		 in_time_resolution );
    }
 
    return time;
@@ -1257,53 +1261,53 @@ uint32_t CRANK_Get_Parameter(
    uint32_t value;
    uint32_t time_base = MCD5408_Get_Time_Base( EPPWMT_TPU_INDEX, TPU_CONFIG_IC_EPPWMT);
    uint32_t    time;
-    uint32_t    counts_per_time;
+	uint32_t    counts_per_time;
 
    switch ( in_parameter )
    {
 
    case   CRANK_PARAMETER_CURRENT_EDGE_TIME:
-      {
-         EPPwMT_Coherent_Edge_Time_And_Count_T edgeTimeAndCount;
+	  {
+		 EPPwMT_Coherent_Edge_Time_And_Count_T edgeTimeAndCount;
 
-         MCD5408_Get_Coherent_Edge_Time_And_Count( EPPWMT_TPU_INDEX, TPU_CONFIG_IC_EPPWMT, &edgeTimeAndCount );
+		 MCD5408_Get_Coherent_Edge_Time_And_Count( EPPWMT_TPU_INDEX, TPU_CONFIG_IC_EPPWMT, &edgeTimeAndCount );
 
-         CRANK_Parameters.F.current_edge_time = edgeTimeAndCount.Time;
-      }
-      break;
+		 CRANK_Parameters.F.current_edge_time = edgeTimeAndCount.Time;
+	  }
+	  break;
    case   CRANK_PARAMETER_TIMER_VALUE_RAW:
-   	  counts_per_time = TPU_TIMER_Get_Base_Frequency( EPPWMT_TPU_INDEX, TPU_CONFIG_IC_EPPWMT);
+	  counts_per_time = TPU_TIMER_Get_Base_Frequency( EPPWMT_TPU_INDEX, TPU_CONFIG_IC_EPPWMT);
 	  time = TPU_TIMER_Get_Value_Channel( EPPWMT_TPU_INDEX, TPU_CONFIG_IC_EPPWMT);
 	  CRANK_Parameters.F.timer_value_raw = IO_PULSE_Convert_Counts_To_Time(counts_per_time, time,0,0);
-      //CRANK_Parameters.F.timer_value_raw = IO_PULSE_Timer_Get_Value_Immediate( CRANK_Object->Init.Eppwmt, 0, 0 );
-      break;
+	  //CRANK_Parameters.F.timer_value_raw = IO_PULSE_Timer_Get_Value_Immediate( CRANK_Object->Init.Eppwmt, 0, 0 );
+	  break;
 
    case   CRANK_PARAMETER_CURRENT_TOOTH:
-      {
-	  	
-      CRANK_Parameters.F.current_tooth = CRANK_Current_Event_Tooth;
-      break;
-      }
+	  {
+		
+	  CRANK_Parameters.F.current_tooth = CRANK_Current_Event_Tooth;
+	  break;
+	  }
    
 
    case   CRANK_PARAMETER_CAM_HISTORY:
-      CRANK_Parameters.F.cam_history =  MCD5408_Get_CAM_History( EPPWMT_TPU_INDEX, TPU_CONFIG_IC_EPPWMT);
-      break;
+	  CRANK_Parameters.F.cam_history =  MCD5408_Get_CAM_History( EPPWMT_TPU_INDEX, TPU_CONFIG_IC_EPPWMT);
+	  break;
    
    case   CRANK_PARAMETER_CURRENT_EDGE_COUNT:
-      {
-     EPPwMT_Coherent_Edge_Time_And_Count_T edgeTimeAndCount;
+	  {
+	 EPPwMT_Coherent_Edge_Time_And_Count_T edgeTimeAndCount;
 
-      MCD5408_Get_Coherent_Edge_Time_And_Count( EPPWMT_TPU_INDEX, TPU_CONFIG_IC_EPPWMT, &edgeTimeAndCount );
+	  MCD5408_Get_Coherent_Edge_Time_And_Count( EPPWMT_TPU_INDEX, TPU_CONFIG_IC_EPPWMT, &edgeTimeAndCount );
 
-     CRANK_Parameters.F.current_edge_count = edgeTimeAndCount.Count;
-      //CRANK_Parameters.F.current_edge_count = 
+	 CRANK_Parameters.F.current_edge_count = edgeTimeAndCount.Count;
+	  //CRANK_Parameters.F.current_edge_count = 
 	  //MCD5408_Get_IRQ_Count_At_Last_Interrupt(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT, CRANK_EPPE_IRQ_Select );
-      break;
-      }
+	  break;
+	  }
 
    default:
-      break;
+	  break;
 
    }
 
@@ -1312,19 +1316,27 @@ uint32_t CRANK_Get_Parameter(
 
    if ( !in_time_precision && !in_time_resolution )
    {
-      value = parameter_value;
+	  value = parameter_value;
    }
    else
    {
-      value = ( uint32_t )IO_Convert_Count_To_Time(
-         parameter_value,
-         time_base,
-         in_time_precision,
-         in_time_resolution );
+	  value = ( uint32_t )IO_Convert_Count_To_Time(
+		 parameter_value,
+		 time_base,
+		 in_time_precision,
+		 in_time_resolution );
    }
 
    return value;
 
+}
+
+//=============================================================================
+// CRANK_Set_Flag
+//=============================================================================
+void CRANK_Set_Current_Event_Tooth(uCrank_Count_T tooth_number)
+{
+	CRANK_Current_Event_Tooth = tooth_number;
 }
 
 //=============================================================================
@@ -1404,17 +1416,17 @@ void CRANK_EngineStall_PerioCheck(void)
    //Need to do stall check only when engine running
    if ( CRANK_Get_Flag( CRANK_FLAG_STALL_DETECTED ) != true )
    {
-      stall_time_out = CRANK_Get_Parameter( CRANK_PARAMETER_LO_RES_REFERENCE_PERIOD, 0, 0 ) / 2;
-      edge_time  = CRANK_Get_Parameter(CRANK_PARAMETER_CURRENT_EDGE_TIME, 0, 0 );
-      counts_per_time = TPU_TIMER_Get_Base_Frequency( EPPWMT_TPU_INDEX, TPU_CONFIG_IC_EPPWMT);
-      current_time = TPU_TIMER_Get_Value_Channel( EPPWMT_TPU_INDEX, TPU_CONFIG_IC_EPPWMT);
-       current_time = IO_PULSE_Convert_Counts_To_Time(counts_per_time, current_time,0,0);
+	  stall_time_out = CRANK_Get_Parameter( CRANK_PARAMETER_LO_RES_REFERENCE_PERIOD, 0, 0 ) / 2;
+	  edge_time  = CRANK_Get_Parameter(CRANK_PARAMETER_CURRENT_EDGE_TIME, 0, 0 );
+	  counts_per_time = TPU_TIMER_Get_Base_Frequency( EPPWMT_TPU_INDEX, TPU_CONFIG_IC_EPPWMT);
+	  current_time = TPU_TIMER_Get_Value_Channel( EPPWMT_TPU_INDEX, TPU_CONFIG_IC_EPPWMT);
+	   current_time = IO_PULSE_Convert_Counts_To_Time(counts_per_time, current_time,0,0);
 
 	 if ( ( (current_time - edge_time) & UINT24_MAX ) > stall_time_out)  	
-      {
-         CRANK_Process_Stall_Event();
-      }
-     
+	  {
+		 CRANK_Process_Stall_Event();
+	  }
+	 
    }
 }
 

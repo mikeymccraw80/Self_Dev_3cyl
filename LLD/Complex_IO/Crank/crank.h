@@ -253,8 +253,8 @@ typedef enum
    CRANK_CYLINDER_I, // @emem
    CRANK_CYLINDER_J, // @emem
    CRANK_CYLINDER_K, // @emem
-   CRANK_CYLINDER_L  // @emem
-
+   CRANK_CYLINDER_L,  // @emem
+   CRANK_CYLINDER_NULL = 255
 } Crank_Cylinder_T;
 
 //=============================================================================
