@@ -485,17 +485,17 @@ void VSEP_EST_Fault_SYNC_Interface(EST_Select_Cylinder_T curent_spark_cylinder)
 	//for the first time, how to determine the PreviousEstCylinder?
 	PreviousEstLine = CurrentEstLine;
 
-	// if( CeWasteEST == GetSPRK_SparkDeliveryMode() ){
-		// Cylinder_numbers = CRANK_CONFIG_NUMBER_OF_CYLINDERS/2;
-		// if (curent_spark_cylinder == EST_SELECT_CYLINDER_A || curent_spark_cylinder == EST_SELECT_CYLINDER_C) {
-			// CurrentEstLine= 1;
-		// } else {
-			// CurrentEstLine =0;
-		// }
-	// } else {
+	if( CeWasteEST == GetSPRK_SparkDeliveryMode() ){
+		Cylinder_numbers = CRANK_CONFIG_NUMBER_OF_CYLINDERS/2;
+		if (curent_spark_cylinder == EST_SELECT_CYLINDER_A || curent_spark_cylinder == EST_SELECT_CYLINDER_C) {
+			CurrentEstLine = 0;
+		} else {
+			CurrentEstLine = 1;
+		}
+	} else {
 		CurrentEstLine = curent_spark_cylinder;
 		Cylinder_numbers = CRANK_CONFIG_NUMBER_OF_CYLINDERS;
-	// }
+	}
 
 	VSEP_EST_Fault_SYNC_Txd[VSEP_EST_FAULT_SYNC_TXD_MESSAGE_SYNC_BYTE2] = \
 			VSEP_Msg_EST_Set_EST1CEN_BYTE_FORMAT(VSEP_EST_Fault_SYNC_Txd[VSEP_EST_FAULT_SYNC_TXD_MESSAGE_SYNC_BYTE2],true);
