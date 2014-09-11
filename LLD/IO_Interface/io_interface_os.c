@@ -5,6 +5,7 @@
 #include "io_interface_os.h"
 #include "hal_os.h"
 #include "hal_ucram.h"
+#include "intr_ems.h"
 
 //=============================================================================
 // define value
@@ -148,6 +149,7 @@ void  IO_OS_BackGround_1ms_Status_Check(void)
 	/* Doing the software reset as the chery requirement */
 	if ((B_HLS_afterrun == true) && 
 		(!Is_IGN_Off()) &&
+		(Ignition_On()) &&
 		(crank_sig.engine_rpm < MIN_RPM_CHERY))
 	{
 		/* Stop the all task containers */

@@ -9,6 +9,7 @@
 #include "t_gentypes.h"
 #include "timepcvc.h"
 #include "v_power.h"
+#include "lux_type.h"
 
 //=============================================================================
 // type define
@@ -75,6 +76,8 @@ extern const PowerSourceType        K_PowerConfig_SparkCoil;
 extern const PowerSourceType        K_PowerConfig_O2Heater;
 extern const PowerSourceType        K_PowerConfig_Injector;
 extern const PowerSourceType        K_PowerConfig_ETC;
+
+extern const Volts_Plus_Fraction    K_VOLT_KeyOnThreshold;
 
 extern const T_COUNT_BYTE           KySYST_BrainDeadBOOT_RecovEnbld;
 #endif

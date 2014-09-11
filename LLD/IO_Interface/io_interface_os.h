@@ -5,12 +5,14 @@
 // include files
 //=============================================================================
 #include "reuse.h"
-
+#include "hwiocald.h"
 
 //=============================================================================
 // extern variable
 //=============================================================================
-#define Is_IGN_Off()    (HAL_Analog_Get_IGNVI_Value()<2500)? true:false
+//#define Is_IGN_Off()    (HAL_Analog_Get_IGNVI_Value()<2500)? true:false
+#define Is_IGN_Off()      ((HAL_Analog_Get_IGNVI_Value()<<2) <= K_VOLT_KeyOnThreshold)
+
 //=============================================================================
 // IO_OS_Get_Shutdown
 //=============================================================================

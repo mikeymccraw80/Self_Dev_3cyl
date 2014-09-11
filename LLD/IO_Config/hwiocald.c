@@ -767,6 +767,18 @@ const PowerSourceType K_PowerConfig_ETC =
 
 /*
 *| hwiocald.{
+*|   K_VOLT_KeyOnThreshold {
+*|     : is_calconst;
+*|     : description = "the threshold between keyon and keyoff.";
+*|     : type = types.Volts_Plus_Fraction;
+*|     : units = "count";
+*|   }
+*| }
+*/
+const   Volts_Plus_Fraction    K_VOLT_KeyOnThreshold = FixDefConst(7.5, Volts_Plus_Fraction);
+
+/*
+*| hwiocald.{
 *|   KySYST_BrainDeadBOOT_RecovEnbld
 *|   {
 *|     : is_calconst;
