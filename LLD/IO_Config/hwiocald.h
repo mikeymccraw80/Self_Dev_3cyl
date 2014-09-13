@@ -40,6 +40,7 @@ extern const T_COUNT_BYTE  KyHWIO_CAM_Pulse_Duty_Max[];
 extern const T_COUNT_BYTE  KyHWIO_CylinderEventAfterCamERising;
 extern const T_CRANK_ANGLE KyHWIO_Crank_Angle_At_First_Crank_Tooth;
 extern const T_CRANK_ANGLE KyHWIO_Crank_Angle_At_CAM_Pulse_Fall[];
+extern const T_CRANK_ANGLE KyHWIO_Delta_Angle_From_Edge_To_Tooth_1;
 
 extern const uint16_t      KyHWIO_MaxErrorTeethMore;
 extern const uint16_t      KyHWIO_MaxErrorTeethLess;

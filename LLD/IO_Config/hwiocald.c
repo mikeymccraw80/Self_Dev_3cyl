@@ -270,10 +270,10 @@ const T_COUNT_BYTE    KyHWIO_Crank_Angle_Per_CAM_Pulse[4] =
 */
 const T_COUNT_BYTE    KyHWIO_CAM_Pulse_Duty_Min[4] =
 {
-   70, //Pulse A
-   25, //Pulse B
-   25, //Pulse C
-   70, //Pulse D
+   17, //Pulse A
+   72, //Pulse B
+   72, //Pulse C
+   17, //Pulse D
 };
 
 /*
@@ -289,10 +289,10 @@ const T_COUNT_BYTE    KyHWIO_CAM_Pulse_Duty_Min[4] =
 */
 const T_COUNT_BYTE    KyHWIO_CAM_Pulse_Duty_Max[4] =
 {
-   75, //Pulse A
-   30, //Pulse B
-   30, //Pulse C
-   75, //Pulse D
+   27, //Pulse A
+   82, //Pulse B
+   82, //Pulse C
+   27, //Pulse D
 };
 
 //=============================================================================
@@ -315,6 +315,18 @@ const T_CRANK_ANGLE    KyHWIO_Crank_Angle_At_CAM_Pulse_Fall[4] =
    V_CRANK_ANGLE(180),//Pulse C Fall Angle
    V_CRANK_ANGLE(180),//Pulse D Fall Angle
 };
+
+/*
+*| hwiocald.{
+*|   KyHWIO_Delta_Angle_From_Edge_To_Tooth_1{
+*|     : is_calconst;
+*|     : description = "delta angle from default cam edge(closet to cylinderA) to crank tooth_1";
+*|     : type = types.t_crank_angle;
+*|     : units = "degrees";
+*|   }
+*| }
+*/
+const   T_CRANK_ANGLE   KyHWIO_Delta_Angle_From_Edge_To_Tooth_1 = V_CRANK_ANGLE(90);
 
 /*===========================================================================*\
  * The cylinder to fire after the cam pulse E rises
