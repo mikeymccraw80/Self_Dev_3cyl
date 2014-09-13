@@ -32,7 +32,7 @@ const IO_Cam_Initialization_Parameters_T CAM_INITIALIZATION_PARAMETERS = {
 	0,       // cam_min_pulses_for_sync;
 	NUMBER_OF_CAM_SENSORS,       // cam_sensor_for_sync, not supported;
 	0,       // cam_edge_before_gap;
-	0,       // delta_teeth_from_edge_to_tooth_1;
+	15,       // delta_teeth_from_edge_to_tooth_1;
 	0       // cam_cyl_id_before_gap;
 };
 

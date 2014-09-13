@@ -11,6 +11,7 @@
 #include "hal_cam.h"
 #include "hwiocald.h"
 
+
 //=============================================================================
 //   Type declaration
 //=============================================================================
@@ -89,7 +90,8 @@ static Crank_Cylinder_T CAM_Get_DutyCycle_Pattern_CylinderID(uint8_t buf_len, ui
 			sub_index ++;
 			buf_index ++;
 			if (sub_index >= KyHWIO_Number_Of_CAM_Pulses) {
-				return CAM_DutyCycle_Cylinder_Map[KyHWIO_Number_Of_CAM_Pulses % pattern_position];
+				// return pattern_position;
+				return CAM_DutyCycle_Cylinder_Map[pattern_position];
 			}
 		}
 		pattern_position ++;
@@ -210,12 +212,14 @@ static bool       cam_active_state;
 //  Parameters:          None
 //  Return:              None
 //=============================================================================
+	Crank_Cylinder_T  pattern_cylinder_id;
 void CAM_Update_State( void )
 {
 	uint32_t          counter;
 	Crank_Cylinder_T  cylinderID;
 	bool              use_cam_toggle = CAM_Initialization_Parameters->use_cam_toggle;
 	uint32_t          cam_history;
+
 
 	cam_history  = CRANK_Get_Parameter( CRANK_PARAMETER_CAM_HISTORY, 0, 0);
 
@@ -312,7 +316,8 @@ void CAM_Update_State( void )
 
 			/* Determine if cam occurred: */
 			// if( CAM_Sensor_State == cam_active_state ) {
-			if (CAM_Get_DutyCycle_Pattern_CylinderID(8, CAM_DutyCycle_BUF) == CRANK_CYLINDER_C) {
+			pattern_cylinder_id = CAM_Get_DutyCycle_Pattern_CylinderID(8, CAM_DutyCycle_BUF);
+			if (pattern_cylinder_id == CRANK_CYLINDER_D) {
 				/* Indicate correct cylinder event: */
 				cylinderID = CAM_Number_Of_Cylinders - 1;
 				CAM_State_Change_Occurred          = Insert_Bits( CAM_State_Change_Occurred,          true, CAM_Sensor_In_Use, 1 );
@@ -482,6 +487,8 @@ static uint8_t CAM_Increment_Cam_Edge_Counter(uint8_t in_cam_edge)
 	return in_cam_edge;
 }
 
+
+#if 1
 //=============================================================================
 // CAM_Start_Crank_Backup_Matches
 //=============================================================================
@@ -492,65 +499,42 @@ void CAM_Start_Crank_Backup_Matches(uint8_t cam_edge)
    uint32_t cam_edge_time;
    uint16_t backup_first_edge_count,last_edge_count;
    uint8_t  backups_between_cams;
-   uint8_t  next_edge_index;
-   uCrank_Count_T current_event_tooth;
-   uCrank_Count_T current_event_pa_content;
    uint32_t interrupt_status;
-   uint32_t       first_edge_delta_time;
-   //Disable interrupts, 
+
    interrupt_status = Enter_Critical_Section();
 
    EPPwMT_Get_Coherent_Edge_Time_And_Count(Active_Crank->Init.Eppwmt,&edge_time_and_count );
    last_edge_count = edge_time_and_count.Count;
 
-   current_event_pa_content = last_edge_count + CAM_Initialization_Parameters->delta_teeth_from_edge_to_tooth_1 + CRANK_First_Cylinder_Event_Tooth - 1;
-
    // Using crank private to access private data.
-   CRANK_Current_Event_PA_Content = current_event_pa_content;
+   CRANK_Next_Event_PA_Content = last_edge_count + 1;
 
-   // Using crank private to access private data.
-   CRANK_Next_Event_PA_Content = current_event_pa_content;
-
-   current_event_tooth = CRANK_First_Cylinder_Event_Tooth;
-   // Using crank private to access private data.
-   CRANK_Current_Event_Tooth = current_event_tooth;
-
-   CRANK_Tooth_Sync_Count = last_edge_count + CAM_Initialization_Parameters->delta_teeth_from_edge_to_tooth_1 + CRANK_Synchronization_Start_Tooth - 1;
-   
-   next_edge_index = (cam_edge + 1)%CAM_Initialization_Parameters->cam_profile_data_pulse_count;
 
    //Edge time in GTC counts
-   cam_edge_time = CAM_Sync_Data[cam_edge];
-
-   //Calculate crank period based on the last CAM Pulse
-
-   backup_period = CAM_Calculate_Backup_Period(cam_edge);
-
+   cam_edge_time = cam_event_time;
 
    //Calculate number of crank pulses for next CAM Pulse
-   backups_between_cams = CAM_Initialization_Parameters->cam_profile_data[next_edge_index].Crank_Teeth_Per_Pulse;
-   
-   Crank_Tooth_At_CAM_Edge = last_edge_count ;
+   backups_between_cams = 30;
+
+   //Calculate crank period based on the last CAM Pulse
+   backup_period = CAM_Period_FIFO[CAM_Duty_Cycle_Index]/backups_between_cams;
+
 
 
    //We have either no Crank signal or lost crank synchronization, so start edge count at 1
-   backup_first_edge_count = Crank_Tooth_At_CAM_Edge + 1;
+   backup_first_edge_count = last_edge_count + 1;
 
-   first_edge_delta_time = CAM_Calculate_Backup_Edge_Time_Delta(backup_period, cam_edge);
 
    //Schedule Initial crank matches
    EPPwMT_BACKUP_MODE_Enter_Backup_Service_Request(
       Active_Crank->Init.Eppwmt,
-      cam_edge_time + first_edge_delta_time,
+      cam_edge_time + backup_period,
       backup_period,
       backup_first_edge_count,
       backups_between_cams );
 
    //Schedule the first crank event
    EPPwMT_Set_New_IRQ_Count( Active_Crank->Init.Eppwmt, CRANK_EPPE_IRQ_Select, current_event_pa_content );
-
-   //Initialize the cylinder number
-   CRANK_Set_Cylinder_ID(CAM_Initialization_Parameters->cam_cyl_id_before_gap);
 
    // Clear the interrupt flag: false == clear
    EPPwMT_Set_Host_Interrupt_Status( Active_Crank->Init.Eppwmt, false );
@@ -616,6 +600,7 @@ void CAM_Request_Crank_Backup_Matches(
       backup_first_edge_count,
       backups_between_cams );
 }
+#endif
 
 //=============================================================================
 // CAM_Edge_Interrupt_Handler
@@ -636,8 +621,13 @@ void CAM_Edge_Process( uint32_t in_cam_sensor )
 	uint32_t        tooth_period;
 	uint32_t        previous_time;
 	uint32_t        current_time;
-	uint32_t        temp_counter;
+	uint32_t        counter;
 	uint32_t        CAM_DutyCycle_BUF_Index;
+
+	uint32_t backup_period;
+	uint32_t cam_edge_time;
+	uint16_t backup_first_edge_count,last_edge_count;
+	uint8_t  backups_between_cams;
 
 	current_edge_index = CAM_Current_Edge[cam_sensor];
 	CAM_EdgeDetected = Insert_Bits( CAM_EdgeDetected, true, cam_sensor, 1 );
@@ -652,30 +642,59 @@ void CAM_Edge_Process( uint32_t in_cam_sensor )
 	if (cam_sensor == CAM1) {
 		CAM_Period_FIFO[CAM_Duty_Cycle_Index] = MCD5411_Get_Parameter(CAME_TPU_INDEX ,CAM_CAME[cam_sensor], CAM_SENSOR_PARAMETER_PERIOD );
 		CAM_Period_Off_FIFO[CAM_Duty_Cycle_Index] = MCD5411_Get_Parameter(CAME_TPU_INDEX ,CAM_CAME[cam_sensor], CAM_SENSOR_PARAMETER_OFF_PERIOD);
-		CAM_DutyCycle_FIFO[CAM_Duty_Cycle_Index] = IO_Convert_Counts_To_Percent(
-									CAM_Period_Off_FIFO[CAM_Duty_Cycle_Index],
-									100,
-									CAM_Period_FIFO[CAM_Duty_Cycle_Index]);
+		CAM_DutyCycle_FIFO[CAM_Duty_Cycle_Index] = IO_Convert_Counts_To_Percent(CAM_Period_Off_FIFO[CAM_Duty_Cycle_Index], 100, CAM_Period_FIFO[CAM_Duty_Cycle_Index]);
 		CAM_Duty_Cycle_Index ++;
-		CAM_Duty_Cycle_Index = CAM_Duty_Cycle_Index >= CAM_DUTY_CYCLE_LENGTH ? 0 : CAM_Duty_Cycle_Index;
+		if (CAM_Duty_Cycle_Index >= CAM_DUTY_CYCLE_LENGTH)
+			CAM_Duty_Cycle_Index = 0;
+
 		CAM_DutyCycle_BUF_Index = CAM_Duty_Cycle_Index;
-		for (temp_counter = 0; temp_counter++; temp_counter < CAM_DUTY_CYCLE_LENGTH) {
-			CAM_DutyCycle_BUF[temp_counter] = CAM_DutyCycle_FIFO[CAM_DutyCycle_BUF_Index];
+		counter = 0;
+		while (counter < CAM_DUTY_CYCLE_LENGTH) {
+			CAM_DutyCycle_BUF[counter] = CAM_DutyCycle_FIFO[CAM_DutyCycle_BUF_Index];
 			CAM_DutyCycle_BUF_Index++;
-			CAM_DutyCycle_BUF_Index = CAM_DutyCycle_BUF_Index >= CAM_DUTY_CYCLE_LENGTH ? 0 : CAM_DutyCycle_BUF_Index;
+			if (CAM_DutyCycle_BUF_Index >= CAM_DUTY_CYCLE_LENGTH)
+				CAM_DutyCycle_BUF_Index = 0;
+			counter++;
 		}
 	}
+
+
 #if 1
 	if ((B_SynCrkLmp == true) && (cam_sensor == CAM1)) {
 		/* confirm the duty cycle pattern */
 		if (CAM_Get_DutyCycle_Pattern_CylinderID(8, CAM_DutyCycle_FIFO) != CRANK_CYLINDER_NULL) {
 			/* set the first edge time, pulse number, tooth period */
-			
-			
+			last_edge_count = CAM_Sensor_Coherent_data[cam_sensor].current_crank_count_at_critical_edge;
+			//Edge time in GTC counts
+			cam_edge_time = cam_event_time;
+			// Using crank private to access private data.
+			CRANK_Next_Event_PA_Content = last_edge_count + 1;
+			//Calculate number of crank pulses for next CAM Pulse
+			backups_between_cams = 30;
+			//Calculate crank period based on the last CAM Pulse
+			backup_period = CAM_Period_FIFO[CAM_Duty_Cycle_Index]/backups_between_cams;
+			//We have either no Crank signal or lost crank synchronization, so start edge count at 1
+			backup_first_edge_count = last_edge_count + 1;
+			//Schedule Initial crank matches
+			EPPwMT_BACKUP_MODE_Enter_Backup_Service_Request(
+				Active_Crank->Init.Eppwmt,
+				cam_edge_time + backup_period,
+				backup_period,
+				backup_first_edge_count,
+				backups_between_cams );
+
+			//Schedule the first crank event
+			MCD5408_Set_New_IRQ_Count(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT, CRANK_EPPE_IRQ_Select, CRANK_Next_Event_PA_Content );
+			// Clear the interrupt flag: false == clear
+			MCD5408_Set_Host_Interrupt_Status(EPPWMT_TPU_INDEX,&TPU,TPU_CONFIG_IC_EPPWMT,false);
+
+			//Resume links to spark logic
+			//The link mask is hardcoded. It should be derived from Active_Crank based on MTSA_CRANK_EPPWMT_LINKS
+			// EPPwMT_Set_Links_Pending_Mask (Active_Crank->Init.Eppwmt, 1 );
+
+			// Enable interrupts
+			EPPwMT_Enable_Host_Interrupt( Active_Crank->Init.Eppwmt );
 		}
-		
-		
-		
 	}
 #endif
 
