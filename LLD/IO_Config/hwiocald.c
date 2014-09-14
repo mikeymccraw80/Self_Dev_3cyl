@@ -230,7 +230,7 @@ const   uint8_t     KyHWIO_Num58xGapsUsingCamForSync = 12;
 *|  KyHWIO_Number_Of_CAM_Pulses {
 *|     : is_calconst;
 *|     : description = "Number of CAM Pulses corresponding to one engine cycle";
-*|     : type = fixed.t_count_byte;
+*|     : type = types.t_count_byte;
 *|     : units = "count";
 *|   }
 *| }
@@ -244,7 +244,7 @@ const   T_COUNT_BYTE     KyHWIO_Number_Of_CAM_Pulses = 4;
 *|     : description = " Crank Angle Per CAM Pulse"
 *| "number of crank pulses corresponding to each CAM pulse";
 *|     : is_calconst;
-*|     : type = fixed.t_count_byte;
+*|     : type = types.t_count_byte;
 *|     : units = "count";
 *|   }
 *| }
@@ -263,7 +263,7 @@ const T_COUNT_BYTE    KyHWIO_Crank_Angle_Per_CAM_Pulse[4] =
 *|   {
 *|     : description = " CAM Pulse Duty Cycle Minimum";
 *|     : is_calconst;
-*|     : type = fixed.t_count_byte;
+*|     : type = types.t_count_byte;
 *|     : units = "count";
 *|   }
 *| }
@@ -282,7 +282,7 @@ const T_COUNT_BYTE    KyHWIO_CAM_Pulse_Duty_Min[4] =
 *|   {
 *|     : description = " CAM Pulse Duty Cycle Maximum";
 *|     : is_calconst;
-*|     : type = fixed.t_count_byte;
+*|     : type = types.t_count_byte;
 *|     : units = "count";
 *|   }
 *| }
@@ -303,7 +303,7 @@ const T_COUNT_BYTE    KyHWIO_CAM_Pulse_Duty_Max[4] =
 *|  KyHWIO_Crank_Angle_At_CAM_Pulse_Fall {
 *|     : is_calconst;
 *|     : description = "Crank angle at falling edge of each CAM pulse";
-*|     : type = fixed.t_crank_angle;
+*|     : type = types.t_crank_angle;
 *|     : units = "degree";
 *|   }
 *| }
@@ -327,37 +327,6 @@ const T_CRANK_ANGLE    KyHWIO_Crank_Angle_At_CAM_Pulse_Fall[4] =
 *| }
 */
 const   T_CRANK_ANGLE   KyHWIO_Delta_Angle_From_Edge_To_Tooth_1 = V_CRANK_ANGLE(90);
-
-/*===========================================================================*\
- * The cylinder to fire after the cam pulse E rises
-\*===========================================================================*/
-/*
-*| hwiocald.{
-*|  KyHWIO_CylinderEventAfterCamERising {
-*|     : is_calconst;
-*|     : description = "Cylinder Event to begin after Cam pulse Edge rises";
-*|     : type = fixed.t_count_byte;
-*|     : units = "count";
-*|   }
-*| }
-*/
-const   T_COUNT_BYTE      KyHWIO_CylinderEventAfterCamERising = 0; 
-
-/*===========================================================================*\
- * The crank angle at first crank tooth
-\*===========================================================================*/
-/*
-*| hwiocald.{
-*|  KyHWIO_Crank_Angle_At_First_Crank_Tooth {
-*|     : is_calconst;
-*|     : description = "Crank angle at first crank tooth";
-*|     : type = fixed.t_crank_angle;
-*|     : units = "degrees";
-*|   }
-*| }
-*/
-const T_CRANK_ANGLE    KyHWIO_Crank_Angle_At_First_Crank_Tooth   = V_CRANK_ANGLE (0);
-
 
 /*
 *| hwiocald.{
