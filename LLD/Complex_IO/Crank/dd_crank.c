@@ -659,6 +659,9 @@ void CRANK_Process_Crank_Event( void )
 
 		/* crank signal is normal */
 		if (CRANK_Get_Flag(CRANK_FLAG_CAM_BACKUP) == false) {
+			/* this count for diagnose the crank signal status by cam reference */
+			crank_diag_tooth_cnt++;
+
 			// Check if first synchronization took place:
 			if (!CRANK_Get_First_Sync_Occurred( CRANK_Internal_State.U32 ) ) {
 				// Look for the first synchronization:
@@ -707,9 +710,6 @@ void CRANK_Process_Crank_Event( void )
 	MCD5408_Set_New_IRQ_Count(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT, CRANK_EPPE_IRQ_Select, CRANK_Next_Event_PA_Content );
 	// Clear the interrupt flag: false == clear
 	MCD5408_Set_Host_Interrupt_Status(EPPWMT_TPU_INDEX,&TPU,TPU_CONFIG_IC_EPPWMT,false);
-
-	/* this count for diagnose the crank signal status by cam reference */
-	crank_diag_tooth_cnt++;
 }
 
 //=============================================================================
