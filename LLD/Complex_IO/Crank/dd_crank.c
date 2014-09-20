@@ -360,7 +360,7 @@ void CRANK_Manage_Execute_Event( void )
 //
 // Try to find a correct gap after a missed sync.
 //=============================================================================
-static void CRANK_Recover_From_Synch_Error( void )
+void CRANK_Recover_From_Synch_Error( void )
 {
 	// Indicate that the synchronization has been missed
 	CRANK_Internal_State.U32 = CRANK_Set_Sync_Error_In_Progress( CRANK_Internal_State.U32, true );
@@ -628,6 +628,43 @@ bool CRANK_Validate_Synchronization( void )
 	CRANK_Parameters.F.current_tooth = CRANK_Current_Event_Tooth;
 	return true;
 }
+
+//=============================================================================
+// CRANK EVENT : Synchronization Validation Event.
+//
+// Check if the synchronization criteria are met
+// This function is called by the scheduler under normal operation.
+//=============================================================================
+   EPPwMT_Coherent_Edge_Time_And_Count_T haha_real_edge_time_count;
+   uCrank_Count_T haha_previous_n_1;
+   uCrank_Count_T haha_previous_1_n;
+   uint32_t haha_real_period;
+   uint32_t haha_previous_real_period;
+   uint16_t haha_gap_detected_count;
+   
+   
+bool CRANK_Check_Real_Gap_In_Backup_Mode( void )
+{
+
+   bool           gap_confirmed;
+
+   haha_gap_detected_count = MCD5408_Get_Gap_Detected_Count(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT);
+   haha_real_period = MCD5408_Get_Real_Period(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT);
+   haha_previous_real_period = MCD5408_Get_Real_Prev_Period(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT);
+   haha_previous_n_1 = MCD5408_Get_Previous_n_1(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT);
+   haha_previous_1_n = MCD5408_Get_Previous_1_n(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT);
+   MCD5408_BACKUP_MODE_Get_Coherent_Real_Edge_Time_And_Count(EPPWMT_TPU_INDEX, TPU_CONFIG_IC_EPPWMT, &haha_real_edge_time_count);
+
+   // Perform the gap search
+   /* 1st criterion : gap at expected location,  2nd criterion : gap pattern recognized*/
+   if((haha_real_edge_time_count.Count == haha_previous_n_1 ) && (((uCrank_Count_T)(haha_previous_n_1 - haha_previous_1_n)) == 1)) {
+      gap_confirmed = true;
+   } else {
+      gap_confirmed = false;
+   }
+
+   return gap_confirmed;
+}
 //=============================================================================
 //
 //  Function:            CRANK_Process_Crank_Event
@@ -644,10 +681,10 @@ void CRANK_Process_Crank_Event( void )
 	do{
 		actual_irq_count = MCD5408_Get_IRQ_Count_At_Last_Interrupt(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT, CRANK_EPPE_IRQ_Select );
 		CRANK_Parameters.F.edge_time = CRANK_Get_Edge_Time_From_Count(CRANK_Next_Event_PA_Content);
-		CRANK_Parameters.F.edge_angle = CRANK_Convert_Teeth_To_uCrank_Angle( actual_irq_count );
+		CRANK_Parameters.F.edge_angle = CRANK_Convert_Teeth_To_uCrank_Angle(actual_irq_count);
 
 		CRANK_Tooth_Duration = MCD5408_Get_Period(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT);
-		CRANK_Hi_Res_Edge_Time = CRANK_Parameters.F.edge_time;	
+		CRANK_Hi_Res_Edge_Time = CRANK_Parameters.F.edge_time;
 
 		OS_ToothInt_Hook();
 
@@ -694,15 +731,28 @@ void CRANK_Process_Crank_Event( void )
 				}
 			}
 		} else {
-		/* crank signal is faulty, so it only can works in backup mode */
-			CRANK_Manage_Execute_Event();
+			/* if mcd5408 detects the real edge gap, we set exit backmode request */
+			if (0) {
+			// if (CRANK_Check_Real_Gap_In_Backup_Mode()) {
+			// 	MCD5408_BACKUP_MODE_Exit_Backup_Service_Request(EPPWMT_TPU_INDEX, &TPU, TPU_CONFIG_IC_EPPWMT, &EPPWMT_INIT);
+			// 	CRANK_Set_Flag(CRANK_FLAG_CAM_BACKUP, false);
+			// 	B_SynCrkLmp = false;
+			// 	CRANK_Recover_From_Synch_Error();
+			} else {
+				/* crank signal is faulty, so it only can works in backup mode */
+				if (IS_IN_RANGE(CRANK_Current_Event_Tooth, 3, 58) ||
+					IS_IN_RANGE(CRANK_Current_Event_Tooth, 63, 118))
+				{
+					CRANK_Manage_Execute_Event();
+				}
+			}
 		}
 
 		temp_count = CRANK_Next_Event_PA_Content;
 		CRANK_Next_Event_PA_Content++;
 
 		// get current count value   
-		MCD5408_Get_Coherent_Edge_Time_And_Count( EPPWMT_TPU_INDEX, TPU_CONFIG_IC_EPPWMT, &edgeTimeAndCount );
+		MCD5408_Get_Coherent_Edge_Time_And_Count(EPPWMT_TPU_INDEX, TPU_CONFIG_IC_EPPWMT, &edgeTimeAndCount);
 		CRANK_Current_Event_Edge_Content = edgeTimeAndCount.Count;
 	} while (CRANK_Current_Event_Edge_Content !=temp_count);
 

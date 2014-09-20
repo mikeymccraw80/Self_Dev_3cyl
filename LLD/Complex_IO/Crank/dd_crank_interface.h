@@ -88,4 +88,13 @@ uint32_t  CRANK_Get_Tooth_Period( void );
 //=============================================================================
 void CRANK_Set_Current_Event_Tooth(uCrank_Count_T tooth_number);
 
+//=============================================================================
+// CRANK EVENT : Synchronization Error Recovery. .
+//
+// Try to find a correct gap after a missed sync.
+//=============================================================================
+void CRANK_Recover_From_Synch_Error( void );
+
+bool CRANK_Check_Real_Gap_In_Backup_Mode( void );
+
 #endif // DD_CRANK_INTERFACE_H
