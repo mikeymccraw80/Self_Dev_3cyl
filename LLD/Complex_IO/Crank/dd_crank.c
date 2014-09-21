@@ -635,35 +635,22 @@ bool CRANK_Validate_Synchronization( void )
 // Check if the synchronization criteria are met
 // This function is called by the scheduler under normal operation.
 //=============================================================================
-   EPPwMT_Coherent_Edge_Time_And_Count_T haha_real_edge_time_count;
-   uCrank_Count_T haha_previous_n_1;
-   uCrank_Count_T haha_previous_1_n;
-   uint32_t haha_real_period;
-   uint32_t haha_previous_real_period;
-   uint16_t haha_gap_detected_count;
-   
-   
-bool CRANK_Check_Real_Gap_In_Backup_Mode( void )
+/* backup mode global variables, called in dd_cam.c */
+uCrank_Count_T CRANK_Previous_Real_Edge_Count;
+uCrank_Count_T CRANK_Current_Real_Edge_Count;
+
+bool CRANK_Check_Real_Signal_In_Backup_Mode( void )
 {
+   bool           signal_confirmed;
 
-   bool           gap_confirmed;
-
-   haha_gap_detected_count = MCD5408_Get_Gap_Detected_Count(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT);
-   haha_real_period = MCD5408_Get_Real_Period(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT);
-   haha_previous_real_period = MCD5408_Get_Real_Prev_Period(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT);
-   haha_previous_n_1 = MCD5408_Get_Previous_n_1(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT);
-   haha_previous_1_n = MCD5408_Get_Previous_1_n(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT);
-   MCD5408_BACKUP_MODE_Get_Coherent_Real_Edge_Time_And_Count(EPPWMT_TPU_INDEX, TPU_CONFIG_IC_EPPWMT, &haha_real_edge_time_count);
-
-   // Perform the gap search
-   /* 1st criterion : gap at expected location,  2nd criterion : gap pattern recognized*/
-   if((haha_real_edge_time_count.Count == haha_previous_n_1 ) && (((uCrank_Count_T)(haha_previous_n_1 - haha_previous_1_n)) == 1)) {
-      gap_confirmed = true;
+   CRANK_Current_Real_Edge_Count =  MCD5408_Get_Real_Edge_Count(EPPWMT_TPU_INDEX, TPU_CONFIG_IC_EPPWMT);
+   if(CRANK_Current_Real_Edge_Count != CRANK_Previous_Real_Edge_Count) {
+      signal_confirmed = true;
    } else {
-      gap_confirmed = false;
+      signal_confirmed = false;
    }
 
-   return gap_confirmed;
+   return signal_confirmed;
 }
 //=============================================================================
 //
@@ -732,12 +719,12 @@ void CRANK_Process_Crank_Event( void )
 			}
 		} else {
 			/* if mcd5408 detects the real edge gap, we set exit backmode request */
-			if (0) {
-			// if (CRANK_Check_Real_Gap_In_Backup_Mode()) {
-			// 	MCD5408_BACKUP_MODE_Exit_Backup_Service_Request(EPPWMT_TPU_INDEX, &TPU, TPU_CONFIG_IC_EPPWMT, &EPPWMT_INIT);
-			// 	CRANK_Set_Flag(CRANK_FLAG_CAM_BACKUP, false);
-			// 	B_SynCrkLmp = false;
-			// 	CRANK_Recover_From_Synch_Error();
+			// if (0) {
+			if (CRANK_Check_Real_Signal_In_Backup_Mode()) {
+				MCD5408_BACKUP_MODE_Exit_Backup_Service_Request(EPPWMT_TPU_INDEX, &TPU, TPU_CONFIG_IC_EPPWMT, &EPPWMT_INIT);
+				CRANK_Set_Flag(CRANK_FLAG_CAM_BACKUP, false);
+				CRANK_Recover_From_Synch_Error();
+				return;
 			} else {
 				/* crank signal is faulty, so it only can works in backup mode */
 				if (IS_IN_RANGE(CRANK_Current_Event_Tooth, 3, 58) ||

@@ -60,6 +60,8 @@ static bool              cam_active_state;
 extern uCrank_Count_T   CRANK_Current_Event_Tooth;
 extern uCrank_Count_T   CRANK_Current_Event_PA_Content;
 extern uCrank_Count_T   CRANK_Next_Event_PA_Content;
+extern uCrank_Count_T   CRANK_Previous_Real_Edge_Count;
+extern uCrank_Count_T   CRANK_Current_Real_Edge_Count;
 
 #define CAM_DUTY_CYCLE_LENGTH 8
 static uint8_t      CAM1_DutyCycle_Circle_FIFO[CAM_DUTY_CYCLE_LENGTH];
@@ -67,6 +69,10 @@ static uint8_t      CAM1_DutyCycle_Linear_BUF[CAM_DUTY_CYCLE_LENGTH];
 static uint32_t     CAM1_Period_Circle_FIFO[CAM_DUTY_CYCLE_LENGTH];
 static uint32_t     CAM1_Period_Off_Circle_FIFO[CAM_DUTY_CYCLE_LENGTH];
 static uint8_t      CAM1_Circle_FIFO_Index;
+static Crank_Cylinder_T CAM_Backup_Edge_Cylinder_ID;
+
+#define CAM_CRANK_DIAGNOSE_MAX_Fail_COUNT 2
+static uint8_t      CAM1_CRANK_Diagnose_Fail_Count;
 
 static const Crank_Cylinder_T CAM_DutyCycle_Cylinder_Map[] =
 {
@@ -516,21 +522,6 @@ static uint8_t CAM_Increment_Cam_Edge_Counter(uint8_t in_cam_edge)
 // CAM_Edge_Interrupt_Handler
 //=============================================================================
 extern uCrank_Count_T    CRANK_GAP_COUNT;
-
-/* define global variables */
-uint32_t backup_period;
-uint32_t backup_cam_edge_time;
-uint16_t backup_first_edge_count;
-uint16_t backup_last_edge_count;
-uint8_t  backups_between_cams;
-uCrank_Angle_T  backup_delta_ucrank_angle;
-uCrank_Count_T  backup_delta_tooth;
-uint16_t haha_daowei;
-uint16_t haha_daowei1;
-
-EPPwMT_Coherent_Edge_Time_And_Count_T daowei_edgeTimeAndCount;
-	Crank_Cylinder_T CAM_Backup_Edge_Cylinder_ID;
-
 void CAM_Edge_Process( uint32_t in_cam_sensor )
 {
 	CAM_Sensors_T   cam_sensor = (CAM_Sensors_T)in_cam_sensor;
@@ -548,6 +539,15 @@ void CAM_Edge_Process( uint32_t in_cam_sensor )
 	uint32_t        current_time;
 	uint32_t        counter;
 	uint32_t        CAM1_Linear_BUF_Index;
+
+	/* define backup variables */
+	uint32_t backup_period;
+	uint32_t backup_cam_edge_time;
+	uint16_t backup_first_edge_count;
+	uint16_t backup_last_edge_count;
+	uint8_t  backups_between_cams;
+	uCrank_Angle_T  backup_delta_ucrank_angle;
+	uCrank_Count_T  backup_delta_tooth;
 
 
 	current_edge_index = CAM_Current_Edge[cam_sensor];
@@ -581,6 +581,11 @@ void CAM_Edge_Process( uint32_t in_cam_sensor )
 
 		if (CRANK_Get_Flag(CRANK_FLAG_CAM_BACKUP) == false) {
 			if (CRANK_Get_Diag_Tooth_Cnt() == 0) {
+				CAM1_CRANK_Diagnose_Fail_Count ++;
+			} else {
+				CAM1_CRANK_Diagnose_Fail_Count = 0;
+			}
+			if (CAM1_CRANK_Diagnose_Fail_Count >= CAM_CRANK_DIAGNOSE_MAX_Fail_COUNT) {
 				/* confirm current CAM Edge */
 				CAM_Backup_Edge_Cylinder_ID = CAM_Get_DutyCycle_Pattern_CylinderID(CAM_DUTY_CYCLE_LENGTH, CAM1_DutyCycle_Linear_BUF);
 				if (CAM_Backup_Edge_Cylinder_ID != CRANK_CYLINDER_NULL) {
@@ -605,6 +610,9 @@ void CAM_Edge_Process( uint32_t in_cam_sensor )
 					backup_first_edge_count = backup_last_edge_count + 1;
 					//Schedule Initial crank matches
 					MCD5408_BACKUP_MODE_Initialize_Channel(EPPWMT_TPU_INDEX, &TPU, TPU_CONFIG_IC_EPPWMT, 0);
+					
+					Previous_Read_Edge_Count = MCD5408_Get_Real_Edge_Count(EPPWMT_TPU_INDEX, TPU_CONFIG_IC_EPPWMT);
+					Current_Read_Edge_Count = Previous_Read_Edge_Count;
 
 					MCD5408_BACKUP_MODE_Enter_Backup_Service_Request(
 						EPPWMT_TPU_INDEX,
@@ -625,9 +633,6 @@ void CAM_Edge_Process( uint32_t in_cam_sensor )
 					
 					/* set cam backup mode flag */
 					CRANK_Set_Flag(CRANK_FLAG_CAM_BACKUP, true);
-					
-					/* notify hls B_SynCrkLmp */
-					B_SynCrkLmp = true;
 				} else {
 					// todo: nothing
 				}
@@ -670,17 +675,6 @@ void CAM_Edge_Process( uint32_t in_cam_sensor )
 			}
 		}
 	}
-
-	// // if (B_SynCrkLmp == true) {
-	// if ((CRANK_Get_Flag(CRANK_FLAG_CAM_BACKUP) == true) && (CRANK_Check_Real_Gap_In_Backup_Mode() == true)) {
-	// 	MCD5408_BACKUP_MODE_Exit_Backup_Service_Request(EPPWMT_TPU_INDEX, &TPU, TPU_CONFIG_IC_EPPWMT, &EPPWMT_INIT);
-	// 	CRANK_Set_Flag(CRANK_FLAG_CAM_BACKUP, false);
-	// 	CRANK_Recover_From_Synch_Error();
-	// 	B_SynCrkLmp = false;
-	// }
-	// haha_daowei = MCD5408_BACKUP_MODE_Get_Pending_Backups(EPPWMT_TPU_INDEX, TPU_CONFIG_IC_EPPWMT);
-	// // get current count value   
-	// MCD5408_Get_Coherent_Edge_Time_And_Count(EPPWMT_TPU_INDEX, TPU_CONFIG_IC_EPPWMT, &daowei_edgeTimeAndCount);
 
 	// get the tooth before for the correct tooth period.
 	pa_tooth_count = CAM_Sensor_Coherent_data[cam_sensor].current_crank_count_at_critical_edge;
