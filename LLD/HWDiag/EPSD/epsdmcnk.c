@@ -43,6 +43,7 @@
 #include "epsdcald.h"  /* For EPSD Calibration File */
 #include "hal_cam.h"
 #include "intr_ems.h"
+#include "dd_crank_interface.h"
 
 /*****************************************************************************
 *  Type declaration
@@ -270,10 +271,11 @@ static void ProcessEPSD_CrankNoSigEnblCriteria(void)
 
 	if ((((GetVIOS_EngSt() == CeENG_KEYON)
 			|| (GetVIOS_EngSt() == CeENG_STALL)
-			|| (GetVIOS_EngSt() == CeENG_CRANK) )
+			|| (GetVIOS_EngSt() == CeENG_CRANK)
+			|| (CRANK_Get_Flag(CRANK_FLAG_CAM_BACKUP) == true) )
 			&& (HAL_Get_CAM_Level(CAM1) != SeEPSD_CamPrevState))
 		|| \
-		(((GetVIOS_EngSt() == CeENG_KEYON) || (GetVIOS_EngSt() == CeENG_CRANK))
+		(((GetVIOS_EngSt() == CeENG_KEYON) || (GetVIOS_EngSt() == CeENG_CRANK) || (CRANK_Get_Flag(CRANK_FLAG_CAM_BACKUP) == true))
 			&& (FixSubAbs(SfEPSD_MnfdPresAtKeyOn, GetVIOS_p_MnfdPresFiltd(), EOBD_KPAa)
 				> KfEPSD_p_CrankDeltaMAP_Thrsh)
 			&& (FixSubAbs(GetVIOS_U_IgnVoltageAtKeyOn(), GetVIOS_U_IgnVolt(), EOBD_VOLTb)
