@@ -300,24 +300,6 @@ const T_COUNT_BYTE    KyHWIO_CAM_Pulse_Duty_Max[4] =
 //=============================================================================
 /*
 *| hwiocald.{
-*|  KyHWIO_Crank_Angle_At_CAM_Pulse_Fall {
-*|     : is_calconst;
-*|     : description = "Crank angle at falling edge of each CAM pulse";
-*|     : type = types.t_crank_angle;
-*|     : units = "degree";
-*|   }
-*| }
-*/
-const T_CRANK_ANGLE    KyHWIO_Crank_Angle_At_CAM_Pulse_Fall[4] =
-{
-   V_CRANK_ANGLE(180),//Pulse A Fall Angle
-   V_CRANK_ANGLE(180),//Pulse B Fall Angle
-   V_CRANK_ANGLE(180),//Pulse C Fall Angle
-   V_CRANK_ANGLE(180),//Pulse D Fall Angle
-};
-
-/*
-*| hwiocald.{
 *|   KyHWIO_Delta_Angle_From_Edge_To_Tooth_1{
 *|     : is_calconst;
 *|     : description = "delta angle from default cam edge(closet to cylinderA) to crank tooth_1";
