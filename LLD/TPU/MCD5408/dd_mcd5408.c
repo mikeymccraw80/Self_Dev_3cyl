@@ -648,6 +648,20 @@ uint32_t MCD5408_Get_Real_Edge_Time(
 }
 
 //=============================================================================
+// MCD5408_Get_Real_Edge_Count
+//=============================================================================
+uint16_t MCD5408_Get_Real_Edge_Count(
+             TPU_Index_T index,
+       TPU_CHANNEL_Configuration_T   configure  )
+{
+
+   MCD5408_SDM_T   *mcd5408_sdm = (MCD5408_SDM_T*)TPU_Get_Channel_SDM_Start_Address(index, configure);
+
+   return( mcd5408_sdm->Real_Coherent_Edge.F.Count);
+}
+
+
+//=============================================================================
 // MCD5408_Get_Synthetic_Edge_Cnt
 //=============================================================================
 uint32_t MCD5408_Get_Synthetic_Edge_Cnt(

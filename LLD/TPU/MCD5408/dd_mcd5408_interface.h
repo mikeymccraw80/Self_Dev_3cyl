@@ -174,6 +174,13 @@ uint32_t MCD5408_Get_Real_Edge_Time(
        TPU_CHANNEL_Configuration_T   configure  );
 
 //=============================================================================
+// MCD5408_Get_Real_Edge_Count
+//=============================================================================
+uint16_t MCD5408_Get_Real_Edge_Count(
+             TPU_Index_T index,
+       TPU_CHANNEL_Configuration_T   configure  );
+
+//=============================================================================
 // MCD5408_Get_Synthetic_Edge_Cnt
 //=============================================================================
 uint32_t MCD5408_Get_Synthetic_Edge_Cnt(
