@@ -1109,6 +1109,97 @@
 *-  description              = "raw MATVI ad input value, 14bit";
 *-}
 
+*-CAM1_DutyCycle_Circle_FIFO_Plus_0{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CAM1DCF0";
+*-  variable_location.symbol = CAM1_DutyCycle_Circle_FIFO[0];
+*-  ds_scaling_unit          = "%";
+*-  ds_precision             = "4.2";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.0";
+*-  ds_const_b               = "0.0";
+*-  description              = "CAM1 Pulse Duty Cycle FIFO 0";
+*-}
+
+*-CAM1_DutyCycle_Circle_FIFO_Plus_1{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CAM1DCF1";
+*-  variable_location.symbol = CAM1_DutyCycle_Circle_FIFO[1];
+*-  ds_scaling_unit          = "%";
+*-  ds_precision             = "4.2";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.0";
+*-  ds_const_b               = "0.0";
+*-  description              = "CAM1 Pulse Duty Cycle FIFO 1";
+*-}
+*-CAM1_DutyCycle_Circle_FIFO_Plus_2{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CAM1DCF2";
+*-  variable_location.symbol = CAM1_DutyCycle_Circle_FIFO[2];
+*-  ds_scaling_unit          = "%";
+*-  ds_precision             = "4.2";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.0";
+*-  ds_const_b               = "0.0";
+*-  description              = "CAM1 Pulse Duty Cycle FIFO 2";
+*-}
+*-CAM1_DutyCycle_Circle_FIFO_Plus_3{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CAM1DCF3";
+*-  variable_location.symbol = CAM1_DutyCycle_Circle_FIFO[3];
+*-  ds_scaling_unit          = "%";
+*-  ds_precision             = "4.2";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.0";
+*-  ds_const_b               = "0.0";
+*-  description              = "CAM1 Pulse Duty Cycle FIFO 3";
+*-}
+*-CAM1_DutyCycle_Circle_FIFO_Plus_4{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CAM1DCF4";
+*-  variable_location.symbol = CAM1_DutyCycle_Circle_FIFO[4];
+*-  ds_scaling_unit          = "%";
+*-  ds_precision             = "4.2";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.0";
+*-  ds_const_b               = "0.0";
+*-  description              = "CAM1 Pulse Duty Cycle FIFO 4";
+*-}
+*-CAM1_DutyCycle_Circle_FIFO_Plus_5{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CAM1DCF5";
+*-  variable_location.symbol = CAM1_DutyCycle_Circle_FIFO[5];
+*-  ds_scaling_unit          = "%";
+*-  ds_precision             = "4.2";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.0";
+*-  ds_const_b               = "0.0";
+*-  description              = "CAM1 Pulse Duty Cycle FIFO 5";
+*-}
+*-CAM1_DutyCycle_Circle_FIFO_Plus_6{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CAM1DCF6";
+*-  variable_location.symbol = CAM1_DutyCycle_Circle_FIFO[6];
+*-  ds_scaling_unit          = "%";
+*-  ds_precision             = "4.2";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.0";
+*-  ds_const_b               = "0.0";
+*-  description              = "CAM1 Pulse Duty Cycle FIFO 6";
+*-}
+*-CAM1_DutyCycle_Circle_FIFO_Plus_7{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CAM1DCF7";
+*-  variable_location.symbol = CAM1_DutyCycle_Circle_FIFO[7];
+*-  ds_scaling_unit          = "%";
+*-  ds_precision             = "4.2";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.0";
+*-  ds_const_b               = "0.0";
+*-  description              = "CAM1 Pulse Duty Cycle FIFO 7";
+*-}
+
+
 /******************************************************************************/
 /*                                                                            */
 /* Revision History:                                                          */
