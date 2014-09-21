@@ -37,7 +37,7 @@ bool knock_flag_b;
 bool knock_flag_c;
 bool knock_flag_d;
 
-
+bool           B_ErCylSynGap;
 
 bool B_syn_update;
 bool B_KeyOn;

@@ -497,6 +497,7 @@ extern bool           B_syn_update;
 extern bool           B_KeyOn;  
 extern bool           S_AC;
 extern tele_type telem_data;
+extern bool           B_ErCylSynGap;
 
 /* The coolant pull up resister flag */
 /* True for 4k, False for 348 */

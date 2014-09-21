@@ -74,6 +74,9 @@ static Crank_Cylinder_T CAM_Backup_Edge_Cylinder_ID;
 #define CAM_CRANK_DIAGNOSE_MAX_Fail_COUNT 2
 static uint8_t      CAM1_CRANK_Diagnose_Fail_Count;
 
+/* cam stuck backup */
+static bool         B_ErCylSynGap_Previous;
+
 static const Crank_Cylinder_T CAM_DutyCycle_Cylinder_Map[] =
 {
 	CRANK_CYLINDER_D,
@@ -376,6 +379,20 @@ void CAM_Update_State( void )
 		} else {
 			/* Indicate cam signal is stuck: */
 			CAM_Stuck = Insert_Bits( CAM_Stuck, true, CAM_Sensor_In_Use, 1 );
+			if ((B_ErCylSynGap_Previous == false) && (B_ErCylSynGap == true)) {
+				if (CRANK_Get_Cylinder_ID() == CRANK_CYLINDER_B)
+					CRANK_Set_Cylinder_ID(CRANK_CYLINDER_D);
+				if (CRANK_Get_Cylinder_ID() == CRANK_CYLINDER_D)
+					CRANK_Set_Cylinder_ID(CRANK_CYLINDER_B);
+			} else {
+				/* invalid cylinder id, set to default value */
+				if ((CRANK_Get_Cylinder_ID() == CRANK_CYLINDER_A) || (CRANK_Get_Cylinder_ID() == CRANK_CYLINDER_C)) {
+					CRANK_Set_Cylinder_ID(CRANK_CYLINDER_D);
+				} else {
+					//to do nothing
+				}
+			}
+			B_ErCylSynGap_Previous = B_ErCylSynGap;
 		}
 	}
 	OS_CAM_READ_Hook();
@@ -611,8 +628,8 @@ void CAM_Edge_Process( uint32_t in_cam_sensor )
 					//Schedule Initial crank matches
 					MCD5408_BACKUP_MODE_Initialize_Channel(EPPWMT_TPU_INDEX, &TPU, TPU_CONFIG_IC_EPPWMT, 0);
 					
-					Previous_Read_Edge_Count = MCD5408_Get_Real_Edge_Count(EPPWMT_TPU_INDEX, TPU_CONFIG_IC_EPPWMT);
-					Current_Read_Edge_Count = Previous_Read_Edge_Count;
+					CRANK_Previous_Real_Edge_Count = MCD5408_Get_Real_Edge_Count(EPPWMT_TPU_INDEX, TPU_CONFIG_IC_EPPWMT);
+					CRANK_Current_Real_Edge_Count = CRANK_Previous_Real_Edge_Count;
 
 					MCD5408_BACKUP_MODE_Enter_Backup_Service_Request(
 						EPPWMT_TPU_INDEX,
