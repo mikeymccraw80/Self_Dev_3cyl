@@ -43,7 +43,6 @@ bool B_syn_update;
 bool B_KeyOn;
 
 bool S_AC;
-bool B_SynCrkLmp;
 
 sys_status_bits sys_status;
 sys_cmmd_bits sys_cmd;
