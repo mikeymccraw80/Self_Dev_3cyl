@@ -270,10 +270,10 @@ const T_COUNT_BYTE    KyHWIO_Crank_Angle_Per_CAM_Pulse[4] =
 */
 const T_COUNT_BYTE    KyHWIO_CAM_Pulse_Duty_Min[4] =
 {
-   17, //Pulse A
-   72, //Pulse B
-   72, //Pulse C
-   17, //Pulse D
+   5, //Pulse A
+   55, //Pulse B
+   55, //Pulse C
+   5, //Pulse D
 };
 
 /*
@@ -289,10 +289,10 @@ const T_COUNT_BYTE    KyHWIO_CAM_Pulse_Duty_Min[4] =
 */
 const T_COUNT_BYTE    KyHWIO_CAM_Pulse_Duty_Max[4] =
 {
-   27, //Pulse A
-   82, //Pulse B
-   82, //Pulse C
-   27, //Pulse D
+   50, //Pulse A
+   95, //Pulse B
+   95, //Pulse C
+   50, //Pulse D
 };
 
 //=============================================================================
@@ -308,7 +308,7 @@ const T_COUNT_BYTE    KyHWIO_CAM_Pulse_Duty_Max[4] =
 *|   }
 *| }
 */
-const   T_CRANK_ANGLE   KyHWIO_Delta_Angle_From_Edge_To_Tooth_1 = V_CRANK_ANGLE(90);
+const   T_CRANK_ANGLE   KyHWIO_Delta_Angle_From_Edge_To_Tooth_1 = V_CRANK_ANGLE(66);
 
 /*
 *| hwiocald.{
