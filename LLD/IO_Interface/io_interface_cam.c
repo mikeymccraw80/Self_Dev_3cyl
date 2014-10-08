@@ -59,9 +59,11 @@ void IO_Crank_Status_Update(void)
 {
 	/* Check if crank failed */
 	if ( HAL_Diag_Crank_Signal()) {
+#if 0
 		crank_sig.crank_status.B_crank_failed = ( bitfield8_t )true;
 		crank_sig.crank_status.B_crank_limp_home = ( bitfield8_t )true;
 		crank_sig.crank_status.B_crank_sync = ( bitfield16_t )false ;
+#endif
 	} else {
 		crank_sig.crank_status.B_crank_failed = ( bitfield8_t )false;
 		crank_sig.crank_status.B_crank_limp_home = ( bitfield8_t )false;
