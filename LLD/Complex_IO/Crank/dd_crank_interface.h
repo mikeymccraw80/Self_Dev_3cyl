@@ -97,4 +97,6 @@ void CRANK_Recover_From_Synch_Error( void );
 
 bool CRANK_Check_Real_Gap_In_Backup_Mode( void );
 
+void CRANK_Backup_Set_Syn_Status(void);
+
 #endif // DD_CRANK_INTERFACE_H

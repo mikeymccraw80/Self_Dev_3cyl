@@ -354,6 +354,20 @@ void CRANK_Manage_Execute_Event( void )
 // |    CRANK SYNCHRONIZATION LOGIC
 // \-----------------------------------------------------------------------/
 //=============================================================================
+//
+
+//=============================================================================
+// CAM Edge : Synchronization Update  .
+//
+// update sync information when valid pattern confirmed, just like gap confirmed.
+//=============================================================================
+void CRANK_Backup_Set_Syn_Status(void)
+{
+	CRANK_Internal_State.U32 = CRANK_Set_Sync_Occurred( CRANK_Internal_State.U32, true );
+	CRANK_Internal_State.U32 = CRANK_Set_Sync_Started( CRANK_Internal_State.U32, false );
+	CRANK_Internal_State.U32 = CRANK_Set_First_Sync_Occurred( CRANK_Internal_State.U32, true );
+	OS_Engine_First_Gap();
+}
 
 //=============================================================================
 // CRANK EVENT : Synchronization Error Recovery. .
@@ -719,8 +733,8 @@ void CRANK_Process_Crank_Event( void )
 			}
 		} else {
 			/* if mcd5408 detects the real edge gap, we set exit backmode request */
-			// if (0) {
-			if (CRANK_Check_Real_Signal_In_Backup_Mode()) {
+			if (0) {
+			// if (CRANK_Check_Real_Signal_In_Backup_Mode()) {
 				MCD5408_BACKUP_MODE_Exit_Backup_Service_Request(EPPWMT_TPU_INDEX, &TPU, TPU_CONFIG_IC_EPPWMT, &EPPWMT_INIT);
 				CRANK_Set_Flag(CRANK_FLAG_CAM_BACKUP, false);
 				CRANK_Recover_From_Synch_Error();
