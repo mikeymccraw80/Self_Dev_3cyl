@@ -315,7 +315,7 @@ void J1979Mode1Handler (void)
 /* RETURN:       None                                                */
 /*                                                                   */
 /*********************************************************************/
-#define Cy1979_Mode_02_MaxInfoType      (0x50)
+#define Cy1979_Mode_02_MaxInfoType      (0x60)
 #define J1979_MODE_02_MSG_LENGTH (3)
 #define CyReqPIDNumberMode2      (1)
 #define Cy1979_FramePosition     (2)
@@ -465,6 +465,19 @@ void J1979Mode2Handler (void)
 				WrtServiceData( frame_index , Li1979_DataIdx++ ) ;
 				WrtServiceData(  Hi8Of16(DIAG_STATUS_FREEZE_FRAME[frame_index].Ffm_Ub_b), Li1979_DataIdx++ ) ;
 				WrtServiceData(  Lo8Of16(DIAG_STATUS_FREEZE_FRAME[frame_index].Ffm_Ub_b) , Li1979_DataIdx++ ) ;
+				break;
+
+			case Cy1979_PID45:
+				/*Freezeframe number*/
+				WrtServiceData( frame_index , Li1979_DataIdx++ ) ;
+				WrtServiceData(  DIAG_STATUS_FREEZE_FRAME[frame_index].Ffm_TpPos, Li1979_DataIdx++ ) ;
+				break;
+
+			case Cy1979_PID5A:
+				/*Freezeframe number*/
+				WrtServiceData( frame_index , Li1979_DataIdx++ ) ;
+				WrtServiceData( Hi8Of16(DIAG_STATUS_FREEZE_FRAME[frame_index].Ffm_PedPos_b), Li1979_DataIdx++ ) ;
+				WrtServiceData( Lo8Of16(DIAG_STATUS_FREEZE_FRAME[frame_index].Ffm_PedPos_b) , Li1979_DataIdx++ ) ;
 				break;
 
 			default: 
