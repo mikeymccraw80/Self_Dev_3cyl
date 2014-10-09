@@ -280,7 +280,7 @@ void MngEOSD_O2_12_Htr125msTasks (void)
 			   VcEOSD_O2_12_HtrSampleCntr,
 			   KcEOSD_12_HtrShortLowFailThrsh,
 			   KcEOSD_12_HtrShortHiFailThrsh,
-			   KcEOSD_11_HtrSmplThrsh,
+			   KcEOSD_12_HtrSmplThrsh,
 			   &SbEOSD_O2_12_HtrTestComplete_Internal,
 			   &SbEOSD_O2_12_HtrShortLowTestFailed,
 			   &SbEOSD_O2_12_HtrShortHiTestFailed) ;

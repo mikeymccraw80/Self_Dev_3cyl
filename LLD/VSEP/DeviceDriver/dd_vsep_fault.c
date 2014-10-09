@@ -175,6 +175,10 @@ bool VSEP_FAULT_Is_Message_Valid(IO_Configuration_T in_configuration, VSEP_Messa
 //=============================================================================
 // VSEP_Fault_Diagnose_Channels, only for PCH
 //=============================================================================
+static int VSEP_Fault_Clear_Count;
+static int VSEP_O2A_Fault_Clear_Count;
+static int VSEP_O2B_Fault_Clear_Count;
+
 void VSEP_Fault_Diagnose_Channels(void* in_pointer)
 {
 	uint8_t            x,fault_index,fault_position;
@@ -187,15 +191,44 @@ void VSEP_Fault_Diagnose_Channels(void* in_pointer)
 	uint32_t           counts_per_time;
 	uint32_t           percent_in_counts;
 	VSEP_Fault_PCH_T   vsep_pch_fault;
-	static int fault_clear_count;
+	Fault_Log_T        o2a_fault_log;
+	Fault_Log_T        o2b_fault_log;
+
 
 	VSEP_Fault_Channel_Data_T *vsep_fault_channel_data = (VSEP_Fault_Channel_Data_T*)in_pointer;
-	fault_clear_count ++;
+	VSEP_Fault_Clear_Count ++;
 	/* clear fault log buffer every 500ms */
-	if (fault_clear_count >= 50) {
+	if (VSEP_Fault_Clear_Count >= 50) {
+		o2a_fault_log = VSEP_Fault_Log[VSEP_CHANNEL_PCH_21_PWM_3_FLT_LVL_6];
+		o2b_fault_log = VSEP_Fault_Log[VSEP_CHANNEL_PCH_22_PWM_4_FLT_LVL_6];
 		VSEP_Fault_Log_Clear();
-		fault_clear_count = 0;
+		VSEP_Fault_Log[VSEP_CHANNEL_PCH_21_PWM_3_FLT_LVL_6] = o2a_fault_log;
+		VSEP_Fault_Log[VSEP_CHANNEL_PCH_22_PWM_4_FLT_LVL_6] = o2b_fault_log;
+		VSEP_Fault_Clear_Count = 0;
 	}
+
+	/* detect the fault of o2a and o2b heater */
+	if (VSEP_Fault_Log[VSEP_CHANNEL_PCH_21_PWM_3_FLT_LVL_6] & 0x0007) {
+		VSEP_O2A_Fault_Clear_Count ++;
+		if (VSEP_O2A_Fault_Clear_Count >= 50) {
+			VSEP_Fault_Log[VSEP_CHANNEL_PCH_21_PWM_3_FLT_LVL_6] = 0;
+			VSEP_Fault_Log[VSEP_CHANNEL_PCH_21_PWM_3_FLT_LVL_6] = FAULT_Set_Supported_Open_Circuit( VSEP_Fault_Log[ VSEP_CHANNEL_PCH_21_PWM_3_FLT_LVL_6 ], true );
+			VSEP_Fault_Log[VSEP_CHANNEL_PCH_21_PWM_3_FLT_LVL_6] = FAULT_Set_Supported_Short_To_Battery( VSEP_Fault_Log[ VSEP_CHANNEL_PCH_21_PWM_3_FLT_LVL_6 ], true );
+			VSEP_Fault_Log[VSEP_CHANNEL_PCH_21_PWM_3_FLT_LVL_6] = FAULT_Set_Supported_Short_To_Ground( VSEP_Fault_Log[ VSEP_CHANNEL_PCH_21_PWM_3_FLT_LVL_6 ], true );
+			VSEP_O2A_Fault_Clear_Count = 0;
+		}
+	}
+	if (VSEP_Fault_Log[VSEP_CHANNEL_PCH_22_PWM_4_FLT_LVL_6] & 0x0007) {
+		VSEP_O2B_Fault_Clear_Count ++;
+		if (VSEP_O2B_Fault_Clear_Count >= 50) {
+			VSEP_Fault_Log[VSEP_CHANNEL_PCH_22_PWM_4_FLT_LVL_6] = 0;
+			VSEP_Fault_Log[VSEP_CHANNEL_PCH_22_PWM_4_FLT_LVL_6] = FAULT_Set_Supported_Open_Circuit( VSEP_Fault_Log[ VSEP_CHANNEL_PCH_22_PWM_4_FLT_LVL_6 ], true );
+			VSEP_Fault_Log[VSEP_CHANNEL_PCH_22_PWM_4_FLT_LVL_6] = FAULT_Set_Supported_Short_To_Battery( VSEP_Fault_Log[ VSEP_CHANNEL_PCH_22_PWM_4_FLT_LVL_6 ], true );
+			VSEP_Fault_Log[VSEP_CHANNEL_PCH_22_PWM_4_FLT_LVL_6] = FAULT_Set_Supported_Short_To_Ground( VSEP_Fault_Log[ VSEP_CHANNEL_PCH_22_PWM_4_FLT_LVL_6 ], true );
+			VSEP_O2B_Fault_Clear_Count = 0;
+		}
+	}
+
 	if (vsep_fault_channel_data != NULL) {
 		// diagnose fault, and also provide delay between IO_DISCRETE_Set_Immediate_State commands
 		//VSEP_Fault_Diagnose_Get_channel_state();

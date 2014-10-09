@@ -688,10 +688,10 @@ INLINE void ConvertIntrParam_ETCDC(void)
 // #define  GetHWIO_58xCylinderEvent()            (PhysicalEstCylinder)
 // #define  GetSPRK_SparkMode()                   (GetVIOS_EngSt())
 
-#define GetVIOS_O2_12_Htr_PSVIFaultShortHi()\
-   ( DD_GetDiscreteDiagStatus(PULSE_OUT_O2_HEATER_12,OUTPUT_SHORT_CKT_FAULT) )
-#define GetVIOS_O2_12_Htr_PSVIFaultShortLow()\
-   ( DD_GetDiscreteDiagStatus(PULSE_OUT_O2_HEATER_12,OUTPUT_OPEN_CKT_FAULT) )
+// #define GetVIOS_O2_12_Htr_PSVIFaultShortHi()\
+//    ( DD_GetDiscreteDiagStatus(PULSE_OUT_O2_HEATER_12,OUTPUT_SHORT_CKT_FAULT) )
+// #define GetVIOS_O2_12_Htr_PSVIFaultShortLow()\
+//    ( DD_GetDiscreteDiagStatus(PULSE_OUT_O2_HEATER_12,OUTPUT_OPEN_CKT_FAULT) )
 
 #define GetOSSP_O2_DiagCntrDsbl()        (CbFALSE)
 
