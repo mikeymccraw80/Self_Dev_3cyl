@@ -235,6 +235,58 @@
 *-}
 #endif
 
+
+*-intr_ems.EOBD_IntegratorAverage0{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "EOBDADESC0";
+*-  variable_location.symbol = intr_ems.EOBD_IntegratorAverage[0];
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.0030517578125";
+*-  ds_const_b               = "0.000000";
+*-  ds_scaling_unit          = "percent";
+*-  description              = "intr_ems.EOBD_IntegratorAverage0";
+*-}
+
+*-intr_ems.EOBD_IntegratorAverage1{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "EOBDADESC1";
+*-  variable_location.symbol = intr_ems.EOBD_IntegratorAverage[1];
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.0030517578125";
+*-  ds_const_b               = "0.000000";
+*-  ds_scaling_unit          = "percent";
+*-  description              = "intr_ems.EOBD_IntegratorAverage1";
+*-}
+
+*-intr_ems.EOBD_IntegratorAverage2{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "EOBDADESC2";
+*-  variable_location.symbol = intr_ems.EOBD_IntegratorAverage[2];
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.0030517578125";
+*-  ds_const_b               = "0.000000";
+*-  ds_scaling_unit          = "percent";
+*-  description              = "intr_ems.EOBD_IntegratorAverage2";
+*-}
+
+#if CcSYST_NUM_OF_CYLINDERS > 3
+*-intr_ems.EOBD_IntegratorAverage3{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "EOBDADESC3";
+*-  variable_location.symbol = intr_ems.EOBD_IntegratorAverage[3];
+*-  ds_precision             = "4.3";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.0030517578125";
+*-  ds_const_b               = "0.000000";
+*-  ds_scaling_unit          = "percent";
+*-  description              = "intr_ems.EOBD_IntegratorAverage3";
+*-}
+#endif
+
+
 *-es_knock.RawMAD_0{
 *-  OBJECTS_CLASS: parameter_es_class;
 *-  label                    = "RAWMAD00";
