@@ -159,6 +159,7 @@ extern const SIU_GPDO_T SIU_INITIAL_PDO_113_LCI;
 //eTPU_A[0]_eTPU_A[12]_eTPU_A[19]_GPIO[114] pin.
 //58XPOS
 extern const SIU_PCR_T SIU_INITIAL_PCR_114;
+#define  HAL_GPIO_CRANK_CHANNEL         SIU_GPIO_CHANNEL_114
 //etpu01
 //The SIU_PCR115 ¨C SIU_PCR118 registers control the functions, directions, and static electrical attributes
 //of the eTPU_A[1:4]_eTPU_A[13:16]_GPIO[115:118] pins. Only the output channels of eTPU_A[13:16]
