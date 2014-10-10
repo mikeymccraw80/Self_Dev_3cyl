@@ -9,6 +9,8 @@
 #include "dd_pfi_interface.h"
 #include "dd_spark_interface.h"
 #include "hwiocald.h"
+#include "io_config_siu.h"
+#include "dd_siu_interface.h"
 
 uint8_t crank_b_syn;
 uint16_t crank_rpm;
@@ -284,6 +286,7 @@ void CRANK_Reset_Parameters( void )
 	  MCD5408_Set_New_Gap_Count( EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT, new_gap_cnt );
 	  MCD5408_Set_Previous_n_1(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT,0);
 	  MCD5408_Set_Previous_1_n(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT,0);
+	  SIU_GPIO_InputBuffer_Config(HAL_GPIO_CRANK_CHANNEL, true);
 
 	  // Call the Resync functions based on a stall event:
 	  CAM_Reset_Parameters();
@@ -732,20 +735,11 @@ void CRANK_Process_Crank_Event( void )
 				}
 			}
 		} else {
-			/* if mcd5408 detects the real edge gap, we set exit backmode request */
-			if (0) {
-			// if (CRANK_Check_Real_Signal_In_Backup_Mode()) {
-				MCD5408_BACKUP_MODE_Exit_Backup_Service_Request(EPPWMT_TPU_INDEX, &TPU, TPU_CONFIG_IC_EPPWMT, &EPPWMT_INIT);
-				CRANK_Set_Flag(CRANK_FLAG_CAM_BACKUP, false);
-				CRANK_Recover_From_Synch_Error();
-				return;
-			} else {
-				/* crank signal is faulty, so it only can works in backup mode */
-				if (IS_IN_RANGE(CRANK_Current_Event_Tooth, 3, 58) ||
-					IS_IN_RANGE(CRANK_Current_Event_Tooth, 63, 118))
-				{
-					CRANK_Manage_Execute_Event();
-				}
+			/* crank signal is faulty, so it only can works in backup mode */
+			if (IS_IN_RANGE(CRANK_Current_Event_Tooth, 3, 58) ||
+				IS_IN_RANGE(CRANK_Current_Event_Tooth, 63, 118))
+			{
+				CRANK_Manage_Execute_Event();
 			}
 		}
 
@@ -1116,17 +1110,7 @@ static uint32_t CRANK_Convert_Ref_Period_To_RPM( void )
 
   engine_speed = (CRANK_SECONDS_PER_MINUTE*CRANK_Parameters.F.time_base
 	*CRANK_DEFAULT_RPM_PRECSION)/( CRANK_Parameters.F.lo_res_reference_period*rpm_conv_factor);
-#if 0
-   //Check if the reference period is valid
-   if((0 < CRANK_Parameters.F.lo_res_reference_period)&&(CRANK_Parameters.F.lo_res_reference_period < 0xFFFFFF))
-   {
-	  engine_speed = IO_Convert_Counts_To_Frequency(
-		 rpm_conv_factor,
-		 CRANK_DEFAULT_RPM_PRECSION,
-		 CRANK_Parameters.F.time_base,
-		 CRANK_Parameters.F.lo_res_reference_period);
-   }
-   #endif
+
    return ( engine_speed );
 }
 
@@ -1459,26 +1443,27 @@ void CRANK_Process_Stall_Event(void)
 //=============================================================================
 void CRANK_EngineStall_PerioCheck(void)
 {
-   uint32_t edge_time;
-   uint32_t stall_time_out;
-   uint32_t    counts_per_time;
-   uint32_t current_time;
-   
-   //Need to do stall check only when engine running
-   if ( CRANK_Get_Flag( CRANK_FLAG_STALL_DETECTED ) != true )
-   {
-	  stall_time_out = CRANK_Get_Parameter( CRANK_PARAMETER_LO_RES_REFERENCE_PERIOD, 0, 0 ) / 2;
-	  edge_time  = CRANK_Get_Parameter(CRANK_PARAMETER_CURRENT_EDGE_TIME, 0, 0 );
-	  counts_per_time = TPU_TIMER_Get_Base_Frequency( EPPWMT_TPU_INDEX, TPU_CONFIG_IC_EPPWMT);
-	  current_time = TPU_TIMER_Get_Value_Channel( EPPWMT_TPU_INDEX, TPU_CONFIG_IC_EPPWMT);
-	   current_time = IO_PULSE_Convert_Counts_To_Time(counts_per_time, current_time,0,0);
+	uint32_t edge_time;
+	uint32_t stall_time_out;
+	uint32_t    counts_per_time;
+	uint32_t current_time;
 
-	 if ( ( (current_time - edge_time) & UINT24_MAX ) > stall_time_out)  	
-	  {
-		 CRANK_Process_Stall_Event();
-	  }
-	 
-   }
+	//Need to do stall check only when engine running
+	if ( CRANK_Get_Flag( CRANK_FLAG_STALL_DETECTED ) != true ) {
+		stall_time_out = CRANK_Get_Parameter( CRANK_PARAMETER_LO_RES_REFERENCE_PERIOD, 0, 0 ) / 2;
+		edge_time  = CRANK_Get_Parameter(CRANK_PARAMETER_CURRENT_EDGE_TIME, 0, 0 );
+		counts_per_time = TPU_TIMER_Get_Base_Frequency( EPPWMT_TPU_INDEX, TPU_CONFIG_IC_EPPWMT);
+		current_time = TPU_TIMER_Get_Value_Channel( EPPWMT_TPU_INDEX, TPU_CONFIG_IC_EPPWMT);
+		current_time = IO_PULSE_Convert_Counts_To_Time(counts_per_time, current_time,0,0);
+
+		if ( ( (current_time - edge_time) & UINT24_MAX ) > stall_time_out) {
+			if (CRANK_Get_Flag(CRANK_FLAG_CAM_BACKUP) != false) {
+				MCD5408_BACKUP_MODE_Exit_Backup_Service_Request(EPPWMT_TPU_INDEX, &TPU, TPU_CONFIG_IC_EPPWMT, &EPPWMT_INIT);
+				CRANK_Set_Flag(CRANK_FLAG_CAM_BACKUP, false);
+			}
+			CRANK_Process_Stall_Event();
+		}
+	}
 }
 
 
