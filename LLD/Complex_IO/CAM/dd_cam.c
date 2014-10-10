@@ -12,6 +12,7 @@
 #include "hwiocald.h"
 #include "io_config_siu.h"
 #include "dd_siu_interface.h"
+#include "dd_cam_interface.h"
 
 //=============================================================================
 //   Type declaration
@@ -630,7 +631,9 @@ void CAM_Edge_Process( uint32_t in_cam_sensor )
 			if (CAM1_CRANK_Diagnose_Fail_Count >= CAM_CRANK_DIAGNOSE_MAX_Fail_COUNT) {
 				/* confirm current CAM Edge */
 				// CAM_Backup_Edge_Cylinder_ID = CAM_Get_DutyCycle_Pattern_CylinderID(CAM_DUTY_CYCLE_LENGTH, CAM1_DutyCycle_Linear_BUF);
-				if ((CAM_Backup_Edge_Cylinder_ID == CRANK_CYLINDER_B) || (CAM_Backup_Edge_Cylinder_ID == CRANK_CYLINDER_D)) {
+				if (((CAM_Backup_Edge_Cylinder_ID == CRANK_CYLINDER_B) || (CAM_Backup_Edge_Cylinder_ID == CRANK_CYLINDER_D)) \
+					&& (CAM_Get_CAM1_EngineSpeed() > KfVIOS_n_BackupModeEventScheduleThrsh))
+				{
 					backup_delta_ucrank_angle = CRANK_Convert_Angle_To_uCrank_Angle(KyHWIO_Delta_Angle_From_Edge_To_Tooth_1, S_CRANK_ANGLE);
 					backup_delta_tooth = CRANK_Convert_uCrank_Angle_To_Teeth(backup_delta_ucrank_angle);
 					/* reset crank_current_event_tooth, just like when gap confirmed setting tooth */
@@ -683,7 +686,9 @@ void CAM_Edge_Process( uint32_t in_cam_sensor )
 					
 					/* update crank status, including hls and crank */
 					CRANK_Backup_Set_Syn_Status();
-				} else {
+				}
+				else
+				{
 					// todo: nothing
 				}
 			} else {

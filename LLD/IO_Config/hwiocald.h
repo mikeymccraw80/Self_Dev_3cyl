@@ -38,6 +38,7 @@ extern const T_COUNT_BYTE  KyHWIO_Crank_Angle_Per_CAM_Pulse[];
 extern const T_COUNT_BYTE  KyHWIO_CAM_Pulse_Duty_Min[];
 extern const T_COUNT_BYTE  KyHWIO_CAM_Pulse_Duty_Max[];
 extern const T_CRANK_ANGLE KyHWIO_Delta_Angle_From_Edge_To_Tooth_1;
+extern const T_RPMa        KfVIOS_n_BackupModeEventScheduleThrsh;
 
 extern const uint16_t      KyHWIO_MaxErrorTeethMore;
 extern const uint16_t      KyHWIO_MaxErrorTeethLess;

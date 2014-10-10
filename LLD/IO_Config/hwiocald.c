@@ -674,6 +674,21 @@ const T_RPMa        KfVIOS_n_RunToCrankThrsh = V_RPMa(150);
 
 /*
 *| hwiocald.{
+*|   KfVIOS_n_BackupModeEventScheduleThrsh {
+*|     : is_calconst;
+*|     : description ="This calibration determines the event schedule engine speed threshold. "
+*| "The engine speed must be more than this calibration before event schedule begin "
+*| "Value To Calibrate Out: N/A "
+*| "Enginerring Range: 0 to 8192 rpm  Resolution: 0.125 rpm / Count ";
+*|     : type = types.t_rpma;
+*|     : units = "RPM";
+*|   }
+*| }
+*/
+const T_RPMa        KfVIOS_n_BackupModeEventScheduleThrsh = V_RPMa(80);
+
+/*
+*| hwiocald.{
 *|   KfVIOS_t_PowerdownDelayTime {
 *|     : is_calconst;
 *|     : description ="This calibration determines the delay time after key-off to begin the "
