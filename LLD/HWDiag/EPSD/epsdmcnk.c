@@ -353,8 +353,10 @@ static void ProcessEPSD_CrankNoSigFaultTmrEval(void)
 	} else {
 		if (GetTIMC_t_StopWatch16(VaEPSD_t_7p8TimerArray, CeEPSD_CrankNoSigResetTimer)
 						>= KfEPSD_t_CrankNoSignalResetThrs) {
-			if (GetVIOS_EngSt() == CeENG_RUN) //added by daowei
-				SbEPSD_CrankNoSigTestFailed = CbFALSE; //added by daowei
+			if (CRANK_Get_Flag(CRANK_FLAG_CAM_BACKUP) != true) {
+				if (GetVIOS_EngSt() == CeENG_RUN) //added by daowei
+					SbEPSD_CrankNoSigTestFailed = CbFALSE; //added by daowei
+			}
 			SbEPSD_CrankNoSigTestComplete_Internal = CbFALSE;
 			
 			/* stop and reset no signal timer */
