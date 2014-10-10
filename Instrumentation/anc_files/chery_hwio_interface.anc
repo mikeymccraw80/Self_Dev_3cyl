@@ -1320,6 +1320,19 @@
 *-  description              = "CAM1 falling edge current tooth number";
 *-}
 
+*-CAM1_Period_Average_Value{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CAM1PDAVG";
+*-  variable_location.symbol = CAM1_Period_Average_Value;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "4.2";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.0";
+*-  ds_const_b               = "0.0";
+*-  description              = "cam1 average period value of the past four periods";
+*-}
+
+
 *-hal_eng.VeVIOS_EngSt{
 *-  OBJECTS_CLASS: parameter_es_class;
 *-  label                    = "EngState";
