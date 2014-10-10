@@ -163,7 +163,7 @@ typedef struct MCD5408_Options_F_Tag
    bitfield32_t  Critical_Edge                :  BIT_1;
    bitfield32_t  Period_Calc_2_Enabled  :  BIT_1;
    bitfield32_t  Period_Avg_Enabled     :  BIT_1;
-   bitfield32_t                                   :  BIT_1;  // unused - 1 more flags available
+   bitfield32_t  TCR1CS_Set             :  BIT_1;
    bitfield32_t  TCR2_Option               :  BIT_8;
    bitfield32_t  Min_Period                   :  BIT_16;
 

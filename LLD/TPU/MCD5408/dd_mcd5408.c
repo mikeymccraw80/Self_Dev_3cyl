@@ -36,6 +36,11 @@ void MCD5408_Initialize_Channel(
    // Initialization of PRAM start address in CPBA
    TPU_Set_Static_Base_Address(index, configure);
 
+   //TCR1 Time base initialisation is taken acre in the TPU Initialise device function
+   //Inform the EPPE algorithm of the TCR1CS setting by  writing 
+   //TRUE(1)/FALSE (0) to the Options flag TCR1CS_Set.
+   mcd5408_sdm->Options.F.TCR1CS_Set = p_tpu->Clock[index].TBCR.F.TCR1CS;
+
    // Set the TCR2 angle mode option
    switch( parameters->angle_mode )
    {
@@ -57,11 +62,10 @@ void MCD5408_Initialize_Channel(
    {
       temp_tbcr.U32 = p_tpu->Clock[index].TBCR.U32;
 
-      // Disable TCR2 hw control
-      temp_tbcr.F.TCR2CTL = TPU_TCR2_SHUTDOWN;
-
       // Disable Angle Clock
       temp_tbcr.F.AM = false;
+      // Disable TCR2 hw control
+      temp_tbcr.F.TCR2CTL = TPU_TCR2_SHUTDOWN;
 
       p_tpu->Clock[index].TBCR.U32 = temp_tbcr.U32;
    }
@@ -175,6 +179,18 @@ void MCD5408_Initialize_Channel(
   //TPU_TRANSFER_REQUEST_DISABLE
    p_tpu->CDTRER[index].U32 &= ~((uint32_t)(1 << channel)); 
 
+   if( EPPE_EDGE_COUNT == mcd5408_sdm->Options.F.TCR2_Option )
+   {
+      temp_tbcr.U32 = p_tpu->Clock[index].TBCR.U32;
+
+      // Enable Angle Clock
+      temp_tbcr.F.AM = true;
+
+      // Ensure Disabled TCR2 hw control
+      temp_tbcr.F.TCR2CTL = TPU_TCR2_SHUTDOWN;
+
+      p_tpu->Clock[index].TBCR.U32 = temp_tbcr.U32;
+   }
    // Issue HSR
    TPU_Set_HSR(index, configure, EPPE_HSR_INIT);
 
@@ -189,6 +205,9 @@ void MCD5408_Initialize_Channel(
    {
       temp_tbcr.U32 = p_tpu->Clock[index].TBCR.U32;
 
+      // Enable Angle Clock
+      temp_tbcr.F.AM = true;
+
       if(EPPE_CRIT_RISING == mcd5408_sdm->Options.F.Critical_Edge)
       {
          temp_tbcr.F.TCR2CTL = TPU_TCR2_RISE_TRANSITION_INC_TCR2;
@@ -197,9 +216,6 @@ void MCD5408_Initialize_Channel(
       {
          temp_tbcr.F.TCR2CTL = TPU_TCR2_FALL_TRANSITION_INC_TCR2;
       }
-
-      // Enable Angle Clock
-      temp_tbcr.F.AM = true;
 
       p_tpu->Clock[index].TBCR.U32 = temp_tbcr.U32;
    }
