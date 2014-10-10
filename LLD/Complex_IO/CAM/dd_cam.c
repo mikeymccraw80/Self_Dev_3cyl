@@ -10,7 +10,8 @@
 #include "io_conversion.h"
 #include "hal_cam.h"
 #include "hwiocald.h"
-
+#include "io_config_siu.h"
+#include "dd_siu_interface.h"
 
 //=============================================================================
 //   Type declaration
@@ -63,16 +64,20 @@ extern uCrank_Count_T   CRANK_Next_Event_PA_Content;
 extern uCrank_Count_T   CRANK_Previous_Real_Edge_Count;
 extern uCrank_Count_T   CRANK_Current_Real_Edge_Count;
 
+/* import crank diagnose result */
+extern bool SbEPSD_CrankNoSigTestFailed;
+
 #define CAM_DUTY_CYCLE_LENGTH 8
 static uint8_t      CAM1_DutyCycle_Circle_FIFO[CAM_DUTY_CYCLE_LENGTH];
 static uint8_t      CAM1_DutyCycle_Linear_BUF[CAM_DUTY_CYCLE_LENGTH];
 static uint8_t      CAM1_Falling_Edge_Tooth_Number[CAM_DUTY_CYCLE_LENGTH];
 static uint32_t     CAM1_Period_Circle_FIFO[CAM_DUTY_CYCLE_LENGTH];
+static uint32_t     CAM1_Period_Average_Value;
 static uint32_t     CAM1_Period_Off_Circle_FIFO[CAM_DUTY_CYCLE_LENGTH];
 static uint8_t      CAM1_Circle_FIFO_Index;
 static Crank_Cylinder_T CAM_Backup_Edge_Cylinder_ID;
 
-#define CAM_CRANK_DIAGNOSE_MAX_Fail_COUNT 1
+#define CAM_CRANK_DIAGNOSE_MAX_Fail_COUNT 2
 static uint8_t      CAM1_CRANK_Diagnose_Fail_Count;
 
 /* cam stuck backup */
@@ -342,9 +347,7 @@ void CAM_Update_State( void )
 
 			/* Determine if in backup mode and cam occurred: */
 			if (CRANK_Get_Flag(CRANK_FLAG_CAM_BACKUP) == false) {
-				// if( CAM_Sensor_State == cam_active_state ) {
-				pattern_cylinder_id = CAM_Backup_Edge_Cylinder_ID;
-				if (pattern_cylinder_id == CRANK_CYLINDER_D) {
+				if( CAM_Sensor_State == cam_active_state ) {
 					/* Indicate correct cylinder event: */
 					cylinderID = CAM_Number_Of_Cylinders - 1;
 					CAM_State_Change_Occurred          = Insert_Bits( CAM_State_Change_Occurred,          true, CAM_Sensor_In_Use, 1 );
@@ -553,12 +556,12 @@ static uint8_t CAM_Increment_Cam_Edge_Counter(uint8_t in_cam_edge)
 // CAM_Edge_Interrupt_Handler
 //=============================================================================
 extern uCrank_Count_T    CRANK_GAP_COUNT;
-	uCrank_Angle_T  backup_delta_ucrank_angle;
-	uCrank_Count_T  backup_delta_tooth;
 void CAM_Edge_Process( uint32_t in_cam_sensor )
 {
 	CAM_Sensors_T   cam_sensor = (CAM_Sensors_T)in_cam_sensor;
 
+	uCrank_Angle_T  backup_delta_ucrank_angle;
+	uCrank_Count_T  backup_delta_tooth;
 	uint8_t         current_edge_index;
 	uCrank_Count_T  pa_tooth_count;
 	uCrank_Count_T  whole_angle_in_teeth;
@@ -572,6 +575,7 @@ void CAM_Edge_Process( uint32_t in_cam_sensor )
 	uint32_t        current_time;
 	uint32_t        counter;
 	uint32_t        CAM1_Linear_BUF_Index;
+	uint32_t        average_period;
 
 	/* define backup variables */
 	uint32_t backup_period;
@@ -579,8 +583,6 @@ void CAM_Edge_Process( uint32_t in_cam_sensor )
 	uint16_t backup_first_edge_count;
 	uint16_t backup_last_edge_count;
 	uint8_t  backups_between_cams;
-
-
 
 	current_edge_index = CAM_Current_Edge[cam_sensor];
 	CAM_EdgeDetected = Insert_Bits( CAM_EdgeDetected, true, cam_sensor, 1 );
@@ -604,13 +606,18 @@ void CAM_Edge_Process( uint32_t in_cam_sensor )
 
 		CAM1_Linear_BUF_Index = CAM1_Circle_FIFO_Index;
 		counter = 0;
+		average_period = 0;
 		while (counter < CAM_DUTY_CYCLE_LENGTH) {
 			CAM1_DutyCycle_Linear_BUF[counter] = CAM1_DutyCycle_Circle_FIFO[CAM1_Linear_BUF_Index];
+			if (counter >= (CAM_DUTY_CYCLE_LENGTH/2)) {
+				average_period += CAM1_Period_Circle_FIFO[CAM1_Linear_BUF_Index];
+			}
 			CAM1_Linear_BUF_Index++;
 			if (CAM1_Linear_BUF_Index >= CAM_DUTY_CYCLE_LENGTH)
 				CAM1_Linear_BUF_Index = 0;
 			counter++;
 		}
+		CAM1_Period_Average_Value = (average_period >> 2);
 		CAM_Backup_Edge_Cylinder_ID = CAM_Get_DutyCycle_Pattern_CylinderID(CAM_DUTY_CYCLE_LENGTH, CAM1_DutyCycle_Linear_BUF);
 
 		if (CRANK_Get_Flag(CRANK_FLAG_CAM_BACKUP) == false) {
@@ -641,12 +648,12 @@ void CAM_Edge_Process( uint32_t in_cam_sensor )
 					//Calculate number of crank pulses for next CAM Pulse
 					backups_between_cams = KyHWIO_Crank_Angle_Per_CAM_Pulse[CAM_Backup_Edge_Cylinder_ID];
 					//Calculate crank period based on the last CAM Pulse
-					backup_period = CAM1_Period_Circle_FIFO[CAM1_Circle_FIFO_Index]/backups_between_cams;
+					backup_period = CAM1_Period_Average_Value/backups_between_cams;
 					//We have either no Crank signal or lost crank synchronization, so start edge count at 1
 					backup_first_edge_count = backup_last_edge_count + 1;
 					//Schedule Initial crank matches
 					MCD5408_BACKUP_MODE_Initialize_Channel(EPPWMT_TPU_INDEX, &TPU, TPU_CONFIG_IC_EPPWMT, 0);
-					
+
 					CRANK_Previous_Real_Edge_Count = MCD5408_Get_Real_Edge_Count(EPPWMT_TPU_INDEX, TPU_CONFIG_IC_EPPWMT);
 					CRANK_Current_Real_Edge_Count = CRANK_Previous_Real_Edge_Count;
 
@@ -659,7 +666,7 @@ void CAM_Edge_Process( uint32_t in_cam_sensor )
 						backup_first_edge_count,
 						backups_between_cams);
 
-					//Schedule the first crank event
+					// Schedule the first crank event
 					MCD5408_Set_New_IRQ_Count(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT, CRANK_EPPE_IRQ_Select, CRANK_Next_Event_PA_Content );
 					// Clear the interrupt flag: false == clear
 					MCD5408_Set_Host_Interrupt_Status(EPPWMT_TPU_INDEX,&TPU,TPU_CONFIG_IC_EPPWMT,false);
@@ -669,6 +676,8 @@ void CAM_Edge_Process( uint32_t in_cam_sensor )
 					
 					/* set cam backup mode flag */
 					CRANK_Set_Flag(CRANK_FLAG_CAM_BACKUP, true);
+					
+					SIU_GPIO_InputBuffer_Config(HAL_GPIO_CRANK_CHANNEL, false);
 					
 					CAM1_BACKUP_FLAG = true;
 					
@@ -681,16 +690,17 @@ void CAM_Edge_Process( uint32_t in_cam_sensor )
 				// todo: nothing
 			}
 		} else {
+			CRANK_Set_Flag( CRANK_FLAG_STALL_DETECTED, false );
 
 			/* confirm current CAM Edge */
 			CAM_Backup_Edge_Cylinder_ID = CAM_Get_DutyCycle_Pattern_CylinderID(CAM_DUTY_CYCLE_LENGTH, CAM1_DutyCycle_Linear_BUF);
-#if 1
+
 			if ((CAM_Backup_Edge_Cylinder_ID == CRANK_CYLINDER_B) || (CAM_Backup_Edge_Cylinder_ID == CRANK_CYLINDER_D)) {
 				//todo nothing
 			} else {
 				CAM_Backup_Edge_Cylinder_ID = CRANK_Get_Cylinder_ID();
 			}
-#endif
+
 			/* confirm the duty cycle pattern */
 			if (CAM_Backup_Edge_Cylinder_ID != CRANK_CYLINDER_NULL) {
 				backup_delta_ucrank_angle = CRANK_Convert_Angle_To_uCrank_Angle(KyHWIO_Delta_Angle_From_Edge_To_Tooth_1, S_CRANK_ANGLE);
@@ -707,7 +717,7 @@ void CAM_Edge_Process( uint32_t in_cam_sensor )
 				//Calculate number of crank pulses for next CAM Pulse
 				backups_between_cams = KyHWIO_Crank_Angle_Per_CAM_Pulse[CAM_Backup_Edge_Cylinder_ID];
 				//Calculate crank period based on the last CAM Pulse
-				backup_period = CAM1_Period_Circle_FIFO[CAM1_Circle_FIFO_Index]/backups_between_cams;
+				backup_period = CAM1_Period_Average_Value/backups_between_cams;
 				//We have either no Crank signal or lost crank synchronization, so start edge count at 1
 				backup_first_edge_count = backup_last_edge_count + 1;
 
@@ -801,5 +811,35 @@ uint8_t CAM_Get_CAM_Current_Index( uint32_t in_cam_sensor )
 uint32_t CAM_Get_CAM_Angle( uint32_t in_cam_sensor ,uint8_t index )
 {
 	return  CAM_Edge_Data[(in_cam_sensor*CAM_Number_Of_Pulses)+ index].Count ;
+}
+
+//=============================================================================
+// CAM_Get_CAM1_Period
+//=============================================================================
+uint32_t CAM_Get_CAM1_Period(void)
+{
+	return CAM1_Period_Average_Value;
+}
+
+//=============================================================================
+// CAM_Get_CAM1_EngineSpeed
+//=============================================================================
+#define CRANK_SECONDS_PER_MINUTE      (60)
+#define CRANK_DEFAULT_RPM_PRECSION    (8)
+uint32_t CAM_Get_CAM1_EngineSpeed(void)
+{
+	uint32_t engine_speed=0;
+	uint8_t tooth_per_lores;
+	uint8_t rpm_conv_factor;
+
+	tooth_per_lores = CRANK_SCHEDULE_CONFIG_VIRTUAL_TEETH_PER_REVOLUTION / 4;
+
+	//The conversion factor is applied to support other crank profiles like 24x,30x etc
+	rpm_conv_factor = (CRANK_VIRTUAL_TEETH_PER_CRANK)/tooth_per_lores;
+
+	engine_speed = (CRANK_SECONDS_PER_MINUTE*(TPU_TIMER_Get_Base_Frequency( EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT ))
+	*CRANK_DEFAULT_RPM_PRECSION)/(CAM1_Period_Average_Value *rpm_conv_factor);
+
+	return ( engine_speed );
 }
 
