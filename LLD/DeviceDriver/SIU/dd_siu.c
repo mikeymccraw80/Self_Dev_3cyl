@@ -425,6 +425,15 @@ void SIU_GPIO_InputBuffer_Config(SIU_GPIO_Channel_T channel, bool enable )
 }
 
 //=============================================================================
+// SIU_Pad_Config
+//=============================================================================
+void SIU_Pad_Config(SIU_GPIO_Channel_T channel, SIU_GPIO_Pin_Assignment_T type )
+{
+	SIU.PCR[channel].F.PA = type;
+}
+
+
+//=============================================================================
 // SIU_Knock_Connect_Pin_To_ETPU
 //=============================================================================
 void SIU_Knock_Connect_Pin_To_ETPU(bool state, SIU_GPIO_Channel_T siu_channel)
