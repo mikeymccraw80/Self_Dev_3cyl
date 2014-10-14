@@ -25,7 +25,7 @@ unsigned char Tooth_Interrupt_Flag;
 void IO_Eng_Cyl_Update(void)
 {
 	LLD_cyl_num  = HAL_Eng_Get_Cyl_Number();
-	if (HAL_Eng_Get_CAM_Backup_Flag == false) {
+	if (HAL_Eng_Get_CAM_Backup_Flag() == false) {
 		crank_sig.engine_rpm = HAL_Eng_Get_Engine_Speed()/2;//rpm scale 0.125 to 0.25(chery)
 		crank_sig.segment_time = (HAL_Eng_Get_Engine_Reference_Time()*5)/16;// time base is 4M, convert to 0.8us
 	} else {
