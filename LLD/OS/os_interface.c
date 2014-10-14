@@ -42,7 +42,8 @@ void OS_Startup_Hook(void)
 	SOH_ETC_Initialize(true);
 
 	// set up os loop time 1ms
-	PIT_TIMER_Set_Value( PIT_CHANNEL_RTI, RTI_LOAD_VALUE_1MS);
+	PIT_INTERRUPT_Clear_Pending(PIT_CHANNEL_RTI);
+	// PIT_TIMER_Set_Value( PIT_CHANNEL_RTI, RTI_LOAD_VALUE_1MS);
 	PIT_INTERRUPT_Set_Enable(PIT_CHANNEL_RTI, true);
 }
 //=============================================================================
