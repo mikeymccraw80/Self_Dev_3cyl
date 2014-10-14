@@ -157,7 +157,7 @@ void OS_TimeBasedTask1ms(void)
 //=============================================================================
 void OS_TimeBasedTask2ms(void)
 {
-
+	HAL_OS_2ms_TimeBasedTask();
 }
 
 
