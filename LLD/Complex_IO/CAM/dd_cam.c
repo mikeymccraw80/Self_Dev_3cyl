@@ -680,8 +680,9 @@ void CAM_Edge_Process( uint32_t in_cam_sensor )
 					
 					/* set cam backup mode flag */
 					CRANK_Set_Flag(CRANK_FLAG_CAM_BACKUP, true);
-					
+					/* disable the 58x signal input port */
 					SIU_GPIO_InputBuffer_Config(HAL_GPIO_CRANK_CHANNEL, false);
+					SIU_Pad_Config(HAL_GPIO_CRANK_CHANNEL, SIU_GPIO_PIN_ASSIGNMENT_ALTERNATE_1);
 					
 					CAM1_BACKUP_FLAG = true;
 					

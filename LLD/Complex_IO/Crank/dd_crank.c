@@ -286,7 +286,9 @@ void CRANK_Reset_Parameters( void )
 	  MCD5408_Set_New_Gap_Count( EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT, new_gap_cnt );
 	  MCD5408_Set_Previous_n_1(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT,0);
 	  MCD5408_Set_Previous_1_n(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT,0);
+	  /* resume the TPU crank channel, support limphome mode */
 	  SIU_GPIO_InputBuffer_Config(HAL_GPIO_CRANK_CHANNEL, true);
+	  SIU_Pad_Config(HAL_GPIO_CRANK_CHANNEL, SIU_GPIO_PIN_ASSIGNMENT_PRIMARY_0);
 
 	  // Call the Resync functions based on a stall event:
 	  CAM_Reset_Parameters();
