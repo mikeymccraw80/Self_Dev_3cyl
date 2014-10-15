@@ -38,6 +38,7 @@ void IO_Eng_Cyl_Update(void)
 	} else {
 		crank_sig.crank_status.B_RefMrk = 1;
 	}
+	crank_sig.crank_status.B_crank_pre_sync = ( bitfield16_t )0 ;
 
 	if(!First_Syn_Flag) {
 		HLS_firstsyn();
