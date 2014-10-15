@@ -336,7 +336,7 @@ void CAM_Update_State( void )
 		CRANK_Set_Cylinder_ID( cylinderID );
 	} else {
 		/* Determine if cam state has changed since last crank rotation */
-		if(( CAM_Sensor_State != CAM_Previous_State ) || CAM_Not_Synched ) {
+		if(( CAM_Sensor_State != CAM_Previous_State ) || CAM_Not_Synched || (CRANK_Get_Flag(CRANK_FLAG_CAM_BACKUP) == true)) {
 			/* Wait until the second 58x gap for a reliable cam sensor signal: */
 			if( CAM_Crank_Number_Gaps_Detected >= CAM_Initialization_Parameters->number_of_gaps_before_sync ) {
 				/* Indicate cam has now been read reliably at least once: */
