@@ -106,7 +106,7 @@ extern bool                    ImmoSiemensEnabled;
 //#define SetImmoRecordSuccessCEL()     (ImmoRecordSuccessCEL = true)
 //#define ClearImmoRecordSuccessCEL()   (ImmoRecordSuccessCEL = false)
 //#define GetImmoRecordSuccessCEL()     (ImmoRecordSuccessCEL)
-#define ImmoCodeAddr                  (&(EE_Immobiliser[2]))
+#define ImmoCodeAddr                  (&(EE_SK[1]))
 
 //#define IsImmoInDeactivation()        (ImmoDeactivateState == ImmoDeactivateOn)
 
@@ -129,7 +129,7 @@ extern bool                    ImmoSiemensEnabled;
  * ============================================================================ */
 //extern void FCALL ImmoDeactivateProcess(void);
 
-extern void FCALL DtrmImmoStatus( void );
+extern void DtrmImmoStatus( void );
 
 
 /* ============================================================================ *\
@@ -151,7 +151,7 @@ extern void FCALL DtrmImmoStatus( void );
  * initialization to check for immobilizer code
  *
 \* ============================================================================ */
-void FCALL ImmobilizerIgnitionOn(void);
+void ImmobilizerIgnitionOn(void);
 
 
 /**************************************************************************
@@ -161,7 +161,7 @@ void FCALL ImmobilizerIgnitionOn(void);
 * Parameters:        none                                      
 * Return:            none   
 **************************************************************************/
-extern FAR_COS void Immo_Executive(void);
+extern void Immo_Executive(void);
 
 /* ============================================================================ *\
  * File revision history (top to bottom, first revision to last revision

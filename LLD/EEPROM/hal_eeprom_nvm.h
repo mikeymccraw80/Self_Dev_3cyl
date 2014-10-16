@@ -29,7 +29,30 @@
 #include "reuse.h"
 //#include "hal_diag.h"
 
+#define  EEFixedBlockSize                (0x32)
+#define  ImmobiliserSize                 (7)
+#define  VehicleIdentificationNumberSize (17)
+#define  DtcDisableMaskSize              (32)
+#define  HistoryTableSize                (8)
+#define  ManufacturesEnableCounter_Size  (1)
+#define  CrankShaftAdaptive_Size         (CcSYST_NUM_OF_CYLINDERS*4)
+#define  CrankShaftAdaptiveCntr_Size     (1)
+#define  M4EepBaudRateSize               (2)
+#define  RepairShopCodeSize              (10)
+#define  ProgrammingDateSize             (4)
+#define  Const_CrankShaftAdaptive_Size   (24) /* max size in case of 6 cyl, keep EEPROM fix size */
+#define  Kw2000Level2KeySize             (2)
+#define  SK_LowBytesLength               (4)
+#define  SK_Length                       (12)
+#define  Siemens_SK_Length               (16) 
+#define  SecretKEYSize                   (12)
+#define  SecretCodeSize                  (2)
+#define  EEImmoBlockSize                 (0x20)
 
+#define PIN_Length_JiCheng               (2)
+#define SK_Length_JiCheng                (5)
+
+#define NoMileageCells                   (16)
 
 /*===========================================================================*\
  *  Data Structure Definitions
@@ -55,6 +78,14 @@ extern MFG_Data_Debug_T   MFG_Data_After_Backup[NUMBER_OF_DEBUG_DATA_SET];
 extern Backup_Disrupted_T Backup_Disrupted;
 // FIXME - A... for test
 extern uint32_t rolling_counter_vehicle;
+
+extern uint8_t     EE_Immobiliser[];
+extern uint8_t     EE_Immo_option;
+extern uint8_t     EE_SK[];
+extern uint8_t     EE_SiemensSK[];
+extern uint16_t    EE_SK_H;
+extern uint32_t    EE_SK_L;
+
 #pragma section DATA " " ".bss"
 
 #endif /* HAL_EMULATED_NVM_H */

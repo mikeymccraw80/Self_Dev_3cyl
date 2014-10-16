@@ -32,9 +32,7 @@
 \* ============================================================================ */
 #include "immo_cal.h"
 #include "immo.h"
-#include "dg_malf.h"
 #include "kw2app.h"
-#include "io_eep.h"
 #include "immo_exec.h"
 #include "immo_fexi.h"
 #include "siemens_immossrv.h"
@@ -68,12 +66,12 @@
 \* ============================================================================ */
 
 /*****************************************************************************/
-#pragma section[ nvram ]         /* nvram variables, checked with a checksum */
+#pragma section DATA " " ".nc_nvram"         /* nvram variables, checked with a checksum */
 /*****************************************************************************/
 bool           ImmoInhibitEngine;
 
 /*****************************************************************************/
-#pragma section[]                               /* normal volatile variables */
+#pragma section DATA " " ".bss"              /* normal volatile variables */
 /*****************************************************************************/
 
 //ImmoStatusByteType      ImmoStatusByte;
@@ -181,7 +179,7 @@ void FCALL ImmoDeactivateProcess(void)
  * This function determine the status of immobilizer, active or deactive
  *
 \* ============================================================================ */
-void FCALL DtrmImmoStatus( void )
+void DtrmImmoStatus( void )
 {
    //ImmoGenericEnabled = false;
    //ImmoJiChengEnabled = false;
@@ -241,7 +239,7 @@ void FCALL DtrmImmoStatus( void )
  * This function contain the immobilizer ignition on logic
  *
 \* ============================================================================ */
-void FCALL ImmobilizerIgnitionOn(void)
+void ImmobilizerIgnitionOn(void)
 {
    DtrmImmoStatus();
 
@@ -276,7 +274,7 @@ void FCALL ImmobilizerIgnitionOn(void)
 * Parameters:        none                                                  
 * Return:            none                                                                                                                    
 **************************************************************************/
-FAR_COS void Immo_Executive (void)
+void Immo_Executive (void)
 {
 /*
 {
