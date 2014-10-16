@@ -41,7 +41,7 @@ void IO_CAM_Level_Update(void)
 //=============================================================================
 void IO_CAM_Status_Update (void)
 {
-	if (HAL_GET_CAM_Stuck_State()) {
+	if (HAL_GET_CAM_Stuck_State(CAM1)) {
 		cam1_sig.status.B_cam_failed = 1;
 		cam1_sig.status.B_cam_loss_of_sync = 1;
 		cam1_sig.status.B_cam_limp_home = 1;
@@ -49,6 +49,16 @@ void IO_CAM_Status_Update (void)
 		cam1_sig.status.B_cam_failed = 0;
 		cam1_sig.status.B_cam_loss_of_sync = 0;
 		cam1_sig.status.B_cam_limp_home = 0;
+	}
+
+	if (HAL_GET_CAM_Stuck_State(CAM2)) {
+		cam2_sig.status.B_cam_failed = 1;
+		cam2_sig.status.B_cam_loss_of_sync = 1;
+		cam2_sig.status.B_cam_limp_home = 1;
+	} else {
+		cam2_sig.status.B_cam_failed = 0;
+		cam2_sig.status.B_cam_loss_of_sync = 0;
+		cam2_sig.status.B_cam_limp_home = 0;
 	}
 }
 
