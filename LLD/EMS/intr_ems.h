@@ -37,6 +37,7 @@
 #include "hal_diag.h"
 #include "hal_analog.h"
 #include "dd_cam_interface.h"
+#include "hal_emulated_eeprom.h"
 
 /* ============================================================================ *\
  * Other header files.
@@ -448,6 +449,19 @@ extern int16_t           EOBD_CoolTemp;
 // }
 
 /***********************************************************************
+ **************    Vehicle Speed   *************************************
+ ***********************************************************************/
+extern EOBD_KPH          EOBD_VehSpd;
+#define GetVIOS_v_VehSpd()\
+                      (EOBD_VehSpd)
+#define GetVIOS_v_ATVehSpd()\
+                      (FixDefConst(0.0, EOBD_KPH))
+INLINE void ConvertIntrParam_VSS(void)
+{
+    EOBD_VehSpd = Vsp;
+}
+
+/***********************************************************************
  ********************    Air Flow  *************************************
  ***********************************************************************/
 // extern EOBD_AIRFLOW      EOBD_dm_Airflow;
@@ -619,7 +633,10 @@ INLINE void ConvertIntrParam_ETCDC(void)
 // }
 
 #define Ignition_On()                                     ((bool)(IgnitionOnStatus.IgnitionIsOn))
-// #define GetFILE_NVM_Failure()                             (NvRamTestFailed)
+#define GetFILE_NVM_Failure()                             (EEP_NVM_Fault)
+// #define GetVIOS_VehInMfgPlant()                           (PbVIDS_VehInMfgPlant)
+#define GetVIOS_VehInMfgPlant()                           (true) //bypass the immo authentication
+// #define GetVIOS_VehInMfgPlant()                           (false) //enable the immo authentication
 #define GetVIOS_IgnSt()                                   (Ignition_On())
 #define GetVIOS_t_EngRunTime()                            (NfVIOS_t_EngRunTime)
 #define GetVIOS_EngSt()                                   (VeVIOS_EngSt)
@@ -660,6 +677,9 @@ INLINE void ConvertIntrParam_ETCDC(void)
 #define GetVIOS_Cam2Occurred()                           (1)
 #define GetVIOS_Cam1Stuck()                              CAM_Get_Stuck(CAM1)
 #define GetVIOS_Cam2Stuck()                              CAM_Get_Stuck(CAM2)
+
+/* for PIDS */
+#define GetFUEL_DFCO_Enabled()                          (B_Fof)
 
 // #if CcSYST_NUM_OF_CYLINDERS ==3
 // #define  GetFUEL_AllCylsOn()                   (inj_enable.B_inj_A &&\
