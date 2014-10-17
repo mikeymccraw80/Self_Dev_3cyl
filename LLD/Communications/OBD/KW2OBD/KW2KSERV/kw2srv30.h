@@ -22,7 +22,7 @@
  *
 \* ============================================================================ */
 
-#include "types.h"
+#include "io_type.h"
 #include "t_base.h"
 #include "t_user.h"
 
@@ -108,7 +108,7 @@ extern bool R_LineEnable;
  *****************************************************************************/
 //extern FAR_COS void PostOFVC_ResponseToRequest (void) ;
 //extern void KwJ14230InputOutputControlByLocalIdentifier (void) ;
-extern FAR_COS BYTE GetOFVC_PID_OvrdReqResp (void) ;
+extern BYTE GetOFVC_PID_OvrdReqResp (void) ;
 //extern void FormAndSendImmoData (void);
 
 /*****************************************************************************

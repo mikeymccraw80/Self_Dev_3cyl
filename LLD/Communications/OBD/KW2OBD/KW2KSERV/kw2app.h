@@ -203,7 +203,8 @@ extern  TbBOOLEAN  VbCopyAndExecuteKernelPending;
 /**********************************************************************/
 
 #define Level2SecurityAccessDelay               (FixDefConst(10.0, Every_Loop_Sec_W))
-#define TriggerL2SecurityTiming()         (Level2SecurityTimer = Level2SecurityAccessDelay)
+//#define TriggerL2SecurityTiming()         (Level2SecurityTimer = Level2SecurityAccessDelay)
+extern void TriggerL2SecurityTiming(void);
 /*********************************************************************/
 /***    Set the ECU Reset Pending flag                             ***/
 /*********************************************************************/

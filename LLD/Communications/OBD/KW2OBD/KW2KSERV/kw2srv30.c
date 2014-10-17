@@ -19,8 +19,11 @@
  *   None.
  *
 \* ============================================================================ */
-#if 0
 #include "kw2srv30.h"
+
+bool R_LineEnable;
+
+#if 0
 
 #include "kw2dll.h"
 #include "kw2app.h"
