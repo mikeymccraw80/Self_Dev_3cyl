@@ -29,6 +29,27 @@ typedef enum {
 extern TeENG_STATE     VeVIOS_EngSt;
 extern T_COUNT_WORD    NfVIOS_t_EngRunTime;
 
+#define GetVIOS_EngSt_Off() \
+    ( ((VeVIOS_EngSt==CeENG_OFF)?CbTRUE:CbFALSE) )
+
+#define GetVIOS_EngSt_KeyOn() \
+    ( ((VeVIOS_EngSt==CeENG_KEYON)?CbTRUE:CbFALSE) )
+
+#define GetVIOS_EngSt_Crank() \
+    ( ((VeVIOS_EngSt==CeENG_CRANK)?CbTRUE:CbFALSE) )
+
+#define GetVIOS_EngSt_Run() \
+    ( ((VeVIOS_EngSt==CeENG_RUN)?CbTRUE:CbFALSE) )
+
+#define GetVIOS_EngSt_Stall() \
+    ( ((VeVIOS_EngSt==CeENG_STALL)?CbTRUE:CbFALSE) )
+
+#define GetVIOS_EngSt_PwrOffDly() \
+    ( ((VeVIOS_EngSt==CeENG_POWEROFFDELAY)?CbTRUE:CbFALSE) )
+
+#define GetVIOS_EngSt_ShtdwnInPrgs() \
+    ( ((VeVIOS_EngSt==CeENG_SHUTDOWNINPROCESS)?CbTRUE:CbFALSE) )
+
 /**********************************************************************/
 /***  Return cumulative total tooth error counts during 58x synchronization. ***/
 /**********************************************************************/
