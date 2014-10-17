@@ -609,8 +609,8 @@ extern uint16_t uTp2Lw;
 extern uint16_t TpPosNlp;
 extern uint8_t FrBitsEtsm;
 extern uint8_t B_FofEtsm;
-
- 
+extern uint16_t Vsp; //EOBD_KPH
+extern bool B_Fof;
 
 /* knock part, defined in HLS */
 extern bool knock_flag_a;
