@@ -27,6 +27,7 @@ SECTIONS
       STORE(0xAAAA,2)
       hwiocald.o (.text_vle)
       vsepcald.o (.text_vle)
+      immo_cal.o (.text_vle)
       vehicle_can_cald.o (.text_vle)
       esc_cal.o(.text_vle)
       emsdcald.o(.text_vle)

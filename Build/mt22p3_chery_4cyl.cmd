@@ -14,6 +14,7 @@
 ..\Instrumentation\calsets.c
 ..\LLD\IO_Config\hwiocald.c
 ..\LLD\IO_Config\vsepcald.c
+..\LLD\Immo\immo_cal.c
 ..\LLD\IO_Config\vehicle_can_cald.c
 ..\knock\esc_cal.c
 ..\LLD\HWDiag\EMSD\emsdcald.c

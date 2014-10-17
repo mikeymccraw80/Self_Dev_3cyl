@@ -61,11 +61,6 @@
  * Global variables.
 \* ============================================================================ */
 
-
-#if ( ( config_CPU_T == option_M68HC12 ) \
- && ( config_Compiler_Vendor == option_COSMIC )  )
-#pragma section const {COMMON_CAL}
-#endif
 /*---------------------------------------------*\
  *--- Number  ---*
 \*---------------------------------------------*/
@@ -169,10 +164,7 @@ const uint8_t KaIMMO_CustomerID[4] = {0x53, 0x54, 0x45, 0x43};
 *|     }
 *|  }
 */
-#if ( ( config_CPU_T == option_M68HC12 ) \
- && ( config_Compiler_Vendor == option_COSMIC )  )
-#pragma section const {}
-#endif
+
 /* ============================================================================ *\
  * Local variables.
 \* ============================================================================ */
