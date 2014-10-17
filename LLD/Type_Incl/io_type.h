@@ -171,6 +171,19 @@ typedef enum IO_Timer_State_Tag
 
 }  IO_Timer_State_T;
 
+/* Immobilizer type */
+typedef enum
+{
+     CeImmo_Off,
+     CeImmo_STEC
+} Immo_Option_T;
+
+typedef enum
+{
+     CeFuelPumpPin,
+     CeAcClutch
+} FuelPump_Channel_T;
+
 //=============================================================================
 //  IO_Configuration_T A configurable value set in
 //          io_type.h that specifies the device type, device number,

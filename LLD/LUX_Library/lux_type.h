@@ -2057,7 +2057,10 @@ typedef LONGCARD                                          Every_1mn_Loop_Sec_L;
                                              (1.0 / Prec_EverySemiFastLoopSecB)
 #define RFactor_Every_2nd_Loop_Sec_W_EveryFastLoopSecB \
                                                  (1.0 / Prec_EveryFastLoopSecB)
-
+#define RFactor_Every_4th_Loop_Sec_W_Every_Loop_Sec_W   \
+                                                 (1.0 / Prec_Every_Loop_Sec_W)
+#define RFactor_Every_16th_Loop_Sec_W_Every_Loop_Sec_W   \
+                                                 (1.0 / Prec_Every_Loop_Sec_W)
 /*--------------------------------------*/
 /*---                                ---*/
 /*---   Injection Time Fixed Types   ---*/
