@@ -41,15 +41,15 @@
 /* Co-ordinate any desired changes with the Software Forward Engineering and */
 /* Building Blocks group                                                     */
 /*===========================================================================*/
-#include "reuse.h"
-#include "types.h"
+#include "io_type.h"
+
 /* ============================================================================ *\
  * Other header files.
 \* ============================================================================ */
 #include "immo_cal.h"
 #include "immo_exec.h"
-#include "os_kernel.h"    /* For FastPitLoopCounter */
-#include "intr_ems.h"	 /* for MT20 EMS interface.    
+#include "intr_ems.h"
+
 /* ============================================================================ *\
  * Exported preprocessor #define commands.
 \* ============================================================================ */
@@ -66,7 +66,6 @@
 /*                                                                           */
 /* Date         user id     SCR       (description on following lines)       */
 /* ----------   -------     ---                                              */
-/* 
 /* ==========================================================================*/
  
 #endif /* IMMO_FEXI_H */

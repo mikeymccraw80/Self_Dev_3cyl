@@ -43,7 +43,7 @@ extern TbBOOLEAN VbSiemens_MsgSeqError;
  * Global Function Prototypes
  ******************************************************************************/
 
-extern FAR_COS void SiemensImmo_UpdateStateMachine (void);
+extern void SiemensImmo_UpdateStateMachine (void);
 
 
 

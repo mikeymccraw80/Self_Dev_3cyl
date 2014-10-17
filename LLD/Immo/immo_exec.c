@@ -39,8 +39,7 @@
 /* Co-ordinate any desired changes with the Software Forward Engineering and */
 /* Building Blocks group                                                     */
 /*===========================================================================*/
-#include "reuse.h"
-#include "types.h"
+#include "io_type.h"
 
 
 /* ========================================================================== *\
@@ -50,9 +49,6 @@
 #include "immo.h"
 #include "immo_encrypt.h"
 #include "kw2dll.h"
-#include "bootloader.h"
-#include "os_kernel.h"
-#include "hal.h"
 //#include "cm_state.h"
 //#include "v_engine.h"
 #include "immo_fexi.h"
@@ -61,10 +57,10 @@
 //#include "v_efi.h"
 #include "immo_cal.h"
 //#include "io_cpu12.h"
-#include "dd_port.h"
 #include "intr_ems.h"
-#include "ddmspapi.h"
 #include "siemens_immosaut.h"
+#include "hal_eeprom_nvm.h"
+#include "io_interface_os.h"
 
 /* ========================================================================== *\
  * Local preprocessor #define commands.
@@ -95,7 +91,7 @@
 \* ========================================================================== */
 
 /* Immobilizer Varible */
-#pragma section [ram_boot]
+// #pragma section [ram_boot]
 uint8_t                    ECMKEY_Reserved[GenericImmoKey_Length];
 uint8_t                    AuthenticationCounter, FeedbackAuthCounter, ValidAuthRspCounter;
 Every_Loop_Sec_B           SingleAuthenCounter;
@@ -103,11 +99,12 @@ Immo_Error_T               Immo_Erro_Code;
 Immo_Status_T              ImmoServiceState;
 ECM_Immo_Relation_T        ECMImmoRelation;
 Authentication_Request_T   Authentication_Request_ID;
-#pragma section []
+// #pragma section []
 
 
 
-#pragma section [nvram]
+// #pragma section [nvram]
+#pragma section DATA " " ".nc_nvram"         /* nvram variables, checked with a checksum */
 //uint8_t                    ECMKEY[JiChengImmoKey_Length];
 WORD                       TotalAuthenticationCounter;
 TbBOOLEAN                  AuthenticationResult;
@@ -115,7 +112,8 @@ TbBOOLEAN                  AuthenticationResultState;
 TbBOOLEAN                  ImmoPassThisKeyon;
 Every_Loop_Sec_W           NoAuthenticationTimer;
 IMMO_WarningState          ImmoCodeWarningSts = AuthenticationResultFail;
-#pragma section []
+// #pragma section []
+#pragma section DATA " " ".bss"              /* normal volatile variables */
 
 SK_H_T                     Immo_SK_H;
 SK_L_T                     Immo_SK_L;
@@ -223,7 +221,7 @@ FAR_COS void CheckSingleAuthenticationTime(void)
  *
  *****************************************************************************/
 
-FAR_COS void GoToECMLearnFromImmoState(void)
+void GoToECMLearnFromImmoState(void)
 {
    ECMImmoRelation=ECMLearnFromImmo;
    Kw2000State=k2sWaitingInitializing;
@@ -238,7 +236,7 @@ FAR_COS void GoToECMLearnFromImmoState(void)
  *
  *****************************************************************************/
 
-FAR_COS void GoToImmoLearnFromECMState(void)
+void GoToImmoLearnFromECMState(void)
 {
    ECMImmoRelation=ImmoLearnFromECM;
    Kw2000State=k2sWaitingInitializing;
@@ -251,7 +249,7 @@ FAR_COS void GoToImmoLearnFromECMState(void)
  * Return:             uint8_t
  *
  *****************************************************************************/
-FAR_COS uint8_t CalculateChecksum(BYTE *address1, BYTE *address2)
+uint8_t CalculateChecksum(BYTE *address1, BYTE *address2)
 {
    uint8_t *addressidx, checksum=0;
  	
@@ -360,7 +358,7 @@ FAR_COS void CalculateAuthenticationKey(void)
  * Return:             None
  *
  *****************************************************************************/
-FAR_COS void ImmoEngineStallCheck(void)
+void ImmoEngineStallCheck(void)
 {
     if(((!ImmoInhibitEngine)) &&
        (!GetEngineTurning()))
@@ -392,7 +390,7 @@ FAR_COS void ImmoEngineStallCheck(void)
  * Return:             None
  *
  *****************************************************************************/
-FAR_COS void ImmoIGNOffCheck(void)
+void ImmoIGNOffCheck(void)
 {
   /*
    if(Chk_GenericImmo_Enabled())
@@ -542,8 +540,8 @@ FAR_COS void ImmoIGNOffCheck(void)
 		  
 	  IGNOffModeTimeOut = true;
          /* to avoid running reset check */
-	if ( (EOBD_VehSpd > K_ImmoByPassVSS)
-               && (!GetDGDM_FaultActive(CeDGDM_VSS_NoSignal) ) )
+	// if ( (EOBD_VehSpd > K_ImmoByPassVSS) && (!GetDGDM_FaultActive(CeDGDM_VSS_NoSignal) ) )
+    if (EOBD_VehSpd > K_ImmoByPassVSS)
 	   {
 
             ImmoEnableEngine();
@@ -827,7 +825,7 @@ static void JiChengImmobilizerInitializing(void)
  *
  *****************************************************************************/
 //static void ImmoEngineRunLimit(void)
-FAR_COS void ImmoEngineRunLimit(void)
+void ImmoEngineRunLimit(void)
 {
    if (ImmoPassThisKeyon == true)
    {
@@ -900,7 +898,7 @@ static void JiChengImmo_UpdateStateMachine(void)
  * Return:             None
  *
  *****************************************************************************/
-FAR_COS void Immo_UpdateService (void)
+void Immo_UpdateService (void)
 {
    if ( (ECMImmoRelation == EndAuthentication)||
    	(VeSiemens_ECMImmoRelation == CeSiemens_EndAuthentication) )
@@ -939,7 +937,7 @@ FAR_COS void Immo_UpdateService (void)
  * Return:             TbBOOLEAN
  *
  *****************************************************************************/
-FAR_COS TbBOOLEAN CheckIMMO_ECMNotLearned(void)
+TbBOOLEAN CheckIMMO_ECMNotLearned(void)
 {
    uint8_t i=0;
    TbBOOLEAN CheckResult;

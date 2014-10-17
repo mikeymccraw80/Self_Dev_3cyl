@@ -26,9 +26,9 @@
 /* ============================================================================ *\
  * Standard header files.
 \* ============================================================================ */
-#include "reuse.h"
-#include "types.h"
+#include "io_type.h"
 #include "intr_ems.h"
+#include "lux_type.h"
 
 
 /* ============================================================================ *\
@@ -44,9 +44,6 @@ extern const FuelPump_Channel_T    K_Immo_FuelPump_channel;
 extern const Immo_Option_T         K_Immo_option;
 extern const Every_Loop_Sec_B      K_SingleAuthenticationMaxTime;
 extern const Every_Loop_Sec_W      K_ImmoAuthenticationClearTime;
-//extern const uint8_t               K_MaxAuthenTimes;
-//extern const uint8_t               K_MaxFeedbackAuthenTimes;
-//extern const uint8_t               K_MaxValidAuthenTimes;
 extern const EOBD_KPH              K_ImmoByPassVSS;
 extern const Every_16th_Loop_Sec_W K_ImmoNoAuthLimit;
 extern const uint8_t               KcMyImmoSourceAddr;

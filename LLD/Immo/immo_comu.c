@@ -39,8 +39,7 @@
 /* Co-ordinate any desired changes with the Software Forward Engineering and */
 /* Building Blocks group                                                     */
 /*===========================================================================*/
-#include "reuse.h"
-#include "types.h"
+#include "io_type.h"
 
 
 /* ========================================================================== *\
@@ -54,16 +53,6 @@
 #include "kw2dll.h"
 #include "kw2dllcf.h"
 #include "kw2exec.h"
-#include "dd_port.h"
-#include "bootloader.h"
-#include "os_kernel.h"
-#include "dd_atd.h"
-//#include "v_eep.h"
-#include "Dg_malf.h"
-//#include "v_vspeed.h"
-#include "os_kernel.h"
-#include "io_eep.h"
-#include "ddmspapi.h"
 
 /*for Siemens immo*/
 #include "siemens_immossrv.h"
@@ -75,9 +64,9 @@
 //extern FAR_COS TbBOOLEAN PINWriteSuccess(void);
 //extern FAR_COS TbBOOLEAN SKWriteSuccess(void);
 //extern FAR_COS void GoToAuthenticationState(void);
-extern FAR_COS void ImmoEndService(void);
+extern void ImmoEndService(void);
 //extern FAR_COS void GoToEndTesterState(void);
-extern FAR_COS void GoToEndResponderState(void);
+extern void GoToEndResponderState(void);
 /* ========================================================================== *\
  * Global variables.
 \* ========================================================================== */
@@ -525,7 +514,7 @@ static void Authentication_OverTime(void)
  * Return:             None
  *
  *****************************************************************************/
-FAR_COS void ImmoEndService(void)
+void ImmoEndService(void)
 {
    /* Change ECM from KW2000 tester to KW2000 responder. */
    ECMImmoRelation=NO_Relation;
@@ -544,48 +533,48 @@ FAR_COS void ImmoEndService(void)
       if (GetImmoAuthenticationResult())  
       {
          ImmoEnableEngine();
-         if (GetDGDM_DTC_FaultType (CeDGDM_ImmoNoResponse) != CeDGDM_FAULT_TYPE_Z)
-         {
-            PerfmDGDM_ProcessPassReport(CeDGDM_ImmoNoResponse);
-         }
-         if (GetDGDM_DTC_FaultType (CeDGDM_ImmoAuthenError) != CeDGDM_FAULT_TYPE_Z)
-         {
-            PerfmDGDM_ProcessPassReport(CeDGDM_ImmoAuthenError);
-         }
+         // if (GetDGDM_DTC_FaultType (CeDGDM_ImmoNoResponse) != CeDGDM_FAULT_TYPE_Z)
+         // {
+         //    PerfmDGDM_ProcessPassReport(CeDGDM_ImmoNoResponse);
+         // }
+         // if (GetDGDM_DTC_FaultType (CeDGDM_ImmoAuthenError) != CeDGDM_FAULT_TYPE_Z)
+         // {
+         //    PerfmDGDM_ProcessPassReport(CeDGDM_ImmoAuthenError);
+         // }
       }
       else
       {
-         if ((!ImmoPassThisKeyon )||
-	       ((!GetDGDM_FaultActive(CeDGDM_VSS_NoSignal) &&(EOBD_VehSpd <= K_ImmoByPassVSS)) || 
-	         ((!GetEngineTurning()) &&(GetDGDM_FaultActive(CeDGDM_VSS_NoSignal)))))
-	      
-	 {
-	    ImmoDisableEngine();
-	 }
-			  
-	 if (ImmoAuthenErrorDetected)
-	 {
-	    if(GetDGDM_DTC_FaultType (CeDGDM_ImmoAuthenError) != CeDGDM_FAULT_TYPE_Z)
-	    {
-	        PerfmDGDM_ProcessFailReport(CeDGDM_ImmoAuthenError);
-	    }
-	    if (GetDGDM_DTC_FaultType (CeDGDM_ImmoNoResponse) != CeDGDM_FAULT_TYPE_Z)
-	    {
-		PerfmDGDM_ProcessPassReport(CeDGDM_ImmoNoResponse);
-	    }
-	 }
-	 else if (ImmoNoResponseDetected &&
-		  GetDGDM_DTC_FaultType (CeDGDM_ImmoNoResponse) != CeDGDM_FAULT_TYPE_Z)
-	 {
-	    PerfmDGDM_ProcessFailReport(CeDGDM_ImmoNoResponse);
-	 }
-	 else
-	 {
-	    /* do nothing */
-	 }
-      }
-      KeywordExecutive( CwKW2000_Initializes ) ;
-      L2_WrongAttemptTry=0;
+        //  if ((!ImmoPassThisKeyon )||
+	       // ((!GetDGDM_FaultActive(CeDGDM_VSS_NoSignal) &&(EOBD_VehSpd <= K_ImmoByPassVSS)) || 
+	       //   ((!GetEngineTurning()) &&(GetDGDM_FaultActive(CeDGDM_VSS_NoSignal)))))
+		if (!ImmoPassThisKeyon || (EOBD_VehSpd <= K_ImmoByPassVSS) || !GetEngineTurning())
+		{
+			ImmoDisableEngine();
+		}
+
+		if (ImmoAuthenErrorDetected)
+		{
+			//    if(GetDGDM_DTC_FaultType (CeDGDM_ImmoAuthenError) != CeDGDM_FAULT_TYPE_Z)
+			//    {
+			//        PerfmDGDM_ProcessFailReport(CeDGDM_ImmoAuthenError);
+			//    }
+			//    if (GetDGDM_DTC_FaultType (CeDGDM_ImmoNoResponse) != CeDGDM_FAULT_TYPE_Z)
+			//    {
+			//        PerfmDGDM_ProcessPassReport(CeDGDM_ImmoNoResponse);
+			//    }
+		}
+		// else if (ImmoNoResponseDetected && GetDGDM_DTC_FaultType (CeDGDM_ImmoNoResponse) != CeDGDM_FAULT_TYPE_Z)
+		else if (ImmoNoResponseDetected)
+		{
+			//    PerfmDGDM_ProcessFailReport(CeDGDM_ImmoNoResponse);
+		}
+		else
+		{
+					/* do nothing */
+		}
+	}
+	KeywordExecutive( CwKW2000_Initializes ) ;
+	L2_WrongAttemptTry=0;
    }
 
 }/*** End of ImmoEndService ***/
@@ -1053,7 +1042,7 @@ FAR_COS void ImmoTester_Initialize(void)
  * Return:             None
  *
  *****************************************************************************/
-FAR_COS void Update_IMMO_DLL_Service(void) 
+void Update_IMMO_DLL_Service(void) 
 {
 /*
    if ((Chk_GenericImmo_Enabled()) ||(Chk_JiChengImmo_Enabled()))
@@ -1177,7 +1166,8 @@ static void CntrlIMMO_WaitTinitime(void)
     SetSiemens_DLLStateToSendingWup ();
   }
 }
-/* for Siemens Immo */
+/* for Siemens Immo */
+
 	#endif
 /*****************************************************************************
 *                                                                            *
@@ -1358,7 +1348,7 @@ static void CntrlIMMO_SendingResponseMsg(void)
  * Return:             None
  *
  *****************************************************************************/
-FAR_COS void GoToEndResponderState (void)
+void GoToEndResponderState (void)
 {
   SyIMMO_SingleAuthCntr = 0;
   VeSiemens_ECMImmoRelation = CeSiemens_EndAuthentication;
@@ -1647,7 +1637,7 @@ static void DtrmnIMMO_ReAcknowldge(void)
 /**********************************************************************/
 /***    Load the level 2 security timer                             ***/
 /**********************************************************************/
-FAR_COS void TriggerL2SecurityTiming (void)
+void TriggerL2SecurityTiming (void)
 {
 /*
  if(Chk_GenericImmo_Enabled() )
@@ -1679,7 +1669,7 @@ if(Chk_SiemensImmo_Enabled() )
  * Return:              None
  *
  *****************************************************************************/
-FAR_COS void LearnSKandPINService(void)
+void LearnSKandPINService(void)
 {
    if (LearnSKandPINState==CbTRUE)
    {

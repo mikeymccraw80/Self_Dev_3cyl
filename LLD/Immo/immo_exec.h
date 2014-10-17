@@ -41,15 +41,14 @@
 /* Co-ordinate any desired changes with the Software Forward Engineering and */
 /* Building Blocks group                                                     */
 /*===========================================================================*/
-#include "reuse.h"
-#include "types.h"
+#include "io_type.h"
+
 /* ============================================================================ *\
  * Other header files.
 \* ============================================================================ */
 #include "kw2dll.h"
 #include "kw2app.h"
 #include "Immo_cal.h"
-#include "dd_nvram.h"
 
 
 /* ============================================================================ *\
@@ -335,23 +334,23 @@ extern TbBOOLEAN                  LearnSKandPINState;
  * ============================================================================ */
 //extern FAR_COS void CheckSingleAuthenticationTime(void);
 //extern FAR_COS void CheckTotalAuthorizationTime(void);
-extern FAR_COS void Update_IMMO_DLL_Service(void) ;
+extern void Update_IMMO_DLL_Service(void) ;
 //extern FAR_COS void GenericImmo_AuthenticationResultLostService (void);
 //extern FAR_COS void JiChengImmo_AuthenticationResultLostService (void);
-extern FAR_COS TbBOOLEAN  EEPROMWriteSuccess( uint8_t *EEP_data_address, uint8_t *RAM_data_address, uint8_t size);
+extern TbBOOLEAN  EEPROMWriteSuccess( uint8_t *EEP_data_address, uint8_t *RAM_data_address, uint8_t size);
 //extern FAR_COS TbBOOLEAN  SecretKeyAndSecurityAccessCodeEEPROMValid(void);
-extern FAR_COS TbBOOLEAN CheckIMMO_ECMNotLearned(void);
-extern FAR_COS uint8_t    CalculateChecksum(BYTE *address1, BYTE *address2);
+extern TbBOOLEAN CheckIMMO_ECMNotLearned(void);
+extern uint8_t    CalculateChecksum(BYTE *address1, BYTE *address2);
 
 //extern FAR_COS void ReadImmoEEPROMData(void);
 //extern FAR_COS TbBOOLEAN  SKPINEEPROMValid(void);
 //extern FAR_COS void UpdateImmoEEPROMData(void);
 //extern FAR_COS void GoToAuthenticationState(void);
-extern FAR_COS void Immo_UpdateService (void);
-extern FAR_COS void ImmoEndService(void);
+extern void Immo_UpdateService (void);
+extern void ImmoEndService(void);
 //extern FAR_COS void GoToEndTesterState(void);
 /*for Siemens immo*/
-extern FAR_COS void GoToEndResponderState(void);
+extern void GoToEndResponderState(void);
 //extern FAR_COS void CalculateAuthenticationKey(void);
 //extern FAR_COS void PINUnProtectService(void);
 //extern FAR_COS void DisableIMMDFlag(void);
@@ -361,16 +360,16 @@ extern FAR_COS void GoToEndResponderState(void);
 //extern FAR_COS void GoToImmoLearnFromECMState(void);
 //extern FAR_COS void PINProtectService (void);
 //extern FAR_COS void ImmoECMLearnService(void);
-extern FAR_COS void LearnSKandPINService(void);
+extern void LearnSKandPINService(void);
 
 extern TbBOOLEAN DtrmnIMMO_SingleAuthTimeOvertime(Every_Loop_Sec_B counter);
 /* for Siemens Immo */
-extern FAR_COS void ImmoEngineStallCheck(void);
-extern FAR_COS void ImmoIGNOffCheck(void);
-extern FAR_COS void ImmoEngineRunLimit(void);
-extern FAR_COS void TriggerL2SecurityTiming (void);
-extern FAR_COS void GoToECMLearnFromImmoState(void);
-extern FAR_COS void GoToImmoLearnFromECMState(void);
+extern void ImmoEngineStallCheck(void);
+extern void ImmoIGNOffCheck(void);
+extern void ImmoEngineRunLimit(void);
+extern void TriggerL2SecurityTiming(void);
+extern void GoToECMLearnFromImmoState(void);
+extern void GoToImmoLearnFromECMState(void);
 /*********************************************/
 /*--------- Change IMMO DLL state     -------*/
 /*********************************************/
@@ -404,7 +403,7 @@ INLINE void SetSiemens_DLLStateToIdleState (void)
 /*                                                                           */
 /* Date         user id     SCR       (description on following lines)       */
 /* ----------   -------     ---                                              */
-/* 20110715   hzm  Add Enum IMMO_WarningState for IMMO application
+/* 20110715   hzm  Add Enum IMMO_WarningState for IMMO application           */
 /* ==========================================================================*/
  
 #endif /* IMMO_EXEC_H */

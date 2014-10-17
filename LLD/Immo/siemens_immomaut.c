@@ -23,8 +23,7 @@
 /******************************************************************************
  *  Include Files
  *****************************************************************************/
-#include "reuse.h"
-#include "types.h"
+#include "io_type.h"
 
 
 /* ========================================================================== *\
@@ -33,23 +32,16 @@
 
 #include "immo.h"
 #include "kw2dll.h"
-//#include "cm_state.h"
-//#include "v_engine.h"
 #include "immo_fexi.h"
-//#include "eng_stat.h"
 #include "v_immo.h"
-//#include "v_efi.h"
 #include "immo_cal.h"
-//#include "io_cpu12.h"
-#include "dd_port.h"
 #include "intr_ems.h"
-#include "ddmspapi.h"
-#include "siemens_immosaut.h"     /*           */
-#include "siemens_immosenc.h"     /*             */
+#include "siemens_immosaut.h"
+#include "siemens_immosenc.h"
 #include "siemens_immossrv.h"
-#include "kw2app.h"  /* */
-
-#include "t_base.h"  /* */
+#include "kw2app.h"
+#include "t_base.h"
+#include "hal_eeprom_nvm.h"
 
 #define CySiemens_ChallengeServiceID                 (0xA0)
 #define CySiemens_ChallengeMSGLength                 (0x01)
@@ -202,7 +194,7 @@ static void SiemensImmo_ACK_Service(void)
  * Return:            none                                                    *
  *                                                                            *
  *****************************************************************************/
-FAR_COS void SiemensImmo_UpdateStateMachine (void)
+void SiemensImmo_UpdateStateMachine (void)
 {
   uint8_t counter;
 

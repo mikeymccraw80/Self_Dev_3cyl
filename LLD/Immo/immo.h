@@ -27,7 +27,6 @@
  * Standard header files.
 \* ============================================================================ */
 #include "reuse.h"
-#include "types.h"
 #include "v_immo.h"
 #include "immo_cal.h"
 

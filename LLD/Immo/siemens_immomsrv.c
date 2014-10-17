@@ -40,24 +40,17 @@
 #include "kw2exec.h" 
 #include "immo.h"
 #include "immo_encrypt.h"
-
-#include "tecdfexi.h"
-
-//#include "cm_state.h"
-//#include "v_engine.h"
+// #include "tecdfexi.h"
 #include "immo_fexi.h"
-//#include "eng_stat.h"
 #include "v_immo.h"
-//#include "v_efi.h"
 #include "immo_cal.h"
-//#include "io_cpu12.h"
-//#include "io_intrf.h"
 #include "intr_ems.h"
-#include "bootloader.h"
-#include "ddmspapi.h"
 #include "kw2srv27.h"
+#include "kw2srv30.h"
+#include "hal_analog.h"
+#include "hal_eng.h"
+#include "hal_gpio.h"
 
-#include "kw2srv30.h" 
 #define CySiemens_ChallengeRspLength            (0x07)
 #define CySiemens_CodeRspLength                 (0x01)
 
@@ -106,7 +99,7 @@ static void ImmoECMRunningResetCheck(void);
 * Return:            none                                                    *
 *                                                                            *
 *****************************************************************************/
-FAR_COS void SiemensImmo_BldChallengeRspMsgFrame (void)
+void SiemensImmo_BldChallengeRspMsgFrame (void)
 {
 
   BYTE SidIdx = 1;
@@ -154,7 +147,7 @@ FAR_COS void SiemensImmo_BldChallengeRspMsgFrame (void)
 * Return:            none                                                    *
 *                                                                            *
 *****************************************************************************/
-FAR_COS void SiemensImmo_BldCodeRspMsgFrame (void)
+void SiemensImmo_BldCodeRspMsgFrame (void)
 {
   
   /* P2 Timer - already one loop passed since immo request received */
@@ -200,7 +193,7 @@ FAR_COS void SiemensImmo_BldCodeRspMsgFrame (void)
  * Return:             None
  *
  *****************************************************************************/
-FAR_COS void SiemensImmo_AuthResultLostService(void) 
+void SiemensImmo_AuthResultLostService(void) 
 {
  
   ImmoEngineStallCheck();
@@ -290,9 +283,9 @@ void SiemensImmo_PrepareAuthenData(void)
       BYTE ByteIndex;
       VaSiemens_RandomNum[0]=CalculateChecksum((BYTE*) 0x0020, (BYTE*) 0x0090);
       VaSiemens_RandomNum[1]=CalculateChecksum((uint8_t*) 0x3FA0, (BYTE*) 0x3FB7)\
-			               +CalculateChecksum((BYTE*) 0x0020, (BYTE*) 0x0050)+(BYTE)ATD0_buffer[AD_IGNITION];
+			               +CalculateChecksum((BYTE*) 0x0020, (BYTE*) 0x0050)+(BYTE)HAL_Analog_Get_IGNVI_Value();
       VaSiemens_RandomNum[2]=CalculateChecksum((uint8_t*) 0x3FB8, (BYTE*) 0x3FCF)\
-			               +CalculateChecksum((BYTE*) 0x0020, (BYTE*) 0x0060)+(BYTE)ATD0_buffer[AD_MAPSLOW];
+			               +CalculateChecksum((BYTE*) 0x0020, (BYTE*) 0x0060)+(BYTE)HAL_Analog_Get_MAPVI_Value();
       VaSiemens_RandomNum[3]=CalculateChecksum((uint8_t*) 0x3FD0, (BYTE*) 0x3FE7)\
                                        +CalculateChecksum((BYTE*) 0x0020, (BYTE*) 0x0070);
       VaSiemens_RandomNum[4]=CalculateChecksum((uint8_t*) 0x3FE8, (BYTE*) 0x3FFF)\
@@ -317,19 +310,19 @@ void SiemensImmo_Initializing(void)
   {
     ImmoDisableEngine();
     VbSiemens_ImmoFuncNotProgrammed = CbTRUE;
-      if (GetDGDM_DTC_FaultType (CeDGDM_ImmoKeyCodeNotPgmd) != CeDGDM_FAULT_TYPE_Z)
-      {
-   	 PerfmDGDM_ProcessFailReport(CeDGDM_ImmoKeyCodeNotPgmd);
-      }
+     //  if (GetDGDM_DTC_FaultType (CeDGDM_ImmoKeyCodeNotPgmd) != CeDGDM_FAULT_TYPE_Z)
+     //  {
+   	 // PerfmDGDM_ProcessFailReport(CeDGDM_ImmoKeyCodeNotPgmd);
+     //  }
     VeSiemens_ActReason = CeIMMO_ECUInVirgin;
   }
   else
   {
     VbSiemens_ImmoFuncNotProgrammed = CbFALSE;
-      if (GetDGDM_DTC_FaultType (CeDGDM_ImmoKeyCodeNotPgmd) != CeDGDM_FAULT_TYPE_Z)
-      {
-         PerfmDGDM_ProcessPassReport(CeDGDM_ImmoKeyCodeNotPgmd);
-      }
+      // if (GetDGDM_DTC_FaultType (CeDGDM_ImmoKeyCodeNotPgmd) != CeDGDM_FAULT_TYPE_Z)
+      // {
+      //    PerfmDGDM_ProcessPassReport(CeDGDM_ImmoKeyCodeNotPgmd);
+      // }
   }
 
   /* ECU Pre-Enable */
@@ -376,7 +369,7 @@ void SiemensImmo_Initializing(void)
 * Return:            none                                                    *
 *                                                                            *
 *****************************************************************************/
-FAR_COS void SiemensImmo_P3MaxOvertime(void)
+void SiemensImmo_P3MaxOvertime(void)
 {
   if(VySiemens_P3MaxOvertimeCntr < 3)
   {
@@ -434,19 +427,22 @@ static void SiemensImmo_CntrlRLineSignal (void)
     if(CbON == SbSiemens_RLineStatus)
     {
       /* Low Side Driver */
-     DD_SetDiscrete(DISCRETE_OUT_IMMOREQ, TRUE);
+     // DD_SetDiscrete(DISCRETE_OUT_IMMOREQ, TRUE);
+      HAL_GPIO_SET_IMMOREQ_Enable(true);
       SbSiemens_RLineStatus = CbOFF;
     }
     else if(CbOFF == SbSiemens_RLineStatus)
     {
-      DD_SetDiscrete(DISCRETE_OUT_IMMOREQ, FALSE);
+      // DD_SetDiscrete(DISCRETE_OUT_IMMOREQ, FALSE);
+      HAL_GPIO_SET_IMMOREQ_Enable(false);
       SbSiemens_RLineStatus = CbON;
     }
     SySiemens_RLineTimerCntr++;
   }
   else
   {
-    DD_SetDiscrete(DISCRETE_OUT_IMMOREQ, FALSE);
+    // DD_SetDiscrete(DISCRETE_OUT_IMMOREQ, FALSE);
+    HAL_GPIO_SET_IMMOREQ_Enable(false);
     SbSiemens_RLineStatus = CbOFF;
     SbSiemens_RLineTriggerEnbl = CbFALSE;
 
@@ -487,12 +483,13 @@ static void SiemensImmo_CntrlPreEnableTime(void)
     }
     else
     {
-      if ( (!ImmoPassThisKeyon)
-         || ( ( (EOBD_VehSpd < K_ImmoByPassVSS)&& 
-               (!GetDGDM_FaultActive(CeDGDM_VSS_NoSignal) ) 
-               )
-            || ( (GetDGDM_FaultActive(CeDGDM_VSS_NoSignal) )
-               && (!GetVIOS_EngSt_Run() ) ) ) )
+      // if ( (!ImmoPassThisKeyon)
+      //    || ( ( (EOBD_VehSpd < K_ImmoByPassVSS)&& 
+      //          (!GetDGDM_FaultActive(CeDGDM_VSS_NoSignal) ) 
+      //          )
+      //       || ( (GetDGDM_FaultActive(CeDGDM_VSS_NoSignal) )
+      //          && (!GetVIOS_EngSt_Run() ) ) ) )
+      if ( !ImmoPassThisKeyon || (EOBD_VehSpd < K_ImmoByPassVSS) || !GetVIOS_EngSt_Run())
       {
         /* When authentication failed, disable the engine only if following 
            conditions met, else bypass the authentication result:

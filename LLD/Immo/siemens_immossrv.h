@@ -29,8 +29,8 @@
 /******************************************************************************
  *  Include Files
  *****************************************************************************/
-#include "reuse.h"
-#include "types.h"
+#include "io_type.h"
+
 /* ============================================================================ *\
  * Other header files.
 \* ============================================================================ */
@@ -64,10 +64,10 @@ extern bool ECMResetToDeliveryDlayTime_En;
  ******************************************************************************/
 void SiemensImmo_PrepareAuthenData(void);
 void SiemensImmo_Initializing(void);
-FAR_COS void SiemensImmo_P3MaxOvertime(void);
-FAR_COS void SiemensImmo_BldChallengeRspMsgFrame (void);
-FAR_COS void SiemensImmo_BldCodeRspMsgFrame (void);
-extern FAR_COS void SiemensImmo_AuthResultLostService(void);
+void SiemensImmo_P3MaxOvertime(void);
+void SiemensImmo_BldChallengeRspMsgFrame (void);
+void SiemensImmo_BldCodeRspMsgFrame (void);
+extern void SiemensImmo_AuthResultLostService(void);
 
 #endif /* SiemensLIANCE_IMMOSSRV_H */
 /******************************************************************************

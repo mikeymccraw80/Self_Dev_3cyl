@@ -375,7 +375,7 @@ static void Phi2()
    while (--LeftRounds);
 }
 
-FAR_COS void CalcSiem_Encrypt(BYTE *Challenge, BYTE *CustomerID, BYTE *SecretKey,BYTE *Response)
+void CalcSiem_Encrypt(BYTE *Challenge, BYTE *CustomerID, BYTE *SecretKey,BYTE *Response)
 {
    unsigned char ByteNo; /* loop variable */
    unsigned char i;
