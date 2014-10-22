@@ -200,6 +200,7 @@ SUBDIRS += LLD/HWDiag/KNOD
 SUBDIRS += knock
 SUBDIRS += LLD/EMS
 SUBDIRS += LLD/Immo
+SUBDIRS += LLD/File
 endif
 
 ifneq ($(TARGET),INTEGRATION)
@@ -283,6 +284,7 @@ INCDIRS += LLD/EMS
 INCDIRS += LLD/LUX_Library
 INCDIRS += knock
 INCDIRS += LLD/Immo
+INCDIRS += LLD/File
 
 # ifneq ($(TARGET),INTEGRATION)
 INCDIRS += HLS
@@ -514,6 +516,8 @@ export I6L_CMD_PREPROCESSOR_FILE ?=\
 export	EXMAP_FILE =\
    $(MAP2SYM) $(OUTPUT_DIR)/$(PROG_NAME).map $(OUTPUT_DIR)/$(PROG_NAME).exmap 40000000 400177FF
 
+export	SECTION_FILE =\
+   $(COMP_DIR)\ddump -h $(OUTPUT_DIR)/$(OUTFILE).elf >>  $(OUTPUT_DIR)/$(PROG_NAME).map
 
 
 
@@ -628,6 +632,11 @@ endif
 	@$(ECHO) Generating XMAP Output
 	-@$(EXMAP_FILE)
 
+###############################################################################
+# Add Section Summary Info to the end of map file
+###############################################################################
+	@$(ECHO) Generating Section Info Output
+	-@$(SECTION_FILE)
 
 ###############################################################################
 # Build ANC file from EXMAP file target
