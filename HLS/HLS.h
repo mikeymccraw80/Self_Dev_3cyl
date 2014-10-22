@@ -506,6 +506,9 @@ extern bool        CLT_Range_High;
 /* The instant fuel consumption from HLS */
 extern uint16_t instant_fuel_consumption;
 
+/* pointer to customer eeprom area 16bytes, defined in LLD */
+extern uint8_t *p_eeprom;
+
 /* HLS mileage variable */
 extern uint32_t odometer;
 

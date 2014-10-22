@@ -56,6 +56,8 @@ TsFILE_EE_ManufactData NsFILE_NVM_EE_ManufactData;
 
 #pragma section DATA " " ".bss"
 
+uint8_t * const p_eeprom = &NsFILE_NVM_EE_ManufactData.VaFILE_EE_ReservedForCustomer[0];
+
 /******************************************************************************
 *
 * Revision History:

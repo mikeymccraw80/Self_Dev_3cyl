@@ -58,7 +58,7 @@
 // #if ( config_Compiler_Vendor == option_TASKING_2_0)
 // #define PROCALGN __align(1)
 // #else
-#define PROCALGN  
+#define PROCALGN 
 // #endif
 
 /******************************************************************************
@@ -210,7 +210,7 @@ typedef enum
  */
 
 
-typedef struct
+typedef __packed__ struct
 {
 #if CcFILE_EE_Block_Status_Size > 0
   BYTE PROCALGN VaFILE_EE_Block_Status[CcFILE_EE_Block_Status_Size];
@@ -610,6 +610,10 @@ typedef struct
 
 #if CcFILE_EE_TDC_CrankShaftAdaptive_Size > 0
   BYTE PROCALGN VaFILE_EE_TDC_CrankShaftAdaptive[CcFILE_EE_TDC_CrankShaftAdaptive_Size];
+#endif
+
+#if CcFILE_EE_ReservedForCustomer_Size > 0
+  BYTE PROCALGN VaFILE_EE_ReservedForCustomer[CcFILE_EE_ReservedForCustomer_Size];
 #endif
 
   volatile WORD VaFILE_EE_Checksum;
