@@ -171,6 +171,7 @@
 #define CcFILE_EE_GreenEngCompComplete_Size         (0)
 #define CcFILE_EE_CalibrationData_Size              (64)
 #define CcFILE_EE_TDC_CrankShaftAdaptive_Size       (0)
+#define CcFILE_EE_Odometer_Size                     (4)
 #define CcFILE_EE_ReservedForCustomer_Size          (16)
 #define CcFILE_EE_Reserved1_Size                    (181)  //Mfg Reserved Data
 

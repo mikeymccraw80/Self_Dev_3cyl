@@ -612,6 +612,10 @@ typedef __packed__ struct
   BYTE PROCALGN VaFILE_EE_TDC_CrankShaftAdaptive[CcFILE_EE_TDC_CrankShaftAdaptive_Size];
 #endif
 
+#if CcFILE_EE_Odometer_Size > 0
+  BYTE PROCALGN VaFILE_EE_Odometer[CcFILE_EE_Odometer_Size];
+#endif
+
 #if CcFILE_EE_ReservedForCustomer_Size > 0
   BYTE PROCALGN VaFILE_EE_ReservedForCustomer[CcFILE_EE_ReservedForCustomer_Size];
 #endif

@@ -35,6 +35,7 @@
 #include "vvtdpapi.h"
 #include "etcdpapi.h"
 #include "condpapi.h"
+#include "hal_mileage.h"
 
 #define HLS_TASK_2MS_PATTERN (HLS_TASK_5MS   | HLS_TASK_10MS  | \
 							  HLS_TASK_20MS  | HLS_TASK_50MS  | \
@@ -215,6 +216,7 @@ void  HAL_OS_10ms_Task(void)
 	IO_Pulse_Update_Function();
 	if(OS_10ms_Cnt1&1) {
 		ScheduleKnockFastBckgLogic();
+		UpdateMileage();
 		/* schedule hls task, insure its' sequence */
 		if ((hls_task_state == HLS_TASK_NORMAL) || (hls_task_state & HLS_TASK_20MS_PATTERN)) {
 			HLS_Task_20ms();
@@ -330,6 +332,7 @@ void HAL_OS_100ms_Task(void)
 //=============================================================================
 void HAL_OS_Init_Task(void)
 {
+	InitialiseMileage();
 	IO_OS_Power_Status_Init();
 	Initialize_HiRes_Engine_Speed();
 	//chery init
