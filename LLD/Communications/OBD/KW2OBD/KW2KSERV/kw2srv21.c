@@ -63,12 +63,15 @@
 
 #define RESEVEDBYTE			  (0x00)
 #define EndModelSize		  	  (8)
+#define BaseModelSize		  	  (8)
 
 #define rdliSecretKey                  (0x10)
 #define rdliSecurityCode               (0x20)
 #define rdliEe_immo_option             (0x30)
 
-
+#define CgDelphiBaseModelPNAddr           (0x00000118)
+#define CpDelphiBaseModelPNAddr_Ptr       (BYTE *) CgDelphiBaseModelPNAddr
+T_COUNT_BYTE *const KW2000_DelphiBaseModelPN_Ptr = CpDelphiBaseModelPNAddr_Ptr;
 
 /***********************************************************************
 *                                                                      *
@@ -87,6 +90,7 @@ void KwJ14230ReadDataByLocalIdentifier( void )
 	uint8_t  TrByteCount,Idx,  siz, LyIdx1  ;
 	uint8_t  TempData;
 	uint32_t TempDataLong, TempDataForWrite;
+	uint8_t *LpKW2000_DelphiBaseModelPN_Ptr;
 
 	if ( Cy14230_MODE_21_MSG_LENGTH != GetKeyword2000ServiceDataLength () ) {
 		/* Invalid Message format */
@@ -250,23 +254,27 @@ void KwJ14230ReadDataByLocalIdentifier( void )
 
 			case rdliBaswModelNumber:
 				WrtKw2000ServiceData( GetKw2000ServiceData(IdxLocalIdentifier), TrByteCount++);
-				TempDataLong= 0;
-				TempDataForWrite = 0;
-				for ( Idx = 0 ; Idx < sizeof(BaseModelNumber) ; Idx++ ) {
-					if(BaseModelNumber[Idx] < 0x30 || BaseModelNumber[Idx] > 0x39) {
-						TempDataLong= 0;
-					}
-					else {
-						TempDataLong = BaseModelNumber[Idx] & 0x0f ;
-					}
-					for( LyIdx1 = 0 ; LyIdx1 < (7-Idx) ; LyIdx1++ ) {
-						TempDataLong = TempDataLong * 10;
-					}
-				TempDataForWrite += TempDataLong;
-				}
-				for(Idx = 0 ; Idx < ((sizeof(BaseModelNumber))/2) ; Idx++ ) {
-					TempData = ( (TempDataForWrite >> ((3-Idx)*8)) & 0xff);
-					WrtKw2000ServiceData( TempData, TrByteCount++);
+				LpKW2000_DelphiBaseModelPN_Ptr = (uint8_t *)KW2000_DelphiBaseModelPN_Ptr;
+				// TempDataLong= 0;
+				// TempDataForWrite = 0;
+				// for ( Idx = 0 ; Idx < sizeof(BaseModelNumber) ; Idx++ ) {
+				// 	if(BaseModelNumber[Idx] < 0x30 || BaseModelNumber[Idx] > 0x39) {
+				// 		TempDataLong= 0;
+				// 	}
+				// 	else {
+				// 		TempDataLong = BaseModelNumber[Idx] & 0x0f ;
+				// 	}
+				// 	for( LyIdx1 = 0 ; LyIdx1 < (7-Idx) ; LyIdx1++ ) {
+				// 		TempDataLong = TempDataLong * 10;
+				// 	}
+				// TempDataForWrite += TempDataLong;
+				// }
+				// for(Idx = 0 ; Idx < ((sizeof(BaseModelNumber))/2) ; Idx++ ) {
+				// 	TempData = ( (TempDataForWrite >> ((3-Idx)*8)) & 0xff);
+				// 	WrtKw2000ServiceData( TempData, TrByteCount++);
+				// }  
+				for(Idx = 0 ; Idx < (BaseModelSize/2) ; Idx++ ) {
+					WrtKw2000ServiceData(*LpKW2000_DelphiBaseModelPN_Ptr++, TrByteCount++);
 				}  
 				SendStandardPositiveAnswer( TrByteCount ) ;
 			break ;
