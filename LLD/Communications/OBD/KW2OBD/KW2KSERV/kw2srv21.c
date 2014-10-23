@@ -31,7 +31,7 @@
 #include "HLS.h"
 #include "id_cald.h"
 // #include "hal_esc.h"
-// #include "hal_mileage.h"
+#include "filenvmd.h"
 
 
 
@@ -225,22 +225,25 @@ void KwJ14230ReadDataByLocalIdentifier( void )
 
 			case rdliEndModelNumber:
 				WrtKw2000ServiceData( GetKw2000ServiceData(IdxLocalIdentifier), TrByteCount++);
-				TempDataLong = 0;
-				TempDataForWrite = 0;
-				for ( Idx = 0 ; Idx < EndModelSize ; Idx++ ) {
-					if(EndModelNumber[Idx] < 0x30 || EndModelNumber[Idx] > 0x39) {
-						TempDataLong= 0;
-					} else {
-						TempDataLong = EndModelNumber[Idx] & 0x0f ;                  
-					} 
-					for( LyIdx1 = 0 ; LyIdx1 < (7-Idx) ; LyIdx1++ ) {
-						TempDataLong = TempDataLong * 10;
-					}
-					TempDataForWrite += TempDataLong;
-				}
+				// TempDataLong = 0;
+				// TempDataForWrite = 0;
+				// for ( Idx = 0 ; Idx < EndModelSize ; Idx++ ) {
+				// 	if(EndModelNumber[Idx] < 0x30 || EndModelNumber[Idx] > 0x39) {
+				// 		TempDataLong= 0;
+				// 	} else {
+				// 		TempDataLong = EndModelNumber[Idx] & 0x0f ;
+				// 	} 
+				// 	for( LyIdx1 = 0 ; LyIdx1 < (7-Idx) ; LyIdx1++ ) {
+				// 		TempDataLong = TempDataLong * 10;
+				// 	}
+				// 	TempDataForWrite += TempDataLong;
+				// }
+				// for(Idx = 0 ; Idx < (EndModelSize/2) ; Idx++ ) {
+				// 	TempData = ( (TempDataForWrite >> ((3-Idx)*8)) & 0xff);
+				// 	WrtKw2000ServiceData( TempData, TrByteCount++);
+				// }
 				for(Idx = 0 ; Idx < (EndModelSize/2) ; Idx++ ) {
-					TempData = ( (TempDataForWrite >> ((3-Idx)*8)) & 0xff);
-					WrtKw2000ServiceData( TempData, TrByteCount++);
+					WrtKw2000ServiceData(NsFILE_NVM_EE_ManufactData.VaFILE_EE_HexEndModelNumber[Idx], TrByteCount++);
 				}
 				SendStandardPositiveAnswer( TrByteCount ) ;
 			break ;
@@ -276,18 +279,16 @@ void KwJ14230ReadDataByLocalIdentifier( void )
 				SendStandardPositiveAnswer( TrByteCount ) ;
 			break ;
 
-#if 0
-       case rdliMileage:
-            WrtKw2000ServiceData( GetKw2000ServiceData(IdxLocalIdentifier), TrByteCount++);
+		case rdliMileage:
+			WrtKw2000ServiceData( GetKw2000ServiceData(IdxLocalIdentifier), TrByteCount++);
 
-            /*--- Fill table with mileage accumulation ---*/
-            WrtKw2000ServiceData( Hi8Of16( Hi16Of32( Mileage ) ), TrByteCount++);
-            WrtKw2000ServiceData( Lo8Of16( Hi16Of32( Mileage ) ), TrByteCount++);
-            WrtKw2000ServiceData( Hi8Of16( Lo16Of32( Mileage ) ), TrByteCount++);
-            WrtKw2000ServiceData( Lo8Of16( Lo16Of32( Mileage ) ), TrByteCount++);
-            SendStandardPositiveAnswer( TrByteCount ) ;
-            break ;           
-#endif
+			/*--- Fill table with mileage accumulation ---*/
+			WrtKw2000ServiceData(NsFILE_NVM_EE_ManufactData.VaFILE_EE_Odometer[0], TrByteCount++);
+			WrtKw2000ServiceData(NsFILE_NVM_EE_ManufactData.VaFILE_EE_Odometer[1], TrByteCount++);
+			WrtKw2000ServiceData(NsFILE_NVM_EE_ManufactData.VaFILE_EE_Odometer[2], TrByteCount++);
+			WrtKw2000ServiceData(NsFILE_NVM_EE_ManufactData.VaFILE_EE_Odometer[3], TrByteCount++);
+			SendStandardPositiveAnswer( TrByteCount ) ;
+			break ;
 
 			default :
 				SendStandardNegativeAnswer( nrcSubFunctionNotSupported_InvalidFormat ) ;
