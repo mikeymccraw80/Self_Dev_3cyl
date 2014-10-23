@@ -812,7 +812,7 @@ void J1979Mode9Handler( void )
 		case Cy1979_InfoType0:
 			WrtServiceData( Cy1979_InfoType0_MsgCnt , Li1979_DataIdx++ ) ;
 			/*support infotype 02, 04, 06*/
-			WrtServiceData( 0xF0 , Li1979_DataIdx++ ) ;
+			WrtServiceData( 0xF3 , Li1979_DataIdx++ ) ;
 			WrtServiceData( 0x00 , Li1979_DataIdx++ ) ;
 			WrtServiceData( 0x00, Li1979_DataIdx++ ) ;
 			WrtServiceData( 0x00 , Li1979_DataIdx++ ) ;
