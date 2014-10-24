@@ -26,6 +26,7 @@
 #include "kw2type.h"
 #include "kw2srv18.h"
 #include "id_cald.h"
+#include "filenvmd.h"
 
 
 #define MODE_3B_MSG_LENGTH       (2)
@@ -55,8 +56,7 @@ void KwJ14230WriteDataByLocalIdentifier( void )
    uint8_t *dataprt;
    LONGWORD Temp_Long;
    
-   // if ( Get_EngineTurning() )
-   if (0)
+   if ( Get_EngineTurning() )
    {
       SendStandardNegativeAnswer( nrcConditionsNotCorrect_RequestSequenceError ) ;
    }
@@ -78,7 +78,9 @@ void KwJ14230WriteDataByLocalIdentifier( void )
             /*--- Program VehicleIdentificationNumber ---*/
             for ( idx = 0 ; idx < VIN_Size ; idx++ )
             {
-             //  WriteNvmEeprom( &NV_VINNumber[idx], GetKw2000ServiceData(IdxData + idx)) ;
+               // WriteNvmEeprom( &NV_VINNumber[idx], GetKw2000ServiceData(IdxData + idx)) ;
+               NsFILE_NVM_EE_ManufactData.VaFILE_EE_VIN[idx] = GetKw2000ServiceData(IdxData + idx);
+               scnVehInfo.VIN[idx] = NsFILE_NVM_EE_ManufactData.VaFILE_EE_VIN[idx];
             }
             WrtKw2000ServiceData( GetKw2000ServiceData(IdxIdentifier), IdxIdentifier);
             SendStandardPositiveAnswer( MODE_3B_RESP_LENGTH ) ;

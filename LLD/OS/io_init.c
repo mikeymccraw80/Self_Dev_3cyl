@@ -25,6 +25,7 @@
 #include "dd_stm_interface.h"
 #include "hal_os.h"
 #include "dd_sswt.h"
+#include "hal_eeprom_mfg.h"
 
 
 /* private variable define */
@@ -257,6 +258,9 @@ void InitializeHardwareLast(void)
 	}
 	op_Return = EEPROM_Restore_MFG_NVM_Block();  // restore Pfalsh MFG if it is valid
 	INST_Initialize_Calibration_Pages();
+
+	/* init vin for hls variable */
+	MFG_InitEepromWithHLS();
 
 	/* read reset type, set power fail flag */
 	// if ((Reset_Status.bits.Power_On_Reset == false) 
