@@ -118,6 +118,8 @@
 // #include "kw2srv10m.h"
 #include "obdssvio.h"
 #include "kw2api.h"
+#include "hal_ucram.h"
+#include "inst_overlay.h"
 
 /*********************************************************************/
 /*            Global  Variable                                             */
@@ -169,6 +171,25 @@ void OBD_ByCAN( void )
 {
    VbKW2K_OBD_Enabled = CbFALSE; 
    VbCAN_OBD_Enabled = CbTRUE;
+}
+
+/*********************************************************************/
+/*** Run Kernel On Ram                     ***/
+/*********************************************************************/
+extern void Force_Stay_In_Boot(uint16_t pattern);
+void RunKernelOnRam (void )
+{
+	/* Set the Copy Kernel to Ram and Execute Pending flag to be FALSE*/
+	SetCopyAndExecuteKernelPending(CbFALSE) ;
+
+	Disable_Interrupts();
+
+	DMA_Clear_Device( );
+
+	INST_Set_Active_Calibration_Page( INST_CALIBRATION_PAGE_REFERENCE );
+
+	HAL_uncleard_ram.data[NCRAM_REPROGRAM_FLAG] = true;
+	Force_Stay_In_Boot(0xDEAD);
 }
 
 /*********************************************************************/

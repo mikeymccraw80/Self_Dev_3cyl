@@ -78,6 +78,7 @@ static void  ExcuteNextRequestedMsg( uint8_t , uint8_t ) ;
 ************************************************************************
 * Last modified on: 03/21/00              by: Iqbal Javid              *
 ***********************************************************************/
+extern void RunKernelOnRam(void);
 void UpdateKeyword2000Services (void)
 {
 	uint16_t *AddPointer ;
@@ -114,6 +115,9 @@ void UpdateKeyword2000Services (void)
 
 			DoNecessaryActionsBeforeReset() ;
 			PerformReset() ;
+		}
+		if ( GetCopyAndExecuteKernelPending()) {
+			RunKernelOnRam();
 		}
 	}
 	/* If a new communication session has started, initialize required application variables. */
