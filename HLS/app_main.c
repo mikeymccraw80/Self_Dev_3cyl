@@ -315,9 +315,9 @@ void HLS_Task_200ms(void)
 	soh_fault.Word = SOH_ETC_Get_Fault_Log();
 }
 /* Call back function for 1000ms task */
+static int b_toggle_function = 1;
 void HLS_Task_1000ms(void)
 {
-    static int b_toggle_function = 1;
     if (b_toggle_function)
         Test_DO_Toggle_Function();
 }
