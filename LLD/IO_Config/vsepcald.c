@@ -459,7 +459,7 @@ const  KsVSEP_Fault_Filter_Cals  KsVSEP_Fault_Filter_Initial= {
 const  KsVSEP_LEDMODE_Cals  KsVSEP_LEDMODE_Initial= {
 
                 0,
-                0,0,0,0
+                0,0,1,0
 
  };
 
