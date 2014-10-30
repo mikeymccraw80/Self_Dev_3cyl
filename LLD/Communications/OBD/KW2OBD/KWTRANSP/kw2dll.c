@@ -1109,7 +1109,9 @@ void ReceivingMessageKw2000State (void)
 		case mrsWaitingSrcAddr:
 			RxSourceAddress = DataRead ;
 			if ((RxSourceAddress == MySourceAddr0) ||
-				(RxSourceAddress == MySourceAddr1) )
+				(RxSourceAddress == MySourceAddr1) ||
+				(RxSourceAddress == KcMyImmoSourceAddr)||
+				(RxSourceAddress == CySiemens_ImmoTargetAddress) )
 			{
 				if (RxMsgDataLength) {
 					/*--- length already in format byte ---*/
@@ -1187,7 +1189,8 @@ static void ExecuteServiceKw2000State (void)
 		switch (RxServiceData [0]) {
 		case sirStartCommunication:
 			if (RxMsgDataLength == 1) {
-				if(Chk_SiemensImmo_Enabled() && (RxTargetAddress == MyImmoSourceAddr)) {
+				/* judge whether 0x81 msg from immo */
+				if(Chk_SiemensImmo_Enabled() && (RxSourceAddress == MyImmoSourceAddr)) {
 					TxServiceData [1] = Siemens_KW2_Start_Communication_KB1;
 					TxServiceData [2] = Siemens_KW2_Start_Communication_KB2;
 					VbSiemens_StartCommReceived = CbTRUE;
