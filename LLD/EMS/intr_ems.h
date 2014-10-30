@@ -635,7 +635,7 @@ INLINE void ConvertIntrParam_ETCDC(void)
 #define Ignition_On()                                     ((bool)(IgnitionOnStatus.IgnitionIsOn))
 #define GetFILE_NVM_Failure()                             (EEP_NVM_Fault)
 // #define GetVIOS_VehInMfgPlant()                           (PbVIDS_VehInMfgPlant)
-#define GetVIOS_VehInMfgPlant()                           (true) //bypass the immo authentication
+#define GetVIOS_VehInMfgPlant()                           (false) //bypass the immo authentication
 // #define GetVIOS_VehInMfgPlant()                           (false) //enable the immo authentication
 #define GetVIOS_IgnSt()                                   (Ignition_On())
 #define GetVIOS_t_EngRunTime()                            (NfVIOS_t_EngRunTime)
