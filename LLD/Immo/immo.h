@@ -45,31 +45,6 @@
 /* ============================================================================ *\
  * Exported preprocessor #define macros.
 \* ============================================================================ */
-#if 0
-typedef union
-{
-   struct
-   {
-      bitfield8_t NoFixCode            : 1;
-      bitfield8_t EcmImmoCommError     : 1;
-      bitfield8_t ImmoError            : 1;
-      bitfield8_t KeyLearningProcess   : 1;
-      bitfield8_t ImmoWrongKeyUsed     : 1;
-      bitfield8_t ImmoNoKeyUsed        : 1;
-      bitfield8_t ImmoVirgin           : 1;
-      bitfield8_t EcmVirgin            : 1;
-   }  Bits;
-   uint8_t     Byte;
-}  ImmoStatusByteType;
-
-/* Immobilizer Deactivatation State */
-typedef enum
-{
-   ImmoDeactivateIdle,             /* Level2 security is still lock */
-   ImmoDeactivateDelay,            /* Level2 security unlock, in Delay windows */
-   ImmoDeactivateOn                /* Level2 security unlock, in Deactivate windows */
-} ImmoDeactivateStateType;
-#endif
 #define GenericImmoKey_Length        (0x02)
 #define ImmoStopEngine()            (ImmoInhibitEngine)
 /* ============================================================================ *\
@@ -95,7 +70,6 @@ extern bool                    ImmoSiemensEnabled;
 /* ============================================================================ *\
  * Local INLINE functions and #define function-like macros.
 \* ============================================================================ */
-#define ImmoCodeAddr                  (&(EE_SK[1]))
 #define ClearImmoResponseFlag()       (ImmoNoResponseDetected = false)
 
 /* added Siemens immo */

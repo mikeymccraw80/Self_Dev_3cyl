@@ -42,6 +42,7 @@
 #include "kw2app.h"
 #include "t_base.h"
 #include "hal_eeprom_nvm.h"
+#include "hal_eeprom_mfg.h"
 
 #define CySiemens_ChallengeServiceID                 (0xA0)
 #define CySiemens_ChallengeMSGLength                 (0x01)
@@ -101,6 +102,7 @@ TbBOOLEAN VbSiemens_MsgSeqError;
  *****************************************************************************/
 static void SiemensImmo_Authentication_Service(void) 
 {
+	uint8_t *EE_SiemensSK = NsFILE_NVM_EE_ManufactData.VaFILE_EE_SecretKey;
 	/* Put data preparation and authentication together here */
 
 	/* Prepare for 6 bytes challenge */

@@ -55,6 +55,7 @@
 #include "intr_ems.h"
 #include "siemens_immosaut.h"
 #include "hal_eeprom_nvm.h"
+#include "hal_eeprom_mfg.h"
 #include "io_interface_os.h"
 
 /* ========================================================================== *\
@@ -121,7 +122,6 @@ static Every_Loop_Sec_W    ImmoIGNOffModeTimer;        /* Maximum: 512sec */
 WORD                       PIN_Protect_Timer;
 BYTE                       ImmoIgnTimer;
 
-uint8_t                    Immo_PIN[PIN_Length_JiCheng];
 uint8_t                    Immo_SK[SK_Length];
 BYTE                       SKPIN_LearnMode;
 
@@ -329,7 +329,10 @@ TbBOOLEAN CheckIMMO_ECMNotLearned(void)
 {
    uint8_t i=0;
    TbBOOLEAN CheckResult;
+   uint8_t *EE_SiemensSK = NsFILE_NVM_EE_ManufactData.VaFILE_EE_SecretKey;
+
    CheckResult=CbFALSE;
+
 
 if(((EE_SiemensSK[0]==0)&&(EE_SiemensSK[1]==0)&&(EE_SiemensSK[2]==0)&&(EE_SiemensSK[3]==0)&&(EE_SiemensSK[4]==0)
      &&(EE_SiemensSK[5]==0)&&(EE_SiemensSK[6]==0)&&(EE_SiemensSK[7]==0)&&(EE_SiemensSK[8]==0)&&(EE_SiemensSK[9]==0)
