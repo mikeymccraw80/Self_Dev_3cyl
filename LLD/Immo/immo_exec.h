@@ -62,8 +62,6 @@
 #define FeedbackAuthenMessageLength_JiCheng     0x02
 #define ECMLearnFromImmoMessageLength           0x01
 #define LearnFromECMMessageLength               0x03
-//#define GenericImmoKey_Length                   0x02
-//#define JiChengImmoKey_Length                   0x05
 #define SK_All0xFF                              (0xFFFFFFFF)
 #define SK_All0x00                              (0x00000000)
 #define Authentication_PostiveRespLength        0x02
@@ -303,7 +301,6 @@ extern TeIMMO_DLL_STATUS          VeSiemens_DLL_State;
 extern TeIMMO_ActReason           VeSiemens_ActReason;
 extern IMMO_WarningState          ImmoCodeWarningSts;
 
-//extern TeSiemens_ECM_Relation     VeSiemens_ECMImmoRelation;
 extern bool                       IGNOffModeTimeOut;
 extern const T_COUNT_WORD     CaSiemens_L2WrongAttemptDelay[];
 extern uint16_t               L2SecurityTmrCoefficient;
