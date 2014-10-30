@@ -106,7 +106,7 @@ void DtrmImmoStatus( void )
 {
 	ImmoSiemensEnabled = false;
 
-	if((K_Immo_option == CeImmo_STEC) {
+	if(K_Immo_option == CeImmo_STEC) {
 		ImmoSiemensEnabled = true;
 	} else {
 		// do nothing

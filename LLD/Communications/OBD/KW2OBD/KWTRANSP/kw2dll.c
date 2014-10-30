@@ -1175,7 +1175,7 @@ void ReceivingMessageKw2000State (void)
 /*** Keyword 2000 State periodic operation: k2sExecuteService      ***/
 /*** > Execute low level services and warn application for others. ***/
 /*********************************************************************/
-
+extern bool R_LineEnable;
 static void ExecuteServiceKw2000State (void)
 {
 	uint8_t ErrorValue ;
