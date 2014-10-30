@@ -64,7 +64,7 @@
 /*---------------------------------------------*\
  *--- Number  ---*
 \*---------------------------------------------*/
-const Immo_Option_T K_Immo_option = CeImmo_Off;
+const Immo_Option_T K_Immo_option = CeImmo_STEC;
 /*
 *|immo_cal. {
 *|    K_Immo_option
