@@ -49,9 +49,6 @@
 #define  SecretCodeSize                  (2)
 #define  EEImmoBlockSize                 (0x20)
 
-#define PIN_Length_JiCheng               (2)
-#define SK_Length_JiCheng                (5)
-
 #define NoMileageCells                   (16)
 
 /*===========================================================================*\
@@ -77,14 +74,7 @@ extern MFG_Data_Debug_T   MFG_Data_After_Backup[NUMBER_OF_DEBUG_DATA_SET];
 #pragma section DATA " " ".nc_nvram"
 extern Backup_Disrupted_T Backup_Disrupted;
 // FIXME - A... for test
-extern uint32_t rolling_counter_vehicle;
-
-extern uint8_t     EE_Immobiliser[];
-extern uint8_t     EE_Immo_option;
-extern uint8_t     EE_SK[];
-extern uint8_t     EE_SiemensSK[];
-extern uint16_t    EE_SK_H;
-extern uint32_t    EE_SK_L;
+extern uint32_t    rolling_counter_vehicle;
 
 #pragma section DATA " " ".bss"
 
