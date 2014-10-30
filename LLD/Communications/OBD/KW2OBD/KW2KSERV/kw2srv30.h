@@ -107,9 +107,9 @@ extern bool R_LineEnable;
  * PUBLIC:
  *****************************************************************************/
 //extern FAR_COS void PostOFVC_ResponseToRequest (void) ;
-//extern void KwJ14230InputOutputControlByLocalIdentifier (void) ;
+extern void KwJ14230InputOutputControlByLocalIdentifier (void) ;
 extern BYTE GetOFVC_PID_OvrdReqResp (void) ;
-//extern void FormAndSendImmoData (void);
+extern void FormAndSendImmoData (void);
 
 /*****************************************************************************
  * INTERFACE:
@@ -181,35 +181,7 @@ INLINE void SetOFVC_OvrdReqResp (BYTE LyOFVC_Response)
 {
   VsOFVC_OvrdRqstStruct.VyOFVC_Response = LyOFVC_Response;
 }
-#if 0
-#define GetPCHUDSlew_Active()       ( CheckEngineLightForced ||\
-                                      (CharcoalCanisterPurgeSlewState != ssNoSlew) ||\
-                                      FuelPumpForced ||\
-                                      (AcClutchFlags.ACClutchRelayForced == ( bitfield8_t)true ) ||\
-                                      Fan1Forced ||\
-                                      Fan2Forced ||\
-                                      MIVECSolenoidForced ||\
-                                      (DwellSlewState != ssNoSlew) ||\
-                                      (SparkAdvanceSlewState != ssNoSlew) ||\
-                                      (IdleAdjustRpmInParkNeutralSlewState != ssNoSlew) ||\
-                                      (IdleAdjustRpmInDriveSlewState != ssNoSlew) ||\
-                                      (DesiredIdleRPMSlewState != ssNoSlew) ||\
-                                      (AirFuelRatioSlewState != ssNoSlew) ||\
-                                      (DesiredLegrSlewState != ssNoSlew) ||\
-                                      (VESlewState != ssNoSlew) ||\
-                                      (IACDesiredMotorPositionSlewState != ssNoSlew) ||\
-                                      (CharcoalCanisterPurgeSlewState != ssNoSlew) ||\
-                                      (PWMFanSlewState != ssNoSlew) ||\
-                                      (StateEst.bf.EstTestSequence == ( bitfield16_t)true ) ||\
-                                      (    (EfiState.CylAFuelOutputDisable != (bitfield8_t)false)\
-                                        || (EfiState.CylBFuelOutputDisable != (bitfield8_t)false)\
-                                        || (EfiState.CylCFuelOutputDisable != (bitfield8_t)false)\
-                                        || (EfiState.CylDFuelOutputDisable != (bitfield8_t)false) ) ||\
-                                      (StateFuel.bf.InjectorIsolationTest== ( bitfield16_t)true) ||\
-                                      (CamSensorFlags.FactoryTestMode == ( bitfield16_t)true) ||\
-                                      (EstState2.bf.BurstTestMode == ( bitfield16_t)true)   )
-                                      
-#endif
+
 #define GetOFVC_OvrdReqResp()\
         (VsOFVC_OvrdRqstStruct.VyOFVC_Response)
 

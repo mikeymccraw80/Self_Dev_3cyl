@@ -37,6 +37,7 @@
 #include "kw2srv22.h"
 #include "kw2srv23.h"
 #include "kw2srv27.h"
+#include "kw2srv30.h"
 #include "kw2srv31.h"
 #include "kw2srv32.h"
 #include "kw2srv34.h"
@@ -187,6 +188,12 @@ const SERVICE_DEFINITION_ARRAY_TYPE CaServiceDefinition[ ]=
       sirSecurityAccess,
       KwJ14230SecurityAccess ,
       KwNoMultiModeAval
+   },
+   /* Service 0x30 */
+   {
+      sirInputOutputControlByLocalIdentifier,
+      KwJ14230InputOutputControlByLocalIdentifier ,
+      FormAndSendImmoData
    },
    /* Service 0x31 */
    {
