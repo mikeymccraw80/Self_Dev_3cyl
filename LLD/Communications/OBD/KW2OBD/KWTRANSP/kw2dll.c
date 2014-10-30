@@ -23,8 +23,8 @@
 #include "dd_sci_interface.h"
 #include "kw2dllcf.h"
 #include "kw2dll.h"
-// #include "kw2api.h"
-// #include "obdlfsrv.h"
+#include "immo.h"
+#include "immo_exec.h"
 
 /* local function prototype */
 static void BuildKw2000Answer (uint8_t);
@@ -1058,8 +1058,9 @@ void ReceivingMessageKw2000State (void)
 				Kw2MsgRxState = mrsWaitingTgtAddr;
 				break;
 			case mfNoAddr:
-				if (KW2K_GetCommunicationActiveState()) {
-					if (1)
+				if (KW2K_GetCommunicationActiveState() || VbSiemens_StartCommReceived) {
+					if ((Chk_SiemensImmo_Enabled() && (Siemens_KW2_Start_Communication_KB1&0x04))
+						|| (!Chk_SiemensImmo_Enabled()) && (KB1&0x04))
 					{
 						if (RxMsgDataLength) {   /*--- length already in format byte ---*/
 							GoToLoadingDataMRState ();
@@ -1186,8 +1187,15 @@ static void ExecuteServiceKw2000State (void)
 		switch (RxServiceData [0]) {
 		case sirStartCommunication:
 			if (RxMsgDataLength == 1) {
-				if(0) {
-
+				if(Chk_SiemensImmo_Enabled() && (RxTargetAddress == MyImmoSourceAddr)) {
+					TxServiceData [1] = Siemens_KW2_Start_Communication_KB1;
+					TxServiceData [2] = Siemens_KW2_Start_Communication_KB2;
+					VbSiemens_StartCommReceived = CbTRUE;
+					VbSiemens_StopCommReceived = CbFALSE;
+					/* Set IMMO state to SendingRequestMsg */
+					SetSiemens_DLLStateToSendingResponseMsg();
+					// ECMImmoRelation=Authentication;
+					R_LineEnable = true;
 				} else {
 					TxServiceData [1] = KB1;
 					TxServiceData [2] = KB2;
@@ -1207,6 +1215,12 @@ static void ExecuteServiceKw2000State (void)
 			if (RxMsgDataLength == 1) {
 				KW2K_SendStandardPositiveAnswer (1) ;
 				CommunicationEstablishedState = false ;
+				if(Chk_SiemensImmo_Enabled() ) {
+					VbSiemens_StopCommReceived = CbTRUE;
+					VbSiemens_StartCommReceived = CbFALSE;
+					/* Set IMMO state to SendingRequestMsg */
+					SetSiemens_DLLStateToSendingResponseMsg();
+				}
 			} else {
 				KW2K_SendStandardNegativeAnswer(nrcSubFunctionNotSupported_InvalidFormat);
 			}

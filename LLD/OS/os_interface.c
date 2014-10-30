@@ -19,6 +19,8 @@
 #include "intr_ems.h"
 #include "hal_os.h"
 #include "dd_sswt.h"
+#include "immo.h"
+#include "immo_exec.h"
 
 
 //=============================================================================
@@ -31,6 +33,8 @@ void OS_Startup_Hook(void)
 	HAL_OS_Init_Task();
 
 	KeywordExecutive(CwKW2000_Initializes);
+
+	ImmobilizerIgnitionOn();
 
 	/* update ems initial parameters */
 	Init_IntrParameter();
@@ -103,8 +107,13 @@ void MngOSTK_10msTasks(void)
 
 	/* CCP 10ms Trigger */
 	CCP_Trigger_Event_Channel( 10 );
+
+	Immo_Executive();
 	/* update kw2000 state machine */
-	KeywordExecutive(CwKW2000_RunMode);
+	if (GetNormalKeywordMode()) {
+		KW2000CommuState = KW2000_Responder;
+		KeywordExecutive(CwKW2000_RunMode);
+	}
 
 	/* update ignition status */
 	UpdateIgnitionState_10MS();
