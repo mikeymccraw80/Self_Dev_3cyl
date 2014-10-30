@@ -3,12 +3,13 @@
 //=============================================================================
 #include "hal_fuel.h"
 #include "hal_eng.h"
-#include"io_config_fuel.h"
+#include "io_config_fuel.h"
 #include "io_conversion.h"
 #include "io_interface_eng.h"
 #include "io_interface_os.h"
 #include "HLS.h"
 #include "hwiocald.h"
+#include "immo.h"
 
 //=============================================================================
 // Chery fuel Variable
@@ -44,37 +45,38 @@ void  IO_Fuel_Syn_Update(void)
     T_MILLISECONDSb PFI_PulseWidth;
     uint32_t chery_inj_width;
     uint16_t chery_inj_end_angle;
-	uint16_t chery_inj_end_angle_prev;
+    uint16_t chery_inj_end_angle_prev;
     uint8_t disable_cyl2_cyl4_flag;
-	uint16_t counter;
+    uint16_t counter;
 
     if (First_Syn_Flag == false) {
 
+        //SetHWIO_FuelSqSwitch(true);
+        /*Convert the engineer value of Chery Injection end angle to Delphi engineer value */
+        //chery_inj_end_angle = (900 - 720)<<S_CRANK_ANGLE;
+        chery_inj_end_angle = 0;
+        SetHWIO_FuelInjectorEOIT(chery_inj_end_angle);
+        SetHWIO_FuelInjectorTrimEOIT(chery_inj_end_angle);
 
-	    //SetHWIO_FuelSqSwitch(true);
-           /*Convert the engineer value of Chery Injection end angle to Delphi engineer value */
-	    //chery_inj_end_angle = (900 - 720)<<S_CRANK_ANGLE;
-	    chery_inj_end_angle = 0;
-           SetHWIO_FuelInjectorEOIT(chery_inj_end_angle);
-           SetHWIO_FuelInjectorTrimEOIT(chery_inj_end_angle);
+        SetHWIO_SequentialFuelMode(0);
+        SetHWIO_PrimePulseComplete();
+        SetHWIO_FuelSqSwitch(false);
 
-	     SetHWIO_SequentialFuelMode(0);
-            SetHWIO_PrimePulseComplete();
-            SetHWIO_FuelSqSwitch(false);
-			
-
-			
         // Chery requirement: Determine which cylinder should be arranged simultaneous injection
         //Cam low means physical cylinder 1,simultaneous inject cyl2,cyl3,cyl4
         if (CAM_Get_Sensor_State(0) == false) {
             // Chery requirement: Disable squence injection of cyl2,cyl4 if corresponding simultaneous injection happened
             disable_cyl2_cyl4_flag = true;
-				    //enable post injection
+            //enable post injection
             PFI_Enable_Trim_Pulses(INJ_CHANNEL_B);
             PFI_Enable_Trim_Pulses(INJ_CHANNEL_C);
             PFI_Enable_Trim_Pulses(INJ_CHANNEL_D);
-			
-            chery_inj_width =  inj_sig[INJ_CHANNEL_A].inj_time;
+
+            if (ImmoInhibitEngine == false) {
+                chery_inj_width = inj_sig[INJ_CHANNEL_A].inj_time;
+            } else {
+                chery_inj_width = 0;
+            }
             PFI_PulseWidth =Convert_Chery_Inj_Width(chery_inj_width,S_MILLISECONDSb);
             PFI_Set_Pulse_Width(INJ_CHANNEL_A, 0,              S_MILLISECONDSb, MILLISECOND_RESOLUTION );
             PFI_Set_Pulse_Width(INJ_CHANNEL_B, PFI_PulseWidth,              S_MILLISECONDSb, MILLISECOND_RESOLUTION );
@@ -89,16 +91,18 @@ void  IO_Fuel_Syn_Update(void)
             PFI_Enable_Trim_Pulses(INJ_CHANNEL_A);
             PFI_Enable_Trim_Pulses(INJ_CHANNEL_B);
             PFI_Enable_Trim_Pulses(INJ_CHANNEL_D);
-			
-            chery_inj_width =  inj_sig[INJ_CHANNEL_C].inj_time;
+
+            if (ImmoInhibitEngine == false) {
+                chery_inj_width = inj_sig[INJ_CHANNEL_C].inj_time;
+            } else {
+                chery_inj_width = 0;
+            }
             PFI_PulseWidth =Convert_Chery_Inj_Width(chery_inj_width,S_MILLISECONDSb);
             PFI_Set_Pulse_Width(INJ_CHANNEL_A, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
             PFI_Set_Pulse_Width(INJ_CHANNEL_B, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
             PFI_Set_Pulse_Width(INJ_CHANNEL_C, 0,              S_MILLISECONDSb, MILLISECOND_RESOLUTION );
             PFI_Set_Pulse_Width(INJ_CHANNEL_D, PFI_PulseWidth             , S_MILLISECONDSb, MILLISECOND_RESOLUTION );
-
         }
-
 
         //PerfmHWIO_SimultaneousFuelDelivery();
 
@@ -106,125 +110,124 @@ void  IO_Fuel_Syn_Update(void)
            /*Convert the engineer value of Chery Injection end angle to Delphi engineer value */
 	    chery_inj_end_angle = (900 - Convert_Chery_Inj_angle(inj_sig[INJ_CHANNEL_A].inj_end_angle,Prec_Inj_end_angle_chery))<<S_CRANK_ANGLE;
 	    chery_inj_end_angle = chery_inj_end_angle -KfHWIO_phi_BoundaryFraction;
-           SetHWIO_FuelInjectorEOIT(chery_inj_end_angle);
-           SetHWIO_FuelInjectorTrimEOIT(chery_inj_end_angle);
+        SetHWIO_FuelInjectorEOIT(chery_inj_end_angle);
+        SetHWIO_FuelInjectorTrimEOIT(chery_inj_end_angle);
 
-	   if (disable_cyl2_cyl4_flag == true) 
-	     {
+        if (disable_cyl2_cyl4_flag == true)  {
+            if (ImmoInhibitEngine == false) {
+                chery_inj_width =  inj_sig[INJ_CHANNEL_A].inj_time;
+            } else {
+                chery_inj_width = 0;
+            }
+            PFI_PulseWidth =Convert_Chery_Inj_Width(chery_inj_width,S_MILLISECONDSb);
+            PFI_Set_Pulse_Width(INJ_CHANNEL_A, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
 
-		 chery_inj_width =  inj_sig[INJ_CHANNEL_A].inj_time;
-               PFI_PulseWidth =Convert_Chery_Inj_Width(chery_inj_width,S_MILLISECONDSb);
-               PFI_Set_Pulse_Width(INJ_CHANNEL_A, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
+        } else {
+            if (ImmoInhibitEngine == false) {
+                chery_inj_width =  inj_sig[INJ_CHANNEL_C].inj_time;
+            } else {
+                chery_inj_width = 0;
+            }
+            PFI_PulseWidth =Convert_Chery_Inj_Width(chery_inj_width,S_MILLISECONDSb);
+            PFI_Set_Pulse_Width(INJ_CHANNEL_C, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
+        }
 
-	      }
-	   else
-	      {
-
-		 chery_inj_width =  inj_sig[INJ_CHANNEL_C].inj_time;
-               PFI_PulseWidth =Convert_Chery_Inj_Width(chery_inj_width,S_MILLISECONDSb);
-               PFI_Set_Pulse_Width(INJ_CHANNEL_C, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
-
-	   	} 
-
-         Startup_Counter++;
+        Startup_Counter++;
         First_Syn_Flag = true;
- }
-else
-{
-   if ( Startup_Counter <255)
-   {
-     Startup_Counter++;
-   }
-
-		
-    /*Convert the engineer value of Chery Injection end angle to Delphi engineer value */
-	chery_inj_end_angle = (900 - Convert_Chery_Inj_angle(inj_sig[INJ_CHANNEL_A].inj_end_angle,Prec_Inj_end_angle_chery))<<S_CRANK_ANGLE;
-	chery_inj_end_angle = chery_inj_end_angle -KfHWIO_phi_BoundaryFraction;
-    SetHWIO_FuelInjectorEOIT(chery_inj_end_angle);
-    SetHWIO_FuelInjectorTrimEOIT(chery_inj_end_angle);
-    //  PFI_Set_Angle( PFI_TRIM_ANGLE, chery_inj_end_angle, 1<<S_CRANK_ANGLE );
-
-
-    if(CRANK_Get_Cylinder_ID() != INJ_CHANNEL_A) {
-        if(inj_sig[INJ_CHANNEL_A].B_post_inj) {
-            Chery_Post_Injection[INJ_CHANNEL_A]+=inj_sig[INJ_CHANNEL_A].post_inj_time; 
-	     PFI_Enable_Trim_Pulses(INJ_CHANNEL_A);
+    } else {
+        if ( Startup_Counter <255)
+        {
+            Startup_Counter++;
         }
-    } else {
-        Chery_Post_Injection[INJ_CHANNEL_A] = 0;
-    }
 
-    if((inj_enable.B_inj_A )&&(!Is_IGN_Off())) {
-        chery_inj_width =  inj_sig[INJ_CHANNEL_A].inj_time+Chery_Post_Injection[INJ_CHANNEL_A];
-    } else {
-        chery_inj_width =0;
-    }
+        /*Convert the engineer value of Chery Injection end angle to Delphi engineer value */
+    	chery_inj_end_angle = (900 - Convert_Chery_Inj_angle(inj_sig[INJ_CHANNEL_A].inj_end_angle,Prec_Inj_end_angle_chery))<<S_CRANK_ANGLE;
+    	chery_inj_end_angle = chery_inj_end_angle -KfHWIO_phi_BoundaryFraction;
+        SetHWIO_FuelInjectorEOIT(chery_inj_end_angle);
+        SetHWIO_FuelInjectorTrimEOIT(chery_inj_end_angle);
+        //  PFI_Set_Angle( PFI_TRIM_ANGLE, chery_inj_end_angle, 1<<S_CRANK_ANGLE );
 
-    inj_sig[INJ_CHANNEL_A].B_post_inj = 0;
-    PFI_PulseWidth =Convert_Chery_Inj_Width(chery_inj_width,S_MILLISECONDSb);
-    PFI_Set_Pulse_Width(INJ_CHANNEL_A, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
 
-    if(CRANK_Get_Cylinder_ID() != INJ_CHANNEL_B) {
-        if(inj_sig[INJ_CHANNEL_B].B_post_inj) {
-            Chery_Post_Injection[INJ_CHANNEL_B]+=inj_sig[INJ_CHANNEL_B].post_inj_time;
-		     PFI_Enable_Trim_Pulses(INJ_CHANNEL_B);
+        if(CRANK_Get_Cylinder_ID() != INJ_CHANNEL_A) {
+            if(inj_sig[INJ_CHANNEL_A].B_post_inj) {
+                Chery_Post_Injection[INJ_CHANNEL_A]+=inj_sig[INJ_CHANNEL_A].post_inj_time; 
+    	     PFI_Enable_Trim_Pulses(INJ_CHANNEL_A);
+            }
+        } else {
+            Chery_Post_Injection[INJ_CHANNEL_A] = 0;
         }
-    } else {
-        Chery_Post_Injection[INJ_CHANNEL_B] = 0;
-    }
 
-    if((inj_enable.B_inj_B)&&(!Is_IGN_Off())) {
-        chery_inj_width =  inj_sig[INJ_CHANNEL_B].inj_time+Chery_Post_Injection[INJ_CHANNEL_B];
-    } else {
-        chery_inj_width =0;
-    }
-
-    inj_sig[INJ_CHANNEL_B].B_post_inj = 0;
-
-    PFI_PulseWidth =Convert_Chery_Inj_Width(chery_inj_width,S_MILLISECONDSb);
-    PFI_Set_Pulse_Width(INJ_CHANNEL_B, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
-
-
-    if(CRANK_Get_Cylinder_ID() != INJ_CHANNEL_C) {
-        if(inj_sig[INJ_CHANNEL_C].B_post_inj) {
-            Chery_Post_Injection[INJ_CHANNEL_C]+=inj_sig[INJ_CHANNEL_C].post_inj_time;
-				     PFI_Enable_Trim_Pulses(INJ_CHANNEL_C);
+        if((inj_enable.B_inj_A ) && (!Is_IGN_Off()) && (ImmoInhibitEngine == false)) {
+            chery_inj_width =  inj_sig[INJ_CHANNEL_A].inj_time+Chery_Post_Injection[INJ_CHANNEL_A];
+        } else {
+            chery_inj_width = 0;
         }
-    } else {
-        Chery_Post_Injection[INJ_CHANNEL_C] = 0;
-    }
 
-    if((inj_enable.B_inj_C)&&(!Is_IGN_Off())) {
-        chery_inj_width =  inj_sig[INJ_CHANNEL_C].inj_time+Chery_Post_Injection[INJ_CHANNEL_C];
-    } else {
-        chery_inj_width =0;
-    }
+        inj_sig[INJ_CHANNEL_A].B_post_inj = 0;
+        PFI_PulseWidth =Convert_Chery_Inj_Width(chery_inj_width,S_MILLISECONDSb);
+        PFI_Set_Pulse_Width(INJ_CHANNEL_A, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
 
-    inj_sig[INJ_CHANNEL_C].B_post_inj = 0;
-    PFI_PulseWidth =Convert_Chery_Inj_Width(chery_inj_width,S_MILLISECONDSb);
-    PFI_Set_Pulse_Width(INJ_CHANNEL_C, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
-
-
-    if(CRANK_Get_Cylinder_ID() != INJ_CHANNEL_D) {
-        if(inj_sig[INJ_CHANNEL_D].B_post_inj) {
-            Chery_Post_Injection[INJ_CHANNEL_D]+=inj_sig[INJ_CHANNEL_D].post_inj_time;
-				     PFI_Enable_Trim_Pulses(INJ_CHANNEL_D);
+        if(CRANK_Get_Cylinder_ID() != INJ_CHANNEL_B) {
+            if(inj_sig[INJ_CHANNEL_B].B_post_inj) {
+                Chery_Post_Injection[INJ_CHANNEL_B]+=inj_sig[INJ_CHANNEL_B].post_inj_time;
+    		     PFI_Enable_Trim_Pulses(INJ_CHANNEL_B);
+            }
+        } else {
+            Chery_Post_Injection[INJ_CHANNEL_B] = 0;
         }
-    } else {
-        Chery_Post_Injection[INJ_CHANNEL_D] = 0;
+
+        if((inj_enable.B_inj_B ) && (!Is_IGN_Off()) && (ImmoInhibitEngine == false)) {
+            chery_inj_width =  inj_sig[INJ_CHANNEL_B].inj_time+Chery_Post_Injection[INJ_CHANNEL_B];
+        } else {
+            chery_inj_width =0;
+        }
+
+        inj_sig[INJ_CHANNEL_B].B_post_inj = 0;
+
+        PFI_PulseWidth =Convert_Chery_Inj_Width(chery_inj_width,S_MILLISECONDSb);
+        PFI_Set_Pulse_Width(INJ_CHANNEL_B, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
+
+
+        if(CRANK_Get_Cylinder_ID() != INJ_CHANNEL_C) {
+            if(inj_sig[INJ_CHANNEL_C].B_post_inj) {
+                Chery_Post_Injection[INJ_CHANNEL_C]+=inj_sig[INJ_CHANNEL_C].post_inj_time;
+    				     PFI_Enable_Trim_Pulses(INJ_CHANNEL_C);
+            }
+        } else {
+            Chery_Post_Injection[INJ_CHANNEL_C] = 0;
+        }
+
+        if((inj_enable.B_inj_C) && (!Is_IGN_Off()) && (ImmoInhibitEngine == false)) {
+            chery_inj_width =  inj_sig[INJ_CHANNEL_C].inj_time+Chery_Post_Injection[INJ_CHANNEL_C];
+        } else {
+            chery_inj_width =0;
+        }
+
+        inj_sig[INJ_CHANNEL_C].B_post_inj = 0;
+        PFI_PulseWidth =Convert_Chery_Inj_Width(chery_inj_width,S_MILLISECONDSb);
+        PFI_Set_Pulse_Width(INJ_CHANNEL_C, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
+
+
+        if(CRANK_Get_Cylinder_ID() != INJ_CHANNEL_D) {
+            if(inj_sig[INJ_CHANNEL_D].B_post_inj) {
+                Chery_Post_Injection[INJ_CHANNEL_D]+=inj_sig[INJ_CHANNEL_D].post_inj_time;
+                PFI_Enable_Trim_Pulses(INJ_CHANNEL_D);
+            }
+        } else {
+            Chery_Post_Injection[INJ_CHANNEL_D] = 0;
+        }
+
+        if((inj_enable.B_inj_D) && (!Is_IGN_Off()) && (ImmoInhibitEngine == false)) {
+            chery_inj_width =  inj_sig[INJ_CHANNEL_D].inj_time+Chery_Post_Injection[INJ_CHANNEL_D];
+        } else {
+            chery_inj_width =0;
+        }
+
+        inj_sig[INJ_CHANNEL_D].B_post_inj = 0;
+
+        PFI_PulseWidth =Convert_Chery_Inj_Width(chery_inj_width,S_MILLISECONDSb);
+        PFI_Set_Pulse_Width(INJ_CHANNEL_D, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
     }
-
-    if((inj_enable.B_inj_D)&&(!Is_IGN_Off())) {
-        chery_inj_width =  inj_sig[INJ_CHANNEL_D].inj_time+Chery_Post_Injection[INJ_CHANNEL_D];
-    } else {
-        chery_inj_width =0;
-    }
-
-    inj_sig[INJ_CHANNEL_D].B_post_inj = 0;
-
-    PFI_PulseWidth =Convert_Chery_Inj_Width(chery_inj_width,S_MILLISECONDSb);
-    PFI_Set_Pulse_Width(INJ_CHANNEL_D, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
-  }
     //Clear the flag to tell the HLS that LLD get the parameters
     B_syn_update = false;
 }
