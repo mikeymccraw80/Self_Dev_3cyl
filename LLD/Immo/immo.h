@@ -88,40 +88,18 @@ typedef enum
 /* ============================================================================ *\
  * Exported variables.
 \* ============================================================================ */
-
-//extern Every_Loop_Sec_W        ImmoDeactivateOnTimer;
 extern bool                    ImmoInhibitEngine;
-//extern ImmoStatusByteType      ImmoStatusByte;
-//extern bool                    ImmoRecordSuccessCEL;
-//extern bool                    ImmoGenericEnabled;
-//extern bool                    ImmoJiChengEnabled;
-//extern ImmoDeactivateStateType ImmoDeactivateState;
 /*for Siemens Immo*/
 extern bool                    ImmoSiemensEnabled;
 
 /* ============================================================================ *\
  * Local INLINE functions and #define function-like macros.
 \* ============================================================================ */
-//#define SetImmoRecordSuccessCEL()     (ImmoRecordSuccessCEL = true)
-//#define ClearImmoRecordSuccessCEL()   (ImmoRecordSuccessCEL = false)
-//#define GetImmoRecordSuccessCEL()     (ImmoRecordSuccessCEL)
 #define ImmoCodeAddr                  (&(EE_SK[1]))
-
-//#define IsImmoInDeactivation()        (ImmoDeactivateState == ImmoDeactivateOn)
-
-//#define Chk_GenericImmo_Enabled()     (ImmoGenericEnabled == true)
-
-//#define Chk_GenericImmo_Disabled()    (ImmoGenericEnabled == false)
-
-//#define Chk_JiChengImmo_Enabled()     (ImmoJiChengEnabled == true)
-
-//#define Chk_JiChengImmo_Disabled()    (ImmoJiChengEnabled == false)
-
 #define ClearImmoResponseFlag()       (ImmoNoResponseDetected = false)
 
 /* added Siemens immo */
 #define Chk_SiemensImmo_Enabled()     (ImmoSiemensEnabled == true)
-
 #define Chk_SiemensImmo_Disabled()    (ImmoSiemensEnabled == false)
 /* ============================================================================ *\
  * Exported Function prototypes
