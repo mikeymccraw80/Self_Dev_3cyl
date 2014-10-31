@@ -1198,7 +1198,7 @@ static void ExecuteServiceKw2000State (void)
 					/* Set IMMO state to SendingRequestMsg */
 					SetSiemens_DLLStateToSendingResponseMsg();
 					// ECMImmoRelation=Authentication;
-					R_LineEnable = true;
+					// R_LineEnable = true;
 				} else {
 					TxServiceData [1] = KB1;
 					TxServiceData [2] = KB2;

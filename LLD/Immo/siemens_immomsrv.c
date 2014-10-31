@@ -205,11 +205,10 @@ void SiemensImmo_AuthResultLostService(void)
 		ImmoPassThisKeyon = CbTRUE;
 	} else {
 		/* Start Immobilizer routine while condition met. */
-		if (( (AuthenticationResultLost() )
-			&& (GetVIOS_IgnSt() == CeIGN_ON)
-			&&( !( (GetFUEL_DFCO_Enabled())
-			&& (ImmoAuthenticationResultPass())
-			&& (GetEngineTurning() ) ) ))||R_LineSignalGenerate)
+		if (((AuthenticationResultLost() )
+				&& (GetVIOS_IgnSt() == CeIGN_ON)
+				&& (!( (GetFUEL_DFCO_Enabled()) && (ImmoAuthenticationResultPass()) && (GetEngineTurning()))))
+			||R_LineSignalGenerate)
 		{
 			SiemensImmo_Initializing();
 			R_LineSignalGenerate=false;
