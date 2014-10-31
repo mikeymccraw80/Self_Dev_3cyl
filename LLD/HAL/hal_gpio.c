@@ -191,7 +191,7 @@
 //=============================================================================
   void HAL_GPIO_SET_IMMOREQ_Enable(bool in_enable) 
  {
-     VSEP_DiscreteSet(VSEP_DO_IMMOREQ_CH  ,in_enable);
+     VSEP_DiscreteSetImmediate(VSEP_DO_IMMOREQ_CH  ,in_enable);
  }
 
 //=============================================================================
