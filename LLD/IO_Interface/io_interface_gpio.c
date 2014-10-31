@@ -5,6 +5,8 @@
 #include "hal_analog.h"
 #include "HLS.h"
 #include "vehicle_can_cald.h"
+#include "immo_cal.h"
+#include "immo.h"
 
 
 //=============================================================================
@@ -46,11 +48,26 @@ void IO_GPIO_DI_Task(void)
 //=============================================================================
 void IO_GPIO_DO_Task(void) 
 {
+	HAL_GPIO_SET_MPR_Enable((bool) LLD_do_table[LLD_DO_MAIN_RELAY].value);
+
+	if(Chk_SiemensImmo_Disabled()||(K_Immo_FuelPump_channel==CeFuelPumpPin)) {
+		if (ImmoStopEngine()) {
+			HAL_GPIO_SET_FPR_Enable((bool) false);
+		} else {
+			HAL_GPIO_SET_FPR_Enable((bool) LLD_do_table[LLD_DO_FUEL_PUMP].value);
+		}
+		HAL_GPIO_SET_ACClutch_Enable((bool) LLD_do_table[LLD_DO_AC_CLUTCH].value);
+	} else {
+		if (ImmoStopEngine()) {
+			HAL_GPIO_SET_ACClutch_Enable(false);
+		} else {
+			HAL_GPIO_SET_ACClutch_Enable((bool) LLD_do_table[LLD_DO_FUEL_PUMP].value);
+		}
+		HAL_GPIO_SET_FPR_Enable((bool) LLD_do_table[LLD_DO_AC_CLUTCH].value);
+	}
+
 	HAL_GPIO_SET_FAN1_Enable((bool) LLD_do_table[LLD_DO_FAN1].value);
 	HAL_GPIO_SET_FAN2_Enable((bool) LLD_do_table[LLD_DO_FAN2].value);
-	HAL_GPIO_SET_FPR_Enable((bool) LLD_do_table[LLD_DO_FUEL_PUMP].value);
-	HAL_GPIO_SET_MPR_Enable((bool) LLD_do_table[LLD_DO_MAIN_RELAY].value);
-	HAL_GPIO_SET_ACClutch_Enable((bool) LLD_do_table[LLD_DO_AC_CLUTCH].value);
 	// HAL_GPIO_SET_IMMOREQ_Enable((bool) LLD_do_table[LLD_DO_R_LINE].value);
 	// HAL_GPIO_SET_SMR_Enable((bool) LLD_do_table[LLD_DO_START_MOTR_RLY].value);
 	HAL_GPIO_SET_CRUISI_Enable((bool) LLD_do_table[LLD_DO_START_MOTR_RLY].value);
