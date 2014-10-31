@@ -265,7 +265,7 @@ void Test_DO_Toggle_Function(void)
 	LLD_do_table[LLD_DO_MIL_LAMP].value = !LLD_do_table[LLD_DO_MIL_LAMP].value;
 	LLD_do_table[LLD_DO_SVS_LAMP].value = !LLD_do_table[LLD_DO_SVS_LAMP].value;
 	LLD_do_table[LLD_DO_AC_CLUTCH].value = !LLD_do_table[LLD_DO_AC_CLUTCH].value;
-	LLD_do_table[LLD_DO_R_LINE].value = !LLD_do_table[LLD_DO_R_LINE].value;
+	//LLD_do_table[LLD_DO_R_LINE].value = !LLD_do_table[LLD_DO_R_LINE].value;
 	LLD_do_table[LLD_DO_START_MOTR_RLY].value = !LLD_do_table[LLD_DO_START_MOTR_RLY].value;
 	LLD_do_table[LLD_DO_VIS_SWITCH].value = !LLD_do_table[LLD_DO_VIS_SWITCH].value;
 	etc_sig.etc_direction  = ~etc_sig.etc_direction ;
