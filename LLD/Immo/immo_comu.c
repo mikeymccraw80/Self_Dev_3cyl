@@ -146,6 +146,10 @@ void ImmoEndService(void)
 	} else {
 		if (GetImmoAuthenticationResult()) {
 			ImmoEnableEngine();
+			SbImmo_NoResponseTestComplete = CbTRUE;
+			SbImmo_NoResponseTestFailed = CbFALSE;
+			SbImmo_AuthenErrorTestComplete = CbTRUE;
+			SbImmo_AuthenErrorTestFailed = CbFALSE;
 			// if (GetDGDM_DTC_FaultType (CeDGDM_ImmoNoResponse) != CeDGDM_FAULT_TYPE_Z)
 			// {
 			//    PerfmDGDM_ProcessPassReport(CeDGDM_ImmoNoResponse);
@@ -164,6 +168,10 @@ void ImmoEndService(void)
 
 			if (ImmoAuthenErrorDetected)
 			{
+				SbImmo_NoResponseTestComplete = CbTRUE;
+				SbImmo_NoResponseTestFailed = CbFALSE;
+				SbImmo_AuthenErrorTestComplete = CbTRUE;
+				SbImmo_AuthenErrorTestFailed = CbTRUE;
 				//    if(GetDGDM_DTC_FaultType (CeDGDM_ImmoAuthenError) != CeDGDM_FAULT_TYPE_Z)
 				//    {
 				//        PerfmDGDM_ProcessFailReport(CeDGDM_ImmoAuthenError);
@@ -176,6 +184,8 @@ void ImmoEndService(void)
 			// else if (ImmoNoResponseDetected && GetDGDM_DTC_FaultType (CeDGDM_ImmoNoResponse) != CeDGDM_FAULT_TYPE_Z)
 			else if (ImmoNoResponseDetected)
 			{
+				SbImmo_NoResponseTestComplete = CbTRUE;
+				SbImmo_NoResponseTestFailed = CbTRUE;
 				//    PerfmDGDM_ProcessFailReport(CeDGDM_ImmoNoResponse);
 			}
 			else

@@ -86,6 +86,18 @@
  * Global variables.
 \* ========================================================================== */
 
+/* Immobilizer OBD interface */
+#pragma section DATA " " ".nc_nvram"
+TbBOOLEAN SbImmo_KeyCodeNotPgmdTestFailed;
+TbBOOLEAN SbImmo_NoResponseTestFailed;
+TbBOOLEAN SbImmo_AuthenErrorTestFailed;
+#pragma section DATA " " ".bss"
+
+TbBOOLEAN SbImmo_KeyCodeNotPgmdTestComplete;
+TbBOOLEAN SbImmo_NoResponseTestComplete;
+TbBOOLEAN SbImmo_AuthenErrorTestComplete;
+
+
 /* Immobilizer Varible */
 // #pragma section [ram_boot]
 uint8_t                    ECMKEY_Reserved[GenericImmoKey_Length];
@@ -100,7 +112,7 @@ Authentication_Request_T   Authentication_Request_ID;
 
 
 // #pragma section [nvram]
-#pragma section DATA " " ".nc_nvram"         /* nvram variables, checked with a checksum */
+#pragma section DATA " " ".nc_nvram"
 //uint8_t                    ECMKEY[JiChengImmoKey_Length];
 WORD                       TotalAuthenticationCounter;
 TbBOOLEAN                  AuthenticationResult;

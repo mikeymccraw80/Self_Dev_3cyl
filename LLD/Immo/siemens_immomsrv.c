@@ -265,17 +265,13 @@ void SiemensImmo_Initializing(void)
 	if (CheckIMMO_ECMNotLearned() ) {
 		ImmoDisableEngine();
 		VbSiemens_ImmoFuncNotProgrammed = CbTRUE;
-		//  if (GetDGDM_DTC_FaultType (CeDGDM_ImmoKeyCodeNotPgmd) != CeDGDM_FAULT_TYPE_Z)
-		//  {
-		// PerfmDGDM_ProcessFailReport(CeDGDM_ImmoKeyCodeNotPgmd);
-		//  }
+		SbImmo_KeyCodeNotPgmdTestComplete = CbTRUE;
+		SbImmo_KeyCodeNotPgmdTestFailed = CbTRUE;
 		VeSiemens_ActReason = CeIMMO_ECUInVirgin;
 	} else {
 		VbSiemens_ImmoFuncNotProgrammed = CbFALSE;
-		// if (GetDGDM_DTC_FaultType (CeDGDM_ImmoKeyCodeNotPgmd) != CeDGDM_FAULT_TYPE_Z)
-		// {
-		//    PerfmDGDM_ProcessPassReport(CeDGDM_ImmoKeyCodeNotPgmd);
-		// }
+		SbImmo_KeyCodeNotPgmdTestComplete = CbTRUE;
+		SbImmo_KeyCodeNotPgmdTestFailed = CbFALSE;
 	}
 
 	/* ECU Pre-Enable */

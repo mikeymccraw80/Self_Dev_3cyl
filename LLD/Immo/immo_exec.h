@@ -264,6 +264,14 @@ typedef union
 /* ============================================================================ *\
  * Exported variables.
 \* ============================================================================ */
+
+extern TbBOOLEAN SbImmo_KeyCodeNotPgmdTestFailed;
+extern TbBOOLEAN SbImmo_NoResponseTestFailed;
+extern TbBOOLEAN SbImmo_AuthenErrorTestFailed;
+extern TbBOOLEAN SbImmo_KeyCodeNotPgmdTestComplete;
+extern TbBOOLEAN SbImmo_NoResponseTestComplete;
+extern TbBOOLEAN SbImmo_AuthenErrorTestComplete;
+
 extern bool                       ImmoInhibitEngine;
 extern uint8_t                    ECMKEY[];
 extern uint8_t                    AuthenticationCounter, FeedbackAuthCounter, ValidAuthRspCounter;
