@@ -243,7 +243,7 @@ void InitAppLvlCommVariables(void)
 *              operation system to check the recieved Msg.             *
 *                                                                      *
 ***********************************************************************/   
-#if 0
+extern TbBOOLEAN DCAN_AnswerStillBeingSent( void );
  void UpdateOBD_Services(void)
 { 
    // Can8DataBytesArrayType *Can8_DataBytesArrayPtr;
@@ -288,23 +288,11 @@ void InitAppLvlCommVariables(void)
        CommunicationStatus = CbFALSE;
    }
 }
-#endif
 
 /*********************************************************************/
 /***   Returns the start address of the Calibration                ***/
 /***   Rom section.                                                ***/
 /*********************************************************************/
-
-/*********************************************************************/
-/***   This functions returns TRUE, if the conditions exists to    ***/
-/***   run the service 38 in diagnostic mode. Application has to   ***/
-/**    include the logic to test the conditions.                   ***/
-/*********************************************************************/
-#if 0
-TbBOOLEAN CheckIfConditionsCorrectToRunInDiagMode ( void )
-{
-   return ( CbTRUE );
-}
 
 /*********************************************************************/
 /** This function does required actions before doing a reset.  It    */
@@ -315,23 +303,23 @@ TbBOOLEAN CheckIfConditionsCorrectToRunInDiagMode ( void )
 void DoNecessaryActionsBeforeReset ( void )
 {
 
-  WORD *Pointer ;
+  // WORD *Pointer ;
 
-   for ( Pointer = ( WORD *) &CpHWIO_RAM_NVM_CriticalStartAddress ;
-         Pointer <=( WORD *) &CpHWIO_RAM_NVM_CriticalEndAddress ;
-         Pointer++ )
-   {
-      *Pointer = 0 ;
-   }
+  //  for ( Pointer = ( WORD *) &CpHWIO_RAM_NVM_CriticalStartAddress ;
+  //        Pointer <=( WORD *) &CpHWIO_RAM_NVM_CriticalEndAddress ;
+  //        Pointer++ )
+  //  {
+  //     *Pointer = 0 ;
+  //  }
 
-   for ( Pointer = ( WORD *) &CpHWIO_RAM_NVM_StartAddress ;
-         Pointer <=( WORD *) &CpHWIO_RAM_NVM_EndAddress ;
-         Pointer++ )
-   {
-      *Pointer = 0 ;
-   }
+  //  for ( Pointer = ( WORD *) &CpHWIO_RAM_NVM_StartAddress ;
+  //        Pointer <=( WORD *) &CpHWIO_RAM_NVM_EndAddress ;
+  //        Pointer++ )
+  //  {
+  //     *Pointer = 0 ;
+  //  }
 }
-#endif
+
 /*********************************************************************/
 /** FUNCTION:     Srv23Address_Is_Validkw()                          */
 /**                                                                  */
@@ -346,23 +334,20 @@ void DoNecessaryActionsBeforeReset ( void )
 /**                                                                  */
 /** Global Variables Updated: None                                   */
 /*********************************************************************/
-TbBOOLEAN Srv23Address_Is_Validkw(LONGWORD Address, BYTE Size)
+TbBOOLEAN Srv23Address_Is_Validkw(LONGWORD Address, uint8_t Size)
 {
    TbBOOLEAN LyRtnVal;
 
-   if ( ((Address >= CyRAM_SectionStart )                  &&
+   if ( ((Address >= CyRAM_SectionStart ) &&
       ((Address + (Size-1)) <= CyRAM_SectionEnd ) )
       ||
     ( ( Address >= ( LONGWORD ) CpHWIO_ROM_CalibrationStart ) &&
-      ((Address + (Size-1)) <=
-                      ( LONGWORD ) CpHWIO_ROM_CalibrationEnd ))
+      ((Address + (Size-1)) <= ( LONGWORD ) CpHWIO_ROM_CalibrationEnd ))
       ||
     (( ( Address >= ( LONGWORD ) CyEEPROM_SectionStart ) &&
-      ((Address + (Size-1)) <=
-                      ( LONGWORD ) CyEEPROM_SectionEnd )))
+      ((Address + (Size-1)) <= ( LONGWORD ) CyEEPROM_SectionEnd ))))
          // && ((GetVIOS_ManufactEnableCounter() > V_COUNT_BYTE(0))
              // || (GetVIOS_VehInDev())))
-   )
    {
       LyRtnVal = CbTRUE;
    }

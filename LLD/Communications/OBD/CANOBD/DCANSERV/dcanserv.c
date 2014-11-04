@@ -86,6 +86,7 @@
 #include "dcansv28.h"/*LnCommunicationControl()*/
 #include "dcansv85.h"/*LnControlDTCSetting()*/
 #include "dcansvb0.h"/*TestService()*/
+#include "kw2app.h"
 /******************************************************************************
 * OBD Lib Service Include Files
 ******************************************************************************/
@@ -231,8 +232,8 @@ static  void InitializeReadDataByPacketIdentifier (void)
 /**********************************************************************/
 TbBOOLEAN IsSecurityAccessActivated (void)
 {
-   return ((GetVIOS_ManufactEnableCounter () == 0) &&
-          (!GetVIOS_VehInDev ()));
+   // return ((GetVIOS_ManufactEnableCounter () == 0));
+   return 0;
 } /*** End of IsSecurityAccessActivated ***/
 
 /***********************************************************************/
@@ -310,7 +311,7 @@ void InitializeDCAN_Services (void)
  /*********************************************************************/
 /*** CANOBD Answer still being sent.                         ***/
 /*********************************************************************/
-static TbBOOLEAN DCAN_AnswerStillBeingSent( void )
+TbBOOLEAN DCAN_AnswerStillBeingSent( void )
 {
    return (GetLnEcuSendingAnswer()
            || GetLnEcuWaitingP2cMinBeforeAns());
@@ -451,7 +452,7 @@ void UpdateLnDiagServices (void)
    if (LnDiagSvFlags.PreviousCommState && !GetLnCommunicationActiveState ())
     /*--- Transition from ON to OFF (not established) ---*/
    {
-      ClearOFVC_AllDeviceControlParameters ();
+      // ClearOFVC_AllDeviceControlParameters ();
    }
 
    LnDiagSvFlags.PreviousCommState = GetLnCommunicationActiveState ();
@@ -473,20 +474,13 @@ void UpdateLnDiagServices (void)
       UpdateLnReadMemoryByAddress ();
    }
    
-   if (LnDiagSvFlags.ReadSupportedDTCActive)
-   {
-      UpdateLnReadDTCGetSupportedDTCData (CurrentStatusMask, EmissionDTC, SupportedDTC);
-   }
+   // if (LnDiagSvFlags.ReadSupportedDTCActive)
+   // {
+   //    UpdateLnReadDTCGetSupportedDTCData (CurrentStatusMask, EmissionDTC, SupportedDTC);
+   // }
       
    /* Initialize OBD application type to default value. */
-   InitPIDApplictaion_Type();
-   
-#ifdef COMPILE_CANOBD_PCHUD
-   if (LnDiagSvFlags.WriteLongPIDData)
-   {
-      UpdateLnReadPCHUDData();
-   }
-#endif   
+   // InitPIDApplictaion_Type();
    LnSeed_Random ++;
    //CurrentSession = (BYTE)(CurrentSessionIndex +1);
    if (GetLnRxCompleteWaitingAppToRespond ())
@@ -512,8 +506,7 @@ void UpdateLnDiagServices (void)
    }
    if (VbCAN_OBD_Enabled)
    {
-      if ((GetLnCommunicationActiveState() == CbFALSE)
-	    ||(!CheckOFVC_GeneralCondValid()))
+      if ((GetLnCommunicationActiveState() == CbFALSE))
       {
          LbOFVC_OvrdConditionsValid = CbFALSE;
       }
@@ -535,6 +528,10 @@ void UpdateLnDiagServices (void)
    }
 } /*** End of UpdateLnDiagServices ***/
 
+void DefineOSTK_EmptyFunction(void)
+{
+  return;
+}
 
 /******************************************************************************
 *

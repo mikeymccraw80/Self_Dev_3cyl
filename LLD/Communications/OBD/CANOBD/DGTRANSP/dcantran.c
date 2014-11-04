@@ -129,6 +129,8 @@ static uint8_t                     LnRxSequenceNumber;
 #define CcSYST_BASE_LOOP_1_TIME_x6_ 24
 #endif
 
+#define PARAM_NOT_USED( notused ) 
+
 /**************************/
 /*** Clear_Buffer ***/
 /**************************/
@@ -227,7 +229,7 @@ bool StoreLnServNbBytesInRingBuffer (uint16_t NbBytesToStore,
    uint8_t *LocalSourceBufferPtr;
 
    LocalSourceBufferPtr = SourceBufferPtr;
-   interrupt_state = EnterCriticalSection();
+   interrupt_state = Enter_Critical_Section();
    if (GetLnServNbOfFreeBytesInRingBuffer () >= NbBytesToStore)
    {
       for (ByteNumber = 0; ByteNumber < NbBytesToStore; ByteNumber++)
@@ -262,7 +264,7 @@ bool StoreLnServNbBytesInRingBuffer (uint16_t NbBytesToStore,
    {
       Stored = false;
    }
-   ExitCriticalSection( interrupt_state );
+   Leave_Critical_Section( interrupt_state );
    return Stored;
 } /*** End of StoreLnServNbBytesInRingBuffer ***/
 
@@ -284,7 +286,7 @@ bool RetrieveLnServNbBytesFromRingBuffer (uint16_t  NbBytesToRetrieve,
    uint16_t ByteNumber;
    uint32_t          interrupt_state;
 
-   interrupt_state = EnterCriticalSection();
+   interrupt_state = Enter_Critical_Section();
    if (GetLnServNbOfUsedBytesInRingBuffer () >= NbBytesToRetrieve)
    {
       for (ByteNumber = 0; ByteNumber < NbBytesToRetrieve; ByteNumber++)
@@ -306,7 +308,7 @@ bool RetrieveLnServNbBytesFromRingBuffer (uint16_t  NbBytesToRetrieve,
    {
       CouldGet = false;
    }
-   ExitCriticalSection( interrupt_state );
+   Leave_Critical_Section( interrupt_state );
    return CouldGet;
 } /*** End of RetrieveLnServNbBytesFromRingBuffer ***/
 
@@ -344,12 +346,12 @@ void LnGoToWaitingForRxFirstOrSingleFrame (void)
 {
    uint32_t          interrupt_state;
 
-   interrupt_state = EnterCriticalSection();
+   interrupt_state = Enter_Critical_Section();
    LnMultipleFrameRxState = WaitingForRxFirstOrSingleFrame;
    LnServiceDataFrame.CurrentDataLength = 0;
    InitializeLnRingBuffer ();
    LnEvent2EmptyRingBuffTransmitted = false;
-   ExitCriticalSection( interrupt_state );
+   Leave_Critical_Section( interrupt_state );
 } /*** End of LnGoToWaitingForRxFirstOrSingleFrame ***/
 
 /***********************************/

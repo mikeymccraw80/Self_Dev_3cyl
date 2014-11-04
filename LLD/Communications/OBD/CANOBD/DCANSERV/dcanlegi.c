@@ -64,6 +64,8 @@
 // #include "obdlcald.h" /*KbDCANCORE_MODE4_With_EngRUN*/
 // #include "ofvcpall.h"/*VbOFVC_DeviceControlActive*/
 #include "obdlcdat.h"
+#include "kw2srv10m.h"
+
 /******************************************************************************
 * CAN OBD NW Layer Include Files
 ******************************************************************************/
@@ -510,7 +512,8 @@ void FormJ1979_Mode_43_Data_DCAN( void )
     Lc1979_ValidDTCCount = V_COUNT_WORD(0);
     DTCCount = V_COUNT_WORD(0);
 
-    while ( DTCCount < GetCMNMaxNumberOfDTCs () )
+    // while ( DTCCount < GetCMNMaxNumberOfDTCs () )
+    while (0)
     {
        // DTCRecordPtr = Get_Next_Valid_Emission_P_Code ( DTCCount, ModeVal );
        DTCRecordPtr = NULL;
@@ -1133,7 +1136,8 @@ void FormJ1979_Mode_47_Data_DCAN( void )
 
     ModeVal = MODE_7 ;
 
-    while ( DTCCount < GetCMNMaxNumberOfDTCs () )
+    // while ( DTCCount < GetCMNMaxNumberOfDTCs () )
+    while(0)
     {
         // DTCRecordPtr = Get_Next_Valid_Emission_P_Code ( DTCCount, ModeVal ) ;
         DTCRecordPtr = NULL;
@@ -2011,7 +2015,6 @@ static BYTE GetDCANService09Info08data(BYTE LyBufferIndex)
 
    WrtDCAN_ServiceData ( Ludata.Byte_Access.Byte_Two,
                    LyBufferIndex++) ;
-
    return LyBufferIndex;
 }
 #endif

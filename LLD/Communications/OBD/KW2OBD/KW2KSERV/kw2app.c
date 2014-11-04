@@ -26,6 +26,7 @@
 #include "kw2dll.h"
 #include "immo_exec.h"
 #include "immo.h"
+#include "obdlfsrv.h"
 
 
 uint16_t       Kw2000Seed;

@@ -124,12 +124,11 @@ void ChangeSession(uint8_t newSession)
              * When service 0x86 is implemented the following
              * function needs to be added: ResetService86Events
              */
-         ClearIMMO_SecurityUnlockStatus();
+         // ClearIMMO_SecurityUnlockStatus();
          // VbDiagServicesDisableDTCs = CbFALSE;
-         ClearOFVC_AllDeviceControlParameters();
+         // ClearOFVC_AllDeviceControlParameters();
 	     ClearAndDisableAllDpids ();
-		 EnableCANH_Receive_By_OBD();
-         EnableCANH_Send_By_OBD();
+         // EnableCANH_Send_By_OBD();
       }
    
    }

@@ -163,20 +163,13 @@ void LnReadDataByCommonIdentifier (void)
 			 	     ||(ParamID == CANPID_VALEO_READSC))
 			       && (!VALEO_IMMO_ENABLED()) )
 			  /*Conti immo---Read SK and SC is only supported by CANOBD 22*/
-#if defined(OBD_CONTROLLER_IS_MT62P1) || defined(OBD_CONTROLLER_IS_MT22P3)
 			    || ( ((ParamID == CANPID_HIRAIN_READSK) 
 			           || (ParamID == CANPID_HIRAIN_READSK_MTCHSTUS))
-			        && (!HIRAIN_IMMO_ENABLED()) )
+			        ) )
 			    || ( ((ParamID == CANPID_CONTI_READSK) 
 			           || (ParamID == CANPID_CONTI_READSC))
-			        && (!CONTI_IMMO_ENABLED()) ) )
-#else
-			    || ( (ParamID == CANPID_CONTI_READSK) 
-			        && ( (!CONTI_IMMO_ENABLED())
-			           || (!GetIMMO_Conti_LV2SecurityUnlockStatus())) ) 
-			    || ( (ParamID == CANPID_CONTI_READSC)
-			       && (!CONTI_IMMO_ENABLED()) ) )
-#endif
+			        && () ) )
+
 	        {
 	            /*The PID is not supported when IMMO is not enabled.*/
 				/*do nothing*/
@@ -200,7 +193,8 @@ void LnReadDataByCommonIdentifier (void)
     			if(CbTRUE == LbValid_CalPID)
     			{
     				CalPID_DataLength = GetCalPIDDataLength( GetVeDIAG_PIDIndex() );
-    				CalPID_Offset = GetCalPIDDataAddressOffest(GetVeDIAG_PIDIndex());
+    				// CalPID_Offset = GetCalPIDDataAddressOffest(GetVeDIAG_PIDIndex());
+            CalPID_Offset = 0;
     				CalPID_DataEndOffset = CalPID_DataLength + CalPID_Offset;
     				
     				if(CalPID_DataEndOffset > EE_CalibrationData_Size )
@@ -229,19 +223,7 @@ void LnReadDataByCommonIdentifier (void)
       }
       if (CbTRUE == LbPIDFound)
       {
-#if ( (XbIMMO_MULTI_SUBS_SELECT_FLAG == CbSUBS_ON) \
-    &&( (XbIMMO_CONTI_SUBS_SELECT_FLAG == CbSUBS_ON) \
-     || (XbIMMO_HIRAIN_SUBS_SELECT_FLAG == CbSUBS_ON) ) )
-         if( ( (!GetIMMO_Conti_LV2SecurityUnlockStatus()) && CONTI_IMMO_ENABLED()
-	          &&((ParamID == CANPID_CONTI_READSK)||(ParamID == CANPID_CONTI_READSC)) )
-	        ||( (!GetIMMO_HIRAIN_LV2SecurityUnlockStatus()) && HIRAIN_IMMO_ENABLED()
-	          &&((ParamID == CANPID_HIRAIN_READSK_MTCHSTUS)||(ParamID == CANPID_HIRAIN_READSK)) ) )
-         {
-            SendLnStandardNegativeAnswer (SecurityAccessDenied);
-         }
-         else
-         {
-#endif
+
      #ifdef COMPILE_CANOBD_PCHUD
 			if(LbLongPIDFound)
             {

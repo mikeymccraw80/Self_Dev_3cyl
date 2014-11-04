@@ -233,7 +233,7 @@ static INLINE void PerformReset(void)
 /*  such as : clear the non-volatile (NVRAM), other initializations  */
 /*  etc.                                                             */
 /*********************************************************************/
-#define DoNecessaryActionsBeforeReset()                    /* no action required -yet- */
+//#define DoNecessaryActionsBeforeReset()                    /* no action required -yet- */
 
 /*********************************************************************/
 /*         Returns The Value of "CAL ID software version ID"         */

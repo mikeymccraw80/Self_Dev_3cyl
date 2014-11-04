@@ -139,8 +139,7 @@ uint32_t BOOT_PATTERN _at(From_APPTOBOOT_ADDRESS);
 
 uint8_t StartRoutineByLocalIdentifier(void)
 {
-   if((( GetLnVulnerabilityState() )
-     ||( GetVIOS_VehInDev() ))
+   if((( GetLnVulnerabilityState() ))
      && (GetVIOS_n_EngSpd() < V_RPM(200)))
  /* in AT vehicle, VKPH will be set a default value when CAN is disabled, 
     because the default value is not equal to 0, we can't reflash the ECU with bench,
@@ -170,8 +169,7 @@ uint8_t StartRoutine_NVMReInitLogic(void)
 {
    // WriteFILE_NVM_CriticalByte(&NbFILE_NVM_Reset_RequestFromSerial, 
    //                                       CbTRUE);
-    if((( GetLnVulnerabilityState() )
-     ||( GetVIOS_VehInDev() ))
+    if((( GetLnVulnerabilityState() ))
      && (GetVIOS_n_EngSpd() < V_RPM(200)))
  /* in AT vehicle, VKPH will be set a default value when CAN is disabled, 
     because the default value is not equal to 0, it can't  reflash the ECU,
@@ -314,10 +312,6 @@ void LnRoutineControl(void)
          SendLnStandardNegativeAnswer (RequestOutOfRange);
       }
       else if( (routineCtrl->Protected) && ( 
-#if ( (XbIMMO_MULTI_SUBS_SELECT_FLAG == CbSUBS_ON) \
-   && (XbIMMO_HIRAIN_SUBS_SELECT_FLAG == CbSUBS_ON) )
-	  	       ( (routineCtrl->Identifier == CyIMMO_HIRAIN_EOL_RID_0209) && !GetIMMO_HIRAIN_LV2SecurityUnlockStatus() ) ||
-#endif
 	  	       ( !IsSecurityAccessUnlocked() )
 	  	       ) )
       {/* Protected routineControl and SecurityAccess is not called */
