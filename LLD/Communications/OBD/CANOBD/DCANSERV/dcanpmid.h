@@ -27,21 +27,19 @@
 *                                                                      *
 *                                                                      *
 ************************************************************************
-/*            INCLUDE FILES                                           */
-/**********************************************************************/
+*            INCLUDE FILES                                           *
+***********************************************************************/
 
 /******************************************************************************
 * APP Include Files
 ******************************************************************************/
-//#include "obdsfexi.h"
-//#include "obdlfapi.h"
+
 /******************************************************************************
 * CAN OBD Service Include Files
 ******************************************************************************/
 #include "dcanpcfg.h"/*XeDCAN_SID_06_Supported*/
-//#include "dcanlegi.h"/*CeDCAN_SCID_0E,TeDCAN_TID_List*/
-//#include "intr_eobd.h"
-#include "obdltype.h"
+#include "obdltype.h"/*TpDCAN_MID_Param_Callback*/
+#include "dgdmptyp.h" /*TeDGDM_DIAGNOSTIC_TESTS*/
 /******************************************************************************
 * CAN OBD NW Layer Include Files
 ******************************************************************************/
@@ -136,10 +134,12 @@ typedef enum
    CeDCAN_SCID_0C = 0x0C,     /* Voltage - 0.01 V per bit*/
    CeDCAN_SCID_0E = 0x0E,     /* Current - 1 ma per bit */
    CeDCAN_SCID_10 = 0x10,     /* Time - 1 ms per bit */
+   CeDCAN_SCID_14 = 0x14,     /* Resistance - 1 ohm per bit */
    CeDCAN_SCID_20 = 0x20,     /* Ratio - 0.0039062 per bit */
    CeDCAN_SCID_24 = 0x24,     /* Counts - 1 count per bit */
    CeDCAN_SCID_29 = 0x29,     /* Pressure per time - 0.25 Pa/s per bit */
    CeDCAN_SCID_2B = 0x2B,     /* Switches - hex to decimal */
+   CeDCAN_SCID_8D = 0x8D,     /* Current - 0.00390625 ma per bit */
    CeDCAN_SCID_9C = 0x9C,     /* Angle - 0.01 degree/bit               */
    CeDCAN_SCID_FD = 0xFD,     /* Pressure(Absolute) - 0.001 kPa per bit */
    CeDCAN_SCID_FE = 0xFE      /* Pressure(Vaccuum) - 0.25 Pa per bit */
@@ -180,18 +180,18 @@ extern const TsDCAN_MID_DEFINITION_ARRAY_TYPE CaDCAN_Supported_MIDs[];
 extern const BYTE                    CyDCAN_NumOf_MIDs;
 extern const TsDCAN_MID_TID_AttrType CaDCAN_MID_NO_TID_Attributes[];
 extern const TsDCAN_MID_TID_AttrType CaDCAN_MID_01_TID_Attributes[];
-//extern const TsDCAN_MID_TID_AttrType CaDCAN_MID_02_TID_Attributes[];
-//extern const TsDCAN_MID_TID_AttrType CaDCAN_MID_05_TID_Attributes[];
-//extern const TsDCAN_MID_TID_AttrType CaDCAN_MID_21_TID_Attributes[];
-//extern const TsDCAN_MID_TID_AttrType CaDCAN_MID_22_TID_Attributes[];
-//extern const TsDCAN_MID_TID_AttrType CaDCAN_MID_41_TID_Attributes[];
-//extern const TsDCAN_MID_TID_AttrType CaDCAN_MID_42_TID_Attributes[];
-//extern const TsDCAN_MID_TID_AttrType CaDCAN_MID_A2_TID_Attributes[];
-//extern const TsDCAN_MID_TID_AttrType CaDCAN_MID_A3_TID_Attributes[];
-//extern const TsDCAN_MID_TID_AttrType CaDCAN_MID_A4_TID_Attributes[];
-//extern const TsDCAN_MID_TID_AttrType CaDCAN_MID_A5_TID_Attributes[];
-//extern const TsDCAN_MID_TID_AttrType CaDCAN_MID_A6_TID_Attributes[];
-//extern const TsDCAN_MID_TID_AttrType CaDCAN_MID_A7_TID_Attributes[];
+extern const TsDCAN_MID_TID_AttrType CaDCAN_MID_02_TID_Attributes[];
+extern const TsDCAN_MID_TID_AttrType CaDCAN_MID_05_TID_Attributes[];
+extern const TsDCAN_MID_TID_AttrType CaDCAN_MID_21_TID_Attributes[];
+extern const TsDCAN_MID_TID_AttrType CaDCAN_MID_22_TID_Attributes[];
+extern const TsDCAN_MID_TID_AttrType CaDCAN_MID_41_TID_Attributes[];
+extern const TsDCAN_MID_TID_AttrType CaDCAN_MID_42_TID_Attributes[];
+extern const TsDCAN_MID_TID_AttrType CaDCAN_MID_A2_TID_Attributes[];
+extern const TsDCAN_MID_TID_AttrType CaDCAN_MID_A3_TID_Attributes[];
+extern const TsDCAN_MID_TID_AttrType CaDCAN_MID_A4_TID_Attributes[];
+extern const TsDCAN_MID_TID_AttrType CaDCAN_MID_A5_TID_Attributes[];
+extern const TsDCAN_MID_TID_AttrType CaDCAN_MID_A6_TID_Attributes[];
+extern const TsDCAN_MID_TID_AttrType CaDCAN_MID_A7_TID_Attributes[];
 
 /******************************************************************************
  *  Global Variable Declarations
@@ -276,13 +276,5 @@ extern void DefineOSTK_EmptyFunction(void);
 *                                                                      *
 * Rev.   Date  User RSM#  Description of Changes                       *
 * ----  ------ ---- ----  ---------------------------------------------*
-* 1     050526 ban  5311  Created Module                               *
-* 2     051209 ban  5311  Removed MID A1                               *
-* tci_pt3#2 
-*      070503  AB  xxxx Removed MID 3C TID 82                          *
-*                       Added TID 80 in MID 3D .                       *
-* tci_pt3#2
-*      080404  VP  6833 Added TID 90 in MID 31.
-*
-* 3.0  100906    hdg  xxx  Implemented CAN OBD in MT22.1 paltform.
+* 1     110401 cjqq  Base on T300 GMLAN Module                               *
 ***********************************************************************/

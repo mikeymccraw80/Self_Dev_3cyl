@@ -23,10 +23,10 @@
  *****************************************************************************
  *
  * Current Module Info:
- * %full_name:     mt20u2#43/incl/dcanpcfg.h/1 %
- * %date_created:  Tue Sep  7 14:55:18 2010 %
- * %version:       1 %
- * %derived_by:    pz0vmh %
+ * %full_name:     ctc_pt3#6/incl/dcanpcfg.h/2 %
+ * %date_created:  Fri Apr  1 14:51:45 2011 %
+ * %version:       2 %
+ * %derived_by:    hzpcqq %
  *
  *****************************************************************************/
 /******************************************************************************
@@ -38,37 +38,43 @@
 /******************************************************************************
 * CAN OBD NW Layer Include Files
 ******************************************************************************/
-#include "timepcvc.h" /*for TwTIME_t_R7p8125ms*/
+
 /***************************************************************
 * Start of configuration settings for application layer        *
 ***************************************************************/
 
 /******************************************************************
 * "APPLICATION LAYER" Service Id Supported/Not Supported status   *
-* NOTE : SIDs $01 - $09 should always be supported for CARB       *
-* applications                                                    *
+* NOTE : SIDs $01 - $09 should always be supported for applications *
 ******************************************************************/
 #define CeDCAN_NotSupported                (0)
 #define CeDCAN_Supported                   (1)
 
-#define XeDCAN_SID_00_Supported             (CeDCAN_NotSupported)
-#define XeDCAN_SID_01_Supported             (CeDCAN_NotSupported)
-#define XeDCAN_SID_02_Supported             (CeDCAN_NotSupported)
-#define XeDCAN_SID_03_Supported             (CeDCAN_NotSupported)
-#define XeDCAN_SID_04_Supported             (CeDCAN_NotSupported)
+#define XeDCAN_SID_01_Supported             (CeDCAN_Supported)
+#define XeDCAN_SID_02_Supported             (CeDCAN_Supported)
+#define XeDCAN_SID_03_Supported             (CeDCAN_Supported)
+#define XeDCAN_SID_04_Supported             (CeDCAN_Supported)
 #define XeDCAN_SID_05_Supported             (CeDCAN_NotSupported)
-#define XeDCAN_SID_06_Supported             (CeDCAN_NotSupported)
-#define XeDCAN_SID_07_Supported             (CeDCAN_NotSupported)
+#define XeDCAN_SID_06_Supported             (CeDCAN_Supported)
+#define XeDCAN_SID_07_Supported             (CeDCAN_Supported)
 #define XeDCAN_SID_08_Supported             (CeDCAN_NotSupported)
-#define XeDCAN_SID_09_Supported             (CeDCAN_NotSupported)
+#define XeDCAN_SID_09_Supported             (CeDCAN_Supported)
 #define XeDCAN_SID_0A_Supported             (CeDCAN_NotSupported)
-#define XeDCAN_SID_0B_Supported             (CeDCAN_NotSupported)
-#define XeDCAN_SID_0C_Supported             (CeDCAN_NotSupported)
-#define XeDCAN_SID_0D_Supported             (CeDCAN_NotSupported)
-#define XeDCAN_SID_0E_Supported             (CeDCAN_NotSupported)
-#define XeDCAN_SID_0F_Supported             (CeDCAN_NotSupported)
-
-
+#define XeDCAN_SID_10_Supported             (CeDCAN_Supported)
+#define XeDCAN_SID_11_Supported             (CeDCAN_Supported)
+#define XeDCAN_SID_14_Supported             (CeDCAN_Supported)
+#define XeDCAN_SID_19_Supported             (CeDCAN_Supported)
+#define XeDCAN_SID_22_Supported             (CeDCAN_Supported)
+#define XeDCAN_SID_23_Supported             (CeDCAN_Supported)
+#define XeDCAN_SID_27_Supported             (CeDCAN_Supported)
+#define XeDCAN_SID_2A_Supported             (CeDCAN_Supported)
+#define XeDCAN_SID_2E_Supported             (CeDCAN_Supported)
+#define XeDCAN_SID_2F_Supported             (CeDCAN_Supported)
+#define XeDCAN_SID_31_Supported             (CeDCAN_Supported)
+#define XeDCAN_SID_3E_Supported             (CeDCAN_Supported)
+#define XeDCAN_SID_85_Supported             (CeDCAN_Supported)
+#define XeDCAN_SID_28_Supported             (CeDCAN_Supported)
+#define XeDCAN_SID_B0_Supported             (CeDCAN_Supported)
 /***************************************************************
 * End of configuration settings for application layer          *
 ***************************************************************/
@@ -80,12 +86,6 @@
 *
 * Rev.  YYMMDD Who RSM# Changes
 * ----- ------ --- ---- -------------------------------------------------------
-* tci_pt3#1
-*       050916 ban xxxx Created Module
-*       051003 tln xxxx Added constants for S3 timer
-* 2     051208 ban 5311 Added compiler switches for SIDs 28 and 29
-* 2     070629 abh 6023 modified as per GMW3110
-* 2.1.1 080131 me  6754 Added support for service 0x0A
-* 3.0  100906    hdg  xxx  Implemented CAN OBD in MT22.1 paltform.
+*1.0      110401 cjqq base on T300 GMLAN Module
 ******************************************************************************/
 

@@ -20,20 +20,21 @@
  *****************************************************************************
  *
  * Current Module Info:
- * %full_name:      mt20u2#24/csrc/dcanmmid.c/1 %
- * %date_created:   Tue Sep  7 14:56:07 2010 %
- * %version:        1 %
- * %derived_by:     pz0vmh %
+ * %full_name:      ctc_pt3#2/csrc/dcanmmid.c/5 %
+ * %date_created:   Wed Mar  7 10:04:24 2012 %
+ * %version:        5 %
+ * %derived_by:     hzpcqq %
  *
  *****************************************************************************/
 /******************************************************************************
 * APP Include Files
 ******************************************************************************/
-//#include "obdsfexi.h"
+#include "obdsfexi.h"
 /******************************************************************************
 * CAN OBD Service Include Files
 ******************************************************************************/
 #include "dcanpmid.h"
+#include "dcanp_usid.h" 
 /******************************************************************************
 * CAN OBD NW Layer Include Files
 ******************************************************************************/
@@ -93,7 +94,7 @@ static void GetDCAN_Dflt_TestMax_Val(void* LpDCAN_Output)
 {
    *((T_COUNT_WORD*)LpDCAN_Output) = V_COUNT_WORD(65535);
 }
-
+#ifdef OBD_CONTROLLER_IS_MT80
 /*********************************************************************/
 /* FUNCTION:    GetDCAN_MID_01_TID_03_TstRslt()                      */
 /* DESCRIPTION: MID 01 TID 03 test result                            */
@@ -180,10 +181,10 @@ static void GetDCAN_MID_01_TID_04_TstThshMax(void* LpDCAN_Output)
 /*                                                                   */
 /* RETURN:      None                                                 */
 /*********************************************************************/
-//static void GetDCAN_MID_01_TID_05_TstRslt(void* LpDCAN_Output)
-//{
-//   *((T_COUNT_WORD*)LpDCAN_Output) = GetEOSD_11_RespRL_Avg_TstRslt();
-//}
+static void GetDCAN_MID_01_TID_05_TstRslt(void* LpDCAN_Output)
+{
+   *((T_COUNT_WORD*)LpDCAN_Output) = GetEOSD_11_RespRL_Avg_TstRslt();
+}
 
 /*********************************************************************/
 /* FUNCTION:    GetDCAN_MID_01_TID_05_TstThshMin()                   */
@@ -193,10 +194,10 @@ static void GetDCAN_MID_01_TID_04_TstThshMax(void* LpDCAN_Output)
 /*                                                                   */
 /* RETURN:      None                                                 */
 /*********************************************************************/
-//static void GetDCAN_MID_01_TID_05_TstThshMin(void* LpDCAN_Output)
-//{
-//   *((T_COUNT_WORD*)LpDCAN_Output) = GetEOSD_11_RespRL_Avg_TstThrshMin();
-//}
+static void GetDCAN_MID_01_TID_05_TstThshMin(void* LpDCAN_Output)
+{
+   *((T_COUNT_WORD*)LpDCAN_Output) = GetEOSD_11_RespRL_Avg_TstThrshMin();
+}
 
 /*********************************************************************/
 /* FUNCTION:    GetDCAN_MID_01_TID_05_TstThshMax()                   */
@@ -206,10 +207,10 @@ static void GetDCAN_MID_01_TID_04_TstThshMax(void* LpDCAN_Output)
 /*                                                                   */
 /* RETURN:      None                                                 */
 /*********************************************************************/
-//static void GetDCAN_MID_01_TID_05_TstThshMax(void* LpDCAN_Output)
-//{
-//   *((T_COUNT_WORD*)LpDCAN_Output) = GetEOSD_11_RespRL_Avg_TstThrshMax();
-//}
+static void GetDCAN_MID_01_TID_05_TstThshMax(void* LpDCAN_Output)
+{
+   *((T_COUNT_WORD*)LpDCAN_Output) = GetEOSD_11_RespRL_Avg_TstThrshMax();
+}
 
 /*********************************************************************/
 /* FUNCTION:    GetDCAN_MID_01_TID_06_TstRslt()                      */
@@ -219,10 +220,10 @@ static void GetDCAN_MID_01_TID_04_TstThshMax(void* LpDCAN_Output)
 /*                                                                   */
 /* RETURN:      None                                                 */
 /*********************************************************************/
-//static void GetDCAN_MID_01_TID_06_TstRslt(void* LpDCAN_Output)
-//{
-  // *((T_COUNT_WORD*)LpDCAN_Output) = GetEOSD_11_RespLR_Avg_TstRslt();
-//}
+static void GetDCAN_MID_01_TID_06_TstRslt(void* LpDCAN_Output)
+{
+   *((T_COUNT_WORD*)LpDCAN_Output) = GetEOSD_11_RespLR_Avg_TstRslt();
+}
 
 /*********************************************************************/
 /* FUNCTION:    GetDCAN_MID_01_TID_06_TstThshMin()                   */
@@ -232,10 +233,10 @@ static void GetDCAN_MID_01_TID_04_TstThshMax(void* LpDCAN_Output)
 /*                                                                   */
 /* RETURN:      None                                                 */
 /*********************************************************************/
-//static void GetDCAN_MID_01_TID_06_TstThshMin(void* LpDCAN_Output)
-//{
-  // *((T_COUNT_WORD*)LpDCAN_Output) = GetEOSD_11_RespLR_Avg_TstThrshMin();
-//}
+static void GetDCAN_MID_01_TID_06_TstThshMin(void* LpDCAN_Output)
+{
+   *((T_COUNT_WORD*)LpDCAN_Output) = GetEOSD_11_RespLR_Avg_TstThrshMin();
+}
 
 /*********************************************************************/
 /* FUNCTION:    GetDCAN_MID_01_TID_06_TstThshMax()                   */
@@ -245,10 +246,10 @@ static void GetDCAN_MID_01_TID_04_TstThshMax(void* LpDCAN_Output)
 /*                                                                   */
 /* RETURN:      None                                                 */
 /*********************************************************************/
-//static void GetDCAN_MID_01_TID_06_TstThshMax(void* LpDCAN_Output)
-//{
-//   *((T_COUNT_WORD*)LpDCAN_Output) = GetEOSD_11_RespLR_Avg_TstThrshMax();
-//}
+static void GetDCAN_MID_01_TID_06_TstThshMax(void* LpDCAN_Output)
+{
+   *((T_COUNT_WORD*)LpDCAN_Output) = GetEOSD_11_RespLR_Avg_TstThrshMax();
+}
 
 /*********************************************************************/
 /* FUNCTION:    GetDCAN_MID_01_TID_81_TstRslt()                      */
@@ -258,10 +259,10 @@ static void GetDCAN_MID_01_TID_04_TstThshMax(void* LpDCAN_Output)
 /*                                                                   */
 /* RETURN:      None                                                 */
 /*********************************************************************/
-//static void GetDCAN_MID_01_TID_81_TstRslt(void* LpDCAN_Output)
-//{
- //  *((T_COUNT_WORD*)LpDCAN_Output) = GetEOSD_11_RespRL_Sw_TstRslt();
-//}
+static void GetDCAN_MID_01_TID_81_TstRslt(void* LpDCAN_Output)
+{
+   *((T_COUNT_WORD*)LpDCAN_Output) = GetEOSD_11_RespRL_Sw_TstRslt();
+}
 
 /*********************************************************************/
 /* FUNCTION:    GetDCAN_MID_01_TID_81_TstThshMin()                   */
@@ -271,10 +272,10 @@ static void GetDCAN_MID_01_TID_04_TstThshMax(void* LpDCAN_Output)
 /*                                                                   */
 /* RETURN:      None                                                 */
 /*********************************************************************/
-//static void GetDCAN_MID_01_TID_81_TstThshMin(void* LpDCAN_Output)
-//{
- //  *((T_COUNT_WORD*)LpDCAN_Output) = GetEOSD_11_RespRL_Sw_TstThrshMin();
-//}
+static void GetDCAN_MID_01_TID_81_TstThshMin(void* LpDCAN_Output)
+{
+   *((T_COUNT_WORD*)LpDCAN_Output) = GetEOSD_11_RespRL_Sw_TstThrshMin();
+}
 
 /*********************************************************************/
 /* FUNCTION:    GetDCAN_MID_01_TID_81_TstThshMax()                   */
@@ -284,10 +285,10 @@ static void GetDCAN_MID_01_TID_04_TstThshMax(void* LpDCAN_Output)
 /*                                                                   */
 /* RETURN:      None                                                 */
 /*********************************************************************/
-//static void GetDCAN_MID_01_TID_81_TstThshMax(void* LpDCAN_Output)
-//{
-//   *((T_COUNT_WORD*)LpDCAN_Output) = GetEOSD_11_RespRL_Sw_TstThrshMax();
-//}
+static void GetDCAN_MID_01_TID_81_TstThshMax(void* LpDCAN_Output)
+{
+   *((T_COUNT_WORD*)LpDCAN_Output) = GetEOSD_11_RespRL_Sw_TstThrshMax();
+}
 
 /*********************************************************************/
 /* FUNCTION:    GetDCAN_MID_01_TID_82_TstRslt()                      */
@@ -297,10 +298,10 @@ static void GetDCAN_MID_01_TID_04_TstThshMax(void* LpDCAN_Output)
 /*                                                                   */
 /* RETURN:      None                                                 */
 /*********************************************************************/
-//static void GetDCAN_MID_01_TID_82_TstRslt(void* LpDCAN_Output)
-//{
-//   *((T_COUNT_WORD*)LpDCAN_Output) = GetEOSD_11_RespLR_Sw_TstRslt();
-//}
+static void GetDCAN_MID_01_TID_82_TstRslt(void* LpDCAN_Output)
+{
+   *((T_COUNT_WORD*)LpDCAN_Output) = GetEOSD_11_RespLR_Sw_TstRslt();
+}
 
 /*********************************************************************/
 /* FUNCTION:    GetDCAN_MID_01_TID_82_TstThshMin()                   */
@@ -310,10 +311,10 @@ static void GetDCAN_MID_01_TID_04_TstThshMax(void* LpDCAN_Output)
 /*                                                                   */
 /* RETURN:      None                                                 */
 /*********************************************************************/
-//static void GetDCAN_MID_01_TID_82_TstThshMin(void* LpDCAN_Output)
-//{
-//   *((T_COUNT_WORD*)LpDCAN_Output) = GetEOSD_11_RespLR_Sw_TstThrshMin();
-//}
+static void GetDCAN_MID_01_TID_82_TstThshMin(void* LpDCAN_Output)
+{
+   *((T_COUNT_WORD*)LpDCAN_Output) = GetEOSD_11_RespLR_Sw_TstThrshMin();
+}
 
 /*********************************************************************/
 /* FUNCTION:    GetDCAN_MID_01_TID_82_TstThshMax()                   */
@@ -323,10 +324,10 @@ static void GetDCAN_MID_01_TID_04_TstThshMax(void* LpDCAN_Output)
 /*                                                                   */
 /* RETURN:      None                                                 */
 /*********************************************************************/
-//static void GetDCAN_MID_01_TID_82_TstThshMax(void* LpDCAN_Output)
-//{
-//   *((T_COUNT_WORD*)LpDCAN_Output) = GetEOSD_11_RespLR_Sw_TstThrshMax();
-//}
+static void GetDCAN_MID_01_TID_82_TstThshMax(void* LpDCAN_Output)
+{
+   *((T_COUNT_WORD*)LpDCAN_Output) = GetEOSD_11_RespLR_Sw_TstThrshMax();
+}
 
 /*********************************************************************/
 /* FUNCTION:    GetDCAN_MID_01_TID_83_TstRslt()                      */
@@ -336,10 +337,10 @@ static void GetDCAN_MID_01_TID_04_TstThshMax(void* LpDCAN_Output)
 /*                                                                   */
 /* RETURN:      None                                                 */
 /*********************************************************************/
-//static void GetDCAN_MID_01_TID_83_TstRslt(void* LpDCAN_Output)
-//{
-//   *((T_COUNT_WORD*)LpDCAN_Output) = GetEOSD_11_RespRatio_TstRslt();
-//}
+static void GetDCAN_MID_01_TID_83_TstRslt(void* LpDCAN_Output)
+{
+   *((T_COUNT_WORD*)LpDCAN_Output) = GetEOSD_11_RespRatio_TstRslt();
+}
 
 /*********************************************************************/
 /* FUNCTION:    GetDCAN_MID_01_TID_83_TstThshMin()                   */
@@ -349,10 +350,10 @@ static void GetDCAN_MID_01_TID_04_TstThshMax(void* LpDCAN_Output)
 /*                                                                   */
 /* RETURN:      None                                                 */
 /*********************************************************************/
-//static void GetDCAN_MID_01_TID_83_TstThshMin(void* LpDCAN_Output)
-//{
-//   *((T_COUNT_WORD*)LpDCAN_Output) = GetEOSD_11_RespRatio_TstThrshMin();
-//}
+static void GetDCAN_MID_01_TID_83_TstThshMin(void* LpDCAN_Output)
+{
+   *((T_COUNT_WORD*)LpDCAN_Output) = GetEOSD_11_RespRatio_TstThrshMin();
+}
 
 /*********************************************************************/
 /* FUNCTION:    GetDCAN_MID_01_TID_83_TstThshMax()                   */
@@ -362,11 +363,11 @@ static void GetDCAN_MID_01_TID_04_TstThshMax(void* LpDCAN_Output)
 /*                                                                   */
 /* RETURN:      None                                                 */
 /*********************************************************************/
-//static void GetDCAN_MID_01_TID_83_TstThshMax(void* LpDCAN_Output)
-//{
-//   *((T_COUNT_WORD*)LpDCAN_Output) = GetEOSD_11_RespRatio_TstThrshMax();
-//}
-#if 0
+static void GetDCAN_MID_01_TID_83_TstThshMax(void* LpDCAN_Output)
+{
+   *((T_COUNT_WORD*)LpDCAN_Output) = GetEOSD_11_RespRatio_TstThrshMax();
+}
+#endif
 /**********************************************************
 * All MID 0x02 TID functions.                             *
 **********************************************************/
@@ -526,6 +527,7 @@ static void GetDCAN_MID_02_TID_06_TstThshMax(void* LpDCAN_Output)
    *((T_COUNT_WORD*)LpDCAN_Output) = GetEOSD_t_12_TP_Resp_Sw_TstTimeMax();
 }
 
+#ifdef OBD_CONTROLLER_IS_MT80
 /*********************************************************************/
 /* FUNCTION:    GetDCAN_MID_02_TID_BA_TstRslt()                      */
 /* DESCRIPTION: MID 02 TID BA test result                            */
@@ -681,8 +683,7 @@ static void GetDCAN_MID_02_TID_BD_TstThshMax(void* LpDCAN_Output)
 {
    *((T_COUNT_WORD*)LpDCAN_Output) = GetEOSD_R_12_ResponseLeanRichMax();
 }
-
-
+#if XeSYST_EOSD_21_SENSOR == CeSYST_EOSD_SENSOR_PRESENT
 /*********************************************************************/
 /* FUNCTION:    GetDCAN_MID_05_TID_03_TstRslt()                      */
 /* DESCRIPTION: MID 05 TID 03 test result                            */
@@ -693,7 +694,7 @@ static void GetDCAN_MID_02_TID_BD_TstThshMax(void* LpDCAN_Output)
 /*********************************************************************/
 static void GetDCAN_MID_05_TID_03_TstRslt(void* LpDCAN_Output)
 {
-  // Parameter_Not_Used(LpDCAN_Output);
+   Parameter_Not_Used(LpDCAN_Output);
 //   *((T_COUNT_WORD*)LpDCAN_Output) = GetEOSD_U_21_RespLeanThrsh();
 }
 
@@ -707,7 +708,7 @@ static void GetDCAN_MID_05_TID_03_TstRslt(void* LpDCAN_Output)
 /*********************************************************************/
 static void GetDCAN_MID_05_TID_03_TstThshMin(void* LpDCAN_Output)
 {
-   //Parameter_Not_Used(LpDCAN_Output);
+   Parameter_Not_Used(LpDCAN_Output);
 //   *((T_COUNT_WORD*)LpDCAN_Output) = GetEOSD_U_21_RespLeanThrsh();
 }
 
@@ -721,7 +722,7 @@ static void GetDCAN_MID_05_TID_03_TstThshMin(void* LpDCAN_Output)
 /*********************************************************************/
 static void GetDCAN_MID_05_TID_03_TstThshMax(void* LpDCAN_Output)
 {
-  // Parameter_Not_Used(LpDCAN_Output);
+   Parameter_Not_Used(LpDCAN_Output);
 //   *((T_COUNT_WORD*)LpDCAN_Output) = GetEOSD_U_21_RespLeanThrsh();
 }
 
@@ -735,7 +736,7 @@ static void GetDCAN_MID_05_TID_03_TstThshMax(void* LpDCAN_Output)
 /*********************************************************************/
 static void GetDCAN_MID_05_TID_04_TstRslt(void* LpDCAN_Output)
 {
-   //Parameter_Not_Used(LpDCAN_Output);
+   Parameter_Not_Used(LpDCAN_Output);
  //  *((T_COUNT_WORD*)LpDCAN_Output) = GetEOSD_U_21_RespRichThrsh();
 }
 
@@ -749,7 +750,7 @@ static void GetDCAN_MID_05_TID_04_TstRslt(void* LpDCAN_Output)
 /*********************************************************************/
 static void GetDCAN_MID_05_TID_04_TstThshMin(void* LpDCAN_Output)
 {
-   //Parameter_Not_Used(LpDCAN_Output);
+   Parameter_Not_Used(LpDCAN_Output);
 //   *((T_COUNT_WORD*)LpDCAN_Output) = GetEOSD_U_21_RespRichThrsh();
 }
 
@@ -763,7 +764,7 @@ static void GetDCAN_MID_05_TID_04_TstThshMin(void* LpDCAN_Output)
 /*********************************************************************/
 static void GetDCAN_MID_05_TID_04_TstThshMax(void* LpDCAN_Output)
 {
-  // Parameter_Not_Used(LpDCAN_Output);
+   Parameter_Not_Used(LpDCAN_Output);
 //   *((T_COUNT_WORD*)LpDCAN_Output) = GetEOSD_U_21_RespRichThrsh();
 }
 
@@ -777,7 +778,7 @@ static void GetDCAN_MID_05_TID_04_TstThshMax(void* LpDCAN_Output)
 /*********************************************************************/
 static void GetDCAN_MID_05_TID_05_TstRslt(void* LpDCAN_Output)
 {
-  // Parameter_Not_Used(LpDCAN_Output);
+   Parameter_Not_Used(LpDCAN_Output);
 //   *((T_COUNT_WORD*)LpDCAN_Output) = GetEOSD_21_RespRL_Avg_TstRslt();
 }
 
@@ -791,7 +792,7 @@ static void GetDCAN_MID_05_TID_05_TstRslt(void* LpDCAN_Output)
 /*********************************************************************/
 static void GetDCAN_MID_05_TID_05_TstThshMin(void* LpDCAN_Output)
 {
-  // Parameter_Not_Used(LpDCAN_Output);
+   Parameter_Not_Used(LpDCAN_Output);
 //   *((T_COUNT_WORD*)LpDCAN_Output) = GetEOSD_21_RespRL_Avg_TstThrshMin();
 }
 
@@ -805,7 +806,7 @@ static void GetDCAN_MID_05_TID_05_TstThshMin(void* LpDCAN_Output)
 /*********************************************************************/
 static void GetDCAN_MID_05_TID_05_TstThshMax(void* LpDCAN_Output)
 {
-  // Parameter_Not_Used(LpDCAN_Output);
+   Parameter_Not_Used(LpDCAN_Output);
 //   *((T_COUNT_WORD*)LpDCAN_Output) = GetEOSD_21_RespRL_Avg_TstThrshMax();
 }
 
@@ -819,7 +820,7 @@ static void GetDCAN_MID_05_TID_05_TstThshMax(void* LpDCAN_Output)
 /*********************************************************************/
 static void GetDCAN_MID_05_TID_06_TstRslt(void* LpDCAN_Output)
 {
-   //Parameter_Not_Used(LpDCAN_Output);
+   Parameter_Not_Used(LpDCAN_Output);
 //   *((T_COUNT_WORD*)LpDCAN_Output) = GetEOSD_21_RespLR_Avg_TstRslt();
 }
 
@@ -833,7 +834,7 @@ static void GetDCAN_MID_05_TID_06_TstRslt(void* LpDCAN_Output)
 /*********************************************************************/
 static void GetDCAN_MID_05_TID_06_TstThshMin(void* LpDCAN_Output)
 {
- //  Parameter_Not_Used(LpDCAN_Output);
+   Parameter_Not_Used(LpDCAN_Output);
 //   *((T_COUNT_WORD*)LpDCAN_Output) = GetEOSD_21_RespLR_Avg_TstThrshMin();
 }
 
@@ -847,7 +848,7 @@ static void GetDCAN_MID_05_TID_06_TstThshMin(void* LpDCAN_Output)
 /*********************************************************************/
 static void GetDCAN_MID_05_TID_06_TstThshMax(void* LpDCAN_Output)
 {
-   //Parameter_Not_Used(LpDCAN_Output);
+   Parameter_Not_Used(LpDCAN_Output);
 //   *((T_COUNT_WORD*)LpDCAN_Output) = GetEOSD_21_RespLR_Avg_TstThrshMax();
 }
 
@@ -861,7 +862,7 @@ static void GetDCAN_MID_05_TID_06_TstThshMax(void* LpDCAN_Output)
 /*********************************************************************/
 static void GetDCAN_MID_05_TID_81_TstRslt(void* LpDCAN_Output)
 {
-   //Parameter_Not_Used(LpDCAN_Output);
+   Parameter_Not_Used(LpDCAN_Output);
 //   *((T_COUNT_WORD*)LpDCAN_Output) = GetEOSD_21_RespRL_Sw_TstRslt();
 }
 
@@ -875,7 +876,7 @@ static void GetDCAN_MID_05_TID_81_TstRslt(void* LpDCAN_Output)
 /*********************************************************************/
 static void GetDCAN_MID_05_TID_81_TstThshMin(void* LpDCAN_Output)
 {
-  // Parameter_Not_Used(LpDCAN_Output);
+   Parameter_Not_Used(LpDCAN_Output);
 //   *((T_COUNT_WORD*)LpDCAN_Output) = GetEOSD_21_RespRL_Sw_TstThrshMin();
 }
 
@@ -889,7 +890,7 @@ static void GetDCAN_MID_05_TID_81_TstThshMin(void* LpDCAN_Output)
 /*********************************************************************/
 static void GetDCAN_MID_05_TID_81_TstThshMax(void* LpDCAN_Output)
 {
-  // Parameter_Not_Used(LpDCAN_Output);
+   Parameter_Not_Used(LpDCAN_Output);
 //   *((T_COUNT_WORD*)LpDCAN_Output) = GetEOSD_21_RespRL_Sw_TstThrshMax();
 }
 
@@ -903,7 +904,7 @@ static void GetDCAN_MID_05_TID_81_TstThshMax(void* LpDCAN_Output)
 /*********************************************************************/
 static void GetDCAN_MID_05_TID_82_TstRslt(void* LpDCAN_Output)
 {
-  // Parameter_Not_Used(LpDCAN_Output);
+   Parameter_Not_Used(LpDCAN_Output);
 //   *((T_COUNT_WORD*)LpDCAN_Output) = GetEOSD_21_RespLR_Sw_TstRslt();
 }
 
@@ -917,7 +918,7 @@ static void GetDCAN_MID_05_TID_82_TstRslt(void* LpDCAN_Output)
 /*********************************************************************/
 static void GetDCAN_MID_05_TID_82_TstThshMin(void* LpDCAN_Output)
 {
-  // Parameter_Not_Used(LpDCAN_Output);
+   Parameter_Not_Used(LpDCAN_Output);
 //   *((T_COUNT_WORD*)LpDCAN_Output) = GetEOSD_21_RespLR_Sw_TstThrshMin();
 }
 
@@ -931,7 +932,7 @@ static void GetDCAN_MID_05_TID_82_TstThshMin(void* LpDCAN_Output)
 /*********************************************************************/
 static void GetDCAN_MID_05_TID_82_TstThshMax(void* LpDCAN_Output)
 {
-   //Parameter_Not_Used(LpDCAN_Output);
+   Parameter_Not_Used(LpDCAN_Output);
 //   *((T_COUNT_WORD*)LpDCAN_Output) = GetEOSD_21_RespLR_Sw_TstThrshMax();
 }
 
@@ -945,7 +946,7 @@ static void GetDCAN_MID_05_TID_82_TstThshMax(void* LpDCAN_Output)
 /*********************************************************************/
 static void GetDCAN_MID_05_TID_83_TstRslt(void* LpDCAN_Output)
 {
-  // Parameter_Not_Used(LpDCAN_Output);
+   Parameter_Not_Used(LpDCAN_Output);
 //   *((T_COUNT_WORD*)LpDCAN_Output) = GetEOSD_21_RespRatio_TstRslt();
 }
 
@@ -959,7 +960,7 @@ static void GetDCAN_MID_05_TID_83_TstRslt(void* LpDCAN_Output)
 /*********************************************************************/
 static void GetDCAN_MID_05_TID_83_TstThshMin(void* LpDCAN_Output)
 {
-  // Parameter_Not_Used(LpDCAN_Output);
+   Parameter_Not_Used(LpDCAN_Output);
 //   *((T_COUNT_WORD*)LpDCAN_Output) = GetEOSD_21_RespRatio_TstThrshMin();
 }
 
@@ -973,10 +974,11 @@ static void GetDCAN_MID_05_TID_83_TstThshMin(void* LpDCAN_Output)
 /*********************************************************************/
 static void GetDCAN_MID_05_TID_83_TstThshMax(void* LpDCAN_Output)
 {
-   //Parameter_Not_Used(LpDCAN_Output);
+   Parameter_Not_Used(LpDCAN_Output);
 //   *((T_COUNT_WORD*)LpDCAN_Output) = GetEOSD_21_RespRatio_TstThrshMax();
 }
-
+#endif
+#endif
 /*********************************************************************/
 /* FUNCTION:    GetDCAN_MID_21_TID_A1_TstRslt()                      */
 /* DESCRIPTION: MID 21 TID A1 test result                            */
@@ -1055,7 +1057,7 @@ static void GetDCAN_MID_22_TID_A2_TstThshMax(void* LpDCAN_Output)
 {
    *((T_COUNT_WORD*)LpDCAN_Output) = GetICMD_t_B2_EWMA_OSC_TstThrshMax();
 }
-
+#ifdef OBD_CONTROLLER_IS_MT80
 /**********************************************************
 * All MID 0x41 TID functions.                             *
 **********************************************************/
@@ -1140,6 +1142,7 @@ static void GetDCAN_MID_42_TID_B1_TstThshMax(void* LpDCAN_Output)
    *((T_COUNT_WORD*)LpDCAN_Output) = GetEOSD_I_E_12_CurrentTestMax();
 }
 
+#endif
 /*********************************************************************/
 /* FUNCTION:    GetDCAN_MID_A2_TID_0B_TstRslt()                      */
 /* DESCRIPTION: MID A2 TID 0B test result                            */
@@ -1243,7 +1246,7 @@ static void GetDCAN_MID_A5_TID_0C_TstRslt(void* LpDCAN_Output)
 {
    *((T_COUNT_WORD*)LpDCAN_Output) = GetMISF_Cyl4_MF_Counts_TstData();
 }
-#endif
+
 /*********************************************************************/
 /*            CONSTANTS DEFS                                         */
 /*********************************************************************/
@@ -1260,14 +1263,20 @@ const TsDCAN_MID_DEFINITION_ARRAY_TYPE CaDCAN_Supported_MIDs[] =
    *     MID Num        Number Of TIDs  Attributes                   *
    ******************************************************************/
    {     CeDCAN_MID_00,       0,        CaDCAN_MID_NO_TID_Attributes },
-   //{     CeDCAN_MID_01,       7,        CaDCAN_MID_01_TID_Attributes },
-    {     CeDCAN_MID_01,       2,        CaDCAN_MID_01_TID_Attributes }
-  #if 0
+#ifdef OBD_CONTROLLER_IS_MT80
+   {     CeDCAN_MID_01,       7,        CaDCAN_MID_01_TID_Attributes },
  #if XeSYST_EOSD_12_SENSOR == CeSYST_EOSD_SENSOR_PRESENT
    {     CeDCAN_MID_02,       8,        CaDCAN_MID_02_TID_Attributes },
-#endif
-#if XeSYST_EOSD_21_SENSOR == CeSYST_EOSD_SENSOR_PRESENT
+ #endif
+ #if XeSYST_EOSD_21_SENSOR == CeSYST_EOSD_SENSOR_PRESENT
    {     CeDCAN_MID_05,       7,        CaDCAN_MID_05_TID_Attributes },
+ #endif
+#else
+   CaEXSD_RSP_B1S1_MID
+ #if XeSYST_EOSD_12_SENSOR == CeSYST_EOSD_SENSOR_PRESENT
+   {     CeDCAN_MID_02,       4,        CaDCAN_MID_02_TID_Attributes },
+ #endif
+   CaEXSD_RSP_B2S1_MID
 #endif
    {     CeDCAN_MID_20,       0,        CaDCAN_MID_NO_TID_Attributes },
    {     CeDCAN_MID_21,       1,        CaDCAN_MID_21_TID_Attributes },
@@ -1275,9 +1284,16 @@ const TsDCAN_MID_DEFINITION_ARRAY_TYPE CaDCAN_Supported_MIDs[] =
    {     CeDCAN_MID_22,       1,        CaDCAN_MID_22_TID_Attributes },
 #endif
    {     CeDCAN_MID_40,       0,        CaDCAN_MID_NO_TID_Attributes },
+#ifdef OBD_CONTROLLER_IS_MT80
    {     CeDCAN_MID_41,       1,        CaDCAN_MID_41_TID_Attributes },
-#if XeSYST_EOSD_12_SENSOR == CeSYST_EOSD_SENSOR_PRESENT
+ #if XeSYST_EOSD_12_SENSOR == CeSYST_EOSD_SENSOR_PRESENT
    {     CeDCAN_MID_42,       1,        CaDCAN_MID_42_TID_Attributes },
+ #endif
+#else
+   CaEXSD_HTR_B1S1_MID
+   CaEXSD_HTR_B1S2_MID   
+   CaEXSD_HTR_B2S1_MID
+   CaEXSD_HTR_B2S2_MID
 #endif
    {     CeDCAN_MID_60,       0,        CaDCAN_MID_NO_TID_Attributes },
    {     CeDCAN_MID_80,       0,        CaDCAN_MID_NO_TID_Attributes },
@@ -1286,7 +1302,6 @@ const TsDCAN_MID_DEFINITION_ARRAY_TYPE CaDCAN_Supported_MIDs[] =
    {     CeDCAN_MID_A3,       2,        CaDCAN_MID_A3_TID_Attributes },
    {     CeDCAN_MID_A4,       2,        CaDCAN_MID_A4_TID_Attributes },
    {     CeDCAN_MID_A5,       2,        CaDCAN_MID_A5_TID_Attributes }
-#endif
 };
 
 /* Number of Supported MIDs */
@@ -1311,6 +1326,7 @@ const TsDCAN_MID_TID_AttrType CaDCAN_MID_NO_TID_Attributes[] =
     }
 };
 
+#ifdef OBD_CONTROLLER_IS_MT80
 /**********************************************************
 * Table Name  : CaDCAN_MID_01_TID_Attributes              *
 * Description : This table contains all the information   *
@@ -1337,52 +1353,53 @@ const TsDCAN_MID_TID_AttrType CaDCAN_MID_01_TID_Attributes[] =
         CeDCAN_SCID_0A                    /* SCALING ID */
     },
     /* TID CeDCAN_TID_05 */
-  //  {
-    //    CeDCAN_TID_05,                    /* TID NUMBER */
-    //    CeDGDM_O2_11_Response,            /* DTC NUMBER */
-    //    GetDCAN_MID_01_TID_05_TstRslt,    /* PARAMETER */
-    //    GetDCAN_MID_01_TID_05_TstThshMin, /* MINIMUM THRESHOLD */
-    //    GetDCAN_MID_01_TID_05_TstThshMax, /* MAXIMUM THRESHOLD */
-    //    CeDCAN_SCID_10                    /* SCALING ID */
-   // },
+    {
+        CeDCAN_TID_05,                    /* TID NUMBER */
+        CeDGDM_O2_11_Response,            /* DTC NUMBER */
+        GetDCAN_MID_01_TID_05_TstRslt,    /* PARAMETER */
+        GetDCAN_MID_01_TID_05_TstThshMin, /* MINIMUM THRESHOLD */
+        GetDCAN_MID_01_TID_05_TstThshMax, /* MAXIMUM THRESHOLD */
+        CeDCAN_SCID_10                    /* SCALING ID */
+    },
     /* TID CeDCAN_TID_06 */
-  //  {
-   //     CeDCAN_TID_06,                    /* TID NUMBER */
-   //     CeDGDM_O2_11_Response,            /* DTC NUMBER */
-    //    GetDCAN_MID_01_TID_06_TstRslt,    /* PARAMETER */
-    //    GetDCAN_MID_01_TID_06_TstThshMin, /* MINIMUM THRESHOLD */
-   //     GetDCAN_MID_01_TID_06_TstThshMax, /* MAXIMUM THRESHOLD */
-    //    CeDCAN_SCID_10                    /* SCALING ID */
-   // },
+    {
+        CeDCAN_TID_06,                    /* TID NUMBER */
+        CeDGDM_O2_11_Response,            /* DTC NUMBER */
+        GetDCAN_MID_01_TID_06_TstRslt,    /* PARAMETER */
+        GetDCAN_MID_01_TID_06_TstThshMin, /* MINIMUM THRESHOLD */
+        GetDCAN_MID_01_TID_06_TstThshMax, /* MAXIMUM THRESHOLD */
+        CeDCAN_SCID_10                    /* SCALING ID */
+    },
     /* TID CeDCAN_TID_81 */
-   // {
-   //     CeDCAN_TID_81,                    /* TID NUMBER */
-  //      CeDGDM_O2_11_Response,            /* DTC NUMBER */
-    //    GetDCAN_MID_01_TID_81_TstRslt,    /* PARAMETER */
-    //    GetDCAN_MID_01_TID_81_TstThshMin, /* MINIMUM THRESHOLD */
-    //    GetDCAN_MID_01_TID_81_TstThshMax, /* MAXIMUM THRESHOLD */
-    //    CeDCAN_SCID_2B                    /* SCALING ID */
-  //  },
+    {
+        CeDCAN_TID_81,                    /* TID NUMBER */
+        CeDGDM_O2_11_Response,            /* DTC NUMBER */
+        GetDCAN_MID_01_TID_81_TstRslt,    /* PARAMETER */
+        GetDCAN_MID_01_TID_81_TstThshMin, /* MINIMUM THRESHOLD */
+        GetDCAN_MID_01_TID_81_TstThshMax, /* MAXIMUM THRESHOLD */
+        CeDCAN_SCID_2B                    /* SCALING ID */
+    },
     /* TID CeDCAN_TID_82 */
-   // {
-   //     CeDCAN_TID_82,                    /* TID NUMBER */
-    //    CeDGDM_O2_11_Response,            /* DTC NUMBER */
-    //    GetDCAN_MID_01_TID_82_TstRslt,    /* PARAMETER */
-   //     GetDCAN_MID_01_TID_82_TstThshMin, /* MINIMUM THRESHOLD */
-   //     GetDCAN_MID_01_TID_82_TstThshMax, /* MAXIMUM THRESHOLD */
-   //     CeDCAN_SCID_2B,                   /* SCALING ID */
-    //},
+    {
+        CeDCAN_TID_82,                    /* TID NUMBER */
+        CeDGDM_O2_11_Response,            /* DTC NUMBER */
+        GetDCAN_MID_01_TID_82_TstRslt,    /* PARAMETER */
+        GetDCAN_MID_01_TID_82_TstThshMin, /* MINIMUM THRESHOLD */
+        GetDCAN_MID_01_TID_82_TstThshMax, /* MAXIMUM THRESHOLD */
+        CeDCAN_SCID_2B,                   /* SCALING ID */
+    },
     /* TID CeDCAN_TID_83 */
-   // {
-    //    CeDCAN_TID_83,                    /* TID NUMBER */
-    //    CeDGDM_O2_11_Response,            /* DTC NUMBER */
-    //    GetDCAN_MID_01_TID_83_TstRslt,    /* PARAMETER */
-    //    GetDCAN_MID_01_TID_83_TstThshMin, /* MINIMUM THRESHOLD */
-     //   GetDCAN_MID_01_TID_83_TstThshMax, /* MAXIMUM THRESHOLD */
-     //   CeDCAN_SCID_20                    /* SCALING ID */
-   // }
+    {
+        CeDCAN_TID_83,                    /* TID NUMBER */
+        CeDGDM_O2_11_Response,            /* DTC NUMBER */
+        GetDCAN_MID_01_TID_83_TstRslt,    /* PARAMETER */
+        GetDCAN_MID_01_TID_83_TstThshMin, /* MINIMUM THRESHOLD */
+        GetDCAN_MID_01_TID_83_TstThshMax, /* MAXIMUM THRESHOLD */
+        CeDCAN_SCID_20                    /* SCALING ID */
+    }
 };
-#if 0
+#endif
+
 #if XeSYST_EOSD_12_SENSOR == CeSYST_EOSD_SENSOR_PRESENT
 /**********************************************************
 * Table Name  : CaDCAN_MID_02_TID_Attributes              *
@@ -1426,7 +1443,9 @@ const TsDCAN_MID_TID_AttrType CaDCAN_MID_02_TID_Attributes[] =
         GetDCAN_MID_02_TID_06_TstThshMin, /* MINIMUM THRESHOLD */
         GetDCAN_MID_02_TID_06_TstThshMax, /* MAXIMUM THRESHOLD */
         CeDCAN_SCID_10                    /* SCALING ID */
-    },
+    }
+   #ifdef OBD_CONTROLLER_IS_MT80
+     ,
     /* TID CeDCAN_TID_BA */
     {
         CeDCAN_TID_BA,                    /* TID NUMBER */
@@ -1463,9 +1482,10 @@ const TsDCAN_MID_TID_AttrType CaDCAN_MID_02_TID_Attributes[] =
         GetDCAN_MID_02_TID_BD_TstThshMax, /* MAXIMUM THRESHOLD */
         CeDCAN_SCID_10                    /* SCALING ID */
     }
+   #endif
 };
 #endif
-
+#ifdef OBD_CONTROLLER_IS_MT80
 #if XeSYST_EOSD_21_SENSOR == CeSYST_EOSD_SENSOR_PRESENT
 /**********************************************************
 * Table Name  : CaDCAN_MID_05_TID_Attributes              *
@@ -1539,6 +1559,7 @@ const TsDCAN_MID_TID_AttrType CaDCAN_MID_05_TID_Attributes[] =
     }
 };
 #endif
+#endif
 
 /**********************************************************
 * Table Name  : CaDCAN_MID_21_TID_Attributes              *
@@ -1578,6 +1599,7 @@ const TsDCAN_MID_TID_AttrType CaDCAN_MID_22_TID_Attributes[] =
 };
 #endif
 
+#ifdef OBD_CONTROLLER_IS_MT80
 /**********************************************************
 * Table Name  : CaDCAN_MID_41_TID_Attributes              *
 * Description : This table contains all the information   *
@@ -1614,6 +1636,7 @@ const TsDCAN_MID_TID_AttrType CaDCAN_MID_42_TID_Attributes[] =
         CeDCAN_SCID_0E                      /* SCALING ID */
     }
 };
+#endif
 #endif
 
 /**********************************************************
@@ -1723,6 +1746,78 @@ const TsDCAN_MID_TID_AttrType CaDCAN_MID_A5_TID_Attributes[] =
         CeDCAN_SCID_24                      /* SCALING ID */
     }
 };
+#if 0
+/**********************************************************
+* Table Name  : CaDCAN_MID_A6_TID_Attributes              *
+* Description : This table contains all the information   *
+*               for MID A6 and their TIDS                 *
+**********************************************************/
+const TsDCAN_MID_TID_AttrType CaDCAN_MID_A6_TID_Attributes[] =
+{
+    /* TID CeDCAN_TID_0B */
+    {
+        CeDCAN_TID_0B,                      /* TID NUMBER */
+        CeDGDM_Misfire,                     /* DTC NUMBER */
+        GetDCAN_MID_A6_TID_0B_TstRslt,      /* PARAMETER */
+        GetDCAN_Dflt_TestMin_Val,           /* MINIMUM THRESHOLD */
+        GetDCAN_Dflt_TestMax_Val,           /* MAXIMUM THRESHOLD */
+        CeDCAN_SCID_24                      /* SCALING ID */
+    },
+    /* TID CeDCAN_TID_0C */
+    {
+        CeDCAN_TID_0C,                      /* TID NUMBER */
+        CeDGDM_Misfire,                     /* DTC NUMBER */
+        GetDCAN_MID_A6_TID_0C_TstRslt,      /* PARAMETER */
+        GetDCAN_Dflt_TestMin_Val,           /* MINIMUM THRESHOLD */
+        GetDCAN_Dflt_TestMax_Val,           /* MAXIMUM THRESHOLD */
+        CeDCAN_SCID_24                      /* SCALING ID */
+    }
+};
+
+/**********************************************************
+* Table Name  : CaDCAN_MID_A7_TID_Attributes              *
+* Description : This table contains all the information   *
+*               for MID A7 and their TIDS                 *
+**********************************************************/
+const TsDCAN_MID_TID_AttrType CaDCAN_MID_A7_TID_Attributes[] =
+{
+    /* TID CeDCAN_TID_0B */
+    {
+        CeDCAN_TID_0B,                      /* TID NUMBER */
+        CeDGDM_Misfire,                     /* DTC NUMBER */
+        GetDCAN_MID_A7_TID_0B_TstRslt,      /* PARAMETER */
+        GetDCAN_Dflt_TestMin_Val,           /* MINIMUM THRESHOLD */
+        GetDCAN_Dflt_TestMax_Val,           /* MAXIMUM THRESHOLD */
+        CeDCAN_SCID_24                      /* SCALING ID */
+    },
+    /* TID CeDCAN_TID_0C */
+    {
+        CeDCAN_TID_0C,                      /* TID NUMBER */
+        CeDGDM_Misfire,                     /* DTC NUMBER */
+        GetDCAN_MID_A7_TID_0C_TstRslt,      /* PARAMETER */
+        GetDCAN_Dflt_TestMin_Val,           /* MINIMUM THRESHOLD */
+        GetDCAN_Dflt_TestMax_Val,           /* MAXIMUM THRESHOLD */
+        CeDCAN_SCID_24                      /* SCALING ID */
+    }
+};
+
+/**********************************************************
+* Table Name  : CaDCAN_MID_E1_TID_Attributes              *
+* Description : This table contains all the information   *
+*               for MID E1 and their TIDS                 *
+**********************************************************/
+const TsDCAN_MID_TID_AttrType CaDCAN_MID_E1_TID_Attributes[] =
+{
+    /* TID CeDCAN_TID_80 */
+    {
+        CeDCAN_TID_80,                        /* TID NUMBER */
+        CeDGDM_EVPD_RestrictedVentPath,       /* DTC NUMBER */
+        GetDCAN_MID_E1_TID_80_TstRslt,        /* PARAMETER */
+        GetDCAN_MID_E1_TID_80_TstThshMin,     /* MINIMUM THRESHOLD */
+        GetDCAN_MID_E1_TID_80_TstThshMax,     /* MAXIMUM THRESHOLD */
+        CeDCAN_SCID_FE                        /* SCALING ID */
+    }
+};
 #endif
 /******************************************************************************
  *  Function Definitions
@@ -1766,6 +1861,9 @@ const TsDCAN_MID_TID_AttrType CaDCAN_MID_A5_TID_Attributes[] =
 * 1      070629   abh  6023  Added to implement DG services for J300
 * tci_pt3#2
 *        080403   VP   6833  Added MID 31, TID-91.
-*
-* 2.0  100906    hdg  xxx  Implemented CAN OBD in MT22.1 paltform.
+* kok_pt2#2
+*        110719   cjk  7640  Update Exhaust Sensor Diagnostic (EXSD)
+*                      8907   interface
+* 4      111104   cjqq  9487  Remove CeDGDM_O2_12_Response.
+* 5      120307   cjqq  xxxx  MT80 and MT92 obd integrate.
 ***********************************************************************/

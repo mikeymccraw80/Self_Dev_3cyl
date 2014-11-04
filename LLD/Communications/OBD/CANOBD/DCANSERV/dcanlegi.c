@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * Filename:          dcancarb.c
+ * Filename:          dcanlegi.c
  *
  * Description:       J1979/ISO 15031-5 Modes 0x01- 0x0F diagnostic handler
  *
@@ -19,11 +19,6 @@
  *                    FormJ1979_NextMode49_DCAN
  *                    J1979ModeAHandler
  *                    FormJ1979_Mode_4A_Data
- *                    J1979ModeBHandler
- *                    J1979ModeCHandler
- *                    J1979ModeDHandler
- *                    J1979ModeEHandler
- *                    J1979ModeFHandler
  * Static Functions Defined:
  *                    Read_O2Sensor_DCAN
  *                    DtrmnDCAN_M6_Data
@@ -43,17 +38,16 @@
  *****************************************************************************
  *
  * Current Module Info:
- * %full_name:     mt20u2#1/csrc/dcanlegi.c/1 %
- * %date_created:  Tue Sep  7 14:57:25 2010 %
- * %version:       1 %
- * %derived_by:    pz0vmh %
+ * %full_name:     ctc_pt3#1/csrc/dcanlegi.c/10 %
+ * %date_created:  Thu Jun 26 10:56:47 2014 %
+ * %version:       10 %
+ * %derived_by:    dzrpmq %
  *
  *****************************************************************************/
 /******************************************************************************
 * APP Include Files
 ******************************************************************************/
-//#include "obdsfexi.h" /*GetVIOS_EngSt_Run()*/
-
+#include "obdsfexi.h" /*GetVIOS_EngSt_Run()*/
 /******************************************************************************
 * CAN OBD Service Include Files
 ******************************************************************************/
@@ -64,26 +58,15 @@
 ******************************************************************************/
 #include "obdlcdat.h"/*KyDCAN_Mode_09_Info_01_To_08*/
 #include "obdlfsrv.h"/*Cy1979_SuppPIDRange_00_20*/
-//#include "obdlfpid.h"/*MaskMode_01*/
-//#include "cmnpid.h"/*MaskMode_01,Get_Valid_PID_Info*/
-//#include "obdlfdtc.h"/*Get_Next_Valid_Emission_P_Code*/
-//#include "obdlnvmd.h"/*VinFirst*/
-//#include "kw2nvmd.h"/*VinFirst*/
-#include "kw2srv10m.h"
-//#include "ofvccald.h" /*KbDCANCORE_MODE4_With_EngRUN*/
+#include "obdlfpid.h"/*MaskMode_01*/
+#include "obdlfdtc.h"/*Get_Next_Valid_Emission_P_Code*/
+#include "obdlcald.h" /*KbDCANCORE_MODE4_With_EngRUN*/
+#include "ofvcpall.h"/*VbOFVC_DeviceControlActive*/
 /******************************************************************************
 * CAN OBD NW Layer Include Files
 ******************************************************************************/
 #include "dcancomm.h"  /*for PfrmDCAN_AckReqWithoutResponse()*/
-//#include "dcantran.h" /*for GetLnServiceData()*/
-#include "j1979.h"/*Cy1979_SuppPIDRange_00_20,TsC2AP_O2Sensor*/
-#include "kw2cal.h"/*KyDCAN_Mode_09_Info_01_To_08*/
-#include "obdltype.h"/*BYTEANDWORD1*/
-#include "kw2type.h"/*FOUR_BYTE_DATA_TYPE*/
-//#include "cmndtc.h"/*DTC_STATUS_INFO_TYPE Get_Next_Valid_Emission_P_Code*/
-#include "dcanfapi.h" 
-#include "dcancreuse.h"
-//#include "ddmspapi.h"
+
 /*********************************************************************/
 /*            TYPE DEFS                                              */
 /*********************************************************************/
@@ -91,13 +74,12 @@
 /*********************************************************************/
 /*            EQUATES                                                */
 /*********************************************************************/
-#define ConvRATIO_0_128(x)   ( ( (x) * 32) / 512)
 
 /*********************************************************************/
 /*            GLOBAL CONSTANT VARIABLES                              */
 /*********************************************************************/
-//TbBOOLEAN VbDCAN_NRC78hexInProgress;
-//TbBOOLEAN VbDCAN_SendNRC78hexResponse;
+TbBOOLEAN VbDCAN_NRC78hexInProgress;
+TbBOOLEAN VbDCAN_SendNRC78hexResponse;
 
 #if (XeDCAN_SID_06_Supported == CeDCAN_Supported)
 BYTE   VyDCAN_1979_RequestedMID;
@@ -107,7 +89,7 @@ BYTE   VyDCAN_1979_RequestedMID;
 /*            STATIC DATA DECLARATIONS                               */
 /*********************************************************************/
 #if (XeDCAN_SID_08_Supported == CeDCAN_Supported)
-//static TeMode8TestIDStatus             Se1979Mode8TestID_01_Status;
+static TeMode8TestIDStatus             Se1979Mode8TestID_01_Status;
 #endif
 
 #if (XeDCAN_SID_09_Supported == CeDCAN_Supported)
@@ -119,7 +101,6 @@ static TbBOOLEAN                       Sb1979_M9_InfoTypeFound;
 /*            Static FUNCTIONS                                       */
 /*********************************************************************/
 #if (XeDCAN_SID_05_Supported == CeDCAN_Supported)
-static TsC2AP_O2Sensor Read_O2Sensor_DCAN(BYTE , BYTE);
 INLINE WORD DCAN_LimitFunction(WORD ,WORD ,WORD );
 #endif
 
@@ -183,6 +164,7 @@ void J1979Mode1Handler_DCAN (void)
    TbBOOLEAN  Lb1979_PIDData_Requested ;
    BYTE       La1979_ServiceData[J1979_MODE_01_MAX_MSG_LENGTH] ;
    BYTE       LyDCAN_1979_RequestedPID;
+   TbBOOLEAN  LbValid_PID;
 
    Ly1979_MsgIdx = 1 ;
    Lb1979_PIDSupported = CbFALSE;
@@ -200,7 +182,7 @@ void J1979Mode1Handler_DCAN (void)
          for(Ly1979_DataIdx = CyMode1_DataOffset;
              Ly1979_DataIdx < GetLnServiceDataLength (); Ly1979_DataIdx++)
          {
-             La1979_ServiceData[Ly1979_DataIdx] = (GetLnServiceData (Ly1979_DataIdx));
+             La1979_ServiceData[Ly1979_DataIdx] = (GetLnServiceData ())[Ly1979_DataIdx];
          }
 
          for(Ly1979_PIDIdx = CyMode1_DataOffset;
@@ -240,8 +222,9 @@ void J1979Mode1Handler_DCAN (void)
             }
 
             /* Test for valid PID and Build Buffer */
-            if(Get_Valid_PID_Info((WORD)
-               La1979_ServiceData[Ly1979_PIDIdx], MaskMode_01))
+			LbValid_PID = Get_Valid_PID_Info((WORD)
+               La1979_ServiceData[Ly1979_PIDIdx], MaskMode_01);
+            if(CbTRUE == LbValid_PID )
             {
                /* Write request PID Number to Transmit Buffer */
                WrtDCAN_ServiceData( La1979_ServiceData[Ly1979_PIDIdx] ,
@@ -252,7 +235,7 @@ void J1979Mode1Handler_DCAN (void)
                                            GetVeDIAG_PIDIndex() ) ;
                */
                LyDCAN_PID_DataIdx =
-                   ProcessReqstdPIDData( DCAN_GetServiceData(), Ly1979_MsgIdx ,
+                   ProcessReqstdPIDData( GetLnServiceData(), Ly1979_MsgIdx ,
                                            GetVeDIAG_PIDIndex() ) ;
 
                if(LyDCAN_PID_DataIdx != Ly1979_MsgIdx)
@@ -272,7 +255,7 @@ void J1979Mode1Handler_DCAN (void)
          if(Lb1979_PIDSupported)
          {
             /* Send Keyword message buffer */
-            SendStandardPositiveAnswer ( Ly1979_MsgIdx  );
+            SendLnStandardPositiveAnswer ( Ly1979_MsgIdx  );
          }
          else
          {
@@ -320,6 +303,7 @@ void J1979Mode2Handler_DCAN (void)
    TbBOOLEAN  Lb1979_SuppPID_Requested ;
    TbBOOLEAN  Lb1979_PIDData_Requested ;
    BYTE       La1979_ServiceData[J1979_MODE_02_MAX_MSG_LENGTH] ;
+   TbBOOLEAN  LbValid_PID;
 
    Ly1979_MsgIdx = 1 ;
    Lb1979_PIDFound = CbFALSE;
@@ -339,7 +323,7 @@ void J1979Mode2Handler_DCAN (void)
          for(Ly1979_DataIdx = CyMode2_DataOffset;
              Ly1979_DataIdx < GetLnServiceDataLength (); Ly1979_DataIdx++)
          {
-             La1979_ServiceData[Ly1979_DataIdx] = (GetLnServiceData (Ly1979_DataIdx));
+             La1979_ServiceData[Ly1979_DataIdx] = (GetLnServiceData ())[Ly1979_DataIdx];
          }
 			 
          for(Ly1979_PIDIdx =  CyMode2_DataOffset;
@@ -368,7 +352,9 @@ void J1979Mode2Handler_DCAN (void)
                 Lb1979_PIDFound= CbFALSE;
                 break;
             }
-            if(Get_Valid_PID_Info((WORD)Ly1979_RequestedPID, MaskMode_02)
+			
+			LbValid_PID = Get_Valid_PID_Info((WORD)Ly1979_RequestedPID, MaskMode_02);
+            if((CbTRUE ==LbValid_PID)
                 && (Cy1979FrameReqZero == Ly1979_RequestedFF))
             {
                if ((Get_Freeze_Frame_DTC( GetRequestedFrame() ) != 0) ||
@@ -386,7 +372,7 @@ void J1979Mode2Handler_DCAN (void)
                     PfrmDCAN_ReqstdPIDData(GetWrtbufferAddr(), Ly1979_MsgIdx,
                                            GetVeDIAG_PIDIndex() ) ;*/
                   LyDCAN_PID_DataIdx =
-                    ProcessReqstdPIDData(DCAN_GetServiceData(), Ly1979_MsgIdx,
+                    ProcessReqstdPIDData( GetLnServiceData(), Ly1979_MsgIdx,
                                            GetVeDIAG_PIDIndex() ) ;
                   if(LyDCAN_PID_DataIdx != Ly1979_MsgIdx)
                   {
@@ -406,7 +392,7 @@ void J1979Mode2Handler_DCAN (void)
 			 
          if(Lb1979_PIDFound)
          {
-            SendStandardPositiveAnswer ( Ly1979_MsgIdx );
+            SendLnStandardPositiveAnswer ( Ly1979_MsgIdx );
          }
          else
          {
@@ -449,7 +435,6 @@ void J1979Mode2Handler_DCAN (void)
 /*                           ViC2GL_CurrentMsg                       */
 /*********************************************************************/
 #if (XeDCAN_SID_03_Supported == CeDCAN_Supported)
-//#define J1979_Mode_43_DTC_Length   (7)
 #define CcM3_RETURN_ID_OFFSET      (2)
 
 void J1979Mode3Handler_DCAN (void)
@@ -506,8 +491,7 @@ void FormJ1979_Mode_43_Data_DCAN( void )
   /* This signifies if at least one DTC was found. */
 
     WORD                 TrByteCount ;
-    //DTC_STATUS_INFO_TYPE DTCRecord, *DTCRecordPtr ;
-    DTC_STATUS_INFO_TYPE DTCRecord ;
+    DTC_STATUS_INFO_TYPE DTCRecord, *DTCRecordPtr ;
     MODES_TYPE           ModeVal ;
 
     TrByteCount = CcM3_RETURN_ID_OFFSET ;
@@ -517,12 +501,10 @@ void FormJ1979_Mode_43_Data_DCAN( void )
 
     while ( DTCCount < GetCMNMaxNumberOfDTCs () )
     {
-     //  DTCRecordPtr = Get_Next_Valid_Emission_P_Code ( DTCCount, ModeVal );
-      // DTCRecord = *DTCRecordPtr;
-       //DTCCount++;
-       DTCRecord = Get_Next_Valid_Emission_P_Code ( DTCCount,
-                                                    ModeVal );
+       DTCRecordPtr = Get_Next_Valid_Emission_P_Code ( DTCCount, ModeVal );
+       DTCRecord = *DTCRecordPtr;
        DTCCount++;
+
        if ( DTCRecord.DTC_Valid )
        {
           Lc1979_ValidDTCCount++;
@@ -537,7 +519,7 @@ void FormJ1979_Mode_43_Data_DCAN( void )
 
     WrtDCAN_ServiceData( Lc1979_ValidDTCCount, CyM3_M7_NumDTC_Offset);
 
-    SendStandardPositiveAnswer (TrByteCount);
+    SendLnStandardPositiveAnswer (TrByteCount);
 }
 #endif
 
@@ -589,7 +571,7 @@ void J1979Mode4Handler_DCAN (void)
         && ( GetVIOS_EngSt_Run() )
         && ( ! KbDCANCORE_MODE4_With_EngRUN ) )
       {
-         SendStandardNegativeAnswer(
+         SendLnStandardNegativeAnswer(
                        CcDCAN_CondNotCorrect_RequestSequenceError);
       }
       else if (GetLnServiceDataLength() ==
@@ -599,7 +581,7 @@ void J1979Mode4Handler_DCAN (void)
           * The DTC's should be cleared within 1 second of sending
           * the response.
          */
-         SendStandardPositiveAnswer ( CcM4_RETURN_ID_OFFSET );
+         SendLnStandardPositiveAnswer ( CcM4_RETURN_ID_OFFSET );
          /* imported from CMNDTC module */
          ClearDiagnosticData ();
       }
@@ -643,13 +625,13 @@ void J1979Mode5Handler_DCAN (void)
 
    Ly1979_MsgIdx  = J1979_ActualDataLoc ;
 
-   Ly1979_TestID  = (GetLnServiceData (CyTestIDMode5));
-   Ly1979_O2ID    = (GetLnServiceData (Cy02IDMode5));
+   Ly1979_TestID  = (GetLnServiceData ())[CyTestIDMode5];
+   Ly1979_O2ID    = (GetLnServiceData ())[Cy02IDMode5];
 
    /*Check if it is in standard diagnostic mode to support service*/
    if(!CheckStandardDiagnosticState())
    {
-      SendStandardNegativeAnswer(CcDCAN_SubFuncNotSupp_InvalidFormat);
+      SendLnStandardNegativeAnswer(CcDCAN_SubFuncNotSupp_InvalidFormat);
    }
    else
    {
@@ -659,7 +641,7 @@ void J1979Mode5Handler_DCAN (void)
          WrtDCAN_ServiceData( Ly1979_TestID , Ly1979_MsgIdx++) ;
          WrtDCAN_ServiceData( Ly1979_O2ID   , Ly1979_MsgIdx++) ;
 
-         Ls1979_T_Code = Read_O2Sensor_DCAN(Ly1979_TestID , Ly1979_O2ID );
+         Ls1979_T_Code = Read_O2Sensor(Ly1979_TestID , Ly1979_O2ID );
 
          if ( Ls1979_T_Code.LyTestIdFlag )
          {
@@ -668,7 +650,7 @@ void J1979Mode5Handler_DCAN (void)
                WrtDCAN_ServiceData( Ls1979_T_Code.LuRslt.Byte_Access.Byte_One ,
                                Ly1979_MsgIdx++ ) ;
 
-               SendStandardPositiveAnswer ( Ly1979_MsgIdx );
+               SendLnStandardPositiveAnswer ( Ly1979_MsgIdx );
 
             }
             else if ( ThreeByteO2Snsr == Ls1979_T_Code.LyRsltSize)
@@ -682,7 +664,7 @@ void J1979Mode5Handler_DCAN (void)
                WrtDCAN_ServiceData( Ls1979_T_Code.LuRslt.Byte_Access.Byte_Three ,
                                Ly1979_MsgIdx++ ) ;
 
-               SendStandardPositiveAnswer ( Ly1979_MsgIdx );
+               SendLnStandardPositiveAnswer ( Ly1979_MsgIdx );
             }
             /* Reading and queueing the Cal constant value           */
             else if(FourByteCalConst == Ls1979_T_Code.LyRsltSize)
@@ -696,669 +678,22 @@ void J1979Mode5Handler_DCAN (void)
                WrtDCAN_ServiceData( Ls1979_T_Code.LuRslt.Byte_Access.Byte_Four ,
                                Ly1979_MsgIdx++ ) ;
 
-               SendStandardPositiveAnswer ( Ly1979_MsgIdx );
+               SendLnStandardPositiveAnswer ( Ly1979_MsgIdx );
             }
          }
          else
          {
             /* Send negative responce if PID not supported */
-            SendStandardNegativeAnswer(CcDCAN_SubFuncNotSupp_InvalidFormat);
+            SendLnStandardNegativeAnswer(CcDCAN_SubFuncNotSupp_InvalidFormat);
          }
       }
       else
       {
          /* Send negative responce if PID not supported */
-         SendStandardNegativeAnswer(CcDCAN_SubFuncNotSupp_InvalidFormat);
+         SendLnStandardNegativeAnswer(CcDCAN_SubFuncNotSupp_InvalidFormat);
       }
    }
 }
-
-/*********************************************************************/
-/* FUNCTION:    Read_O2Sensor_DCAN()                                      */
-/*                                                                   */
-/* Type:        static                                               */
-/*                                                                   */
-/* DESCRIPTION: Checks mode 5 supported test ids for any given O2-ID */
-/*              if supported reads the O2_ID specified o2 sensor and */
-/*              returns the scaled sensor value.                     */
-/*                                                                   */
-/*                                                                   */
-/* PARAMETERS:  BYTE test ID and BYTE O2 ID                          */
-/*                                                                   */
-/* RETURN:      TsC2AP_O2Sensor                                      */
-/*                                                                   */
-/* Global Variables Updated: None                                    */
-/* CHANGE LOG:    04/20/00 bdt add test for Lyo2ID while testing     */
-/*                CeMode5TestRange0 - 80                             */
-/*                                                                   */
-/* REVISION NO:   1.0                                                */
-/*********************************************************************/
-static TsC2AP_O2Sensor Read_O2Sensor_DCAN(BYTE LyTestID, BYTE LyO2ID)
-{
-   TsC2AP_O2Sensor LsC2AP_O2SensorRes;
-   BYTEANDWORD1 temp1;
-   LsC2AP_O2SensorRes.LyRsltSize = OneByteO2Snsr;
-   LsC2AP_O2SensorRes.LyTestIdFlag = CbTRUE;
-
-   switch(LyTestID)
-   {
-      case Ce1979_Mode_05_TestID_3:
-
-         switch(LyO2ID)
-         {
-            case CeBank1O2Sensor1:
-               temp1.uword = usLookup_Rescale_xy_us(
-                                    &CsC2SC_MAP256_U_O2_VOLT,
-                                    GetEOSD_U_11_RespLeanThrsh() );
-
-       #if config_Compiler_Vendor == option_TASKING
-               LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_One =
-                                         DCAN_GetHighByte(temp1.uword);
-       #else
-               LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_One = temp1.ubyte;
-       #endif
-               break;
-#if XeSYST_EOSD_21_SENSOR == CeSYST_EOSD_SENSOR_PRESENT
-
-            case CeBank2O2Sensor1:
-               temp1.uword = usLookup_Rescale_xy_us(
-                                    &CsC2SC_MAP256_U_O2_VOLT,
-                                    GetEOSD_U_21_RespLeanThrsh() );
-
-       #if config_Compiler_Vendor == option_TASKING
-               LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_One =
-                                         DCAN_GetHighByte(temp1.uword);
-       #else
-               LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_One = temp1.ubyte;
-       #endif
-               break;
-#endif
-
-            default:
-               LsC2AP_O2SensorRes.LyTestIdFlag = CbFALSE;
-               break;
-            }
-            break;
-
-       case Ce1979_Mode_05_TestID_4:
-
-            switch(LyO2ID)
-            {
-                case CeBank1O2Sensor1:
-
-                     temp1.uword = usLookup_Rescale_xy_us(
-                                         &CsC2SC_MAP256_U_O2_VOLT,
-                                         GetEOSD_U_11_RespRichThrsh() );
-
-          #if config_Compiler_Vendor == option_TASKING
-                     LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_One =
-                                         DCAN_GetHighByte(temp1.uword);
-          #else
-                     LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_One = temp1.ubyte;
-          #endif
-                     break;
-#if XeSYST_EOSD_21_SENSOR == CeSYST_EOSD_SENSOR_PRESENT
-
-                case CeBank2O2Sensor1:
-
-                     temp1.uword = usLookup_Rescale_xy_us(
-                                         &CsC2SC_MAP256_U_O2_VOLT,
-                                         GetEOSD_U_21_RespRichThrsh() );
-
-          #if config_Compiler_Vendor == option_TASKING
-                     LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_One =
-                                         DCAN_GetHighByte(temp1.uword);
-          #else
-                     LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_One = temp1.ubyte;
-          #endif
-                     break;
-#endif
-                default:
-
-                     LsC2AP_O2SensorRes.LyTestIdFlag = CbFALSE;
-
-                     break;
-            }
-            break;
-
-       case Ce1979_Mode_05_TestID_5:
-
-            LsC2AP_O2SensorRes.LyRsltSize = ThreeByteO2Snsr;
-
-            switch(LyO2ID)
-            {
-                case CeBank1O2Sensor1:
-
-                  if((GetDGDM_DTC_FaultType (CeDGDM_O2_11_Response) == CeDGDM_FAULT_TYPE_Z )
-                     || ((GetDGDM_TestNotPassedSnceCdClr(CeDGDM_O2_11_Response))
-                         && ( !GetDGDM_TestFailSinceCodeClr(CeDGDM_O2_11_Response)))
-                     || ((GetEOSD_O2_11_RespRichLeanAvg() == V_RATIO_0_128(0))
-                         && (GetEOSD_O2_11_RespLeanRichAvg() == V_RATIO_0_128(0))
-                         && (GetEOSD_O2_11_ResponseRatio() == V_RATIO_0_128(0))))
-                  {
-                     LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_One = 0x00;
-                     LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_Two = 0x00;
-                     LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_Three = 0x00;
-                  }
-                  else
-                  {
-                     LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_One =
-                                    ConvO2_SECS(GetEOSD_O2_11_RespRichLeanAvg());
-
-                     LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_Two = 0x00;
-
-                     LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_Three =
-                                    ConvO2_SECS(GetEOSD_11_RespRichLeanAvgThrsh());
-                  }
-                     break;
-#if XeSYST_EOSD_21_SENSOR == CeSYST_EOSD_SENSOR_PRESENT
-
-                case CeBank2O2Sensor1:
-
-                  if((GetDGDM_DTC_FaultType (CeDGDM_O2_21_Response) == CeDGDM_FAULT_TYPE_Z )
-                     || ((GetDGDM_TestNotPassedSnceCdClr(CeDGDM_O2_21_Response))
-                         && ( !GetDGDM_TestFailSinceCodeClr(CeDGDM_O2_21_Response)))
-                     || ((GetEOSD_O2_21_RespRichLeanAvg() == V_RATIO_0_128(0))
-                         && (GetEOSD_O2_21_RespLeanRichAvg() == V_RATIO_0_128(0))
-                         && (GetEOSD_O2_21_ResponseRatio() == V_RATIO_0_128(0))))
-                  {
-                     LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_One = 0x00;
-                     LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_Two = 0x00;
-                     LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_Three = 0x00;
-                  }
-                  else
-                  {
-                     LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_One =
-                                     ConvO2_SECS(GetEOSD_O2_21_RespRichLeanAvg());
-
-                     LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_Two = 0x00;
-
-                     LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_Three =
-                                     ConvO2_SECS(GetEOSD_21_RespRichLeanAvgThrsh());
-                  }
-                     break;
-#endif
-                default:
-
-                     LsC2AP_O2SensorRes.LyTestIdFlag = CbFALSE;
-
-                     break;
-            }
-            break;
-       case Ce1979_Mode_05_TestID_6:
-
-            LsC2AP_O2SensorRes.LyRsltSize = ThreeByteO2Snsr;
-
-            switch(LyO2ID)
-            {
-                case CeBank1O2Sensor1:
-
-                  if((GetDGDM_DTC_FaultType (CeDGDM_O2_11_Response) == CeDGDM_FAULT_TYPE_Z )
-                     || ((GetDGDM_TestNotPassedSnceCdClr(CeDGDM_O2_11_Response))
-                         && ( !GetDGDM_TestFailSinceCodeClr(CeDGDM_O2_11_Response)))
-                     || ((GetEOSD_O2_11_RespRichLeanAvg() == V_RATIO_0_128(0))
-                         && (GetEOSD_O2_11_RespLeanRichAvg() == V_RATIO_0_128(0))
-                         && (GetEOSD_O2_11_ResponseRatio() == V_RATIO_0_128(0))))
-                  {
-                     LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_One = 0x00;
-                     LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_Two = 0x00;
-                     LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_Three = 0x00;
-                  }
-                  else
-                  {
-                     LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_One =
-                                  ConvO2_SECS(GetEOSD_O2_11_RespLeanRichAvg());
-
-                     LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_Two = 0x00;
-
-                     LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_Three =
-                                  ConvO2_SECS(GetEOSD_11_RespLeanRichAvgThrsh());
-                  }
-                     break;
-#if XeSYST_EOSD_21_SENSOR == CeSYST_EOSD_SENSOR_PRESENT
-
-                case CeBank2O2Sensor1:
-
-                  if((GetDGDM_DTC_FaultType (CeDGDM_O2_21_Response) == CeDGDM_FAULT_TYPE_Z )
-                     || ((GetDGDM_TestNotPassedSnceCdClr(CeDGDM_O2_21_Response))
-                         && ( !GetDGDM_TestFailSinceCodeClr(CeDGDM_O2_21_Response)))
-                     || ((GetEOSD_O2_21_RespRichLeanAvg() == V_RATIO_0_128(0))
-                         && (GetEOSD_O2_21_RespLeanRichAvg() == V_RATIO_0_128(0))
-                         && (GetEOSD_O2_21_ResponseRatio() == V_RATIO_0_128(0))))
-                  {
-                     LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_One = 0x00;
-                     LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_Two = 0x00;
-                     LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_Three = 0x00;
-                  }
-                  else
-                  {
-                     LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_One =
-                                     ConvO2_SECS(GetEOSD_O2_21_RespLeanRichAvg());
-
-                     LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_Two = 0x00;
-
-                     LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_Three =
-                                     ConvO2_SECS(GetEOSD_21_RespLeanRichAvgThrsh());
-                  }
-                     break;
-#endif
-                 default:
-
-                     LsC2AP_O2SensorRes.LyTestIdFlag = CbFALSE;
-
-                     break;
-            }
-            break;
-
-       case Ce1979_Mode_05_TestID_70:
-
-            LsC2AP_O2SensorRes.LyRsltSize = ThreeByteO2Snsr;
-
-            switch(LyO2ID)
-            {
-                case CeBank1O2Sensor1:
-
-                  if((GetDGDM_DTC_FaultType (CeDGDM_O2_11_Response) == CeDGDM_FAULT_TYPE_Z )
-                    || ((GetDGDM_TestNotPassedSnceCdClr(CeDGDM_O2_11_Response))
-                        && ( !GetDGDM_TestFailSinceCodeClr(CeDGDM_O2_11_Response))))
-                  {
-                     LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_One = 0x00;
-                     LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_Two = 0x00;
-                     LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_Three = 0x00;
-                  }
-                  else
-                  {
-                     if(GetEOSD_O2_11_RespRichLeanSwCntr() > MAXBYTE)
-                     {
-                        LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_One = MAXBYTE;
-                     }
-                     else
-                     {
-                        LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_One =
-                                         (BYTE)GetEOSD_O2_11_RespRichLeanSwCntr();
-                     }
-
-                     if(GetEOSD_Cnt_11_RespRL_SwThrsh() > MAXBYTE)
-                     {
-                        LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_Two = MAXBYTE;
-                     }
-                     else
-                     {
-                        LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_Two =
-                                         (BYTE)GetEOSD_Cnt_11_RespRL_SwThrsh();
-                     }
-
-                     LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_Three = MAXBYTE;
-                  }
-                  break;
-#if XeSYST_EOSD_21_SENSOR == CeSYST_EOSD_SENSOR_PRESENT
-
-                case CeBank2O2Sensor1:
-
-                  if((GetDGDM_DTC_FaultType (CeDGDM_O2_21_Response) == CeDGDM_FAULT_TYPE_Z )
-                    || ((GetDGDM_TestNotPassedSnceCdClr(CeDGDM_O2_21_Response))
-                        && ( !GetDGDM_TestFailSinceCodeClr(CeDGDM_O2_21_Response))))
-                  {
-                     LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_One = 0x00;
-                     LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_Two = 0x00;
-                     LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_Three = 0x00;
-                  }
-                  else
-                  {
-                     if(GetEOSD_O2_21_RespRichLeanSwCntr() > MAXBYTE)
-                     {
-                        LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_One = MAXBYTE;
-                     }
-                     else
-                     {
-                        LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_One =
-                                         (BYTE)GetEOSD_O2_21_RespRichLeanSwCntr();
-                     }
-
-                     if(GetEOSD_Cnt_21_RespRL_SwThrsh() > MAXBYTE)
-                     {
-                        LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_Two = MAXBYTE;
-                     }
-                     else
-                     {
-                        LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_Two =
-                                         (BYTE)GetEOSD_Cnt_21_RespRL_SwThrsh();
-                     }
-
-                     LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_Three = MAXBYTE;
-                  }
-                  break;
-#endif
-                default:
-
-                LsC2AP_O2SensorRes.LyTestIdFlag = CbFALSE;
-
-                break;
-            }
-            break;
-
-       case Ce1979_Mode_05_TestID_71:
-
-            LsC2AP_O2SensorRes.LyRsltSize = ThreeByteO2Snsr;
-
-            switch(LyO2ID)
-            {
-                case CeBank1O2Sensor1:
-
-                  if((GetDGDM_DTC_FaultType (CeDGDM_O2_11_Response) == CeDGDM_FAULT_TYPE_Z )
-                     || ((GetDGDM_TestNotPassedSnceCdClr(CeDGDM_O2_11_Response))
-                         && ( !GetDGDM_TestFailSinceCodeClr(CeDGDM_O2_11_Response))))
-                  {
-                     LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_One = 0x00;
-                     LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_Two = 0x00;
-                     LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_Three = 0x00;
-                  }
-                  else
-                  {
-                     if(GetEOSD_O2_11_RespLeanRichSwCntr() > MAXBYTE)
-                     {
-                        LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_One = MAXBYTE;
-                     }
-                     else
-                     {
-                        LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_One =
-                                         (BYTE)GetEOSD_O2_11_RespLeanRichSwCntr();
-                     }
-
-                     if(GetEOSD_Cnt_11_RespLR_SwThrsh() > MAXBYTE)
-                     {
-                        LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_Two = MAXBYTE;
-                     }
-                     else
-                     {
-                        LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_Two =
-                                         (BYTE)GetEOSD_Cnt_11_RespLR_SwThrsh();
-                     }
-
-                     LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_Three = MAXBYTE;
-                  }
-                  break;
-#if XeSYST_EOSD_21_SENSOR == CeSYST_EOSD_SENSOR_PRESENT
-
-                case CeBank2O2Sensor1:
-
-                  if((GetDGDM_DTC_FaultType (CeDGDM_O2_21_Response) == CeDGDM_FAULT_TYPE_Z )
-                     || ((GetDGDM_TestNotPassedSnceCdClr(CeDGDM_O2_21_Response))
-                         && ( !GetDGDM_TestFailSinceCodeClr(CeDGDM_O2_21_Response))))
-                  {
-                     LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_One = 0x00;
-                     LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_Two = 0x00;
-                     LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_Three = 0x00;
-                  }
-                  else
-                  {
-                     if(GetEOSD_O2_21_RespLeanRichSwCntr() > MAXBYTE)
-                     {
-                        LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_One = MAXBYTE;
-                     }
-                     else
-                     {
-                        LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_One =
-                                         (BYTE)GetEOSD_O2_21_RespLeanRichSwCntr();
-                     }
-
-                     if(GetEOSD_Cnt_21_RespLR_SwThrsh() > MAXBYTE)
-                     {
-                        LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_Two = MAXBYTE;
-                     }
-                     else
-                     {
-                        LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_Two =
-                                         (BYTE)GetEOSD_Cnt_21_RespLR_SwThrsh();
-                     }
-
-                     LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_Three = MAXBYTE;
-                  }
-                  break;
-#endif
-                default:
-
-                LsC2AP_O2SensorRes.LyTestIdFlag = CbFALSE;
-
-                break;
-            }
-            break;
-
-       case Ce1979_Mode_05_TestID_81:
-
-            LsC2AP_O2SensorRes.LyRsltSize = ThreeByteO2Snsr;
-
-            switch(LyO2ID)
-            {
-                case CeBank1O2Sensor1:
-
-                  if((GetDGDM_DTC_FaultType (CeDGDM_O2_11_Response) == CeDGDM_FAULT_TYPE_Z )
-                     || ((GetDGDM_TestNotPassedSnceCdClr(CeDGDM_O2_11_Response))
-                         && ( !GetDGDM_TestFailSinceCodeClr(CeDGDM_O2_11_Response)))
-                     || ((GetEOSD_O2_11_RespRichLeanAvg() == V_RATIO_0_128(0))
-                         && (GetEOSD_O2_11_RespLeanRichAvg() == V_RATIO_0_128(0))
-                         && (GetEOSD_O2_11_ResponseRatio() == V_RATIO_0_128(0))))
-                  {
-                     LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_One = 0x00;
-                     LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_Two = 0x00;
-                     LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_Three = 0x00;
-                  }
-                  else
-                  {
-                     temp1.uword = ConvRATIO_0_128(GetEOSD_O2_11_ResponseRatio());
-                     LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_One =
-                            (BYTE)DCAN_LimitFunction(0,temp1.uword,MAXBYTE);
-
-                     temp1.uword = ConvRATIO_0_128(GetEOSD_11_RespRatioThrshLo());
-                     LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_Two =
-                            (BYTE)DCAN_LimitFunction(0,temp1.uword,MAXBYTE);
-
-                     temp1.uword = ConvRATIO_0_128(GetEOSD_11_RespRatioThrshHi());
-                     LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_Three =
-                            (BYTE)DCAN_LimitFunction(0,temp1.uword,MAXBYTE);
-                  }
-                  break;
-#if XeSYST_EOSD_21_SENSOR == CeSYST_EOSD_SENSOR_PRESENT
-
-                case CeBank2O2Sensor1:
-
-                  if((GetDGDM_DTC_FaultType (CeDGDM_O2_21_Response) == CeDGDM_FAULT_TYPE_Z )
-                     || ((GetDGDM_TestNotPassedSnceCdClr(CeDGDM_O2_21_Response))
-                         && ( !GetDGDM_TestFailSinceCodeClr(CeDGDM_O2_21_Response)))
-                     || ((GetEOSD_O2_21_RespRichLeanAvg() == V_RATIO_0_128(0))
-                         && (GetEOSD_O2_21_RespLeanRichAvg() == V_RATIO_0_128(0))
-                         && (GetEOSD_O2_21_ResponseRatio() == V_RATIO_0_128(0))))
-                  {
-                     LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_One = 0x00;
-                     LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_Two = 0x00;
-                     LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_Three = 0x00;
-                  }
-                  else
-                  {
-                     temp1.uword = ConvRATIO_0_128(GetEOSD_O2_21_ResponseRatio());
-                     LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_One =
-                            (BYTE)DCAN_LimitFunction(0,temp1.uword,MAXBYTE);
-
-                     temp1.uword = ConvRATIO_0_128(GetEOSD_21_RespRatioThrshLo());
-                     LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_Two =
-                            (BYTE)DCAN_LimitFunction(0,temp1.uword,MAXBYTE);
-
-                     temp1.uword = ConvRATIO_0_128(GetEOSD_21_RespRatioThrshHi());
-                     LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_Three =
-                            (BYTE)DCAN_LimitFunction(0,temp1.uword,MAXBYTE);
-                  }
-                  break;
-#endif
-                default:
-
-                LsC2AP_O2SensorRes.LyTestIdFlag = CbFALSE;
-
-                break;
-            }
-            break;
-
-       case CeMode5TestRange0:
-
-            if( (CeBank1O2Sensor1 == LyO2ID) ||
-                (CeBank2O2Sensor1 == LyO2ID) )
-            {
-                LsC2AP_O2SensorRes.LyRsltSize = FourByteCalConst;
-
-                LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_One =
-                Ka1979_M5_TestRange_00Thru80[0];
-
-                LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_Two =
-                Ka1979_M5_TestRange_00Thru80[1];
-
-                LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_Three =
-                Ka1979_M5_TestRange_00Thru80[2];
-
-                LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_Four =
-                Ka1979_M5_TestRange_00Thru80[3];
-            }
-            else
-            {
-                LsC2AP_O2SensorRes.LyTestIdFlag = CbFALSE;
-            }
-            break;
-
-       case CeMode5TestRange20:
-
-            if( (CeBank1O2Sensor1 == LyO2ID) ||
-                (CeBank2O2Sensor1 == LyO2ID) )
-            {
-                LsC2AP_O2SensorRes.LyRsltSize = FourByteCalConst;
-
-                LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_One =
-                Ka1979_M5_TestRange_00Thru80[4];
-
-                LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_Two =
-                Ka1979_M5_TestRange_00Thru80[5];
-
-                LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_Three =
-                Ka1979_M5_TestRange_00Thru80[6];
-
-                LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_Four =
-                Ka1979_M5_TestRange_00Thru80[7];
-            }
-            else
-            {
-            LsC2AP_O2SensorRes.LyTestIdFlag = CbFALSE;
-            }
-            break;
-
-       case CeMode5TestRange40:
-
-            if( (CeBank1O2Sensor1 == LyO2ID) ||
-                (CeBank2O2Sensor1 == LyO2ID) )
-            {
-                LsC2AP_O2SensorRes.LyRsltSize = FourByteCalConst;
-
-                LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_One =
-                              Ka1979_M5_TestRange_00Thru80[8];
-
-                LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_Two =
-                              Ka1979_M5_TestRange_00Thru80[9];
-
-                LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_Three =
-                              Ka1979_M5_TestRange_00Thru80[10];
-
-                LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_Four =
-                              Ka1979_M5_TestRange_00Thru80[11];
-            }
-            else
-            {
-                LsC2AP_O2SensorRes.LyTestIdFlag = CbFALSE;
-            }
-            break;
-
-       case CeMode5TestRange60:
-
-            if( (CeBank1O2Sensor1 == LyO2ID) ||
-                (CeBank2O2Sensor1 == LyO2ID) )
-            {
-                LsC2AP_O2SensorRes.LyRsltSize = FourByteCalConst;
-
-                LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_One =
-                Ka1979_M5_TestRange_00Thru80[12];
-
-                LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_Two =
-                Ka1979_M5_TestRange_00Thru80[13];
-
-                LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_Three =
-                Ka1979_M5_TestRange_00Thru80[14];
-
-                LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_Four =
-                Ka1979_M5_TestRange_00Thru80[15];
-            }
-            else
-            {
-                LsC2AP_O2SensorRes.LyTestIdFlag = CbFALSE;
-            }
-
-            break;
-
-       case CeMode5TestRange80:
-
-            if( (CeBank1O2Sensor1 == LyO2ID) ||
-                (CeBank2O2Sensor1 == LyO2ID) )
-            {
-                LsC2AP_O2SensorRes.LyRsltSize = FourByteCalConst;
-
-      LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_One =
-                Ka1979_M5_TestRange_00Thru80[16];
-
-                LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_Two =
-                Ka1979_M5_TestRange_00Thru80[17];
-
-                LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_Three =
-                Ka1979_M5_TestRange_00Thru80[18];
-
-                LsC2AP_O2SensorRes.LuRslt.Byte_Access.Byte_Four =
-                Ka1979_M5_TestRange_00Thru80[19];
-            }
-            else
-            {
-                LsC2AP_O2SensorRes.LyTestIdFlag = CbFALSE;
-            }
-
-            break;
-
-        default:
-
-            LsC2AP_O2SensorRes.LyTestIdFlag = CbFALSE;
-
-            break;
-   }
-
-   return(LsC2AP_O2SensorRes);
-}
-
-/*********************************************************************
-* FUNCTION:     DCAN_LimitFunction                                  *
-* DESCRIPTION:  Limits the input value between the limits            *
-*                                                                    *
-*********************************************************************/
-INLINE WORD DCAN_LimitFunction(WORD LfLower,WORD LfValue,WORD LfUpper)
-{
-    WORD LfLimitVal;
-
-    if (LfValue < LfLower)
-    {
-        LfLimitVal = LfLower;
-    }
-    else if (LfValue > LfUpper)
-    {
-        LfLimitVal = LfUpper;
-    }
-    else
-    {
-        LfLimitVal = LfValue;
-    }
-
- return  LfLimitVal;
-}
-
 #endif
 
 /*********************************************************************/
@@ -1410,7 +745,7 @@ void J1979Mode6Handler_DCAN (void)
          for(LyDCAN_DataIdx = CcDCAN_MODE6_DataOffset;
              LyDCAN_DataIdx < GetLnServiceDataLength (); LyDCAN_DataIdx++)
          {
-            LaDCAN_ServiceData[LyDCAN_DataIdx] = (GetLnServiceData (LyDCAN_DataIdx));
+            LaDCAN_ServiceData[LyDCAN_DataIdx] = (GetLnServiceData ())[LyDCAN_DataIdx];
          }
 
          for(LyDCAN_DataIdx = CcDCAN_MODE6_DataOffset;
@@ -1538,7 +873,7 @@ void J1979Mode6Handler_DCAN (void)
 
          if(LbDCAN_SendResponse)
          {
-            SendStandardPositiveAnswer ( LyDCAN_MsgIdx  );
+            SendLnStandardPositiveAnswer ( LyDCAN_MsgIdx  );
          }
          else
          {
@@ -1587,17 +922,16 @@ static void DtrmnDCAN_M6_Data(TWO_BYTE_DATA_TYPE *LpDCAN_Test_Value,
 
    LeDCAN_DTC_ID = GetDCAN_DTC_ID(LyDCAN_MID_Index,LyDCAN_TID_Index);
 
- /*  if ( CeDGDM_Misfire == LeDCAN_DTC_ID )
+   if ( CeDGDM_Misfire == LeDCAN_DTC_ID )
    {
       if ( DtrmnMISF_CAN_TestReportingEnabled() )
       {
          LbDCAN_TestReportingEnabled = CbTRUE;
       }
    }
-   else*/ if ( ( CeDGDM_NoFault == LeDCAN_DTC_ID )
+   else if ( ( CeDGDM_NoFault == LeDCAN_DTC_ID )
           || ( ( CeDGDM_FAULT_TYPE_Z != GetDGDM_DTC_FaultType(LeDCAN_DTC_ID) )
-            &&( ( GetDGDM_TestFailSinceCodeClr(LeDCAN_DTC_ID) )||
-                 ( !GetDGDM_TestNotPassedSnceCdClr(LeDCAN_DTC_ID) ))   ) )
+            && ( GetDGDM_TestCompletedSnceCdClr(LeDCAN_DTC_ID) ) ) )
    {
      LbDCAN_TestReportingEnabled = CbTRUE;
    }
@@ -1777,8 +1111,8 @@ void FormJ1979_Mode_47_Data_DCAN( void )
     T_COUNT_WORD  Lc1979_ValidDTCCount ;
 
 
-    //DTC_STATUS_INFO_TYPE DTCRecord, *DTCRecordPtr ;
-    DTC_STATUS_INFO_TYPE DTCRecord ;
+    DTC_STATUS_INFO_TYPE DTCRecord, *DTCRecordPtr ;
+
     MODES_TYPE  ModeVal ;
 
     TrByteCount = CcM7_RETURN_ID_OFFSET ;
@@ -1789,13 +1123,11 @@ void FormJ1979_Mode_47_Data_DCAN( void )
 
     while ( DTCCount < GetCMNMaxNumberOfDTCs () )
     {
-       // DTCRecordPtr = Get_Next_Valid_Emission_P_Code ( DTCCount,
-        //                                                ModeVal ) ;
-        //DTCRecord = *DTCRecordPtr ;
-        //DTCCount++ ;
-        DTCRecord = Get_Next_Valid_Emission_P_Code ( DTCCount,
-                                                    ModeVal );
-        DTCCount++;
+        DTCRecordPtr = Get_Next_Valid_Emission_P_Code ( DTCCount,
+                                                        ModeVal ) ;
+        DTCRecord = *DTCRecordPtr ;
+        DTCCount++ ;
+
         if ( DTCRecord.DTC_Valid )
         {
            Lc1979_ValidDTCCount++;
@@ -1809,7 +1141,7 @@ void FormJ1979_Mode_47_Data_DCAN( void )
 
     WrtDCAN_ServiceData( Lc1979_ValidDTCCount, CyM3_M7_NumDTC_Offset);
 
-    SendStandardPositiveAnswer (TrByteCount) ;
+    SendLnStandardPositiveAnswer (TrByteCount) ;
 }
 #endif
 
@@ -1838,7 +1170,7 @@ void J1979Mode8Handler_DCAN( void )
    /*Check if it is in standard diagnostic mode to support service*/
    if(!CheckStandardDiagnosticState())
    {
-      SendStandardNegativeAnswer(
+      SendLnStandardNegativeAnswer(
                             CcDCAN_SubFuncNotSupp_InvalidFormat );
    }
    else
@@ -1849,7 +1181,7 @@ void J1979Mode8Handler_DCAN( void )
       if ( Ky1979_MODE_08_MSG_LENGTH  ==
                               GetLnServiceDataLength())
       {
-         Ly1979_TestRange_TestID = (GetLnServiceData (CyTestID_OR_Range));
+         Ly1979_TestRange_TestID = (GetLnServiceData ())[CyTestID_OR_Range];
          Li1979_MsgIdx = 1 ;
          LyFlag = CbFALSE;
 
@@ -1899,7 +1231,7 @@ void J1979Mode8Handler_DCAN( void )
                WrtDCAN_ServiceData( 0x00 , Li1979_MsgIdx++ ) ;
                WrtDCAN_ServiceData( 0x00 , Li1979_MsgIdx++ ) ;
                WrtDCAN_ServiceData( 0x00 , Li1979_MsgIdx++ ) ;
-               SendStandardPositiveAnswer( Li1979_MsgIdx );
+               SendLnStandardPositiveAnswer( Li1979_MsgIdx );
             }
          }
          /* If TestRange is Zero  */
@@ -1925,28 +1257,28 @@ void J1979Mode8Handler_DCAN( void )
             }
             if(!LyFlag)
             {
-              SendStandardNegativeAnswer(
+              SendLnStandardNegativeAnswer(
                               CcDCAN_SubFuncNotSupp_InvalidFormat);
             }
          }
          else
          {
-            SendStandardNegativeAnswer(CcDCAN_SubFuncNotSupp_InvalidFormat);
+            SendLnStandardNegativeAnswer(CcDCAN_SubFuncNotSupp_InvalidFormat);
          }
 
          if(CbTRUE == LyFlag)
          {
-            SendStandardPositiveAnswer( Li1979_MsgIdx );
+            SendLnStandardPositiveAnswer( Li1979_MsgIdx );
          }
       }
       else
       {
          /* Send negative responce if Test ID not supported */
-         SendStandardNegativeAnswer(
+         SendLnStandardNegativeAnswer(
                               CcDCAN_SubFuncNotSupp_InvalidFormat);
       }
    }
-   SendStandardNegativeAnswer( CcDCAN_ServiceNotSupported ) ;
+   SendLnStandardNegativeAnswer( CcDCAN_ServiceNotSupported ) ;
 }
 
 /*********************************************************************/
@@ -2025,8 +1357,6 @@ static void Refresh1979_Mode8_SystemLeakTest_DCAN( void )
 /* Global Variables Updated: ViC2GL_CurrentMsg, Va1979_M49_Data      */
 /*********************************************************************/
 #if (XeDCAN_SID_09_Supported == CeDCAN_Supported)
-#define CcFILE_CAL_ID_SIZE           16
-#define SizeofKySYST_CALIBRATION_FILE_PART_NR   8
 #define J1979_MODE_09_INFO_LENGTH      (2)
 #define J1979_MODE_09_SUPP_INFO_LENGTH (7)
 #define CyInfoType                     (1)
@@ -2045,11 +1375,11 @@ void J1979Mode9Handler_DCAN( void )
    const BYTE* KyDCAN_EcuName;
 
    Sy1979_Mode09_CalIdx = 0;
-//   Sb1979_EngCVNSent = CbFALSE;
+   Sb1979_EngCVNSent = CbFALSE;
    Ly1979_DataIdx = CyInfoType ;
    Lb1979_Found  = CbFALSE;
    Sb1979_M9_InfoTypeFound = CbFALSE;
-   //Lb1979_MultiMode = CbFALSE;
+   Lb1979_MultiMode = CbFALSE;
 
    /*Check if it is in standard diagnostic mode to support service*/
    if(CheckStandardDiagnosticState())
@@ -2063,7 +1393,7 @@ void J1979Mode9Handler_DCAN( void )
          for(Ly1979_BuffIdx = CyInfoType;
              Ly1979_BuffIdx < GetLnServiceDataLength (); Ly1979_BuffIdx++)
          {
-            La1979_ServiceData[Ly1979_BuffIdx] = (GetLnServiceData (Ly1979_BuffIdx));
+            La1979_ServiceData[Ly1979_BuffIdx] = (GetLnServiceData ())[Ly1979_BuffIdx];
          }
 
          if (( GetLnServiceDataLength() == J1979_MODE_09_INFO_LENGTH )
@@ -2105,8 +1435,7 @@ void J1979Mode9Handler_DCAN( void )
                      WrtDCAN_ServiceData(Cy1979_Info_02_NumDataItems, Ly1979_DataIdx++);
 
                      /* Read VIN from Flash ROM */
-                     //ReadFILE_EE_FLASH_VIN(VinFirst);
-                     GetVinDataValue();
+                     ReadFILE_EE_FLASH_VIN(VinFirst);
 
                      for(Ly1979_Index = 0;Ly1979_Index < VIN_Size;Ly1979_Index++)
                      {
@@ -2139,16 +1468,13 @@ void J1979Mode9Handler_DCAN( void )
                                ((Cy1979_Info_04_NumDataItems * Cy1979_MaxCalIDs),
                                 Ly1979_DataIdx++);
 
-                     for (Ly1979_Index = 0; Ly1979_Index <CcFILE_CAL_ID_SIZE ;
+                     for (Ly1979_Index = 0; Ly1979_Index < CcFILE_CAL_ID_SIZE;
                           Ly1979_Index++)
                      {
-                        if (Ly1979_Index<SizeofKySYST_CALIBRATION_FILE_PART_NR)
-                        {
-                           //WrtDCAN_ServiceData( GetSYST_BTC_NR(Ly1979_Index),
-                             //                          Ly1979_DataIdx++);
-
-				WrtDCAN_ServiceData   ( KySYST_CALIBRATION_FILE_PART_NR
-                                                   [Ly1979_Index], Ly1979_DataIdx++);
+                        if (Ly1979_Index<Cy1979_EngCalIDSize)
+                        { 
+                           WrtDCAN_ServiceData( KySYST_BTC_NR[Ly1979_Index],
+                                                       Ly1979_DataIdx++);
                         }
                         else
                         {
@@ -2173,7 +1499,7 @@ void J1979Mode9Handler_DCAN( void )
                   else
                      Lb1979_Found = CbFALSE ;
                   break;
-#if 0
+
                case Cy1979_InfoType6:
                   if ( CbFALSE != Chk1979_Md9_InfoTypeSupported
                                          (KyDCAN_Mode_09_Info_01_To_08,
@@ -2181,26 +1507,26 @@ void J1979Mode9Handler_DCAN( void )
                   {
                       /* Send back a negative response indicating
                          that the function is not complete. */
-                 //#if (XeTRVS_SYST_TYPE == XeTRVS_SYST_PCM) && \
-                  //   (XeSYST_SEPERATE_CAL == CeSYST_AVAILABLE)
-                     // if(GetTRVC_TransCntrlIsPCM())
-                     // {
-                     //     if(!GetFILE_CVN_Available()
-                     //        || !GetFILE_CVN_Available_TRN())
-                      //    {
-                      //        SendStandardNegativeAnswer(
-                       //          CcDCAN_ReqCorrectlyRecvd_ResponsePending);
-                       //   }
-                     // }
-                     // else
-                  //#endif
-                      //{
-                       //   if(!GetFILE_CVN_Available())
+                 #if (XeTRVS_SYST_TYPE == XeTRVS_SYST_PCM) && \
+                     (XeSYST_SEPERATE_CAL == CeSYST_AVAILABLE)
+                      if(GetTRVC_TransCntrlIsPCM())
+                      {
+                          if(!GetFILE_CVN_Available()
+                             || !GetFILE_CVN_Available_TRN())
                           {
-                              SendStandardNegativeAnswer(
+                              SendLnStandardNegativeAnswer(
+                                 CcDCAN_ReqCorrectlyRecvd_ResponsePending);
+                          }
+                      }
+                      else
+                  #endif
+                      {
+                          if(!GetFILE_CVN_Available())
+                          {
+                              SendLnStandardNegativeAnswer(
                                     CcDCAN_ReqCorrectlyRecvd_ResponsePending);
                           }
-                     // }
+                      }
 
                       Lb1979_MultiMode = CbTRUE ;
                   }
@@ -2209,7 +1535,7 @@ void J1979Mode9Handler_DCAN( void )
                       Lb1979_Found = CbFALSE ;
                   }
                   break;
-#endif
+
                case Cy1979_InfoType7:
                   if ( CbFALSE != Chk1979_Md9_InfoTypeSupported
                                    (KyDCAN_Mode_09_Info_01_To_08,
@@ -2221,7 +1547,7 @@ void J1979Mode9Handler_DCAN( void )
                   else
                      Lb1979_Found = CbFALSE ;
                   break;
-#if 0
+
                case Cy1979_InfoType8:
                   if ( CbFALSE != Chk1979_Md9_InfoTypeSupported
                                    (KyDCAN_Mode_09_Info_01_To_08,
@@ -2239,8 +1565,7 @@ void J1979Mode9Handler_DCAN( void )
                      Lb1979_Found = CbFALSE ;
                   }
                   break;
-
-#endif				  
+				  
                case Cy1979_InfoType0A:
                   if ( CbFALSE != Chk1979_Md9_InfoTypeSupported
                                    (Ky1979_Mode_09_Info_09_To_16,
@@ -2249,8 +1574,8 @@ void J1979Mode9Handler_DCAN( void )
                      WrtDCAN_ServiceData( Cy1979_Info_0A_NumDataItems,
                                         Ly1979_DataIdx++) ;
 
-                     if( GetTRVC_TransCntrlIsManual())
-                    //     || GetTRVC_TransCntrlIsTCM())
+                     if( GetTRVC_TransCntrlIsManual()
+                         || GetTRVC_TransCntrlIsTCM())
                      {
                        KyDCAN_EcuName = KyDCAN_ECM_EcuName;
                      }
@@ -2276,16 +1601,14 @@ void J1979Mode9Handler_DCAN( void )
                   Lb1979_Found = CbFALSE ;
                   break;
             }
-          //  if(( Lb1979_MultiMode )
-            //  && ( Lb1979_Found ))
-           // {
-            //   WrtDCANMultiRespInProgress( CbTRUE ) ;
-           // }
-            //else if ( Lb1979_Found )
-
-	     if ( Lb1979_Found )
+            if(( Lb1979_MultiMode )
+              && ( Lb1979_Found ))
             {
-               SendStandardPositiveAnswer( Ly1979_DataIdx );
+               WrtDCANMultiRespInProgress( CbTRUE ) ;
+            }
+            else if ( Lb1979_Found )
+            {
+               SendLnStandardPositiveAnswer( Ly1979_DataIdx );
             }
             else
             {
@@ -2305,7 +1628,7 @@ void J1979Mode9Handler_DCAN( void )
 
             if(Sb1979_M9_InfoTypeFound)
             {
-               SendStandardPositiveAnswer( Ly1979_DataIdx );
+               SendLnStandardPositiveAnswer( Ly1979_DataIdx );
             }
             else
             {
@@ -2375,7 +1698,7 @@ static T_COUNT_BYTE DtrmnJ1979_SuppM9Infotypes(T_COUNT_BYTE Ly1979_InfoType,
 
    return (Ly1979_DataIdx);
 }
-#if 0
+
 /*********************************************************************/
 /* FUNCTION:     FormJ1979_NextMode49_DCAN                                */
 /*                                                                   */
@@ -2391,15 +1714,15 @@ static T_COUNT_BYTE DtrmnJ1979_SuppM9Infotypes(T_COUNT_BYTE Ly1979_InfoType,
 /*                                                                   */
 /* Global Variables Updated: Va1979_M49_Data                         */
 /*********************************************************************/
-//#define        HexZero     0
+
 void FormJ1979_NextMode49_DCAN( void )
 {
    BYTE                Ly1979_DataIdx ;
    FOUR_BYTE_DATA_TYPE Lg1979_CalVerNum[ Cy1979_MaxCalIDs ];
-//#if (XeTRVS_SYST_TYPE == XeTRVS_SYST_PCM) && \
- //   (XeSYST_SEPERATE_CAL == CeSYST_AVAILABLE)
-//   FOUR_BYTE_DATA_TYPE Lg1979_CalVerNum_TRN[ Cy1979_MaxCalIDs ];
-//#endif
+#if (XeTRVS_SYST_TYPE == XeTRVS_SYST_PCM) && \
+    (XeSYST_SEPERATE_CAL == CeSYST_AVAILABLE)
+   FOUR_BYTE_DATA_TYPE Lg1979_CalVerNum_TRN[ Cy1979_MaxCalIDs ];
+#endif
   /* fix the bug of receiving "0xBF" when 0x78 Response*/
    Ly1979_DataIdx = 0;
    WrtDCAN_ServiceData( Cy1979_Mode09 , Ly1979_DataIdx++ );
@@ -2410,18 +1733,17 @@ void FormJ1979_NextMode49_DCAN( void )
       case Cy1979_InfoType6:
         Sy1979_Mode09_CalIdx = 0;
 
- //  #if (XeTRVS_SYST_TYPE == XeTRVS_SYST_PCM) && \
-    //   (XeSYST_SEPERATE_CAL == CeSYST_AVAILABLE)
-  //      WrtDCAN_ServiceData((Cy1979_Info_06_NumDataItems * Cy1979_MaxCVNIDsPCM),
-  //                            Ly1979_DataIdx++) ;
- //  #else
+   #if (XeTRVS_SYST_TYPE == XeTRVS_SYST_PCM) && \
+       (XeSYST_SEPERATE_CAL == CeSYST_AVAILABLE)
+        WrtDCAN_ServiceData((Cy1979_Info_06_NumDataItems * Cy1979_MaxCVNIDsPCM),
+                              Ly1979_DataIdx++) ;
+   #else
         WrtDCAN_ServiceData((Cy1979_Info_06_NumDataItems * Cy1979_MaxCVNIDs),
                               Ly1979_DataIdx++) ;
- //  #endif
+   #endif
 
         /* Returns CRC of calibration area*/
-       // if(GetFILE_CVN_Available() && (!Sb1979_EngCVNSent))
-        if(!Sb1979_EngCVNSent)
+        if(GetFILE_CVN_Available() && (!Sb1979_EngCVNSent))
         {
             Lg1979_CalVerNum[Sy1979_Mode09_CalIdx] = GetFILE_CVN();
 
@@ -2440,7 +1762,7 @@ void FormJ1979_NextMode49_DCAN( void )
 
             Sb1979_EngCVNSent = CbTRUE;
         }
-#if 0
+
    #if (XeTRVS_SYST_TYPE == XeTRVS_SYST_PCM) && \
        (XeSYST_SEPERATE_CAL == CeSYST_AVAILABLE)
         if(GetTRVC_TransCntrlIsPCM()
@@ -2463,7 +1785,6 @@ void FormJ1979_NextMode49_DCAN( void )
                                            Ly1979_DataIdx++) ;
         }
    #endif
-   #endif
         break;
 
       default:
@@ -2485,14 +1806,14 @@ void FormJ1979_NextMode49_DCAN( void )
        ***********************************************************/
        if(GetDCAN_Send_Next_78Response())
        {
-          SendStandardNegativeAnswer(
+          SendLnStandardNegativeAnswer(
                   CcDCAN_ReqCorrectlyRecvd_ResponsePending);
           SetDCAN_Send_Next_78Response(CbFALSE);
        }
     }
     else if(Vy1979_InfoType == Cy1979_InfoType6)
     {
-       SendStandardPositiveAnswer( Ly1979_DataIdx );
+       SendLnStandardPositiveAnswer( Ly1979_DataIdx );
        WrtDCANMultiRespInProgress( CbFALSE ) ;
     }
     else
@@ -2646,9 +1967,41 @@ static BYTE GetDCANService09Info08data(BYTE LyBufferIndex)
 
    WrtDCAN_ServiceData( Ludata.Byte_Access.Byte_Two,
                    LyBufferIndex++) ;
+
+   Ludata.Word_Access.Word_One = GetDGDM_RM_EOSD_B1_S2_Numrtr();
+
+   WrtDCAN_ServiceData ( Ludata.Byte_Access.Byte_One,
+                   LyBufferIndex++) ;
+
+   WrtDCAN_ServiceData ( Ludata.Byte_Access.Byte_Two,
+                   LyBufferIndex++) ;
+
+   Ludata.Word_Access.Word_One = GetDGDM_RM_EOSD_B1_S2_Denom();
+
+   WrtDCAN_ServiceData ( Ludata.Byte_Access.Byte_One,
+                   LyBufferIndex++) ;
+   
+   WrtDCAN_ServiceData ( Ludata.Byte_Access.Byte_Two,
+                   LyBufferIndex++) ;
+
+   Ludata.Word_Access.Word_One = GetDGDM_RM_EOSD_B2_S2_Numrtr();
+
+   WrtDCAN_ServiceData ( Ludata.Byte_Access.Byte_One,
+                   LyBufferIndex++) ;
+
+   WrtDCAN_ServiceData ( Ludata.Byte_Access.Byte_Two,
+                   LyBufferIndex++) ;
+
+   Ludata.Word_Access.Word_One = GetDGDM_RM_EOSD_B2_S2_Denom();
+
+   WrtDCAN_ServiceData ( Ludata.Byte_Access.Byte_One,
+                   LyBufferIndex++) ;
+
+   WrtDCAN_ServiceData ( Ludata.Byte_Access.Byte_Two,
+                   LyBufferIndex++) ;
+
    return LyBufferIndex;
 }
-#endif
 #endif
 
 /*********************************************************************/
@@ -2737,99 +2090,10 @@ void FormJ1979_Mode_4A_Data( void )
        LcPermnNDTCCount++;
     }
     WrtDCAN_ServiceData( LcPermnNDTCCount, CyModeA_NumDTC_Offset);
-    SendStandardPositiveAnswer (TrByteCount);
+    SendLnStandardPositiveAnswer (TrByteCount);
 }
 #endif
 
-/*********************************************************************/
-/* FUNCTION:     J1979ModeBHandler                                   */
-/*                                                                   */
-/* Type:         global                                              */
-/*                                                                   */
-/* DESCRIPTION:                                                      */
-/*                                                                   */
-/* PARAMETERS:   None                                                */
-/*                                                                   */
-/* RETURN:       None                                                */
-/*                                                                   */
-/*********************************************************************/
-#if (XeDCAN_SID_0B_Supported == CeDCAN_Supported)
-void J1979ModeBHandler (void)
-{
-}
-#endif
-
-/*********************************************************************/
-/* FUNCTION:     J1979ModeCHandler                                   */
-/*                                                                   */
-/* Type:         global                                              */
-/*                                                                   */
-/* DESCRIPTION:                                                      */
-/*                                                                   */
-/* PARAMETERS:   None                                                */
-/*                                                                   */
-/* RETURN:       None                                                */
-/*                                                                   */
-/*********************************************************************/
-#if (XeDCAN_SID_0C_Supported == CeDCAN_Supported)
-void J1979ModeCHandler (void)
-{
-}
-#endif
-
-/*********************************************************************/
-/* FUNCTION:     J1979ModeDHandler                                   */
-/*                                                                   */
-/* Type:         global                                              */
-/*                                                                   */
-/* DESCRIPTION:                                                      */
-/*                                                                   */
-/* PARAMETERS:   None                                                */
-/*                                                                   */
-/* RETURN:       None                                                */
-/*                                                                   */
-/*********************************************************************/
-#if (XeDCAN_SID_0D_Supported == CeDCAN_Supported)
-void J1979ModeDHandler (void)
-{
-}
-#endif
-
-/*********************************************************************/
-/* FUNCTION:     J1979ModeEHandler                                   */
-/*                                                                   */
-/* Type:         global                                              */
-/*                                                                   */
-/* DESCRIPTION:                                                      */
-/*                                                                   */
-/* PARAMETERS:   None                                                */
-/*                                                                   */
-/* RETURN:       None                                                */
-/*                                                                   */
-/*********************************************************************/
-#if (XeDCAN_SID_0E_Supported == CeDCAN_Supported)
-void J1979ModeEHandler (void)
-{
-}
-#endif
-
-/*********************************************************************/
-/* FUNCTION:     J1979ModeFHandler                                   */
-/*                                                                   */
-/* Type:         global                                              */
-/*                                                                   */
-/* DESCRIPTION:                                                      */
-/*                                                                   */
-/* PARAMETERS:   None                                                */
-/*                                                                   */
-/* RETURN:       None                                                */
-/*                                                                   */
-/*********************************************************************/
-#if (XeDCAN_SID_0F_Supported == CeDCAN_Supported)
-void J1979ModeFHandler (void)
-{
-}
-#endif
 
 /******************************************************************************
 *
@@ -2837,152 +2101,9 @@ void J1979ModeFHandler (void)
 *
 * Rev.  YYMMDD Who RSM# Changes
 * ----- ------ --- ---- -------------------------------------------------------
-* 1.01  04-07-98  EPA       Converted code from Greg Hogdal (DE Lux.)
-*                           for our use, started from version 1.3
-*                           RSM # 00LD9-046
-* 1.2   11-13-97  EPA       Added some extern's.
-* 1.4   10-15-98  cdw       New version created from Daewoo delivery
-* 1.5   11-15-98  cdw       Fixed and reduce function code
-* 1.8   02-10-98  cdw       Fixed and reduce function code
-* 1.9   07-27-99  HFU       Changed modes 6 and 8.
-* 2.0   09-17-99  HFU       SID 08 Request Message Length changed to 7,
-*                           and Set Flag VbOFVC_EVPD_SerBay_Test_Req.
-*                           SID 03 if no DTCs pad response with zeroes.
-* 2.1   09-24-99  HFU       Delete all zero's message in SID 07 if DTC
-*                           found according to Daewoo Spec.
-* 2.2   10-04-99  HFU     Removed TestID 06 in SID06 in Daewoo Project.
-* 2.3   10-20-99  HFU       Changed for SID2, which will give negative
-*                           response for PIDs 3 and above if no DTC
-*                           stored in Freeze Frame.
-* 2.4   11-11-99  hfu       Delete Is1979_Mode5_TestID_Supported and
-*                           Is1979_M6_TestIdSupported functions.
-* 2.5   12-22-99  HFU     Correct function ComputeCRC_CalibrationArea,
-*                         add function call PerformHWIO_ToggleWatchdog.
-* 2.6   02-01-00  HFU       SID 09-Info 06, send negative response 78
-*                           first, then send the result of CRC-16.
-* 2.7   04-05-00  bdt       Remove SID 06 test 0A, no longer supported.
-*                           T-150    ver. 1.7
-* 2.8   04-10-00  bdt       Remove SID 08 which is no longer supported.
-*                           T-150    ver. 1.7
-* 2.9   04-14-00  hfu       For SID 9 Info 06 set Sy1979_Mode09_CalIdx
-*                           index to zero
-* 3.0   05-05-00  IAJ       Replace vin access routines with the new
-*                           routines.
-* 3.1   05-18-00  hfu       Hook up SID 09-04 to return
-*                           KySYST_CALIBRATION_FILE_PART_NR.
-*                           Changed SID 02 condition check.
-* 3.2   05-24-00  hfu       Pad SID 09-04 last 8 bytes with Hex zeros.
-* 3.3   06-08-00  hfu       Sliced CRC-16 Checksum Calculation in
-*                           SID 09-06 to make it excute less time.
-* 3.4   18-08-00  gps       Converted CbTRUE -> ! CbFALSE; 7 changes
-* 3.5   03-15-01  SAF       Service ID 08 correction
-* tcb_pt1#7
-*       03-03-31  ban  2589 Changed the data type of DTC list indices
-*                           from BYTE to WORD to support more than 256
-*                           DTCs
-* tcb_pt1#8
-*       03-04-04  ban  2648 Added 0x70 in CyTestID_04CompID[] to
-*                           support Bank2 data for SID 06 04
-*                           Modified switch case Cy1979_InfoType8
-*                           in functions J1979Mode9Handler_DCAN and
-*                           FormJ1979_NextMode49_DCAN for SID 09 08
-*                           Added function
-*                           GetDCANService09Info08data for SID 09 08
-*                           Added CySupportedPID20_Thru40 and
-*                                 CySupportedPID40_Thru60 for SID 02
-* tci_pt3#9
-*       03-05-29  ban  2648 Modified SID 05 to match hyundai spec
-* tci-pt3#10
-*       03-05-09  kvm  2106 New EVAP Algorithm changes into EMS_Core,
-*                            Used GetEVPD_TankProtectionMode() in
-*                            function J1979Mode8Handler_DCAN
-* tci_pt3#11
-*       04-09-03  ban  3032 Modified SID 09 infotype 06
-* x.xx  030917 rag 3101 EVPD: Modularization.
-*                        Replaced evpdpall.h with evpdpapi.h
-*       031007 ban          Moved initialisation of variable
-*                           Li1979_DataIdx outside the IF statement
-* tci_pt3#14
-*       031021 ban 3074 Deleted unused local variables
-* tci_pt3#15
-*       031103 ban 3352 Added logic in SID 09 to split up calibration
-*                       IDs for Engine and Transmission
-*                       Removed KySYST_CALIBRATION_FILE_PART_NR
-* tci_pt3#14.1.1
-*       031103 ban 3312 Added logic in SID 09 to split up CVN
-*                       for Engine and Transmission
-* tci_pt3#14.2.1
-*       031210 ban 3497 Added logic to support ECU Development mode
-* tci_pt3#14.2.2
-*       031210 ban xxxx Merge of versions tci_pt3#14.2.1 and
-*                       tci_pt3#16
-* tci_pt3#14.2.3
-*       040305 tln 3680 Changes for Transmission Modularity
-* tci_pt3#14.2.4
-*       040309 tln 3680 Merged 'j1979.c-tci_pt3#14.2.3'
-*                       with 'j1979.c-tcb_pt1#14.2.3'.
-* tci_pt3#14.2.4.1.1
-*       040323 ban 3770 Added functionality to read VIN from
-*                       FLASH ROM
-* tci_pt3#14.2.5
-*       040322 ban 3829 Added functionality to read VIN from Flash ROM
-*                       using SID 09
-* tci_pt3#14.2.7
-*       040422 ban 3932 Changed component IDs for test ID 04 to
-*                       E0 and F0
-* tci_pt3#14.2.8
-*       040722 ban 4252 Changed the connection for 09 04 to
-*                       KW2HyundaiCalID
-* tci_pt3#14.2.7.1.1
-*       040906 ban 4412 Modified Mode 3 and Mode 7
-* tcb_pt1#14.3 ksr -BM- Merged 'j1979.c-tci_pt3#14.2.8' with
-*                        'j1979.c-tci_pt3#14.2.7.1.1'.
-* tci_pt3#14.2.8.1.1
-*       040928 ban 4462 Removed support for Test ID 07 in SID 06
-* tcb_pt1#14.4 ksr -BM- Merged 'j1979.c-tcb_pt1#14.3' with
-*                        'j1979.c-tci_pt3#14.2.8.1.1'.
-* tci_pt3#14.2.8.1.2
-*       041007 ban 4534 Moved cal ID connection from EE to cal area
-* tcb_pt#14.5  ksr -BM- Merged 'j1979.c-tcb_pt1#14.4' with
-*                        'j1979.c-tci_pt3#14.2.8.1.2'.
-* tci_pt3#14.6
-*       041027 ban 4600 Modified CVN logic to meet CARB requirements
-* tci_pt3#x
-*       041221 ban xxxx Corrected comparison of boolean against enum
-*                       in Mode 8
-*                       Corrected reject reason issues with mode 8
-* 2.0   051130 tln 5311 Added logic to support info types for SID 09
-*                       Cy1979_InfoTypeA0, Cy1979_InfoTypeC0,
-*                       Cy1979_InfoTypeE0
-* 3.0   051220 tln 5491 Corrected info types for SID 09 issue
-*                       to support mesg 09 00
-* 4.0   060110 tln 5491 Modified FormJ1979_Mode_43_Data_DCAN() and
-*                       FormJ1979_Mode_47_Data_DCAN() to eliminate the
-*                       check for Addl_DTC_Found condition.
-*                       (Reference RSM 5410)
-* tci_pt3#x
-*      06.15.06 ABH  5730 Modified  Sb1979_M9_InfoTypeFound Flag
-*                         intialization in J1979Mode9Handler_DCAN
-*
-* tci_pt3#7
-*      070305  AB 6191  Added support for Service 0x09 Infotype 0x0A
-*                       Ecu Name ( ECM or PCM ).
-* 8    070612 hdb 6346  MODE4 Calibratable Clear Codes
-*      070612 hdb 6347 CANOBD MODE6 Misfire MIDs Report Data Conditions
-* tcb_pt1#9
-*      071016 vs  6614 Modified KyDCAN_ECM_EcuName, KyDCAN_PCM_EcuName
-* tcb_pt#10
-*      071120 mat 6698 Modified KyDCAN_PCM_EcuName to correct byte
-*                       swap
-* tcb_p1#11
-*     080115 me  6754 Implemented Mode 0x0A handler
-*                     Added stub handler for Mode 0x0B to 0x0F
-* tcb_pt1#12
-*     080909 me  7212 Added Mode9 IT08 RM Add Secondary O2 Results
-* 13  090115 me  7637 Modified CANOBD APIs' names.
-* kok_pt2#15
-*       090603 woz 7672 Renamed NVM vars to follow standard naming conventions.
-*
-* 3.0  100906    hdg  xxx  Implemented CAN OBD in MT22.1 paltform.
+* 1.0  110401  cjqq       Base on GMLAN project
+* 7.0  130614  xll  SCR#1153 RSM_CTC_8205_OBD_IUPT_InterfaceChange For Mode 09 type 08_v01_20130402.doc
+* 8.0  130628  xll  SCR#1168 Change GetSYST_BTC_NR() to KySYST_BTC_NR[].
+* 9.0  130830  xll  RCR#1239 Added LbValid_PID in function J1979Mode1Handler_DCAN(),J1979Mode2Handler_DCAN()
 *
 ******************************************************************************/

@@ -51,7 +51,6 @@
 * OBD Lib Service Include Files
 ******************************************************************************/
 #include "obdltype.h"/*ECUProgrammingSessionState*/
-//#include "cmndtc.h"/*ECUProgrammingSessionState*/
 #include "kw2api.h"
 
 
@@ -185,6 +184,24 @@
 /*           CONSTANT and ENUMERATION DECLARATIONS                   */
 /*********************************************************************/
 /*****  Supported Record Local Identifier  *****/
+
+/* Define boundaries for start and end of ram */
+#define CyRAM_SectionStart          (0x40000000)
+#define CyRAM_SectionEnd            (0x400177FF)
+
+/*--- (####PPC5634 hard-coded for now) ---*/
+#define BootBaseL                   ((uint32_t) 0x00004000L)
+#define BootEndL                    ((uint32_t) 0x0000FFFFL)
+
+#define FlashBaseL                  ((uint32_t) 0x00040000L)
+#define FlashEndL                   ((uint32_t) 0x0017FFFFL)
+
+#define CyCal_SectionStart          (0x00020000)
+#define CyCal_SectionEnd            (0x0003FFFF)
+
+#define CyEEPROM_SectionStart       (0x00000000)
+#define CyEEPROM_SectionEnd         (0x00003FFF)
+
 #if 0
 #define CcRdliSnapShot        (0x01)
 #define CcSideRail                       (0x02)
@@ -333,6 +350,26 @@
 #define CcScalingSize                 (42)
 
 /* Define boundaries for start and end of ram */
+
+#if defined(OBD_CONTROLLER_IS_MT62P1) || defined(OBD_CONTROLLER_IS_MT22P3)
+/* Define boundaries for start and end of ram */
+#define CyRAM_SectionStart          (0x40000000)
+#define CyRAM_SectionEnd            (0x400177FF)
+
+/*--- (####PPC5634 hard-coded for now) ---*/
+#define BootBaseL                   ((uint32_t) 0x00004000L)
+#define BootEndL                    ((uint32_t) 0x0000FFFFL)
+
+#define FlashBaseL                  ((uint32_t) 0x00040000L)
+#define FlashEndL                   ((uint32_t) 0x0017FFFFL)
+
+#define CyCal_SectionStart          (0x00020000)
+#define CyCal_SectionEnd            (0x0003FFFF)
+
+#define CyEEPROM_SectionStart       (0x00000000)
+#define CyEEPROM_SectionEnd         (0x00003FFF)
+
+#endif
 #define CyRAM_SectionStart          (0x40000000)
 #define CyRAM_SectionEnd            (0x400177FF)
 
@@ -505,23 +542,23 @@ extern TbBOOLEAN VbKW2K_OBD_Enabled;
 //extern BYTE* GetWrtbufferAddr( void );
 //extern FAR_COS void RunKernelOnRam (void );
 //void   ServiceNotSupported(void);
-extern FAR_COS void   SendStandardNegativeAnswer( BYTE in_code );
-extern FAR_COS void   SendStandardPositiveAnswer( BYTE in_msg_size );
+extern void   SendStandardNegativeAnswer( BYTE in_code );
+extern void   SendStandardPositiveAnswer( BYTE in_msg_size );
 //WORD   Get_Security_Seed_Data( void );
 //WORD   Get_Key( void );
 //void   PerformReset ( void );
 //TbBOOLEAN  Address_Is_Validkw( LONGWORD , BYTE );
-TbBOOLEAN  Srv23Address_Is_Validkw( LONGWORD , BYTE );
-extern FAR_COS  TbBOOLEAN GetCommunicationEstablishedState( void );
-extern FAR_COS  void OBD_ByKW2000( void );
-void OBD_ByCAN( void );
+extern TbBOOLEAN  Srv23Address_Is_Validkw( LONGWORD , BYTE );
+extern TbBOOLEAN GetCommunicationEstablishedState( void );
+extern void OBD_ByKW2000( void );
+extern void OBD_ByCAN( void );
 //BYTE GetECUIDScalingTable ( BYTE LyIndex  );
 //void ResetActuatorsIfActivated (void);
 //TbBOOLEAN CheckIfConditionsCorrectToRunInDiagMode ( void );
 //TbBOOLEAN IfKeywordLogicIsActive ( void );
 //void DoNecessaryActionsBeforeReset ( void );
 //TbBOOLEAN IsDevelopmentOrManfModeActive ( void );
-FAR_COS void UpdateOBD_Services(void);
-FAR_COS void InitAppLvlCommVariables(void);
+extern void UpdateOBD_Services(void);
+extern void InitAppLvlCommVariables(void);
 
 #endif

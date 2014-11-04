@@ -32,21 +32,6 @@
 /******************************************************************************
 * System Include Files
 ******************************************************************************/
-
-/******************************************************************************
-* OBD Lib Service Include Files
-******************************************************************************/
-
-
-
-
-#if((XeSYST_OBD_CommunicationType != CeSYST_OBD_OVER_KW2K)\
-    ||(XeSYST_OBD_LegislatedSrvs != CeSYST_OBD_OVER_CAN))
-
-#error "(!) OBD compile flag error"
-#endif
-
-#if(XeSYST_CANOBD_SrvsEnable == CeSYST_AVAILABLE)
 /*********************************************************************/
 /* DESCRIPTION   Get the DTC related data structures.             */
 /*********************************************************************/
@@ -58,12 +43,12 @@
 /*****************************************************************************
  *  Global Function Prototypes
  *****************************************************************************/
-extern FAR_COS void   SendStandardNegativeAnswer( BYTE in_code );
-extern FAR_COS void   SendStandardPositiveAnswer( BYTE in_msg_size );
-extern FAR_COS void OBD_ByKW2000( void );
-extern FAR_COS void MngDCAN_TasksExecutive( void );
-extern FAR_COS void InitDCAN_RstToKeyOnTasks( void );
-#endif 
+extern void   SendStandardNegativeAnswer( BYTE in_code );
+extern void   SendStandardPositiveAnswer( BYTE in_msg_size );
+extern void OBD_ByKW2000( void );
+extern void MngDCAN_TasksExecutive( void );
+extern void InitDCAN_RstToKeyOnTasks( void );
+
 #endif /* OBDSPAPI_H */
 
 /******************************************************************************

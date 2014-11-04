@@ -28,6 +28,10 @@
 /*          GetLnServNbOfFreeBytesInRingBuffer                       */
 /*          GetLnServNbOfUsedBytesInRingBuffer                       */
 /*          StoreLnServNbBytesInRingBuffer                           */
+/*          LntrspCanId100RcvdEvent                                  */
+/*          LntrspCanId101RcvdEvent                                  */
+/*          LntrspCanId102RcvdEvent                                  */
+/*          LntrspCanId5e8RcvdEvent                                  */
 /*          LntrspCanId7e0RcvdEvent                                  */
 /*          LntrspCanId7e8RcvdEvent                                  */
 /*                                                                   */
@@ -77,9 +81,7 @@
 /******************************************************************************
  *  Library Include Files
  *****************************************************************************/
-#include "obdltype.h"
-
-
+#include "obdsbase.h"
 /*********************************/
 /* GENERIC CAN TYPES DEFINITION  */
 /*********************************/
@@ -168,23 +170,6 @@ struct
 }
 VioCanRxBufferStructType;
 
-typedef struct
-{
-   uint16_t       CAN_message_ID; //mzyqz4-added newly.
-   uint8_t        MessageBufferNumber;
-   void             (*Task) (Can8DataBytesArrayType *);  /*--- address of the can task to
-                                                    execute on the reception of a message
-                                                    identified by its CAN ID  ---*/
-}CanRxMessageControlType;
-/****************************************************/
-/*   Definition of CAN messages by their CAN IDs    */
-/****************************************************/
-//#define CanId5e8                  (0x5e8) /*--- Transmitted but must also be Received ---*/
-//#define CanId7df                  (0x7df)
-//#define CanID101                  (0x101)
-//#define CanId7e0                  (0x7e0)
-//#define CanId7e8                  (0x7e8) /*--- Transmitted but must also be Received ---*/
-
 /*********************************************************************/
 /*** Definitions for Network Layer and application interface layer ***/
 /*********************************************************************/
@@ -194,21 +179,33 @@ typedef struct
 
 #define ExtendedAddressing		     (3)
 
+/****************************************************/
+/*   Definition of CAN messages by their CAN IDs    */
+/****************************************************/
+#define CanId5e8                  (0x5e8) /*--- Transmitted but must also be Received ---*/
+#define CanId7df                  (0x7df)
+#define CanIdCAL                  (0x000)
+#define CanId7e0                  (0x7e0)
+#define CanId7e8                  (0x7e8) /*--- Transmitted but must also be Received ---*/
+
+
+#define TXIndxCanIdCAL   (2)
+#define IndxCanIdCAL     (4)
 /********************************/
 /*** CANOBD Response CAN Id ***/
 /******************************8*/
 //#define DiagRespUudtSingleFrameCanId      (CanId5e8)
-#define DiagRespPhysclRespPeriodicCanId   (DCAN_RespPhysclRespPeriodicCanId)
+#define DiagRespPhysclRespPeriodicCanId   (CanId5e8)
 
 /*** CAN Id definition for all USDT response frames (single, First, consecutive ***/
 /*** and FlowControl) when request is issued by the tester (CAN id = $7e0)      ***/
 /*** for diagnostic needs                                                       ***/
-#define DiagRespUsdtFrameCanId            (DCAN_RESPONSE_MESSAGE_ID)
+#define DiagRespUsdtFrameCanId            (CanId7e8)
 
 /****************************************************************/
 /*** Definitions for Network Layer Addressing Modes           ***/
 /****************************************************************/
-#define UsdtFrameVnidFunctionalAllNodes  (0xFE)
+//#define UsdtFrameVnidFunctionalAllNodes  (0xFE)
 
 /*************************************************/
 /*** Definitions for Network Layer USDT frames ***/
@@ -222,22 +219,23 @@ typedef struct
 #define FlowControlFlowStatusMask          (0x0F)
 #define FlowControlFlowStatusClearToSend   (0x00)
 #define FlowControlFlowStatusWait          (0x01)
+#define FlowControlFlowStatusoverflow      (0x02)
 #define BlockSizeNoFurtherFlowControl      (0)
 #define SingleFrameDataLengthPciMask       (0x0F)
 
 /**************************************************/
 /*** Definitions of Network Layer Waiting times ***/
 /**************************************************/
-#define MaxTimeFromFfOrCfToFcInMs (1000) /*--- Max time to wait after the transmission
+#define MaxTimeFromFfOrCfToFcInMs (75) /*--- Max time to wait after the transmission
                                                of the First Frame and the reception
-                                               of the Flow Control ---*/
-#define MaxTimeFromFcCtsToCfInMs  (1000) /*--- Max time to wait after the transmission
+                                               of the Flow Control ---N_Bs*/
+#define MaxTimeFromFcCtsToCfInMs  (150) /*--- Max time to wait after the transmission
                                                of the FC CTS (with BS and STmim) and
                                                the reception of the first Consecutive
-                                               Frame ---*/
+                                               Frame ---N_Cr*/
 #define MaxTimeFromCfToCfInMs     (1000) /*--- Max time between the reception of 2
                                                Consecutive Frames ---*/
-#define MaxTimeFromFcWtToFcInMs   (1000) /*--- Max time to wait after the reception
+#define MaxTimeFromFcWtToFcInMs   (75) /*--- Max time to wait after the reception
                                                of the Flow Control Wait frame and the
                                                reception of the next Frame ---*/ 
 #define MinimumSeparationTimeInMs (2)    /*--- the minimum separation time of this
@@ -251,6 +249,7 @@ typedef struct
                                                Wait Frame ---*/ 
 #define MaxTimeForSengingOneFrameInMs (50)  /*--- max time to wait for our trannsmission ---*/
 
+#define EcmCountForTxFirstCF (2)/*--- wait count to Tx FirstConsecutiveFrame ---N_Cs*/
 /*********************************************************************/
 /*** Definitions of time-out errors of Network Layer Waiting times ***/
 /*********************************************************************/
@@ -279,7 +278,11 @@ typedef struct
 extern LnServiceDataFrameType      LnServiceDataFrame;
 extern bool                     LnServiceDataBeingInserted;
 extern uint16_t                   LnNbOfUsedBytesInRingBuffer;
-
+extern LnMultipleFrameTxStateType  LnMultipleFrameTxState;
+extern LnMultipleFrameRxStateType  LnMultipleFrameRxState;
+extern uint16_t                    NbOfBytesStillToTransmit;
+extern uint8_t                     LnSequenceNumber;
+extern bool                        VbDCAN_SvIgnoredMessage;
 /***************************/
 /*** function prototypes ***/
 /***************************/
@@ -293,15 +296,13 @@ void LnSendMessage (void);
 void InitializeLnTransportLayer (void);
 void UpdateLnTransportLayer (void);
 void LnGoToWaitingForRxFirstOrSingleFrame (void);
+void CanId5e8RcvdEvent (Can8DataBytesArrayType *Can8DataBytesArrayPtr);
 void CanId7dfRcvdEvent (Can8DataBytesArrayType *Can8DataBytesArrayPtr);
 void CanId7e0RcvdEvent (Can8DataBytesArrayType *Can8DataBytesArrayPtr);
+void CanIdCALRcvdEvent (Can8DataBytesArrayType *Can8DataBytesArrayPtr);
 void CanId7e8RcvdEvent (Can8DataBytesArrayType *Can8DataBytesArrayPtr);
 void RequestCanToTransmit (CanIdType CanId,
                            Can8DataBytesArrayType *Can8DataBytesArray);
-//FAR_COS void Callback_Application_CANOBD( uint16_t   msg_id);
-FAR_COS void MngDCAN_TransmitdEvent( uint16_t   msg_id);
-//FAR_COS void Notify_Application_CANOBD( uint16_t  message_id );
-FAR_COS void MngDCAN_RcvdEvent( uint16_t  message_id );
 
 /*************************************/
 /*** GetLnServReqMsgAddressingMode ***/
@@ -324,57 +325,6 @@ INLINE void SetLnMessageAddressingMode (uint16_t AddressingMode)
 { 
   LnServiceDataFrame.AddressingMode = AddressingMode;
 } /*** End of SetLnMessageAddressingMode ***/
-#if 0
-/******************************/
-/*** GetLnFunctionalAddress ***/
-/*************************************************************************/
-/*** CAUTION: need to be used in with GetLnServReqMsgAddressingMode () ***/
-/***          to be sure in Functional addressing.                     ***/
-/***          then the value returned is valid and can be:             ***/
-/***            FunctionalAllNodes  (0xFE)                             ***/
-/***            FunctionalObd       (0x33)                             ***/
-/*************************************************************************/
-INLINE uint8_t GetLnFunctionalAddress (void)
-{ 
-   return LnServiceDataFrame.Data [0];
-} /*** End of GetLnFunctionalAddress ***/
-
-/**********************************************/
-/*** GetLnIndexOfValidDataNotOverwrittenYet ***/
-/**********************************************************************/
-/*** GetLnServiceDataByIndex () does not care of the validity of    ***/
-/*** the byte read in the read buffer.                              ***/
-/*** The byte may be not valid any more because already overwritten ***/
-/*** by a write in the ring buffer.                                 ***/
-/*** The use of GetLnIndexOfValidDataNotOverwrittenYet () is        ***/
-/*** welcome prior to call GetLnServiceDataByIndex ().              ***/
-/*** SuppressAllInterrupts () and RestoreIntLevelBreakContext()     ***/
-/*** must be used arround GetLnIndexOfValidDataNotOverwrittenYet () ***/
-/*** and GetLnServiceDataByIndex () to be sure of data consistency. ***/
-/**********************************************************************/
-INLINE uint16_t GetLnIndexOfValidDataNotOverwrittenYet (void)
-{
-   return LnServiceDataFrame.IndexOfValidDataNotOverwrittenYet;
-} /*** End of GetLnIndexOfValidDataNotOverwrittenYet ***/
-
-/*******************************/
-/*** GetLnServiceDataByIndex ***/
-/**********************************************************************/
-/*** this routine returns a byte from the Data buffer.              ***/
-/*** this routine does not care of the validity of the byte read in ***/
-/*** the read buffer.                                               ***/
-/*** The byte may be not valid any more because already overwritten ***/
-/*** by a write in the ring buffer.                                 ***/
-/*** The use of GetLnIndexOfValidDataNotOverwrittenYet () is        ***/
-/*** welcome prior to call GetLnServiceDataByIndex ().              ***/
-/*** SuppressAllInterrupts () and RestoreIntLevelBreakContext()     ***/
-/*** must be used arround GetLnIndexOfValidDataNotOverwrittenYet () ***/
-/*** and GetLnServiceDataByIndex () to be sure of data consistency. ***/
-/**********************************************************************/
-INLINE uint8_t GetLnServiceDataByIndex (uint16_t DataIndex)
-{ 
-   return LnServiceDataFrame.Data [DataIndex % DataBufferSize];
-} /*** End of GetLnServiceDataByIndex ***/
 
 /************************/
 /*** GetLnServiceData ***/
@@ -386,9 +336,7 @@ INLINE uint8_t *GetLnServiceData (void)
 {
    return LnServiceDataFrame.Data;
 } /*** End of GetLnServiceData ***/
-#endif
-#define GetLnServiceData(index)\
-            ( LnServiceDataFrame.Data [index] )
+
 /*********************************/
 /*** GetLnServiceDataServiceId ***/
 /*************************************************************/
@@ -439,8 +387,11 @@ INLINE void WriteLnMessageDataLength (uint16_t DataLength)
 /*********************************************************************/
 INLINE void WrtDCAN_ServiceData( BYTE in_data, BYTE in_location )
 {
-   (GetLnServiceData (in_location)) = in_data;//bankim
+   (GetLnServiceData ()) [in_location]= in_data;//bankim
 }
+
+#endif
+
 /******************************************************************************
 *
 * Revision History:
@@ -449,12 +400,10 @@ INLINE void WrtDCAN_ServiceData( BYTE in_data, BYTE in_location )
 * ----- ------ --- ---- -------------------------------------------------------
 * 1     060215 cr       Created from TCL version (archive cvs partition op36cm)
 * 2     080117 HHO CR28 Integrated Immobilizer id $3c1 and $3c9 from GMW 7349
-*
-* 3.0  100906    hdg  xxx  Implemented CAN OBD in MT22.1 paltform.
-* 4.0  100915    hdg  xxx  Implemented CAN Flash in MT22.1 paltform.
-* 3    100917    wj  CTC RSM8069
-*                          Added CAN ID 101 for CAN-reflash
-*
+* 3     110228 cjqq  change MaxTimeFromFfOrCfToFcInMs from 1000 to  75ms
+* 4     111104 cjqq define a time for waiting TX first CF when receive FC.
+* 5     120307 cjqq change MaxTimeFromFcWtToFcInMs to 75ms
+* 5     121017 xll  add CAN ID 0x600 for extended service functional addressing
+* 6     121022 xll  modified the value of CanIdCAL from 0x600 to 0x000.
+* 7     130509 xll  Change N_Cr from 1000ms to 150ms
 ******************************************************************************/
-
-#endif

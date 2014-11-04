@@ -61,20 +61,22 @@
 /******************************************************************************
 * CAN OBD Service Include Files
 ******************************************************************************/
-#include "dcanserv.h"/*ChangeSession()*/
+#include "dcansv10.h"/*ChangeSession()*/
+#include "dcanserv.h"/*S3ServerTimer*/
 /******************************************************************************
 * CAN OBD NW Layer Include Files
 ******************************************************************************/
 #include "dcancomm.h"   /* for ...    */
-//#include "dcantran.h"/*for LnGoToWaitingForRxFirstOrSingleFrame()*/
+
 /******************************************************************************
 *OBD Lib Service Include Files
 ******************************************************************************/
-//#include "obdlserv.h"/*PositiveResponseOffset */
+
 /******************************************************************************
  *  Global Variables
  *****************************************************************************/
 LnDiagSvCommunicationStateType  LnDiagSvCommunicationState;
+SESSION_TYPE                    CurrentSessionIndex;
 /******************************************************************************
  * Static Variables
  *****************************************************************************/
@@ -159,7 +161,7 @@ void LnEventFrameTransmitted (void)
 /********************************/
 void LnSignalTranspErrorEvent (LnTrspTimeOutErrorType LnTrspTimeOutError)
 {
-   //PARAM_NOT_USED (LnTrspTimeOutError);
+   PARAM_NOT_USED (LnTrspTimeOutError);
    switch (LnDiagSvCommunicationState)
    {
       case DiagnosticComNotActive:
@@ -209,15 +211,6 @@ void LnGoToSendingAnswer (void)
    LnSendMessage ();
 } /*** End of LnGoToSendingAnswer ***/
 
-#if 0
-/************************/
-/*** SendLnUudtAnswer ***/
-/************************/
-void SendLnUudtAnswer (Can8DataBytesArrayType *Can8DataBytesArrayPtr, uint8_t NbBytesToTransmit)
-{
-   LnSendUudtMessage (Can8DataBytesArrayPtr, NbBytesToTransmit);
- } /*** End of SendLnUudtAnswer ***/
-#endif 
 /**************************************************************************/
 /*** Update P2cMax Waiting Loop.                called Every Loop       ***/
 /**************************************************************************/
@@ -316,14 +309,13 @@ INLINE void UpdateLnCommunicationTimingParameters (void)
       {
          LnGoToDiagnosticComNotActive ();
       }
-              /* Handle S3Server timeout */
-      if(CurrentSessionIndex != 0)
+        /* Handle S2 and S3Server timeout */
+      if(CurrentSessionIndex != Default_session)
       {
          if( S3ServerTimer ==C_R7p8125ms16(0))
          {
             ChangeSession(DefaultSession);
-            CurrentSessionIndex = 0;
-	     ExtendedDiagnosticSessionControl= false;
+            CurrentSessionIndex = Default_session;
          }
       }
       break;
@@ -403,18 +395,29 @@ void LnAnswer (uint16_t DataLength)
 /***********************************************/
 void SendLnStandardNegativeAnswer (uint8_t NegativeResponseCode)
 {
-   (GetLnServiceData (1))  = (GetLnServiceData (0)) ;
-   (GetLnServiceData (0)) = NegativeResponseServiceIdentifier;
-   (GetLnServiceData (2)) = NegativeResponseCode;
-   LnAnswer (3);
 
-   if (NegativeResponseCode == RequestCorrectlyReceivedResponsePending)
+   if((GetLnServReqMsgAddressingMode () == FunctionalAddressing)
+   	&&(( ServiceIdNotSupported == NegativeResponseCode)
+   	  ||(SubFunctionNotSupported_InvalidFormat == NegativeResponseCode)
+   	  ||(RequestOutOfRange == NegativeResponseCode)))
    {
-      GoToEnhancedP2cMax ();
+      PfrmDCAN_AckReqWithoutResponse ();
    }
    else
    {
-      GoToStandardP2cMax ();
+      (GetLnServiceData ()) [1] = (GetLnServiceData ()) [0];
+      (GetLnServiceData ()) [0] = NegativeResponseServiceIdentifier;
+      (GetLnServiceData ()) [2] = NegativeResponseCode;
+       LnAnswer (3);
+
+      if (NegativeResponseCode == RequestCorrectlyReceivedResponsePending)
+      {
+         GoToEnhancedP2cMax ();
+      }
+      else
+      {
+         GoToStandardP2cMax ();
+      }
    }
 } /*** End of SendLnStandardNegativeAnswer ***/
 /*************************************************************/
@@ -422,9 +425,9 @@ void SendLnStandardNegativeAnswer (uint8_t NegativeResponseCode)
 /************************************************************/
 void SendLimitExceedNegativeAnswer (uint8_t NegativeResponseCode)
 {
-   (GetLnServiceData (1)) = (GetLnServiceData (0)) ;
-   (GetLnServiceData (0)) = NegativeResponseServiceIdentifier;
-   (GetLnServiceData (2)) = NegativeResponseCode;
+   (GetLnServiceData ()) [1] = (GetLnServiceData ()) [0];
+   (GetLnServiceData ()) [0] = NegativeResponseServiceIdentifier;
+   (GetLnServiceData ()) [2] = NegativeResponseCode;
    LnAnswer (5);
 
    if (NegativeResponseCode == RequestCorrectlyReceivedResponsePending)
@@ -442,7 +445,7 @@ void SendLimitExceedNegativeAnswer (uint8_t NegativeResponseCode)
 /*****************************************/
 void SendLnStandardPositiveAnswer (register uint16_t MsgSize)
 {
-   (GetLnServiceData (0)) = (GetLnServiceData (0)) + PositiveResponseOffset; 
+   (GetLnServiceData ()) [0] = (GetLnServiceData ()) [0] + PositiveResponseOffset; 
    LnAnswer (MsgSize);
 } /*** End of SendLnStandardPositiveAnswer ***/
 
@@ -464,18 +467,18 @@ void InitializeLnDiagSvCommunication (void)
    InitializeLnNodeManagementState ();
 } /*** End of InitializeLnDiagSvCommunication ***/
 
+void ServiceNotSupported_DCAN( void )
+{
+   SendLnStandardNegativeAnswer( ServiceIdNotSupported ) ;
+}
+
 /******************************************************************************
 *
 * Revision History:
 *
 * Rev.  YYMMDD Who RSM# Changes
 * ----- ------ --- ---- -------------------------------------------------------
-* 1     060215 cr       Created from TCL version (archive cvs partition op36cm)
-*                  
-* tci_pt3#2
-*       080411 abh 6832 Added SendLimitExceedNegativeAnswer
-* tci_pt3#2.1.1
-*      080924 VP  7329 Changes to support Customized TP for Immobilizer.
-* 2.0  100906   xxx  hdg  Implemented CAN OBD in MT22.1 paltform. 
-*
+* 1     20100401 cjqq       Base on T300 GMLAN Project
+* 2     20120307 cjqq       When Negative Response 11/12/31 and canid is 7df, 
+*                           then no response.
 ******************************************************************************/

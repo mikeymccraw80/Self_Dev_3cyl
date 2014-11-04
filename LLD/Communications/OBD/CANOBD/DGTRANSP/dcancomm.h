@@ -103,49 +103,59 @@ typedef
     } 
   LnDiagSvCommunicationStateType;
 
-  
+ typedef enum 
+{ 
+  Default_session,
+  Programming_session, 
+  Extended_session, 
+  DS_NUMBER_OF_SESSIONS
+}SESSION_TYPE;
+ 
 /*------------------------------------------------------------------------------------*/
 /*--- definition of data needed for Application Messages Rx Tx Timing verification ---*/
 /*------------------------------------------------------------------------------------*/
 /*--- P2 = Time between tester request and ECU response ---*/
 /*---      or two ECU responses                         ---*/
-#define DefaultP2cMinInMs (0.0)
-#define DefaultP2cMaxInMs (100.0)
-#define EnhancedP2cMaxInMs (5000.0)
-#define DiagComDeactivationTimeInSec (8.0)
+#define DefaultP2cMinInMs                             (0.0)
+#define DefaultP2cMaxInMs                             (50.0)  //comply is015765
+#define EnhancedP2cMaxInMs                            (5000.0)
+#define DiagComDeactivationTimeInSec                  (8.0)
 
 
 /*--- CANOBD negative Response Return Code Definition (after $7F) ---*/
 /*------------------------------------------------------------------*/
-#define NegativeResponseServiceIdentifier           (0x7F)
+#define NegativeResponseServiceIdentifier             (0x7F)
 
-#define ServiceIdNotSupported                       (0x11)
-#define SubFunctionNotSupported_InvalidFormat   (0x12)
-#define IncorrectMessageLength       (0x13)
-#define ConditionsNotCorrectOrRequestSequenceError  (0x22)
-#define RequestOutOfRange                           (0x31)
-#define SecurityAccessDenied                    (0x33)
-#define InvalidKey                                  (0x35)
-#define ExceedNumberOfAttempts                      (0x36)
-#define RequiredTimeDelayNotExpired                 (0x37)
-#define RequestCorrectlyReceivedResponsePending     (0x78)
-#define SchedulerFull                               (0x81)
-#define VoltageRangeFault                           (0x83)
-#define ProgramFailure                              (0x85)
-#define ReadyForDownloadDtcSored                    (0x99)
-#define DeviceControlLimitsExceeded                 (0xE3)
-#define DefaultSession       (0x01)
-
+#define ServiceIdNotSupportedInActiveSession          (0x7F)
+#define ServiceIdNotSupported                         (0x11)
+#define SubFunctionNotSupported_InvalidFormat         (0x12)
+#define IncorrectMessageLength                        (0x13)
+#define ConditionsNotCorrectOrRequestSequenceError    (0x22)
+#define RequestSequenceError                          (0x24)
+#define RequestOutOfRange                             (0x31)
+#define SecurityAccessDenied                          (0x33)
+#define InvalidKey                                    (0x35)
+#define ExceedNumberOfAttempts                        (0x36)
+#define RequiredTimeDelayNotExpired                   (0x37)
+#define WrongBlockSequenceCounter                     (0x73)
+#define RequestCorrectlyReceivedResponsePending       (0x78)
+#define SchedulerFull                                 (0x81)
+#define VoltageRangeFault                             (0x83)
+#define ProgramFailure                                (0x85)
+#define ReadyForDownloadDtcSored                      (0x99)
+#define DeviceControlLimitsExceeded                   (0xE3)
+#define DefaultSession                                (0x01)
+#define ECUProgrammingSession                         (0x02)
 /*-----------------*/
 /*--- Responses ---*/
 /*-----------------*/
-#define PositiveResponseOffset                      (0x40)
+#define PositiveResponseOffset                        (0x40)
 
 /******************************************************************************
  *  Global Variable Declarations
  *****************************************************************************/
 extern LnDiagSvCommunicationStateType  LnDiagSvCommunicationState;
-
+extern SESSION_TYPE                    CurrentSessionIndex;
 /**********************************************************************/
 /*** Function prototype                                             ***/
 /**********************************************************************/
@@ -162,13 +172,7 @@ void LnGoToWaitingRequest (void);
 /**********************************************************************/
 void SendLnStandardNegativeAnswer (uint8_t NegRespCode);
 void SendLimitExceedNegativeAnswer (uint8_t NegRespCode);
-#if 0
-/**********************************************************************/
-/*** Sends an answer using UUDT frame                               ***/
-/**********************************************************************/
-void SendLnUudtAnswer (Can8DataBytesArrayType *Can8DataBytesArrayPtr,
-                       uint8_t NbBytesToTransmit);
-#endif
+
 /**********************************************************************/
 /*** Sends a standart positive answer                               ***/
 /*** this routine will send the answer with Data [0] added by $40   ***/
@@ -181,6 +185,7 @@ void LnEventReceptionCompleteMsgWaiting (void);
 
 void LnEventFrameTransmitted (void);
 
+void ServiceNotSupported_DCAN( void );
 /************************************************************/
 /*** Acknoledge Ln Request Without Response               ***/
 /*** for functional request that do not send any response ***/
@@ -247,23 +252,14 @@ INLINE bool GetLnEcuWaitingP2cMinBeforeAns (void)
    return (bool ) (LnDiagSvCommunicationState == WaitingP2cMinBeforeAnswer);
 } /*** End of GetLnEcuSendingAnswer ***/
 
-
-
-
+#endif
 /******************************************************************************
 *
 * Revision History:
 *
 * Rev.  YYMMDD Who RSM# Changes
 * ----- ------ --- ---- -------------------------------------------------------
-* 1     060215 cr       Created from TCL version (archive cvs partition op36cm)
+* 1     20100401 cjqq       Base on T300 GMLAN Project
+* 3     20130509 xll        Added NRC ServiceIdNotSupportedInActiveSession.
 *
-* 2     070629 abh 6023 Modified to implement non legislative services for J300
-* tci_pt3#3
-*       080411 abh 6832 Added SendLimitExceedNegativeAnswer
-* 3.0  100906   xxx  hdg  Implemented CAN OBD in MT22.1 paltform. 
 ******************************************************************************/
-
-#endif
-
-

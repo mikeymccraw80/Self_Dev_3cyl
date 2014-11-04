@@ -19,17 +19,16 @@
  *****************************************************************************
  *
  * Current Module Info:
- * %full_name:     mt20u2#2/csrc/dcanmmng.c/1 %
- * %date_created:  Tue Sep  7 14:55:37 2010 %
- * %version:       1 %
- * %derived_by:    pz0vmh %
+ * %full_name:     ctc_pt3#2/csrc/dcanmmng.c/2 %
+ * %date_created:  Fri Apr  1 14:52:00 2011 %
+ * %version:       2 %
+ * %derived_by:    hzpcqq %
  *
  *****************************************************************************/
 /******************************************************************************
 * APP Include Files
 ******************************************************************************/
-//#include "systpcfg.h"
-#if(XeSYST_CANOBD_SrvsEnable == CeSYST_AVAILABLE)
+#include "systpcfg.h"
 #include "obdsfapp.h"/*ImmoGoToNormalKeyword()*/
 /******************************************************************************
 * CAN OBD Service Include Files
@@ -41,7 +40,7 @@
 * CAN OBD NW Layer Include Files
 ******************************************************************************/
 #include "dcancomm.h"/*UpdateLnDiagSvCommunication()*/
-//#include "dcantran.h"/*UpdateLnTransportLayer()*/
+
 /******************************************************************************
  *  Global Variables
  *****************************************************************************/
@@ -74,7 +73,7 @@ void MngCANOBD_TasksExecutive( void )
 * Description: This function will be called at each 7.8125 ms  by the  *
 *              operation system to check the recieved Msg.             *
 ***********************************************************************/
-FAR_COS void MngDCAN_TasksExecutive( void )
+FARFUNC void MngDCAN_TasksExecutive( void )
 {
       /*- Normal Keyword Mode. Server Mode-*/
       MngCANOBD_TasksExecutive();
@@ -87,38 +86,13 @@ FAR_COS void MngDCAN_TasksExecutive( void )
 *                                                                      *
 * Description: This function will be called at reset to key on         *
 ***********************************************************************/
-FAR_COS void InitDCAN_RstToKeyOnTasks( void )
+FARFUNC void InitDCAN_RstToKeyOnTasks( void )
 {
    InitializeDCAN_Services() ;
    InitializeLnDiagServices ();
 }
 
-#else
-/***********************************************************************
-* FUNCTION:      MngDCAN_TasksExecutive                                *
-*                                                                      *
-* TYPE:          Global                                                *
-*                                                                      *
-* Description: This function will be called at each 7.8125 ms  by the  *
-*              operation system to check the recieved Msg.             *
-***********************************************************************/
-//FAR_COS void MngDCAN_TasksExecutive( void )
-//{
 
-//}
-
-/***********************************************************************
-* FUNCTION:      MngDCAN_RstToKeyOnTasks                               *
-*                                                                      *
-* TYPE:          Global                                                *
-*                                                                      *
-* Description: This function will be called at reset to key on         *
-***********************************************************************/
-//FAR_COS void InitDCAN_RstToKeyOnTasks( void )
-//{
-
-//}
-#endif
 /******************************************************************************
 *
 * Revision History:
@@ -126,7 +100,6 @@ FAR_COS void InitDCAN_RstToKeyOnTasks( void )
 * Rev.  YYMMDD Who RSM# Changes
 * ----- ------ --- ---- -------------------------------------------------------
 * base of T300
-*1.  20090808 cjqq Added Legisted CANOBD
+*1.0  20090808 cjqq Added Legisted CANOBD
 *
-* 2.0  100906    hdg  xxx  Implemented CAN OBD in MT22.1 paltform.
 ******************************************************************************/

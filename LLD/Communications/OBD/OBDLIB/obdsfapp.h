@@ -33,8 +33,7 @@
 * APP Include Files
 ******************************************************************************/
 #include "obdsfcfg.h"
-#include "can_xfer.h" /*Get_Message()*/
-#include "can_aif.h"
+// #include "can_xfer.h"
+// #include "can_aif.h"
+
 #endif /*OBDSFAPP_H*/
-
-

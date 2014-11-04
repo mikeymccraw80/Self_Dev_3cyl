@@ -38,6 +38,9 @@
 /*          LnWaitingForRxFlowControl                                */
 /*          LnSendingBlockOfData                                     */
 /*          WaitingDataForTxInRingBuffer                             */
+/*          LnTrspCanId101RcvdEvent               -h-                */
+/*          LnTrspCanId102RcvdEvent               -h-                */
+/*          LnTrspCanId5e8RcvdEvent               -h-                */
 /*          LnTrspCanId7e0RcvdEvent               -h-                */
 /*          LnTrspCanId7e8RcvdEvent               -h-                */
 /*          InitializeLnTransportLayer            -h-                */
@@ -52,10 +55,10 @@
  /****************************************************************************
  *
  * Current Module Info:
- * %full_name:      lux_pt1#1/csrc/lntransp.c/1 %
- * %date_created:   Wed Feb 15 18:20:47 2006 %
- * %version:        1 %
- * %derived_by:     c23cr %
+ * %full_name:      ctc_pt3#1/csrc/dcantran.c/17 %
+ * %date_created:   Thu Jun 26 10:57:11 2014 %
+ * %version:        17 %
+ * %derived_by:     dzrpmq %
  *
  *****************************************************************************/
 /******************************************************************************
@@ -65,15 +68,11 @@
 /******************************************************************************
 * CAN OBD Service Include Files
 ******************************************************************************/
-//#include "obdltype.h"
+#include "obdltype.h"
 #include "dcancomm.h"/*LnSignalTranspErrorEvent()*/
+#include "cnftyp.h"
 #include "dcanserv.h"
-#include "dd_flash.h"      
-#include "mt2x_kernel.h"
-#include "dd_can.h"
-#include "hwiocald.h"
-#include "intr_ems.h"
-#include "dd_tle4471.h"
+#include "obdlcald.h"
 /******************************************************************************
 * CAN OBD NW Layer Include Files
 ******************************************************************************/
@@ -86,42 +85,50 @@ LnServiceDataFrameType      LnServiceDataFrame;
 uint16_t                   LnNbOfUsedBytesInRingBuffer;
 bool                        LnServiceDataBeingInserted;
 LnTrspTimeOutErrorType             LnTrspTimeOutError;
-VioCanRxBufferStructType VioCanRxBuffer [RX_MSG_BUFFER_NUMBER];
+LnMultipleFrameTxStateType  LnMultipleFrameTxState;
+LnMultipleFrameRxStateType  LnMultipleFrameRxState;
+uint16_t                    NbOfBytesStillToTransmit;
+uint8_t                     LnSequenceNumber;
+bool                        VbDCAN_SvIgnoredMessage;
 /******************************************************************************
  * Static Variables
  *****************************************************************************/
 /*--- definition of data for network layer multiple frame Rx Tx ---*/
-static LnMultipleFrameRxStateType  LnMultipleFrameRxState;
-static LnMultipleFrameTxStateType  LnMultipleFrameTxState;
 static uint8_t                    *LnInPointer;
 static uint8_t                    *LnOutPointer;
 static CanIdType                   LnTranspRespUsdtFrameCanId;
-static uint16_t                    NbOfBytesStillToTransmit;
 static bool                        LnEvent2EmptyRingBuffTransmitted;
-static uint8_t                     LnSequenceNumber;
+
 static uint8_t                     LnSTmin;  /*--- min Separation Time between transmissions
                                                 of 2 Consecutive Frames ---*/
 static TyTIME_t_R7p8125ms          LnSTminInBaseLoopSecB; /*--- min Separation Time between
                                                              transmissions of 2 Consecutive Frames ---*/
+static TyTIME_t_R7p8125ms          LnSTminToBaseLoop;
 static TwTIME_t_R7p8125ms          LnNetworkLayerWaitTimeCounter;
-															 
-//static uint8_t                   LnBSmax; /*unused code BSmax always = 0 in CANOBD 
-                                /*--- Block Size max for Control Flow
-                                           = max number of Consecutive Frame per Block
-                                             without Flow Control frame ---*/
-/* uint8_t                   LnNbConsecutiveFrameTransmitted; unused code BSmax always = 0 in GMLAN */
-/* uint8_t                   LnNbConsFrameRcvdInCurrentBlock;  unused code BSmax always = 0 in GMLAN */
+static uint8_t                     LnRxSequenceNumber;															 
 
-/* GMW-3110 V1.5 :                                  */
+/* ISO-15765-2:                                  */
 /*   1 ms per count for value between $00 and $7F   */
 /*   100 us per count for value between $F1 and $F9 */
-#define   OneMsMaxRange   (0x7F)
+/*   for MT80 is 0x19 (25ms)*/
+#define   OneMsMaxRange   (0x19)
 #define MaxTimeToWaitforRingBufferNotFullInMs (1000)  /*--- max time to wait for ring Buffer not full ---*/
 
 #define LntranspEventFrameTransmitted (LnEventFrameTransmitted)
 #define LntranspEventFunctionalRequest (LnEventFunctionalRequest)
 #define LntranspEventResetToWaitingRequest (LnGoToWaitingRequest)
 #define RequestCanToTransmit8Bytes RequestCanToTransmit
+
+#ifndef CcSYST_BASE_LOOP_1_TIME_x2_
+#define CcSYST_BASE_LOOP_1_TIME_x2_ 8
+#endif
+#ifndef CcSYST_BASE_LOOP_1_TIME_x4_
+#define CcSYST_BASE_LOOP_1_TIME_x4_ 16
+#endif
+#ifndef CcSYST_BASE_LOOP_1_TIME_x6_
+#define CcSYST_BASE_LOOP_1_TIME_x6_ 24
+#endif
+
 /**************************/
 /*** Clear_Buffer ***/
 /**************************/
@@ -214,15 +221,13 @@ uint16_t GetLnServNbOfUsedBytesInRingBuffer (void)
 bool StoreLnServNbBytesInRingBuffer (uint16_t NbBytesToStore,
                                         uint8_t *SourceBufferPtr)
 {
-   //uint32_t          interrupt_state;
-   interrupt_state_t context ;   
+   uint32_t          interrupt_state;
    bool Stored;
    uint16_t ByteNumber;
    uint8_t *LocalSourceBufferPtr;
 
    LocalSourceBufferPtr = SourceBufferPtr;
-   //interrupt_state = EnterCriticalSection();
-  context = Enter_Critical_Section();
+   interrupt_state = EnterCriticalSection();
    if (GetLnServNbOfFreeBytesInRingBuffer () >= NbBytesToStore)
    {
       for (ByteNumber = 0; ByteNumber < NbBytesToStore; ByteNumber++)
@@ -257,8 +262,7 @@ bool StoreLnServNbBytesInRingBuffer (uint16_t NbBytesToStore,
    {
       Stored = false;
    }
-  // ExitCriticalSection( interrupt_state );
-  Leave_Critical_Section(context);
+   ExitCriticalSection( interrupt_state );
    return Stored;
 } /*** End of StoreLnServNbBytesInRingBuffer ***/
 
@@ -278,10 +282,9 @@ bool RetrieveLnServNbBytesFromRingBuffer (uint16_t  NbBytesToRetrieve,
 {
    bool CouldGet;
    uint16_t ByteNumber;
-  // uint32_t          interrupt_state;
-  // interrupt_state = EnterCriticalSection();
-  interrupt_state_t context ;   
-  context = Enter_Critical_Section();
+   uint32_t          interrupt_state;
+
+   interrupt_state = EnterCriticalSection();
    if (GetLnServNbOfUsedBytesInRingBuffer () >= NbBytesToRetrieve)
    {
       for (ByteNumber = 0; ByteNumber < NbBytesToRetrieve; ByteNumber++)
@@ -303,8 +306,7 @@ bool RetrieveLnServNbBytesFromRingBuffer (uint16_t  NbBytesToRetrieve,
    {
       CouldGet = false;
    }
-  // ExitCriticalSection( interrupt_state );
-  Leave_Critical_Section(context);
+   ExitCriticalSection( interrupt_state );
    return CouldGet;
 } /*** End of RetrieveLnServNbBytesFromRingBuffer ***/
 
@@ -340,18 +342,14 @@ bool RetrieveLnServNbBytesFromRingBuffer (uint16_t  NbBytesToRetrieve,
 /********************************************/
 void LnGoToWaitingForRxFirstOrSingleFrame (void)
 {
-   interrupt_state_t context ;   
+   uint32_t          interrupt_state;
 
-  context = Enter_Critical_Section();
-  // uint32_t          interrupt_state;
-  
-   //interrupt_state = EnterCriticalSection();
+   interrupt_state = EnterCriticalSection();
    LnMultipleFrameRxState = WaitingForRxFirstOrSingleFrame;
    LnServiceDataFrame.CurrentDataLength = 0;
    InitializeLnRingBuffer ();
    LnEvent2EmptyRingBuffTransmitted = false;
-   //ExitCriticalSection( interrupt_state );
-   Leave_Critical_Section(context);
+   ExitCriticalSection( interrupt_state );
 } /*** End of LnGoToWaitingForRxFirstOrSingleFrame ***/
 
 /***********************************/
@@ -362,6 +360,16 @@ INLINE void LnGoToSendingFlowControlCts (void)
    LnNetworkLayerWaitTimeCounter = C_R7p8125ms16 (MaxTimeForSengingOneFrameInMs / 1000.0);
    LnMultipleFrameRxState = SendingFlowControlCts;
 } /*** End of LnGoToSendingFlowControlCts ***/
+
+/************************************/
+/*** LnGoToSendingFlowControlOverflow ***/
+/************************************/
+INLINE void LnGoToSendingFlowControlOverflow (void)
+{
+   LnNetworkLayerWaitTimeCounter = C_R7p8125ms16(0) ;
+   LnMultipleFrameRxState = SendingFlowControlWait;
+} /*** End of LnGoToSendingFlowControlOverflow ***/
+
 
 /************************************/
 /*** LnGoToSendingFlowControlWait ***/ /* unused function in GMLAN , FlowControlWait not allowed in GMLAN */
@@ -449,7 +457,7 @@ void LnReceivingBlockOfData (void)
 /*******************************/
 /*** Send Flow Control frame ***/
 /*******************************/
-void SendFlowControl (void)
+void SendFlowControl (uint16_t  DataLength)
 {
    LnUsdtFlowControlFrameType LnUsdtFlowControlFrame;
 
@@ -482,7 +490,7 @@ void SendFlowControl (void)
 /*     } */
 
 /* always FlowControl FlowStatus ClearToSend because FlowControlWait not allowed in GMLAN */
-   LnUsdtFlowControlFrame.PCIByte = PCIFlowControl + FlowControlFlowStatusClearToSend;
+
    LnUsdtFlowControlFrame.BSmax = BlockSizeNoFurtherFlowControl; /* always 0 in CANOBD */
    LnUsdtFlowControlFrame.STmin = MinimumSeparationTimeInMs;
    LnUsdtFlowControlFrame.Unused1=0;
@@ -490,10 +498,21 @@ void SendFlowControl (void)
    LnUsdtFlowControlFrame.Unused3=0;
    LnUsdtFlowControlFrame.Unused4=0;
    LnUsdtFlowControlFrame.Unused5=0;
+   if (DataLength <0x0104)
+   {
+      LnUsdtFlowControlFrame.PCIByte = PCIFlowControl + FlowControlFlowStatusClearToSend;
+      LnGoToSendingFlowControlCts ();
+   }
+   else
+   {
+     /*overflow*/
+      LnUsdtFlowControlFrame.PCIByte = PCIFlowControl + FlowControlFlowStatusoverflow;
+	  LnGoToSendingFlowControlOverflow (); //should be added
+   }
 
-   LnGoToSendingFlowControlCts ();
    RequestCanToTransmit (LnTranspRespUsdtFrameCanId,
                         (Can8DataBytesArrayType *) &LnUsdtFlowControlFrame);
+
 } /*** End of SendFlowControl ***/
 
 /***************************************/
@@ -521,6 +540,8 @@ INLINE void LnWaitingForRxRingBufferNotFull (void)
 INLINE void LnGoToNotSending (void)
 {
    LnMultipleFrameTxState = NotSending;
+   VbDCAN_SvIgnoredMessage = false;
+   
 } /*** End of LnGoToNotSending ***/
 
 /********************************/
@@ -600,12 +621,14 @@ void LnGoToSendingBlockOfData (void)
          /*--- First and last Consecutive Frame ---*/
       RetrieveLnServNbBytesFromRingBuffer( NbOfBytesStillToTransmit,
             ( uint8_t * )&Can8DataBytesArray[ 1 ] );
+	  NbOfBytesStillToTransmit = 0;
+	  VbDCAN_SvIgnoredMessage = false;
       RequestCanToTransmit( LnTranspRespUsdtFrameCanId,
             &Can8DataBytesArray );
-      NbOfBytesStillToTransmit = 0;
    }
    else
    {
+      VbDCAN_SvIgnoredMessage = true;
          /*--- First and not the last Consecutive Frame ---*/
       RetrieveLnServNbBytesFromRingBuffer( 7,
             ( uint8_t * )&Can8DataBytesArray[ 1 ] );
@@ -677,8 +700,9 @@ void LnSendMessage (void)
       Clear_Buffer(&Can8DataBytesArray [0]);
       Can8DataBytesArray [0] = LnServiceDataFrame.DataLength; /*--- PCI = $0X, X = Data Length ---*/
       LnWriteNbBytesFromSourceToDest (LnServiceDataFrame.DataLength,
-                                    (uint8_t *)(&LnServiceDataFrame.Data[0]),
+                                    (uint8_t *) GetLnServiceData (),
                                     (uint8_t *) &Can8DataBytesArray [1]);
+	  VbDCAN_SvIgnoredMessage = false;
       RequestCanToTransmit (LnTranspRespUsdtFrameCanId, &Can8DataBytesArray);
       LnGoToSendingSingleFrame ();
    }
@@ -692,8 +716,9 @@ void LnSendMessage (void)
          LnNbOfUsedBytesInRingBuffer = LnServiceDataFrame.DataLength;
       }
       LnOutPointer = &LnServiceDataFrame.Data [0];
+	  VbDCAN_SvIgnoredMessage = true;
       SendFirstFrame ();
-      //LnGoToSendingFirstFrame ();
+      LnGoToSendingFirstFrame ();
    }
 } /*** End of LnSendMessage ***/
 
@@ -757,8 +782,8 @@ void LnSendingBlockOfData (void)
    {
       if (LnSTminInBaseLoopSecB == 0)
       {
-       //  LnSTminInBaseLoopSecB = LnSTmin / CcSYST_BASE_LOOP_1_TIME_x2;
-        LnSTminInBaseLoopSecB = LnSTmin* 1000 / 7812;
+         LnSTminInBaseLoopSecB = LnSTminToBaseLoop;
+
          LnSequenceNumber++;
       /*--- prepare PCI = Consecutive Frame + Sequence Number ---*/
          Can8DataBytesArray [0] = ConsecutiveFrame
@@ -770,6 +795,7 @@ void LnSendingBlockOfData (void)
                                                  (uint8_t *) &Can8DataBytesArray [1]))
             {
                NbOfBytesStillToTransmit = 0;
+			   VbDCAN_SvIgnoredMessage = false;	   
                LnMultipleFrameTxState = WaitingForBlockFrameTx;
                LnNetworkLayerWaitTimeCounter =  C_R7p8125ms16 (MaxTimeForSengingOneFrameInMs / 1000.0);
                RequestCanToTransmit (LnTranspRespUsdtFrameCanId, &Can8DataBytesArray);
@@ -786,6 +812,7 @@ void LnSendingBlockOfData (void)
             {
                LnMultipleFrameTxState = WaitingForBlockFrameTx;
                LnNetworkLayerWaitTimeCounter =  C_R7p8125ms16 (MaxTimeForSengingOneFrameInMs / 1000.0);
+			   VbDCAN_SvIgnoredMessage = true;
                RequestCanToTransmit8Bytes (LnTranspRespUsdtFrameCanId, &Can8DataBytesArray);
                NbOfBytesStillToTransmit = NbOfBytesStillToTransmit - 7;
             }
@@ -831,7 +858,6 @@ INLINE void LnWaitingDataForTxInRingBuffer (void)
    LnGoToWaitingForRxFirstOrSingleFrame ();
    LnGoToNotSending ();
    LntranspEventFrameTransmitted ();
-   //InitializeLnDiagSvCommunication();
    LnTranspRespUsdtFrameCanId = DiagRespUsdtFrameCanId;
 } /*** End of LnFrameTransmitted ***/
 
@@ -848,9 +874,9 @@ INLINE void LnWaitingDataForTxInRingBuffer (void)
 /***          Single Frame or First Frame or Consecutive Frame ***/
 /***                       or Flow Control                     ***/
 /*****************************************************************/
-INLINE void LnTrspUsdtRcvdFromDistantEvent (Can8DataBytesArrayType Can8DataBytesArray)
+void LnTrspUsdtRcvdFromDistantEvent (Can8DataBytesArrayType Can8DataBytesArray)
 {
-   uint8_t PCIByte;
+   uint8_t   PCIByte;
    uint16_t  DataLength;
    uint16_t  RemainingNbBytetoReceive;
 
@@ -870,14 +896,27 @@ INLINE void LnTrspUsdtRcvdFromDistantEvent (Can8DataBytesArrayType Can8DataBytes
            Implementation rules'.
            The maximum polling rate specified there is 30 ms.
            Our application polling rate is 10 ms. ---*/
+           
+      /*terminate the current reception when SF N_PDU arrives*/
+	  if((WaitingForRxBlockOfData == LnMultipleFrameRxState)
+	  	 ||(ReceivingBlockOfData == LnMultipleFrameRxState))
+      {
+	    LnGoToWaitingForRxFirstOrSingleFrame();
+
+      }
       DataLength = (uint16_t) (PCIByte & SingleFrameDataLengthPciMask);
-      LnServiceDataFrame.DataLength = DataLength;
-      LnWriteNbBytesFromSourceToDest (DataLength,
+      if ( ((DataLength > 0) && (DataLength < 8))
+           &&(DataLength < GetCANMsg_Buffer_DLC())
+           &&(!VbDCAN_SvIgnoredMessage))
+      {
+         LnServiceDataFrame.DataLength = DataLength;
+         LnWriteNbBytesFromSourceToDest (DataLength,
                                       &Can8DataBytesArray [1],
                                       &LnServiceDataFrame.Data [0]);
-      LnServiceDataFrame.CurrentDataLength = DataLength;
-      SetLnMessageAddressingMode (PhysicalAddressing);
-      LnGoToReceptionCompleteMsgWaiting ();
+         LnServiceDataFrame.CurrentDataLength = DataLength;
+         SetLnMessageAddressingMode (PhysicalAddressing);
+         LnGoToReceptionCompleteMsgWaiting ();
+      }
 /*        }*/
       break;
       case FirstFrame:
@@ -893,41 +932,75 @@ INLINE void LnTrspUsdtRcvdFromDistantEvent (Can8DataBytesArrayType Can8DataBytes
            The maximum polling rate specified there is 30 ms.
            Our application polling rate is 10 ms. ---*/
       LntranspEventResetToWaitingRequest ();
+
+	  if((WaitingForRxBlockOfData == LnMultipleFrameRxState)
+	  	 ||(ReceivingBlockOfData == LnMultipleFrameRxState))
+	  {
+         LnGoToWaitingForRxFirstOrSingleFrame();
+	  }
+	  
       DataLength = (uint16_t) (((PCIByte & SingleFrameDataLengthPciMask) << 8)
                                       + Can8DataBytesArray [1]);
-      LnServiceDataFrame.DataLength = DataLength;
-      StoreLnServNbBytesInRingBuffer (6, &Can8DataBytesArray [2]);
-
-            SendFlowControl();
+      if (( DataLength > 6 )
+	  	&&(!VbDCAN_SvIgnoredMessage))
+      {
+         LnServiceDataFrame.DataLength = DataLength;
+         StoreLnServNbBytesInRingBuffer (6, &Can8DataBytesArray [2]);
+         SendFlowControl(DataLength);
+	     LnRxSequenceNumber = 0;
+      }
 
       break;
       case ConsecutiveFrame:
-      if (LnMultipleFrameRxState == WaitingForRxBlockOfData)
-      { /*--- on first Consecutive Frame ---*/
-         LnGoToReceivingBlockOfData ();
-      }
-      LnNetworkLayerWaitTimeCounter = C_R7p8125ms16 (MaxTimeFromCfToCfInMs / 1000.0);
-      if (LnMultipleFrameRxState == ReceivingBlockOfData)
+	  if(!VbDCAN_SvIgnoredMessage)
+	  {
+         if (LnMultipleFrameRxState == WaitingForRxBlockOfData)
+         { /*--- on first Consecutive Frame ---*/
+            LnGoToReceivingBlockOfData();
+         }
+         LnNetworkLayerWaitTimeCounter = C_R7p8125ms16 (MaxTimeFromCfToCfInMs / 1000.0);
+         LnRxSequenceNumber++;
+         if (LnRxSequenceNumber == 0x0F)
+         {
+       	   LnRxSequenceNumber = 0;
+         }
+	  }
+      if ((LnMultipleFrameRxState == ReceivingBlockOfData)
+          &&(LnRxSequenceNumber == (PCIByte & ConsecutiveFrameSequenceNumberMask)))
       {
         /* LnNbConsFrameRcvdInCurrentBlock++; unused code BSmax always = 0 in GMLAN */
          RemainingNbBytetoReceive = LnServiceDataFrame.DataLength -
                                    LnServiceDataFrame.CurrentDataLength;
          if (RemainingNbBytetoReceive > 7)
          { /*--- remaining number of byte to receive >= 7 ---*/
-            if (!StoreLnServNbBytesInRingBuffer (7, &Can8DataBytesArray [1]))
+            if( 8 != GetCANMsg_Buffer_DLC() )
             {
-               LnGoToWaitingForRxRingBufferNotFull (C_R7p8125ms16 (MaxTimeToWaitforRingBufferNotFullInMs / 1000.0));
+               LnNetworkLayerWaitTimeCounter = C_R7p8125ms16 (0);
             }
-            if (LnNbOfUsedBytesInRingBuffer > 80 /* 1 frame per ms <=> 80 bytes per 10 ms */
-              &&
-              !LnEvent2EmptyRingBuffTransmitted)
-            {
-               LnEventRxWaitingAppToEmptyRingBuffer ();
-               LnEvent2EmptyRingBuffTransmitted = true;
-            }
+			else
+			{
+               if (!StoreLnServNbBytesInRingBuffer (7, &Can8DataBytesArray [1]))
+               {
+                  LnGoToWaitingForRxRingBufferNotFull (C_R7p8125ms16 (MaxTimeToWaitforRingBufferNotFullInMs / 1000.0));
+               }
+               if (LnNbOfUsedBytesInRingBuffer > 80 /* 1 frame per ms <=> 80 bytes per 10 ms */
+                 &&
+                 !LnEvent2EmptyRingBuffTransmitted)
+               {
+                  LnEventRxWaitingAppToEmptyRingBuffer ();
+                  LnEvent2EmptyRingBuffTransmitted = true;
+               }
+	        }
          }
          else
-         { /*--- this is the last Consecutive frame of this block
+         { // when the data length wrong, don't response
+		 	if( RemainingNbBytetoReceive > (GetCANMsg_Buffer_DLC()-1) )
+            {
+               LnNetworkLayerWaitTimeCounter = C_R7p8125ms16 (0);
+            }
+			else
+			{
+		 	/*--- this is the last Consecutive frame of this block
                   because all data bytes have been received ---*/
             if (!StoreLnServNbBytesInRingBuffer (RemainingNbBytetoReceive,
                                                &Can8DataBytesArray [1]))
@@ -940,44 +1013,54 @@ INLINE void LnTrspUsdtRcvdFromDistantEvent (Can8DataBytesArrayType Can8DataBytes
                SetLnMessageAddressingMode (PhysicalAddressing);
                LnGoToReceptionCompleteMsgWaiting ();
             }
+			}
          }
       }
       break;
       case PCIFlowControl:
-      if (LnMultipleFrameTxState == WaitingForRxFlowControl)
+      if ((LnMultipleFrameTxState == WaitingForRxFlowControl)
+	  	||(LnMultipleFrameTxState == SendingFirstFrame)
+	  	||(LnMultipleFrameTxState == WaitingForRxFlowControlAfterWait))
       {
-         if ((PCIByte & UsdtFrameTypePciMask) == PCIFlowControl)
+         if (((PCIByte & UsdtFrameTypePciMask) == PCIFlowControl) 
+		&& (GetCANMsg_Buffer_DLC() >= 3))
          { /*--- received Flow Control in transmission ---*/
             if ((PCIByte & FlowControlFlowStatusMask) == FlowControlFlowStatusClearToSend)
             {
                /* LnBSmax = Can8DataBytesArray [1]; unused code, BSmax always = 0 in GMLAN */
                LnSTmin = Can8DataBytesArray [2];
                /*--- conversion from 1 ms or 100us to 7.8125 ms precision since logic called every 7.8125 ms ---*/
-               if (LnSTmin <= OneMsMaxRange)
+               if (LnSTmin < OneMsMaxRange)
                {
-			  /* 1 ms per count */
-                 // LnSTminInBaseLoopSecB = LnSTmin / CcSYST_BASE_LOOP_1_TIME_x2;
-                  LnSTminInBaseLoopSecB = LnSTmin* 1000 / 7812;
-                  if ((LnSTmin % 8) != 0)
+                  if ( LnSTmin < CcSYST_BASE_LOOP_1_TIME_x2_ )
                   {
-                    LnSTminInBaseLoopSecB++;
+                     LnSTminInBaseLoopSecB = 0;
                   }
+                  else if (LnSTmin < CcSYST_BASE_LOOP_1_TIME_x4_)	
+                  {
+                     LnSTminInBaseLoopSecB = 1;                  
+                  }
+                  else if (LnSTmin < CcSYST_BASE_LOOP_1_TIME_x6_ )	
+                  {
+                     LnSTminInBaseLoopSecB = 2;                  
+                  }
+                  else
+                  {
+                     LnSTminInBaseLoopSecB = 3;                       
+                  }
+               }
+               else if( (LnSTmin <= 0xF9) &&(LnSTmin >= 0xF1) )
+               {
+                  /*100 us */
+                  LnSTminInBaseLoopSecB = 0;               
                }
                else
                {
-			  /* 100 us per count: set minimum time to 7.8125 ms  */
-                  LnSTminInBaseLoopSecB = 1;
+	           /*  set minimum time to 25 ms  */
+                  LnSTminInBaseLoopSecB = 3;
                }
-            /*--- the current specification do not require to wait after the reception
-                  of a Control Flow to transmit the fisrt Consecutive frame ---*/
-            /* if ()
-              {
-              LnGoToWaitingForTxFirstConsecutiveFrame (TwTIME_t_R7p8125ms MaxTimeToWait);
-              }
-            else
-              { */
-               LnGoToSendingBlockOfData ();
-              /*} */
+               LnSTminToBaseLoop = LnSTminInBaseLoopSecB;
+			   LnGoToWaitingForTxFirstConsecutiveFrame(EcmCountForTxFirstCF);
             }
             else if ((PCIByte & FlowControlFlowStatusMask) == FlowControlFlowStatusWait)
             { /* this should never happen in GMLAN */
@@ -997,6 +1080,14 @@ INLINE void LnTrspUsdtRcvdFromDistantEvent (Can8DataBytesArrayType Can8DataBytes
    }
 } /*** End of LnTrspUsdtRcvdFromDistantEvent ***/
 
+/*****************************************************************/
+/*** CAN Id = $5e8 frame received event                        ***/
+/***          Diag UUDT Single Frame (response only)           ***/
+/*****************************************************************/
+void LnTrspCanId5e8RcvdEvent (Can8DataBytesArrayType Can8DataBytesArray)
+{
+   PARAM_NOT_USED (Can8DataBytesArray);
+} /*** End of LnTrspCanId5e8RcvdEvent ***/
 
 /*******************************************************/
 /*** CAN Id = $7df frame received event              ***/
@@ -1007,15 +1098,12 @@ void LnTrspCanId7dfRcvdEvent (Can8DataBytesArrayType Can8DataBytesArray)
    uint8_t PCIByte;
    uint16_t  DataLength;
    PCIByte = Can8DataBytesArray [0];
-
-   if ((PCIByte & 0xF0) == 0x00 /*--- only Single Frame in functional mode cf spec. ---*/
-      //&&
-     // LnMultipleFrameRxState == WaitingForRxFirstOrSingleFrame
-      )
+   DataLength = (uint16_t) (PCIByte & SingleFrameDataLengthPciMask);
+   if (((PCIByte & 0xF0) == 0x00) /*--- only Single Frame in functional mode cf spec. ---*/
+      && (DataLength > 0 && DataLength < 8)
+      && (DataLength < GetCANMsg_Buffer_DLC()))
    {
-     LnMultipleFrameRxState = WaitingForRxFirstOrSingleFrame;
       SetLnMessageAddressingMode (FunctionalAddressing);
-      DataLength = (uint16_t) (PCIByte & SingleFrameDataLengthPciMask);
       LnServiceDataFrame.DataLength = DataLength;
       LnWriteNbBytesFromSourceToDest (DataLength,
                                     &Can8DataBytesArray [1],
@@ -1055,7 +1143,17 @@ void LnTrspUsdtRcvdFromEcmEvent (Can8DataBytesArrayType Can8DataBytesArray)
          { /*--- on last Consecutive Frame ---*/
             LnFrameTransmitted ();
          }
-
+      /* unused code, BSmax always = 0 in GMLAN
+      else
+        {
+        if (LnBSmax != BlockSizeNoFurtherFlowControl
+            &&
+            LnNbConsecutiveFrameTransmitted == LnBSmax)
+          {
+          LnGoToWaitingForRxFlowControl (FixDefConst ((MaxTimeFromFfOrCfToFcInMs / 1000.0),
+                                                       TwTIME_t_R7p8125ms));
+          }
+        } */
       break;
       case PCIFlowControl:
          if (LnMultipleFrameRxState == SendingFlowControlCts)
@@ -1063,24 +1161,28 @@ void LnTrspUsdtRcvdFromEcmEvent (Can8DataBytesArrayType Can8DataBytesArray)
             LnGoToWaitingForRxBlockOfData (C_R7p8125ms16 (MaxTimeFromFcCtsToCfInMs / 1000.0));
           }
       break;
-
-	  default :
-		
-                LnMultipleFrameTxState=SendingBlockOfData;
-	break; 
-
    }
 } /*** End of LnTrspUsdtRcvdFromEcmEvent ***/
 
+/*********************/
+/* CanId5e8RcvdEvent */
+/*********************/
+void CanId5e8RcvdEvent (Can8DataBytesArrayType *Can8DataBytesArrayPtr)
+{
+   LnTrspCanId5e8RcvdEvent (*Can8DataBytesArrayPtr);
+} /*** End of CanId5e8RcvdEvent ***/
 
 /*********************/
 /* CanId7dfRcvdEvent */
 /*********************/
 void CanId7dfRcvdEvent (Can8DataBytesArrayType *Can8DataBytesArrayPtr)
 {
-   LnServiceDataFrame.SourceCanId = DCAN_RECEIVE_MESSAGE_ID;
+   LnServiceDataFrame.SourceCanId = CanId7df;
    LnTranspRespUsdtFrameCanId = DiagRespUsdtFrameCanId;
-   LnTrspCanId7dfRcvdEvent (*Can8DataBytesArrayPtr);
+   if(!VbDCAN_SvIgnoredMessage)
+   {
+      LnTrspCanId7dfRcvdEvent (*Can8DataBytesArrayPtr);
+   }
 } /*** End of CanId7dfRcvdEvent ***/
 
 /*********************/
@@ -1088,10 +1190,22 @@ void CanId7dfRcvdEvent (Can8DataBytesArrayType *Can8DataBytesArrayPtr)
 /*********************/
 void CanId7e0RcvdEvent (Can8DataBytesArrayType *Can8DataBytesArrayPtr)
 {
-   LnServiceDataFrame.SourceCanId = DCAN_FLOWCONTROL_MESSAGE_ID;
+   LnServiceDataFrame.SourceCanId = CanId7e0;
    LnTranspRespUsdtFrameCanId = DiagRespUsdtFrameCanId;
-   LnTrspUsdtRcvdFromDistantEvent (*Can8DataBytesArrayPtr);
+   LnTrspUsdtRcvdFromDistantEvent (*Can8DataBytesArrayPtr);   
 } /*** End of CanId7e0RcvdEvent ***/
+
+/*********************/
+/*CanIdCALRcvdEvent */
+void CanIdCALRcvdEvent (Can8DataBytesArrayType *Can8DataBytesArrayPtr)
+{
+   	  LnServiceDataFrame.SourceCanId = KwDCANOBD_CANID;
+      LnTranspRespUsdtFrameCanId = DiagRespUsdtFrameCanId;
+   	  if(!VbDCAN_SvIgnoredMessage)
+   	  {
+   		 LnTrspCanId7dfRcvdEvent (*Can8DataBytesArrayPtr);
+	  } 
+} /*** End of CanIdCALRcvdEvent ***/
 
 /*********************/
 /* CanId7e8RcvdEvent */
@@ -1100,66 +1214,6 @@ void CanId7e8RcvdEvent (Can8DataBytesArrayType *Can8DataBytesArrayPtr)
 {
    LnTrspUsdtRcvdFromEcmEvent (*Can8DataBytesArrayPtr);
 } /*** End of CanId7e8RcvdEvent ***/
-
-#define KERNEL_FLASH_STARTADDR_LOW    (0x8000)
-#define KERNEL_RAM_STARTADDR           (0x5000)
-#define KERNEL_SIZE                    (2809)
-/* ========================================================================= *\
- * FUNCTION: Copy_DFlash_to_RAM_and_Execute
- * Description: copy code from D-Flash to RAM and execute
-\* ========================================================================= */
-static void Copy_Flash_to_RAM_and_Execute( uint8_t *rom_add, uint8_t *ram_add, uint16_t size )
-{
- void (*fp_reprogramkernal)(void);
-
-   ReadIO_Flash_BlockData( rom_add, ram_add, size);
-   
-   fp_reprogramkernal = (void*) ((uint16_t)(KERNEL_RAM_STARTADDR));
-
-   /* Call routine. */
-   //fp_reprogramkernal();  
-  (*fp_reprogramkernal)();
-
-}
-
-bool Get_Reprogram_Conditions_Met(void)
-{
-   bool reprogram_allowed = false;
-
-   if ( GetVIOS_n_EngSpd() < V_RPMa( 200 ) &&
-         GetVIOS_v_VehSpd() < V_KPH( 3 ) )
-   {
-       reprogram_allowed = true;
-   }
-   return reprogram_allowed;
-}
-
-FAR_COS void KW2KCAN_Received_Message(Can8DataBytesArrayType Can8DataBytesArrayPtr)
-{
-   uint8_t startDiagResp[8]= { 0xFB, 0x02, 0x50, 0x84, 0x00, 0x00, 0x00, 0x00 };
-
-
-
- if ( Get_Reprogram_Conditions_Met() )
- {
-
-      // okay to FLASH 
-
-    Transmit_Message( KW2K_CANID_TRANSMIT, startDiagResp);
-    CAN_Clear_Transmit_Buffer_Empty_Flag(KeHWIO_CCP_CanPort,1);      /* request message xmit for CAN0 */
-    CAN_Clear_Receive_Buffer_Full_Flag(KeHWIO_CCP_CanPort);
-     // Put ECU into a known safe state 
-     // SetIO_Outputs_For_Flash_Program();
-    SetVIOS_MainRlyOff();
-    Disable_Interrupts();
-    TLE4471_WatchDog_Feeding();
-    OS_COPClear();
-	  
-	Copy_Flash_to_RAM_and_Execute( (uint8_t*)KERNEL_FLASH_STARTADDR_LOW,
-                                   (uint8_t*)KERNEL_RAM_STARTADDR,
-                                             KW2k_Over_CAN_Kernel_Size);
-   }
-}
 
 /****************************************************/
 /***                   END OF                     ***/
@@ -1227,7 +1281,6 @@ void UpdateLnTransportLayer (void)
          LnWaitingForRxRingBufferNotFull ();
       break;
       case ReceptionCompleteMsgWaiting:
-	 // LnDiagSvCommunicationState = RxCompleteWaitingAppToRespond;
       break;
       default :
       for (;;) {}
@@ -1275,149 +1328,10 @@ void UpdateLnTransportLayer (void)
       case WaitingDataForTxInRingBuffer:
          LnWaitingDataForTxInRingBuffer ();
       break;
-      default : 
+      default :
       for (;;) {}
    }
 } /*** End of UpdateLnTransportLayer ***/
-
-void INCA_ReFlash (Can8DataBytesArrayType *Can8DataBytesArrayPtr)
-  {
-  KW2KCAN_Received_Message (*Can8DataBytesArrayPtr);
-  }
-
-/****************************************************************/
-/***                     RECEPTION TASKS                      ***/
-/****************************************************************/
-const CanRxMessageControlType CanRxMesgControlTable [] = {
-/* Functional Request EOBD */
-  DCAN_RECEIVE_MESSAGE_ID,
-  BufferCanId7df,
-  CanId7dfRcvdEvent
-  ,
-/* Diagnostic Information Usdt */
-  DCAN_FLOWCONTROL_MESSAGE_ID,
-  BufferCanId7e0,
-  CanId7e0RcvdEvent
-  ,
-/* Functionnal Request Diag */
-  KW2K_CANID_RECEIVE,
-  BufferCanId6fb,
-  INCA_ReFlash
-
-};
-
-#define RxMsgNbWithRxTimingsControlled (sizeof (CanRxMesgControlTable) / sizeof (CanRxMessageControlType))
-const uint8_t BufferSizeRxMesgControlTable = RxMsgNbWithRxTimingsControlled;
-
-//FAR_COS void Notify_Application_CANOBD( uint16_t  message_id )
-FAR_COS void MngDCAN_RcvdEvent( uint16_t  message_id )
-{
-   VioCanRxBufferStructType * PtrOnVioCanRxBuffer;
-   Can8DataBytesArrayType *Can8DataBytesArrayPtr;
-   uint16_t PreviousRxBufferstate;
-   uint8_t CanBuffer=0;
-   uint8_t found = false;
-   uint8_t CAN_message_number = 0;
-   //uint8_t  Transferlayerbuffernumber = 0;
-
-  // Transferlayerbuffernumber = Get_Receive_Message_Number_From_Message_ID(message_id); //mzyqz4-sep10
- 
-   for( CAN_message_number = 0;
-        CAN_message_number <  BufferSizeRxMesgControlTable ;
-        CAN_message_number++ )
-   {
-      if( CanRxMesgControlTable[CAN_message_number].CAN_message_ID == message_id )
-      {
-         found  = 1;
-         CanBuffer = CAN_message_number;
-         break;
-      }
-   }
-
-   if (found != false)
-   {
-      // we have found a matching buffer entry,lets try to process the received msg.
-      
-     //CanBuffer = CanRxMesgControlTable [CAN_message_number].MessageBufferNumber;
-
-      PtrOnVioCanRxBuffer = &(VioCanRxBuffer [CanBuffer]);
-
-      PreviousRxBufferstate = VioCanRxBuffer[CanBuffer].State; 
-      VioCanRxBuffer[CanBuffer].State = VioRxBufferBusy;
-
-      if ( Get_Message( DCAN_RECEIVE_MESSAGE_ID, PtrOnVioCanRxBuffer->DataBytes ) )
-      {
-         if (PreviousRxBufferstate == VioRxBufferEmpty) 
-         {
-            VioCanRxBuffer[CanBuffer].State = VioRxBufferFull;
-         }
-         else
-         {
-            VioCanRxBuffer[CanBuffer].State = VioRxBufferOverrun;
-         }
-         Can8DataBytesArrayPtr =
-                   (Can8DataBytesArrayType *) &(VioCanRxBuffer [CanBuffer].DataBytes);
-        (*CanRxMesgControlTable [CanBuffer].Task) (Can8DataBytesArrayPtr);
-
-      }
-     else if ( Get_Message( DCAN_FLOWCONTROL_MESSAGE_ID, PtrOnVioCanRxBuffer->DataBytes ) )
-      {
-         if (PreviousRxBufferstate == VioRxBufferEmpty) 
-         {
-            VioCanRxBuffer[CanBuffer].State = VioRxBufferFull;
-         }
-         else
-         {
-            VioCanRxBuffer[CanBuffer].State = VioRxBufferOverrun;
-         }
-         Can8DataBytesArrayPtr =
-                   (Can8DataBytesArrayType *) &(VioCanRxBuffer [CanBuffer].DataBytes);
-        (*CanRxMesgControlTable [CanBuffer].Task) (Can8DataBytesArrayPtr);
-
-      }
-     else if ( Get_Message( KW2K_CANID_RECEIVE, PtrOnVioCanRxBuffer->DataBytes ) )
-      {
-         if (PreviousRxBufferstate == VioRxBufferEmpty) 
-         {
-            VioCanRxBuffer[CanBuffer].State = VioRxBufferFull;
-         }
-         else
-         {
-            VioCanRxBuffer[CanBuffer].State = VioRxBufferOverrun;
-         }
-         Can8DataBytesArrayPtr =
-                   (Can8DataBytesArrayType *) &(VioCanRxBuffer [CanBuffer].DataBytes);
-        (*CanRxMesgControlTable [CanBuffer].Task) (Can8DataBytesArrayPtr);
-
-     }
-	     
-   } 
-}
-
-
-FAR_COS void MngDCAN_TransmitdEvent( uint16_t   msg_id)
-{
-
-uint8_t CAN_transmit_message_number ;
-Can8DataBytesArrayType *Can8DataBytesArrayPtr;
-
-   for( CAN_transmit_message_number = 0;
-        CAN_transmit_message_number <  CAN_NUMBER_OF_TRANSMIT_MESSAGES;
-        CAN_transmit_message_number++ )
-   {
-      if( (TRANSMIT_CAN_MESSAGE_ID == msg_id)
-	  	&&(DCAN_RESPONSE_MESSAGE_ID == msg_id))
-      {
-            break;
-      }
-   }
-  
-   Can8DataBytesArrayPtr = (Can8DataBytesArrayType *)(TRANSMIT_NEXT_DATA_OUT_PTR -TRANSMIT_CAN_MESSAGE_LENGTH);
-   //CanId7e8TransmitdEvent(Can8DataBytesArrayPtr);
-   CanId7e8RcvdEvent(Can8DataBytesArrayPtr);
-
-}
-
 
 /******************************************************************************
 *
@@ -1425,23 +1339,34 @@ Can8DataBytesArrayType *Can8DataBytesArrayPtr;
 *
 * Rev.  YYMMDD Who RSM# Changes
 * ----- ------ --- ---- -------------------------------------------------------
-* 1     060215 cr       Created from TCL version (archive cvs partition op36cm)
+* 1     110401 cjqq       Base on T300 GMLAN Project
 *
-* 2     070629 abh      Modified to implement padding the non information bytes
-*                       with zeros
-* 3     080117 HHO CR28 Integrated immobilizer functions (GMW 7349)
-*
-* tcb_pt1#3.1.1
-*       080603 HHO CR28 Added flags to inform immobilizer end of multi-frame tx
-* tci_pt3#3.1.2
-*       080924 VP  7329 Changes to support Customized TP for Immobilizer.
-*
-* 3.0  100906    hdg  xxx  Implemented CAN OBD in MT22.1 paltform.
-* 4.0  100915    hdg  xxx  Implemented CAN Flash in MT22.1 paltform.
-* 3    100917    wj  CTC RSM8069
-*                           Added CAN ID 101 for CAN reflash
-* 4    101011    wj  CTC RSM8069 Turn off main power relay when reprogramming on going.
-*
+* ctc_pt3#1.0   SCR:ctc_pt3#578
+*       101124 cjqq Changed the dlc of CANID 7df/7e0 at CANOBD_Message_Parameter_Table
+* ctc_pt3#2.0   SCR:ctc_pt3#597
+*       101215 cjqq Recovered the dlc of CANID 7df/7e0 at CANOBD_Message_Parameter_Table
+* ctc_pt3#3.0   SCR:ctc_pt3#665
+*       110401 cjqq Improved the error handling function at transport layer
+* ctc_pt3#4.0   
+*       110921 cjqq code optimized to avoid float operation
+* 7  
+*       111006 cjqq Fix the bug of no response find in MT22.1IAC project.
+* 8  
+*       111104 cjqq Define a time for waiting TX first CF when receive FC.
+* 9     120307 cjqq Add VbDCAN_SvIgnoredMessage to comply the spec,
+*                    when sending not response new require.
+*                   fix the bug about 30 00 xx no response.
+* 10     120829 cjqq Fix the bug of CAN frame DLC too short in a ConsecutiveFrame.
+* 11     120829 cjqq Fix the bug of Behaviour of ECU reception of a segmented 
+*                    message interrupted with a FirstFrame after FlowControl.
+* 12     121017 xll  Added function CanIdCALRcvdEvent().
+* 13     121022 xll  modified function CanIdCALRcvdEvent().
+* 14     121213 xll  Bug fix for the status of LnMultipleFrameRxState is not restored 
+*                    When ECU send the 32 flow control.
+* 15     121224 xjj  Define CcSYST_BASE_LOOP_1_TIME_x2_ CcSYST_BASE_LOOP_1_TIME_x4_ 
+*                           CcSYST_BASE_LOOP_1_TIME_x6_ if be not defined.
+* 16     130509 xll  Added the logic that terminate the current reception when SF or FF N_PDU arrives
+*                    Added the logic when the data length wrong ECM  don't response in CF.
 ******************************************************************************/
 
 
