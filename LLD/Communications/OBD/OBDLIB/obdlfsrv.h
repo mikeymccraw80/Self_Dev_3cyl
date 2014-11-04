@@ -116,7 +116,7 @@
 #define Cy1979_InfoType_0A_BitPosVal 0x40
 
 #define Cy1979_NumOfMsgsToRptCalID   4
-//#define Cy1979_NumOfMsgsToRptCVNs    1
+#define Cy1979_NumOfMsgsToRptCVNs    1
 #define Cy1979_Mode09_MsgNumLoc      1
 #define Cy1979_InfoTypeDataIdx       1
 #define Cy1979_PerRespMaxChar        4
@@ -146,7 +146,7 @@
 #define  CyModeA_NumDTC_Offset       (1)
 
 /* SID 09 Supported Infotypes */
-//#define Cy1979_InfoType20            0x20
+#define Cy1979_InfoType20            0x20
 #define Cy1979_InfoType40            0x40
 #define Cy1979_InfoType60            0x60
 #define Cy1979_InfoType80            0x80
@@ -166,9 +166,9 @@
 
 #define Cy1979_NumOfMsgsToRptCalID_DCAN   1    /* 1 Msg only for CAN */
 
-//#define Cy1979_MaxCalIDs             1
-//#define Cy1979_MaxCVNIDs             1
-//#define Cy1979_Mode09_MaxCalChar     16
+#define Cy1979_MaxCalIDs             1
+#define Cy1979_MaxCVNIDs             1
+#define Cy1979_Mode09_MaxCalChar     16
 
 //#if XeTRVS_SYST_TYPE == XeTRVS_SYST_PCM
 //#define Cy1979_Mode09_MaxCalCharPCM  32
@@ -177,7 +177,7 @@
 
 //#if (XeTRVS_SYST_TYPE == XeTRVS_SYST_PCM) &&\
    // (XeSYST_SEPERATE_CAL == CeSYST_AVAILABLE)
-//#define Cy1979_MaxCVNIDsPCM          2
+#define Cy1979_MaxCVNIDsPCM          2
 //#endif
 
 /*********************************************************************/
@@ -429,7 +429,7 @@
 //#define GetWrtbufferAddr() (KW2K_GetServiceData())
 
 /***********************End of  Service 31*****************************/
-#if 0
+#if 1
 /***************** Service 1A and Service 3B **************************/
 #define VIN_Size                     (17)/* Defines size of Vin Number Array */
 #define VehicleManu_HW_Number_Size    (11)
@@ -491,10 +491,10 @@
 #define CcODOInformation                              (0xDC)
 #define CcDelphiImmoSecretKEY                         (0x10)
 #define CcSecurityAccessLevel2Key                     (0x20)
-
+#endif
 #define Cy1979_EngCalIDSize               (8)
 #define Cy1979_TrnCalIDSize               (8)
-
+#if 0
 /*****  Supported Record Local Identifier Size *****/
 #define CyAfterSalesServiceRecordSize      (7)/*not used*/
 #define SideRailSize                       (20)

@@ -28,7 +28,7 @@
 /******************************************************************************
 * APP Include Files
 ******************************************************************************/
-#include "systpcfg.h"
+// #include "systpcfg.h"
 #include "obdsfapp.h"/*ImmoGoToNormalKeyword()*/
 /******************************************************************************
 * CAN OBD Service Include Files
@@ -73,7 +73,7 @@ void MngCANOBD_TasksExecutive( void )
 * Description: This function will be called at each 7.8125 ms  by the  *
 *              operation system to check the recieved Msg.             *
 ***********************************************************************/
-FARFUNC void MngDCAN_TasksExecutive( void )
+void MngDCAN_TasksExecutive( void )
 {
       /*- Normal Keyword Mode. Server Mode-*/
       MngCANOBD_TasksExecutive();
@@ -86,7 +86,7 @@ FARFUNC void MngDCAN_TasksExecutive( void )
 *                                                                      *
 * Description: This function will be called at reset to key on         *
 ***********************************************************************/
-FARFUNC void InitDCAN_RstToKeyOnTasks( void )
+void InitDCAN_RstToKeyOnTasks( void )
 {
    InitializeDCAN_Services() ;
    InitializeLnDiagServices ();

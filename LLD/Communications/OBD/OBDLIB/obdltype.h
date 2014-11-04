@@ -70,7 +70,9 @@ typedef union
 {
   BYTE ubyte;
   WORD uword;
-} BYTEANDWORD1;
+} BYTEANDWORD1;
+
+
 
 typedef struct
 {
@@ -140,7 +142,42 @@ typedef union
   WORD                      Word_Access;
 } TWO_BYTE_DATA_TYPE;
 
+typedef
+  struct
+    {
+    bitfield16_t PreviousCommState:                 1;
+    bitfield16_t SecurityAccessUnlocked:            1;
+    bitfield16_t ECUResetPending:                   1;
+    bitfield16_t WaitingForWriteDataByIdToComplete: 1;
+    bitfield16_t WriteLongPIDData:                  1;
+    bitfield16_t UnusedBit2:                        1;
+    bitfield16_t TransferDataRequested:             1; 
+    bitfield16_t DownLoadRequested:                 1;
+    
+    bitfield16_t DownLoadGranted:                   1;
+    bitfield16_t ReprogramWdgCalPending:            1;
+    bitfield16_t SendingOneShotDpidResponse:        1;
+    bitfield16_t ReadMemoryByAddressActive:         1;
+    bitfield16_t ReadSupportedDTCActive:            1;
+    bitfield16_t DeviceControlActive:               1;
+    bitfield16_t SmallGmLan:                        1;
+    }
+  LnDiagSvFlagsType;
 
+/* DTC information returned to the service functions.  */
+typedef struct
+{
+  TWO_BYTE_DATA_TYPE       DTC_Number;
+  BYTE                     DTC_FailureType;
+  BYTE                     DTC_Status;
+  TbBOOLEAN                DTC_Valid;
+  TbBOOLEAN                Addl_DTC_Found;
+} DTC_STATUS_INFO_TYPE;
+
+typedef enum {
+  MODE_3,
+  MODE_7
+} MODES_TYPE;
 /*****************************************************************************
  *  Local Types
  *****************************************************************************/

@@ -52,7 +52,7 @@
 ***********************************************************************/
 #include "t_gentypes.h"
 #include "dcanpcfg.h"
-#include "obdspcfg.h"
+// #include "obdspcfg.h"
 #if (XeDCAN_SID_27_Supported == CeDCAN_Supported)
 #define SubFuncRequestSeed (0x01)
 #define SubFuncSendKey     (0x02)

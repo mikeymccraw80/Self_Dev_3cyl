@@ -55,6 +55,7 @@
  *  Library Include Files
  *****************************************************************************/
 #include "obdltype.h"
+#include "timepcvc.h"
 
 typedef
     struct

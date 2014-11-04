@@ -29,7 +29,7 @@
 /******************************************************************************
 * APP Include Files
 ******************************************************************************/
-#include "obdsfexi.h"
+// #include "obdsfexi.h"
 /******************************************************************************
 * CAN OBD Service Include Files
 ******************************************************************************/
@@ -1864,6 +1864,7 @@ const TsDCAN_MID_TID_AttrType CaDCAN_MID_E1_TID_Attributes[] =
 * kok_pt2#2
 *        110719   cjk  7640  Update Exhaust Sensor Diagnostic (EXSD)
 *                      8907   interface
-* 4      111104   cjqq  9487  Remove CeDGDM_O2_12_Response.
+* 4      111104   cjqq  9487  Remove CeDGDM_O2_12_Response.
+
 * 5      120307   cjqq  xxxx  MT80 and MT92 obd integrate.
 ***********************************************************************/

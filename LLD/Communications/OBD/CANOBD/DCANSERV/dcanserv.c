@@ -64,7 +64,7 @@
 /******************************************************************************
 * APP Include Files
 ******************************************************************************/
-#include "obdsfexi.h"
+// #include "obdsfexi.h"
 
 /******************************************************************************
 * CAN OBD Service Include Files
@@ -90,8 +90,8 @@
 * OBD Lib Service Include Files
 ******************************************************************************/
 #include "obdlfsrv.h"/*SetECUResetPending()*/
-#include "obdlfpid.h"/*Mode_12*/
-#include "obdlfdtc.h"/*ClearDiagnosticData()*/
+// #include "obdlfpid.h"/*Mode_12*/
+// #include "obdlfdtc.h"/*ClearDiagnosticData()*/
 #ifdef COMPILE_CANOBD_PCHUD
 #include "pchdpall.h"
 #endif
@@ -99,8 +99,8 @@
 * CAN OBD NW Layer Include Files
 ******************************************************************************/
 #include "dcancomm.h"   /* for SubFunctionNotSupported_InvalidFormat..*/
-#include "io_dcan_config.h"
-#include "obdlcald.h"
+// #include "io_dcan_config.h"
+// #include "obdlcald.h"
 /*****************************************************************************
  * Public constants & variables
  *****************************************************************************/
@@ -248,7 +248,7 @@ static void InitializeSecurityAccessTiming (void)
       &&
       !IsSecurityAccessUnlocked ())
    {
-      LnDiagSecurityDelayTimer = KfDCAN_t_SecurityAccessDelayTime;
+      // LnDiagSecurityDelayTimer = KfDCAN_t_SecurityAccessDelayTime;
    }
    else
    { /* normal case (not in flash programming) */
@@ -291,8 +291,8 @@ void InitializeDCAN_Services (void)
 {
    SetECUResetPending( CbFALSE) ;
    SetCopyAndExecuteKernelPending(CbFALSE);
-   local_Timer         = 0;
-   VbDiagServicesDisableDTCs = CbFALSE;
+   // local_Timer         = 0;
+   // VbDiagServicesDisableDTCs = CbFALSE;
    VbDCAN_NRC78hexInProgress   = CbFALSE;
    VbDCAN_SendNRC78hexResponse = CbTRUE;
    CurrentSessionIndex = Default_session;
@@ -303,8 +303,8 @@ void InitializeDCAN_Services (void)
    VbDCAN_SvIgnoredMessage = false;
    EmissionDTC = false; 
    SupportedDTC = false; 
-   LnFailureRecordsTypeByte = 0x00;
-    Initial_CANOBD_CAL_ID(KwDCANOBD_CANID);
+   // LnFailureRecordsTypeByte = 0x00;
+    // Initial_CANOBD_CAL_ID(KwDCANOBD_CANID);
 } /*** End of InitializeDCAN_Services ***/
 
  /*********************************************************************/
@@ -488,7 +488,7 @@ void UpdateLnDiagServices (void)
    }
 #endif   
    LnSeed_Random ++;
-   CurrentSession = (BYTE)(CurrentSessionIndex +1);
+   //CurrentSession = (BYTE)(CurrentSessionIndex +1);
    if (GetLnRxCompleteWaitingAppToRespond ())
    { /*--- New service received ---*/
       OBD_ByCAN();
@@ -522,16 +522,16 @@ void UpdateLnDiagServices (void)
          LbOFVC_OvrdConditionsValid = CbTRUE;
       }   
  /* Call this every 15.6 mS */
-      if( local_Timer % 2 == 0)
-      { 
-         UpdateOFVC_PeriodicFunctions (LbOFVC_OvrdConditionsValid);
-         UpdateOFVC_PendingDevCtrlRqst ();
-         if (GetOFVC_OvrdRqstPending())
-         {
-            PostOFVC_LnResponseToRequest();
-         }
-      }
-      local_Timer++;
+      // if( local_Timer % 2 == 0)
+      // { 
+      //    UpdateOFVC_PeriodicFunctions (LbOFVC_OvrdConditionsValid);
+      //    UpdateOFVC_PendingDevCtrlRqst ();
+      //    if (GetOFVC_OvrdRqstPending())
+      //    {
+      //       PostOFVC_LnResponseToRequest();
+      //    }
+      // }
+      // local_Timer++;
    }
 } /*** End of UpdateLnDiagServices ***/
 

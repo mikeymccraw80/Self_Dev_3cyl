@@ -70,9 +70,9 @@
 ******************************************************************************/
 #include "obdltype.h"
 #include "dcancomm.h"/*LnSignalTranspErrorEvent()*/
-#include "cnftyp.h"
+// #include "cnftyp.h"
 #include "dcanserv.h"
-#include "obdlcald.h"
+// #include "obdlcald.h"
 /******************************************************************************
 * CAN OBD NW Layer Include Files
 ******************************************************************************/
@@ -1199,7 +1199,7 @@ void CanId7e0RcvdEvent (Can8DataBytesArrayType *Can8DataBytesArrayPtr)
 /*CanIdCALRcvdEvent */
 void CanIdCALRcvdEvent (Can8DataBytesArrayType *Can8DataBytesArrayPtr)
 {
-   	  LnServiceDataFrame.SourceCanId = KwDCANOBD_CANID;
+   	  // LnServiceDataFrame.SourceCanId = KwDCANOBD_CANID;
       LnTranspRespUsdtFrameCanId = DiagRespUsdtFrameCanId;
    	  if(!VbDCAN_SvIgnoredMessage)
    	  {

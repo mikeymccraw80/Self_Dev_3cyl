@@ -83,7 +83,7 @@ void LnControlDTCSetting (void)
    {
       if (SubFuncDisableAllDTCs == SubFuncPar )
       {
-         VbDiagServicesDisableDTCs = CbTRUE;
+         // VbDiagServicesDisableDTCs = CbTRUE;
          if ( !suppressPosRespMsgIndicationBit ) 
          {
              SendLnStandardPositiveAnswer(2);
@@ -95,7 +95,7 @@ void LnControlDTCSetting (void)
       }
       else if (SubFuncEnableAllDTCs == SubFuncPar )
       {
-         VbDiagServicesDisableDTCs = CbFALSE;
+         // VbDiagServicesDisableDTCs = CbFALSE;
          if ( !suppressPosRespMsgIndicationBit ) 
          {
              SendLnStandardPositiveAnswer(2);

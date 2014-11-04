@@ -47,7 +47,8 @@
 /******************************************************************************
 * APP Include Files
 ******************************************************************************/
-#include "obdsfexi.h" /*GetVIOS_EngSt_Run()*/
+// #include "obdsfexi.h" /*GetVIOS_EngSt_Run()*/
+#include "hal_eng.h"
 /******************************************************************************
 * CAN OBD Service Include Files
 ******************************************************************************/
@@ -57,11 +58,12 @@
 * OBD Lib Service Include Files
 ******************************************************************************/
 #include "obdlcdat.h"/*KyDCAN_Mode_09_Info_01_To_08*/
-#include "obdlfsrv.h"/*Cy1979_SuppPIDRange_00_20*/
-#include "obdlfpid.h"/*MaskMode_01*/
-#include "obdlfdtc.h"/*Get_Next_Valid_Emission_P_Code*/
-#include "obdlcald.h" /*KbDCANCORE_MODE4_With_EngRUN*/
-#include "ofvcpall.h"/*VbOFVC_DeviceControlActive*/
+#include "obdlfsrv.h" /* Cy1979_SuppPIDRange_00_20 */
+// #include "obdlfpid.h"/*MaskMode_01*/
+// #include "obdlfdtc.h"/*Get_Next_Valid_Emission_P_Code*/
+// #include "obdlcald.h" /*KbDCANCORE_MODE4_With_EngRUN*/
+// #include "ofvcpall.h"/*VbOFVC_DeviceControlActive*/
+#include "obdlcdat.h"
 /******************************************************************************
 * CAN OBD NW Layer Include Files
 ******************************************************************************/
@@ -74,6 +76,15 @@
 /*********************************************************************/
 /*            EQUATES                                                */
 /*********************************************************************/
+#define  MaskMode_01 0x10
+#define  MaskMode_02 0x20
+#define  MaskMode_12 0x40
+#define  MaskMode_22 0x80
+
+#define  Mode_01 MaskMode_01
+#define  Mode_02 MaskMode_02
+#define  Mode_12 MaskMode_12 
+#define  Mode_22 MaskMode_22 
 
 /*********************************************************************/
 /*            GLOBAL CONSTANT VARIABLES                              */
@@ -127,8 +138,8 @@ static T_COUNT_BYTE DtrmnJ1979_SuppM9Infotypes(T_COUNT_BYTE,
 /*****************************************************************************
  *  Variable Exports
  *****************************************************************************/
-//extern TbBOOLEAN                       Sb1979_EngCVNSent;
-//extern BYTE    Vy1979_InfoType ;
+TbBOOLEAN                       Sb1979_EngCVNSent;
+BYTE                            Vy1979_InfoType ;
 /*********************************************************************/
 /*            GLOBAL FUNCTIONS                                       */
 /*********************************************************************/
@@ -501,7 +512,8 @@ void FormJ1979_Mode_43_Data_DCAN( void )
 
     while ( DTCCount < GetCMNMaxNumberOfDTCs () )
     {
-       DTCRecordPtr = Get_Next_Valid_Emission_P_Code ( DTCCount, ModeVal );
+       // DTCRecordPtr = Get_Next_Valid_Emission_P_Code ( DTCCount, ModeVal );
+       DTCRecordPtr = NULL;
        DTCRecord = *DTCRecordPtr;
        DTCCount++;
 
@@ -568,8 +580,8 @@ void J1979Mode4Handler_DCAN (void)
    {
       if ( ( GetLnServiceDataLength() ==
                     ( J1979_MODE_04_MSG_LENGTH ) )
-        && ( GetVIOS_EngSt_Run() )
-        && ( ! KbDCANCORE_MODE4_With_EngRUN ) )
+        && ( GetVIOS_EngSt_Run() ))
+        // && ( ! KbDCANCORE_MODE4_With_EngRUN ) )
       {
          SendLnStandardNegativeAnswer(
                        CcDCAN_CondNotCorrect_RequestSequenceError);
@@ -1123,8 +1135,8 @@ void FormJ1979_Mode_47_Data_DCAN( void )
 
     while ( DTCCount < GetCMNMaxNumberOfDTCs () )
     {
-        DTCRecordPtr = Get_Next_Valid_Emission_P_Code ( DTCCount,
-                                                        ModeVal ) ;
+        // DTCRecordPtr = Get_Next_Valid_Emission_P_Code ( DTCCount, ModeVal ) ;
+        DTCRecordPtr = NULL;
         DTCRecord = *DTCRecordPtr ;
         DTCCount++ ;
 
@@ -1435,7 +1447,7 @@ void J1979Mode9Handler_DCAN( void )
                      WrtDCAN_ServiceData(Cy1979_Info_02_NumDataItems, Ly1979_DataIdx++);
 
                      /* Read VIN from Flash ROM */
-                     ReadFILE_EE_FLASH_VIN(VinFirst);
+                    // ReadFILE_EE_FLASH_VIN(VinFirst);
 
                      for(Ly1979_Index = 0;Ly1979_Index < VIN_Size;Ly1979_Index++)
                      {
@@ -1473,8 +1485,8 @@ void J1979Mode9Handler_DCAN( void )
                      {
                         if (Ly1979_Index<Cy1979_EngCalIDSize)
                         { 
-                           WrtDCAN_ServiceData( KySYST_BTC_NR[Ly1979_Index],
-                                                       Ly1979_DataIdx++);
+                           // WrtDCAN_ServiceData( KySYST_BTC_NR[Ly1979_Index],
+                           //                             Ly1979_DataIdx++);
                         }
                         else
                         {
@@ -1745,7 +1757,7 @@ void FormJ1979_NextMode49_DCAN( void )
         /* Returns CRC of calibration area*/
         if(GetFILE_CVN_Available() && (!Sb1979_EngCVNSent))
         {
-            Lg1979_CalVerNum[Sy1979_Mode09_CalIdx] = GetFILE_CVN();
+            // Lg1979_CalVerNum[Sy1979_Mode09_CalIdx] = GetFILE_CVN();
 
             WrtDCAN_ServiceData
                 ( Lg1979_CalVerNum[Sy1979_Mode09_CalIdx].Byte_Access.Byte_One,
@@ -1769,7 +1781,7 @@ void FormJ1979_NextMode49_DCAN( void )
           && (GetFILE_CVN_Available_TRN())
           && (Sb1979_EngCVNSent))
         {
-            Lg1979_CalVerNum_TRN[Sy1979_Mode09_CalIdx] = GetFILE_CVN_TRN();
+            // Lg1979_CalVerNum_TRN[Sy1979_Mode09_CalIdx] = GetFILE_CVN_TRN();
 
             WrtDCAN_ServiceData
                 ( Lg1979_CalVerNum_TRN[Sy1979_Mode09_CalIdx].Byte_Access.Byte_One,

@@ -54,7 +54,7 @@
 /******************************************************************************
 * APP Include Files
 ******************************************************************************/
-#include "obdsfexi.h"/*CyEEPROM_SectionStart*/
+// #include "obdsfexi.h"/*CyEEPROM_SectionStart*/
 /******************************************************************************
 * OBD Lib Service Include Files
 ******************************************************************************/
@@ -168,8 +168,8 @@ uint8_t StartRoutineByLocalIdentifier(void)
 
 uint8_t StartRoutine_NVMReInitLogic(void)
 {
-   WriteFILE_NVM_CriticalByte(&NbFILE_NVM_Reset_RequestFromSerial, 
-                                         CbTRUE);
+   // WriteFILE_NVM_CriticalByte(&NbFILE_NVM_Reset_RequestFromSerial, 
+   //                                       CbTRUE);
     if((( GetLnVulnerabilityState() )
      ||( GetVIOS_VehInDev() ))
      && (GetVIOS_n_EngSpd() < V_RPM(200)))
@@ -252,28 +252,28 @@ const DS_ROUTINE_CTRL DS_RoutineControl[DS_NUM_ROUTINE_CTRL] =
 /*  Identifier,                          Protected,  HandlerFunc */
     {0xAA00,                             true,       DS_RC_AA00_Handler           },
     {0xF000,                             true,       DS_RC_F000_Handler           }
-#if ( (XbIMMO_MULTI_SUBS_SELECT_FLAG == CbSUBS_ON) \
-   && (XbIMMO_KOSTAL_SUBS_SELECT_FLAG == CbSUBS_ON) )
-   ,{CyIMMO_Kostsal_EOL_RID_B20A,        false,      KostalIMMO_EOL_Handler_B20A        }
-   ,{CyIMMO_Kostsal_EOL_RID_B20B,        false,      KostalIMMO_EOL_Handler_B20B        }
-   ,{CyIMMO_Kostsal_EOL_RID_B20C,        false,      KostalIMMO_EOL_Handler_B20C        }
-   ,{CyIMMO_Kostsal_EOL_RID_B20D,        false,      KostalIMMO_EOL_Handler_B20D        }
-   ,{CyIMMO_Kostsal_EOL_RID_B10A,        false,      KostalIMMO_EOL_Handler_B10A        }
-   ,{CyIMMO_Kostsal_ChangePEPS_RID_B205, false,      KostalIMMO_ChangePEPS_Handler_B205 }
-   ,{CyIMMO_Kostsal_ChangePEPS_RID_B206, false,      KostalIMMO_ChangePEPS_Handler_B206 }
-   ,{CyIMMO_Kostsal_ChangePEPS_RID_B207, false,      KostalIMMO_ChangePEPS_Handler_B207 }
-   ,{CyIMMO_Kostsal_ChangePEPS_RID_B105, false,      KostalIMMO_ChangePEPS_Handler_B105 }
-#endif
-#if ( (XbIMMO_MULTI_SUBS_SELECT_FLAG == CbSUBS_ON) \
-   && (XbIMMO_HIRAIN_SUBS_SELECT_FLAG == CbSUBS_ON) )
-   ,{CyIMMO_HIRAIN_EOL_RID_0209,         true,       HIRAINIMMO_EOL_Handler_0209        }
-#endif
-#if ( (XbIMMO_MULTI_SUBS_SELECT_FLAG == CbSUBS_ON) \
-   && (XbIMMO_VALEO_SUBS_SELECT_FLAG == CbSUBS_ON) )
-   ,{CyIMMO_Valeo_LearnSK_RID,            true,       ValeoIMMO_LearnSK_Handler }
-   ,{CyIMMO_Valeo_TeachSK_RID,            true,       ValeoIMMO_LearnSK_Handler }
-   ,{CyIMMO_Valeo_RstECM_RID,             true,       ValeoIMMO_LearnSK_Handler }
-#endif
+// #if ( (XbIMMO_MULTI_SUBS_SELECT_FLAG == CbSUBS_ON) \
+//    && (XbIMMO_KOSTAL_SUBS_SELECT_FLAG == CbSUBS_ON) )
+//    ,{CyIMMO_Kostsal_EOL_RID_B20A,        false,      KostalIMMO_EOL_Handler_B20A        }
+//    ,{CyIMMO_Kostsal_EOL_RID_B20B,        false,      KostalIMMO_EOL_Handler_B20B        }
+//    ,{CyIMMO_Kostsal_EOL_RID_B20C,        false,      KostalIMMO_EOL_Handler_B20C        }
+//    ,{CyIMMO_Kostsal_EOL_RID_B20D,        false,      KostalIMMO_EOL_Handler_B20D        }
+//    ,{CyIMMO_Kostsal_EOL_RID_B10A,        false,      KostalIMMO_EOL_Handler_B10A        }
+//    ,{CyIMMO_Kostsal_ChangePEPS_RID_B205, false,      KostalIMMO_ChangePEPS_Handler_B205 }
+//    ,{CyIMMO_Kostsal_ChangePEPS_RID_B206, false,      KostalIMMO_ChangePEPS_Handler_B206 }
+//    ,{CyIMMO_Kostsal_ChangePEPS_RID_B207, false,      KostalIMMO_ChangePEPS_Handler_B207 }
+//    ,{CyIMMO_Kostsal_ChangePEPS_RID_B105, false,      KostalIMMO_ChangePEPS_Handler_B105 }
+// #endif
+// #if ( (XbIMMO_MULTI_SUBS_SELECT_FLAG == CbSUBS_ON) \
+//    && (XbIMMO_HIRAIN_SUBS_SELECT_FLAG == CbSUBS_ON) )
+//    ,{CyIMMO_HIRAIN_EOL_RID_0209,         true,       HIRAINIMMO_EOL_Handler_0209        }
+// #endif
+// #if ( (XbIMMO_MULTI_SUBS_SELECT_FLAG == CbSUBS_ON) \
+//    && (XbIMMO_VALEO_SUBS_SELECT_FLAG == CbSUBS_ON) )
+//    ,{CyIMMO_Valeo_LearnSK_RID,            true,       ValeoIMMO_LearnSK_Handler }
+//    ,{CyIMMO_Valeo_TeachSK_RID,            true,       ValeoIMMO_LearnSK_Handler }
+//    ,{CyIMMO_Valeo_RstECM_RID,             true,       ValeoIMMO_LearnSK_Handler }
+// #endif
 };
 
 void LnRoutineControl(void)

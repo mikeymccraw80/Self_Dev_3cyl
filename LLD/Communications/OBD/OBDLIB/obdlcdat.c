@@ -20,10 +20,10 @@
  *****************************************************************************
  *
  * Current Module Info:
- * %full_name:     mt20u2#1/csrc/obdlcdat.c/1 %
- * %date_created:  Fri Sep 10 14:29:48 2010 %
- * %version:       1 %
- * %derived_by:    pz0vmh %
+ * %full_name:     ctc_pt3#1/csrc/obdlcdat.c/4 %
+ * %date_created:  Thu Jan 23 16:18:34 2014 %
+ * %version:       4 %
+ * %derived_by:    dzrpmq %
  *
  *****************************************************************************/
 /******************************************************************************
@@ -52,7 +52,11 @@
 
 /* supported.                                                        */
 
-//const BYTE Ky1979_Mode_09_Info_01_To_08 = 0xff;
+#if defined(OBD_CONTROLLER_IS_MT62P1) || defined(OBD_CONTROLLER_IS_MT22P3)
+const BYTE Ky1979_Mode_09_Info_01_To_08 = 0xfd;
+#else
+const BYTE Ky1979_Mode_09_Info_01_To_08 = 0xff;
+#endif
 
 const BYTE KyDCAN_Mode_09_Info_01_To_08 = 0x55;
 
@@ -64,7 +68,7 @@ const BYTE KyDCAN_Mode_09_Info_01_To_08 = 0x55;
 
 /* supported.                                                        */
 
-//const BYTE Ky1979_Mode_09_Info_09_To_16 = 0x40;
+const BYTE Ky1979_Mode_09_Info_09_To_16 = 0x40;
 
 /* ECU NAME: ECM -Engine Control */
 const BYTE KyDCAN_ECM_EcuName[ECU_NAME_Size] = { 0x45, 0x43, 0x4D, 0x00,
@@ -87,7 +91,7 @@ const BYTE KyDCAN_PCM_EcuName[ECU_NAME_Size] = { 0x50, 0x43, 0x4D, 0x00,
 
 /* supported.                                                        */
 
-//const BYTE Ky1979_Mode_09_Info_17_To_24 = 0x0;
+const BYTE Ky1979_Mode_09_Info_17_To_24 = 0x0;
 
 
 
@@ -99,7 +103,7 @@ const BYTE KyDCAN_PCM_EcuName[ECU_NAME_Size] = { 0x50, 0x43, 0x4D, 0x00,
 
 /* supported.                                                        */
 
-//const BYTE Ky1979_Mode_09_Info_25_To_32 = 0x0;
+const BYTE Ky1979_Mode_09_Info_25_To_32 = 0x0;
 
 
 /* Added for Mode 08                                                  */
@@ -107,11 +111,11 @@ const BYTE KyDCAN_PCM_EcuName[ECU_NAME_Size] = { 0x50, 0x43, 0x4D, 0x00,
 /* Test Range currently supported is 0x00, therefore all are          */
 
 /* initialized to 0x00                                                */
-#if 0
+
 const BYTE Ka1979_M8_TID_Supported[Cy1979_Mode_8_TIDs_Sup] =
 
                  {0x80,0x00,0x00,0x00};
-#endif
+
 /* This gives the o2 sensors supported by the application as          */
 
 /* such. This is required for mode 5 and this is irrespective of the  */
@@ -125,7 +129,7 @@ const BYTE Ka1979_M8_TID_Supported[Cy1979_Mode_8_TIDs_Sup] =
 /* Bit 3 - Bank1Sensor4; Bit 4 - Bank2Sensor1; Bit 5 - Bank2Sensor2   */
 
 /* Bit 6 - Bank2Sensor3; Bit 7 - Bank2Sensor4;                        */
-#if 0
+
 const BYTE KyC2AP_O2Snsrs_Supported = 0x03; /*not used*/
 
 /* Update Mode 6 supported test for T-150 spec. 1.7. bdt 3-31-00      */
@@ -222,7 +226,11 @@ const BYTE Ka1979_M5_TestRange_00Thru80[Cy1979_Mode_5_TestRange] =
                   0x00, 0x01, 0x80, 0x01, /* Test Range 0x60          */
                   0x80, 0x00, 0x00, 0x00};/* Test Range 0x80          */
 
+#if XeSYST_KEYWORD_USE_SW_FIX_NUMBER == CeSYST_AVAILABLE
+#define Ca_SOFTWARE_10BYTE_NAME_FIXED "MT92GDISW"
+const T_COUNT_BYTE CwSYST_SOFTWARE_10Byte_Name_Fixed[10] = {Ca_SOFTWARE_10BYTE_NAME_FIXED};
 #endif
+
 /******************************************************************************
 *
 * Revision History:

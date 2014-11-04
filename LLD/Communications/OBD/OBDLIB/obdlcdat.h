@@ -138,7 +138,7 @@
 
 /* supported.                                                        */
 
-//extern const BYTE Ky1979_Mode_09_Info_01_To_08;
+extern const BYTE Ky1979_Mode_09_Info_01_To_08;
 
 extern const BYTE KyDCAN_Mode_09_Info_01_To_08;
 
@@ -150,7 +150,7 @@ extern const BYTE KyDCAN_Mode_09_Info_01_To_08;
 
 /* supported.                                                        */
 
-//extern const BYTE Ky1979_Mode_09_Info_09_To_16;
+extern const BYTE Ky1979_Mode_09_Info_09_To_16;
 
 /* ECU NAME: ECM -Engine Control */
 extern const BYTE KyDCAN_ECM_EcuName[];
@@ -166,7 +166,7 @@ extern const BYTE KyDCAN_PCM_EcuName[];
 
 /* supported.                                                        */
 
-//extern const BYTE Ky1979_Mode_09_Info_17_To_24;
+extern const BYTE Ky1979_Mode_09_Info_17_To_24;
 
 
 
@@ -178,12 +178,12 @@ extern const BYTE KyDCAN_PCM_EcuName[];
 
 /* supported.                                                        */
 
-//extern const BYTE Ky1979_Mode_09_Info_25_To_32;
+extern const BYTE Ky1979_Mode_09_Info_25_To_32;
 
 
 
 /* Added for mode 1 and mode 2 */
-#if 0
+
 extern const BYTE Ka1979_M1_PID_Supported[];
 extern const BYTE Ka1979_M2_PID_Supported[];
 extern const BYTE Ka1979_M1_PID20_Thru40_Supp[];
@@ -196,7 +196,7 @@ extern const BYTE Ka1979_M5_TestRange_00Thru80[];
 extern const BYTE Ka1979_M8_TID_Supported[];
 
 extern const BYTE KyC2AP_O2Snsrs_Supported;
-#endif
+
 #endif
 
 

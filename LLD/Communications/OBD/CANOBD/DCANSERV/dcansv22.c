@@ -56,10 +56,10 @@
 /******************************************************************************
 * OBD Lib Service Include Files
 ******************************************************************************/
-#include "obdlfpid.h"/*MaskMode_22*/
-#include "obdsfexi.h"/* for IMMO include */
+// #include "obdlfpid.h"/*MaskMode_22*/
+// #include "obdsfexi.h" //for IMMO include 
 #include "dcanserv.h"
-#include "pchdpall.h"
+// #include "pchdpall.h"
 /******************************************************************************
 * CANOBD Service Include Files
 ******************************************************************************/
@@ -78,6 +78,19 @@
 #define CANPID_CONTI_READSC   (0x0206)
 #define CANPID_HIRAIN_READSK_MTCHSTUS   (0x0202)
 #define CANPID_HIRAIN_READSK            (0x0203)
+
+#define  MaskMode_01 0x10
+#define  MaskMode_02 0x20
+#define  MaskMode_12 0x40
+#define  MaskMode_22 0x80
+
+#define  Mode_01 MaskMode_01
+#define  Mode_02 MaskMode_02
+#define  Mode_12 MaskMode_12 
+#define  Mode_22 MaskMode_22 
+
+#define EE_CalibrationData_Size             (96)
+
 /*******************************************************************************/
 /*** service: LnReadDataByCommonIdentifier      (SID22)                       ***/
 /*** Reports the Diagnostic Data corresponding to the Parameter ID (2 bytes) ***/

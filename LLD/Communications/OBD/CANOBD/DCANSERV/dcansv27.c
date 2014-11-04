@@ -71,7 +71,7 @@
 #include "dcanserv.h"
 #include "obdlcald.h" /*KeDCANCORE_Security_Algorithm*/
 #include "dcancomm.h"
-#include "obdspcfg.h"
+// #include "obdspcfg.h"
 /***********************************************************************
 * Functions in this file:                                              *
 ************************************************************************

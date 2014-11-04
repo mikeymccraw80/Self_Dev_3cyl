@@ -39,7 +39,7 @@
 ******************************************************************************/
 #include "dcanpcfg.h"/*XeDCAN_SID_06_Supported*/
 #include "obdltype.h"/*TpDCAN_MID_Param_Callback*/
-#include "dgdmptyp.h" /*TeDGDM_DIAGNOSTIC_TESTS*/
+// #include "dgdmptyp.h" /*TeDGDM_DIAGNOSTIC_TESTS*/
 /******************************************************************************
 * CAN OBD NW Layer Include Files
 ******************************************************************************/

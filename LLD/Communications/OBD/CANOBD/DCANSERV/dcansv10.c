@@ -56,8 +56,8 @@
 /******************************************************************************
 * OBD Lib Service Include Files
 ******************************************************************************/
-#include "obdsfexi.h"
-#include "ofvcpall.h"/*ClearOFVC_AllDeviceControlParameters*/
+// #include "obdsfexi.h"
+// #include "ofvcpall.h"/*ClearOFVC_AllDeviceControlParameters*/
 #include "obdltype.h"/*LnDiagSvFlagsType*/
 /******************************************************************************
 * CANOBD Service Include Files
@@ -95,7 +95,7 @@ void ChangeSession(uint8_t newSession)
       if (newSession == DefaultSession)
       {
             /* 1 */
-         ClearOFVC_AllDeviceControlParameters();
+         // ClearOFVC_AllDeviceControlParameters();
       }     
       else
       {
@@ -125,7 +125,7 @@ void ChangeSession(uint8_t newSession)
              * function needs to be added: ResetService86Events
              */
          ClearIMMO_SecurityUnlockStatus();
-         VbDiagServicesDisableDTCs = CbFALSE;
+         // VbDiagServicesDisableDTCs = CbFALSE;
          ClearOFVC_AllDeviceControlParameters();
 	     ClearAndDisableAllDpids ();
 		 EnableCANH_Receive_By_OBD();
