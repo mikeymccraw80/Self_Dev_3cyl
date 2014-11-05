@@ -26,8 +26,6 @@
 // Include Files
 //=============================================================================
 #include "t_base.h"
-#include "cn_io_fexi.h"
-
 #include "cn_io_interface.h"
 #include "cn_io_transfer.h"
 #include "cn_io_diagnostic.h"

@@ -31,12 +31,12 @@
 #define XbCNIO_FEXI_INCLUDE_OBD_PUBLIC_TYPE
 #define XbCNIO_FEXI_INCLUDE_CAN_INTERFACE
 #define XbCNIO_FEXI_INCLUDE_IMMO_INTERFACE
-#include "cn_io_fexi.h"
 
 #include "cn_io_transfer.h"
 #include "cn_io_interface.h"
 #include "cn_io_diagnostic.h"
 #include "dd_flexcan_common.h"
+#include "io_dcan_config.h"
 
 
 CAN_Message_Parameter_T *CAN_Message_Parameter_Table_Ptr;
@@ -227,15 +227,15 @@ bool Get_OBD_Message( uint8_t CAN_receive_message_number, uint8_t *message_addre
 
    if(FLEXCAN_MSG_OBJ_32 <= CAN_receive_message_number)
    {
-      istate = EnterCriticalSection();
-      temp_message = Get_CANOBD_Message_Parameter_Table(CAN_receive_message_number - NumOfMSGs);
+      istate = Enter_Critical_Section();
+      temp_message = Get_CANOBD_Message_Parameter_Table(CAN_receive_message_number - FLEXCAN_MSG_OBJ_32);
       temp_buffer_ptr = temp_message.CAN_buffer_ptr;
       temp_length = temp_message.CAN_message_length;
       for (loop_counter = 0; loop_counter < temp_length; loop_counter++)
       {
          *message_address++ = *temp_buffer_ptr++;
       }
-      ExitCriticalSection(istate);
+      Leave_Critical_Section(istate);
    }
    else
    {

@@ -22,7 +22,6 @@
 // Include Files
 //=============================================================================
 #define XbCNIO_FEXI_INCLUDE_HAL_CAN
-#include "cn_io_fexi.h"
 
 #include "cn_io_diagnostic.h"
 
