@@ -24,7 +24,6 @@
 //=============================================================================
 #include "io_type.h"
 #include "dcantran.h"
-#include "obdspcfg.h"
 #include "cn_io_transfer.h"/*CAN_Message_Parameter_T*/
 #include "hal_can.h"
 
@@ -77,20 +76,12 @@ typedef struct
 /*            CAN OBD config             */
 /*****************************************/
 /*****************************************/
-#if (XeSYST_CANOBD_SrvsEnable == CeSYST_AVAILABLE)
 #define TX_MESSAGE_NUM_OF_CANOBD (2)
 #define RX_MESSAGE_NUM_OF_CANOBD (3)
-#else
-#define TX_MESSAGE_NUM_OF_CANOBD (0)
-#define RX_MESSAGE_NUM_OF_CANOBD (0)
-#endif
-
 #define MESSAGE_NUM_OF_CANOBD    (TX_MESSAGE_NUM_OF_CANOBD + RX_MESSAGE_NUM_OF_CANOBD)
 
 extern CAN_Message_Parameter_T Get_CANOBD_Message_Parameter_Table(uint8_t index);
 extern void Initial_CANOBD_CAL_ID(uint16_t CANID);
-
-
 
 #endif
 

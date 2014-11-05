@@ -17,11 +17,6 @@
 //
 //=============================================================================
 /******************************************************************************
-* APP Include Files
-******************************************************************************/
-#include "obdspcfg.h"
-#include "obdsfapp.h" /* Get_Receive_Message_Number_From_Message_ID */
-/******************************************************************************
 * CAN OBD Service Include Files
 ******************************************************************************/     
 #include "io_dcan_config.h" 
@@ -144,8 +139,7 @@ void Callback_Application_CANOBD( uint32_t   CanId)
    Can8DataBytesArrayType *Can8DataBytesArrayPtr;
 
    in_msg_obj = Get_Transmit_Message_Number_From_Message_ID(CanId);
-   Can8DataBytesArrayPtr = (Can8DataBytesArrayType *)
-                           CANOBD_Message_Parameter_Table[ in_msg_obj -VyCANH_Current_message_Number ].CAN_buffer_ptr; 
+   Can8DataBytesArrayPtr = (Can8DataBytesArrayType *) CANOBD_Message_Parameter_Table[ in_msg_obj].CAN_buffer_ptr; 
    switch (CanId)
    {
       case CanId5e8:

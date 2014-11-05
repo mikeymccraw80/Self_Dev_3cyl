@@ -528,7 +528,7 @@
 //extern BYTE CyServiceRequestTable_Idx ;
 //extern BYTE CommunicationStatus ;
 //extern TbBOOLEAN Sb1979_EngCVNSent;
-//extern BYTE Vy1979_InfoType ;
+extern BYTE Vy1979_InfoType ;
 //extern BYTE VyRequestedFrameNumber;
 extern TbBOOLEAN VbCAN_OBD_Enabled;
 extern TbBOOLEAN VbKW2K_OBD_Enabled;
