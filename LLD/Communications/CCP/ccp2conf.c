@@ -35,6 +35,7 @@
 #include "inst_overlay.h"
 #include "dd_siu_interface.h"
 #include "io_type.h"
+#include "io_config_flexcan.h"
 
 //===========================================================================
 // Function Prototypes (must be prior to constant definition)

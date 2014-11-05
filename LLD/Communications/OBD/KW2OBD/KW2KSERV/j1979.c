@@ -54,6 +54,7 @@
 // #include "dd_nvram.h" 
 #include "HLS.h"
 // #include "id_cald.h"
+#include "obdlfsrv.h"
 /*********************************************************************/
 /*            TYPE DEFS                                              */
 /*********************************************************************/
@@ -106,7 +107,7 @@ static BYTE                            Vi1979_Mode09_CurrMsgIdx ;
 #define J1979_MODE_01_MSG_LENGTH (2) 
 #define Cy1979_Mode_01_MaxInfoType      (0x60)
 #define CyInfoType               (1)
-BYTE    Vy1979_InfoType ;
+//BYTE    Vy1979_InfoType ;
 
 void J1979Mode1Handler (void)
 {

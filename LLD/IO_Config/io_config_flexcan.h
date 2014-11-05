@@ -43,6 +43,54 @@
 #define FLEXCAN_MSG_OBJ_Index_CCP_INCA_RECEIVE   FLEXCAN_MSG_OBJ_6
 #define FLEXCAN_MSG_OBJ_Index_CCP_INCA_TRANSIT   FLEXCAN_MSG_OBJ_7
 
+//====================================================================
+// FlexCAN Device Bit Rate Values
+// Ensure that: 
+//      PROPSEG + PSEG1 + 2 = [4...16]
+//      PSEG2 + 1           = [2...8 ]
+//      Time Quanta         = [8...25]
+//=========================================================================
+#ifndef FLEXCAN_A_DEVICE_BITRATE_INIT 
+#define FLEXCAN_A_DEVICE_BITRATE_INIT\
+   (         FlexCAN_Set_Index( 0, FLEXCAN_DEVICE_A    ) |\
+              FlexCAN_Set_Baud( 0, FLEXCAN_BAUD_500KBPS) |\
+    FlexCAN_Set_Phase_Segment1( 0, 0                   ) |\
+    FlexCAN_Set_Phase_Segment2( 0, 0                   ) |\
+      FlexCAN_Set_Prop_Segment( 0, 0                   ) |\
+               FlexCAN_Set_RJW( 0, 0                   ) |\
+       FlexCAN_Set_Time_Quanta( 0, 16                  ) )
+#endif
+
+#ifndef FLEXCAN_C_DEVICE_BITRATE_INIT 
+#define FLEXCAN_C_DEVICE_BITRATE_INIT\
+   (         FlexCAN_Set_Index( 0, FLEXCAN_DEVICE_C    ) |\
+              FlexCAN_Set_Baud( 0, FLEXCAN_BAUD_500KBPS) |\
+    FlexCAN_Set_Phase_Segment1( 0, 0                   ) |\
+    FlexCAN_Set_Phase_Segment2( 0, 0                   ) |\
+      FlexCAN_Set_Prop_Segment( 0, 0                   ) |\
+               FlexCAN_Set_RJW( 0, 0                   ) |\
+       FlexCAN_Set_Time_Quanta( 0, 16                  ) )
+#endif
+
+//=============================================================
+//  FlexCAN Prescalar macro
+//==============================================================
+#define FLEXCAN_A_PRESCALER \
+   FLEXCAN_Get_Prescaler(FLEXCAN_SYSTEM_FREQUENCY,\
+   (FlexCAN_Get_Baud(FLEXCAN_A_DEVICE_BITRATE_INIT) == FLEXCAN_BAUD_250KBPS ? FLEXCAN_BAUD_RATE_250KBPS :\
+    FlexCAN_Get_Baud(FLEXCAN_A_DEVICE_BITRATE_INIT) == FLEXCAN_BAUD_500KBPS ? FLEXCAN_BAUD_RATE_500KBPS :\
+    FlexCAN_Get_Baud(FLEXCAN_A_DEVICE_BITRATE_INIT) == FLEXCAN_BAUD_1MBPS ? FLEXCAN_BAUD_RATE_1MBPS :\
+    FLEXCAN_BAUD_RATE_500KBPS)\
+   ,(FlexCAN_Get_Time_Quanta(FLEXCAN_A_DEVICE_BITRATE_INIT)))
+
+
+#define FLEXCAN_C_PRESCALER \
+   FLEXCAN_Get_Prescaler(FLEXCAN_SYSTEM_FREQUENCY,\
+   (FlexCAN_Get_Baud(FLEXCAN_C_DEVICE_BITRATE_INIT) == FLEXCAN_BAUD_250KBPS ? FLEXCAN_BAUD_RATE_250KBPS : \
+    FlexCAN_Get_Baud(FLEXCAN_C_DEVICE_BITRATE_INIT) == FLEXCAN_BAUD_500KBPS ? FLEXCAN_BAUD_RATE_500KBPS : \
+    FlexCAN_Get_Baud(FLEXCAN_C_DEVICE_BITRATE_INIT) == FLEXCAN_BAUD_1MBPS ? FLEXCAN_BAUD_RATE_1MBPS : \
+    FLEXCAN_BAUD_RATE_500KBPS)\
+   ,(FlexCAN_Get_Time_Quanta(FLEXCAN_C_DEVICE_BITRATE_INIT)))
 
 
 //=============================================================================
@@ -109,6 +157,45 @@ extern const FLEXCAN_IFRH_T  FLEXCAN_C_IFRH_INIT ;
 //=============================================================================
 extern const FLEXCAN_IFRL_T  FLEXCAN_A_IFRL_INIT;
 extern const FLEXCAN_IFRL_T  FLEXCAN_C_IFRL_INIT ;
+
+#ifndef FLEXCAN_TRANSMIT_CALLBACK_INIT_A
+#define FLEXCAN_TRANSMIT_CALLBACK_INIT_A (FlexCAN_Transmit_Callback_T)(0)
+#endif
+
+#ifndef FLEXCAN_TRANSMIT_CALLBACK_INIT_C
+#define FLEXCAN_TRANSMIT_CALLBACK_INIT_C (FlexCAN_Transmit_Callback_T)(0)
+#endif
+
+#ifndef FLEXCAN_RECEIVE_CALLBACK_INIT_A
+#define FLEXCAN_RECEIVE_CALLBACK_INIT_A (FlexCAN_Receive_Callback_T)(0)
+#endif
+
+#ifndef FLEXCAN_RECEIVE_CALLBACK_INIT_C
+#define FLEXCAN_RECEIVE_CALLBACK_INIT_C (FlexCAN_Receive_Callback_T)(0)
+#endif
+
+#ifndef FLEXCAN_ERROR_CALLBACK_INIT_A
+#define FLEXCAN_ERROR_CALLBACK_INIT_A (FlexCAN_Error_Callback_T)(0)
+#endif
+
+#ifndef FLEXCAN_ERROR_CALLBACK_INIT_C
+#define FLEXCAN_ERROR_CALLBACK_INIT_C (FlexCAN_Error_Callback_T)(0)
+#endif
+
+//=============================================================================
+// FLEXCAN_TRANSMIT_CALLBACK
+//=============================================================================
+extern const FlexCAN_Transmit_Callback_T FLEXCAN_TRANSMIT_CALLBACK[ NUMBER_OF_FLEXCAN_DEVICES ];
+
+//=============================================================================
+//FLEXCAN_RECEIVE_CALLBACK
+//=============================================================================
+extern const FlexCAN_Receive_Callback_T FLEXCAN_RECEIVE_CALLBACK[ NUMBER_OF_FLEXCAN_DEVICES ];
+
+//=============================================================================
+//FLEXCAN_ERROR_CALLBACK
+//=============================================================================
+extern const FlexCAN_Error_Callback_T FLEXCAN_ERROR_CALLBACK[ NUMBER_OF_FLEXCAN_DEVICES ];
 
 #endif // IO_CONFIG_FLEXCAN_H
 

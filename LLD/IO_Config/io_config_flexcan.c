@@ -4,6 +4,7 @@
 //=============================================================================
 
 #include "io_config_flexcan.h"
+#include "dd_flexcan_common.h"
 
 //=============================================================================
 // Initialization Constants for Module Control Register (MCR)
@@ -367,5 +368,31 @@ const FLEXCAN_IFRL_T  FLEXCAN_C_IFRL_INIT =
 };
 
 
-//#define SIU_GPIO_INIT_88 MTSA_CONFIG_FLEXCAN_C_RXD
+//=============================================================================
+// FLEXCAN_TRANSMIT_CALLBACK
+//=============================================================================
+const FlexCAN_Transmit_Callback_T FLEXCAN_TRANSMIT_CALLBACK[ NUMBER_OF_FLEXCAN_DEVICES ] =
+{
+   FLEXCAN_TRANSMIT_CALLBACK_INIT_A,
+   NULL,  // FLEXCAN B Does not exist
+   FLEXCAN_TRANSMIT_CALLBACK_INIT_C
+};
+//=============================================================================
+//FLEXCAN_RECEIVE_CALLBACK
+//=============================================================================
+const FlexCAN_Receive_Callback_T FLEXCAN_RECEIVE_CALLBACK[ NUMBER_OF_FLEXCAN_DEVICES ] =
+{
+   FLEXCAN_RECEIVE_CALLBACK_INIT_A,
+   NULL,  // FLEXCAN B Does not exist
+   FLEXCAN_RECEIVE_CALLBACK_INIT_C
+};
+//=============================================================================
+//FLEXCAN_ERROR_CALLBACK
+//=============================================================================
+const FlexCAN_Error_Callback_T FLEXCAN_ERROR_CALLBACK[ NUMBER_OF_FLEXCAN_DEVICES ] =
+{
+   FLEXCAN_ERROR_CALLBACK_INIT_A,
+   NULL,  // FLEXCAN B Does not exist
+   FLEXCAN_ERROR_CALLBACK_INIT_C
+};
 

@@ -73,6 +73,8 @@
 // #include "cnftyp.h"
 #include "dcanserv.h"
 // #include "obdlcald.h"
+#include "cn_io_transfer.h"
+
 /******************************************************************************
 * CAN OBD NW Layer Include Files
 ******************************************************************************/
