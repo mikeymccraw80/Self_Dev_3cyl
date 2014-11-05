@@ -1,4 +1,6 @@
 #include "dd_flexcan.h"
+#include "dd_flexcan_common.h"
+#include "io_config_flexcan.h"
 
 #define SECTION_FLEXCAN_A_REGISTER
 #include "section.h"
@@ -17,6 +19,8 @@ FLEXCAN_T FlexCAN_C;
 #define FLEXCAN_29BIT_MASK                    (0x1FFFFFFFU)
 
 
+const uint32_t FLEXCAN_FREQUENCY_HZ = (uint32_t)FLEXCAN_SYSTEM_FREQUENCY;
+
 static const uint32_t FlexCAN_Bit_Rate[ ] =
 {
    FLEXCAN_BAUD_RATE_100KBPS,
@@ -25,6 +29,12 @@ static const uint32_t FlexCAN_Bit_Rate[ ] =
    FLEXCAN_BAUD_RATE_1MBPS
 };
 
+static const FLEXCAN_T* const FlexCAN_Devices[ NUMBER_OF_FLEXCAN_DEVICES ] =
+{
+   &FlexCAN_A,
+   NULL,
+   &FlexCAN_C
+};
 
 
 void FlexCAN_TX_CallBack ( uint32_t message_id          );
@@ -105,6 +115,23 @@ void FlexCAN_A_Initialize_Device(void )
 }
 
 //=============================================================================
+// FlexCAN_Get_Device
+//=============================================================================
+FLEXCAN_T* FlexCAN_Get_Device(
+   IO_Configuration_T in_configuration )
+{
+   FlexCAN_Index_T index = FlexCAN_Get_Index(in_configuration);
+   FLEXCAN_T * pFlexCAN  = NULL;
+
+   if( (index == FLEXCAN_DEVICE_A) || (index == FLEXCAN_DEVICE_C) )
+   {
+      pFlexCAN = (FLEXCAN_T *)FlexCAN_Devices[ index ];
+   }
+   ASSERT( pFlexCAN != NULL );
+   return pFlexCAN;
+}
+
+//=============================================================================
 // FlexCAN_Initialize_Device
 //=============================================================================
 void FlexCAN_C_Initialize_Device(void )
@@ -144,87 +171,6 @@ void FlexCAN_C_Initialize_Device(void )
 
    //Enable the FlexCAN module
    pFlexCAN->MCR.F.MDIS   = false;
-}
-
-
-
-//=============================================================================
-// FLEXCAN_Get_Msg_ID
-//=============================================================================
-uint32_t FLEXCAN_Get_Msg_ID(
-    FLEXCAN_T *      in_pFlexCAN,
-   FlexCAN_MSGOBJ_INDEX_T in_msgobj)
-{
-   uint32_t  msg_id;
-   if (FLEXCAN_MSGOBJ_ID_STD == in_pFlexCAN->MSGBUF[in_msgobj].F.CTRSTS.F.IDE)
-   {
-      msg_id = in_pFlexCAN->MSGBUF[in_msgobj].F.ID.U32 >> FLEXCAN_STD_ID_SHIFT;
-   }
-   else
-   {
-      msg_id = in_pFlexCAN->MSGBUF[in_msgobj].F.ID.U32;
-   }
-   return(msg_id);
-}
-//=============================================================================
-// FLEXCAN_Set_Msg_ID
-//=============================================================================
-void FLEXCAN_Set_Msg_ID(
-   FLEXCAN_T *      in_pFlexCAN,
-   FlexCAN_MSGOBJ_INDEX_T in_msg_obj,
-   uint32_t in_message_id)
-{
-   uint32_t  msg_id;
-   if (FLEXCAN_MSGOBJ_ID_STD == in_pFlexCAN->MSGBUF[in_msg_obj].F.CTRSTS.F.IDE)
-   {
-      in_pFlexCAN->MSGBUF[in_msg_obj].F.ID.F.STD_EXT = in_message_id;
-      in_pFlexCAN->MSGBUF[in_msg_obj].F.ID.F.EXTENDED = 0;
-   }
-   else
-   {
-      in_pFlexCAN->MSGBUF[in_msg_obj].F.ID.U32 = in_message_id;
-   }
-}
-
-//=============================================================================
-//  FLEXCAN_Get_Free_Running_Timer
-//============================================================================
-uint16_t FLEXCAN_Get_Free_Running_Timer(
-    FLEXCAN_T* in_pFlexCAN,
-   FlexCAN_MSGOBJ_INDEX_T  in_msgobj)
-{
-   return ((uint16_t)(in_pFlexCAN->MSGBUF[in_msgobj].F.CTRSTS.F.TIME_STAMP));
-}
-
-//=============================================================================
-//  FLEXCAN_MSGOBJ_Write_Data
-//============================================================================
-void FLEXCAN_MSGOBJ_Write_Data(
-   FLEXCAN_T *                  in_pFlexCAN,
-   FlexCAN_MSGOBJ_INDEX_T       in_msgobj,
-    uint8_t *              in_buffer,
-   FlexCAN_MSGOBJ_Data_Length_T in_length)
-{
-   uint8_t data_index;
-   for (data_index = 0; data_index < in_length; data_index++)
-   {
-      in_pFlexCAN->MSGBUF[in_msgobj].F.DATA.U8[data_index]= in_buffer[data_index];
-   }
-}
-//=============================================================================
-//  FLEXCAN_MSGOBJ_Get_Data
-//============================================================================
-void FLEXCAN_MSGOBJ_Get_Data(
-   FLEXCAN_T *      in_pFlexCAN,
-   FlexCAN_MSGOBJ_INDEX_T in_msgobj,
-   uint8_t *              in_buffer,
-   uint8_t                in_length)
-{
-   uint8_t data_index;               
-   for (data_index = 0; data_index < in_length; data_index++)
-   {
-      in_buffer[data_index] = in_pFlexCAN->MSGBUF[in_msgobj].F.DATA.U8[data_index];
-   }
 }
 
 //============================================================================

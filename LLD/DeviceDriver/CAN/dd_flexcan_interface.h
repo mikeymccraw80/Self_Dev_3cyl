@@ -60,7 +60,11 @@ extern void FlexCAN_Receive_Interrupt(
            uint8_t *in_data_buffer
           );
 
-
+//=============================================================================
+// FlexCAN_Get_Device
+//=============================================================================
+FLEXCAN_T* FlexCAN_Get_Device(
+   IO_Configuration_T in_configuration );
 
 
 #endif // DD_FLEXCAN_INTERFACE_H

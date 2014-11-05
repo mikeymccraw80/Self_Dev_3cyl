@@ -1,8 +1,31 @@
 #ifndef DD_FLEXCAN_H
 #define DD_FLEXCAN_H
-
-#include "hw_flexcan.h"
-#include "io_config_flexcan.h"
+//=============================================================================
+//
+//       COPYRIGHT, 2005, Delphi Technologies, Inc. All Rights reserved
+//
+//       Delphi Confidential
+//
+// ============================================================================
+// %full_filespec:   dd_flexcan.h~kok_pt2#7:incl:tci_pt2#6 %
+//
+// created_by:       gzdmlz
+//
+// date_created:     Fri Jan 13 22:58:37 2006
+//
+// %derived_by:      hz1swt %
+//
+// %date_modified:   Mon Apr 16 09:41:34 2012 %
+//
+// %version:         kok_pt2#7 %
+//
+// ============================================================================
+// ============================================================================
+// Configurable Development Software Module:
+// DO NOT MODIFY THIS FILE. It contains no configurable parameters.
+//
+//=============================================================================
+#include "dd_flexcan_common.h"
 
 #define SECTION_FLEXCAN_A_REGISTER
 #include "section.h"
@@ -39,299 +62,61 @@ typedef enum FlexCAN_ID_Acc_Mask_Tag
 #define FLEXCAN_BAUD_RATE_250KBPS   (250000)
 #define FLEXCAN_BAUD_RATE_500KBPS   (500000)
 #define FLEXCAN_BAUD_RATE_1MBPS     (1000000)
-
-
-// CAN bit related constants
-#define CAN_REGISTER_SET_ALL_BITS          0xFFFFFFFF
-#define CAN_INT_REGISTER_BYTE_NUM          4
-#define CAN_INT_FLAG_MSB                   7
-#define CAN_INT_REGISTER_BIT_NUM           32
-#define FLEXCAN_STD_ID_SHIFT               ((uint8_t)18)
-#define FLEXCAN_MSGBUF_TX (0x8)
-
-
-
 //=============================================================================
-// @enum FlexCAN Device Index
+// @enum FlexCAN Device Additional Configuration Position
 //=============================================================================
-typedef enum
+typedef enum FlexCAN_Additional_Config_Position_Tag
 {
-   FLEXCAN_DEVICE_A,  // @emem FlexCAN A
-   FLEXCAN_DEVICE_B,  // @emem FlexCAN B
-   FLEXCAN_DEVICE_C,  // @emem FlexCAN C
-   FLEXCAN_DEVICE_D,  // @emem FlexCAN D
-   FLEXCAN_DEVICE_E,  // @emem FlexCAN D
-   FLEXCAN_DEVICE_MAX
-} FlexCAN_Index_T;
-typedef enum
-{
-   FLEXCAN_OSCILLATOR_CLOCK, // @emem Oscillator clock
-   FLEXCAN_SYSTEM_CLOCK      // @emem System Clock
-} FlexCAN_CLOCK_T;
-typedef enum
-{
-   FLEXCAN_SAMPLE_MODE_ONE,  // @emem One Sample Mode
-   FLEXCAN_SAMPLE_MODE_THREE // @emem Three Sample Mode
-} FlexCAN_SAMPLE_MODE_T;
-typedef enum
-{
-   FLEXCAN_LOWEST_ID_FIRST, // @emem Transmit Lowest ID first
-   FLEXCAN_BUFFER_NO_FIRST  // @emem Transmit lowest buffer no first
-} FlexCAN_TX_PRIORITY_T;
-typedef enum
-{
-   FLEXCAN_MODE_RX,       // @emem RX Interrupt
-   FLEXCAN_MODE_TX,       // @emem TX Interrupt
-   FLEXCAN_MODE_ERROR     // @emem Error Interrupt
-} FlexCAN_INTERRUPT_MODE_T;
+   FLEXCAN_CONFIGURATION_POSITION_WRNEN        = 20, //@emem    20   FlexCAN Warning Interrupt Enable
+   FLEXCAN_CONFIGURATION_POSITION_SRXDIS       = 21, //@emem    21   FlexCAN Self Reception Disable
+   FLEXCAN_CONFIGURATION_POSITION_MBFEN        = 22, //@emem    22   FlexCAN Msg Buff Indv Mask Enable
+   FLEXCAN_CONFIGURATION_POSITION_TWRNMSK      = 23, //@emem    23   FlexCAN TxWarn Intr Enabled Mask
+   FLEXCAN_CONFIGURATION_POSITION_RWRNMSK      = 24, //@emem    24   FlexCAN RxWarn Intr Enabled Mask
+   FLEXCAN_CONFIGURATION_POSITION_MCR_FEN      = 25, //@emem    25   FlexCAN FIFO Enable
+   FLEXCAN_CONFIGURATION_POSITION_MCR_WAKMSK   = 26, //@emem    26   FlexCAN Wakeup Mask
+   FLEXCAN_CONFIGURATION_POSITION_MCR_SLFWAK   = 27, //@emem    27   FlexCAN Self Wakeup
+   FLEXCAN_CONFIGURATION_POSITION_MCR_DOZE     = 28, //@emem    28   FlexCAN Doze Mode Enable
+   FLEXCAN_CONFIGURATION_POSITION_MCR_AEN      = 29, //@emem    29   FlexCAN Abort Enable
+   FLEXCAN_CONFIGURATION_POSITION_MCR_IDAM     = 30  //@emem    30:31   FlexCAN ID Acceptance Mask
 
-
-
+}FlexCAN_Additional_Config_Position_T;
 //=============================================================================
-// @enum FlexCAN Device Baud Rate Configuration Position
+// @enum FlexCAN Device Additional Configuration Width
 //=============================================================================
-
-typedef enum
+typedef enum FlexCAN_Additional_Config_Width_Tag
 {
-   FLEXCAN_BAUD_250KBPS,
-   FLEXCAN_BAUD_500KBPS,
-   FLEXCAN_BAUD_1MBPS,
-   FLEXCAN_BAUD_MAX
-}FlexCAN_BAUD_T;
+   FLEXCAN_CONFIGURATION_WIDTH_WRNEN        = 1, //@emem    20   FlexCAN Warning Interrupt Enable
+   FLEXCAN_CONFIGURATION_WIDTH_SRXDIS       = 1, //@emem    21   FlexCAN Self Reception Disable
+   FLEXCAN_CONFIGURATION_WIDTH_MBFEN        = 1, //@emem    22   FlexCAN Msg Buff Indv Mask Enable
+   FLEXCAN_CONFIGURATION_WIDTH_TWRNMSK      = 1, //@emem    23   FlexCAN TxWarn Intr Enabled Mask
+   FLEXCAN_CONFIGURATION_WIDTH_RWRNMSK      = 1, //@emem    24   FlexCAN RxWarn Intr Enabled Mask
+   FLEXCAN_CONFIGURATION_WIDTH_MCR_FEN      = 1, //@emem    25   FlexCAN FIFO Enable
+   FLEXCAN_CONFIGURATION_WIDTH_MCR_WAKMSK   = 1, //@emem    26   FlexCAN Wakeup Mask
+   FLEXCAN_CONFIGURATION_WIDTH_MCR_SLFWAK   = 1, //@emem    27   FlexCAN Self Wakeup
+   FLEXCAN_CONFIGURATION_WIDTH_MCR_DOZE     = 1, //@emem    28   FlexCAN Doze Mode Enable
+   FLEXCAN_CONFIGURATION_WIDTH_MCR_AEN      = 1, //@emem    29   FlexCAN Abort Enable
+   FLEXCAN_CONFIGURATION_WIDTH_MCR_IDAM     = 2  //@emem    30:31   FlexCAN ID Acceptance Mask
 
-
+}FlexCAN_Additional_Config_Width_T;
 //=============================================================================
-// @enum FlexCAN Message Object Configuration Position
-//=============================================================================
-typedef union
-{
-   struct
-   {
-      bitfield32_t                              : 2; 
-      bitfield32_t   INDEX                 : 6;   //@emem [ 7: 2] FlexCAN Message Object Index
-      bitfield32_t   DATA_LENGTH    : 4;  //@emem [11: 8] FlexCAN Message Object Data Length
-      bitfield32_t   ID_LENGTH         : 1;    //@emem    12   FlexCAN Message Object ID Length
-      bitfield32_t   CODE                   : 4;   //@emem [16:13] FlexCAN Message Object Code
-      bitfield32_t   SRR                      : 1;    //@emem   17    FlexCAN Message Object Substitute Remote Request
-      bitfield32_t   RTR                      : 1;   //@emem   18    FlexCAN Message Object Remote Tx Request
-      bitfield32_t   DIRECTION          : 1;   //@emem   19    FlexCAN Message Object Direction
-      bitfield32_t   INTERRUPT         : 1; //@emem   20    FlexCAN Message Object Interrupt Enable
-      bitfield32_t                              : 11; 
-   }      F;
-
-   uint32_t U32;
-
-}  FlexCAN_MSGOBJ_Configuration_T;
-
-
-
-typedef enum FlexCAN_MSGOBJ_INDEX_Tag
-{
-   FLEXCAN_MSG_OBJ_0,  //@emem Message Object 0
-   FLEXCAN_MSG_OBJ_1,  //@emem Message Object 1
-   FLEXCAN_MSG_OBJ_2,  //@emem Message Object 2
-   FLEXCAN_MSG_OBJ_3,  //@emem Message Object 3
-   FLEXCAN_MSG_OBJ_4,  //@emem Message Object 4
-   FLEXCAN_MSG_OBJ_5,  //@emem Message Object 5
-   FLEXCAN_MSG_OBJ_6,  //@emem Message Object 6
-   FLEXCAN_MSG_OBJ_7,  //@emem Message Object 7
-   FLEXCAN_MSG_OBJ_8,  //@emem Message Object 8
-   FLEXCAN_MSG_OBJ_9,  //@emem Message Object 9
-   FLEXCAN_MSG_OBJ_10, //@emem Message Object 10
-   FLEXCAN_MSG_OBJ_11, //@emem Message Object 11
-   FLEXCAN_MSG_OBJ_12, //@emem Message Object 12
-   FLEXCAN_MSG_OBJ_13, //@emem Message Object 13
-   FLEXCAN_MSG_OBJ_14, //@emem Message Object 14
-   FLEXCAN_MSG_OBJ_15, //@emem Message Object 15
-   FLEXCAN_MSG_OBJ_16, //@emem Message Object 16
-   FLEXCAN_MSG_OBJ_17, //@emem Message Object 17
-   FLEXCAN_MSG_OBJ_18, //@emem Message Object 18
-   FLEXCAN_MSG_OBJ_19, //@emem Message Object 19
-   FLEXCAN_MSG_OBJ_20, //@emem Message Object 20
-   FLEXCAN_MSG_OBJ_21, //@emem Message Object 21
-   FLEXCAN_MSG_OBJ_22, //@emem Message Object 22
-   FLEXCAN_MSG_OBJ_23, //@emem Message Object 23
-   FLEXCAN_MSG_OBJ_24, //@emem Message Object 24
-   FLEXCAN_MSG_OBJ_25, //@emem Message Object 25
-   FLEXCAN_MSG_OBJ_26, //@emem Message Object 26
-   FLEXCAN_MSG_OBJ_27, //@emem Message Object 27
-   FLEXCAN_MSG_OBJ_28, //@emem Message Object 28
-   FLEXCAN_MSG_OBJ_29, //@emem Message Object 29
-   FLEXCAN_MSG_OBJ_30, //@emem Message Object 30
-   FLEXCAN_MSG_OBJ_31, //@emem Message Object 31
-   FLEXCAN_MSG_OBJ_32, //@emem Message Object 32
-   FLEXCAN_MSG_OBJ_33, //@emem Message Object 33
-   FLEXCAN_MSG_OBJ_34, //@emem Message Object 34
-   FLEXCAN_MSG_OBJ_35, //@emem Message Object 35
-   FLEXCAN_MSG_OBJ_36, //@emem Message Object 36
-   FLEXCAN_MSG_OBJ_37, //@emem Message Object 37
-   FLEXCAN_MSG_OBJ_38, //@emem Message Object 38
-   FLEXCAN_MSG_OBJ_39, //@emem Message Object 39
-   FLEXCAN_MSG_OBJ_40, //@emem Message Object 40
-   FLEXCAN_MSG_OBJ_41, //@emem Message Object 41
-   FLEXCAN_MSG_OBJ_42, //@emem Message Object 42
-   FLEXCAN_MSG_OBJ_43, //@emem Message Object 43
-   FLEXCAN_MSG_OBJ_44, //@emem Message Object 44
-   FLEXCAN_MSG_OBJ_45, //@emem Message Object 45
-   FLEXCAN_MSG_OBJ_46, //@emem Message Object 46
-   FLEXCAN_MSG_OBJ_47, //@emem Message Object 47
-   FLEXCAN_MSG_OBJ_48, //@emem Message Object 48
-   FLEXCAN_MSG_OBJ_49, //@emem Message Object 49
-   FLEXCAN_MSG_OBJ_50, //@emem Message Object 50
-   FLEXCAN_MSG_OBJ_51, //@emem Message Object 51
-   FLEXCAN_MSG_OBJ_52, //@emem Message Object 52
-   FLEXCAN_MSG_OBJ_53, //@emem Message Object 53
-   FLEXCAN_MSG_OBJ_54, //@emem Message Object 54
-   FLEXCAN_MSG_OBJ_55, //@emem Message Object 55
-   FLEXCAN_MSG_OBJ_56, //@emem Message Object 56
-   FLEXCAN_MSG_OBJ_57, //@emem Message Object 57
-   FLEXCAN_MSG_OBJ_58, //@emem Message Object 58
-   FLEXCAN_MSG_OBJ_59, //@emem Message Object 59
-   FLEXCAN_MSG_OBJ_60, //@emem Message Object 60
-   FLEXCAN_MSG_OBJ_61, //@emem Message Object 61
-   FLEXCAN_MSG_OBJ_62, //@emem Message Object 62
-   FLEXCAN_MSG_OBJ_63, //@emem Message Object 63
-   FLEXCAN_MSG_OBJ_MAX //@emem Message Object Max
-
-}FlexCAN_MSGOBJ_INDEX_T;
-
-typedef enum FlexCAN_MSGOBJ_Data_Length_Tag
-{
-   FLEXCAN_DATA_0_BYTES = 0,
-   FLEXCAN_DATA_1_BYTES = 1,
-   FLEXCAN_DATA_2_BYTES = 2,
-   FLEXCAN_DATA_3_BYTES = 3,
-   FLEXCAN_DATA_4_BYTES = 4,
-   FLEXCAN_DATA_5_BYTES = 5,
-   FLEXCAN_DATA_6_BYTES = 6,
-   FLEXCAN_DATA_7_BYTES = 7,
-   FLEXCAN_DATA_MAX_BYTES = 8
-
-}FlexCAN_MSGOBJ_Data_Length_T;
-
-typedef enum FlexCAN_MSGOBJ_DIR_Tag
-{
-   FLEXCAN_MSGOBJ_DIR_RX, //@emem Message Direction Rx
-   FLEXCAN_MSGOBJ_DIR_TX  //@emem Message Direction Tx
-}FlexCAN_MSGOBJ_DIR_T;
-
-typedef enum FlexCAN_MSGOBJ_ID_Tag
-{
-   FLEXCAN_MSGOBJ_ID_STD, //@emem Standard Message ID
-   FLEXCAN_MSGOBJ_ID_EXT  //@emem Extended Message ID
-}FlexCAN_MSGOBJ_ID_T;
-
-typedef enum FlexCAN_Msg_Code_Tag
-{
-   FLEXCAN_MSGOBJ_RX_INACTIVE      = 0x0,  //@emem RX Inactive
-   FLEXCAN_MSGOBJ_RX_BUSY          = 0x1,  //@emem RX Busy
-   FLEXCAN_MSGOBJ_RX_FULL          = 0x2,  //@emem RX FULL
-   FLEXCAN_MSGOBJ_RX_EMPTY         = 0x4,  //@emem RX Empty
-   FLEXCAN_MSGOBJ_RX_OVERRUN       = 0x6,  //@emem RX Overrun
-   FLEXCAN_MSGOBJ_TX_INACTIVE      = 0x8,  //@emem TX Inactive
-   FLEXCAN_MSGOBJ_TX_REMOTE        = 0xA,  //@emem TX Remote
-   FLEXCAN_MSGOBJ_TX_UNCONDITIONAL = 0xC,  //@emem TX Unconditional
-   FLEXCAN_MSGOBJ_TX_REMOTE_MATCH  = 0xE   //@emem Tx Remote match
-
-} FlexCAN_Msg_Code_T ;
-
-//=============================================================================
-// @enum FlexCAN Device Bus Off/Error Interrupt Configuration Position
-//=============================================================================
-typedef enum FlexCAN_Interrupt_Configuration_Position_Tag
-{
-   FLEXCAN_INTERRUPT_CONFIGURATION_POSITION_TYPE   = 2  //@emem [ 3: 2] FlexCAN Interrupt Type 
-}FlexCAN_Interrupt_Configuration_Position_T;
-
-typedef enum FlexCAN_Interrupt_Configuration_Width_Tag
-{
-   FLEXCAN_INTERRUPT_CONFIGURATION_WIDTH_TYPE   = 2  //@emem [ 3: 2] FlexCAN Interrupt Type 
-}FlexCAN_Interrupt_Configuration_Width_T;
-
-typedef enum FlexCAN_Interrupt_Type_Tag
-{
-   FLEXCAN_BUSOFF_INTERRUPT,     //@emem Bus off interrupt type
-   FLEXCAN_ERROR_INTERRUPT,      //@emem Error interrupt type
-   FLEXCAN_MESSAGE_INTERRUPT,    //@emem Message Buffer interrupt type
-   FLEXCAN_INTERRUPT_MAX
-
-}FlexCAN_Interrupt_Type_T;
-
-
-//FlexCAN C has only 32 MB's
-#define FLEXCAN_C_MSG_OBJ_MAX    (32)
-
-#define FLEXCAN_Get_Prescaler( device_freq, desired_baud, time_quanta )\
-       (uint8_t)(( device_freq/(desired_baud * time_quanta)) - 1 )
-
-//=============================================================
-//  FlexCAN Prescalar macro
-//==============================================================
-#define FLEXCAN_A_PRESCALER \
-   FLEXCAN_Get_Prescaler(FLEXCAN_SYSTEM_FREQUENCY,\
-   (FLEXCAN_A_BAUD_RATE == FLEXCAN_BAUD_250KBPS ? FLEXCAN_BAUD_RATE_250KBPS :\
-    FLEXCAN_A_BAUD_RATE == FLEXCAN_BAUD_500KBPS ? FLEXCAN_BAUD_RATE_500KBPS :\
-    FLEXCAN_A_BAUD_RATE == FLEXCAN_BAUD_1MBPS ? FLEXCAN_BAUD_RATE_1MBPS :\
-    FLEXCAN_BAUD_RATE_500KBPS)\
-   ,FlexCAN_A_Time_Quanta)
-
-
-#define FLEXCAN_C_PRESCALER \
-   FLEXCAN_Get_Prescaler(FLEXCAN_SYSTEM_FREQUENCY,\
-  ( FLEXCAN_C_BAUD_RATE == FLEXCAN_BAUD_250KBPS ? FLEXCAN_BAUD_RATE_250KBPS : \
-   FLEXCAN_C_BAUD_RATE == FLEXCAN_BAUD_500KBPS ? FLEXCAN_BAUD_RATE_500KBPS : \
-   FLEXCAN_C_BAUD_RATE== FLEXCAN_BAUD_1MBPS ? FLEXCAN_BAUD_RATE_1MBPS : \
-    FLEXCAN_BAUD_RATE_500KBPS)\
-   ,FlexCAN_C_Time_Quanta)
-
-
-//=============================================================================
-// @enum FlexCAN Message Object Configuration Position
-//=============================================================================
-typedef enum FlexCAN_MSGOBJ_Configuration_Position_Tag
-{
-   FLEXCAN_MSGOBJ_CONFIGURATION_POSITION_INDEX        = 3,  //@emem [ 7: 2] FlexCAN Message Object Index
-   FLEXCAN_MSGOBJ_CONFIGURATION_POSITION_DATA_LENGTH  = 9,  //@emem [11: 8] FlexCAN Message Object Data Length
-   FLEXCAN_MSGOBJ_CONFIGURATION_POSITION_ID_LENGTH    = 13, //@emem    12   FlexCAN Message Object ID Length
-   FLEXCAN_MSGOBJ_CONFIGURATION_POSITION_CODE         = 14, //@emem [16:13] FlexCAN Message Object Code
-   FLEXCAN_MSGOBJ_CONFIGURATION_POSITION_SRR          = 18, //@emem   17    FlexCAN Message Object Substitute Remote Request
-   FLEXCAN_MSGOBJ_CONFIGURATION_POSITION_RTR          = 19, //@emem   18    FlexCAN Message Object Remote Tx Request
-   FLEXCAN_MSGOBJ_CONFIGURATION_POSITION_DIRECTION    = 20, //@emem   19    FlexCAN Message Object Direction
-   FLEXCAN_MSGOBJ_CONFIGURATION_POSITION_INTERRUPT    = 21  //@emem   20    FlexCAN Message Object Interrupt Enable
-}FlexCAN_MSGOBJ_Configuration_Position_T;
-
-typedef enum FlexCAN_MSGOBJ_Configuration_Width_Tag
-{
-   FLEXCAN_MSGOBJ_CONFIGURATION_WIDTH_INDEX        = 6,  //@emem [ 7: 2] FlexCAN Message Object Index
-   FLEXCAN_MSGOBJ_CONFIGURATION_WIDTH_DATA_LENGTH  = 4,  //@emem [11: 8] FlexCAN Message Object Data Length
-   FLEXCAN_MSGOBJ_CONFIGURATION_WIDTH_ID_LENGTH    = 1,  //@emem    12   FlexCAN Message Object ID Length
-   FLEXCAN_MSGOBJ_CONFIGURATION_WIDTH_CODE         = 4,  //@emem [16:13] FlexCAN Message Object Code
-   FLEXCAN_MSGOBJ_CONFIGURATION_WIDTH_SRR          = 1,  //@emem   17    FlexCAN Message Object Substitute Remote Request
-   FLEXCAN_MSGOBJ_CONFIGURATION_WIDTH_RTR          = 1,  //@emem   18    FlexCAN Message Object Remote Tx Request
-   FLEXCAN_MSGOBJ_CONFIGURATION_WIDTH_DIRECTION    = 1,  //@emem   19    FlexCAN Message Object Direction
-   FLEXCAN_MSGOBJ_CONFIGURATION_WIDTH_INTERRUPT    = 1   //@emem   20    FlexCAN Message Object Interrupt Enable
-}FlexCAN_MSGOBJ_Configuration_Width_T;
-
-
-//=============================================================================
-// FlexCAN_MSGOBJ_Set_Index
+// FlexCAN_Set_Warning_Int_Enable
 //
-// @func Set FlexCAN Message Object Index configuration
+// @func Set FlexCAN Device Warning_Interrupt configuration
 //
 // @parm IO_Configuration_T | config | The value of the configuration prior to modification
 //
-// @parm FlexCAN_MSGOBJ_INDEX_T | value | A <t FlexCAN_MSGOBJ_INDEX_T> element
+// @parm uint8_t | status | A <t uint8_t> element
 //
-// @rdesc <t IO_Configuration_T> containing the element <t FlexCAN_MSGOBJ_INDEX_T>
+// @rdesc <t IO_Configuration_T> containing the element <t uint8_t>
 //
 // @end
 //=============================================================================
-#define FlexCAN_MSGOBJ_Set_Index(config,index) \
-   (IO_Configuration_T)( Insert_Bits( config, index, FLEXCAN_MSGOBJ_CONFIGURATION_POSITION_INDEX, FLEXCAN_MSGOBJ_CONFIGURATION_WIDTH_INDEX ) )
+#define FlexCAN_Set_Warning_Int_Enable(config,status) \
+   (IO_Configuration_T)( Insert_Bits( config, status, FLEXCAN_CONFIGURATION_POSITION_WRNEN, FLEXCAN_CONFIGURATION_WIDTH_WRNEN ) )
 //=============================================================================
-// FlexCAN_MSGOBJ_Get_Index
+// FlexCAN_Get_Warning_Int_Enable
 //
-// @func Get FlexCAN Message Object Index configuration
+// @func Get FlexCAN Device Warning_Interrupt configuration
 //
 // @parm IO_Configuration_T | config | A <t IO_Configuration_T> type
 //
@@ -339,205 +124,401 @@ typedef enum FlexCAN_MSGOBJ_Configuration_Width_Tag
 //
 // @end
 //=============================================================================
-#define FlexCAN_MSGOBJ_Get_Index(config) \
-   (FlexCAN_MSGOBJ_INDEX_T)( Extract_Bits( config, FLEXCAN_MSGOBJ_CONFIGURATION_POSITION_INDEX, FLEXCAN_MSGOBJ_CONFIGURATION_WIDTH_INDEX ) )
+#define FlexCAN_Get_Warning_Int_Enable(config) \
+   (uint8_t)( Extract_Bits( config, FLEXCAN_CONFIGURATION_POSITION_WRNEN, FLEXCAN_CONFIGURATION_WIDTH_WRNEN ) )
 //=============================================================================
-// FlexCAN_MSGOBJ_Set_Direction
+// FlexCAN_Set_Self_Reception
 //
-// @func Set FlexCAN Message Object Direction configuration
+// @func Set FlexCAN Device Self_Reception configuration
 //
 // @parm IO_Configuration_T | config | The value of the configuration prior to modification
 //
-// @parm FlexCAN_MSGOBJ_DIR_T | value | A <t FlexCAN_MSGOBJ_DIR_T> element
-//
-// @rdesc <t IO_Configuration_T> containing the element <t FlexCAN_MSGOBJ_DIR_T>
-//
-// @end
-//=============================================================================
-#define FlexCAN_MSGOBJ_Set_Direction(config,dir) \
-   (IO_Configuration_T)( Insert_Bits( config, dir, FLEXCAN_MSGOBJ_CONFIGURATION_POSITION_DIRECTION, FLEXCAN_MSGOBJ_CONFIGURATION_WIDTH_DIRECTION ) )
-//=============================================================================
-// FlexCAN_MSGOBJ_Get_Direction
-//
-// @func Get FlexCAN Message Object Direction configuration
-//
-// @parm IO_Configuration_T | config | A <t IO_Configuration_T> type
-//
-// @rdesc <t FlexCAN_MSGOBJ_DIR_T> element decoded from the <t IO_Configuration_T>
-//
-// @end
-//=============================================================================
-#define FlexCAN_MSGOBJ_Get_Direction(config) \
-   (FlexCAN_MSGOBJ_DIR_T)( Extract_Bits( config, FLEXCAN_MSGOBJ_CONFIGURATION_POSITION_DIRECTION, FLEXCAN_MSGOBJ_CONFIGURATION_WIDTH_DIRECTION ) )
-//=============================================================================
-// FlexCAN_MSGOBJ_Set_ID_Length
-//
-// @func Set FlexCAN Message Object ID_Length configuration
-//
-// @parm IO_Configuration_T | config | The value of the configuration prior to modification
-//
-// @parm FlexCAN_MSGOBJ_ID_T | value | A <t FlexCAN_MSGOBJ_ID_T> element
-//
-// @rdesc <t IO_Configuration_T> containing the element <t FlexCAN_MSGOBJ_ID_T>
-//
-// @end
-//=============================================================================
-#define FlexCAN_MSGOBJ_Set_ID_Length(config,value) \
-   (IO_Configuration_T)( Insert_Bits( config, value, FLEXCAN_MSGOBJ_CONFIGURATION_POSITION_ID_LENGTH, FLEXCAN_MSGOBJ_CONFIGURATION_WIDTH_ID_LENGTH ) )
-//=============================================================================
-// FlexCAN_MSGOBJ_Get_ID_Length
-//
-// @func Get FlexCAN Message Object ID_Length configuration
-//
-// @parm IO_Configuration_T | config | A <t IO_Configuration_T> type
-//
-// @rdesc <t FlexCAN_MSGOBJ_DIR_T> element decoded from the <t IO_Configuration_T>
-//
-// @end
-//=============================================================================
-#define FlexCAN_MSGOBJ_Get_ID_Length(config) \
-   (FlexCAN_MSGOBJ_ID_T)( Extract_Bits( config, FLEXCAN_MSGOBJ_CONFIGURATION_POSITION_ID_LENGTH, FLEXCAN_MSGOBJ_CONFIGURATION_WIDTH_ID_LENGTH ) )
-//=============================================================================
-// FlexCAN_MSGOBJ_Set_Data_Length
-//
-// @func Set FlexCAN Message Object Data_Length configuration
-//
-// @parm IO_Configuration_T | config | The value of the configuration prior to modification
-//
-// @parm FlexCAN_MSGOBJ_Data_Length_T | value | A <t FlexCAN_MSGOBJ_DataLength_T> element
+// @parm uint8_t | status | A <t uint8_t> element
 //
 // @rdesc <t IO_Configuration_T> containing the element <t uint8_t>
 //
 // @end
 //=============================================================================
-#define FlexCAN_MSGOBJ_Set_Data_Length(config,value) \
-   (IO_Configuration_T)( Insert_Bits( config, value, FLEXCAN_MSGOBJ_CONFIGURATION_POSITION_DATA_LENGTH, FLEXCAN_MSGOBJ_CONFIGURATION_WIDTH_DATA_LENGTH ) )
+#define FlexCAN_Set_Self_Reception(config,status) \
+   (IO_Configuration_T)( Insert_Bits( config, status, FLEXCAN_CONFIGURATION_POSITION_SRXDIS, FLEXCAN_CONFIGURATION_WIDTH_SRXDIS ) )
 //=============================================================================
-// FlexCAN_MSGOBJ_Get_Data_Length
+// FlexCAN_Get_Warning_Interrupt
 //
-// @func Get FlexCAN Message Object Data_Length configuration
+// @func Get FlexCAN Device Self_Reception configuration
 //
 // @parm IO_Configuration_T | config | A <t IO_Configuration_T> type
 //
-// @rdesc <t FlexCAN_MSGOBJ_Data_Length_T> element decoded from the <t IO_Configuration_T>
+// @rdesc <t uint8_t> element decoded from the <t IO_Configuration_T>
 //
 // @end
 //=============================================================================
-#define FlexCAN_MSGOBJ_Get_Data_Length(config) \
-   (FlexCAN_MSGOBJ_Data_Length_T)( Extract_Bits( config, FLEXCAN_MSGOBJ_CONFIGURATION_POSITION_DATA_LENGTH, FLEXCAN_MSGOBJ_CONFIGURATION_WIDTH_DATA_LENGTH ) )
+#define FlexCAN_Get_Self_Reception(config) \
+   (uint8_t)( Extract_Bits( config, FLEXCAN_CONFIGURATION_POSITION_SRXDIS, FLEXCAN_CONFIGURATION_WIDTH_SRXDIS ) )
 //=============================================================================
-// FlexCAN_MSGOBJ_Set_Message_Code
+// FlexCAN_Set_MsgBuf_Individual_Mask
 //
-// @func Set FlexCAN Message Object MsgCode configuration
+// @func Set FlexCAN Device MsgBuf_Individual_Mask configuration
 //
 // @parm IO_Configuration_T | config | The value of the configuration prior to modification
 //
-// @parm FlexCAN_Msg_Code_T | code | A <t FlexCAN_Msg_Code_T> element
+// @parm uint8_t | status | A <t uint8_t> element
 //
-// @rdesc <t IO_Configuration_T> containing the element <t FlexCAN_Msg_Code_T>
+// @rdesc <t IO_Configuration_T> containing the element <t uint8_t>
 //
 // @end
 //=============================================================================
-#define FlexCAN_MSGOBJ_Set_Message_Code(config,code) \
-   (IO_Configuration_T)( Insert_Bits( config, code, FLEXCAN_MSGOBJ_CONFIGURATION_POSITION_CODE, FLEXCAN_MSGOBJ_CONFIGURATION_WIDTH_CODE ) )
+#define FlexCAN_Set_MsgBuf_Individual_Mask(config,status) \
+   (IO_Configuration_T)( Insert_Bits( config, status, FLEXCAN_CONFIGURATION_POSITION_MBFEN, FLEXCAN_CONFIGURATION_WIDTH_MBFEN ) )
 //=============================================================================
-// FlexCAN_MSGOBJ_Get_Message_Code
+// FlexCAN_Get_MsgBuf_Individual_Mask
 //
-// @func Get FlexCAN Message Object MsgCode configuration
+// @func Get FlexCAN Device MsgBuf_Individual_Mask configuration
 //
 // @parm IO_Configuration_T | config | A <t IO_Configuration_T> type
 //
-// @rdesc <t FlexCAN_Msg_Code_T> element decoded from the <t IO_Configuration_T>
+// @rdesc <t uint8_t> element decoded from the <t IO_Configuration_T>
 //
 // @end
 //=============================================================================
-#define FlexCAN_MSGOBJ_Get_Message_Code(config) \
-   (FlexCAN_Msg_Code_T)( Extract_Bits( config, FLEXCAN_MSGOBJ_CONFIGURATION_POSITION_CODE, FLEXCAN_MSGOBJ_CONFIGURATION_WIDTH_CODE ) )
+#define FlexCAN_Get_MsgBuf_Individual_Mask(config) \
+   (uint8_t)( Extract_Bits( config, FLEXCAN_CONFIGURATION_POSITION_MBFEN, FLEXCAN_CONFIGURATION_WIDTH_MBFEN ) )
 //=============================================================================
-// FlexCAN_MSGOBJ_Set_SRR
+// FlexCAN_Set_TxWarn_Interrupt_Mask
 //
-// @func Set FlexCAN Message Object SRR configuration
+// @func Set FlexCAN Device TxWarn_Interrupt_Mask configuration
 //
 // @parm IO_Configuration_T | config | The value of the configuration prior to modification
 //
-// @parm bool | value | A <t bool> element
+// @parm uint8_t | status | A <t uint8_t> element
 //
-// @rdesc <t IO_Configuration_T> containing the element <t bool>
+// @rdesc <t IO_Configuration_T> containing the element <t uint8_t>
 //
 // @end
 //=============================================================================
-#define FlexCAN_MSGOBJ_Set_SRR(config,value) \
-   (IO_Configuration_T)( Insert_Bits( config, value, FLEXCAN_MSGOBJ_CONFIGURATION_POSITION_SRR, FLEXCAN_MSGOBJ_CONFIGURATION_WIDTH_SRR ) )
+#define FlexCAN_Set_TxWarn_Interrupt_Mask(config,status) \
+   (IO_Configuration_T)( Insert_Bits( config, status, FLEXCAN_CONFIGURATION_POSITION_TWRNMSK, FLEXCAN_CONFIGURATION_WIDTH_TWRNMSK ) )
 //=============================================================================
-// FlexCAN_MSGOBJ_Get_SRR
+// FlexCAN_Get_TxWarn_Interrupt_Mask
 //
-// @func Get FlexCAN Message Object SRR configuration
+// @func Get FlexCAN Device TxWarn_Interrupt_Mask configuration
 //
 // @parm IO_Configuration_T | config | A <t IO_Configuration_T> type
 //
-// @rdesc <t bool> element decoded from the <t IO_Configuration_T>
+// @rdesc <t uint8_t> element decoded from the <t IO_Configuration_T>
 //
 // @end
 //=============================================================================
-#define FlexCAN_MSGOBJ_Get_SRR(config) \
-   (bool)( Extract_Bits( config, FLEXCAN_MSGOBJ_CONFIGURATION_POSITION_SRR, FLEXCAN_MSGOBJ_CONFIGURATION_WIDTH_SRR ) )
+#define FlexCAN_Get_TxWarn_Interrupt_Mask(config) \
+   (uint8_t)( Extract_Bits( config, FLEXCAN_CONFIGURATION_POSITION_TWRNMSK, FLEXCAN_CONFIGURATION_WIDTH_TWRNMSK ) )
 //=============================================================================
-// FlexCAN_MSGOBJ_Set_RTR
+// FlexCAN_Set_RxWarn_Interrupt_Mask
 //
-// @func Set FlexCAN Message Object RTR configuration
+// @func Set FlexCAN Device RxWarn_Interrupt_Mask configuration
 //
 // @parm IO_Configuration_T | config | The value of the configuration prior to modification
 //
-// @parm bool | value | A <t bool> element
+// @parm uint8_t | status | A <t uint8_t> element
 //
-// @rdesc <t IO_Configuration_T> containing the element <t bool>
+// @rdesc <t IO_Configuration_T> containing the element <t uint8_t>
 //
 // @end
 //=============================================================================
-#define FlexCAN_MSGOBJ_Set_RTR(config,value) \
-   (IO_Configuration_T)( Insert_Bits( config, value, FLEXCAN_MSGOBJ_CONFIGURATION_POSITION_RTR, FLEXCAN_MSGOBJ_CONFIGURATION_WIDTH_RTR ) )
+#define FlexCAN_Set_RxWarn_Interrupt_Mask(config,status) \
+   (IO_Configuration_T)( Insert_Bits( config, status, FLEXCAN_CONFIGURATION_POSITION_RWRNMSK, FLEXCAN_CONFIGURATION_WIDTH_RWRNMSK ) )
 //=============================================================================
-// FlexCAN_MSGOBJ_Get_RTR
+// FlexCAN_Get_RxWarn_Interrupt_Mask
 //
-// @func Get FlexCAN Message Object RTR configuration
+// @func Get FlexCAN Device TxWarn_Interrupt_Mask configuration
 //
 // @parm IO_Configuration_T | config | A <t IO_Configuration_T> type
 //
-// @rdesc <t bool> element decoded from the <t IO_Configuration_T>
+// @rdesc <t uint8_t> element decoded from the <t IO_Configuration_T>
 //
 // @end
 //=============================================================================
-#define FlexCAN_MSGOBJ_Get_RTR(config) \
-   (bool)( Extract_Bits( config, FLEXCAN_MSGOBJ_CONFIGURATION_POSITION_RTR, FLEXCAN_MSGOBJ_CONFIGURATION_WIDTH_RTR ) )
-//=============================================================================
-// FlexCAN_MSGOBJ_Set_Interrupt
-//
-// @func Set FlexCAN Message Object RTR configuration
-//
-// @parm IO_Configuration_T | config | The value of the configuration prior to modification
-//
-// @parm bool | value | A <t bool> element
-//
-// @rdesc <t IO_Configuration_T> containing the element <t bool>
-//
-// @end
-//=============================================================================
-#define FlexCAN_MSGOBJ_Set_Interrupt(config,value) \
-   (IO_Configuration_T)( Insert_Bits( config, value, FLEXCAN_MSGOBJ_CONFIGURATION_POSITION_INTERRUPT, FLEXCAN_MSGOBJ_CONFIGURATION_WIDTH_INTERRUPT ) )
-//=============================================================================
-// FlexCAN_MSGOBJ_Get_Interrupt
-//
-// @func Get FlexCAN Message Object Interrupt configuration
-//
-// @parm IO_Configuration_T | config | A <t IO_Configuration_T> type
-//
-// @rdesc <t bool> element decoded from the <t IO_Configuration_T>
-//
-// @end
-//=============================================================================
-#define FlexCAN_MSGOBJ_Get_Interrupt(config) \
-   (bool)( Extract_Bits( config, FLEXCAN_MSGOBJ_CONFIGURATION_POSITION_INTERRUPT, FLEXCAN_MSGOBJ_CONFIGURATION_WIDTH_INTERRUPT ) )
+#define FlexCAN_Get_RxWarn_Interrupt_Mask(config) \
+   (uint8_t)( Extract_Bits( config, FLEXCAN_CONFIGURATION_POSITION_RWRNMSK, FLEXCAN_CONFIGURATION_WIDTH_RWRNMSK ) )
 
+//=============================================================================
+// FlexCAN_Set_FIFO_Enable
+//
+// @func Set FlexCAN Device FIFO Enable configuration
+//
+// @parm IO_Configuration_T | config | The value of the configuration prior to modification
+//
+// @parm uint8_t | status | A <t uint8_t> element
+//
+// @rdesc <t IO_Configuration_T> containing the element <t bool>
+//
+// @end
+//=============================================================================
+#define FlexCAN_Set_FIFO_Enable(config,status) \
+   (IO_Configuration_T)( Insert_Bits( config, status, FLEXCAN_CONFIGURATION_POSITION_MCR_FEN, FLEXCAN_CONFIGURATION_WIDTH_MCR_FEN ) )
+//=============================================================================
+// FlexCAN_Get_FIFO_Enable
+//
+// @func Get FlexCAN Device FIFO_Enable configuration
+//
+// @parm IO_Configuration_T | config | A <t IO_Configuration_T> type
+//
+// @rdesc <t bool> element decoded from the <t IO_Configuration_T>
+//
+// @end
+//=============================================================================
+#define FlexCAN_Get_FIFO_Enable(config) \
+   (bool)( Extract_Bits( config, FLEXCAN_CONFIGURATION_POSITION_MCR_FEN, FLEXCAN_CONFIGURATION_WIDTH_MCR_FEN ) )
+
+//=============================================================================
+// FlexCAN_Set_Wakeup_Mask
+//
+// @func Set FlexCAN Device Wakeup Mask configuration
+//
+// @parm IO_Configuration_T | config | The value of the configuration prior to modification
+//
+// @parm uint8_t | status | A <t bool> element
+//
+// @rdesc <t IO_Configuration_T> containing the element <t bool>
+//
+// @end
+//=============================================================================
+#define FlexCAN_Set_Wakeup_Mask(config,status) \
+   (IO_Configuration_T)( Insert_Bits( config, status, FLEXCAN_CONFIGURATION_POSITION_MCR_WAKMSK, FLEXCAN_CONFIGURATION_WIDTH_MCR_WAKMSK) )
+//=============================================================================
+// FlexCAN_Get_Wakeup_Mask
+//
+// @func Get FlexCAN Device FIFO_Enable configuration
+//
+// @parm IO_Configuration_T | config | A <t IO_Configuration_T> type
+//
+// @rdesc <t bool> element decoded from the <t IO_Configuration_T>
+//
+// @end
+//=============================================================================
+#define FlexCAN_Get_Wakeup_Mask(config) \
+   (bool)( Extract_Bits( config, FLEXCAN_CONFIGURATION_POSITION_MCR_WAKMSK, FLEXCAN_CONFIGURATION_WIDTH_MCR_WAKMSK ) )
+
+//=============================================================================
+// FlexCAN_Set_Self_Wakeup
+//
+// @func Set FlexCAN Device Self Wakeup configuration
+//
+// @parm IO_Configuration_T | config | The value of the configuration prior to modification
+//
+// @parm uint8_t | status | A <t bool> element
+//
+// @rdesc <t IO_Configuration_T> containing the element <t bool>
+//
+// @end
+//=============================================================================
+#define FlexCAN_Set_Self_Wakeup(config,status) \
+   (IO_Configuration_T)( Insert_Bits( config, status, FLEXCAN_CONFIGURATION_POSITION_MCR_SLFWAK, FLEXCAN_CONFIGURATION_POSITION_MCR_SLFWAK) )
+//=============================================================================
+// FlexCAN_Get_Self_Wakeup
+//
+// @func Get FlexCAN Device Self Wakeup configuration
+//
+// @parm IO_Configuration_T | config | A <t IO_Configuration_T> type
+//
+// @rdesc <t bool> element decoded from the <t IO_Configuration_T>
+//
+// @end
+//=============================================================================
+#define FlexCAN_Get_Self_Wakeup(config) \
+   (bool)( Extract_Bits( config, FLEXCAN_CONFIGURATION_POSITION_MCR_SLFWAK, FLEXCAN_CONFIGURATION_POSITION_MCR_SLFWAK ) )
+
+//=============================================================================
+// FlexCAN_Set_Doze_Mode
+//
+// @func Set FlexCAN Device Doze Mode configuration
+//
+// @parm IO_Configuration_T | config | The value of the configuration prior to modification
+//
+// @parm uint8_t | status | A <t bool> element
+//
+// @rdesc <t IO_Configuration_T> containing the element <t bool>
+//
+// @end
+//=============================================================================
+#define FlexCAN_Set_Doze_Mode(config,status) \
+   (IO_Configuration_T)( Insert_Bits( config, status, FLEXCAN_CONFIGURATION_POSITION_MCR_DOZE, FLEXCAN_CONFIGURATION_WIDTH_MCR_DOZE) )
+//=============================================================================
+// FlexCAN_Get_Doze_Mode
+//
+// @func Get FlexCAN Device Doze Mode configuration
+//
+// @parm IO_Configuration_T | config | A <t IO_Configuration_T> type
+//
+// @rdesc <t bool> element decoded from the <t IO_Configuration_T>
+//
+// @end
+//=============================================================================
+#define FlexCAN_Get_Doze_Mode(config) \
+   (bool)( Extract_Bits( config, FLEXCAN_CONFIGURATION_POSITION_MCR_DOZE, FLEXCAN_CONFIGURATION_WIDTH_MCR_DOZE ) )
+
+//=============================================================================
+// FlexCAN_Set_Abort_Enable
+//
+// @func Set FlexCAN Device Abort Enable configuration
+//
+// @parm IO_Configuration_T | config | The value of the configuration prior to modification
+//
+// @parm uint8_t | status | A <t bool> element
+//
+// @rdesc <t IO_Configuration_T> containing the element <t bool>
+//
+// @end
+//=============================================================================
+#define FlexCAN_Set_Abort_Enable(config,status) \
+   (IO_Configuration_T)( Insert_Bits( config, status, FLEXCAN_CONFIGURATION_POSITION_MCR_AEN, FLEXCAN_CONFIGURATION_WIDTH_MCR_AEN ) )
+//=============================================================================
+// FlexCAN_Get_Abort_Enable
+//
+// @func Get FlexCAN Device Abort Ebable configuration
+//
+// @parm IO_Configuration_T | config | A <t IO_Configuration_T> type
+//
+// @rdesc <t bool> element decoded from the <t IO_Configuration_T>
+//
+// @end
+//=============================================================================
+#define FlexCAN_Get_Abort_Enable(config) \
+   (bool)( Extract_Bits( config, FLEXCAN_CONFIGURATION_POSITION_MCR_AEN, FLEXCAN_CONFIGURATION_WIDTH_MCR_AEN ) )
+
+//=============================================================================
+// FlexCAN_Set_ID_Acceptance_Mask
+//
+// @func Set FlexCAN Device ID Acceptance Mask configuration
+//
+// @parm IO_Configuration_T | config | The value of the configuration prior to modification
+//
+// @parm uint8_t | id_acc_type | A <t FlexCAN_ID_Acc_Mask_t> element
+//
+// @rdesc <t IO_Configuration_T> containing the element <t FlexCAN_ID_Acc_Mask_t>
+//
+// @end
+//=============================================================================
+#define FlexCAN_Set_ID_Accept_Mask(config,id_acc_type) \
+   (IO_Configuration_T)( Insert_Bits( config, status, FLEXCAN_CONFIGURATION_POSITION_MCR_IDAM, FLEXCAN_CONFIGURATION_WIDTH_MCR_IDAM ) )
+//=============================================================================
+// FlexCAN_Get_ID_Acceptance_Mask
+//
+// @func Get FlexCAN Device ID Acceptance Mask configuration
+//
+// @parm IO_Configuration_T | config | A <t IO_Configuration_T> type
+//
+// @rdesc <t FlexCAN_ID_Acc_Mask_t> element decoded from the <t IO_Configuration_T>
+//
+// @end
+//=============================================================================
+#define FlexCAN_Get_ID_Accept_Mask(config) \
+   (FlexCAN_ID_Acc_Mask_T)( Extract_Bits( config, FLEXCAN_CONFIGURATION_POSITION_MCR_IDAM, FLEXCAN_CONFIGURATION_WIDTH_MCR_IDAM ) )
+
+//=============================================================================
+// FlexCAN_Get_Device
+//
+// @func This function returns the base register address of FlexCAN device
+//
+// @parm IO_Configuration_T | in_config   |A configurable value set in
+//          io_config.h that specifies the FlexCAN device, Message Buffer no etc
+//
+// @rdesc FLEXCAN_T* FlexCAN register address
+//
+// @end
+//=============================================================================
+FLEXCAN_T* FlexCAN_Get_Device(
+   IO_Configuration_T in_configuration );
+//=============================================================================
+// FlexCAN_Initialize_Device
+//
+// @func This function initializes FlexCAN registers
+//
+// @parm IO_Configuration_T | in_config   |A configurable value set in
+//          io_config.h that specifies the FlexCAN device, Message Buffer no etc
+//       FlexCAN_Init_Table_T * init_table - The address of table for dynamic
+//          initialization of mask, Bit Timing parameters etc.  
+//
+// @rdesc None
+//
+// @end
+//=============================================================================
+void FlexCAN_Initialize_Device(
+   IO_Configuration_T in_configuration,
+   FlexCAN_Init_Table_T * init_table);
+//=============================================================================
+// FlexCAN_Set_MsgBuf_Filter_Enable
+//
+// @func This function will Enable/Disable MBFEN bit in MCR Register
+//
+// @parm IO_Configuration_T | in_config   |A configurable value set in
+//          io_config.h that specifies the FlexCAN device, Message Buffer no etc
+//       bool state - true will set MBFEN Bit and false will Reset MBFEN bit
+//
+// @rdesc None
+//
+// @end
+//=============================================================================
+void FlexCAN_Set_MsgBuf_Filter_Enable(
+   IO_Configuration_T in_configuration,
+   bool state);
+//=============================================================================
+// FlexCAN_Set_MsgObj_Indiv_Mask
+//
+// @func This function will Set the individual Mask for Msg Buffer 
+//
+// @parm IO_Configuration_T | in_config   |A configurable value set in
+//          io_config.h that specifies the FlexCAN device, Message Buffer no etc
+//       FLEXCAN_MSK_T  in_mask - The individual Mask value to be set 
+//
+// @rdesc None
+//
+// @end
+//=============================================================================
+void FlexCAN_Set_MsgObj_Indiv_Mask(
+   IO_Configuration_T in_configuration,
+   uint32_t in_mask );
+
+//=============================================================================
+// FlexCAN_Clear_Message_Buffers
+//
+// @func This function initializes FlexCAN Message buffers
+//
+// @parm FLEXCAN_T* | pFlexCAN |pointer to FlexCAN register address  
+//
+// @parm FlexCAN_Index_T | Flexcan device Index
+// @rdesc None
+//
+// @end
+//=============================================================================
+void FlexCAN_Clear_Message_Buffers(
+   FLEXCAN_T*          in_pFlexCAN,
+   FlexCAN_Index_T     in_index   );
+
+//==========================================================================
+// Extern declarations 
+//==========================================================================
+//=============================================================================
+// @const FlexCAN_Transmit_Callback_T | FLEXCAN_TRANSMIT_CALLBACK |
+//=============================================================================
+extern const FlexCAN_Transmit_Callback_T FLEXCAN_TRANSMIT_CALLBACK[ NUMBER_OF_FLEXCAN_DEVICES ];
+//=============================================================================
+// @const FlexCAN_Receive_Callback_T | FLEXCAN_RECEIVE_CALLBACK |
+//=============================================================================
+extern const FlexCAN_Receive_Callback_T FLEXCAN_RECEIVE_CALLBACK[ NUMBER_OF_FLEXCAN_DEVICES ];
+//=============================================================================
+// @const FlexCAN_Error_Callback_T | FLEXCAN_ERROR_CALLBACK |
+//=============================================================================
+extern const FlexCAN_Error_Callback_T FLEXCAN_ERROR_CALLBACK[ NUMBER_OF_FLEXCAN_DEVICES ];
+//=============================================================================
+extern const uint32_t        FLEXCAN_FREQUENCY_HZ;
+extern const FLEXCAN_MCR_T   FLEXCAN_MCR_INIT[NUMBER_OF_FLEXCAN_DEVICES];
+extern const FLEXCAN_CR_T    FLEXCAN_CR_INIT[NUMBER_OF_FLEXCAN_DEVICES];
+extern const FLEXCAN_MSK_T   FLEXCAN_RXGMASK_INIT[NUMBER_OF_FLEXCAN_DEVICES];
+extern const FLEXCAN_MSK_T   FLEXCAN_RX14MASK_INIT[NUMBER_OF_FLEXCAN_DEVICES];
+extern const FLEXCAN_MSK_T   FLEXCAN_RX15MASK_INIT[NUMBER_OF_FLEXCAN_DEVICES];
+extern const FLEXCAN_MSK_T   FLEXCAN_RXIMR_INIT[NUMBER_OF_FLEXCAN_DEVICES] [FLEXCAN_MSG_OBJ_MAX];
+extern const FLEXCAN_IMRH_T  FLEXCAN_IMRH_INIT[NUMBER_OF_FLEXCAN_DEVICES];
+extern const FLEXCAN_IMRL_T  FLEXCAN_IMRL_INIT[NUMBER_OF_FLEXCAN_DEVICES];
+extern const FLEXCAN_IFRH_T  FLEXCAN_IFRH_INIT[NUMBER_OF_FLEXCAN_DEVICES];
+extern const FLEXCAN_IFRL_T  FLEXCAN_IFRL_INIT[NUMBER_OF_FLEXCAN_DEVICES];
 
 #endif // DD_FLEXCAN_H
-
