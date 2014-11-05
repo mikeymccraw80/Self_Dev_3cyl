@@ -21,7 +21,8 @@
 #include "dd_sswt.h"
 #include "immo.h"
 #include "immo_exec.h"
-
+#include "obdspapi.h"
+#include "obdspapi.h"
 
 //=============================================================================
 // OS_Startup_Hook
@@ -33,6 +34,7 @@ void OS_Startup_Hook(void)
 	HAL_OS_Init_Task();
 
 	KeywordExecutive(CwKW2000_Initializes);
+	// InitDCAN_RstToKeyOnTasks();
 
 	ImmobilizerIgnitionOn();
 
@@ -114,6 +116,7 @@ void MngOSTK_10msTasks(void)
 		KW2000CommuState = KW2000_Responder;
 		KeywordExecutive(CwKW2000_RunMode);
 	}
+	// MngDCAN_TasksExecutive();
 
 	/* update ignition status */
 	UpdateIgnitionState_10MS();
