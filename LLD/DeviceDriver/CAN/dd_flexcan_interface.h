@@ -37,7 +37,7 @@ extern void FLEXCAN_MSGOBJ_INTERRUPT_Set_Enable(
    bool in_enable ); 
 
 //============================================================================
-// FlexCAN_Receive_Interrupt
+// FlexCAN_Receive_Configure
 //============================================================================
 extern void FlexCAN_Receive_Configure(
             FLEXCAN_T *      in_pFlexCAN,
@@ -53,12 +53,7 @@ extern void FLEXCAN_MSGOBJ_INTERRUPT_Set_Enable(
 //============================================================================
 // FlexCAN_Receive_Interrupt
 //============================================================================
-extern void FlexCAN_Receive_Interrupt(
-           FlexCAN_Index_T in_FlexCAN,
-           FlexCAN_MSGOBJ_INDEX_T        msg_obj,
-           uint32_t in_message_id,
-           uint8_t *in_data_buffer
-          );
+extern void FlexCAN_Receive_Interrupt(FlexCAN_Index_T in_FlexCAN, uint8_t *in_data_buffer);
 
 //=============================================================================
 // FlexCAN_Get_Device

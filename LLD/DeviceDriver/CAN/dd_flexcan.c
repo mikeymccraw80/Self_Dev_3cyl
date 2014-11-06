@@ -241,7 +241,7 @@ void FLEXCAN_MSGOBJ_INTERRUPT_Set_Enable(
 }
 
 //============================================================================
-// FlexCAN_Receive_Interrupt
+// FlexCAN_Receive_Configure
 //============================================================================
 void FlexCAN_Receive_Configure(
             FLEXCAN_T *      in_pFlexCAN,
@@ -272,131 +272,132 @@ void FlexCAN_Receive_Configure(
 //============================================================================
 // FlexCAN_Receive_Interrupt
 //============================================================================
-void FlexCAN_Receive_Interrupt(
-           FlexCAN_Index_T in_FlexCAN,
-           FlexCAN_MSGOBJ_INDEX_T        msg_obj,
-           uint32_t in_message_id,
-           uint8_t *in_data_buffer
-          )
+//// Constants
+#define THIRTYONE (31)
+#define THIRTYTWO (32)
+
+void FlexCAN_Receive_Interrupt(FlexCAN_Index_T in_FlexCAN, uint8_t *in_data_buffer)
 {
+	FLEXCAN_T *pFlexCAN;
+	uint32_t* pInterrupt_Flag;
+	uint32_t  in_message_id;
+	IO_Configuration_T      config;
+	FlexCAN_MSGOBJ_DIR_T    direction;
+	// Initialize local var to msg object max value to remove compiler warning
+	FlexCAN_MSGOBJ_INDEX_T  msg_obj_max, msg_obj_index = FLEXCAN_MSG_OBJ_MAX;
 
+	FlexCAN_Msg_Code_T   message_code;
+	volatile uint16_t    timer;
+	uint8_t              index;
+	uint8_t              data_length;
 
-   FLEXCAN_T            *pFlexCAN;
-   uint8_t msg_obj_max;
-   uint32_t* pInterrupt_Flag;
+	if(FLEXCAN_DEVICE_A == in_FlexCAN) {
+		msg_obj_max = FLEXCAN_MSG_OBJ_MAX;
+		pFlexCAN  =(FLEXCAN_T *)&FlexCAN_A;
+	} else {
+		msg_obj_max = FLEXCAN_MSG_OBJ_MAX/2;   //FlexCAN C has only 32 MB's      
+		pFlexCAN  =(FLEXCAN_T *)&FlexCAN_C;
+	}
 
-    FlexCAN_Msg_Code_T   message_code;
-   volatile uint16_t    timer;
-   uint8_t              index;
-   uint8_t              data_length;
- 
+	// Get the device index into configuration
+	config = FlexCAN_Set_Index(false, (uint32_t)(in_FlexCAN));
 
-   if(FLEXCAN_DEVICE_A == in_FlexCAN)
-   {
-      msg_obj_max = FLEXCAN_MSG_OBJ_MAX;
-	  pFlexCAN  =(FLEXCAN_T *)&FlexCAN_A;
-   }
-   else
-   {
-      msg_obj_max = FLEXCAN_MSG_OBJ_MAX/2;   //FlexCAN C has only 32 MB's      
-   	 pFlexCAN  =(FLEXCAN_T *)&FlexCAN_C;
-   }
+	// If there is no interrupt set the Lower interrupt flage register
+	if(false != pFlexCAN->IFRL.U32) {
+		// Get the first message object index whose interrupt flag is set
+		msg_obj_index = (FlexCAN_MSGOBJ_INDEX_T)Count_Leading_Zeros_For_UINT32((pFlexCAN->IFRL.U32 & pFlexCAN->IMRL.U32));
+		msg_obj_index = THIRTYONE - msg_obj_index;
+	} else if(false != pFlexCAN->IFRH.U32) {
+		// Get the first message object index whose interrupt flag is set
+		msg_obj_index = (FlexCAN_MSGOBJ_INDEX_T)Count_Leading_Zeros_For_UINT32((pFlexCAN->IFRH.U32 & pFlexCAN->IMRH.U32));
+		msg_obj_index = THIRTYONE - msg_obj_index + THIRTYTWO;
+	} else {
+		ASSERT( false );
+	}
 
-   if( msg_obj < FLEXCAN_MSG_OBJ_32)
-   {
-         pInterrupt_Flag = (uint32_t *)&(pFlexCAN->IFRL.U32);
-   }
-   else
-   {
-         msg_obj   -= FLEXCAN_MSG_OBJ_32;
-         pInterrupt_Flag = (uint32_t *)&(pFlexCAN->IFRH.U32);
-   }
+	// Update the configuration with the message object index
+	config |= FlexCAN_MSGOBJ_Set_Index(config, msg_obj_index);
 
+	// Get the message object direction
+	direction = FlexCAN_Interrupt_Get_Direction(config);
 
+	// If direction is Tx
+	if(direction == FLEXCAN_MSGOBJ_DIR_RX) {
+		//Read Control and Status Word to lock the Buffer
+		message_code = (FlexCAN_Msg_Code_T)pFlexCAN->MSGBUF[msg_obj_index].F.CTRSTS.F.CODE;
 
-   //Read Control and Status Word to lock the Buffer
-   message_code = (FlexCAN_Msg_Code_T)pFlexCAN->MSGBUF[msg_obj].F.CTRSTS.F.CODE;
+		if ((message_code != FLEXCAN_MSGOBJ_RX_BUSY) && (message_code != FLEXCAN_MSGOBJ_RX_OVERRUN)) {
+			// Read ID- Optional
+			in_message_id = FLEXCAN_Get_Msg_ID(pFlexCAN, msg_obj_index);
 
-   if ((message_code != FLEXCAN_MSGOBJ_RX_BUSY) &&
-       (message_code != FLEXCAN_MSGOBJ_RX_OVERRUN))
-   {
-      // Read ID- Optional
-      in_message_id = FLEXCAN_Get_Msg_ID(pFlexCAN, msg_obj);
+			// Read DATA Fields
+			data_length    = (uint8_t)pFlexCAN->MSGBUF[msg_obj_index].F.CTRSTS.F.LENGTH;
+			FLEXCAN_MSGOBJ_Get_Data(pFlexCAN, msg_obj_index, in_data_buffer, data_length);
 
-      // Read DATA Fields
-      data_length    = (uint8_t)pFlexCAN->MSGBUF[msg_obj].F.CTRSTS.F.LENGTH;
-      FLEXCAN_MSGOBJ_Get_Data(pFlexCAN, msg_obj, in_data_buffer, data_length);
+			//Write unused data bytes as 0
+			for(index = data_length; index < FLEXCAN_DATA_MAX_BYTES; index++) {
+				in_data_buffer[index] = 0;
+			}
 
-      //Write unused data bytes as 0
-      for(index = data_length; index < FLEXCAN_DATA_MAX_BYTES; index++)
-      {
-         in_data_buffer[index] = 0;
-      }
+			//Read Free Running Timer to release the lock
+			timer = FLEXCAN_Get_Free_Running_Timer(pFlexCAN, msg_obj_index);
 
-      //Read Free Running Timer to release the lock
-      timer = FLEXCAN_Get_Free_Running_Timer(pFlexCAN, msg_obj);
+			// FLEXCAN_MSGOBJ_INTERRUPT_Clear_Pending
+			if( msg_obj_index < FLEXCAN_MSG_OBJ_32) {
+				pFlexCAN->IFRL.U32 &= (1 << msg_obj_index);
+			} else {
+				// msg_obj_index   -= FLEXCAN_MSG_OBJ_32;
+				pFlexCAN->IFRH.U32 &= (1 << (msg_obj_index - FLEXCAN_MSG_OBJ_32));
+			}
 
-     // FLEXCAN_MSGOBJ_INTERRUPT_Clear_Pending
-	  if( msg_obj < FLEXCAN_MSG_OBJ_32)
-      {
-         pFlexCAN->IFRL.U32 &= (1 << msg_obj);
-      }
-      else
-      {
-         msg_obj   -= FLEXCAN_MSG_OBJ_32;
-         pFlexCAN->IFRH.U32 &= (1 << msg_obj);
-      }
+			//Make the message buffer available for next recieve
+			pFlexCAN->MSGBUF[msg_obj_index].F.CTRSTS.F.CODE = FLEXCAN_MSGOBJ_RX_EMPTY;
+			FlexCAN_RX_CallBack(in_message_id, in_data_buffer, FLEXCAN_DATA_MAX_BYTES);
+		} else {
+			//Buffer overflow happened.
+			// FLEXCAN_MSGOBJ_INTERRUPT_Clear_Pending
+			if( msg_obj_index < FLEXCAN_MSG_OBJ_32) {
+				pFlexCAN->IFRL.U32 &= (1 << msg_obj_index);
+			} else {
+				// msg_obj_index   -= FLEXCAN_MSG_OBJ_32;
+				pFlexCAN->IFRH.U32 &= (1 << (msg_obj_index - FLEXCAN_MSG_OBJ_32));
+			}
 
-      //Make the message buffer available for next recieve
-      pFlexCAN->MSGBUF[msg_obj].F.CTRSTS.F.CODE = FLEXCAN_MSGOBJ_RX_EMPTY;
-      FlexCAN_RX_CallBack(in_message_id,in_data_buffer, FLEXCAN_DATA_MAX_BYTES);
-
-   }
-   else
-   {
-      //Buffer overflow happened.
-      // FLEXCAN_MSGOBJ_INTERRUPT_Clear_Pending
-	  if( msg_obj < FLEXCAN_MSG_OBJ_32)
-      {
-         pFlexCAN->IFRL.U32 &= (1 << msg_obj);
-      }
-      else
-      {
-         msg_obj   -= FLEXCAN_MSG_OBJ_32;
-         pFlexCAN->IFRH.U32 &= (1 << msg_obj);
-      }
-
-      //Make the message buffer available for next recieve
-      pFlexCAN->MSGBUF[msg_obj].F.CTRSTS.F.CODE = FLEXCAN_MSGOBJ_RX_EMPTY;
-   }
+			//Make the message buffer available for next recieve
+			pFlexCAN->MSGBUF[msg_obj_index].F.CTRSTS.F.CODE = FLEXCAN_MSGOBJ_RX_EMPTY;
+		}
+	} else if(direction ==  FLEXCAN_MSGOBJ_DIR_TX) {
+		// Get the message id of the message object
+		in_message_id = FLEXCAN_Get_Msg_ID(pFlexCAN, msg_obj_index);
+		// FLEXCAN_MSGOBJ_INTERRUPT_Clear_Pending 
+		if( msg_obj_index < FLEXCAN_MSG_OBJ_32) {
+			pFlexCAN->IFRL.U32 &= (1 << msg_obj_index);
+		} else {
+			// msg_obj_index   -= FLEXCAN_MSG_OBJ_32;
+			pFlexCAN->IFRH.U32 &= (1 << (msg_obj_index - FLEXCAN_MSG_OBJ_32));
+		}
+		FlexCAN_TX_CallBack(in_message_id);
+	}
 }
-
-
 
 //============================================================================
 // FlexCAN_Process_Transmitted_Message
 //============================================================================
-void FlexCAN_Transmit_Interrupt(
-     FLEXCAN_T *                  in_pFlexCAN,
-   FlexCAN_MSGOBJ_INDEX_T        msg_obj)
+void FlexCAN_Transmit_Interrupt(FLEXCAN_T * in_pFlexCAN, FlexCAN_MSGOBJ_INDEX_T msg_obj)
 {
-   FlexCAN_Index_T         FlexCAN_index;
-   uint32_t                msg_id;
+	FlexCAN_Index_T         FlexCAN_index;
+	uint32_t                msg_id;
 
-   // Get the message id of the message object
-   msg_id = FLEXCAN_Get_Msg_ID(in_pFlexCAN, msg_obj);
+	// Get the message id of the message object
+	msg_id = FLEXCAN_Get_Msg_ID(in_pFlexCAN, msg_obj);
 
-         // FLEXCAN_MSGOBJ_INTERRUPT_Clear_Pending 
-   if( msg_obj < FLEXCAN_MSG_OBJ_32)
-   {
-         in_pFlexCAN->IFRL.U32 &= (1 << msg_obj);
-   }
-   else
-   {
-         msg_obj   -= FLEXCAN_MSG_OBJ_32;
-         in_pFlexCAN->IFRH.U32 &= (1 << msg_obj);
-   }
-  FlexCAN_TX_CallBack(msg_id);
- 
+	// FLEXCAN_MSGOBJ_INTERRUPT_Clear_Pending 
+	if( msg_obj < FLEXCAN_MSG_OBJ_32) {
+		in_pFlexCAN->IFRL.U32 &= (1 << msg_obj);
+	} else {
+		msg_obj   -= FLEXCAN_MSG_OBJ_32;
+		in_pFlexCAN->IFRH.U32 &= (1 << msg_obj);
+	}
+	FlexCAN_TX_CallBack(msg_id);
 }
 

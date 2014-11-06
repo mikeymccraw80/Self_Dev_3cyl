@@ -38,8 +38,8 @@
 //
 // @end
 //=============================================================================
-void FlexCAN_Receive_Interrupt(
-   FlexCAN_Index_T  in_FlexCAN);
+//void FlexCAN_Receive_Interrupt(
+//   FlexCAN_Index_T  in_FlexCAN);
 
 //=============================================================================
 // FlexCAN_Process_Received_Message
