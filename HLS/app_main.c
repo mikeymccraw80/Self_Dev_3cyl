@@ -343,6 +343,10 @@ void HLS_ini(void)
 	LLD_di_table[LLD_DI_CAM_1].DebounceTimes = LLD_DI_CAM_1_DebTime;
 	LLD_di_table[LLD_DI_IGN_ON_OFF_SW].DebounceTimes = LLD_DI_IGN_ON_OFF_SW_DebTime ;
 	LLD_di_table[LLD_DI_HEAD_LAMP].DebounceTimes = LLD_DI_HEAD_LAMP_DebTime ;
+	LLD_di_table[LLD_DI_POWER_STEERING].DebounceTimes = LLD_DI_POWER_STEERING_DebTime;
+	LLD_di_table[LLD_DI_BRAKE_SWITCH].DebounceTimes = LLD_DI_BREAK_SWITCH_DebTime;
+	LLD_di_table[LLD_DI_CLUTCH_TOP].DebounceTimes = LLD_DI_ClUTCH_TOP_DebTime;
+	LLD_di_table[LLD_DI_CRANK_REQUEST].DebounceTimes = LLD_DI_CRANK_REQUEST_DebTime;
 #if 0
 	/* pulse output enable/disable set */
 	LLD_pwm_out_table[LLD_PWM_O2_HEATER_1].B_enable = true;

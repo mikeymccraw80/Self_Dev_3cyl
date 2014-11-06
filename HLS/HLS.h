@@ -440,6 +440,8 @@ extern bool     B_CpgVStp;       /* 0xE8  KDS stop canister purge valve test  */
 #define LLD_DI_HEAD_LAMP_DebTime          10
 #define LLD_DI_POWER_STEERING_DebTime     10
 #define LLD_DI_CRANK_REQUEST_DebTime      10
+#define LLD_DI_ClUTCH_TOP_DebTime         10
+#define LLD_DI_BREAK_SWITCH_DebTime       10
 
 /* Corresponding PIN number of connector */
 #define LLD_DO_FAN1             LLD_DO00 //index of digital output channel 0
