@@ -14,13 +14,14 @@
 #include "hal_ucram.h"
 #include "hal.h" //for V_rpm
 #include "hal_ucram.h"
-
+#include "io_dcan_config.h"
 
 typedef enum 
 {
-   CAN_MESSAGE_IN_UNCAL_TABLE,
-   CAN_MESSAGE_IN_CAL_TABLE,
-   CAN_MESSAGE_NOT_IN_TABLE = 255
+	CAN_MESSAGE_IN_UNCAL_TABLE,
+	CAN_MESSAGE_IN_CANOBD_TABLE,
+	CAN_MESSAGE_IN_CAL_TABLE,
+	CAN_MESSAGE_NOT_IN_TABLE = 255
 } CAN_MESSAGE_LOCATION;
 
 
@@ -71,11 +72,8 @@ const FlexCAN_message_parameter_T FlexCAN_TX_Message_Parameter_Table[] =
 
 const FlexCAN_message_parameter_T FlexCAN_RX_Message_Parameter_Table[] =
 {
-
-   {CCP_CANID_CRO   ,     FlexCAN_RX_Buffer_CCP_CRO    ,     CCP_Received_Message      ,     FLEXCAN_MESSAGE_NULL_CONFIG},     
-   {CCP_INCA_RECEIVE,     FlexCAN_RX_Buffer_CCP_KW2KCAN,     KW2KCAN_Received_Message  ,     FLEXCAN_MESSAGE_NULL_CONFIG},     
-//   {MCAMOS_CANID_7EE,     FlexCAN_RX_Buffer_MCAMOS     ,     MCAMOS_Process_7EE_Message,     FLEXCAN_MESSAGE_NULL_CONFIG},     
- //  {MCAMOS_CANID_7EF,     FlexCAN_RX_Buffer_MCAMOS     ,     MCAMOS_Process_7EF_Message,     FLEXCAN_MESSAGE_NULL_CONFIG},     
+   {CCP_CANID_CRO   ,     FlexCAN_RX_Buffer_CCP_CRO    ,     CCP_Received_Message      ,     FLEXCAN_MESSAGE_NULL_CONFIG},
+   {CCP_INCA_RECEIVE,     FlexCAN_RX_Buffer_CCP_KW2KCAN,     KW2KCAN_Received_Message  ,     FLEXCAN_MESSAGE_NULL_CONFIG},
    //Last Entry will always have message id 0
    {    0           ,     NULL                         ,     NULL_NOTIFIER_PTR         ,     FLEXCAN_MESSAGE_NULL_CONFIG}
 };
@@ -123,75 +121,97 @@ bool Get_Message( uint32_t in_message_id,
 //=============================================================================
 // FlexCAN_RX_CallBack
 //=============================================================================
-void FlexCAN_RX_CallBack (
-      uint32_t in_message_id,
-      uint8_t *in_data_buffer,
-      uint8_t  in_data_length)
+void FlexCAN_RX_CallBack (uint32_t in_message_id, uint8_t *in_data_buffer, uint8_t  in_data_length)
 {
-   uint8_t * dest_buffer;
-   uint8_t message;
-   uint8_t index;
-   CAN_MESSAGE_LOCATION     msg_location = CAN_MESSAGE_NOT_IN_TABLE;
+	uint8_t * dest_buffer;
+	uint8_t ccp_message, obd_message;
+	uint8_t index;
+	CAN_MESSAGE_LOCATION     msg_location = CAN_MESSAGE_NOT_IN_TABLE;
 
-   for (message = 0; FlexCAN_RX_Message_Parameter_Table[message].Message_ID!=0; message ++)
-   {
-      if ( FlexCAN_RX_Message_Parameter_Table[message].Message_ID == in_message_id)
-      {
-         msg_location = CAN_MESSAGE_IN_UNCAL_TABLE;
-         break;
-      }
-   }
+	for (ccp_message = 0; FlexCAN_RX_Message_Parameter_Table[ccp_message].Message_ID!=0; ccp_message ++) {
+		if ( FlexCAN_RX_Message_Parameter_Table[ccp_message].Message_ID == in_message_id) {
+			msg_location = CAN_MESSAGE_IN_UNCAL_TABLE;
+			break;
+		}
+	}
 
-   if (CAN_MESSAGE_IN_UNCAL_TABLE == msg_location) 
-   {
-      dest_buffer = FlexCAN_RX_Message_Parameter_Table[message].FlexCAN_buffer_ptr;
-      for (index = 0; index < in_data_length; index++)
-      {
+	/* search the canobd table */
+	if (msg_location == CAN_MESSAGE_NOT_IN_TABLE) {
+		for (obd_message = 0; obd_message < MESSAGE_NUM_OF_CANOBD; obd_message ++) {
+			if ( CANOBD_Message_Parameter_Table[obd_message].CAN_message_ID == in_message_id) {
+				msg_location = CAN_MESSAGE_IN_CANOBD_TABLE;
+				break;
+			}
+		}
+	}
 
-         *dest_buffer++ = *in_data_buffer++;
-      }
+	if (CAN_MESSAGE_IN_UNCAL_TABLE == msg_location)  {
+		dest_buffer = FlexCAN_RX_Message_Parameter_Table[ccp_message].FlexCAN_buffer_ptr;
+		for (index = 0; index < in_data_length; index++) {
+			*dest_buffer++ = *in_data_buffer++;
+		}
 
-      FlexCAN_RX_Message_Count[message]++;
-      if(FlexCAN_RX_Message_Parameter_Table[message].notifier_function_ptr != NULL)
-      {
-         FlexCAN_RX_Message_Parameter_Table[message].notifier_function_ptr();
-      }
-   else 
-   {
-   }
-  }
+		FlexCAN_RX_Message_Count[ccp_message]++;
+		if(FlexCAN_RX_Message_Parameter_Table[ccp_message].notifier_function_ptr != NULL) {
+			FlexCAN_RX_Message_Parameter_Table[ccp_message].notifier_function_ptr();
+		} else  {
+			
+		}
+	} else if (CAN_MESSAGE_IN_CANOBD_TABLE == msg_location) {
+		dest_buffer = CANOBD_Message_Parameter_Table[obd_message].CAN_buffer_ptr;
+		for (index = 0; index < in_data_length; index++) {
+			*dest_buffer++ = *in_data_buffer++;
+		}
+		if(CANOBD_Message_Parameter_Table[obd_message].callback != NULL) {
+			CANOBD_Message_Parameter_Table[obd_message].callback(in_message_id);
+		} else  {
+			
+		}
+	} else {
+		//todo: nothing
+	}
 }
 
 //=============================================================================
 // FlexCAN_TX_CallBack
 //=============================================================================
-void FlexCAN_TX_CallBack ( 
-      uint32_t message_id          )
+void FlexCAN_TX_CallBack (uint32_t message_id)
 {
-   uint8_t message;
-   CAN_MESSAGE_LOCATION     msg_location = CAN_MESSAGE_NOT_IN_TABLE;
+	uint8_t ccp_message, obd_message;
+	CAN_MESSAGE_LOCATION     msg_location = CAN_MESSAGE_NOT_IN_TABLE;
 
-   for (message = 0; FlexCAN_TX_Message_Parameter_Table[message].Message_ID!=0; message ++)
-   {
-      if ( FlexCAN_TX_Message_Parameter_Table[message].Message_ID == message_id)
-      {
-         msg_location = CAN_MESSAGE_IN_UNCAL_TABLE;
-         break;
-      }
-   }
+	for (ccp_message = 0; FlexCAN_TX_Message_Parameter_Table[ccp_message].Message_ID!=0; ccp_message ++) {
+		if ( FlexCAN_TX_Message_Parameter_Table[ccp_message].Message_ID == message_id) {
+			msg_location = CAN_MESSAGE_IN_UNCAL_TABLE;
+			break;
+		}
+	}
 
-   if (CAN_MESSAGE_IN_UNCAL_TABLE == msg_location) 
-   {
-      if (FlexCAN_TX_Message_Parameter_Table[message].notifier_function_ptr != NULL)
-      {
-         FlexCAN_TX_Message_Parameter_Table[message].notifier_function_ptr();
-      }
-   }
-   else 
-   {
-      //do nothing
-   }
+	/* search the canobd table */
+	if (msg_location == CAN_MESSAGE_NOT_IN_TABLE) {
+		for (obd_message = 0; obd_message < MESSAGE_NUM_OF_CANOBD; obd_message ++) {
+			if ( CANOBD_Message_Parameter_Table[obd_message].CAN_message_ID == message_id) {
+				msg_location = CAN_MESSAGE_IN_CANOBD_TABLE;
+				break;
+			}
+		}
+	}
 
+	if (CAN_MESSAGE_IN_UNCAL_TABLE == msg_location)  {
+		if (FlexCAN_TX_Message_Parameter_Table[ccp_message].notifier_function_ptr != NULL) {
+			FlexCAN_TX_Message_Parameter_Table[ccp_message].notifier_function_ptr();
+		} else {
+			//todo: nothing
+		}
+	} else if (CAN_MESSAGE_IN_CANOBD_TABLE == msg_location) {
+		if(CANOBD_Message_Parameter_Table[obd_message].callback != NULL) {
+			CANOBD_Message_Parameter_Table[obd_message].callback(message_id);
+		} else  {
+			
+		}
+	} else {
+		//todo: nothing
+	}
 }
 
 
