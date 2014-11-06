@@ -80,6 +80,7 @@ typedef struct
 #define RX_MESSAGE_NUM_OF_CANOBD (3)
 #define MESSAGE_NUM_OF_CANOBD    (TX_MESSAGE_NUM_OF_CANOBD + RX_MESSAGE_NUM_OF_CANOBD)
 
+extern CAN_Message_Parameter_T CANOBD_Message_Parameter_Table[MESSAGE_NUM_OF_CANOBD];
 extern CAN_Message_Parameter_T Get_CANOBD_Message_Parameter_Table(uint8_t index);
 extern void Initial_CANOBD_CAL_ID(uint16_t CANID);
 
