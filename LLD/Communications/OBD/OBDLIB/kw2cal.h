@@ -57,7 +57,7 @@
 
 #define Cy1979_Mode09_MaxCalChar     16
 #define Cy1979_MaxCalIDs             1
-
+#if 0
 /*********************************************************************/
 /*            TYPEDEFS AND STRUCTURE DECLARATIONS                    */
 /*********************************************************************/
@@ -173,7 +173,7 @@ extern const BYTE Ka1979_M5_TestRange_00Thru80[];
  *  Global Constant Declarations for Cal Form
  *****************************************************************************/
 extern const T_COUNT_BYTE KySYST_CALIBRATION_FILE_PART_NR[] ;
-
+#endif
 
 #endif
 

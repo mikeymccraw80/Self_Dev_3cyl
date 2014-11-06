@@ -72,7 +72,7 @@
 #define Cy1979_PID20_Thru40          0x04
 #define Cy1979_PID40_Thru60          0x04
 #define Cy1979_Mode_5_TestRange      0x14
-
+#if 0
 /*********************************************************************/
 /*            TYPEDEFS AND STRUCTURE DECLARATIONS                    */
 /*********************************************************************/
@@ -313,7 +313,7 @@ const BYTE Ka1979_M5_TestRange_00Thru80[Cy1979_Mode_5_TestRange] =
                   0x80, 0x00, 0x00, 0x00};/* Test Range 0x80          */
 
 #pragma section const {}
-
+#endif
 
 /* ============================================================================ *\
  * File revision history (top to bottom, first revision to last revision
