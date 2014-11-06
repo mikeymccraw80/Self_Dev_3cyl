@@ -45,13 +45,7 @@ void HAL_CAN_RX_B00_Config(void)
 void HAL_CAN_RX_B00_INT(void)
 {
 //CCP_CANID_CRO
-	FlexCAN_Receive_Interrupt(
-			FLEXCAN_DEVICE_A,
-			FLEXCAN_MSG_OBJ_Index_CCP_CANID_CRO,
-			CCP_CANID_CRO,
-			CAN_Message_RX_DATA
-	);
-
+	FlexCAN_Receive_Interrupt(FLEXCAN_DEVICE_A, CAN_Message_RX_DATA);
 }
 //=============================================================================
 // HAL_CAN_TX_B01_Config
@@ -199,13 +193,7 @@ void HAL_CAN_RX_B06_Config(void)
 void HAL_CAN_RX_B06_INT(void)
 {
 //CCP_CANID_CRO
-	FlexCAN_Receive_Interrupt(
-			FLEXCAN_DEVICE_A,
-			FLEXCAN_MSG_OBJ_Index_CCP_INCA_RECEIVE,
-			CCP_INCA_RECEIVE,
-			CAN_Message_RX_DATA
-	);
-
+	FlexCAN_Receive_Interrupt(FLEXCAN_DEVICE_A,	CAN_Message_RX_DATA);
 }
 
 //=============================================================================
@@ -272,14 +260,7 @@ void HAL_CAN_RX_B08_Config(void)
 
 void HAL_CAN_RX_B08_INT(void)
 {
-
-	FlexCAN_Receive_Interrupt(
-			FLEXCAN_DEVICE_A,
-			FLEXCAN_MSG_OBJ_8,
-			CAN_Message_RX_ID,
-			VsCAN_CHERY_ID2E9
-	);
-
+	FlexCAN_Receive_Interrupt(FLEXCAN_DEVICE_A, VsCAN_CHERY_ID2E9);
 }
 
 void HAL_CAN_RX_B09_Config(void)
@@ -297,14 +278,7 @@ void HAL_CAN_RX_B09_Config(void)
 
 void HAL_CAN_RX_B09_INT(void)
 {
-
-	FlexCAN_Receive_Interrupt(
-			FLEXCAN_DEVICE_A,
-			FLEXCAN_MSG_OBJ_9,
-			CAN_Message_RX_ID,
-			VsCAN_CHERY_ID310
-	);
-
+	FlexCAN_Receive_Interrupt(FLEXCAN_DEVICE_A,VsCAN_CHERY_ID310);
 }
 
 void HAL_CAN_RX_B10_Config(void)
@@ -322,14 +296,7 @@ void HAL_CAN_RX_B10_Config(void)
 
 void HAL_CAN_RX_B10_INT(void)
 {
-
-	FlexCAN_Receive_Interrupt(
-			FLEXCAN_DEVICE_A,
-			FLEXCAN_MSG_OBJ_10,
-			CAN_Message_RX_ID,
-			VsCAN_CHERY_ID391
-	);
-
+	FlexCAN_Receive_Interrupt(FLEXCAN_DEVICE_A, VsCAN_CHERY_ID391);
 }
 
 void HAL_CAN_RX_B11_Config(void)
@@ -347,14 +314,7 @@ void HAL_CAN_RX_B11_Config(void)
 
 void HAL_CAN_RX_B11_INT(void)
 {
-
-	FlexCAN_Receive_Interrupt(
-			FLEXCAN_DEVICE_A,
-			FLEXCAN_MSG_OBJ_11,
-			CAN_Message_RX_ID,
-			VsCAN_CHERY_ID3C0
-	);
-
+	FlexCAN_Receive_Interrupt(FLEXCAN_DEVICE_A, VsCAN_CHERY_ID3C0);
 }
 
 void HAL_CAN_RX_B12_Config(void)
@@ -372,14 +332,7 @@ void HAL_CAN_RX_B12_Config(void)
 
 void HAL_CAN_RX_B12_INT(void)
 {
-
-	FlexCAN_Receive_Interrupt(
-			FLEXCAN_DEVICE_A,
-			FLEXCAN_MSG_OBJ_12,
-			CAN_Message_RX_ID,
-			VsCAN_CHERY_ID430
-	);
-
+	FlexCAN_Receive_Interrupt(FLEXCAN_DEVICE_A, VsCAN_CHERY_ID430);
 }
 
 void HAL_CAN_RX_B13_Config(void)
@@ -397,12 +350,7 @@ void HAL_CAN_RX_B13_Config(void)
 
 void HAL_CAN_RX_B13_INT(void)
 {
-	FlexCAN_Receive_Interrupt(
-			FLEXCAN_DEVICE_A,
-			FLEXCAN_MSG_OBJ_13,
-			CAN_Message_RX_ID,
-			VsCAN_CHERY_ID1AE
-	);
+	FlexCAN_Receive_Interrupt(FLEXCAN_DEVICE_A, VsCAN_CHERY_ID1AE);
 	VsCAN_Receive_Err.CAN_ID1AE_RXF = true;
 }
 
@@ -421,13 +369,12 @@ void HAL_CAN_RX_B14_Config(void)
 
 void HAL_CAN_RX_B14_INT(void)
 {
+	FlexCAN_Receive_Interrupt(FLEXCAN_DEVICE_A, VsCAN_CHERY_ID300);
+}
 
-	FlexCAN_Receive_Interrupt(
-			FLEXCAN_DEVICE_A,
-			FLEXCAN_MSG_OBJ_14,
-			CAN_Message_RX_ID,
-			VsCAN_CHERY_ID300
-	);
+void HAL_CAN_RX_B63_32_INT(void)
+{
+	FlexCAN_Receive_Interrupt(FLEXCAN_DEVICE_A, CAN_Message_RX_DATA);
 }
 
 void HAL_CAN_Diag_Network_10ms(void)
