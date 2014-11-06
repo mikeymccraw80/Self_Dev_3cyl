@@ -26,6 +26,7 @@
 #include "hal_os.h"
 #include "dd_sswt.h"
 #include "hal_eeprom_mfg.h"
+#include "cn_io_transfer.h"
 
 
 /* private variable define */
@@ -294,6 +295,9 @@ void InitializeHardwareLast(void)
 
 	/* feed tle4471 watchdog */
 	SetHWIO_ServiceExtCOP_1Time();
+
+	/* init the canobd schedule table */
+	CAN_Reset_Init();
 }
 
 
