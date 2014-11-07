@@ -121,6 +121,8 @@ void  HAL_OS_1ms_TimeBasedTask(void)
 	IO_Analog_1ms_Update();
 	HLS_Task_1ms();
 	IO_ETC_Update_1msTimeBase();
+	LLD_DI_1ms_sample();
+	LLD_DI_INTR();
 	// IO_OS_BackGround_1ms_Status_Check();
 }
 
@@ -143,8 +145,6 @@ void  HAL_OS_1ms_Task(void)
 	if (hls_task_state == HLS_TASK_1MS)
 		HAL_Set_HLS_Task_State(HLS_TASK_2MS);
 
-	LLD_DI_1ms_sample();
-	LLD_DI_INTR();
 	IO_OS_BackGround_1ms_Status_Check();
 }
 
