@@ -114,7 +114,7 @@ void LLD_DI_1ms_sample(void)
     }
 
     /* Break Switch input channel */
-	if( (bool)(HAL_GPIO_GET_BRKSWDI_Status()) ){
+	if( (bool)(HAL_GPIO_GET_BRKSWDI_Status()) == false ){
 		
        if(LLD_di_samplecnt[LLD_DI_BRAKE_SWITCH] < 
 	   	 LLD_di_table[LLD_DI_BRAKE_SWITCH].DebounceTimes){
