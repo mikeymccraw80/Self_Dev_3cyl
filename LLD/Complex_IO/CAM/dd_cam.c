@@ -624,12 +624,14 @@ void CAM_Edge_Process( uint32_t in_cam_sensor )
 		if (CRANK_Get_Flag(CRANK_FLAG_CAM_BACKUP) == false) {
 			if (CRANK_Get_Diag_Tooth_Cnt() == 0) {
 				CAM1_CRANK_Diagnose_Fail_Count ++;
-				OS_Engine_Start_Crank();
-				CRANK_Set_Flag( CRANK_FLAG_STALL_DETECTED, false );
 			} else {
 				CAM1_CRANK_Diagnose_Fail_Count = 0;
 			}
 			if (CAM1_CRANK_Diagnose_Fail_Count >= CAM_CRANK_DIAGNOSE_MAX_Fail_COUNT) {
+				/* if diagnose fail count get the maximum, enable pre-syn value */
+				OS_Engine_Start_Crank();
+				CRANK_Set_Flag( CRANK_FLAG_STALL_DETECTED, false );
+
 				/* confirm current CAM Edge */
 				// CAM_Backup_Edge_Cylinder_ID = CAM_Get_DutyCycle_Pattern_CylinderID(CAM_DUTY_CYCLE_LENGTH, CAM1_DutyCycle_Linear_BUF);
 				if (((CAM_Backup_Edge_Cylinder_ID == CRANK_CYLINDER_B) || (CAM_Backup_Edge_Cylinder_ID == CRANK_CYLINDER_D)) \
