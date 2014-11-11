@@ -223,6 +223,7 @@ void IO_OS_Perform_Reset_Task(void)
 	if (sys_cmd.B_ResetEtsm) {
 		Disable_Interrupts();
 		sys_cmd.B_ResetEtsm = 0;
+		HAL_uncleard_ram.data[NCRAM_RESETETSM_FLAG] = true;
 		while (true) {};
 	}
 }

@@ -15,6 +15,7 @@ extern HAL_UNCLEARED_RAM_T HAL_uncleard_ram;
 
 /* this flag is used to indicate whether the inca re-flash was operated */
 #define NCRAM_REPROGRAM_FLAG 9
-
+/* reset etsm share the same unclear ram with reprogram flag */
+#define NCRAM_RESETETSM_FLAG 9
 
 #endif /* end of include guard: HAL_UCRAM_H */
