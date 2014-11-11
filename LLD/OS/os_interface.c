@@ -34,7 +34,7 @@ void OS_Startup_Hook(void)
 	HAL_OS_Init_Task();
 
 	KeywordExecutive(CwKW2000_Initializes);
-	// InitDCAN_RstToKeyOnTasks();
+	InitDCAN_RstToKeyOnTasks();
 
 	ImmobilizerIgnitionOn();
 
@@ -116,7 +116,7 @@ void MngOSTK_10msTasks(void)
 		KW2000CommuState = KW2000_Responder;
 		KeywordExecutive(CwKW2000_RunMode);
 	}
-	// MngDCAN_TasksExecutive();
+	MngDCAN_TasksExecutive();
 
 	/* update ignition status */
 	UpdateIgnitionState_10MS();
