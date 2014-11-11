@@ -291,11 +291,11 @@ void SiemensImmo_Initializing(void)
 	SbSiemens_RLineTriggerEnbl = CbTRUE;
 	SbSiemens_RLineStatus = CbON;
 	SySiemens_RLineTimerCntr = V_COUNT_BYTE(0);
-
+	
 	/* IMMO KW Enable */    
 	SbSiemens_IMMOKWEnable = CbTRUE;
 	SwSiemens_IMMOKWEnblTimerCntr = V_COUNT_WORD(0);
-
+	
 	/*--- Initialize Functionalities ---*/
 	VeSiemens_ECMImmoRelation = CeSiemens_StartCommunication;
 	/* Set Immo_DLL_State <-- CeIMMO_WaitICUResponse */

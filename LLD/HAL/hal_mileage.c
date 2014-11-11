@@ -45,7 +45,8 @@ void InitialiseMileage(void)
 {
    uint32_t *p;
    p = (uint32_t *)NsFILE_NVM_EE_ManufactData.VaFILE_EE_Odometer;
-   odometer = Convert_100m_To_Km(*p);
+
+   odometer = *p;
 }
 
 
@@ -54,7 +55,7 @@ void UpdateMileage( void )
    uint32_t *p;
    p = (uint32_t *)NsFILE_NVM_EE_ManufactData.VaFILE_EE_Odometer;
 
-   *p = Convert_Km_To_100m(odometer);
+   *p = odometer;
 }
 
 /* ============================================================================ *\

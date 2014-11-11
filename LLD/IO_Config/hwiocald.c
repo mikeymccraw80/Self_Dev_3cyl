@@ -869,13 +869,27 @@ const PowerSourceType K_PowerConfig_ETC =
 *| hwiocald.{
 *|   K_VOLT_KeyOnThreshold {
 *|     : is_calconst;
-*|     : description = "the threshold between keyon and keyoff.";
+*|     : description = "the voltage of threshold keyon";
 *|     : type = types.Volts_Plus_Fraction;
-*|     : units = "count";
+*|     : units = "V";
 *|   }
 *| }
 */
 const   Volts_Plus_Fraction    K_VOLT_KeyOnThreshold = FixDefConst(7.5, Volts_Plus_Fraction);
+
+/*
+*| hwiocald.{
+*|   K_VOLT_KeyoffThreshold {
+*|     : is_calconst;
+*|     : description = "the voltage of threshold keyoff";
+*|     : type = types.Volts_Plus_Fraction;
+*|     : units = "V";
+*|   }
+*| }
+*/
+const   Volts_Plus_Fraction    K_VOLT_KeyoffThreshold = FixDefConst(4.5, Volts_Plus_Fraction);
+
+
 
 /*
 *| hwiocald.{

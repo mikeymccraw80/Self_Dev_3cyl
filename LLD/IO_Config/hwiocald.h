@@ -86,6 +86,7 @@ extern const PowerSourceType        K_PowerConfig_Injector;
 extern const PowerSourceType        K_PowerConfig_ETC;
 
 extern const Volts_Plus_Fraction    K_VOLT_KeyOnThreshold;
+extern const Volts_Plus_Fraction    K_VOLT_KeyoffThreshold;
 
 extern const T_COUNT_BYTE           KySYST_BrainDeadBOOT_RecovEnbld;
 #endif

@@ -11,8 +11,9 @@
 // extern variable
 //=============================================================================
 extern unsigned int IgnitionOffTimeVar;
+extern bool Ign_off;
 //#define Is_IGN_Off()    (HAL_Analog_Get_IGNVI_Value()<2500)? true:false
-#define Is_IGN_Off()      ((HAL_Analog_Get_IGNVI_Value()<<2) <= K_VOLT_KeyOnThreshold)
+#define Is_IGN_Off()      Ign_off
 
 //=============================================================================
 // IO_OS_Get_Shutdown
