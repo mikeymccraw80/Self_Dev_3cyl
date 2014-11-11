@@ -58,6 +58,8 @@ extern uint8_t FlexCAN_RX_Message_Count[];
 extern const FlexCAN_message_parameter_T FlexCAN_TX_Message_Parameter_Table[];
 extern const FlexCAN_message_parameter_T FlexCAN_RX_Message_Parameter_Table[];
 
+extern uint8_t FlexCAN_RX_MSG_DLC;
+
 //=============================================================================
 // FlexCAN_RX_CallBack
 //

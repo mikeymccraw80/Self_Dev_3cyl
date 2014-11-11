@@ -63,9 +63,11 @@ extern uint8_t Get_Transmit_Message_Number_From_Message_ID(uint16_t Message_ID )
 
 extern CAN_Message_Parameter_T *CAN_Message_Parameter_Table_Ptr;
 
-extern uint8_t          CANMsg_Buffer_DLC;
-#define GetCANMsg_Buffer_DLC()       CANMsg_Buffer_DLC
+// extern uint8_t          CANMsg_Buffer_DLC;
+// #define GetCANMsg_Buffer_DLC()       CANMsg_Buffer_DLC
 
+extern uint8_t FlexCAN_RX_MSG_DLC;
+#define GetCANMsg_Buffer_DLC()       FlexCAN_RX_MSG_DLC
 
 // xuhui added
 #define MESSAGE_ID_NOT_IN_TABLE  255

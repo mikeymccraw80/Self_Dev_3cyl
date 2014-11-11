@@ -41,7 +41,7 @@ void KW2KCAN_Received_Message( void );
 //=============================================================================
 // FlexCAN Data Buffers
 //=============================================================================
-
+uint8_t FlexCAN_RX_MSG_DLC;
 
 static uint8_t FlexCAN_TX_Buffer_CCP_DTO[8];
 static uint8_t FlexCAN_TX_Buffer_CCP_DAQ0[8];
@@ -127,6 +127,8 @@ void FlexCAN_RX_CallBack (uint32_t in_message_id, uint8_t *in_data_buffer, uint8
 	uint8_t ccp_message, obd_message;
 	uint8_t index;
 	CAN_MESSAGE_LOCATION     msg_location = CAN_MESSAGE_NOT_IN_TABLE;
+
+	FlexCAN_RX_MSG_DLC = in_data_length;
 
 	for (ccp_message = 0; FlexCAN_RX_Message_Parameter_Table[ccp_message].Message_ID!=0; ccp_message ++) {
 		if ( FlexCAN_RX_Message_Parameter_Table[ccp_message].Message_ID == in_message_id) {
