@@ -197,7 +197,7 @@ uint8_t Get_Receive_Message_Number_From_Message_ID( uint16_t Message_ID )
       }
    }
 
-   return( message_number );
+   return( message_number + FLEXCAN_MSG_OBJ_32);
 }
 
 //=============================================================================
