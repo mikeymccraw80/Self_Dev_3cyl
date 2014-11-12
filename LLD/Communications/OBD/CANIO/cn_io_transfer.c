@@ -37,7 +37,7 @@
 #include "cn_io_diagnostic.h"
 #include "dd_flexcan_common.h"
 #include "io_dcan_config.h"
-
+#include "dd_flexcan.h"
 
 CAN_Message_Parameter_T *CAN_Message_Parameter_Table_Ptr;
 //============================================================================
@@ -277,7 +277,11 @@ bool Transmit_Message( uint16_t can_id, uint8_t *message_address )
         *transmit_message_buffer++ = *(message_address+index);
    }
    // do real transmit here, drop data into register
-   FlexCAN_Transmit_Message( (CAN_Message_Parameter_Table_Ptr+CAN_transmit_message_number)->in_configuration, (uint32_t)can_id, message_address, (CAN_Message_Parameter_Table_Ptr+CAN_transmit_message_number)->CAN_message_length);
+   FlexCAN_Transmit_Message(&FlexCAN_A,
+                            FlexCAN_MSGOBJ_Get_Index((CAN_Message_Parameter_Table_Ptr+CAN_transmit_message_number)->in_configuration),
+                            (uint32_t)can_id, 
+                            message_address,
+                            (CAN_Message_Parameter_Table_Ptr+CAN_transmit_message_number)->CAN_message_length);
 
    return true;
 }

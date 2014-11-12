@@ -73,11 +73,11 @@ void FlexCAN_Transmit_Interrupt(
 //
 // @end
 //=============================================================================
-bool FlexCAN_Transmit_Message(
-   IO_Configuration_T in_configuration,
-   uint32_t in_message_id,        
-   const uint8_t *in_data_buffer,
-   uint8_t  in_data_length    );
+// bool FlexCAN_Transmit_Message(
+//    IO_Configuration_T in_configuration,
+//    uint32_t in_message_id,        
+//    const uint8_t *in_data_buffer,
+//    uint8_t  in_data_length    );
 //=============================================================================
 // FlexCAN_Process_Transmitted_Message
 //
