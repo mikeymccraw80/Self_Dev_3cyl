@@ -120,6 +120,7 @@
 #include "kw2api.h"
 #include "hal_ucram.h"
 #include "inst_overlay.h"
+#include "dcancomm.h"
 
 /*********************************************************************/
 /*            Global  Variable                                             */
@@ -152,7 +153,7 @@ TbBOOLEAN GetCommunicationEstablishedState( void )
    LyRtnVal = false;
    if ( VbCAN_OBD_Enabled )
    {
-      // LyRtnVal = DCAN_GetCommunicationActiveState();
+      LyRtnVal = GetLnCommunicationActiveState();
    }
    else if ( VbKW2K_OBD_Enabled )
    {
@@ -248,7 +249,8 @@ extern TbBOOLEAN DCAN_AnswerStillBeingSent( void );
 { 
    // Can8DataBytesArrayType *Can8_DataBytesArrayPtr;
    if ((!DCAN_AnswerStillBeingSent ())&&
-           (!Keyword2000AnswerStillBeingSent ()))
+           (!Keyword2000AnswerStillBeingSent ())&&
+           (VbKW2K_OBD_Enabled))
    { 
         /*--- Triggers Programmming Session only after */
    /*    answer is sent to the tester ---*/
