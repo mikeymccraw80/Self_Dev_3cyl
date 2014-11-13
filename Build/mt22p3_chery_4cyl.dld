@@ -40,6 +40,7 @@ SECTIONS
       knodcald.o(.text_vle)
       estdcald.o(.text_vle)
       etcdcald.o(.text_vle)
+      obdlcald.o(.text_vle)
       CalVariable.o (.text_vle)
       end_of_calrom = .;
   } > cal

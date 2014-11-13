@@ -27,3 +27,4 @@
 ..\LLD\HWDiag\CAND\candcald.c
 ..\LLD\HWDiag\KNOD\knodcald.c
 ..\LLD\SOH\soh_cald.c
+..\LLD\Communications\OBD\OBDLIB\obdlcald.c
