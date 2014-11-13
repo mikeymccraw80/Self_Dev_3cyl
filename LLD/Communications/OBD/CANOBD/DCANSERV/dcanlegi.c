@@ -382,126 +382,189 @@ void J1979Mode1Handler_DCAN (void)
 /*                                                                   */
 /*********************************************************************/
 #if (XeDCAN_SID_02_Supported == CeDCAN_Supported)
+#define Cy1979_Mode_02_MaxInfoType      (0x60)
+#define J1979_MODE_02_MSG_LENGTH (3)
+#define CyReqPIDNumberMode2      (1)
+#define Cy1979_FramePosition     (2)
+#define Cy1979FrameReqZero       (0)
+#define Cy1979FrameReqMax        (3)
+
 void J1979Mode2Handler_DCAN (void)
 {
-   BYTE       Ly1979_MsgIdx;
-   BYTE       LyDCAN_PID_DataIdx ;
-   BYTE       Ly1979_PIDIdx ;
-   BYTE       Ly1979_DataIdx ;
-   BYTE       Ly1979_RequestedPID ;
-   BYTE       Ly1979_RequestedFF ;
-   TbBOOLEAN  Lb1979_PIDFound ;
-   TbBOOLEAN  Lb1979_SuppPID_Requested ;
-   TbBOOLEAN  Lb1979_PIDData_Requested ;
-   BYTE       La1979_ServiceData[J1979_MODE_02_MAX_MSG_LENGTH] ;
-   TbBOOLEAN  LbValid_PID;
+	BYTE LyFound = 0, Li1979_DataIdx = 1;
+	BYTE frame_index, info_index;
 
-   Ly1979_MsgIdx = 1 ;
-   Lb1979_PIDFound = CbFALSE;
-   
-   Lb1979_SuppPID_Requested = CbFALSE;
-   Lb1979_PIDData_Requested = CbFALSE;
-   /*Check if it is in standard diagnostic mode to support service*/
-   if(CheckStandardDiagnosticState())
-   {
-      /*  Set frame number to zero */
-      SetRequestedFrame ( Cy1979FrameReqZero );
+	if ( GetLnServiceDataLength() == J1979_MODE_02_MSG_LENGTH ) {
+		info_index =  (GetLnServiceData ())[1];
+		frame_index = (GetLnServiceData ())[2];
 
-      /* check for message validity */
-      if (( GetLnServiceDataLength () >= J1979_MODE_02_MIN_MSG_LENGTH )
-         && ( GetLnServiceDataLength () <= J1979_MODE_02_MAX_MSG_LENGTH ))
-      {
-         for(Ly1979_DataIdx = CyMode2_DataOffset;
-             Ly1979_DataIdx < GetLnServiceDataLength (); Ly1979_DataIdx++)
-         {
-             La1979_ServiceData[Ly1979_DataIdx] = (GetLnServiceData ())[Ly1979_DataIdx];
-         }
-			 
-         for(Ly1979_PIDIdx =  CyMode2_DataOffset;
-             Ly1979_PIDIdx < GetLnServiceDataLength (); Ly1979_PIDIdx++)
-         {
-            Ly1979_RequestedPID = La1979_ServiceData[Ly1979_PIDIdx++];
-            Ly1979_RequestedFF = La1979_ServiceData[Ly1979_PIDIdx];
-            if( (!Lb1979_PIDData_Requested)
-              && ( (Cy1979_SuppPIDRange_00_20 == Ly1979_RequestedPID)
-                || (Cy1979_SuppPIDRange_20_40 == Ly1979_RequestedPID)
-                || (Cy1979_SuppPIDRange_40_60 == Ly1979_RequestedPID)) )
-            {
-                Lb1979_SuppPID_Requested = CbTRUE;
-            }
-            else if((!Lb1979_SuppPID_Requested)
-		            &&  (Cy1979_SuppPIDRange_00_20 != Ly1979_RequestedPID)
-                    && (Cy1979_SuppPIDRange_20_40 != Ly1979_RequestedPID)
-                    && (Cy1979_SuppPIDRange_40_60 != Ly1979_RequestedPID))
-            {
-                Lb1979_PIDData_Requested = CbTRUE;
-            }
-            else
-            {
-                /* Cannot request Suppported PID and PID data in the same message */
-                //Lb1979_PIDSupported = CbFALSE;
-                Lb1979_PIDFound= CbFALSE;
-                break;
-            }
-			
-			LbValid_PID = Get_Valid_PID_Info((WORD)Ly1979_RequestedPID, MaskMode_02);
-            if((CbTRUE ==LbValid_PID)
-                && (Cy1979FrameReqZero == Ly1979_RequestedFF))
-            {
-               if ((Get_Freeze_Frame_DTC( GetRequestedFrame() ) != 0) ||
-                  (Ly1979_RequestedPID <= 0x02) ||
-                  (Ly1979_RequestedPID == Cy1979_SuppPIDRange_20_40) ||
-                  (Ly1979_RequestedPID == Cy1979_SuppPIDRange_40_60) )
-               {
-                                 /* response data. */
-                  WrtDCAN_ServiceData(Ly1979_RequestedPID,
-                                 Ly1979_MsgIdx++) ;
+		if( ( info_index < Cy1979_Mode_02_MaxInfoType )&& (frame_index < Cy1979FrameReqMax )) {
+			Li1979_DataIdx = 1;
+			WrtDCAN_ServiceData( info_index , Li1979_DataIdx++ );
 
-                  WrtDCAN_ServiceData(Cy1979FrameReqZero, Ly1979_MsgIdx++ ) ;
-                  /* Build Transmit buffer 
-                  LyDCAN_PID_DataIdx =
-                    PfrmDCAN_ReqstdPIDData(GetWrtbufferAddr(), Ly1979_MsgIdx,
-                                           GetVeDIAG_PIDIndex() ) ;*/
-                  LyDCAN_PID_DataIdx =
-                    ProcessReqstdPIDData( GetLnServiceData(), Ly1979_MsgIdx,
-                                           GetVeDIAG_PIDIndex() ) ;
-                  if(LyDCAN_PID_DataIdx != Ly1979_MsgIdx)
-                  {
-                     Lb1979_PIDFound = CbTRUE;
-                     /* Buffer filled up with PID data, send positive response */
-                     Ly1979_MsgIdx = LyDCAN_PID_DataIdx ;
-                  }
-                  else
-                  {
-                     /* Buffer not filled with PID data for some reason */
-                     /* Send negative response                          */
-                     Ly1979_MsgIdx = Ly1979_MsgIdx - 2;
-                  }
-               }
-            }
-         }
-			 
-         if(Lb1979_PIDFound)
-         {
-            SendLnStandardPositiveAnswer ( Ly1979_MsgIdx );
-         }
-         else
-         {
-            /* Do not send any response if FF empty */
-            PfrmDCAN_AckReqWithoutResponse();
-         }
-      }
-      else
-      {
-         /* Do not send any response if invalid message received */
-         PfrmDCAN_AckReqWithoutResponse();
-      }
-   }
-   else
-   {
-       /* Do not send a response if the ECU is not in standard diagnostic session */
-       PfrmDCAN_AckReqWithoutResponse();
-   }
+			LyFound = CbTRUE ;
+
+			switch (info_index) {
+
+			case Cy1979_PID00:  /*PID 00*/
+				/*Freezeframe number*/
+				WrtDCAN_ServiceData( frame_index , Li1979_DataIdx++ ) ;
+				/*support PID(01~08) 01, 02,03, 04,05, 06, 07*/
+				WrtDCAN_ServiceData( 0x7E , Li1979_DataIdx++ ) ;
+				/*support PID(09~10) 0B, 0C,0D, 0E,0F*/
+				WrtDCAN_ServiceData( 0x3E , Li1979_DataIdx++ ) ;
+				/*support PID(11~18) 11, 13,14, 15*/
+				WrtDCAN_ServiceData( 0x80, Li1979_DataIdx++ ) ;
+				/*support PID(19~20) 1C, 1F,20*/
+				WrtDCAN_ServiceData( 0x01 , Li1979_DataIdx++ ) ;
+				break;
+
+			case Cy1979_PID02:
+				/*Freezeframe number*/
+				WrtDCAN_ServiceData( frame_index , Li1979_DataIdx++ ) ;
+				WrtDCAN_ServiceData( Hi8Of16(DIAG_STATUS_FREEZE_FRAME[frame_index].Ffm_Frame_Pcode), Li1979_DataIdx++ ) ;
+				WrtDCAN_ServiceData( Lo8Of16(DIAG_STATUS_FREEZE_FRAME[frame_index].Ffm_Frame_Pcode) , Li1979_DataIdx++ ) ;
+				break;
+
+			case Cy1979_PID03:
+				/*Freezeframe number*/
+				WrtDCAN_ServiceData( frame_index , Li1979_DataIdx++ ) ;
+				WrtDCAN_ServiceData( DIAG_STATUS_FREEZE_FRAME[frame_index].Ffm_B_FuelStatus, Li1979_DataIdx++ ) ;
+				//  WrtServiceData( 0x00 , Li1979_DataIdx++ ) ;
+				break;
+
+			case Cy1979_PID04:
+				/*Freezeframe number*/
+				WrtDCAN_ServiceData( frame_index , Li1979_DataIdx++ ) ;
+				WrtDCAN_ServiceData( DIAG_STATUS_FREEZE_FRAME[frame_index].Ffm_CsMaf, Li1979_DataIdx++ ) ;
+				break;
+
+			case Cy1979_PID05:
+				/*Freezeframe number*/
+				WrtDCAN_ServiceData( frame_index , Li1979_DataIdx++ ) ;
+				WrtDCAN_ServiceData( DIAG_STATUS_FREEZE_FRAME[frame_index].Ffm_TmLin, Li1979_DataIdx++ ) ;
+				break;
+
+			case Cy1979_PID06:
+				/*Freezeframe number*/
+				WrtDCAN_ServiceData( frame_index , Li1979_DataIdx++ ) ;
+				WrtDCAN_ServiceData( DIAG_STATUS_FREEZE_FRAME[frame_index].Ffm_fLc, Li1979_DataIdx++ ) ;
+				break;
+
+			case Cy1979_PID07:
+				/*Freezeframe number*/
+				WrtDCAN_ServiceData( frame_index , Li1979_DataIdx++ ) ;
+				WrtDCAN_ServiceData( DIAG_STATUS_FREEZE_FRAME[frame_index].Ffm_fLcAd, Li1979_DataIdx++ ) ;
+				break;
+
+			case Cy1979_PID0B:
+				/*Freezeframe number*/
+				WrtDCAN_ServiceData( frame_index , Li1979_DataIdx++ ) ;
+				WrtDCAN_ServiceData( DIAG_STATUS_FREEZE_FRAME[frame_index].Ffm_Pmap, Li1979_DataIdx++ ) ;
+				break;
+
+			case Cy1979_PID0C:
+				/*Freezeframe number*/
+				WrtDCAN_ServiceData( frame_index , Li1979_DataIdx++ ) ;
+				WrtDCAN_ServiceData(  Hi8Of16(DIAG_STATUS_FREEZE_FRAME[frame_index].Ffm_N), Li1979_DataIdx++ ) ;
+				WrtDCAN_ServiceData(  Lo8Of16(DIAG_STATUS_FREEZE_FRAME[frame_index].Ffm_N) , Li1979_DataIdx++ ) ;
+				break;
+
+			case Cy1979_PID0D:
+				/*Freezeframe number*/
+				WrtDCAN_ServiceData( frame_index , Li1979_DataIdx++ ) ;
+				WrtDCAN_ServiceData( DIAG_STATUS_FREEZE_FRAME[frame_index].Ffm_Vsp, Li1979_DataIdx++ ) ;
+				break;
+
+			case Cy1979_PID0E:
+				/*Freezeframe number*/
+				WrtDCAN_ServiceData( frame_index , Li1979_DataIdx++ ) ;
+				WrtDCAN_ServiceData( DIAG_STATUS_FREEZE_FRAME[frame_index].Ffm_IgaOut, Li1979_DataIdx++ ) ;
+				break;
+
+			case Cy1979_PID0F:
+				/*Freezeframe number*/
+				WrtDCAN_ServiceData( frame_index , Li1979_DataIdx++ ) ;
+				WrtDCAN_ServiceData( DIAG_STATUS_FREEZE_FRAME[frame_index].Ffm_TaLin, Li1979_DataIdx++ ) ;
+				break;
+
+			case Cy1979_PID11:
+				/*Freezeframe number*/
+				WrtDCAN_ServiceData( frame_index , Li1979_DataIdx++ ) ;
+				WrtDCAN_ServiceData( DIAG_STATUS_FREEZE_FRAME[frame_index].Ffm_TpPos, Li1979_DataIdx++ ) ;
+				break;
+
+			case Cy1979_PID20:
+				/*Freezeframe number*/
+				WrtDCAN_ServiceData( frame_index , Li1979_DataIdx++ ) ;
+				/*support PID(21~28) 21*/
+				WrtDCAN_ServiceData( 0x80 , Li1979_DataIdx++ ) ;
+				/*support PID(29~30) */
+				WrtDCAN_ServiceData( 0x00 , Li1979_DataIdx++ ) ;
+				/*support PID(31~38) */
+				WrtDCAN_ServiceData( 0x00, Li1979_DataIdx++ ) ;
+				/*support PID(39~40) 40*/
+				WrtDCAN_ServiceData( 0x01 , Li1979_DataIdx++ ) ;
+				break;
+
+			case Cy1979_PID21:
+				/*Freezeframe number*/
+				WrtDCAN_ServiceData( frame_index , Li1979_DataIdx++ ) ;
+				WrtDCAN_ServiceData(  Hi8Of16(DIAG_STATUS_FREEZE_FRAME[frame_index].Ffm_KmQ6Mil), Li1979_DataIdx++ ) ;
+				WrtDCAN_ServiceData(  Lo8Of16(DIAG_STATUS_FREEZE_FRAME[frame_index].Ffm_KmQ6Mil) , Li1979_DataIdx++ ) ;
+				break;
+
+			case Cy1979_PID40:
+				/*Freezeframe number*/
+				WrtDCAN_ServiceData( frame_index , Li1979_DataIdx++ ) ;
+				/*support PID(41~48) 42*/
+				WrtDCAN_ServiceData( 0x40 , Li1979_DataIdx++ ) ;
+				/*support PID(49~50) */
+				WrtDCAN_ServiceData( 0x00 , Li1979_DataIdx++ ) ;
+				/*support PID(51~58) */
+				WrtDCAN_ServiceData( 0x00, Li1979_DataIdx++ ) ;
+				/*support PID(59~50) 00*/
+				WrtDCAN_ServiceData( 0x00 , Li1979_DataIdx++ ) ;
+				break;
+
+			case Cy1979_PID42:
+				/*Freezeframe number*/
+				WrtDCAN_ServiceData( frame_index , Li1979_DataIdx++ ) ;
+				WrtDCAN_ServiceData(  Hi8Of16(DIAG_STATUS_FREEZE_FRAME[frame_index].Ffm_Ub_b), Li1979_DataIdx++ ) ;
+				WrtDCAN_ServiceData(  Lo8Of16(DIAG_STATUS_FREEZE_FRAME[frame_index].Ffm_Ub_b) , Li1979_DataIdx++ ) ;
+				break;
+
+			case Cy1979_PID45:
+				/*Freezeframe number*/
+				WrtDCAN_ServiceData( frame_index , Li1979_DataIdx++ ) ;
+				WrtDCAN_ServiceData(  DIAG_STATUS_FREEZE_FRAME[frame_index].Ffm_TpPos, Li1979_DataIdx++ ) ;
+				break;
+
+			case Cy1979_PID5A:
+				/*Freezeframe number*/
+				WrtDCAN_ServiceData( frame_index , Li1979_DataIdx++ ) ;
+				WrtDCAN_ServiceData( Hi8Of16(DIAG_STATUS_FREEZE_FRAME[frame_index].Ffm_PedPos_b), Li1979_DataIdx++ ) ;
+				WrtDCAN_ServiceData( Lo8Of16(DIAG_STATUS_FREEZE_FRAME[frame_index].Ffm_PedPos_b) , Li1979_DataIdx++ ) ;
+				break;
+
+			default: 
+				/* Send negative responce if PID not supported */
+				LyFound = CbFALSE ;                 
+				break;
+			}
+			if ( LyFound != CbFALSE ) {
+				SendLnStandardPositiveAnswer( Li1979_DataIdx );
+			} else {
+				SendLnStandardNegativeAnswer(nrcSubFunctionNotSupported_InvalidFormat);
+			}
+		} else {
+			/* Send negative responce if PID not supported */
+			SendLnStandardNegativeAnswer(nrcSubFunctionNotSupported_InvalidFormat);
+		}
+	} else {
+		/* Send negative responce if PID not supported */
+		SendLnStandardNegativeAnswer(nrcSubFunctionNotSupported_InvalidFormat);
+	}
 }
 #endif
 

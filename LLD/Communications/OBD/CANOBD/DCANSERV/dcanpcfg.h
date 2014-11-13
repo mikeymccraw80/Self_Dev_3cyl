@@ -51,7 +51,7 @@
 #define CeDCAN_Supported                   (1)
 
 #define XeDCAN_SID_01_Supported             (CeDCAN_Supported)
-#define XeDCAN_SID_02_Supported             (CeDCAN_NotSupported)
+#define XeDCAN_SID_02_Supported             (CeDCAN_Supported)
 #define XeDCAN_SID_03_Supported             (CeDCAN_NotSupported)
 #define XeDCAN_SID_04_Supported             (CeDCAN_NotSupported)
 #define XeDCAN_SID_05_Supported             (CeDCAN_NotSupported)
