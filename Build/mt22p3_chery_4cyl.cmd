@@ -9,6 +9,7 @@
 ..\LLD\HWDiag\ETCD\etcd_type.cdf
 ..\LLD\HWDiag\CAND\cand_type.cdf
 ..\LLD\HWDiag\KNOD\knod_type.cdf
+..\LLD\Communications\OBD\OBDLIB\kw2cal.cdf
 
 -e
 ..\Instrumentation\calsets.c

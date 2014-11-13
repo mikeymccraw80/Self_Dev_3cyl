@@ -80,7 +80,7 @@
 *|                     "Code Clear is not allowed in Engine State = Run. "
 *|                     "Mode-0x04 Code Clear is always allowed when Engine "
 *|                     "State <> Run.";
-*|     : type = enum.size2_0to1;
+*|     : type = types.size2_0to1;
 *|     : units = "boolean";
 *|   }
 *| }
@@ -105,7 +105,7 @@ const TeSID27_SeedKeyType   KeDCANOBD_Security_Algorithm = CeDelphi_Generic_Stat
 *|     : is_calconst;
 *|     : description ="Additional CAN OBD Function address ID for specific customer. "
 *|                          "0x0 is disabling the additional ID; 0x600 is for GW CHK application";
-*|     : type = fixed.t_count_word;
+*|     : type = types.t_count_byte;
 *|     : units = "count";
 *|    }
 *| }
@@ -118,7 +118,7 @@ const  T_COUNT_WORD   KwDCANOBD_CANID = V_COUNT_WORD(0);
 *|     : is_calconst;
 *|     : description =" It'll be updated when end model release "
 *| "and the MFG will store the first end model number. ";
-*|     : type = fixed.t_count_long;
+*|     : type = types.t_count_long;
 *|     : units = "count";
 *|   }
 *| }
@@ -161,7 +161,7 @@ const TeService_SecurityAccess_Type  KaDCANOBD_SecurityAccessUsedService[CcSecur
 *|  KfDCAN_t_SecurityAccessDelayTime {
 *|     : is_calconst;
 *|     : description ="Set the lockout timer for security access in initial function.";
-*|     : type = fixed.t_w_R7p8125ms;
+*|     : type = types.t_w_R7p8125ms;
 *|     : units = "seconds";
 *|   }
 *| }
@@ -176,54 +176,13 @@ const TwTIME_t_R7p8125ms  KfDCAN_t_SecurityAccessDelayTime = C_R7p8125ms16(2.0) 
 *| "Engineering Range: any hex value; enter the ASCII code for any values "
 *| "which must appear as  ASCII in the keyword mode 09 ID 04 message "
 *| "Resolution: na ";
-*|     : type = fixed.t_ubyte;
+*|     : type = types.t_count_byte;
 *|     : units = "count";
 *|   }
 *| }
 */
 const T_COUNT_BYTE  KySYST_BTC_NR[] =
         { 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30 };
-
-/*
-*| obdlcald.{
-*|   KaDCAN_CalEEPROM_Data {
-*|     : is_calconst;
-*|     : description = "Array of calibrations for all Calibration EEPROM DATA.";
-*|  :enum_as_array_index = TeDCAN_CalEEPROMDATAS;
-*|     .KwDCAN_DID_Number
-*|     {
-*|        :description = "KwDCAN_DID_Number";
-*|        :units = "count";
-*|     }
-*|     .KfDCAN_Data_Length
-*|     {
-*|        :description = "Indicate the the size of the Data";
-*|        :units = "count";
-*|     }
-*|     .KfDCAN_Data_Address_Offset
-*|     {
-*|        :description = "KfDCAN_Data_Address_Offset";
-*|        :units = "count";
-*|     }
-*|     .KeDCAN_Data_SupportMethod
-*|     {
-*|        :description =  "indicate the DID support which severice";
-*|        :units = "enum";
-*|     }
-*|   }
-*| }
-*/
-const TsDCAN_CalEEPROM_T  KaDCAN_CalEEPROM_Data[CcDCAN_NumberOfCalEEPROM_DATA] = {
-	{0x0000,  0,  0, CeSupport_None},
-	{0x0000,  0,  0, CeSupport_None},
-	{0x0000,  0,  0, CeSupport_None},
-	{0x0000,  0,  0, CeSupport_None},
-	{0x0000,  0,  0, CeSupport_None},
-	{0x0000,  0,  0, CeSupport_None},
-	{0x0000,  0,  0, CeSupport_None},
-	{0x0000,  0,  0, CeSupport_None},
-	{0x0000,  0,  0, CeSupport_None},
-	{0x0000,  0,  0, CeSupport_None}};
 
 /*
 *| obdlcald.{
@@ -234,7 +193,7 @@ const TsDCAN_CalEEPROM_T  KaDCAN_CalEEPROM_Data[CcDCAN_NumberOfCalEEPROM_DATA] =
 *| "Value To Calibrate Out: not applicable "
 *| "Engineering Range: any hex value; enter the ASCII code for any values. "
 *| "Resolution: na ";
-*|     : type = fixed.t_ubyte;
+*|     : type = types.t_count_byte;
 *|     : units = "count";
 *|   }
 *| }
@@ -252,7 +211,7 @@ const T_COUNT_BYTE  KyCOMM_VehMfgSparePartNumber[CcCOMM_VehMfgSparePartNumber] =
 *| "Value To Calibrate Out: not applicable "
 *| "Engineering Range: any hex value; enter the ASCII code for any values. "
 *| "Resolution: na ";
-*|     : type = fixed.t_ubyte;
+*|     : type = types.t_count_byte;
 *|     : units = "count";
 *|   }
 *| }
@@ -269,7 +228,7 @@ const T_COUNT_BYTE  KyCOMM_SysSupplierDataIdentifier[CcCOMM_SysSupplierDataIdent
 *|   KaDCAN_Matrix_VersionLevel {
 *|     : is_calconst;
 *|     : description ="ECU Communication Matrix Version Level";
-*|     : type  = fixed.t_ubyte;
+*|     : type  = types.t_count_byte;
 *|     : units = "count";
 *|   }
 *| }
@@ -287,7 +246,7 @@ const T_COUNT_BYTE  KaDCAN_Matrix_VersionLevel[CcDCAN_Matrix_VersionLevel] =
 *|   KaDCAN_NM_VersionLevel {
 *|     : is_calconst;
 *|     : description ="ECU Network Management Version Level";
-*|     : type  = fixed.t_ubyte;
+*|     : type  = types.t_count_byte;
 *|     : units = "count";
 *|   }
 *| }
@@ -299,7 +258,7 @@ const T_COUNT_BYTE  KaDCAN_NM_VersionLevel[CcDCAN_NM_VersionLevel] = { 0x30, 0x3
 *|   KaDCAN_DiagProtocol_VersionLevel {
 *|     : is_calconst;
 *|     : description ="ECU Diagnostic Protocol Version Level";
-*|     : type  = fixed.t_ubyte;
+*|     : type  = types.t_count_byte;
 *|     : units = "count";
 *|   }
 *| }
@@ -311,7 +270,7 @@ const T_COUNT_BYTE  KaDCAN_DiagProtocol_VersionLevel[CcDCAN_DiagProtocol_Version
 *|   KaDCAN_CommSpec_VersionLevel {
 *|     : is_calconst;
 *|     : description ="Communication SpecVersionLevel";
-*|     : type  = fixed.t_ubyte;
+*|     : type  = types.t_count_byte;
 *|     : units = "count";
 *|   }
 *| }
@@ -326,7 +285,7 @@ const T_COUNT_BYTE  KaDCAN_CommSpec_VersionLevel[CcDCAN_CommSpec_VersionLevel] =
 *|     : is_calconst;
 *|     : description ="VIN Update Only Once, Once this calibration is set to" 
 *|"true Security access and Flag in EEprom will be checked for vin update feasibility.";
-*|     : type = enum.size2_0to1;
+*|     : type = types.size2_0to1;
 *|     : units = "boolean";
 *|   }
 *| }
