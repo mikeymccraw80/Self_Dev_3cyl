@@ -26,7 +26,6 @@
  *                    Is1979Mode8TestIDSupp_DCAN
  *                    Refresh1979_Mode8_SystemLeakTest_DCAN
  *                    DtrmnJ1979_SuppM9Infotypes
- *                    GetDCANService09Info08data
  * Inline Functions Defined:
  *                    None
  *
@@ -147,9 +146,7 @@ static void         Refresh1979_Mode8_SystemLeakTest_DCAN( void ) ;
 #endif
 
 #if (XeDCAN_SID_09_Supported == CeDCAN_Supported)
-static BYTE         GetDCANService09Info08data(BYTE); /*Added for SID 09 infotype 08*/
-static T_COUNT_BYTE DtrmnJ1979_SuppM9Infotypes(T_COUNT_BYTE,
-                                               T_COUNT_BYTE);
+
 #endif
 
 /*****************************************************************************
@@ -1241,54 +1238,20 @@ void J1979Mode7Handler_DCAN (void)
 /*                                                                   */
 /* Global Variables Updated: None                                    */
 /*********************************************************************/
+#define CcM7_RETURN_ID_OFFSET      (2)
 void FormJ1979_Mode_47_Data_DCAN( void )
 {
-	static WORD          DTCCount1 ;
-	/* This signifies if at least one DTC was found, for the present packet.  */
-	static TbBOOLEAN     DTCFoundInPacket1 ;
-	/* This signifies if at least one DTC was found. */
-	static TbBOOLEAN     DTCFound1 ;
-
-	BYTE                 TrByteCount ;
-	TrByteCount = RETURN_ID_OFFSET ;
+	WORD    DTCCount1 = 0;
+	BYTE    TrByteCount = CcM7_RETURN_ID_OFFSET;
 
 	while ( DTCCount1 < count_DTCs_SID07 ) {
-		DTCFound1 = CbTRUE;
-		DTCFoundInPacket1 = CbTRUE;
 		WrtDCAN_ServiceData(Hi8Of16(DTCs_SID07[DTCCount1]),TrByteCount++);
 		WrtDCAN_ServiceData(Lo8Of16(DTCs_SID07[DTCCount1]),TrByteCount++);
 		DTCCount1++;
-
-		if ( TrByteCount >= J1979_Mode_43_DTC_Length ) {
-			break;
-		}
 	}
 
-    /* if no DTC was found or if the message lenght is less 
-       than maximum append zero's to the message, and send a 
-       positive response. */
-
-	if (( !DTCFound1 ) || (( DTCFoundInPacket1 ) && ( DTCFound1 ))) {
-		while ( TrByteCount < J1979_Mode_43_DTC_Length ) {
-			WrtDCAN_ServiceData( 0, TrByteCount++);
-		}
-	} else {
-		TrByteCount = 0;
-	}
-
+	WrtDCAN_ServiceData( DTCCount1, CyM3_M7_NumDTC_Offset);
 	SendLnStandardPositiveAnswer (TrByteCount);
-	/* set the flag to FALSE, the message is complete */
-	DTCFoundInPacket1 = CbFALSE;
- 
-    /* If all the list is searched, disable multiple response 
-       message logic.  */
-	if ( DTCCount1 >= count_DTCs_SID07) {
-		DTCFound1 = CbFALSE;
-		DTCCount1 = 0;
-		WrtDCANMultiRespInProgress( CbFALSE  ) ;
-	} else {
-		WrtDCANMultiRespInProgress( CbTRUE  ) ;
-	}
 }
 #endif
 
@@ -1673,187 +1636,7 @@ void FormJ1979_NextMode49_DCAN( void )
 	}
 }
 
-/*********************************************************************/
-/* FUNCTION:     GetDCANService09Info08data                        */
-/*                                                                   */
-/* Type:         static                                              */
-/*                                                                   */
-/* DESCRIPTION:  This function sets up the response data for SID 09  */
-/*               info type 08                                        */
-/*                                                                   */
-/* PARAMETERS:   BYTE                                                */
-/*                                                                   */
-/* RETURN:       BYTE                                                */
-/*                                                                   */
-/* Global Variables Updated: None                                    */
-/*********************************************************************/
-static BYTE GetDCANService09Info08data(BYTE LyBufferIndex)
-{
-   FOUR_BYTE_DATA_TYPE Ludata;
-
-   Ludata.Word_Access.Word_One = GetDGDM_RM_Generic_Denom();
-
-   WrtDCAN_ServiceData( Ludata.Byte_Access.Byte_One,
-                   LyBufferIndex++) ;
-
-   WrtDCAN_ServiceData( Ludata.Byte_Access.Byte_Two,
-                   LyBufferIndex++) ;
-
-   Ludata.Word_Access.Word_One = GetDGDM_RM_OFVC_IgnCycleCntr();
-
-   WrtDCAN_ServiceData( Ludata.Byte_Access.Byte_One,
-                   LyBufferIndex++) ;
-
-   WrtDCAN_ServiceData( Ludata.Byte_Access.Byte_Two,
-                   LyBufferIndex++) ;
-
-   Ludata.Word_Access.Word_One = GetDGDM_RM_ICMD_B1_Numrtr();
-
-   WrtDCAN_ServiceData( Ludata.Byte_Access.Byte_One,
-                   LyBufferIndex++) ;
-
-   WrtDCAN_ServiceData( Ludata.Byte_Access.Byte_Two,
-                   LyBufferIndex++) ;
-
-   Ludata.Word_Access.Word_One = GetDGDM_RM_ICMD_B1_Denom();
-
-   WrtDCAN_ServiceData( Ludata.Byte_Access.Byte_One,
-                   LyBufferIndex++) ;
-
-   WrtDCAN_ServiceData( Ludata.Byte_Access.Byte_Two,
-                   LyBufferIndex++) ;
-
-   Ludata.Word_Access.Word_One = GetDGDM_RM_ICMD_B2_Numrtr();
-
-   WrtDCAN_ServiceData( Ludata.Byte_Access.Byte_One,
-                   LyBufferIndex++) ;
-
-   WrtDCAN_ServiceData( Ludata.Byte_Access.Byte_Two,
-                   LyBufferIndex++) ;
-
-   Ludata.Word_Access.Word_One = GetDGDM_RM_ICMD_B2_Denom();
-
-   WrtDCAN_ServiceData( Ludata.Byte_Access.Byte_One,
-                   LyBufferIndex++) ;
-
-   WrtDCAN_ServiceData( Ludata.Byte_Access.Byte_Two,
-                   LyBufferIndex++) ;
-
-   Ludata.Word_Access.Word_One = GetDGDM_RM_EOSD_B1_S1_Numrtr();
-
-   WrtDCAN_ServiceData( Ludata.Byte_Access.Byte_One,
-                   LyBufferIndex++) ;
-
-   WrtDCAN_ServiceData( Ludata.Byte_Access.Byte_Two,
-                   LyBufferIndex++) ;
-
-   Ludata.Word_Access.Word_One = GetDGDM_RM_EOSD_B1_S1_Denom();
-
-   WrtDCAN_ServiceData( Ludata.Byte_Access.Byte_One,
-                   LyBufferIndex++) ;
-
-   WrtDCAN_ServiceData( Ludata.Byte_Access.Byte_Two,
-                   LyBufferIndex++) ;
-
-   Ludata.Word_Access.Word_One = GetDGDM_RM_EOSD_B2_S1_Numrtr();
-
-   WrtDCAN_ServiceData( Ludata.Byte_Access.Byte_One,
-                   LyBufferIndex++) ;
-
-   WrtDCAN_ServiceData( Ludata.Byte_Access.Byte_Two,
-                   LyBufferIndex++) ;
-
-   Ludata.Word_Access.Word_One = GetDGDM_RM_EOSD_B2_S1_Denom();
-
-   WrtDCAN_ServiceData( Ludata.Byte_Access.Byte_One,
-                   LyBufferIndex++) ;
-
-   WrtDCAN_ServiceData( Ludata.Byte_Access.Byte_Two,
-                   LyBufferIndex++) ;
-
-   Ludata.Word_Access.Word_One = GetDGDM_RM_EGR_VVT_Numrtr();
-
-   WrtDCAN_ServiceData( Ludata.Byte_Access.Byte_One,
-                   LyBufferIndex++) ;
-
-   WrtDCAN_ServiceData( Ludata.Byte_Access.Byte_Two,
-                   LyBufferIndex++) ;
-
-   Ludata.Word_Access.Word_One = GetDGDM_RM_EGR_VVT_Denom();
-
-   WrtDCAN_ServiceData( Ludata.Byte_Access.Byte_One,
-                   LyBufferIndex++) ;
-
-   WrtDCAN_ServiceData( Ludata.Byte_Access.Byte_Two,
-                   LyBufferIndex++) ;
-
-   Ludata.Word_Access.Word_One = GetDGDM_RM_SAID_Numrtr();
-
-   WrtDCAN_ServiceData( Ludata.Byte_Access.Byte_One,
-                   LyBufferIndex++) ;
-
-   WrtDCAN_ServiceData( Ludata.Byte_Access.Byte_Two,
-                   LyBufferIndex++) ;
-
-   Ludata.Word_Access.Word_One = GetDGDM_RM_SAID_Denom();
-
-   WrtDCAN_ServiceData( Ludata.Byte_Access.Byte_One,
-                   LyBufferIndex++) ;
-
-   WrtDCAN_ServiceData( Ludata.Byte_Access.Byte_Two,
-                   LyBufferIndex++) ;
-
-   Ludata.Word_Access.Word_One = GetDGDM_RM_EVPD_Numrtr();
-
-   WrtDCAN_ServiceData( Ludata.Byte_Access.Byte_One,
-                   LyBufferIndex++) ;
-
-   WrtDCAN_ServiceData( Ludata.Byte_Access.Byte_Two,
-                   LyBufferIndex++) ;
-
-   Ludata.Word_Access.Word_One = GetDGDM_RM_EVPD_Denom();
-
-   WrtDCAN_ServiceData( Ludata.Byte_Access.Byte_One,
-                   LyBufferIndex++) ;
-
-   WrtDCAN_ServiceData( Ludata.Byte_Access.Byte_Two,
-                   LyBufferIndex++) ;
-
-   Ludata.Word_Access.Word_One = GetDGDM_RM_EOSD_B1_S2_Numrtr();
-
-   WrtDCAN_ServiceData ( Ludata.Byte_Access.Byte_One,
-                   LyBufferIndex++) ;
-
-   WrtDCAN_ServiceData ( Ludata.Byte_Access.Byte_Two,
-                   LyBufferIndex++) ;
-
-   Ludata.Word_Access.Word_One = GetDGDM_RM_EOSD_B1_S2_Denom();
-
-   WrtDCAN_ServiceData ( Ludata.Byte_Access.Byte_One,
-                   LyBufferIndex++) ;
-   
-   WrtDCAN_ServiceData ( Ludata.Byte_Access.Byte_Two,
-                   LyBufferIndex++) ;
-
-   Ludata.Word_Access.Word_One = GetDGDM_RM_EOSD_B2_S2_Numrtr();
-
-   WrtDCAN_ServiceData ( Ludata.Byte_Access.Byte_One,
-                   LyBufferIndex++) ;
-
-   WrtDCAN_ServiceData ( Ludata.Byte_Access.Byte_Two,
-                   LyBufferIndex++) ;
-
-   Ludata.Word_Access.Word_One = GetDGDM_RM_EOSD_B2_S2_Denom();
-
-   WrtDCAN_ServiceData ( Ludata.Byte_Access.Byte_One,
-                   LyBufferIndex++) ;
-
-   WrtDCAN_ServiceData ( Ludata.Byte_Access.Byte_Two,
-                   LyBufferIndex++) ;
-   return LyBufferIndex;
-}
 #endif
-
 /*********************************************************************/
 /* FUNCTION:     J1979ModeAHandler                                   */
 /*                                                                   */
