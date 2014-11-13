@@ -72,6 +72,10 @@
 #include "obdlcald.h" /*KeDCANCORE_Security_Algorithm*/
 #include "dcancomm.h"
 // #include "obdspcfg.h"
+#include "kw2app.h"
+#include "kw2api.h"
+#include "kw2srv10m.h"
+
 /***********************************************************************
 * Functions in this file:                                              *
 ************************************************************************
@@ -182,16 +186,6 @@ void LnSecurityAccess (void)
 	  case CeDelphi_Generic_Static:
    	    DataLength_ReqKey  = SID27_MSG02_LENGTH;
 		    break;
-#ifdef COMPILE_SID27_GWM_CHK011
-	  case CeGWM_CHK011:
-	      DataLength_ReqKey  = SID27_MSG02_CHK011_LENGTH;							
-		    break;
-#endif
-#ifdef COMPILE_SID27_JAC_SII
-    case CeJAC_SII:
-        DataLength_ReqKey  = SID27_MSG02_JAC_LENGTH;							
-        break;
-#endif
     case CePML_2Sd4Key:
     case CePML_4Sd4Key:
         DataLength_ReqKey  = SID27_MSG02_DelphiGeneric_4KyLENGTH; 
@@ -215,8 +209,10 @@ void LnSecurityAccess (void)
         }
         else
         {
-          if (( IsDevelopmentOrManfModeActive () )  ||
-                CheckProgrammingState ()  ||
+          // if (( IsDevelopmentOrManfModeActive () )  ||
+          //       CheckProgrammingState ()  ||
+          //       GetLnVulnerabilityState() )
+          if (  CheckProgrammingState ()  ||
                 GetLnVulnerabilityState() )
                                   /* PCM already unlocked */
           {
@@ -226,22 +222,6 @@ void LnSecurityAccess (void)
                     WrtDCAN_ServiceData(0x00, meslegth++);
                     WrtDCAN_ServiceData(0x00, meslegth++);
                     break;
-#ifdef COMPILE_SID27_GWM_CHK011
-              case CeGWM_CHK011:
-                    WrtDCAN_ServiceData(0x00, meslegth++);
-                    WrtDCAN_ServiceData(0x00, meslegth++);
-                    WrtDCAN_ServiceData(0x00, meslegth++);
-                    WrtDCAN_ServiceData(0x00, meslegth++);
-                    break;
-#endif
-#ifdef COMPILE_SID27_JAC_SII
-              case CeJAC_SII:
-                    WrtDCAN_ServiceData(0x00, meslegth++);
-                    WrtDCAN_ServiceData(0x00, meslegth++);
-                    WrtDCAN_ServiceData(0x00, meslegth++);
-                    WrtDCAN_ServiceData(0x00, meslegth++);
-                    break;
-#endif
               case CePML_2Sd4Key:
                     WrtDCAN_ServiceData(0x00, meslegth++);
                     WrtDCAN_ServiceData(0x00, meslegth++);
@@ -273,32 +253,6 @@ void LnSecurityAccess (void)
                         WrtDCAN_ServiceData(((uint8_t) (Get_Security_Seed_Data() >> 8)), meslegth++);
                         WrtDCAN_ServiceData(((uint8_t) Get_Security_Seed_Data()), meslegth++);
                         break;
-#ifdef COMPILE_SID27_GWM_CHK011
-                    case CeGWM_CHK011:
-                        LnReceivedSeed = LnSeed_Random;
-                        if((LnReceivedSeed==0x00000000)||((LnReceivedSeed==0xFFFFFFFF)))
-                        {
-                          LnReceivedSeed=0x00000001ul;
-                        }
-                        WrtDCAN_ServiceData(((uint8_t) (LnReceivedSeed >> 24)), meslegth++);
-                        WrtDCAN_ServiceData(((uint8_t) (LnReceivedSeed >> 16)), meslegth++);
-                        WrtDCAN_ServiceData(((uint8_t) (LnReceivedSeed >> 8)), meslegth++);
-                        WrtDCAN_ServiceData(((uint8_t) LnReceivedSeed ), meslegth++);
-                        break;
-#endif
-#ifdef COMPILE_SID27_JAC_SII
-                    case CeJAC_SII:
-                        LnReceivedSeed = LnSeed_Random;
-                        if((LnReceivedSeed==0x00000000)||((LnReceivedSeed==0xFFFFFFFF)))
-                        {
-                          LnReceivedSeed=0x00000001ul;
-                        }
-                        WrtDCAN_ServiceData(((uint8_t) (LnReceivedSeed >> 24)), meslegth++);
-                        WrtDCAN_ServiceData(((uint8_t) (LnReceivedSeed >> 16)), meslegth++);
-                        WrtDCAN_ServiceData(((uint8_t) (LnReceivedSeed >> 8)), meslegth++);
-                        WrtDCAN_ServiceData(((uint8_t) LnReceivedSeed ), meslegth++);
-                        break;
-#endif
                     case CePML_2Sd4Key:
                         WrtDCAN_ServiceData(((uint8_t) (GetOBD_4ByteSeed() >> 8)), meslegth++);
                         WrtDCAN_ServiceData(((uint8_t) GetOBD_4ByteSeed()), meslegth++); 
@@ -347,35 +301,6 @@ void LnSecurityAccess (void)
                         PostiveResponse = false;
                       }
                       break;
-#ifdef COMPILE_SID27_GWM_CHK011
-                  case CeGWM_CHK011:
-                      LnReceivedKey = ((GetLnServiceData ()) [2] << 24) + ((GetLnServiceData ()) [3]<< 16) +
-                         ((GetLnServiceData ()) [4]<< 8)+ (GetLnServiceData ()) [5];
-                      if(LnReceivedKey == LnSeedToKey(LnReceivedSeed, CHK011_Mask))
-                      {
-                        PostiveResponse = true;
-                      }
-                      else
-                      {
-                        PostiveResponse = false;
-                      }
-                      break;
-#endif
-#ifdef COMPILE_SID27_JAC_SII
-                  case CeJAC_SII:
-                      LnReceivedKey = ((GetLnServiceData ()) [2] << 24) + ((GetLnServiceData ()) [3]<< 16) +
-                                  ((GetLnServiceData ()) [4]<< 8)+ (GetLnServiceData ()) [5];
-                      GetKW2SequenceNumValue();
-                      if(LnReceivedKey == JAC_SII_seedToKey (num_rounds, LnReceivedSeed, KW2SequenceNumData))
-                      {
-                        PostiveResponse = true;
-                      }
-                      else
-                      {
-                        PostiveResponse = false;
-                      }
-                      break;
-#endif
                   case CePML_2Sd4Key:
                   case CePML_4Sd4Key:
                       LnReceivedKey =  ((GetLnServiceData ()) [2] <<24) 
@@ -421,38 +346,6 @@ void LnSecurityAccess (void)
            }
         }
      }
-  #if ( (XbIMMO_MULTI_SUBS_SELECT_FLAG == CbSUBS_ON) \
-        && (XbIMMO_KOSTAL_SUBS_SELECT_FLAG == CbSUBS_ON) )
-     else if( (KOSTAL_IMMO_ENABLED() )
-          &&( (SubFuncRequestSeed_EOL == SecurityAccessSubFunction)
-           || (SubFuncSendKey_EOL == SecurityAccessSubFunction)
-           || (SubFuncRequestSeed_AS == SecurityAccessSubFunction)
-           || (SubFuncSendKey_AS == SecurityAccessSubFunction) ) )
-     {
-        KostalIMMO_OBDSecurityAccess(SecurityAccessSubFunction);
-     }
-  #endif	   
-  #if ( (XbIMMO_MULTI_SUBS_SELECT_FLAG == CbSUBS_ON) \
-        && ((XbIMMO_CONTI_SUBS_SELECT_FLAG == CbSUBS_ON) \
-         || (XbIMMO_TTEC_SUBS_SELECT_FLAG == CbSUBS_ON)) )
-     else if( ( CONTI_IMMO_ENABLED() || TTEC_IMMO_ENABLED() )
-          &&( (SubFuncRequestSeed_EOL == SecurityAccessSubFunction)
-           || (SubFuncSendKey_EOL == SecurityAccessSubFunction)
-           || (SubFuncRequestSeed_AS == SecurityAccessSubFunction)
-           || (SubFuncSendKey_AS == SecurityAccessSubFunction) ) )
-     {
-        ContiIMMO_OBDSecurityAccess(SecurityAccessSubFunction);
-     }
-  #endif	   
-  #if ( (XbIMMO_MULTI_SUBS_SELECT_FLAG == CbSUBS_ON) \
-        && (XbIMMO_HIRAIN_SUBS_SELECT_FLAG == CbSUBS_ON) )
-     else if( ( HIRAIN_IMMO_ENABLED() )
-            &&( (SubFuncRequestSeed_EOL == SecurityAccessSubFunction)
-               ||(SubFuncSendKey_EOL == SecurityAccessSubFunction)))
-     {
-        HIRAINIMMO_OBDSecurityAccess(SecurityAccessSubFunction);
-     }
-  #endif	
      else
      {
         if(GetLnServReqMsgAddressingMode () == FunctionalAddressing)

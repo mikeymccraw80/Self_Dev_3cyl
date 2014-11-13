@@ -187,6 +187,23 @@ typedef enum
    CeDCAN_FreezeFrameData
 }TeDCAN_PID_DataType;
 
+typedef enum
+{
+  CeDCANOBD_default
+#ifdef OBD_CONTROLLER_IS_MT92
+  ,CeDCANOBD_CHK011_MT92
+  ,CeDCANOBD_JAC_MT92
+  ,CeDCANOBD_CHB031_MT92
+#endif
+#ifdef OBD_CONTROLLER_IS_MT62P1
+  ,CeDCANOBD_DX5_MT62p1
+  ,CeDCANOBD_DM7A_MT62p1
+#endif
+#ifdef OBD_CONTROLLER_IS_MT22P3
+  ,CeDCANOBD_CMCAS_MT22p3
+#endif
+} TeDCANOBD_Applictaion_Type;
+
 /* PID's table function pointer definition */
 typedef void (*TpDCAN_MID_Param_Callback)(void*);
 typedef void (*TpDCAN_PID_Param_Callback)(void*, TeDCAN_PID_DataType);

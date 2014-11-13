@@ -407,11 +407,12 @@
 #endif
 #define KW2K_SEED_ADDRESS                 (0x80008114)
 #define KW2K_KEY_ADDRESS                  (0x80008116)
-#define CgKW2KSideRailAddress             (0x80008100)
-#define CgDelphiBaseModelPNAddr           (0x80008118)
+#define OBD_SEED_4Bytes_ADDRESS           (0x00000120)
+#define OBD_KEY_4Bytes_ADDRESS            (0x00000124)
+#define OBD_PML_SAIndex_ADDRESS           (0x00000128)
 
-#define CpKW2KSideRailAddress_Ptr         (BYTE *) CgKW2KSideRailAddress
-#define CpDelphiBaseModelPNAddr_Ptr       (BYTE *) CgDelphiBaseModelPNAddr
+#define CgKW2KSideRailAddress             (0x00000100)
+#define CgDelphiBaseModelPNAddr           (0x00000118)
 
 /**********End of  Service 21 and Service 2C Definition****************/
 

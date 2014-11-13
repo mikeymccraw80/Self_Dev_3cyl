@@ -121,6 +121,7 @@
 #include "hal_ucram.h"
 #include "inst_overlay.h"
 #include "dcancomm.h"
+#include "obdlfsrv.h"
 
 /*********************************************************************/
 /*            Global  Variable                                             */
@@ -137,12 +138,47 @@ TbBOOLEAN  VbCopyAndExecuteKernelPending;
 TbBOOLEAN         VbCAN_OBD_Enabled;
 TbBOOLEAN         VbKW2K_OBD_Enabled;
 
+static BYTE                 OBD_PML_SAIndex;
+static T_COUNT_WORD         Kw2000_Seed;
+static T_COUNT_WORD         Kw2000_Key;
+static T_COUNT_LONG         OBD_Seed_4Bytes;
+static T_COUNT_LONG         OBD_Key_4Bytes;
+
 /*********************************************************************/
 /*           Static  Variable                                             */
 /*********************************************************************/
 
 void InitAppLvlCommVariables(void);
 
+/*********************************************************************/
+/***   This returns the ECM key value.                             ***/
+/*********************************************************************/
+WORD Get_Key( void )
+{
+  Kw2000_Key = *((WORD *)KW2K_KEY_ADDRESS); /* take this out when EEPROM keyis implemented */
+  return ( (WORD)Kw2000_Key );
+}
+
+/*********************************************************************/
+/***  This returns stored seed value.                              ***/
+/*********************************************************************/
+WORD Get_Security_Seed_Data( void )
+{
+  Kw2000_Seed = *((WORD *)KW2K_SEED_ADDRESS); /* take this out when EEPROM seed is implemented */
+  return ( (WORD)Kw2000_Seed );
+}
+
+LONGWORD GetOBD_4ByteKey( void )
+{
+  OBD_Key_4Bytes = *((LONGWORD *)OBD_KEY_4Bytes_ADDRESS); /* take this out when EEPROM keyis implemented */
+  return ( (LONGWORD)OBD_Key_4Bytes ); 
+}
+
+LONGWORD GetOBD_4ByteSeed( void )
+{
+  OBD_Seed_4Bytes = *((LONGWORD *)OBD_SEED_4Bytes_ADDRESS);/* take this out when EEPROM seed is implemented */
+  return ( (LONGWORD)OBD_Seed_4Bytes );
+}
 
 /*********************************************************************/
 /*** Get Communication Established Status.                         ***/
