@@ -66,12 +66,54 @@
 #include "dcancomm.h"
 /***********************************************************************
 * Functions in this file:                                              *
-************************************************************************
-
 ***********************************************************************/
+#include "lux_type.h"
+#include "filenvmd.h"
+#include "id_cald.h"
+#include "HLS.h"
 /*********************************************************************/
 /*           CONSTANT and ENUMERATION DECLARATIONS                   */
 /*********************************************************************/
+
+#define Cy14230_MODE_21_MSG_LENGTH      (2)
+
+#define IdxLocalIdentifier              (1)
+
+#define rdliSnapshot                      (0x01)
+#define rdliEndModelNumber		  (0x03)
+#define rdliBaswModelNumber		  (0x04)
+#define rdliBCCNumber			  (0x05)
+#define rdliBLMCells			  (0x09)
+#define rdliCrankShaftAdaptiveCylinder	  (0x0A)
+#define rdliTECDSampleCounter		  (0x0B)
+#define rdliMECCounter			  (0xA0)
+#define rdliVIN                           (0x90)
+#define rdliMileage                       (0xC0)
+#define rdliEngRuntime                    (0xA1)
+
+#define rdliAddressTableSnapshot1         (0x11)
+#define rdliAddressTableSnapshot2         (0x12)
+#define rdliAddressTableSnapshot3         (0x13)
+#define rdliAddressTableSnapshot4         (0x14)
+#define rdliAddressTableSnapshot5         (0x15)
+#define rdliAddressTableSnapshot6         (0x16)
+#define rdliAddressTableSnapshot7         (0x17)
+#define rdliAddressTableSnapshot8         (0x18)
+#define rdliAddressTableSnapshot9         (0x19)
+
+#define RESEVEDBYTE			  (0x00)
+#define EndModelSize		  	  (8)
+#define BaseModelSize		  	  (8)
+
+#define rdliSecretKey                  (0x10)
+#define rdliSecurityCode               (0x20)
+#define rdliEe_immo_option             (0x30)
+
+#define CgDelphiBaseModelPNAddr           (0x00000118)
+#define CpDelphiBaseModelPNAddr_Ptr       (BYTE *) CgDelphiBaseModelPNAddr
+extern T_COUNT_BYTE *const KW2000_DelphiBaseModelPN_Ptr;
+
+
 #define CANPID_VALEO_READSC   (0x20B2)
 #define CANPID_VALEO_DELIVERY (0x0300)
 #define CANPID_CONTI_READSK   (0x0201)
@@ -97,156 +139,190 @@
 /*******************************************************************************/
 void LnReadDataByCommonIdentifier (void)
 {
-   uint16_t  ParamID;
-   uint8_t   msglength;
-   uint8_t    LyPIDIdx ;
-   uint8_t    LyDataIdx ;
-   uint8_t    LaServiceData[7] ;
-   bool        LbPIDFound;
-   TbBOOLEAN  LbValid_PID;
-   TbBOOLEAN  LbValid_CalPID;
-   uint8_t    CalPID_DataLength; 
-   uint8_t    CalPID_Offset;
-   uint8_t    CalPID_DataEndOffset;
-   uint16_t   Longmsglength;
-   bool        LbLongPIDFound;
-   
-   LbPIDFound = CbFALSE;
-   LbValid_CalPID = CbFALSE;
-   LbValid_PID = CbFALSE;
-   LbLongPIDFound = CbFALSE;
-   if(GetLnServiceDataLength () < 3)
-   {
-        /* Request should be atleast 3 bytes long */
-      SendLnStandardNegativeAnswer (IncorrectMessageLength);
-   }
-   else if(!(GetLnServiceDataLength () & 0x0001))
-   {
-        /* The length should be an odd value ( SID + n * 2byte ID ) */
-      SendLnStandardNegativeAnswer (IncorrectMessageLength);
-   }
-   else 
-   {
-    /* Prepare response */
-      msglength = 1;
-      for(LyDataIdx = 1; LyDataIdx < GetLnServiceDataLength (); LyDataIdx++)
-      {
-         LaServiceData[LyDataIdx] = (GetLnServiceData ())[LyDataIdx];
-      }
-      LyPIDIdx = 1;
-      while(LyPIDIdx < GetLnServiceDataLength ())
-      {
-    /*--- ParamID (also called common identifier is on 2 bytes for this service ---*/
-         ParamID = (uint16_t) (LaServiceData[LyPIDIdx++] << 8);
-         ParamID = (uint16_t) (ParamID |LaServiceData[LyPIDIdx++]);
+	uint8_t ParamID;
+	uint8_t msglength;
+	uint8_t Idx ;
+	uint8_t *LpKW2000_DelphiBaseModelPN_Ptr;
 
-   /*Check if the PID was supported in the PID table with Mode 22 */
-         LbValid_PID = Get_Valid_SpecialPID_Info(ParamID,&LbValid_CalPID);
-   
-         if(CbFALSE == LbValid_PID)
-         {
-		 	LbValid_PID = Get_Valid_PID_Info(ParamID, MaskMode_22);
-		 }
-         if ((CbTRUE == LbValid_PID)
-		 	#ifdef COMPILE_CANOBD_PCHUD
-		 	 ||(CANPID_PCHUD == ParamID)
-		 	#endif
-			 )
-         {
-	      #if ( (XbIMMO_MULTI_SUBS_SELECT_FLAG == CbSUBS_ON) \
-	           && ( (XbIMMO_VALEO_SUBS_SELECT_FLAG == CbSUBS_ON) \
-	              ||(XbIMMO_HIRAIN_SUBS_SELECT_FLAG == CbSUBS_ON) \
-	              ||(XbIMMO_CONTI_SUBS_SELECT_FLAG == CbSUBS_ON) ) )
+	if(GetLnServiceDataLength () != 2) {
+		/* Request should be atleast 2 bytes long */
+		SendLnStandardNegativeAnswer (IncorrectMessageLength);
+	} else  {
+		/* Prepare response */
+		msglength = 1;
+		ParamID = (uint8_t) (GetLnServiceData ())[1];
 
-	        /*Valeo immo---Read DeliveryStatus and SC is only supported by CANOBD 22*/
-	        if( ( ((ParamID == CANPID_VALEO_DELIVERY) 
-			 	     ||(ParamID == CANPID_VALEO_READSC))
-			       && (!VALEO_IMMO_ENABLED()) )
-			  /*Conti immo---Read SK and SC is only supported by CANOBD 22*/
-			    || ( ((ParamID == CANPID_HIRAIN_READSK) 
-			           || (ParamID == CANPID_HIRAIN_READSK_MTCHSTUS))
-			        ) )
-			    || ( ((ParamID == CANPID_CONTI_READSK) 
-			           || (ParamID == CANPID_CONTI_READSC))
-			        && () ) )
+		switch(ParamID) {
+		case rdliSnapshot:
+			WrtDCAN_ServiceData(ParamID, msglength++);
+			WrtDCAN_ServiceData( FCMEnd, msglength++);
+			WrtDCAN_ServiceData( MafTst, msglength++);
+			WrtDCAN_ServiceData( TmLin, msglength++);
+			WrtDCAN_ServiceData( Hi8Of16(fLc), msglength++);
+			WrtDCAN_ServiceData( Lo8Of16(fLc), msglength++);
+			WrtDCAN_ServiceData( Hi8Of16(fLcAd), msglength++);
+			WrtDCAN_ServiceData( Lo8Of16(fLcAd), msglength++);
+			WrtDCAN_ServiceData( Pmap_b, msglength++);
+			WrtDCAN_ServiceData( Hi8Of16(N), msglength++);
+			WrtDCAN_ServiceData( Lo8Of16(N), msglength++);
+			WrtDCAN_ServiceData( Hi8Of16(VspRaw), msglength++);
+			WrtDCAN_ServiceData( Lo8Of16(VspRaw), msglength++);
+			WrtDCAN_ServiceData( IgaOut, msglength++);
+			WrtDCAN_ServiceData( TaLin, msglength++);
+			WrtDCAN_ServiceData( Hi8Of16(KmQ1Mil), msglength++);
+			WrtDCAN_ServiceData( Lo8Of16(KmQ1Mil), msglength++);
+			WrtDCAN_ServiceData( Ub_b, msglength++);
+			WrtDCAN_ServiceData( Hi8Of16(uTm), msglength++);
+			WrtDCAN_ServiceData( Lo8Of16(uTm), msglength++);
+			WrtDCAN_ServiceData( uTa, msglength++);
+			WrtDCAN_ServiceData( Hi8Of16(uPmap), msglength++);
+			WrtDCAN_ServiceData( Lo8Of16(uPmap), msglength++);
+			WrtDCAN_ServiceData( Hi8Of16(Fl), msglength++);
+			WrtDCAN_ServiceData( Lo8Of16(Fl), msglength++);
+			WrtDCAN_ServiceData( Hi8Of16(Hi16Of32(Ti)), msglength++);
+			WrtDCAN_ServiceData( Lo8Of16(Hi16Of32(Ti)), msglength++);
+			WrtDCAN_ServiceData( Hi8Of16(Lo16Of32(Ti)), msglength++);
+			WrtDCAN_ServiceData( Lo8Of16(Lo16Of32(Ti)), msglength++);
+			WrtDCAN_ServiceData( Nstat, msglength++);
+			WrtDCAN_ServiceData( Hi8Of16(dN), msglength++);
+			WrtDCAN_ServiceData( Lo8Of16(dN), msglength++);
+			WrtDCAN_ServiceData( Hi8Of16(dTqLosAd), msglength++);
+			WrtDCAN_ServiceData( Lo8Of16(dTqLosAd), msglength++);
+			WrtDCAN_ServiceData( dIgaKncDyn, msglength++);
+			WrtDCAN_ServiceData( B_Knk, msglength++);
+			WrtDCAN_ServiceData( Maf_b, msglength++);
+			WrtDCAN_ServiceData( Ld_b, msglength++);
+			WrtDCAN_ServiceData( Gr, msglength++);
+			WrtDCAN_ServiceData( Hi8Of16(fAlt), msglength++);
+			WrtDCAN_ServiceData( Lo8Of16(fAlt), msglength++);
+			WrtDCAN_ServiceData( Hi8Of16(dTqIdcP), msglength++);
+			WrtDCAN_ServiceData( Lo8Of16(dTqIdcP), msglength++);
+			WrtDCAN_ServiceData( Hi8Of16(dTqIdcI), msglength++);
+			WrtDCAN_ServiceData( Lo8Of16(dTqIdcI), msglength++);
+			WrtDCAN_ServiceData( dIgaKnc[0], msglength++);
+			WrtDCAN_ServiceData( dIgaKnc[1], msglength++);
+			WrtDCAN_ServiceData( dIgaKnc[2], msglength++);
+			WrtDCAN_ServiceData( dIgaKnc[3], msglength++);
+			WrtDCAN_ServiceData( Hi8Of16(FtCntEmis), msglength++);
+			WrtDCAN_ServiceData( Lo8Of16(FtCntEmis), msglength++);
+			WrtDCAN_ServiceData( Hi8Of16(FtCntEmisCyl[0]), msglength++);
+			WrtDCAN_ServiceData( Lo8Of16(FtCntEmisCyl[0]), msglength++);
+			WrtDCAN_ServiceData( Hi8Of16(FtCntEmisCyl[1]), msglength++);
+			WrtDCAN_ServiceData( Lo8Of16(FtCntEmisCyl[1]), msglength++);
+			WrtDCAN_ServiceData( Hi8Of16(FtCntEmisCyl[2]), msglength++);
+			WrtDCAN_ServiceData( Lo8Of16(FtCntEmisCyl[2]), msglength++);
+			WrtDCAN_ServiceData( Hi8Of16(FtCntEmisCyl[3]), msglength++);
+			WrtDCAN_ServiceData( Lo8Of16(FtCntEmisCyl[3]), msglength++);
+			WrtDCAN_ServiceData( Hi8Of16(RounFon), msglength++);
+			WrtDCAN_ServiceData( Lo8Of16(RounFon), msglength++);
+			WrtDCAN_ServiceData( B_Fan1, msglength++);
+			WrtDCAN_ServiceData( B_Fan2, msglength++);
+			WrtDCAN_ServiceData( B_AcOn, msglength++);
+			WrtDCAN_ServiceData( Hi8Of16(uLsb), msglength++);
+			WrtDCAN_ServiceData( Lo8Of16(uLsb), msglength++);
+			WrtDCAN_ServiceData( Hi8Of16(uLsa), msglength++);
+			WrtDCAN_ServiceData( Lo8Of16(uLsa), msglength++);
+			WrtDCAN_ServiceData( Hi8Of16(tLsbAfFlt), msglength++);
+			WrtDCAN_ServiceData( Lo8Of16(tLsbAfFlt), msglength++);
+			WrtDCAN_ServiceData( IntLcDwnI, msglength++);
+			WrtDCAN_ServiceData( SsCatDwnM, msglength++);
+			WrtDCAN_ServiceData( MxGrdLsaFit_b, msglength++);
+			WrtDCAN_ServiceData( B_LsaRdy, msglength++);
+			WrtDCAN_ServiceData( Acl_b, msglength++);
+			WrtDCAN_ServiceData( Hi8Of16(TcatInPre), msglength++);
+			WrtDCAN_ServiceData( Lo8Of16(TcatInPre), msglength++);
+			WrtDCAN_ServiceData( Hi8Of16(uTp1), msglength++);
+			WrtDCAN_ServiceData( Lo8Of16(uTp1), msglength++);
+			WrtDCAN_ServiceData( Hi8Of16(uTp2), msglength++);
+			WrtDCAN_ServiceData( Lo8Of16(uTp2), msglength++);
+			WrtDCAN_ServiceData( Hi8Of16(TpPosDpc), msglength++);
+			WrtDCAN_ServiceData( Lo8Of16(TpPosDpc), msglength++);
+			WrtDCAN_ServiceData( Hi8Of16(TpPos), msglength++);
+			WrtDCAN_ServiceData( Lo8Of16(TpPos), msglength++);
+			WrtDCAN_ServiceData( Hi8Of16(dpcpids), msglength++);
+			WrtDCAN_ServiceData( Lo8Of16(dpcpids), msglength++);
+			WrtDCAN_ServiceData( B_dpcPids, msglength++);
+			WrtDCAN_ServiceData( Hi8Of16(uPed1), msglength++);
+			WrtDCAN_ServiceData( Lo8Of16(uPed1), msglength++);
+			WrtDCAN_ServiceData( Hi8Of16(uPed2), msglength++);
+			WrtDCAN_ServiceData( Lo8Of16(uPed2), msglength++);
+			WrtDCAN_ServiceData( PedPos_b, msglength++);
+			WrtDCAN_ServiceData( Hi8Of16(AngCamOvlapAdj), msglength++);
+			WrtDCAN_ServiceData( Lo8Of16(AngCamOvlapAdj), msglength++);
+			WrtDCAN_ServiceData( fctCamOvlapIn_b, msglength++);
+			WrtDCAN_ServiceData( fctCamOvlapOut_b, msglength++);
+			WrtDCAN_ServiceData( Hi8Of16(DyCyPsIn), msglength++);
+			WrtDCAN_ServiceData( Lo8Of16(DyCyPsIn), msglength++);
+			WrtDCAN_ServiceData( Hi8Of16(DyCyPsOut), msglength++);
+			WrtDCAN_ServiceData( Lo8Of16(DyCyPsOut), msglength++);
+			WrtDCAN_ServiceData( Hi8Of16(DuCyPgOut), msglength++);
+			WrtDCAN_ServiceData( Lo8Of16(DuCyPgOut), msglength++);
+			WrtDCAN_ServiceData( Hi8Of16(FlPg), msglength++);
+			WrtDCAN_ServiceData( Lo8Of16(FlPg), msglength++);
+			WrtDCAN_ServiceData( Hi8Of16(fPgRatDsr), msglength++);
+			WrtDCAN_ServiceData( Lo8Of16(fPgRatDsr), msglength++);
+			WrtDCAN_ServiceData( Hi8Of16(fPgAdp), msglength++);
+			WrtDCAN_ServiceData( Lo8Of16(fPgAdp), msglength++);
+			WrtDCAN_ServiceData( Tam, msglength++);
+			WrtDCAN_ServiceData( StcEtcAdpt, msglength++);
+			WrtDCAN_ServiceData( ScSpr, msglength++);
+			WrtDCAN_ServiceData( ScAntiIce, msglength++);
+			WrtDCAN_ServiceData( ScLrn, msglength++);
+			WrtDCAN_ServiceData( B_LrnSuc, msglength++);
+			WrtDCAN_ServiceData( Hi8Of16(uTp1Lw), msglength++);
+			WrtDCAN_ServiceData( Lo8Of16(uTp1Lw), msglength++);
+			WrtDCAN_ServiceData( Hi8Of16(uTp2Lw), msglength++);
+			WrtDCAN_ServiceData( Lo8Of16(uTp2Lw), msglength++);
+			WrtDCAN_ServiceData( Hi8Of16(TpPosNlp), msglength++);
+			WrtDCAN_ServiceData( Lo8Of16(TpPosNlp), msglength++);
+			WrtDCAN_ServiceData( FrBitsEtsm, msglength++);
+			WrtDCAN_ServiceData( B_FofEtsm, msglength++);
+			SendLnStandardPositiveAnswer( msglength ) ;
+		break;
 
-	        {
-	            /*The PID is not supported when IMMO is not enabled.*/
-				/*do nothing*/
-	        }
-	        else
-	      #endif
-	      	{
-            WrtDCAN_ServiceData( ((ParamID>>8)&0xff), msglength++ ) ;
-            WrtDCAN_ServiceData( (ParamID&0xff),msglength++ ) ;
-			
-          #ifdef COMPILE_CANOBD_PCHUD
-			if(CANPID_PCHUD == ParamID)
-			{
-				Longmsglength = ProcessReqstdLongPIDData(GetLnServiceData (), msglength);
-				LbLongPIDFound = CbTRUE;
-				LbPIDFound = CbTRUE;
-			}
-			else
-          #endif
-			{
-    			if(CbTRUE == LbValid_CalPID)
-    			{
-    				CalPID_DataLength = GetCalPIDDataLength( GetVeDIAG_PIDIndex() );
-    				// CalPID_Offset = GetCalPIDDataAddressOffest(GetVeDIAG_PIDIndex());
-            CalPID_Offset = 0;
-    				CalPID_DataEndOffset = CalPID_DataLength + CalPID_Offset;
-    				
-    				if(CalPID_DataEndOffset > EE_CalibrationData_Size )
-    				{
-    					/*PID in KaDCAN_CalEEPROM_Data exceed EE_CalibrationData_Size*/
-    					SendLnStandardNegativeAnswer (RequestOutOfRange);
-    				}
-    				else
-    				{
-    					msglength = ProcessReqstdCalPIDData(GetLnServiceData (), msglength ,
-                                       CalPID_DataLength, CalPID_Offset ) ;
-    					LbPIDFound = CbTRUE;
-    				}
-    
-    			}
-    			else
-    			{
-    				msglength = ProcessReqstdPIDData(GetLnServiceData (), msglength ,
-                                       GetVeDIAG_PIDIndex() ) ;
-    				LbPIDFound = CbTRUE;
-    				
-    			}
-			}
-	      }
-         }
-      }
-      if (CbTRUE == LbPIDFound)
-      {
 
-     #ifdef COMPILE_CANOBD_PCHUD
-			if(LbLongPIDFound)
-            {
-				SendLnStandardPositiveAnswer (Longmsglength);
+
+		case rdliEndModelNumber:
+			WrtDCAN_ServiceData(ParamID, msglength++);
+			for(Idx = 0 ; Idx < (EndModelSize/2) ; Idx++ ) {
+				WrtDCAN_ServiceData(NsFILE_NVM_EE_ManufactData.VaFILE_EE_HexEndModelNumber[Idx], msglength++);
 			}
-			else
-	 #endif
-			{
-				SendLnStandardPositiveAnswer (msglength);
+			SendLnStandardPositiveAnswer( msglength ) ;
+		break ;
+
+		case rdliBaswModelNumber:
+			WrtDCAN_ServiceData(ParamID, msglength++);
+			LpKW2000_DelphiBaseModelPN_Ptr = (uint8_t *)KW2000_DelphiBaseModelPN_Ptr;
+			for(Idx = 0 ; Idx < (BaseModelSize/2) ; Idx++ ) {
+				WrtDCAN_ServiceData(*LpKW2000_DelphiBaseModelPN_Ptr++, msglength++);
+			}  
+			SendLnStandardPositiveAnswer( msglength ) ;
+		break ;
+
+		case rdliBCCNumber:
+			WrtDCAN_ServiceData(ParamID, msglength++);
+			for ( Idx = 0 ; Idx < sizeof( DEBroadcastCode ) ; Idx++ ) {
+				WrtDCAN_ServiceData( DEBroadcastCode[Idx], msglength++);
 			}
-            
-#if ( (XbIMMO_MULTI_SUBS_SELECT_FLAG == CbSUBS_ON) \
-    && ((XbIMMO_CONTI_SUBS_SELECT_FLAG == CbSUBS_ON) \
-      ||(XbIMMO_HIRAIN_SUBS_SELECT_FLAG == CbSUBS_ON) ) )
-         }
-#endif
-      }
-      else
-      {
-      /*--- PID does not exists in our list: neg answer ---*/
-         SendLnStandardNegativeAnswer (RequestOutOfRange);
-      }
-   }
+			SendLnStandardPositiveAnswer( msglength ) ;
+		break ;
+
+		case rdliMileage:
+			WrtDCAN_ServiceData(ParamID, msglength++);
+
+			/*--- Fill table with mileage accumulation ---*/
+			WrtDCAN_ServiceData(NsFILE_NVM_EE_ManufactData.VaFILE_EE_Odometer[0], msglength++);
+			WrtDCAN_ServiceData(NsFILE_NVM_EE_ManufactData.VaFILE_EE_Odometer[1], msglength++);
+			WrtDCAN_ServiceData(NsFILE_NVM_EE_ManufactData.VaFILE_EE_Odometer[2], msglength++);
+			WrtDCAN_ServiceData(NsFILE_NVM_EE_ManufactData.VaFILE_EE_Odometer[3], msglength++);
+			SendLnStandardPositiveAnswer( msglength ) ;
+			break ;
+
+		default :
+			SendLnStandardNegativeAnswer( RequestOutOfRange ) ;
+			break ;
+		}
+	}
 } /*** End of LnReadDataByCommonIdentifier ***/
 
 #endif
