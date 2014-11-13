@@ -600,28 +600,16 @@ void J1979Mode2Handler_DCAN (void)
 #if (XeDCAN_SID_03_Supported == CeDCAN_Supported)
 #define CcM3_RETURN_ID_OFFSET      (2)
 
+
 void J1979Mode3Handler_DCAN (void)
 {
-   /*Check if it is in standard diagnostic mode to support service*/
-   if(CheckStandardDiagnosticState())
-   {
-      /* Test for valid  message length */
-      if (( J1979_MODE_03_MSG_LENGTH ) ==
-                           GetLnServiceDataLength() )
-      {
-         FormJ1979_Mode_43_Data_DCAN ();
-      }
-      else
-      {
-         /* Do not send a response if request invalid */
-         PfrmDCAN_AckReqWithoutResponse();
-      }
-   }
-   else
-   {
-       /* Do not send a response if the ECU is not in standard diagnostic session */
-       PfrmDCAN_AckReqWithoutResponse();
-   }
+	/* Test for valid  message length */
+	if (( J1979_MODE_03_MSG_LENGTH ) == GetLnServiceDataLength() ) {
+		FormJ1979_Mode_43_Data_DCAN ();
+	} else {
+		/* Send negative responce if PID not supported */  
+		SendLnStandardNegativeAnswer(nrcSubFunctionNotSupported_InvalidFormat);
+	}
 }
 #endif
 
@@ -649,42 +637,16 @@ void J1979Mode3Handler_DCAN (void)
 #if (XeDCAN_SID_03_Supported == CeDCAN_Supported)
 void FormJ1979_Mode_43_Data_DCAN( void )
 {
-    WORD          DTCCount ;
-    WORD          Lc1979_ValidDTCCount ;
-  /* This signifies if at least one DTC was found. */
+	WORD          DTCCount    = 0;
+	BYTE          TrByteCount = CcM3_RETURN_ID_OFFSET ;
 
-    WORD                 TrByteCount ;
-    DTC_STATUS_INFO_TYPE DTCRecord, *DTCRecordPtr ;
-    MODES_TYPE           ModeVal ;
-
-    TrByteCount = CcM3_RETURN_ID_OFFSET ;
-    ModeVal     = MODE_3 ;
-    Lc1979_ValidDTCCount = V_COUNT_WORD(0);
-    DTCCount = V_COUNT_WORD(0);
-
-    // while ( DTCCount < GetCMNMaxNumberOfDTCs () )
-    while (0)
-    {
-       // DTCRecordPtr = Get_Next_Valid_Emission_P_Code ( DTCCount, ModeVal );
-       DTCRecordPtr = NULL;
-       DTCRecord = *DTCRecordPtr;
-       DTCCount++;
-
-       if ( DTCRecord.DTC_Valid )
-       {
-          Lc1979_ValidDTCCount++;
-          DTCRecord.DTC_Valid = CbFALSE;
-
-          WrtDCAN_ServiceData(DTCRecord.DTC_Number.Byte_Access.Byte_One,
-                         TrByteCount++);
-          WrtDCAN_ServiceData(DTCRecord.DTC_Number.Byte_Access.Byte_Two,
-                         TrByteCount++);
-       }
-    }
-
-    WrtDCAN_ServiceData( Lc1979_ValidDTCCount, CyM3_M7_NumDTC_Offset);
-
-    SendLnStandardPositiveAnswer (TrByteCount);
+	while ( DTCCount < count_DTCs_SID03 ) {
+		WrtDCAN_ServiceData(Hi8Of16(DTCs_SID03[DTCCount]),TrByteCount++);
+		WrtDCAN_ServiceData(Lo8Of16(DTCs_SID03[DTCCount]),TrByteCount++);
+		DTCCount++;
+	}
+	WrtDCAN_ServiceData( DTCCount, CyM3_M7_NumDTC_Offset);
+	SendLnStandardPositiveAnswer (TrByteCount);
 }
 #endif
 
