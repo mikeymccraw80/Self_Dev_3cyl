@@ -111,6 +111,18 @@ static TeMode8TestIDStatus             Se1979Mode8TestID_01_Status;
 #if (XeDCAN_SID_09_Supported == CeDCAN_Supported)
 static BYTE                            Sy1979_Mode09_CalIdx ;
 static TbBOOLEAN                       Sb1979_M9_InfoTypeFound;
+
+
+/*********************************************************************/
+/*            STATIC DATA DECLARATIONS                               */
+/* Removed Mode 8 static variables. bdt 4/10/00                      */
+/*********************************************************************/
+static BYTE                            Vi1979_Mode09_MsgIdx ;
+static BYTE                            Vi1979_Mode09_CalCharIdx ;
+static BYTE                            Vi1979_Mode09_CalIdx ;
+static BYTE                            Vi1979_CompID ;
+static BYTE                            Vi1979_Mode09_CurrMsgIdx ;
+
 #endif
 
 /*********************************************************************/
@@ -1194,29 +1206,18 @@ static FOUR_BYTE_DATA_TYPE PrfmDCAN_MID_SuppRange(void)
 /*********************************************************************/
 /* mode 47 transmit callback is set                                  */
 #if (XeDCAN_SID_07_Supported == CeDCAN_Supported)
+#define J1979_MODE_07_MSG_LENGTH   (1)
 #define J1979_Mode_47_DTC_Length   (7)
-#define CcM7_RETURN_ID_OFFSET      (2)
 
 void J1979Mode7Handler_DCAN (void)
 {
-   /*Check if it is in standard diagnostic mode to support service*/
-   if(CheckStandardDiagnosticState())
-   {
-      if ( J1979_MODE_07_MSG_LENGTH == GetLnServiceDataLength() )
-      {
-         FormJ1979_Mode_47_Data_DCAN ();
-      }
-      else
-      {
-          /* Do not send a response if request invalid */
-          PfrmDCAN_AckReqWithoutResponse();
-      }
-   }
-   else
-   {
-       /* Do not send a response if the ECU is not in standard diagnostic session */
-       PfrmDCAN_AckReqWithoutResponse();
-   }
+	if ( J1979_MODE_07_MSG_LENGTH == GetLnServiceDataLength() ) {
+		/*  WrtMultiRespInProgress( CbTRUE  ) ; */
+		FormJ1979_Mode_47_Data_DCAN ();
+	} else {
+		/* Send negative responce if message length not valid. */
+		SendLnStandardNegativeAnswer(nrcSubFunctionNotSupported_InvalidFormat);
+	}
 }
 
 /*********************************************************************/
@@ -1242,43 +1243,52 @@ void J1979Mode7Handler_DCAN (void)
 /*********************************************************************/
 void FormJ1979_Mode_47_Data_DCAN( void )
 {
-    WORD          DTCCount ;
-    BYTE          TrByteCount ;
-    T_COUNT_WORD  Lc1979_ValidDTCCount ;
+	static WORD          DTCCount1 ;
+	/* This signifies if at least one DTC was found, for the present packet.  */
+	static TbBOOLEAN     DTCFoundInPacket1 ;
+	/* This signifies if at least one DTC was found. */
+	static TbBOOLEAN     DTCFound1 ;
 
+	BYTE                 TrByteCount ;
+	TrByteCount = RETURN_ID_OFFSET ;
 
-    DTC_STATUS_INFO_TYPE DTCRecord, *DTCRecordPtr ;
+	while ( DTCCount1 < count_DTCs_SID07 ) {
+		DTCFound1 = CbTRUE;
+		DTCFoundInPacket1 = CbTRUE;
+		WrtDCAN_ServiceData(Hi8Of16(DTCs_SID07[DTCCount1]),TrByteCount++);
+		WrtDCAN_ServiceData(Lo8Of16(DTCs_SID07[DTCCount1]),TrByteCount++);
+		DTCCount1++;
 
-    MODES_TYPE  ModeVal ;
+		if ( TrByteCount >= J1979_Mode_43_DTC_Length ) {
+			break;
+		}
+	}
 
-    TrByteCount = CcM7_RETURN_ID_OFFSET ;
-    Lc1979_ValidDTCCount = V_COUNT_WORD(0);
-    DTCCount = V_COUNT_WORD(0);
+    /* if no DTC was found or if the message lenght is less 
+       than maximum append zero's to the message, and send a 
+       positive response. */
 
-    ModeVal = MODE_7 ;
+	if (( !DTCFound1 ) || (( DTCFoundInPacket1 ) && ( DTCFound1 ))) {
+		while ( TrByteCount < J1979_Mode_43_DTC_Length ) {
+			WrtDCAN_ServiceData( 0, TrByteCount++);
+		}
+	} else {
+		TrByteCount = 0;
+	}
 
-    // while ( DTCCount < GetCMNMaxNumberOfDTCs () )
-    while(0)
-    {
-        // DTCRecordPtr = Get_Next_Valid_Emission_P_Code ( DTCCount, ModeVal ) ;
-        DTCRecordPtr = NULL;
-        DTCRecord = *DTCRecordPtr ;
-        DTCCount++ ;
-
-        if ( DTCRecord.DTC_Valid )
-        {
-           Lc1979_ValidDTCCount++;
-           DTCRecord.DTC_Valid = CbFALSE ;
-           WrtDCAN_ServiceData(DTCRecord.DTC_Number.Byte_Access.Byte_One,
-                                                     TrByteCount++) ;
-           WrtDCAN_ServiceData(DTCRecord.DTC_Number.Byte_Access.Byte_Two,
-                                                     TrByteCount++) ;
-        }
-    }
-
-    WrtDCAN_ServiceData( Lc1979_ValidDTCCount, CyM3_M7_NumDTC_Offset);
-
-    SendLnStandardPositiveAnswer (TrByteCount) ;
+	SendLnStandardPositiveAnswer (TrByteCount);
+	/* set the flag to FALSE, the message is complete */
+	DTCFoundInPacket1 = CbFALSE;
+ 
+    /* If all the list is searched, disable multiple response 
+       message logic.  */
+	if ( DTCCount1 >= count_DTCs_SID07) {
+		DTCFound1 = CbFALSE;
+		DTCCount1 = 0;
+		WrtDCANMultiRespInProgress( CbFALSE  ) ;
+	} else {
+		WrtDCANMultiRespInProgress( CbTRUE  ) ;
+	}
 }
 #endif
 
@@ -1495,346 +1505,97 @@ static void Refresh1979_Mode8_SystemLeakTest_DCAN( void )
 /*********************************************************************/
 #if (XeDCAN_SID_09_Supported == CeDCAN_Supported)
 #define J1979_MODE_09_INFO_LENGTH      (2)
-#define J1979_MODE_09_SUPP_INFO_LENGTH (7)
-#define CyInfoType                     (1)
-#define KW_CRC_Step_Lenth              (100)
-
 
 void J1979Mode9Handler_DCAN( void )
 {
-   T_COUNT_BYTE Ly1979_DataIdx;
-   T_COUNT_BYTE Ly1979_BuffIdx ;
-   T_COUNT_BYTE Ly1979_InfoTypeIdx;
-   T_COUNT_BYTE Ly1979_Index;
-   TbBOOLEAN    Lb1979_Found;
-   TbBOOLEAN    Lb1979_MultiMode;
-   BYTE         La1979_ServiceData[J1979_MODE_09_SUPP_INFO_LENGTH] ;
-   const BYTE* KyDCAN_EcuName;
+	BYTE Li1979_DataIdx,Ly1979_MsgIdx,LyMultiMode,LyFound;
 
-   Sy1979_Mode09_CalIdx = 0;
-   Sb1979_EngCVNSent = CbFALSE;
-   Ly1979_DataIdx = CyInfoType ;
-   Lb1979_Found  = CbFALSE;
-   Sb1979_M9_InfoTypeFound = CbFALSE;
-   Lb1979_MultiMode = CbFALSE;
+	Vi1979_Mode09_MsgIdx = 0;
+	Vi1979_Mode09_CalIdx = 0;
+	Vi1979_Mode09_CalCharIdx = 0;
+	Vi1979_Mode09_CurrMsgIdx = 0;
+	Li1979_DataIdx = CyInfoType ;
+	LyMultiMode  = 0 ;
+	LyFound  = 0;
 
-   /*Check if it is in standard diagnostic mode to support service*/
-   if(CheckStandardDiagnosticState())
-   {
-      if(GetLnServiceDataLength() > J1979_MODE_09_SUPP_INFO_LENGTH)
-      {
-         PfrmDCAN_AckReqWithoutResponse();
-      }
-      else
-      {
-         for(Ly1979_BuffIdx = CyInfoType;
-             Ly1979_BuffIdx < GetLnServiceDataLength (); Ly1979_BuffIdx++)
-         {
-            La1979_ServiceData[Ly1979_BuffIdx] = (GetLnServiceData ())[Ly1979_BuffIdx];
-         }
+	if ( GetLnServiceDataLength() == J1979_MODE_09_MSG_LENGTH ) {
+		Vy1979_InfoType =  (GetLnServiceData())[1];
+		WrtDCAN_ServiceData( Vy1979_InfoType , Li1979_DataIdx++ );
+		LyFound = CbTRUE ;
 
-         if (( GetLnServiceDataLength() == J1979_MODE_09_INFO_LENGTH )
-            && (    (La1979_ServiceData[CyInfoType] != Cy1979_InfoType0)
-                 && (La1979_ServiceData[CyInfoType] != Cy1979_InfoType20)
-                 && (La1979_ServiceData[CyInfoType] != Cy1979_InfoType40)
-                 && (La1979_ServiceData[CyInfoType] != Cy1979_InfoType60)
-                 && (La1979_ServiceData[CyInfoType] != Cy1979_InfoType80)
-                 && (La1979_ServiceData[CyInfoType] != Cy1979_InfoTypeA0)
-                 && (La1979_ServiceData[CyInfoType] != Cy1979_InfoTypeC0)
-                 && (La1979_ServiceData[CyInfoType] != Cy1979_InfoTypeE0)
-               )
-            )
-         {
-            Vy1979_InfoType =  La1979_ServiceData[CyInfoType];
+		switch(Vy1979_InfoType) {
+		case Cy1979_InfoType0:
+			WrtDCAN_ServiceData( Cy1979_InfoType0_MsgCnt , Li1979_DataIdx++ ) ;
+			/*support infotype 02, 04, 06*/
+			WrtDCAN_ServiceData( 0xF3 , Li1979_DataIdx++ ) ;
+			WrtDCAN_ServiceData( 0x00 , Li1979_DataIdx++ ) ;
+			WrtDCAN_ServiceData( 0x00, Li1979_DataIdx++ ) ;
+			WrtDCAN_ServiceData( 0x00 , Li1979_DataIdx++ ) ;
+			break;
 
-            WrtDCAN_ServiceData( Vy1979_InfoType , Ly1979_DataIdx++ );
+		case Cy1979_InfoType1:
+			WrtDCAN_ServiceData( Cy1979_NumOfMsgsToRptVIN , Li1979_DataIdx++ );
+			break;
 
-            Lb1979_Found = CbTRUE ;
+		case Cy1979_InfoType2:
+			Vi1979_Mode09_MsgIdx = Cy1979_NumOfMsgsToRptVIN;
+			WrtDCAN_ServiceData(++Vi1979_Mode09_CurrMsgIdx   ,Li1979_DataIdx++) ;
+			WrtDCAN_ServiceData( 0 , Li1979_DataIdx++);
+			WrtDCAN_ServiceData( 0 , Li1979_DataIdx++);
+			WrtDCAN_ServiceData( 0 , Li1979_DataIdx++);
+			WrtDCAN_ServiceData( scnVehInfo.VIN[ Vi1979_Mode09_CalCharIdx++ ], Li1979_DataIdx++ );
+			LyMultiMode = CbTRUE ;
+			break;
 
-            switch(Vy1979_InfoType)
-            {
-               case Cy1979_InfoType1:
-                  if ( CbFALSE != Chk1979_Md9_InfoTypeSupported
-                                   (KyDCAN_Mode_09_Info_01_To_08,
-                                    Cy1979_InfoType_01_BitPosVal) )
-                  {
-                     WrtDCAN_ServiceData( Cy1979_NumOfMsgsToRptVIN_DCAN , Ly1979_DataIdx++ );
-                  }
-                  else
-                     Lb1979_Found = CbFALSE ;
-                  break;
+		case Cy1979_InfoType3:
+			WrtDCAN_ServiceData(Cy1979_NumOfMsgsToRptCalID,Li1979_DataIdx++);
+			break;
 
-               case Cy1979_InfoType2:
-                  if ( CbFALSE != Chk1979_Md9_InfoTypeSupported
-                                     (KyDCAN_Mode_09_Info_01_To_08,
-                                    Cy1979_InfoType_02_BitPosVal) )
-                  {
-                     WrtDCAN_ServiceData(Cy1979_Info_02_NumDataItems, Ly1979_DataIdx++);
+		case Cy1979_InfoType4:
+			Vi1979_Mode09_MsgIdx = (Cy1979_NumOfMsgsToRptCalID );
+			WrtDCAN_ServiceData( ++Vi1979_Mode09_CurrMsgIdx,  Li1979_DataIdx++);
+			WrtDCAN_ServiceData( scnVehInfo.CALID[Vi1979_Mode09_CalCharIdx++],Li1979_DataIdx++ );
+			WrtDCAN_ServiceData( scnVehInfo.CALID[Vi1979_Mode09_CalCharIdx++],Li1979_DataIdx++ );
+			WrtDCAN_ServiceData( scnVehInfo.CALID[Vi1979_Mode09_CalCharIdx++],Li1979_DataIdx++ );
+			WrtDCAN_ServiceData( scnVehInfo.CALID[Vi1979_Mode09_CalCharIdx++],Li1979_DataIdx++ );
+			LyMultiMode = CbTRUE ;
+			break;
 
-                     /* Read VIN from Flash ROM */
-                    // ReadFILE_EE_FLASH_VIN(VinFirst);
+		case Cy1979_InfoType7:
+			WrtDCAN_ServiceData(Cy1979_NumOfMsgsToRptIUPR,Li1979_DataIdx++);
+			break;
 
-                     for(Ly1979_Index = 0;Ly1979_Index < VIN_Size;Ly1979_Index++)
-                     {
-                        WrtDCAN_ServiceData( GetVinDataByte( Ly1979_Index ),
-                                           Ly1979_DataIdx++);
-                     }
-                  }
-                  else
-                     Lb1979_Found = CbFALSE ;
-                  break;
+		case Cy1979_InfoType8:
+			Vi1979_Mode09_MsgIdx = (Cy1979_NumOfMsgsToRptIUPR);
+			WrtDCAN_ServiceData(++Vi1979_Mode09_CurrMsgIdx,  Li1979_DataIdx++);
+			WrtDCAN_ServiceData(scnVehInfo.IUPR[Vi1979_Mode09_CalCharIdx++], Li1979_DataIdx++);
+			WrtDCAN_ServiceData(scnVehInfo.IUPR[Vi1979_Mode09_CalCharIdx++], Li1979_DataIdx++);
+			WrtDCAN_ServiceData(scnVehInfo.IUPR[Vi1979_Mode09_CalCharIdx++], Li1979_DataIdx++);
+			WrtDCAN_ServiceData(scnVehInfo.IUPR[Vi1979_Mode09_CalCharIdx++], Li1979_DataIdx++);
+			LyMultiMode = CbTRUE ;
+			break;
 
-               case Cy1979_InfoType3:
-                  if ( CbFALSE != Chk1979_Md9_InfoTypeSupported
-                                   (KyDCAN_Mode_09_Info_01_To_08,
-                                    Cy1979_InfoType_03_BitPosVal) )
-                  {
-                     WrtDCAN_ServiceData(Cy1979_NumOfMsgsToRptCalID_DCAN,
-                                       Ly1979_DataIdx++);
-                  }
-                  else
-                     Lb1979_Found = CbFALSE ;
-                  break;
+		default: 
+			/* Send negative responce if PID not supported */
+			LyFound = CbFALSE ;                 
+			break;
+		}
 
-               case Cy1979_InfoType4:
-                  if ( CbFALSE != Chk1979_Md9_InfoTypeSupported
-                                   (KyDCAN_Mode_09_Info_01_To_08,
-                                    Cy1979_InfoType_04_BitPosVal) )
-                  {
-                     WrtDCAN_ServiceData
-                               ((Cy1979_Info_04_NumDataItems * Cy1979_MaxCalIDs),
-                                Ly1979_DataIdx++);
-
-                     for (Ly1979_Index = 0; Ly1979_Index < CcFILE_CAL_ID_SIZE;
-                          Ly1979_Index++)
-                     {
-                        if (Ly1979_Index<Cy1979_EngCalIDSize)
-                        { 
-                           // WrtDCAN_ServiceData( KySYST_BTC_NR[Ly1979_Index],
-                           //                             Ly1979_DataIdx++);
-                        }
-                        else
-                        {
-                           WrtDCAN_ServiceData( 0x00, Ly1979_DataIdx++); 
-                        }
-                     }
-                  }
-                  else
-                  {
-                     Lb1979_Found = CbFALSE ;
-                  }
-                  break;
-
-               case Cy1979_InfoType5:
-                  if ( CbFALSE != Chk1979_Md9_InfoTypeSupported
-                                   (KyDCAN_Mode_09_Info_01_To_08,
-                                    Cy1979_InfoType_05_BitPosVal) )
-                  {
-                     WrtDCAN_ServiceData((Cy1979_NumOfMsgsToRptCVNs),
-                                        Ly1979_DataIdx++) ;
-                  }
-                  else
-                     Lb1979_Found = CbFALSE ;
-                  break;
-
-               case Cy1979_InfoType6:
-                  if ( CbFALSE != Chk1979_Md9_InfoTypeSupported
-                                         (KyDCAN_Mode_09_Info_01_To_08,
-                                          Cy1979_InfoType_06_BitPosVal) )
-                  {
-                      /* Send back a negative response indicating
-                         that the function is not complete. */
-                 #if (XeTRVS_SYST_TYPE == XeTRVS_SYST_PCM) && \
-                     (XeSYST_SEPERATE_CAL == CeSYST_AVAILABLE)
-                      if(GetTRVC_TransCntrlIsPCM())
-                      {
-                          if(!GetFILE_CVN_Available()
-                             || !GetFILE_CVN_Available_TRN())
-                          {
-                              SendLnStandardNegativeAnswer(
-                                 CcDCAN_ReqCorrectlyRecvd_ResponsePending);
-                          }
-                      }
-                      else
-                  #endif
-                      {
-                          if(!GetFILE_CVN_Available())
-                          {
-                              SendLnStandardNegativeAnswer(
-                                    CcDCAN_ReqCorrectlyRecvd_ResponsePending);
-                          }
-                      }
-
-                      Lb1979_MultiMode = CbTRUE ;
-                  }
-                  else
-                  {
-                      Lb1979_Found = CbFALSE ;
-                  }
-                  break;
-
-               case Cy1979_InfoType7:
-                  if ( CbFALSE != Chk1979_Md9_InfoTypeSupported
-                                   (KyDCAN_Mode_09_Info_01_To_08,
-                                    Cy1979_InfoType_07_BitPosVal) )
-                  {
-                     WrtDCAN_ServiceData( Cy1979_MessageCountIPT_DCAN,
-                                        Ly1979_DataIdx++) ;
-                  }
-                  else
-                     Lb1979_Found = CbFALSE ;
-                  break;
-
-               case Cy1979_InfoType8:
-                  if ( CbFALSE != Chk1979_Md9_InfoTypeSupported
-                                   (KyDCAN_Mode_09_Info_01_To_08,
-                                    Cy1979_InfoType_08_BitPosVal) )
-                  {
-                     WrtDCAN_ServiceData( Cy1979_Info_08_NumDataItems,
-                                        Ly1979_DataIdx++) ;
-
-                       /* OBD Monitoring Conditions Count */
-                     Ly1979_DataIdx =
-                        GetDCANService09Info08data(Ly1979_DataIdx);
-                  }
-                  else
-                  {
-                     Lb1979_Found = CbFALSE ;
-                  }
-                  break;
-				  
-               case Cy1979_InfoType0A:
-                  if ( CbFALSE != Chk1979_Md9_InfoTypeSupported
-                                   (Ky1979_Mode_09_Info_09_To_16,
-                                    Cy1979_InfoType_0A_BitPosVal) )
-                  {
-                     WrtDCAN_ServiceData( Cy1979_Info_0A_NumDataItems,
-                                        Ly1979_DataIdx++) ;
-
-                     if( GetTRVC_TransCntrlIsManual()
-                         || GetTRVC_TransCntrlIsTCM())
-                     {
-                       KyDCAN_EcuName = KyDCAN_ECM_EcuName;
-                     }
-                     else
-                     {
-                       KyDCAN_EcuName = KyDCAN_PCM_EcuName;
-                     }
-                     for (Ly1979_Index = 0; Ly1979_Index < ECU_NAME_Size;
-                          Ly1979_Index++)
-                     {
-                        WrtDCAN_ServiceData( KyDCAN_EcuName[Ly1979_Index],
-                                                       Ly1979_DataIdx++);
-                     }
-                  }
-                  else
-                  {
-                     Lb1979_Found = CbFALSE ;
-                  }
-                  break;
-
-               default:
-                  /* Send negative responce if PID not supported */
-                  Lb1979_Found = CbFALSE ;
-                  break;
-            }
-            if(( Lb1979_MultiMode )
-              && ( Lb1979_Found ))
-            {
-               WrtDCANMultiRespInProgress( CbTRUE ) ;
-            }
-            else if ( Lb1979_Found )
-            {
-               SendLnStandardPositiveAnswer( Ly1979_DataIdx );
-            }
-            else
-            {
-               /* No response if the infotype is not supported */
-               PfrmDCAN_AckReqWithoutResponse();
-            }
-         }
-         else
-         {
-            for(Ly1979_InfoTypeIdx = CyInfoType;Ly1979_InfoTypeIdx < GetLnServiceDataLength();
-                Ly1979_InfoTypeIdx++)
-            {
-               Ly1979_DataIdx =
-                     DtrmnJ1979_SuppM9Infotypes(La1979_ServiceData[Ly1979_InfoTypeIdx],
-                                                   Ly1979_DataIdx);
-            }
-
-            if(Sb1979_M9_InfoTypeFound)
-            {
-               SendLnStandardPositiveAnswer( Ly1979_DataIdx );
-            }
-            else
-            {
-               /* No response if the infotype is not supported */
-               PfrmDCAN_AckReqWithoutResponse();
-            }
-         }
-      }
-   }
-   else
-   {
-       /* Do not send a response if the ECU is not in standard diagnostic session */
-       PfrmDCAN_AckReqWithoutResponse();
-   }
+		if(( LyMultiMode ) && ( Vi1979_Mode09_CurrMsgIdx < Vi1979_Mode09_MsgIdx ) && ( LyFound != CbFALSE )) {
+			WrtDCANMultiRespInProgress( CbTRUE  ) ;
+			if(Li1979_DataIdx > 0)
+				SendLnStandardPositiveAnswer( Li1979_DataIdx );
+		} else if ( LyFound != CbFALSE ) {
+			SendLnStandardPositiveAnswer( Li1979_DataIdx );
+		} else {
+			SendLnStandardNegativeAnswer(nrcSubFunctionNotSupported_InvalidFormat);
+		}
+	} else {
+		/* Send negative responce if PID not supported */
+		SendLnStandardNegativeAnswer(nrcSubFunctionNotSupported_InvalidFormat);
+	}
 }
 
-/*********************************************************************/
-/* FUNCTION:     DtrmnJ1979_SuppM9Infotypes                          */
-/*                                                                   */
-/* Type:         global                                              */
-/*                                                                   */
-/* DESCRIPTION:  Returns all the supported infotypes for Mode 09     */
-/*                                                                   */
-/* PARAMETERS:   None                                                */
-/*                                                                   */
-/* RETURN:       None                                                */
-/*                                                                   */
-/* Global Variables Updated: Va1979_M49_Data                         */
-/*********************************************************************/
-static T_COUNT_BYTE DtrmnJ1979_SuppM9Infotypes(T_COUNT_BYTE Ly1979_InfoType,
-                                               T_COUNT_BYTE Ly1979_DataIdx)
-{
-   switch(Ly1979_InfoType)
-   {
-      case Cy1979_InfoType0:
-
-         WrtDCAN_ServiceData( Ly1979_InfoType ,
-                         Ly1979_DataIdx++ );
-
-         WrtDCAN_ServiceData( KyDCAN_Mode_09_Info_01_To_08 ,
-                         Ly1979_DataIdx++ );
-
-         WrtDCAN_ServiceData( Ky1979_Mode_09_Info_09_To_16 ,
-                         Ly1979_DataIdx++ ) ;
-
-         WrtDCAN_ServiceData( Ky1979_Mode_09_Info_17_To_24,
-                         Ly1979_DataIdx++ ) ;
-
-         WrtDCAN_ServiceData( Ky1979_Mode_09_Info_25_To_32 ,
-                         Ly1979_DataIdx++ ) ;
-
-         Sb1979_M9_InfoTypeFound = CbTRUE;
-         break;
-
-      case Cy1979_InfoType20:
-      case Cy1979_InfoType40:
-      case Cy1979_InfoType60:
-      case Cy1979_InfoType80:
-      case Cy1979_InfoTypeA0:
-      case Cy1979_InfoTypeC0:
-      case Cy1979_InfoTypeE0:
-         break;
-      default :
-         Sb1979_M9_InfoTypeFound = CbFALSE;
-         break;
-   }
-
-   return (Ly1979_DataIdx);
-}
 
 /*********************************************************************/
 /* FUNCTION:     FormJ1979_NextMode49_DCAN                                */
@@ -1851,112 +1612,65 @@ static T_COUNT_BYTE DtrmnJ1979_SuppM9Infotypes(T_COUNT_BYTE Ly1979_InfoType,
 /*                                                                   */
 /* Global Variables Updated: Va1979_M49_Data                         */
 /*********************************************************************/
+#define HexZero            0
+#define Cy1979_InitVal     0
 
 void FormJ1979_NextMode49_DCAN( void )
 {
-   BYTE                Ly1979_DataIdx ;
-   FOUR_BYTE_DATA_TYPE Lg1979_CalVerNum[ Cy1979_MaxCalIDs ];
-#if (XeTRVS_SYST_TYPE == XeTRVS_SYST_PCM) && \
-    (XeSYST_SEPERATE_CAL == CeSYST_AVAILABLE)
-   FOUR_BYTE_DATA_TYPE Lg1979_CalVerNum_TRN[ Cy1979_MaxCalIDs ];
-#endif
-  /* fix the bug of receiving "0xBF" when 0x78 Response*/
-   Ly1979_DataIdx = 0;
-   WrtDCAN_ServiceData( Cy1979_Mode09 , Ly1979_DataIdx++ );
-   WrtDCAN_ServiceData( Vy1979_InfoType , Ly1979_DataIdx++ );
+	BYTE Ly1979_InfoType ;
+	BYTE Li1979_DataIdx ;
+	BYTE Ly1979_MsgIdx ;
+	/* TbBOOLEAN Lb1979_Mode9_ID_6_Done = CbFALSE; */
 
-   switch(Vy1979_InfoType)
-   {
-      case Cy1979_InfoType6:
-        Sy1979_Mode09_CalIdx = 0;
+	if( ( Vi1979_Mode09_MsgIdx > Cy1979_InitVal ) && (Vi1979_Mode09_CurrMsgIdx < Vi1979_Mode09_MsgIdx))
+	{
+		Li1979_DataIdx = Cy1979_Mode09_MsgNumLoc;
+		WrtDCAN_ServiceData( Vy1979_InfoType , Li1979_DataIdx++ );
+		WrtDCAN_ServiceData( ++Vi1979_Mode09_CurrMsgIdx, Li1979_DataIdx++ );
 
-   #if (XeTRVS_SYST_TYPE == XeTRVS_SYST_PCM) && \
-       (XeSYST_SEPERATE_CAL == CeSYST_AVAILABLE)
-        WrtDCAN_ServiceData((Cy1979_Info_06_NumDataItems * Cy1979_MaxCVNIDsPCM),
-                              Ly1979_DataIdx++) ;
-   #else
-        WrtDCAN_ServiceData((Cy1979_Info_06_NumDataItems * Cy1979_MaxCVNIDs),
-                              Ly1979_DataIdx++) ;
-   #endif
+		switch (Vy1979_InfoType) {
+		case Cy1979_InfoType2:
+			for( Ly1979_MsgIdx = 0; Ly1979_MsgIdx < Cy1979_PerRespMaxChar; Ly1979_MsgIdx++ ) {
+				WrtDCAN_ServiceData( scnVehInfo.VIN[ Vi1979_Mode09_CalCharIdx++ ], Li1979_DataIdx++ );
+			}
+			break;
 
-        /* Returns CRC of calibration area*/
-        if(GetFILE_CVN_Available() && (!Sb1979_EngCVNSent))
-        {
-            // Lg1979_CalVerNum[Sy1979_Mode09_CalIdx] = GetFILE_CVN();
+		case Cy1979_InfoType4:
+			for( Ly1979_MsgIdx = 0; Ly1979_MsgIdx < Cy1979_PerRespMaxChar; Ly1979_MsgIdx++ ) {
+				WrtDCAN_ServiceData(scnVehInfo.CALID[Vi1979_Mode09_CalCharIdx++], Li1979_DataIdx++ );
+			}
+			break;
 
-            WrtDCAN_ServiceData
-                ( Lg1979_CalVerNum[Sy1979_Mode09_CalIdx].Byte_Access.Byte_One,
-                                           Ly1979_DataIdx++) ;
-            WrtDCAN_ServiceData
-                ( Lg1979_CalVerNum[Sy1979_Mode09_CalIdx].Byte_Access.Byte_Two,
-                                           Ly1979_DataIdx++) ;
-            WrtDCAN_ServiceData
-                ( Lg1979_CalVerNum[Sy1979_Mode09_CalIdx].Byte_Access.Byte_Three,
-                                           Ly1979_DataIdx++) ;
-            WrtDCAN_ServiceData
-                ( Lg1979_CalVerNum[Sy1979_Mode09_CalIdx].Byte_Access.Byte_Four,
-                                           Ly1979_DataIdx++) ;
+		case Cy1979_InfoType8:
+			for( Ly1979_MsgIdx = 0; Ly1979_MsgIdx < Cy1979_PerRespMaxChar; Ly1979_MsgIdx++ ) {
+				WrtDCAN_ServiceData(scnVehInfo.IUPR[Vi1979_Mode09_CalCharIdx++], Li1979_DataIdx++ );
+			}
+			break;
 
-            Sb1979_EngCVNSent = CbTRUE;
-        }
+      /* >>>>> This functionality was removed because the
+         calculation of the CVN happens so quickly after
+         keyon that testing was unable to take the code
+         through this path.  This will have to be placed
+         back into the code if the S/W as well as the Cal
+         are included in the CRC. <<<<<<<<<<<<<<<<<<<<<<<< */
 
-   #if (XeTRVS_SYST_TYPE == XeTRVS_SYST_PCM) && \
-       (XeSYST_SEPERATE_CAL == CeSYST_AVAILABLE)
-        if(GetTRVC_TransCntrlIsPCM()
-          && (GetFILE_CVN_Available_TRN())
-          && (Sb1979_EngCVNSent))
-        {
-            // Lg1979_CalVerNum_TRN[Sy1979_Mode09_CalIdx] = GetFILE_CVN_TRN();
+		default:
+			--Vi1979_Mode09_CurrMsgIdx;
+			break;
+		}
+	} else {
+		Li1979_DataIdx = Cy1979_InitVal;
+		Vi1979_Mode09_MsgIdx = Cy1979_InitVal;
+		Vi1979_Mode09_CurrMsgIdx = Cy1979_InitVal;
+		WrtDCANMultiRespInProgress( CbFALSE );
+	}
 
-            WrtDCAN_ServiceData
-                ( Lg1979_CalVerNum_TRN[Sy1979_Mode09_CalIdx].Byte_Access.Byte_One,
-                                           Ly1979_DataIdx++) ;
-            WrtDCAN_ServiceData
-                ( Lg1979_CalVerNum_TRN[Sy1979_Mode09_CalIdx].Byte_Access.Byte_Two,
-                                           Ly1979_DataIdx++) ;
-            WrtDCAN_ServiceData
-                ( Lg1979_CalVerNum_TRN[Sy1979_Mode09_CalIdx].Byte_Access.Byte_Three,
-                                           Ly1979_DataIdx++) ;
-            WrtDCAN_ServiceData
-                ( Lg1979_CalVerNum_TRN[Sy1979_Mode09_CalIdx].Byte_Access.Byte_Four,
-                                           Ly1979_DataIdx++) ;
-        }
-   #endif
-        break;
-
-      default:
-         break;
-    }
-
-    if ((Vy1979_InfoType == Cy1979_InfoType6)
-#if (XeTRVS_SYST_TYPE == XeTRVS_SYST_PCM) && \
-    (XeSYST_SEPERATE_CAL == CeSYST_AVAILABLE)
-        && (!GetFILE_CVN_Available() || !GetFILE_CVN_Available_TRN()))
-#else
-        && (!GetFILE_CVN_Available() ))
-#endif
-    {
-       WrtDCANMultiRespInProgress( CbTRUE ) ;
-       Sb1979_EngCVNSent = CbFALSE;
-       /***********************************************************
-       * Check if another 78 negative response needs to be sent   *
-       ***********************************************************/
-       if(GetDCAN_Send_Next_78Response())
-       {
-          SendLnStandardNegativeAnswer(
-                  CcDCAN_ReqCorrectlyRecvd_ResponsePending);
-          SetDCAN_Send_Next_78Response(CbFALSE);
-       }
-    }
-    else if(Vy1979_InfoType == Cy1979_InfoType6)
-    {
-       SendLnStandardPositiveAnswer( Ly1979_DataIdx );
-       WrtDCANMultiRespInProgress( CbFALSE ) ;
-    }
-    else
-    {
-       /* Do nothing */
-    }
+	if( Vi1979_Mode09_CurrMsgIdx >= Vi1979_Mode09_MsgIdx ) {
+		WrtDCANMultiRespInProgress( CbFALSE ) ;
+		SendLnStandardPositiveAnswer( Li1979_DataIdx );
+	} else {
+		SendLnStandardPositiveAnswer( Li1979_DataIdx );
+	}
 }
 
 /*********************************************************************/
