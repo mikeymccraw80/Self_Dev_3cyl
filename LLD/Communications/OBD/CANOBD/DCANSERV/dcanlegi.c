@@ -70,6 +70,9 @@
 * CAN OBD NW Layer Include Files
 ******************************************************************************/
 #include "dcancomm.h"  /*for PfrmDCAN_AckReqWithoutResponse()*/
+#include "hls.h"
+#include "lux_type.h"
+#include "j1979.h"
 
 /*********************************************************************/
 /*            TYPE DEFS                                              */
@@ -165,128 +168,203 @@ BYTE                            Vy1979_InfoType ;
 #define J1979_MODE_01_MIN_MSG_LENGTH (2)
 #define J1979_MODE_01_MAX_MSG_LENGTH (7)
 #define CyMode1_DataOffset           (1)
+#define Cy1979_Mode_01_MaxInfoType      (0x60)
 
 void J1979Mode1Handler_DCAN (void)
 {
-   BYTE       Ly1979_MsgIdx ;
-   BYTE       LyDCAN_PID_DataIdx ;
-   BYTE       Ly1979_DataIdx ;
-   BYTE       Ly1979_PIDIdx ;
-   TbBOOLEAN  Lb1979_PIDSupported ;
-   TbBOOLEAN  Lb1979_SuppPID_Requested ;
-   TbBOOLEAN  Lb1979_PIDData_Requested ;
-   BYTE       La1979_ServiceData[J1979_MODE_01_MAX_MSG_LENGTH] ;
-   BYTE       LyDCAN_1979_RequestedPID;
-   TbBOOLEAN  LbValid_PID;
+	BYTE       LyDCAN_PID_DataIdx ;
+	BYTE       Li1979_DataIdx ;
+	BYTE       LyFound;
 
-   Ly1979_MsgIdx = 1 ;
-   Lb1979_PIDSupported = CbFALSE;
-   Lb1979_SuppPID_Requested = CbFALSE;
-   Lb1979_PIDData_Requested = CbFALSE;
+	LyFound = 0;
 
-   /*Check if it is in standard diagnostic mode to support service*/
-   if(CheckStandardDiagnosticState())
-   {
-      /* check for message validity */
-      /* length should contain at least one PID */
-      if (( GetLnServiceDataLength () >= J1979_MODE_01_MIN_MSG_LENGTH )
-         && ( GetLnServiceDataLength () <= J1979_MODE_01_MAX_MSG_LENGTH ))
-      {
-         for(Ly1979_DataIdx = CyMode1_DataOffset;
-             Ly1979_DataIdx < GetLnServiceDataLength (); Ly1979_DataIdx++)
-         {
-             La1979_ServiceData[Ly1979_DataIdx] = (GetLnServiceData ())[Ly1979_DataIdx];
-         }
+	/*Check if it is in standard diagnostic mode to support service*/
+	if(CheckStandardDiagnosticState()) {
+		/* check for message validity */
+		/* length should contain at least one PID */
+		if (( GetLnServiceDataLength () == J1979_MODE_01_MIN_MSG_LENGTH ) ) {
+			Li1979_DataIdx = CyMode1_DataOffset;
+			Vy1979_InfoType = (GetLnServiceData ())[CyMode1_DataOffset];
+			WrtDCAN_ServiceData( Vy1979_InfoType , Li1979_DataIdx++ );
 
-         for(Ly1979_PIDIdx = CyMode1_DataOffset;
-             Ly1979_PIDIdx < GetLnServiceDataLength (); Ly1979_PIDIdx++)
-         {
-            LyDCAN_1979_RequestedPID = La1979_ServiceData[Ly1979_PIDIdx];
+			if ( Vy1979_InfoType < Cy1979_Mode_01_MaxInfoType ) {
+				LyFound = CbTRUE ;
+				switch(Vy1979_InfoType) {
+				case Cy1979_PID00:  /*PID 00*/
+					// WrtServiceData( Cy1979_PID00 , Li1979_DataIdx++ ) ;
+					/*support PID(01~08) 01, 02,03, 04,05, 06, 07*/
+					WrtDCAN_ServiceData( 0xFE , Li1979_DataIdx++ ) ;
+					/*support PID(09~10) 0B, 0C,0D, 0E,0F*/
+					WrtDCAN_ServiceData( 0x3E , Li1979_DataIdx++ ) ;
+					/*support PID(11~18) 11, 13,14, 15*/
+					WrtDCAN_ServiceData( 0xB8, Li1979_DataIdx++ ) ;
+					/*support PID(19~20) 1C, 1F,20*/
+					WrtDCAN_ServiceData( 0x13 , Li1979_DataIdx++ ) ;
+					break;
 
-            if( (!Lb1979_PIDData_Requested)
-              && ( (Cy1979_SuppPIDRange_00_20 == LyDCAN_1979_RequestedPID)
-                || (Cy1979_SuppPIDRange_20_40 == LyDCAN_1979_RequestedPID)
-                || (Cy1979_SuppPIDRange_40_60 == LyDCAN_1979_RequestedPID)
-                || (Cy1979_SuppPIDRange_60_80 == LyDCAN_1979_RequestedPID)
-                || (Cy1979_SuppPIDRange_80_A0 == LyDCAN_1979_RequestedPID)
-                || (Cy1979_SuppPIDRange_A0_C0 == LyDCAN_1979_RequestedPID)
-                || (Cy1979_SuppPIDRange_C0_E0 == LyDCAN_1979_RequestedPID)
-                || (Cy1979_SuppPIDRange_E0_FF == LyDCAN_1979_RequestedPID) ) )
-            {
-                Lb1979_SuppPID_Requested = CbTRUE;
-            }
-            else if((!Lb1979_SuppPID_Requested)
-		             && (Cy1979_SuppPIDRange_00_20 != LyDCAN_1979_RequestedPID)
-                      && (Cy1979_SuppPIDRange_20_40 != LyDCAN_1979_RequestedPID)
-                      && (Cy1979_SuppPIDRange_40_60 != LyDCAN_1979_RequestedPID)
-                      && (Cy1979_SuppPIDRange_60_80 != LyDCAN_1979_RequestedPID)
-                      && (Cy1979_SuppPIDRange_80_A0 != LyDCAN_1979_RequestedPID)
-                      && (Cy1979_SuppPIDRange_A0_C0 != LyDCAN_1979_RequestedPID)
-                      && (Cy1979_SuppPIDRange_C0_E0 != LyDCAN_1979_RequestedPID)
-                      && (Cy1979_SuppPIDRange_E0_FF != LyDCAN_1979_RequestedPID) )
-            {
-                Lb1979_PIDData_Requested = CbTRUE;
-            }
-            else
-            {
-                /* Cannot request Suppported PID and PID data in the same message */
-                Lb1979_PIDSupported = CbFALSE;
-                break;
-            }
+				case Cy1979_PID01: /*PID 01*/
+					WrtDCAN_ServiceData( telem_data.tele_Monitor_status[0] ,Li1979_DataIdx++);
+					WrtDCAN_ServiceData( telem_data.tele_Monitor_status[1] ,Li1979_DataIdx++);
+					WrtDCAN_ServiceData( telem_data.tele_Monitor_status[2] ,Li1979_DataIdx++);
+					WrtDCAN_ServiceData( telem_data.tele_Monitor_status[3] ,Li1979_DataIdx++);
+					break;
 
-            /* Test for valid PID and Build Buffer */
-			LbValid_PID = Get_Valid_PID_Info((WORD)
-               La1979_ServiceData[Ly1979_PIDIdx], MaskMode_01);
-            if(CbTRUE == LbValid_PID )
-            {
-               /* Write request PID Number to Transmit Buffer */
-               WrtDCAN_ServiceData( La1979_ServiceData[Ly1979_PIDIdx] ,
-                               Ly1979_MsgIdx++ ) ;
-               /* Build Transmit buffer 
-               LyDCAN_PID_DataIdx =
-                   PfrmDCAN_ReqstdPIDData( GetWrtbufferAddr(), Ly1979_MsgIdx ,
-                                           GetVeDIAG_PIDIndex() ) ;
-               */
-               LyDCAN_PID_DataIdx =
-                   ProcessReqstdPIDData( GetLnServiceData(), Ly1979_MsgIdx ,
-                                           GetVeDIAG_PIDIndex() ) ;
+				case Cy1979_PID02: /*PID 02*/
+					WrtDCAN_ServiceData( Hi8Of16( telem_data.tele_Cause_Frame_Pcode ), Li1979_DataIdx++);
+					WrtDCAN_ServiceData( Lo8Of16( telem_data.tele_Cause_Frame_Pcode ), Li1979_DataIdx++);
+					break;
 
-               if(LyDCAN_PID_DataIdx != Ly1979_MsgIdx)
-               {
-                  Lb1979_PIDSupported = CbTRUE;
-                  /* Buffer filled up with PID data, send positive response */
-                  Ly1979_MsgIdx = LyDCAN_PID_DataIdx ;
-               }
-               else
-               {
-                  /* Buffer not filled with PID data for some reason */
-                  Ly1979_MsgIdx--;
-               }
-            }
-         }
+				case Cy1979_PID03: /*PID 03*/
+					WrtDCAN_ServiceData( telem_data.tele_B_FuelStatus,Li1979_DataIdx++);
+					break;
 
-         if(Lb1979_PIDSupported)
-         {
-            /* Send Keyword message buffer */
-            SendLnStandardPositiveAnswer ( Ly1979_MsgIdx  );
-         }
-         else
-         {
-            /* Do not send any response  */
-            PfrmDCAN_AckReqWithoutResponse();
-         }
-      }
-      else
-      {
-         /* Do not send any response if invalid message received */
-         PfrmDCAN_AckReqWithoutResponse ();
-      }
-   }
-   else
-   {
-       /* Do not send a response if the ECU is not in standard diagnostic session */
-       PfrmDCAN_AckReqWithoutResponse ();
-   }
+				case Cy1979_PID04: /*PID 04*/
+					WrtDCAN_ServiceData( telem_data.tele_CsMaf,Li1979_DataIdx++);
+					break;
+
+				case Cy1979_PID05: /*PID 05*/
+					WrtDCAN_ServiceData( telem_data.tele_TmLin,Li1979_DataIdx++);
+					break;
+
+				case Cy1979_PID06: /*PID 06*/
+					WrtDCAN_ServiceData( telem_data.tele_fLc,Li1979_DataIdx++);
+					break;
+
+				case Cy1979_PID07: /*PID 07*/
+					WrtDCAN_ServiceData( telem_data.tele_fLcAd,Li1979_DataIdx++);
+					break;
+
+				case Cy1979_PID0B:
+					WrtDCAN_ServiceData( telem_data.tele_Pmap,Li1979_DataIdx++);
+					break;
+
+				case Cy1979_PID0C:     
+					WrtDCAN_ServiceData( Hi8Of16(telem_data.tele_N),Li1979_DataIdx++);
+					WrtDCAN_ServiceData( Lo8Of16(telem_data.tele_N),Li1979_DataIdx++);
+					break;
+
+				case Cy1979_PID0D:
+					WrtDCAN_ServiceData( telem_data.tele_Vsp,Li1979_DataIdx++);
+					break;
+
+				case Cy1979_PID0E:
+					WrtDCAN_ServiceData( telem_data.tele_IgaOut,Li1979_DataIdx++);
+					break;
+
+				case Cy1979_PID0F:
+					WrtDCAN_ServiceData( telem_data.tele_TaLin,Li1979_DataIdx++);
+					break;
+
+				case Cy1979_PID14:
+					WrtDCAN_ServiceData( telem_data.tele_uLsb,Li1979_DataIdx++);
+					WrtDCAN_ServiceData( telem_data.tele_uLsbfLc,Li1979_DataIdx++);
+					break;
+
+				case Cy1979_PID15:
+					WrtDCAN_ServiceData( telem_data.tele_uLsa,Li1979_DataIdx++);
+					WrtDCAN_ServiceData( telem_data.tele_uLsafLc,Li1979_DataIdx++);
+					break;
+
+				case Cy1979_PID1C:
+					WrtDCAN_ServiceData( telem_data.tele_obd_Type,Li1979_DataIdx++);
+					break;
+
+				case Cy1979_PID1D:
+					WrtDCAN_ServiceData( telem_data.tele_O2SPos,Li1979_DataIdx++);
+					break;
+
+				case Cy1979_PID1F:
+					WrtDCAN_ServiceData( Hi8Of16(telem_data.tele_tStaEnd),Li1979_DataIdx++);
+					WrtDCAN_ServiceData( Lo8Of16(telem_data.tele_tStaEnd),Li1979_DataIdx++);
+					break;
+
+				case Cy1979_PID20:
+					//    WrtServiceData( Cy1979_PID20 , Li1979_DataIdx++ ) ;
+					/*support PID(21~28) 21*/
+					WrtDCAN_ServiceData( 0x80,Li1979_DataIdx++);
+					/*support PID(29~30) 2E, 2F*/
+					WrtDCAN_ServiceData( 0x07,Li1979_DataIdx++);
+					/*support PID(31~38) 30,33*/
+					WrtDCAN_ServiceData( 0x20,Li1979_DataIdx++);
+					/*support PID(31~40) */
+					WrtDCAN_ServiceData( 0x11,Li1979_DataIdx++);
+					break;
+
+				case Cy1979_PID21:
+					WrtDCAN_ServiceData( Hi8Of16(telem_data.tele_KmQ6Mil),Li1979_DataIdx++);
+					WrtDCAN_ServiceData( Lo8Of16(telem_data.tele_KmQ6Mil),Li1979_DataIdx++);
+					break;
+
+				case Cy1979_PID2E:
+					WrtDCAN_ServiceData( telem_data.tele_DuCyPgOut,Li1979_DataIdx++);
+					break;
+
+				case Cy1979_PID30:
+					WrtDCAN_ServiceData( telem_data.tele_WmuCntVal,Li1979_DataIdx++);
+					break;
+
+				case Cy1979_PID33:
+					WrtDCAN_ServiceData( telem_data.tele_Pam,Li1979_DataIdx++);
+					break;
+
+				case Cy1979_PID3C:
+					WrtDCAN_ServiceData( Hi8Of16(telem_data.tele_TcatPre_b),Li1979_DataIdx++);
+					WrtDCAN_ServiceData( Lo8Of16(telem_data.tele_TcatPre_b),Li1979_DataIdx++);
+					break;
+
+				case Cy1979_PID40:
+					//      WrtServiceData( Cy1979_PID40 , Li1979_DataIdx++ ) ;
+					/*support PID(41~48) 42, 46*/
+					WrtDCAN_ServiceData( 0x44,Li1979_DataIdx++);
+					/*support PID(49~50) */
+					WrtDCAN_ServiceData( 0x00,Li1979_DataIdx++);
+					/*support PID(51~58) 30,33*/
+					WrtDCAN_ServiceData( 0x00,Li1979_DataIdx++);
+					/*support PID(59~60) */
+					WrtDCAN_ServiceData( 0x00,Li1979_DataIdx++);
+					break;
+
+				case Cy1979_PID42:
+					WrtDCAN_ServiceData(  Hi8Of16(telem_data.tele_Ub_b),Li1979_DataIdx++);
+					WrtDCAN_ServiceData(  Lo8Of16(telem_data.tele_Ub_b),Li1979_DataIdx++);
+					break;
+
+				case Cy1979_PID45:
+					WrtDCAN_ServiceData( telem_data.tele_TpPos,Li1979_DataIdx++);
+					break;
+
+				case Cy1979_PID46:
+					WrtDCAN_ServiceData( telem_data.tele_Tam,Li1979_DataIdx++);
+					break;
+
+				case Cy1979_PID51:
+					WrtDCAN_ServiceData( telem_data.tele_FuelType,Li1979_DataIdx++);
+					break;
+
+				case Cy1979_PID5A:
+					WrtDCAN_ServiceData( telem_data.tele_PedPos,Li1979_DataIdx++);
+					break;
+
+				default: 
+					/* Send negative responce if PID not supported */
+					LyFound = CbFALSE ;                 
+					break;
+				}
+
+				if ( LyFound != CbFALSE ) {
+					SendLnStandardPositiveAnswer( Li1979_DataIdx );
+				} else {
+					SendLnStandardNegativeAnswer(nrcSubFunctionNotSupported_InvalidFormat);
+				}
+			} else {
+				/* Send negative responce if PID not supported */
+				SendLnStandardNegativeAnswer(nrcSubFunctionNotSupported_InvalidFormat);
+			}
+		} else {
+			/* Send negative responce if PID not supported */
+			SendLnStandardNegativeAnswer(nrcSubFunctionNotSupported_InvalidFormat);
+		}
+	}
 }
 #endif
 
@@ -2115,10 +2193,4 @@ void FormJ1979_Mode_4A_Data( void )
 * Revision History:
 *
 * Rev.  YYMMDD Who RSM# Changes
-* ----- ------ --- ---- -------------------------------------------------------
-* 1.0  110401  cjqq       Base on GMLAN project
-* 7.0  130614  xll  SCR#1153 RSM_CTC_8205_OBD_IUPT_InterfaceChange For Mode 09 type 08_v01_20130402.doc
-* 8.0  130628  xll  SCR#1168 Change GetSYST_BTC_NR() to KySYST_BTC_NR[].
-* 9.0  130830  xll  RCR#1239 Added LbValid_PID in function J1979Mode1Handler_DCAN(),J1979Mode2Handler_DCAN()
-*
 ******************************************************************************/
