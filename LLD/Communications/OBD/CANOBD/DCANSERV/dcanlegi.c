@@ -715,43 +715,23 @@ void FormJ1979_Mode_43_Data_DCAN( void )
 /*********************************************************************/
 #if (XeDCAN_SID_04_Supported == CeDCAN_Supported)
 /* no callback need to be set for mode 44 transmit*/
-#define CcM4_RETURN_ID_OFFSET     (1)
+#define J1979_MODE_04_MSG_LENGTH  (1)
 
 void J1979Mode4Handler_DCAN (void)
 {
-   /*Check if it is in standard diagnostic mode to support service*/
-   if(CheckStandardDiagnosticState())
-   {
-      if ( ( GetLnServiceDataLength() ==
-                    ( J1979_MODE_04_MSG_LENGTH ) )
-        && ( GetVIOS_EngSt_Run() ))
-        // && ( ! KbDCANCORE_MODE4_With_EngRUN ) )
-      {
-         SendLnStandardNegativeAnswer(
-                       CcDCAN_CondNotCorrect_RequestSequenceError);
-      }
-      else if (GetLnServiceDataLength() ==
-                    ( J1979_MODE_04_MSG_LENGTH ))
-      {
-         /* It is not required to reply after clearing the DTC's.
-          * The DTC's should be cleared within 1 second of sending
-          * the response.
-         */
-         SendLnStandardPositiveAnswer ( CcM4_RETURN_ID_OFFSET );
-         /* imported from CMNDTC module */
-         ClearDiagnosticData ();
-      }
-      else
-      {
-          /* Do not send a response if request invalid */
-          PfrmDCAN_AckReqWithoutResponse();
-      }
-   }
-   else
-   {
-       /* Do not send a response if the ECU is not in standard diagnostic session */
-       PfrmDCAN_AckReqWithoutResponse();
-   }
+	if (GetLnServiceDataLength() == ( J1979_MODE_04_MSG_LENGTH ) && ( GetVIOS_EngSt_Run())) {
+		SendLnStandardNegativeAnswer(CcDCAN_CondNotCorrect_RequestSequenceError);
+	} else if (GetLnServiceDataLength() == ( J1979_MODE_04_MSG_LENGTH )) {
+		/* It is not required to reply after clearing the DTC's.
+		* The DTC's should be cleared within 1 second of sending
+		* the response.
+		*/
+		B_DiagInfoClrReq = true;
+		SendLnStandardPositiveAnswer ( RETURN_ID_OFFSET );
+		/* imported from CMNDTC module */
+	} else {
+		SendLnStandardNegativeAnswer(nrcSubFunctionNotSupported_InvalidFormat);
+	}
 }
 #endif
 
