@@ -197,6 +197,10 @@ etc_signals etc_sig;
 //soh fault
 Soh_Fault_Log_Type soh_fault;
 
+// electronic pump fuel function
+bool                 B_EOL_FuelAdjust;
+bool                 E_EOL_FuelAdjust;
+
 #define START_SECTION_static_volatile_SlowRam_32bit
 #include "PRAGMA_CHERY.h"
 uint32_t hlsbss_test0;
@@ -221,6 +225,8 @@ T_MILLISECONDSb PfKNOC_phi_FinalWindow2_length;
 
 extern bool     First_Syn_Flag;
 
+void HAL_GPIO_SET_INJECTION_Enable(bool in_enable);
+void HAL_GPIO_SET_INJECTION_GPIO_Mode_Enable(bool in_enable);
 /* ============================================================================ *\
  * Local FUNCTION.
 \* ============================================================================ */
@@ -320,6 +326,8 @@ void HLS_Task_1000ms(void)
 {
     if (b_toggle_function)
         Test_DO_Toggle_Function();
+	// HAL_GPIO_SET_INJECTION_Enable(b_toggle_function);
+	// b_toggle_function = !b_toggle_function;
 }
 
 void HLS_afterrun(void)
@@ -330,6 +338,7 @@ void HLS_afterrun(void)
 /*HLS initialization function.*/
 void HLS_ini(void)
 {
+	// HAL_GPIO_SET_INJECTION_GPIO_Mode_Enable(false);
 	/* etc signal output set */
 	etc_sig.etc_enable = true;
 	etc_sig.etc_freq = 500; //set to 2khz

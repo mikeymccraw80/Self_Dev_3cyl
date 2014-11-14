@@ -27,7 +27,7 @@
 #include "hal_eng.h"
 #include "id.h"
 #include "hls.h"
-
+#include "hal_gpio.h"
 
 #define CyKW2K_NVM_Reset_MsgSize            2
 #define MODE_1A_MSG_LENGTH                  2
@@ -36,6 +36,9 @@
 #define CyKW2K_JumpToBootMsgSize           (2)
 #define KHI_ACTUATOR_TEST_MsgSize           3
 #define CyKHIActuatorTestLocalId            2
+#define SyFuelCalDataLength                 3
+#define SyFuelCalHighBytePosition           1
+#define SyFuelCalLowBytePosition            2
 
 #define srliActivateSecurityAccess         (0x08)
 #define srliCheckFlashEnvironment          (0x09)
@@ -43,6 +46,8 @@
 #define CyKW2K_NVM_Reset                   (0xAA)
 #define CyKW2K_CopyKernelToRAM             (0xFD)
 #define KHI_ACTUATOR_TEST                  (0x81)
+#define srliFuelCalHighByte                (0x7F)
+#define srliFuelCalLowByte                 (0x00)
 
 /* khi actuator test id */
 #define KHI_SUPPORT_FLAG_C0                 (0xC0)
@@ -58,7 +63,9 @@
 #define KHI_Fan2_Request                    (0xE6)
 #define KHI_CpgV_Request                    (0xE8)
 
-
+extern TbBOOLEAN     SaINJD_CktTestFailed[4];
+extern TbBOOLEAN     SbEMSD_FPRDShortHiTestFailed;
+extern TbBOOLEAN     SbEMSD_FPRDShortLoTestFailed;
 /******************************************************************************
  *  Global NVM Definitions
  *****************************************************************************/
@@ -67,6 +74,7 @@ bool   NbFILE_NVM_Reset_RequestFromSerial;
 // #pragma section []
 
 uint8_t khi_last_test;
+bool    KW31_EndofLine_FuelAdjustMode;
 
 void KwJ14230StartRoutineByLocalIdentifier( void )
 {
@@ -74,6 +82,12 @@ void KwJ14230StartRoutineByLocalIdentifier( void )
 	uint8_t new_flag;
 	uint8_t TrBytes;
 	uint8_t khi_local_id;
+	bool    result;
+
+	/*check the data length */
+	if ( GetKeyword2000ServiceDataLength() < 2) {
+		SendStandardNegativeAnswer( nrcSubFunctionNotSupported_InvalidFormat );
+	}
 
 	switch (GetKw2000ServiceData(CyLocalId)) {
 	case CyKW2K_NVM_Reset :
@@ -109,6 +123,56 @@ void KwJ14230StartRoutineByLocalIdentifier( void )
 				SendStandardPositiveAnswer(CyKW2K_Mode31Msg_Offset);
 				SetCopyAndExecuteKernelPending(CbTRUE);
 			}
+		}
+		break;
+
+	case srliFuelCalHighByte:
+		/*check the data length */
+		if ( GetKeyword2000ServiceDataLength() != 3) {
+			SendStandardNegativeAnswer(nrcSubFunctionNotSupported_InvalidFormat );
+			break;
+		}
+		if ( GetKw2000ServiceData(SyFuelCalLowBytePosition) != srliFuelCalLowByte) {
+			SendStandardNegativeAnswer(nrcSubFunctionNotSupported_InvalidFormat );
+			break;
+		}
+
+		if (KbCAN_CHERY_Fuel_Adjust_Enable) {
+			if (!KW31_EndofLine_FuelAdjustMode) {
+				/* check the injector error */
+				result = (SaINJD_CktTestFailed[0] || SaINJD_CktTestFailed[1] || \
+				           SaINJD_CktTestFailed[2] || SaINJD_CktTestFailed[3]);
+				/* check the fuel pump error */
+				result = (result || SbEMSD_FPRDShortHiTestFailed || SbEMSD_FPRDShortLoTestFailed);
+				/* check the engine turning flag */
+				result = (result || GetEngineTurning());
+
+				if ((!result) && (GetVIOS_EngSt() == CeENG_KEYON)) { 
+					/*adjust the injector port to GPIO Mode*/
+					HAL_GPIO_SET_INJECTION_GPIO_Mode_Enable(true);
+					/* shut down the GPIO output */
+					HAL_GPIO_SET_INJECTION_Enable(true);
+					B_EOL_FuelAdjust = true ;
+					E_EOL_FuelAdjust = false ;
+					KW31_EndofLine_FuelAdjustMode = true;
+					TrBytes = 1;
+					WrtKw2000ServiceData(0x7F, TrBytes++);
+					WrtKw2000ServiceData(0x01, TrBytes++);
+					SendStandardPositiveAnswer(TrBytes); 
+				} else {
+					B_EOL_FuelAdjust = false ;
+					E_EOL_FuelAdjust = true ;
+					/* shut down the GPIO output */
+					HAL_GPIO_SET_INJECTION_Enable(false);
+					/*adjust the injector port back to tpu*/
+					HAL_GPIO_SET_INJECTION_GPIO_Mode_Enable(false);
+					SendStandardNegativeAnswer( nrcConditionsNotCorrect_RequestSequenceError2 );
+				}
+			} else {
+				SendStandardNegativeAnswer(nrcConditionsNotCorrect_RequestSequenceError3);
+			}
+		} else {
+			SendStandardNegativeAnswer(nrcSubFunctionNotSupported_InvalidFormat);
 		}
 		break;
 

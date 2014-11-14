@@ -617,6 +617,9 @@ extern uint8_t B_FofEtsm;
 extern uint16_t Vsp; //EOBD_KPH
 extern bool B_Fof;
 
+extern bool                 B_EOL_FuelAdjust;
+extern bool                 E_EOL_FuelAdjust;
+
 /* knock part, defined in HLS */
 extern bool knock_flag_a;
 extern bool knock_flag_b;
