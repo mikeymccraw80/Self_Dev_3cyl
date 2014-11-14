@@ -890,6 +890,62 @@ const   Volts_Plus_Fraction    K_VOLT_KeyOnThreshold = FixDefConst(7.5, Volts_Pl
 const   Volts_Plus_Fraction    K_VOLT_KeyoffThreshold = FixDefConst(4.5, Volts_Plus_Fraction);
 
 
+/*
+*| hwiocald.{
+*|   K_VAL_tFuelInjAdjust {
+*|     : is_calconst;
+*|     : description ="This calibration determines the End of line fuel adjust time. The fuel injector will be opened as "
+*| "the calibartion time, in the end of line mode which be trigged by the Tester."
+*| "Value To Calibrate Out: 0 "
+*| "Enginerring Range: 0 to 256 s  Resolution: 0.001 s / Count ";
+*|     : type = types.t_w_R7p8125ms;
+*|     : units = "seconds";
+*|   }
+*| }
+*/
+const TwTIME_t_R7p8125ms   K_VAL_tFuelInjAdjust = C_R7p8125ms16(2.00);
+
+/*
+*| hwiocald.{
+*|   K_VAL_tFuelPumpAdjust {
+*|     : is_calconst;
+*|     : description ="This calibration determines the End of line fuel pump open time . The fuel pump will be opened as  "
+*| "the calibartion  time, in the end of line mode which be trigged by the Tester. "
+*| "Value To Calibrate Out: 0 "
+*| "Enginerring Range: 0 to 256 s  Resolution: 0.001 s / Count ";
+*|     : type = types.t_w_R7p8125ms;
+*|     : units = "seconds";
+*|   }
+*| }
+*/
+const TwTIME_t_R7p8125ms   K_VAL_tFuelPumpAdjust = C_R7p8125ms16(20.00);
+
+
+/*
+*| hwiocald.{
+*|   K_VAL_tFuelPumpPreWork {
+*|     : is_calconst;
+*|     : description ="This calibration determines the End of line fuel pump prework time . The fuel pump will be opened as  "
+*| "the calibartion time, in the end of line mode which be trigged by the Tester. "
+*| "Value To Calibrate Out: 0 "
+*| "Enginerring Range: 0 to 256 s  Resolution: 0.001 s / Count ";
+*|     : type = types.t_w_R7p8125ms;
+*|     : units = "seconds";
+*|   }
+*| }
+*/
+const TwTIME_t_R7p8125ms   K_VAL_tFuelPumpPreWork = C_R7p8125ms16(2.00);
+
+/*
+*| hwiocald.{
+*|    KbCAN_CHERY_Fuel_Adjust_Enable {
+*|       :is_calconst;
+*|       :units = "BOOLEAN";
+*|       :description = "Determine open Fuel Adjust function (true) or close Fuel Adjust function (false) .";
+*|    }
+*| }
+*/
+const bool    KbCAN_CHERY_Fuel_Adjust_Enable = true ;
 
 /*
 *| hwiocald.{
@@ -912,3 +968,5 @@ const   Volts_Plus_Fraction    K_VOLT_KeyoffThreshold = FixDefConst(4.5, Volts_P
 #pragma use_section SECTION_BRAIN_DEAD_CAL KySYST_BrainDeadBOOT_RecovEnbld
 const T_COUNT_BYTE KySYST_BrainDeadBOOT_RecovEnbld = 0xAA;
 #pragma section
+
+
