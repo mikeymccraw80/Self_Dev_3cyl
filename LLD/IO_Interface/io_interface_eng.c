@@ -6,7 +6,7 @@
 #include "hal_pulse.h"
 #include "vehicle_can_cald.h"
 #include "io_interface_os.h"
-
+#include "hal_gpio.h"
 
 //=============================================================================
 // global variable
@@ -73,7 +73,10 @@ void  IO_Eng_Engine_Start_Crank(void)
 {
 	crank_sig.crank_status.B_crank_no_sync = ( bitfield16_t )0;
 	crank_sig.crank_status.B_crank_stall = ( bitfield16_t )0;
-	crank_sig.crank_status.B_crank_pre_sync  =( bitfield16_t )1;
+	/* only when SMR(remap to CRUISI port) enabled, set the pre sync flag */
+	if (HAL_GPIO_GET_CRUISI_Status() == true) {
+		crank_sig.crank_status.B_crank_pre_sync  =( bitfield16_t )1;
+	}
 }
 
 
