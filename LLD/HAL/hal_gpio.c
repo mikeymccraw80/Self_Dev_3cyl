@@ -7,6 +7,30 @@
 #include "dd_vsep_discrete_interface.h"
 #include "io_config_vsep.h"
 #include "hwiocald.h"
+#include "io_config_tpu.h"
+
+void HAL_GPIO_SET_INJECTION_Enable(bool in_enable)
+{
+	SIU_GPIO_DISCRETE_Set_State(HAL_GPIO_INJECTION1_CHANNEL,in_enable);
+	SIU_GPIO_DISCRETE_Set_State(HAL_GPIO_INJECTION2_CHANNEL,in_enable);
+	SIU_GPIO_DISCRETE_Set_State(HAL_GPIO_INJECTION3_CHANNEL,in_enable);
+	SIU_GPIO_DISCRETE_Set_State(HAL_GPIO_INJECTION4_CHANNEL,in_enable);
+}
+
+void HAL_GPIO_SET_INJECTION_GPIO_Mode_Enable(bool in_enable)
+{
+	if (in_enable) {
+		SIU_Pad_Config(HAL_GPIO_INJECTION1_CHANNEL, SIU_GPIO_PIN_ASSIGNMENT_GPIO);
+		SIU_Pad_Config(HAL_GPIO_INJECTION2_CHANNEL, SIU_GPIO_PIN_ASSIGNMENT_GPIO);
+		SIU_Pad_Config(HAL_GPIO_INJECTION3_CHANNEL, SIU_GPIO_PIN_ASSIGNMENT_GPIO);
+		SIU_Pad_Config(HAL_GPIO_INJECTION4_CHANNEL, SIU_GPIO_PIN_ASSIGNMENT_GPIO);
+	} else {
+		SIU_Pad_Config(HAL_GPIO_INJECTION1_CHANNEL, SIU_GPIO_PIN_ASSIGNMENT_PRIMARY_0);
+		SIU_Pad_Config(HAL_GPIO_INJECTION2_CHANNEL, SIU_GPIO_PIN_ASSIGNMENT_PRIMARY_0);
+		SIU_Pad_Config(HAL_GPIO_INJECTION3_CHANNEL, SIU_GPIO_PIN_ASSIGNMENT_PRIMARY_0);
+		SIU_Pad_Config(HAL_GPIO_INJECTION4_CHANNEL, SIU_GPIO_PIN_ASSIGNMENT_PRIMARY_0);
+	}
+}
 
 
 //=============================================================================

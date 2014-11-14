@@ -297,25 +297,28 @@ extern const SIU_PCR_T SIU_INITIAL_PCR_132;
 //of the eTPU_A[16:19]_GPIO[130:133] pins. This registers allow selection of the eTPU_A and GPIO
 //functions.
 extern const SIU_PCR_T SIU_INITIAL_PCR_133;
+#define  HAL_GPIO_INJECTION1_CHANNEL       SIU_GPIO_CHANNEL_133
 
 //etpu20
 //INJ2
 //The SIU_PCR134 ¨C SIU_PCR135 registers control the functions, directions, and static electrical attributes
 //of the eTPU_A[20:21]_IRQ[8:9]_GPIO[134:135] pins.
 extern const SIU_PCR_T SIU_INITIAL_PCR_134;
+#define  HAL_GPIO_INJECTION2_CHANNEL       SIU_GPIO_CHANNEL_134
 
 //etpu21
 //INJ3
 //The SIU_PCR134 ¨C SIU_PCR135 registers control the functions, directions, and static electrical attributes
 //of the eTPU_A[20:21]_IRQ[8:9]_GPIO[134:135] pins.
 extern const SIU_PCR_T SIU_INITIAL_PCR_135 ;
+#define  HAL_GPIO_INJECTION3_CHANNEL       SIU_GPIO_CHANNEL_135
 
 //etpu22
 //INJ4
 //The SIU_PCR136 register controls the function, direction, and static electrical attributes of the
 //eTPU_A[22]_IRQ[10]_eTPU_A[17]_GPIO[136] pin. The eTPU_A[17] is an output only function.
 extern const SIU_PCR_T SIU_INITIAL_PCR_136 ;
-
+#define  HAL_GPIO_INJECTION4_CHANNEL       SIU_GPIO_CHANNEL_136
 
 //etpu23
 //not active
