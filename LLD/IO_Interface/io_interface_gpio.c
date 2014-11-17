@@ -14,6 +14,7 @@
 //=============================================================================
 uint8_t LLD_di_samplecnt[LLD_DI_MAX_CHANNEL];
 bool Ign_off;
+extern bool    KW31_EndofLine_FuelAdjustMode;
 /*
 //=============================================================================
 //  IO_GPIO_DI_Task
@@ -377,16 +378,20 @@ void IO_GPIO_DO_Task(void)
 
 	if(Chk_SiemensImmo_Disabled()||(K_Immo_FuelPump_channel==CeFuelPumpPin)) {
 		if (ImmoStopEngine()) {
-			HAL_GPIO_SET_FPR_Enable((bool) false);
+			if (KW31_EndofLine_FuelAdjustMode == false)
+				HAL_GPIO_SET_FPR_Enable((bool) false);
 		} else {
-			HAL_GPIO_SET_FPR_Enable((bool) LLD_do_table[LLD_DO_FUEL_PUMP].value);
+			if (KW31_EndofLine_FuelAdjustMode == false)
+				HAL_GPIO_SET_FPR_Enable((bool) LLD_do_table[LLD_DO_FUEL_PUMP].value);
 		}
 		HAL_GPIO_SET_ACClutch_Enable((bool) LLD_do_table[LLD_DO_AC_CLUTCH].value);
 	} else {
 		if (ImmoStopEngine()) {
-			HAL_GPIO_SET_ACClutch_Enable(false);
+			if (KW31_EndofLine_FuelAdjustMode == false)
+				HAL_GPIO_SET_ACClutch_Enable(false);
 		} else {
-			HAL_GPIO_SET_ACClutch_Enable((bool) LLD_do_table[LLD_DO_FUEL_PUMP].value);
+			if (KW31_EndofLine_FuelAdjustMode == false)
+				HAL_GPIO_SET_ACClutch_Enable((bool) LLD_do_table[LLD_DO_FUEL_PUMP].value);
 		}
 		HAL_GPIO_SET_FPR_Enable((bool) LLD_do_table[LLD_DO_AC_CLUTCH].value);
 	}
