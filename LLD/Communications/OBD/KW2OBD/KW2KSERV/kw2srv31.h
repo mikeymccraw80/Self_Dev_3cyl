@@ -22,9 +22,10 @@
  *
 \* ============================================================================ */
 extern bool   NbFILE_NVM_Reset_RequestFromSerial;
-
+extern bool    KW31_EndofLine_FuelAdjustMode;
 
 void KwJ14230StartRoutineByLocalIdentifier( void );
+void LLD_Update_FuelCorrect_Model(void);
 
 
 

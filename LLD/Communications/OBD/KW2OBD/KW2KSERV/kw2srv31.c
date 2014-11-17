@@ -28,6 +28,9 @@
 #include "id.h"
 #include "hls.h"
 #include "hal_gpio.h"
+#include "id_cald.h"
+#include "hal_gpio.h"
+#include "immo_cal.h"
 
 #define CyKW2K_NVM_Reset_MsgSize            2
 #define MODE_1A_MSG_LENGTH                  2
@@ -75,6 +78,19 @@ bool   NbFILE_NVM_Reset_RequestFromSerial;
 
 uint8_t khi_last_test;
 bool    KW31_EndofLine_FuelAdjustMode;
+
+uint16_t    KW_EOL_CounterFreeRunning0;
+uint16_t    KW_EOL_CounterFreeRunning1;
+uint16_t    KW_EOL_CounterFreeRunning2;
+
+uint8_t     KW_EOL_initialization;
+
+bool Pb_FuelInjAdjust;
+//bool Pb_FuelPumpAdjust;
+bool Pb_FuelInjAdjust_stop;
+bool Pb_FuelPumpAdjust_stop;
+bool Pb_FuelPumpPreWork;
+bool Pb_EOL_Fueladjust;
 
 void KwJ14230StartRoutineByLocalIdentifier( void )
 {
@@ -151,7 +167,7 @@ void KwJ14230StartRoutineByLocalIdentifier( void )
 					/*adjust the injector port to GPIO Mode*/
 					HAL_GPIO_SET_INJECTION_GPIO_Mode_Enable(true);
 					/* shut down the GPIO output */
-					HAL_GPIO_SET_INJECTION_Enable(true);
+					HAL_GPIO_SET_INJECTION_Enable(false);
 					B_EOL_FuelAdjust = true ;
 					E_EOL_FuelAdjust = false ;
 					KW31_EndofLine_FuelAdjustMode = true;
@@ -213,18 +229,6 @@ void KwJ14230StartRoutineByLocalIdentifier( void )
 				B_SVSReq = 1;
 				khi_last_test = khi_local_id;
 				break;
-			// case KHI_IGN0_Request:
-				// B_Ign0Req = 1;
-				// khi_last_test = khi_local_id;
-				// break;
-			// case KHI_IGN1_Request:
-				// B_Ign1Req = 1;
-				// khi_last_test = khi_local_id;
-				// break;
-			// case KHI_IGN2_Request:
-				// B_Ign2Req = 1;
-				// khi_last_test = khi_local_id;
-				// break;
 			case KHI_Fan1_Request:
 				B_Fan1Req = 1;
 				khi_last_test = khi_local_id;
@@ -237,22 +241,6 @@ void KwJ14230StartRoutineByLocalIdentifier( void )
 				B_CpgVReq = 1;
 				khi_last_test = khi_local_id;
 				break;
-			// case KHI_ISC_Request:  //stepper motor self study
-				// B_ISCReq = 1;
-				// khi_last_test = khi_local_id;
-				// break;
-			// case KHI_SUPPORT_FLAG_C0:
-				// WrtKw2000ServiceData(SupFlagC0[0], TrBytes++);
-				// WrtKw2000ServiceData(SupFlagC0[1], TrBytes++);
-				// WrtKw2000ServiceData(SupFlagC0[2], TrBytes++);
-				// WrtKw2000ServiceData(SupFlagC0[3], TrBytes++);
-				// break;
-			// case KHI_SUPPORT_FLAG_E0:
-				// WrtKw2000ServiceData(SupFlagE0[0], TrBytes++);
-				// WrtKw2000ServiceData(SupFlagE0[1], TrBytes++);
-				// WrtKw2000ServiceData(SupFlagE0[2], TrBytes++);
-				// WrtKw2000ServiceData(SupFlagE0[3], TrBytes++);
-				// break;
 			default:
 				SendStandardNegativeAnswer(nrcGeneralReject);
 				return;
@@ -264,6 +252,82 @@ void KwJ14230StartRoutineByLocalIdentifier( void )
 	default :
 		SendStandardNegativeAnswer( nrcSubFunctionNotSupported_InvalidFormat ) ;
 		break ;
+	}
+}
+
+void LLD_Update_FuelCorrect_Model(void)
+{
+	bool    result;
+		/* check the injector error */
+	result = (SaINJD_CktTestFailed[0] || SaINJD_CktTestFailed[1] || \
+	           SaINJD_CktTestFailed[2] || SaINJD_CktTestFailed[3]);
+	/* check the fuel pump error */
+	result = (result || SbEMSD_FPRDShortHiTestFailed || SbEMSD_FPRDShortLoTestFailed);
+	/* check the engine turning flag */
+	result = (result || GetEngineTurning());
+	/* check the crank sig sync state */
+	result = (result || crank_sig.crank_status.B_crank_sync);
+
+	if (result || (GetVIOS_EngSt() != CeENG_KEYON) || (B_EOL_FuelAdjust == false)) {
+		KW31_EndofLine_FuelAdjustMode = false;
+		B_EOL_FuelAdjust = false;
+		E_EOL_FuelAdjust = true;
+		/* shut down the GPIO output */
+		HAL_GPIO_SET_INJECTION_Enable(false);
+		/*adjust the injector port back to tpu*/
+		HAL_GPIO_SET_INJECTION_GPIO_Mode_Enable(false);
+	} else {
+
+		if(((KW_EOL_initialization == 0) || ( KKPgmId != ProductionProgramId ))
+			&& (Pb_EOL_Fueladjust == false)
+			&& (Pb_FuelPumpAdjust_stop == false))
+		{
+			if (K_Immo_FuelPump_channel==CeFuelPumpPin) {
+				HAL_GPIO_SET_FPR_Enable(true);
+			} else {
+				HAL_GPIO_SET_ACClutch_Enable(true);
+			}
+
+			KW_EOL_initialization = 0xAA;
+			Pb_FuelPumpPreWork = true;
+			Pb_EOL_Fueladjust = true;
+		}
+		if( Pb_FuelPumpPreWork == true ) {
+			KW_EOL_CounterFreeRunning0++;
+		}
+		if(KW_EOL_CounterFreeRunning0 >= K_VAL_tFuelPumpPreWork) {
+			Pb_FuelInjAdjust = true;
+			Pb_FuelPumpPreWork = false;
+			KW_EOL_CounterFreeRunning0 = 0;
+		}
+		if(Pb_FuelInjAdjust == true) {
+			if(Pb_FuelInjAdjust_stop == false) {
+				KW_EOL_CounterFreeRunning1++;
+				/* open the GPIO output */
+				HAL_GPIO_SET_INJECTION_Enable(true);
+			}
+			if(Pb_FuelPumpAdjust_stop == false) {
+				KW_EOL_CounterFreeRunning2++;
+			}
+			if(KW_EOL_CounterFreeRunning1 == K_VAL_tFuelInjAdjust) {
+				/* shut down the GPIO output */
+				HAL_GPIO_SET_INJECTION_Enable(false);
+				Pb_FuelInjAdjust_stop = true;
+				KW_EOL_CounterFreeRunning1 = 0;
+			}
+			if(KW_EOL_CounterFreeRunning2 == K_VAL_tFuelPumpAdjust) {
+				if (K_Immo_FuelPump_channel==CeFuelPumpPin) {
+					HAL_GPIO_SET_FPR_Enable(false);
+				} else {
+					HAL_GPIO_SET_ACClutch_Enable(false);
+				}
+				Pb_FuelPumpAdjust_stop = true;
+				KW_EOL_CounterFreeRunning2 = 0;
+			}
+			if(Pb_FuelInjAdjust_stop && Pb_FuelPumpAdjust_stop) {
+				Pb_FuelInjAdjust = false;
+			}
+		}
 	}
 }
 
