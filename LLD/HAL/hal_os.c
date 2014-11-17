@@ -36,6 +36,7 @@
 #include "etcdpapi.h"
 #include "condpapi.h"
 #include "hal_mileage.h"
+#include "kw2srv31.h"
 
 #define HLS_TASK_2MS_PATTERN (HLS_TASK_5MS   | HLS_TASK_10MS  | \
 							  HLS_TASK_20MS  | HLS_TASK_50MS  | \
@@ -215,6 +216,9 @@ void  HAL_OS_10ms_Task(void)
 
 	HAL_SOH_Update_Loop_Sequence_10MS();
 	IO_GPIO_DO_Task();
+	if (KW31_EndofLine_FuelAdjustMode == true) {
+		LLD_Update_FuelCorrect_Model();
+	}
 	IO_Pulse_Update_Function();
 	if(OS_10ms_Cnt1&1) {
 		ScheduleKnockFastBckgLogic();
