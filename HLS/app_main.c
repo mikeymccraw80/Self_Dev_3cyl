@@ -117,7 +117,36 @@ unsigned char  Ta;
  uint16_t TpPosNlp;
  uint8_t FrBitsEtsm;
  uint8_t B_FofEtsm;
-
+ 
+ uint16_t TqiMx =0x1112;
+ uint16_t TqiDsr =0x1113;
+ uint16_t TqiAct =0x1114;
+ uint16_t tStaEndL =0x1115;
+ uint16_t PedPos =0x1116;
+ uint16_t FlVofLS =0x1117;
+ uint8_t  TqActRespEtsm =0xfe;
+ uint8_t  TpPosDsr_b;
+ uint8_t  TcatInPre_b;
+ uint8_t  TqActEtsm;
+ int16_t  TpPos1;
+ int16_t  TpPos2;
+ uint8_t  TpPosNlp_b;
+ uint16_t uTpNlp1;
+ uint8_t  uTp1Lw_b;
+ int16_t  AngVlvInOp1;
+ int16_t  AngDsrVlvOpIn;
+ uint16_t ToileKel;
+ uint16_t uPed2Dble;
+ uint16_t TexBfPreCat;
+ uint8_t  TmSta;
+ uint16_t MafPcv;
+ uint16_t FtCntEmisCyl_[4];
+ int16_t  dTqIdcPD;
+ uint16_t uLsbAdc;
+ uint16_t uLsaAdc;
+ uint8_t  B_Vis;
+ uint8_t  B_Pmp;
+ 
 Freeze_Frame_Elem  DIAG_STATUS_FREEZE_FRAME[3];
 tele_type telem_data;
 uint8_t 	count_DTCs_SID03;

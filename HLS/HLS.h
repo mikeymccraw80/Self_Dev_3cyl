@@ -617,6 +617,35 @@ extern uint8_t B_FofEtsm;
 extern uint16_t Vsp; //EOBD_KPH
 extern bool B_Fof;
 
+extern uint16_t TqiMx;
+extern uint16_t TqiDsr;
+extern uint16_t TqiAct;
+extern uint16_t tStaEndL;
+extern uint16_t PedPos;
+extern uint16_t FlVofLS;
+extern uint8_t  TqActRespEtsm;
+extern uint8_t  TpPosDsr_b;
+extern uint8_t  TcatInPre_b;
+extern uint8_t  TqActEtsm;
+extern int16_t  TpPos1;
+extern int16_t  TpPos2;
+extern uint8_t  TpPosNlp_b;
+extern uint16_t uTpNlp1;
+extern uint8_t  uTp1Lw_b;
+extern int16_t  AngVlvInOp1;
+extern int16_t  AngDsrVlvOpIn;
+extern uint16_t ToileKel;
+extern uint16_t uPed2Dble;
+extern uint16_t TexBfPreCat;
+extern uint8_t  TmSta;
+extern uint16_t MafPcv;
+extern uint16_t FtCntEmisCyl_[4];
+extern int16_t  dTqIdcPD;
+extern uint16_t uLsbAdc;
+extern uint16_t uLsaAdc;
+extern uint8_t  B_Vis;
+extern uint8_t  B_Pmp;
+
 extern bool                 B_EOL_FuelAdjust;
 extern bool                 E_EOL_FuelAdjust;
 
