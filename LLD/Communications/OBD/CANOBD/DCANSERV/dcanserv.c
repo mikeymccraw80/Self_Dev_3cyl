@@ -81,6 +81,7 @@
 #include "dcansv27.h" /*LnSecurityAccess()*/
 #include "dcansv2a.h" /*LnReadDataByPacketIdentifier ()*/
 #include "dcansv2e.h" /*LnWriteDataByIdentifier()*/
+#include "dcansv2f.h" /*LnInputOutputControlByIdentifier*/
 #include "dcansv31.h"/*LnTesterPresent()*/
 #include "dcansv3e.h"/*LnRoutineControl()*/
 #include "dcansv28.h"/*LnCommunicationControl()*/

@@ -29,13 +29,15 @@
 /******************************************************************************
 * APP Include Files
 ******************************************************************************/
+#include "kw2srv30.h"
+#include "HLS.h"
 /******************************************************************************
 * CAN OBD Service Include Files
 ******************************************************************************/
 /******************************************************************************
 * OBD lib Service Include Files
 ******************************************************************************/
-#include "ofvcpall.h"/*GetOFVC_OvrdDevice()*/
+//#include "ofvcpall.h"/*GetOFVC_OvrdDevice()*/
 /******************************************************************************
 * CAN OBD NW Layer Include Files
 ******************************************************************************/
@@ -69,6 +71,17 @@
 
 #define CyOFVC_LN_MAX_NUM_RESPONSES 22
 
+
+#define PID_Inj0Req     0x0907
+#define PID_Inj1Req     0x0908
+#define PID_Inj2Req     0x0909
+#define PID_Inj3Req     0x090A
+#define PID_FulPReq     0x0901
+#define PID_MILReq      0x090B
+#define PID_SVSReq      0x090C
+#define PID_Fan1Req     0x0902
+#define PID_Fan2Req     0x0903
+#define PID_CpgVReq     0x0900
 /*****************************************************************************
  *  Local Data Define
  *****************************************************************************/
@@ -118,6 +131,10 @@ const BYTE CyOFVC_LN_MessageResponseTranslate[CyOFVC_LN_MAX_NUM_RESPONSES] =
 #if XeSYST_CO_ADJUST_OPTION == CeSYST_AVAILABLE
 static T_COUNT_BYTE          SyDCAN_OvrdResponseLength;
 #endif 
+/*****************************************************************************
+ *  GLOBAL Variable 
+ *****************************************************************************/
+extern TsOFVC_OvrdMessage VsOFVC_OvrdRqstStruct;
 
 /*****************************************************************************
  *
@@ -192,11 +209,13 @@ void PostOFVC_LnResponseToRequest (void)
 /**********************************************************************/
 void LnInputOutputControlByIdentifier (void)
 {
-
+  uint16_t WriteDataIdentifierId;
+  
+  WriteDataIdentifierId = ((GetLnServiceData ())[1]<<8)+ (GetLnServiceData ())[2];
   /*--- After 5sec, initial state is restored ----*/
 //  LnActivateTesterPresent ();
-  if((GetLnServiceDataLength()<4)
-  	||(GetLnServiceDataLength()>5))
+  if(GetLnServiceDataLength() != 3)
+
   {
      SendLnStandardNegativeAnswer(IncorrectMessageLength);    
   }
@@ -205,46 +224,76 @@ void LnInputOutputControlByIdentifier (void)
   {
      SendLnStandardNegativeAnswer(SecurityAccessDenied);  
   }
-  else if ((GetLnServiceData ())[CyOFVC_LN_DATA1] == 0x20)
+  else// if ((GetLnServiceData ())[CyOFVC_LN_DATA1] == 0x20)
   {
-     switch (GetLnServiceDataLength ())
+     switch (WriteDataIdentifierId)
      {
-         case  (5): 
-           if((GetLnServiceData ()) [CyOFVC_LN_DATA3]!=0x00)
-           {
-              VsOFVC_OvrdRqstStruct.VyOFVC_Action1 = (GetLnServiceData ()) [CyOFVC_LN_DATA4];
-              VsOFVC_OvrdRqstStruct.VyOFVC_Request = (GetLnServiceData ()) [CyOFVC_LN_DATA3] ;
-              VsOFVC_OvrdRqstStruct.VyOFVC_Device = (GetLnServiceData ()) [CyOFVC_LN_DATA2] ;
-              VsOFVC_OvrdRqstStruct.VbOFVC_RqstPending = CbTRUE ;
-           }
-           else
-           {
-              SendLnStandardNegativeAnswer(IncorrectMessageLength) ;            
-           }
-         break;
+         case  PID_Inj0Req: 
 
-         case  (4):
-           if((GetLnServiceData ()) [CyOFVC_LN_DATA3]==0x00)
-           {
-              VsOFVC_OvrdRqstStruct.VyOFVC_Request = (GetLnServiceData ()) [CyOFVC_LN_DATA3];
-              VsOFVC_OvrdRqstStruct.VyOFVC_Device = (GetLnServiceData ()) [CyOFVC_LN_DATA2];
-              VsOFVC_OvrdRqstStruct.VbOFVC_RqstPending = CbTRUE;
-           }
-           else
-           {
-              SendLnStandardNegativeAnswer(IncorrectMessageLength) ; 
-           }
-         break;
+			B_Inj0Req = 1;  
+            SendLnStandardPositiveAnswer (3);
+			break;
 			
-         default:
-            SendLnStandardNegativeAnswer(IncorrectMessageLength) ;
-         break;
+		 case  PID_Inj1Req:
+
+			B_Inj1Req = 1;  
+            SendLnStandardPositiveAnswer (3);
+			break;
+
+		 case  PID_Inj2Req:
+
+			B_Inj2Req = 1;  
+            SendLnStandardPositiveAnswer (3);
+			break;
+			
+		 case  PID_Inj3Req:
+
+			B_Inj3Req = 1;  
+            SendLnStandardPositiveAnswer (3);
+			break;
+
+		 case  PID_FulPReq:
+
+			B_FulPReq = 1;
+			SendLnStandardPositiveAnswer (3);
+			break;
+
+		 case  PID_MILReq:
+
+			B_MILReq = 1;
+			SendLnStandardPositiveAnswer (3);
+			break;
+			
+		 case  PID_SVSReq:
+
+			B_SVSReq = 1;
+			SendLnStandardPositiveAnswer (3);
+			break;	
+
+		 case  PID_Fan1Req:
+
+			B_Fan1Req = 1;
+			SendLnStandardPositiveAnswer (3);
+			break;
+
+		 case  PID_Fan2Req:
+
+			B_Fan2Req = 1;
+			SendLnStandardPositiveAnswer (3);
+			break;	
+
+		 case  PID_CpgVReq:
+
+			B_CpgVReq = 1;
+			SendLnStandardPositiveAnswer (3);
+			break;
+			
+		 default :
+            SendLnStandardNegativeAnswer (RequestOutOfRange);
+            break;
      }
   }
-  else
-  {
-      SendLnStandardNegativeAnswer(RequestOutOfRange);
-  }
+ 
 } /*** End of LnDeviceControl ***/
 
 #endif
