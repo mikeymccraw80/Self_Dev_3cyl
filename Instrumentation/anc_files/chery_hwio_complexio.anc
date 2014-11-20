@@ -127,6 +127,17 @@
 *-  description              = "tooth between cylider event, this var can monitor syn schedule";
 *-}
 
+*-dd_crank.CRANK_Internal_State.U32{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CRKSTATE";
+*-  variable_location.symbol = dd_crank.CRANK_Internal_State.U32;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.0";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "dd crank internal state";
+*-}
 
 /******************************************************************************/
 /*                                                                            */
