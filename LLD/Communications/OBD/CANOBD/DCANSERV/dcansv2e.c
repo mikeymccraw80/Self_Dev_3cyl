@@ -58,16 +58,21 @@
 ***********************************************************************/
 #include "dcansv2e.h"
 #if (XeDCAN_SID_2E_Supported == CeDCAN_Supported)
+
+#define EE_CalibrationData_Size             (96)
+#define CrankShaftAdaptiveCylinderSize      (16)
+
+#include "filenvmd.h"
 /******************************************************************************
 * APP Include Files
 ******************************************************************************/
-#include "systpcfg.h"
+//#include "systpcfg.h"
 /******************************************************************************
 * OBD Lib Service Include Files
 ******************************************************************************/
-#include "obdsfexi.h"/*CeVIOS_SYS_DEVELOPMENT*/
+//#include "obdsfexi.h"/*CeVIOS_SYS_DEVELOPMENT*/
 #include "obdlfsrv.h"/*SetECUResetPending()*/
-#include "obdlfpid.h"/* GetCalPIDNumber() */
+//#include "obdlfpid.h"/* GetCalPIDNumber() */
 /******************************************************************************
 * CANOBD Service Include Files
 ******************************************************************************/
@@ -150,146 +155,19 @@ void LnWriteDataByIdentifier (void)
       SendLnStandardNegativeAnswer (IncorrectMessageLength);
    }
    else if( (KaDCANOBD_SecurityAccessUsedService[CeServiceID_2E] == CeService_SecurityAccessUsed)
-           &&(!GetLnVulnerabilityState()) && !(HIRAIN_IMMO_ENABLED()&&(WriteDataIdentifierId==DIdHIRAINIMMOWriteSK)) )
+           &&(!GetLnVulnerabilityState()) )//&& !(HIRAIN_IMMO_ENABLED()&&(WriteDataIdentifierId==DIdHIRAINIMMOWriteSK)) )
    {
       SendLnStandardNegativeAnswer(SecurityAccessDenied);  
    }
    else
-   {
-   	LbCalDID_Found = Find_PID_InCalArray(WriteDataIdentifierId, &LyCalDIDIndx);
-	if((CbTRUE == LbCalDID_Found)
-		&&(CeSupport_22_2E == GetCalPIDSupportMethod(LyCalDIDIndx)))
-	{
-		LbCalDID_Found = CbTRUE;
-	}
-	else
-	{
-		LbCalDID_Found = CbFALSE;
-	}
+   {	
 	
-	if(CbTRUE == LbCalDID_Found)
-	{
-		CalDID_DataSize = GetCalPIDDataLength( LyCalDIDIndx );
-	    CalDID_Offset = GetCalPIDDataAddressOffest(LyCalDIDIndx);
-		CalDID_EndDataOffset = CalDID_Offset + CalDID_DataSize;
-		
-		if(GetLnServiceDataLength () != (3 + CalDID_DataSize))
-		{
-            SendLnStandardNegativeAnswer (IncorrectMessageLength);
-        }
-		else if(CalDID_EndDataOffset > EE_CalibrationData_Size)
-		{
-			SendLnStandardNegativeAnswer (RequestOutOfRange);
-		}
-		else
-		{
-			GetCalibrationDataValue();
-			for (Idx = 0; Idx < CalDID_DataSize; Idx++)
-			{
-				WrtKW2CalibrationDataByte(Idx+CalDID_Offset,(GetLnServiceData ()) [3 + Idx]);
-			}
-			WrtKW2CalibrationDataValue();
-			SendLnStandardPositiveAnswer(3);
-			
-		}
-	}
-	else
-	{
         /*--- NOTE: The switch statement contains the LocalIds which
                    do not require a security access*/
       switch (WriteDataIdentifierId)
       {
           /*--- NO Security Access required for these Data ---*/
-         case DIdCrankshaftAdaptiveCylinder:
-         if (GetLnServiceDataLength () !=
-                (3 + CrankShaftAdaptiveCylinderSize))
-         {
-            SendLnStandardNegativeAnswer (IncorrectMessageLength);
-         }
-         else if(IsDevelopmentOrManfModeActive() != CeVIOS_SYS_DEVELOPMENT)
-         {
-            SendLnStandardNegativeAnswer ( ConditionsNotCorrectOrRequestSequenceError);
-         }
-         else
-         {
-            uint32_t Temp_Long;
 
-              /*--- Program CrankShaft Adaptive Cylinder ---*/
-            for(Idx_WritePointer = 0, Idx = 0;
-                  Idx_WritePointer < CcSYST_NUM_OF_CYLINDERS;
-                  Idx_WritePointer++)
-            {
-               KW2CrankShaftAdaptiveCylinder[Idx] = (GetLnServiceData ()) [3 + Idx];
-               Temp_Long  = (LONGWORD) ( (KW2CrankShaftAdaptiveCylinder[Idx] & 0xff) << 24);
-               Idx++;
-
-               KW2CrankShaftAdaptiveCylinder[Idx] = (GetLnServiceData ()) [3 + Idx];
-               Temp_Long += (LONGWORD) ( (KW2CrankShaftAdaptiveCylinder[Idx] & 0xff) << 16);
-               Idx++;
-
-               KW2CrankShaftAdaptiveCylinder[Idx] = (GetLnServiceData ()) [3 + Idx];
-               Temp_Long += (LONGWORD) ( (KW2CrankShaftAdaptiveCylinder[Idx] & 0xff) << 8);
-               Idx++;
-
-               KW2CrankShaftAdaptiveCylinder[Idx] = (GetLnServiceData ()) [3 + Idx];
-               Temp_Long += (LONGWORD) (KW2CrankShaftAdaptiveCylinder[Idx] & 0xff);
-               Idx++;
-
-               NaTECD_FactorTotals[Idx_WritePointer] = Temp_Long;
-            }
-            ModifyFILE_EE_TEC_Factors(NaTECD_FactorTotals);
-
-            SendLnStandardPositiveAnswer (3);
-         }
-         break;
-		  
-         case DIdTECDSampleCounter:
-         if (GetLnServiceDataLength () != (3 + TECDSampleCounterSize))
-         {
-            SendLnStandardNegativeAnswer (IncorrectMessageLength);
-         }
-         else if(IsDevelopmentOrManfModeActive() != CeVIOS_SYS_DEVELOPMENT)
-         {
-            SendLnStandardNegativeAnswer ( ConditionsNotCorrectOrRequestSequenceError);
-         }
-         else
-         {
-            NcTECD_SampleCntr = (GetLnServiceData ()) [3];
-            ModifyFILE_EE_TEC_SmplCntr(&NcTECD_SampleCntr);
-            SendLnStandardPositiveAnswer (3);
-         }
-         break;
-		  
-         case DIdManufacturersEnableCounter:
-
-         if (GetLnServiceDataLength () != 4)
-         {
-            SendLnStandardNegativeAnswer (IncorrectMessageLength);
-         }
-         else
-         {
-            if(GetVIOS_ManufactEnableCounter() == 0)
-            {
-               if(GetVIOS_VehInDev ())
-               {
-                  NyVIOS_ManufactEnableCounter = (GetLnServiceData ()) [3];
-                  ModifyFILE_EE_MEC_ManufEnblCntr(&NyVIOS_ManufactEnableCounter);
-                  SendLnStandardPositiveAnswer (3);
-               }
-               else
-               {
-                  SendLnStandardNegativeAnswer (ConditionsNotCorrectOrRequestSequenceError);
-               }
-            }
-            else
-            {
-               NyVIOS_ManufactEnableCounter = (GetLnServiceData ()) [3];
-               ModifyFILE_EE_MEC_ManufEnblCntr(&NyVIOS_ManufactEnableCounter);
-               SendLnStandardPositiveAnswer (3);
-            }
-         }
-         break;
-			
          case DIdVehicleIdentificationNumber:
          if (GetLnServiceDataLength () !=(3 + VIN_Size))
          {
@@ -297,99 +175,22 @@ void LnWriteDataByIdentifier (void)
          }
          else
          {
-            /* Verify if VIN Update Once is enabled */
-            if((CbTRUE == KbDCAN_VIN_UpdateOnce) && (V_COUNT_BYTE(0) == NyVIOS_ManufactEnableCounter))
+
+			/*--- Program VehicleIdentificationNumber ---*/
+            for ( Idx = 0 ; Idx < VIN_Size ; Idx++ )
             {
-               /*do nothing*/
+               
+               NsFILE_NVM_EE_ManufactData.VaFILE_EE_VIN[Idx] = (GetLnServiceData ()) [3 + Idx];
+               scnVehInfo.VIN[Idx] = NsFILE_NVM_EE_ManufactData.VaFILE_EE_VIN[Idx];
             }
-            else
-            {
-               /*--- Program VehicleIdentificationNumber ---*/
-               // allow VIN re-updated, set NcFILE_FLASH_VIN_Update =0
-               ClearVIN_Update_Flag();
-            }
-            for (Idx = 0; Idx < VIN_Size; Idx++)
-            {
-               WrtVinDataByte (Idx, (GetLnServiceData ()) [3 + Idx]);
-            }
-            /* Write to EE */
-            WrtVinDataValue();
-            if( CbTRUE == GetVinUpdateSuccessful() )
-            {
-               SendLnStandardNegativeAnswer(ConditionsNotCorrectOrRequestSequenceError);
-            }
-            else
-            {
-               WrtVinUpdateStatus(CbTRUE);
-               //set NcFILE_FLASH_VIN_Update =1 for VIN diag in this key cycle    
-               SetVIN_Update_Flag();
-               SendLnStandardPositiveAnswer (3);
-            }
+			
+			SendLnStandardPositiveAnswer (3);
          }
          break;
-
-#if defined(OBD_CONTROLLER_IS_MT22P3)
-   #if defined(CeFILE_USE_CMC_2nd_Set_VIN)
-         case DldCMC1stVehicleIdentificationNumber:
-         GetVinDataValue();
-         if (GetLnServiceDataLength() != (3 + VIN_Size))
-         {
-            SendLnStandardNegativeAnswer(IncorrectMessageLength);
-         }
-         else if (GetVIOS_EngSt_Run() || GetVIOS_v_VehSpd() > V_KPH(0))
-         {
-            SendLnStandardNegativeAnswer(ConditionsNotCorrectOrRequestSequenceError);
-         }
-         else
-         {
-            /*--- Program VehicleIdentificationNumber ---*/
-            // allow VIN re-updated, set NcFILE_FLASH_VIN_Update =0
-            ClearVIN_Update_Flag();
-            for (Idx = 0; Idx < VIN_Size; Idx++)
-            {
-               WrtVinDataByte (Idx, (GetLnServiceData ()) [3 + Idx]);
-            }
-            /* Write to EE */
-            WrtVinDataValue();
-            WrtVinUpdateStatus(CbTRUE);
-            //set NcFILE_FLASH_VIN_Update =1 for VIN diag in this key cycle
-            SetVIN_Update_Flag();
-            SendLnStandardPositiveAnswer (3);
-         }
-         break;
-
-         case DldCMC2ndVehicleIdentificationNumber:
-         if (GetLnServiceDataLength() != (3 + VIN_Size))
-         {
-            SendLnStandardNegativeAnswer(IncorrectMessageLength);
-         }
-         else if (GetVIOS_EngSt_Run()
-            || GetVIOS_v_VehSpd() > V_KPH(0)
-            || !CheckVINAllZero(VinSecond, VIN_Size))
-         {
-            SendLnStandardNegativeAnswer(ConditionsNotCorrectOrRequestSequenceError);
-         }
-         else
-         {
-            /*--- Program VehicleIdentificationNumber ---*/
-            // allow VIN re-updated, set NcFILE_FLASH_VIN_Update =0
-            for (Idx = 0; Idx < VIN_Size; Idx++)
-            {
-               Wrt2ndVinDataByte (Idx, (GetLnServiceData ()) [3 + Idx]);
-            }
-            /* Write to EE */
-            Wrt2ndVinDataValue();
-            Wrt2ndVinUpdateStatus(CbTRUE);
-            //set NcFILE_FLASH_VIN_Update =1 for VIN diag in this key cycle
-            SendLnStandardPositiveAnswer (3);
-         }
-         break;
-
-   #endif /* #if defined (CeFILE_USE_CMC_2nd_Set_VIN) */
-#endif /* #if defined(OBD_CONTROLLER_IS_MT22P3)*/
-			  
+	  
          case DIdRepairShopCodeOrTesterSerialNumber:
-         if (GetLnServiceDataLength () != (3 + RepairShopCode_Size))
+
+		 if (GetLnServiceDataLength () != (3 + RepairShopCode_Size))
          {
             SendLnStandardNegativeAnswer (IncorrectMessageLength);
          }
@@ -397,12 +198,13 @@ void LnWriteDataByIdentifier (void)
          {
             for (Idx = 0; Idx < RepairShopCode_Size; Idx++)
             {
-               WrtKW2RepairShopCodeByte (Idx,(GetLnServiceData ()) [3 + Idx]);
+              // WrtKW2RepairShopCodeByte (Idx,(GetLnServiceData ()) [3 + Idx]);
             }
-            WrtKW2RepairShopCodeValue ();
+            
             SendLnStandardPositiveAnswer (3);
          }
          break;
+
 
          case DIdProgrammingDate:
          if (GetLnServiceDataLength () != (3 + ProgrammingDate_Size))
@@ -413,13 +215,15 @@ void LnWriteDataByIdentifier (void)
          {
             for (Idx = 0; Idx < ProgrammingDate_Size; Idx++)
             {
-               WrtKW2ProgrammingDateByte (Idx,(GetLnServiceData ()) [3 + Idx]);
+              // WrtKW2ProgrammingDateByte (Idx,(GetLnServiceData ()) [3 + Idx]);
             }
-            WrtKW2ProgrammingDateValue ();
+            
             SendLnStandardPositiveAnswer (3);
          }
          break;
-		 
+
+
+#if 0
 #if ( (XbIMMO_MULTI_SUBS_SELECT_FLAG == CbSUBS_ON) \
    && (XbIMMO_KOSTAL_SUBS_SELECT_FLAG == CbSUBS_ON) )
          case DIdKostallImmoSKCheckResult:
@@ -520,11 +324,12 @@ void LnWriteDataByIdentifier (void)
             }
          break;
 #endif /* #if defined(OBD_CONTROLLER_IS_MT22P3) */
+#endif
          default :
             SendLnStandardNegativeAnswer (RequestOutOfRange);
          break;
       } /* End of Switch*/
-	}
+	
    }
 } /*** End of LnWriteDataByIdentifier ***/
 

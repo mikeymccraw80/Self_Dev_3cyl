@@ -62,6 +62,7 @@
 #include "filepcfg.h"
 
 #if (XeDCAN_SID_2E_Supported == CeDCAN_Supported)
+
 #define wdliMalfDisableArray    (0xFA)
 #define ExpectedTimeToFlushAllEepInMs (2000.0)
 /*--- Data Identifier list definition (SID2E)---*/
