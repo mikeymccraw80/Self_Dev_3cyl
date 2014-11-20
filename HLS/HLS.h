@@ -648,29 +648,7 @@ extern uint8_t  B_Pmp;
 
 extern bool                 B_EOL_FuelAdjust;
 extern bool                 E_EOL_FuelAdjust;
-
-/***Input&Output control*****/
-extern bool     B_Inj0Req;       
-extern bool     B_Inj0Stp;      
-extern bool     B_Inj1Req;       
-extern bool     B_Inj1Stp;       
-extern bool     B_Inj2Req;       
-extern bool     B_Inj2Stp;      
-extern bool     B_Inj3Req;       
-extern bool     B_Inj3Stp;       
-extern bool     B_FulPReq;      
-extern bool     B_FulPStp;      
-extern bool     B_MILReq;       
-extern bool     B_MILStp;        
-extern bool     B_SVSReq;       
-extern bool     B_SVSStp;        
-extern bool     B_Fan1Req;       
-extern bool     B_Fan1Stp;       
-extern bool     B_Fan2Req;      
-extern bool     B_Fan2Stp;      
-extern bool     B_CpgVReq;       
-extern bool     B_CpgVStp;       
-
+      
 /* knock part, defined in HLS */
 extern bool knock_flag_a;
 extern bool knock_flag_b;
