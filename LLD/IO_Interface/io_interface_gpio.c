@@ -395,7 +395,6 @@ void IO_GPIO_DO_Task(void)
 		}
 		HAL_GPIO_SET_FPR_Enable((bool) LLD_do_table[LLD_DO_AC_CLUTCH].value);
 	}
-
 	HAL_GPIO_SET_FAN1_Enable((bool) LLD_do_table[LLD_DO_FAN1].value);
 	HAL_GPIO_SET_FAN2_Enable((bool) LLD_do_table[LLD_DO_FAN2].value);
 	// HAL_GPIO_SET_IMMOREQ_Enable((bool) LLD_do_table[LLD_DO_R_LINE].value);

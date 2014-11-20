@@ -286,7 +286,7 @@ void LLD_Update_FuelCorrect_Model(void)
 				HAL_GPIO_SET_FPR_Enable(true);
 			} else {
 				HAL_GPIO_SET_ACClutch_Enable(true);
-			}
+			}  
 
 			KW_EOL_initialization = 0xAA;
 			Pb_FuelPumpPreWork = true;

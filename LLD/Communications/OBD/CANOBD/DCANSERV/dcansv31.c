@@ -64,6 +64,7 @@
 ******************************************************************************/
 #include "dcanserv.h"
 #include "dcancomm.h"
+//#include "dcantran.h"
 /***********************************************************************
 * Functions in this file:                                              *
 ************************************************************************
@@ -112,11 +113,15 @@
 #define DS_NUM_ROUTINE_CTRL_VALEO (0)
 #endif
 
-#define DS_ORIGINAL_ROUTINE_CTRL (2)
+#define DS_ORIGINAL_ROUTINE_CTRL (1)
 
 #define DS_NUM_ROUTINE_CTRL   (DS_ORIGINAL_ROUTINE_CTRL + DS_NUM_ROUTINE_CTRL_KOSTAL + DS_NUM_ROUTINE_CTRL_HIRAIN + DS_NUM_ROUTINE_CTRL_VALEO)
 
 uint8_t VyDCAN_SRV31_PosRespLength;
+extern bool    KW31_EndofLine_FuelAdjustMode;
+extern TbBOOLEAN     SaINJD_CktTestFailed[4]; 
+extern TbBOOLEAN     SbEMSD_FPRDShortHiTestFailed;
+extern TbBOOLEAN     SbEMSD_FPRDShortLoTestFailed;
 /***********************************************************************
 *                                                                      *
 * FUNCTION:          StartRoutineByLocalIdentifier                     *
@@ -133,61 +138,70 @@ uint8_t VyDCAN_SRV31_PosRespLength;
 * Last modified on: 06/10/10              by: Abhishek Sharma          *
 ***********************************************************************/
 
-#ifdef OBD_CONTROLLER_IS_MT92 
-uint32_t BOOT_PATTERN _at(From_APPTOBOOT_ADDRESS);
-#endif
+ 
 
 uint8_t StartRoutineByLocalIdentifier(void)
 {
+   bool    result;
+   uint8_t   meslegth;
+   
    if((( GetLnVulnerabilityState() ))
      && (GetVIOS_n_EngSpd() < V_RPM(200)))
- /* in AT vehicle, VKPH will be set a default value when CAN is disabled, 
-    because the default value is not equal to 0, we can't reflash the ECU with bench,
-    it need to delete the condition that VKPH==0 */  
-//     &&  (GetVIOS_v_VehSpd()== V_KPH(0)))
    {
-      #ifdef OBD_CONTROLLER_IS_MT80  
-      SetCopyAndExecuteKernelPending(CbTRUE);
-      #endif
-      #if defined(OBD_CONTROLLER_IS_MT62P1) || defined(OBD_CONTROLLER_IS_MT22P3)
-      SetCopyAndExecuteKernelPending(CbTRUE);
-      #endif
-	   #ifdef OBD_CONTROLLER_IS_MT92 
-	   BOOT_PATTERN = ENTER_BOOT_INDICATOR;
-      SetECUResetPending(CbTRUE);
-      #endif
-      return 0x00;
+     if (KbCAN_CHERY_Fuel_Adjust_Enable) {
+
+		if (!KW31_EndofLine_FuelAdjustMode) {
+
+            /* check the injector error */
+			result = (SaINJD_CktTestFailed[0] || SaINJD_CktTestFailed[1] || \
+				     SaINJD_CktTestFailed[2] || SaINJD_CktTestFailed[3]);
+			/* check the fuel pump error */
+			result = (result || SbEMSD_FPRDShortHiTestFailed || SbEMSD_FPRDShortLoTestFailed);
+			/* check the engine turning flag */
+			result = (result || GetEngineTurning());
+            if ((!result) && (GetVIOS_EngSt() == CeENG_KEYON)) { 
+					/*adjust the injector port to GPIO Mode*/
+					HAL_GPIO_SET_INJECTION_GPIO_Mode_Enable(true);
+					/* shut down the GPIO output */
+					HAL_GPIO_SET_INJECTION_Enable(false);
+					B_EOL_FuelAdjust = true ;
+					E_EOL_FuelAdjust = false ;
+					KW31_EndofLine_FuelAdjustMode = true;
+					return 0x00;
+			 }else {
+					B_EOL_FuelAdjust = false ;
+					E_EOL_FuelAdjust = true ;
+					/* shut down the GPIO output */
+					HAL_GPIO_SET_INJECTION_Enable(false);
+					/*adjust the injector port back to tpu*/
+					HAL_GPIO_SET_INJECTION_GPIO_Mode_Enable(false);
+					return ConditionsNotCorrectOrRequestSequenceError;
+			 }
+		}else{
+
+			return ConditionsNotCorrectOrRequestSequenceError;
+		}
+
+	 }else{
+     		
+       return ServiceIdNotSupported;
+
+	 }
+			
    }
    else
    {
-      return 0x22;//Change 0x7F to 0x22
+      return ConditionsNotCorrectOrRequestSequenceError;
    }
  
 } /*** End of KwJ14230StopDiagnosticSession ***/
 
-uint8_t StartRoutine_NVMReInitLogic(void)
-{
-   // WriteFILE_NVM_CriticalByte(&NbFILE_NVM_Reset_RequestFromSerial, 
-   //                                       CbTRUE);
-    if((( GetLnVulnerabilityState() ))
-     && (GetVIOS_n_EngSpd() < V_RPM(200)))
- /* in AT vehicle, VKPH will be set a default value when CAN is disabled, 
-    because the default value is not equal to 0, it can't  reflash the ECU,
-    it need to delete the condition that VKPH==0 */        
-//     &&  (GetVIOS_v_VehSpd()== V_KPH(0)))
-   {
-     return 0x00;
-   }
-   else
-   {
-   	return 0x22;
-   	}
-}
+ 
 /**
  * Handlerfunction for RC 0x03
  * Length=2: 'RoutineControl'
  */
-static uint8_t DS_RC_F000_Handler(uint8_t type)
+ static  uint8_t DS_RC_0930_Handler(uint8_t type)
 {
    /* TODO: Insert code to perform RC handling! */
    uint8_t status = 0x00;
@@ -213,31 +227,8 @@ static uint8_t DS_RC_F000_Handler(uint8_t type)
    return status;
 }
 
-static uint8_t DS_RC_AA00_Handler(uint8_t type)
-{
-   /* TODO: Insert code to perform RC handling! */
-   uint8_t status = 0x00;
+ 
 
-   if(GetLnServiceDataLength() == 4)
-   {
-      switch(type)
-      {
-         case 0x01:  /* StartRoutine */
-            status = StartRoutine_NVMReInitLogic();
-         break;
-         case 0x02:  /* StopRoutine */
-         case 0x03:  /* requestRoutineResult */
-         default:
-            status = SubFunctionNotSupported_InvalidFormat;
-      }
-      SetDCAN_SRV31_PosRespLength(4);
-   }
-   else
-   {
-      status = IncorrectMessageLength;
-   }
-   return status;
-}
 
 /**
  * Array of DS_ROUTINE_CTRL structures defining the available RoutineControl 
@@ -245,11 +236,11 @@ static uint8_t DS_RC_AA00_Handler(uint8_t type)
  * the lowest value first.
  * See the definition of type DS_ROUTINE_CTRL for information about the members.
  */
-const DS_ROUTINE_CTRL DS_RoutineControl[DS_NUM_ROUTINE_CTRL] =
+ const DS_ROUTINE_CTRL DS_RoutineControl[DS_NUM_ROUTINE_CTRL] =
 {
 /*  Identifier,                          Protected,  HandlerFunc */
-    {0xAA00,                             true,       DS_RC_AA00_Handler           },
-    {0xF000,                             true,       DS_RC_F000_Handler           }
+    {0x0930,                             true,       DS_RC_0930_Handler           }
+    //{0xF000,                             true,       DS_RC_F000_Handler           }
 // #if ( (XbIMMO_MULTI_SUBS_SELECT_FLAG == CbSUBS_ON) \
 //    && (XbIMMO_KOSTAL_SUBS_SELECT_FLAG == CbSUBS_ON) )
 //    ,{CyIMMO_Kostsal_EOL_RID_B20A,        false,      KostalIMMO_EOL_Handler_B20A        }
