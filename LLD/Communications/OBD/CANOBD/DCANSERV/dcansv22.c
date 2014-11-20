@@ -229,7 +229,7 @@ extern T_COUNT_BYTE *const KW2000_DelphiBaseModelPN_Ptr;
 #define  Mode_12 MaskMode_12 
 #define  Mode_22 MaskMode_22 
 
-#define EE_CalibrationData_Size             (96)
+
 
 /*******************************************************************************/
 /*** service: LnReadDataByCommonIdentifier      (SID22)                       ***/
