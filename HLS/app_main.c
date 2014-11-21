@@ -140,7 +140,6 @@ unsigned char  Ta;
  uint16_t TexBfPreCat;
  uint8_t  TmSta;
  uint16_t MafPcv;
- uint16_t FtCntEmisCyl_[4];
  int16_t  dTqIdcPD;
  uint16_t uLsbAdc;
  uint16_t uLsaAdc;

@@ -639,7 +639,6 @@ extern uint16_t uPed2Dble;
 extern uint16_t TexBfPreCat;
 extern uint8_t  TmSta;
 extern uint16_t MafPcv;
-extern uint16_t FtCntEmisCyl_[4];
 extern int16_t  dTqIdcPD;
 extern uint16_t uLsbAdc;
 extern uint16_t uLsaAdc;

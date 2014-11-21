@@ -703,8 +703,8 @@ void LnReadDataByCommonIdentifier (void)
 			
 			WrtDCAN_ServiceData(Hi8Of16(ParamID), msglength++);
 			WrtDCAN_ServiceData(Lo8Of16(ParamID), msglength++);
-            WrtDCAN_ServiceData( Hi8Of16(FtCntEmisCyl_[0]), msglength++);
-			WrtDCAN_ServiceData( Lo8Of16(FtCntEmisCyl_[0]), msglength++);
+            WrtDCAN_ServiceData( Hi8Of16(FtCntEmisCyl[0]), msglength++);
+			WrtDCAN_ServiceData( Lo8Of16(FtCntEmisCyl[0]), msglength++);
 			SendLnStandardPositiveAnswer( msglength );
 			break;
 																																																																			
@@ -712,8 +712,8 @@ void LnReadDataByCommonIdentifier (void)
 			
 			WrtDCAN_ServiceData(Hi8Of16(ParamID), msglength++);
 			WrtDCAN_ServiceData(Lo8Of16(ParamID), msglength++);
-            WrtDCAN_ServiceData( Hi8Of16(FtCntEmisCyl_[1]), msglength++);
-			WrtDCAN_ServiceData( Lo8Of16(FtCntEmisCyl_[1]), msglength++);
+            WrtDCAN_ServiceData( Hi8Of16(FtCntEmisCyl[1]), msglength++);
+			WrtDCAN_ServiceData( Lo8Of16(FtCntEmisCyl[1]), msglength++);
 			SendLnStandardPositiveAnswer( msglength );
 			break;
 																																																																			
@@ -721,8 +721,8 @@ void LnReadDataByCommonIdentifier (void)
 			
 			WrtDCAN_ServiceData(Hi8Of16(ParamID), msglength++);
 			WrtDCAN_ServiceData(Lo8Of16(ParamID), msglength++);
-            WrtDCAN_ServiceData( Hi8Of16(FtCntEmisCyl_[2]), msglength++);
-			WrtDCAN_ServiceData( Lo8Of16(FtCntEmisCyl_[2]), msglength++);
+            WrtDCAN_ServiceData( Hi8Of16(FtCntEmisCyl[2]), msglength++);
+			WrtDCAN_ServiceData( Lo8Of16(FtCntEmisCyl[2]), msglength++);
 			SendLnStandardPositiveAnswer( msglength );
 			break;
 																																																																			
@@ -730,8 +730,8 @@ void LnReadDataByCommonIdentifier (void)
 			
 			WrtDCAN_ServiceData(Hi8Of16(ParamID), msglength++);
 			WrtDCAN_ServiceData(Lo8Of16(ParamID), msglength++);
-            WrtDCAN_ServiceData( Hi8Of16(FtCntEmisCyl_[3]), msglength++);
-			WrtDCAN_ServiceData( Lo8Of16(FtCntEmisCyl_[3]), msglength++);
+            WrtDCAN_ServiceData( Hi8Of16(FtCntEmisCyl[3]), msglength++);
+			WrtDCAN_ServiceData( Lo8Of16(FtCntEmisCyl[3]), msglength++);
 			SendLnStandardPositiveAnswer( msglength );
 			break;
 																																																																			
