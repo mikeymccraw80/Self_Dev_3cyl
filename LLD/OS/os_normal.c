@@ -55,7 +55,7 @@ void OS_Powerdown_Callback(void);
 static uint8_t  Normal_10ms_CNT;
 
 /* record loop flag overflow counter */
-static uint16_t LOOP_OF_CNT_ARRAY[4];
+static uint32_t LOOP_OF_CNT_ARRAY[4];
 
 //=============================================================================
 // StartOS_Task_Normal
