@@ -909,6 +909,42 @@
 *-  ds_scaling_unit          = "t_count_long";
 *-}
 
+*-os_timebase.VaOSTK_ThruPutData_A100{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "TPBGAET";
+*-  variable_location.symbol = os_timebase.VaOSTK_ThruPutData[10].t_AvgExecTime;
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "Throughput array, background (while loop), average execution time";
+*-  ds_scaling_unit          = "t_count_long";
+*-}
+
+*-os_timebase.VaOSTK_ThruPutData_A101{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "TPBGMXET";
+*-  variable_location.symbol = os_timebase.VaOSTK_ThruPutData[10].t_MaxExecTime;
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "Throughput array, background (while loop), max execution time";
+*-  ds_scaling_unit          = "t_count_long";
+*-}
+
+*-os_timebase.VaOSTK_ThruPutData_A102{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "TPBGMIET";
+*-  variable_location.symbol = os_timebase.VaOSTK_ThruPutData[10].t_MinExecTime;
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "Throughput array, background (while loop), min execution time";
+*-  ds_scaling_unit          = "t_count_long";
+*-}
+
 *-RTI_Flags{
 *-  OBJECTS_CLASS: parameter_es_class;
 *-  label                    = "RTI_FLAG";

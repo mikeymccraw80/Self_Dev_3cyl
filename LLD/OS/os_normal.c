@@ -82,6 +82,8 @@ void StartOS_Task_Normal(void)
 
 	/* do until application indicates shutdown */
 	while (!HAL_OS_Get_Shutdown()) {
+		Enter_OSThroughputMeasure(CeOSTK_SEG_BGLOOP);
+
 		/* os background 1ms schedule */
 		if (RTI_Flags.bf.TimeFor1ms == 1) {
 			Enter_OSThroughputMeasure(CeOSTK_SEG_1msLOOP);
@@ -148,6 +150,8 @@ void StartOS_Task_Normal(void)
 		}
 
 		OS_Free_Time_Tasks_Hook();
+
+		Leave_OSThroughputMeasure(CeOSTK_SEG_BGLOOP);
 	}
 
 	//Turn off power supply and return to OSEK
