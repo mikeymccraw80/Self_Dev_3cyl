@@ -306,6 +306,7 @@ extern TbBOOLEAN DCAN_AnswerStillBeingSent( void );
       if ( GetCopyAndExecuteKernelPending())
       {
          // KW2KCAN_Received_Message (*Can8_DataBytesArrayPtr);
+         RunKernelOnRam();
       }
   
    }

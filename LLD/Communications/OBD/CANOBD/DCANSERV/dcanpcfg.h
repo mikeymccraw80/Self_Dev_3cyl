@@ -73,7 +73,7 @@
 #define XeDCAN_SID_31_Supported             (CeDCAN_Supported)
 #define XeDCAN_SID_3E_Supported             (CeDCAN_Supported)
 #define XeDCAN_SID_85_Supported             (CeDCAN_Supported)
-#define XeDCAN_SID_28_Supported             (CeDCAN_NotSupported)
+#define XeDCAN_SID_28_Supported             (CeDCAN_Supported)
 #define XeDCAN_SID_B0_Supported             (CeDCAN_NotSupported)
 /***************************************************************
 * End of configuration settings for application layer          *

@@ -104,13 +104,11 @@ void LnCommunicationControl (void)
          case EnableRxAndTx:
             if ( CommunicationType & AppCommunicationType )
             {
-			     #ifdef OBD_CONTROLLER_IS_MT80
-				  EnableCANHNetwork(); 
-                  EnableCANHRec() ;
-				 #else				  
-                  EnableCANH_Send_By_OBD(); 
-                  EnableCANH_Receive_By_OBD() ;
-				 #endif
+			     
+						  
+                  //EnableCANH_Send_By_OBD(); 
+                  //EnableCANH_Receive_By_OBD() ;
+				 
                if ( !suppressPosRespMsgIndicationBit ) 
                {
                   SendLnStandardPositiveAnswer(2);
@@ -128,13 +126,10 @@ void LnCommunicationControl (void)
          case EnableRxAndDisableTx:	
             if ( CommunicationType & AppCommunicationType )
             {
-                 #ifdef OBD_CONTROLLER_IS_MT80
-				  DisableCANHNetwork();
-                  EnableCANHRec() ;
-				 #else
-				  DisableCANH_Send_By_OBD();
-                  EnableCANH_Receive_By_OBD() ;
-				 #endif
+                 
+				 // DisableCANH_Send_By_OBD();
+                 // EnableCANH_Receive_By_OBD() ;
+				 
                if ( !suppressPosRespMsgIndicationBit ) 
                {
                   SendLnStandardPositiveAnswer(2);
@@ -152,13 +147,11 @@ void LnCommunicationControl (void)
          case DisableRxAndEnableTx:
             if ( CommunicationType & AppCommunicationType )
             {
-                 #ifdef OBD_CONTROLLER_IS_MT80
-				  EnableCANHNetwork();
-                  DisableCANHRec();
-				 #else
-				  EnableCANH_Send_By_OBD();
-                  DisableCANH_Receive_By_OBD();
-				 #endif
+                 
+				 
+				 // EnableCANH_Send_By_OBD();
+                 // DisableCANH_Receive_By_OBD();
+				 
                if ( !suppressPosRespMsgIndicationBit ) 
                {
                   SendLnStandardPositiveAnswer(2);
@@ -176,13 +169,11 @@ void LnCommunicationControl (void)
          case DisableRxAndTx:
             if ( CommunicationType & AppCommunicationType )
             {
-                 #ifdef OBD_CONTROLLER_IS_MT80 
-				  DisableCANHNetwork();
-                  DisableCANHRec();
-				 #else
-				  DisableCANH_Send_By_OBD();
-                  DisableCANH_Receive_By_OBD();
-				 #endif
+                 
+				 
+				 // DisableCANH_Send_By_OBD();
+                 // DisableCANH_Receive_By_OBD();
+				
                if ( !suppressPosRespMsgIndicationBit ) 
                {
                   SendLnStandardPositiveAnswer(2);

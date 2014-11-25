@@ -54,6 +54,7 @@
 /******************************************************************************
 * APP Include Files
 ******************************************************************************/
+#include "kw2app.h"
 // #include "obdsfexi.h"/*CyEEPROM_SectionStart*/
 /******************************************************************************
 * OBD Lib Service Include Files
@@ -113,7 +114,7 @@
 #define DS_NUM_ROUTINE_CTRL_VALEO (0)
 #endif
 
-#define DS_ORIGINAL_ROUTINE_CTRL (1)
+#define DS_ORIGINAL_ROUTINE_CTRL (2)
 
 #define DS_NUM_ROUTINE_CTRL   (DS_ORIGINAL_ROUTINE_CTRL + DS_NUM_ROUTINE_CTRL_KOSTAL + DS_NUM_ROUTINE_CTRL_HIRAIN + DS_NUM_ROUTINE_CTRL_VALEO)
 
@@ -138,7 +139,26 @@ extern TbBOOLEAN     SbEMSD_FPRDShortLoTestFailed;
 * Last modified on: 06/10/10              by: Abhishek Sharma          *
 ***********************************************************************/
 
+uint8_t SetCopyAndExecuteKernel(void)
+{
+   if((( GetLnVulnerabilityState() ))
+     && (GetVIOS_n_EngSpd() < V_RPM(200)))
+ /* in AT vehicle, VKPH will be set a default value when CAN is disabled, 
+    because the default value is not equal to 0, we can't reflash the ECU with bench,
+    it need to delete the condition that VKPH==0 */  
+//     &&  (GetVIOS_v_VehSpd()== V_KPH(0)))
+   {
+      
+      SetCopyAndExecuteKernelPending(CbTRUE);
+
+      return 0x00;
+   }
+   else
+   {
+      return 0x22;//Change 0x7F to 0x22
+   }
  
+} /*** End of KwJ14230StopDiagnosticSession ***/
 
 uint8_t StartRoutineByLocalIdentifier(void)
 {
@@ -228,6 +248,31 @@ uint8_t StartRoutineByLocalIdentifier(void)
 }
 
  
+static uint8_t DS_RC_F000_Handler(uint8_t type)
+{
+   /* TODO: Insert code to perform RC handling! */
+   uint8_t status = 0x00;
+
+   if(GetLnServiceDataLength() == 4)
+   {
+      switch(type)
+      {
+         case 0x01:  /* StartRoutine */
+            status = SetCopyAndExecuteKernel();
+         break;
+         case 0x02:  /* StopRoutine */
+         case 0x03:  /* requestRoutineResult */
+         default:
+            status = SubFunctionNotSupported_InvalidFormat;
+      }
+      SetDCAN_SRV31_PosRespLength(4);
+   }
+   else
+   {
+      status = IncorrectMessageLength;
+   }
+   return status;
+}
 
 
 /**
@@ -239,8 +284,8 @@ uint8_t StartRoutineByLocalIdentifier(void)
  const DS_ROUTINE_CTRL DS_RoutineControl[DS_NUM_ROUTINE_CTRL] =
 {
 /*  Identifier,                          Protected,  HandlerFunc */
-    {0x0930,                             true,       DS_RC_0930_Handler           }
-    //{0xF000,                             true,       DS_RC_F000_Handler           }
+    {0x0930,                             true,       DS_RC_0930_Handler           },
+    {0xF000,                             true,       DS_RC_F000_Handler           }
 // #if ( (XbIMMO_MULTI_SUBS_SELECT_FLAG == CbSUBS_ON) \
 //    && (XbIMMO_KOSTAL_SUBS_SELECT_FLAG == CbSUBS_ON) )
 //    ,{CyIMMO_Kostsal_EOL_RID_B20A,        false,      KostalIMMO_EOL_Handler_B20A        }
