@@ -405,8 +405,9 @@
 
 #define NumberOfDataElementsInDDLI       42
 #endif
-#define KW2K_SEED_ADDRESS                 (0x80008114)
-#define KW2K_KEY_ADDRESS                  (0x80008116)
+#define KW2K_SEED_ADDRESS                 (0x00000114)
+#define KW2K_KEY_ADDRESS                  (0x00000116)
+
 #define OBD_SEED_4Bytes_ADDRESS           (0x00000120)
 #define OBD_KEY_4Bytes_ADDRESS            (0x00000124)
 #define OBD_PML_SAIndex_ADDRESS           (0x00000128)
@@ -545,7 +546,7 @@ extern TbBOOLEAN VbKW2K_OBD_Enabled;
 //void   ServiceNotSupported(void);
 extern void   SendStandardNegativeAnswer( BYTE in_code );
 extern void   SendStandardPositiveAnswer( BYTE in_msg_size );
-//WORD   Get_Security_Seed_Data( void );
+WORD   Get_Security_Seed_Data( void );
 //WORD   Get_Key( void );
 //void   PerformReset ( void );
 //TbBOOLEAN  Address_Is_Validkw( LONGWORD , BYTE );

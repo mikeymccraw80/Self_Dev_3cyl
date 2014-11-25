@@ -31,7 +31,7 @@
 #include "kw2dll.h"
 //#include "kw2cfg.h"
 #include "intr_ems.h"
-
+#include "obdlfsrv.h"
 /*  application specific functions */
 #if 0
 /* Define boundrys for start and end of ram */

@@ -142,18 +142,15 @@ typedef
   LnUsdtFlowControlFrameType;
 
 
-typedef
-  struct
-    {
+typedef struct {
     CanIdType   SourceCanId;
     uint16_t    AddressingMode; /*--- 0 = Physical, 1 = Functional ---*/
     uint16_t    CurrentDataLength; /*--- is the current data byte nb written in the 
                                          data ring buffer ---*/ 
     uint16_t    DataLength;
     uint16_t    IndexOfValidDataNotOverwrittenYet; /*--- because of ring buffer ---*/
-    uint8_t   Data [DataBufferSize]; /*--- data ring buffer ---*/
-    }
-  LnServiceDataFrameType;
+    uint8_t     Data [DataBufferSize]; /*--- data ring buffer ---*/
+} LnServiceDataFrameType;
 
 typedef uint8_t CanDataByteArrayType [DataLengthInBytes];
 

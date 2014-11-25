@@ -160,7 +160,7 @@ typedef uint8_t Kw2MicroSec ;
 
 #define CanBeProgrammed()              ( true )
 
-#define Get_Security_Seed_Data()       ((uint16_t) Kw2000Seed )
+//#define Get_Security_Seed_Data()       ((uint16_t) Kw2000Seed )
 
 #define Get_Security_Key_Data()        ((uint16_t) Kw2000Key )
 

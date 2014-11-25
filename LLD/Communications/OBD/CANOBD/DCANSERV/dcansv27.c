@@ -75,6 +75,7 @@
 #include "kw2app.h"
 #include "kw2api.h"
 #include "kw2srv10m.h"
+#include "dcantran.h"
 
 /***********************************************************************
 * Functions in this file:                                              *
@@ -90,274 +91,151 @@ static uint32_t  LnReceivedSeed;
 static uint32_t  LnReceivedKey;
 BYTE KW2SequenceNumData [SequenceNumData_Size];
 
-/*********************************************************************/
-/*           CONSTANT and ENUMERATION DECLARATIONS                   */
-/*********************************************************************/
-uint32_t LnSeedToKey (uint32_t seed, uint32_t mask)
-{
-   uint32_t key = 0;
-   uint8_t  item;
-   if( seed!=0 )
-   {
-      for (item = 0; item < 35; item++)
-      {
-        if (seed & 0x80000000)
-        {
-           seed = seed << 0x01;
-           seed = seed ^ mask;
-        }
-        else
-        {
-           seed = seed << 0x01;
-        }
-      }
-      key = seed;
-   }
-   return key;
-}
-uint32_t JAC_SII_seedToKey (uint8_t num_rounds, uint32_t Seed, uint8_t *SN)
-{
-   uint32_t key;
-   uint32_t v0,v1;
-   uint8_t seed0,seed1,seed2,seed3,i;
-   uint32_t k[4];
-   uint32_t sum=0;
-   uint32_t delta=0x9E3779B9;
-
-   seed0 = (uint8_t)(Seed >>24);
-   seed1 = (uint8_t)((Seed & 0x00FFFFFF)>>16);
-   seed2 = (uint8_t)((Seed & 0x0000FFFF)>>8);
-   seed3 = (uint8_t)(Seed & 0x000000FF);
-
-   v0 = Seed;
-   v1 = ((((uint32_t)(~seed0))<<24) & 0xFF000000) |
-   	    ((((uint32_t)(~seed1))<<16)& 0x00FF0000) |
-   	    ((((uint32_t)(~seed2))<<8)& 0x0000FF00) |
-        (((uint32_t)(~seed3))& 0x000000FF);
-
-   for(i=0;i<4;i++)
-   {
-      //   k[i]=(uint32_t)((((*(SN + i))&0x07)<<5)|((*(SN + i))>>3));
-      k[i]=(uint32_t)(*(SN+i));
-	}
-   for(i=0;i<num_rounds;i++)
-   {
-      v0 +=(((v1<<4)^(v1>>5))+v1)^(sum + k[sum&3]);
-      sum += delta;
-      v1+=(((v0<<4)^(v0>>5))+v0)^(sum + k[(sum>>11)&3]);
-   }
-
-   key = v0;
-   return key;
-}
-
-INLINE void GetKW2SequenceNumValue(void)
-{   
-   uint8_t i = 0;
-   for(i=0;i<SequenceNumData_Size;i++)
-   {
-      //KW2SequenceNumData[i]=*((@gpage @far BYTE *)CgSideRailSequenceNumAddr+i); // MT22.1
-#ifdef OBD_CONTROLLER_IS_MT92
-      KW2SequenceNumData[i]=*((uint8_t *) (CpKW2KSideRailAddress_Ptr + SequenceNumberoffset +i));
-#endif
-   }
-}
-
 /**********************************************************************/
 /*** LnDiag service: SecurityAccess    (SID27)                             ***/
 /**********************************************************************/
 void LnSecurityAccess (void)
 {
-   uint8_t   SecurityAccessSubFunction;
-   uint16_t  ReceivedKey;
-   uint8_t   meslegth;
-   uint8_t   DataLength_ReqSeed;
-   uint8_t   DataLength_ReqKey;
-   bool      PostiveResponse;
-   uint8_t   num_rounds;
+	uint8_t   SecurityAccessSubFunction;
+	uint16_t  ReceivedKey;
+	uint8_t   meslegth;
+	uint8_t   DataLength_ReqSeed;
+	uint8_t   DataLength_ReqKey;
+	bool      PostiveResponse;
+	uint8_t   num_rounds;
 
-   PostiveResponse = false;
-   SecurityAccessSubFunction = (GetLnServiceData ()) [1];
-   meslegth = 2;
-   num_rounds = 2;
+	PostiveResponse = false;
+	SecurityAccessSubFunction = (GetLnServiceData())[1];
+	meslegth = 2;
+	num_rounds = 2;
 
-   switch( KeDCANOBD_Security_Algorithm )
-   {
-	  case CeDelphi_Generic_Static:
-   	    DataLength_ReqKey  = SID27_MSG02_LENGTH;
-		    break;
-    case CePML_2Sd4Key:
-    case CePML_4Sd4Key:
-        DataLength_ReqKey  = SID27_MSG02_DelphiGeneric_4KyLENGTH; 
-        break;
-    default:
-        DataLength_ReqKey = 0;
-	      break;	
-   }
+	switch( KeDCANOBD_Security_Algorithm ){
+	case CeDelphi_Generic_Static:
+		DataLength_ReqKey = SID27_MSG02_LENGTH;
+		break;
+	case CePML_2Sd4Key:
+	case CePML_4Sd4Key:
+		DataLength_ReqKey = SID27_MSG02_DelphiGeneric_4KyLENGTH;
+		break;
+	default:
+		DataLength_ReqKey = 0;
+		break;
+	}
 
-   if(GetLnServiceDataLength () < 2)
-   {
-   	  SendLnStandardNegativeAnswer (IncorrectMessageLength);
-   }
-   else
-   {
-     if(SubFuncRequestSeed == SecurityAccessSubFunction)
-     {
-        if (GetLnServiceDataLength () != SID27_MSG01_LENGTH)
-        {
-            SendLnStandardNegativeAnswer (IncorrectMessageLength);
-        }
-        else
-        {
-          // if (( IsDevelopmentOrManfModeActive () )  ||
-          //       CheckProgrammingState ()  ||
-          //       GetLnVulnerabilityState() )
-          if (  CheckProgrammingState ()  ||
-                GetLnVulnerabilityState() )
-                                  /* PCM already unlocked */
-          {
-            switch( KeDCANOBD_Security_Algorithm )
-            {
-              case CeDelphi_Generic_Static:
-                    WrtDCAN_ServiceData(0x00, meslegth++);
-                    WrtDCAN_ServiceData(0x00, meslegth++);
-                    break;
-              case CePML_2Sd4Key:
-                    WrtDCAN_ServiceData(0x00, meslegth++);
-                    WrtDCAN_ServiceData(0x00, meslegth++);
-                    break; 
-              case CePML_4Sd4Key:
-                    WrtDCAN_ServiceData(0x00, meslegth++);
-                    WrtDCAN_ServiceData(0x00, meslegth++);
-                    WrtDCAN_ServiceData(0x00, meslegth++);
-                    WrtDCAN_ServiceData(0x00, meslegth++);
-                    break;
-              default:
-                    break;	
-            }
-            UnlockSecurityAccess_DCAN ();
-            SendLnStandardPositiveAnswer (meslegth);
-          }
-          else
-          {
-              if (LnDiagSecurityDelayTimer)
-              {
-                 SendLnStandardNegativeAnswer (RequiredTimeDelayNotExpired);
-              }
-              else
-              {
-                  SPS_Security_Key_Allowed = CbTRUE; 
-                  switch( KeDCANOBD_Security_Algorithm )
-                  {
-                    case CeDelphi_Generic_Static:
-                        WrtDCAN_ServiceData(((uint8_t) (Get_Security_Seed_Data() >> 8)), meslegth++);
-                        WrtDCAN_ServiceData(((uint8_t) Get_Security_Seed_Data()), meslegth++);
-                        break;
-                    case CePML_2Sd4Key:
-                        WrtDCAN_ServiceData(((uint8_t) (GetOBD_4ByteSeed() >> 8)), meslegth++);
-                        WrtDCAN_ServiceData(((uint8_t) GetOBD_4ByteSeed()), meslegth++); 
-                        break;
-                    case CePML_4Sd4Key:
-                        WrtDCAN_ServiceData(((uint8_t) (GetOBD_4ByteSeed() >> 24)), meslegth++);
-                        WrtDCAN_ServiceData(((uint8_t) (GetOBD_4ByteSeed() >> 16)), meslegth++);
-                        WrtDCAN_ServiceData(((uint8_t) (GetOBD_4ByteSeed() >> 8)), meslegth++);
-                        WrtDCAN_ServiceData(((uint8_t) GetOBD_4ByteSeed()), meslegth++); 
-                        break;
-                    default:
-                        break;	
-                  } 
-                  SendLnStandardPositiveAnswer (meslegth);
-              }
-           }
-        }
-     }
-     else if(SubFuncSendKey == SecurityAccessSubFunction)
-     {
-        if (LnDiagSecurityDelayTimer)
-        {
-           SendLnStandardNegativeAnswer (RequiredTimeDelayNotExpired);
-        }
-        else
-        {
-           if (GetLnServiceDataLength () != DataLength_ReqKey)
-           {
-              SendLnStandardNegativeAnswer (IncorrectMessageLength);
-           }
-           else
-           {
-              if (SPS_Security_Key_Allowed)
-              {
-                 SPS_Security_Key_Allowed = CbFALSE;
-                 switch( KeDCANOBD_Security_Algorithm )
-                 {
-                  case CeDelphi_Generic_Static:
-                      ReceivedKey = ((GetLnServiceData ()) [2] << 8) + (GetLnServiceData ()) [3];
-                      if((ReceivedKey == Get_Key()))
-                      {
-                        PostiveResponse = true;
-                      }
-                      else
-                      {
-                        PostiveResponse = false;
-                      }
-                      break;
-                  case CePML_2Sd4Key:
-                  case CePML_4Sd4Key:
-                      LnReceivedKey =  ((GetLnServiceData ()) [2] <<24) 
-                                     + ((GetLnServiceData ()) [3] <<16) 
-                                     + ((GetLnServiceData ()) [4] << 8) 
-                                     + (GetLnServiceData ()) [5];
-                      if((LnReceivedKey == GetOBD_4ByteKey()))
-                      {
-                        PostiveResponse = true;
-                      } 
-                      else
-                      {
-                        PostiveResponse = false; 
-                      }
-                      break;
-                  default:
-                      break;
-                 }
-                 if (true == PostiveResponse)
-                 {
-                    UnlockSecurityAccess_DCAN ();
-                    LnDgSecAccessSpsBadKeyCounter = 0;
-                    SendLnStandardPositiveAnswer (2);
-                 }
-                 else
-                 {
-                    LnDgSecAccessSpsBadKeyCounter ++;
-                    if (LnDgSecAccessSpsBadKeyCounter == 2)
-                    {
-                       SendLnStandardNegativeAnswer (ExceedNumberOfAttempts);
-                       TriggerSecurityAccessTiming ();
-                    }
-                    else
-                    {
-                       SendLnStandardNegativeAnswer (InvalidKey);
-                    }
-                 }
-              }
-              else
-              {
-                 SendLnStandardNegativeAnswer (RequestSequenceError);
-              }
-           }
-        }
-     }
-     else
-     {
-        if(GetLnServReqMsgAddressingMode () == FunctionalAddressing)
-        {
-           PfrmDCAN_AckReqWithoutResponse ();
-        }
-        else
-        {
-           SendLnStandardNegativeAnswer (SubFunctionNotSupported_InvalidFormat);
-        }
-     }
-   }
+	if(GetLnServiceDataLength() < 2) {
+		SendLnStandardNegativeAnswer (IncorrectMessageLength);
+	} else {
+		if(SecurityAccessSubFunction == SubFuncRequestSeed) {
+			if (GetLnServiceDataLength() != SID27_MSG01_LENGTH) {
+				SendLnStandardNegativeAnswer (IncorrectMessageLength);
+			} else {
+				if (CheckProgrammingState() || GetLnVulnerabilityState()) {
+					switch( KeDCANOBD_Security_Algorithm ) {
+					case CeDelphi_Generic_Static:
+						WrtDCAN_ServiceData(0x00, meslegth++);
+						WrtDCAN_ServiceData(0x00, meslegth++);
+						break;
+					case CePML_2Sd4Key:
+						WrtDCAN_ServiceData(0x00, meslegth++);
+						WrtDCAN_ServiceData(0x00, meslegth++);
+						break; 
+					case CePML_4Sd4Key:
+						WrtDCAN_ServiceData(0x00, meslegth++);
+						WrtDCAN_ServiceData(0x00, meslegth++);
+						WrtDCAN_ServiceData(0x00, meslegth++);
+						WrtDCAN_ServiceData(0x00, meslegth++);
+						break;
+					default:
+						break;
+					}
+					UnlockSecurityAccess_DCAN ();
+					SendLnStandardPositiveAnswer (meslegth);
+				} else {
+					if (LnDiagSecurityDelayTimer) {
+						SendLnStandardNegativeAnswer (RequiredTimeDelayNotExpired);
+					} else {
+						SPS_Security_Key_Allowed = CbTRUE; 
+						switch( KeDCANOBD_Security_Algorithm ) {
+						case CeDelphi_Generic_Static:
+							WrtDCAN_ServiceData(((uint8_t) (Get_Security_Seed_Data() >> 8)), meslegth++);
+							WrtDCAN_ServiceData(((uint8_t) Get_Security_Seed_Data()), meslegth++);
+							break;
+						case CePML_2Sd4Key:
+							WrtDCAN_ServiceData(((uint8_t) (GetOBD_4ByteSeed() >> 8)), meslegth++);
+							WrtDCAN_ServiceData(((uint8_t) GetOBD_4ByteSeed()), meslegth++); 
+							break;
+						case CePML_4Sd4Key:
+							WrtDCAN_ServiceData(((uint8_t) (GetOBD_4ByteSeed() >> 24)), meslegth++);
+							WrtDCAN_ServiceData(((uint8_t) (GetOBD_4ByteSeed() >> 16)), meslegth++);
+							WrtDCAN_ServiceData(((uint8_t) (GetOBD_4ByteSeed() >> 8)), meslegth++);
+							WrtDCAN_ServiceData(((uint8_t) GetOBD_4ByteSeed()), meslegth++); 
+							break;
+						default:
+							break;
+						}
+						SendLnStandardPositiveAnswer (meslegth);
+					}
+				}
+			}
+		} else if(SubFuncSendKey == SecurityAccessSubFunction) {
+			if (LnDiagSecurityDelayTimer) {
+				SendLnStandardNegativeAnswer (RequiredTimeDelayNotExpired);
+			} else {
+				if (LnServiceDataFrame.DataLength != DataLength_ReqKey) {
+					SendLnStandardNegativeAnswer (IncorrectMessageLength);
+				} else {
+					if (SPS_Security_Key_Allowed) {
+						SPS_Security_Key_Allowed = CbFALSE;
+						switch( KeDCANOBD_Security_Algorithm ) {
+						case CeDelphi_Generic_Static:
+							ReceivedKey = ((GetLnServiceData ()) [2] << 8) + (GetLnServiceData ()) [3];
+							if((ReceivedKey == Get_Key())) {
+								PostiveResponse = true;
+							} else {
+								PostiveResponse = false;
+							}
+							break;
+						case CePML_2Sd4Key:
+						case CePML_4Sd4Key:
+							LnReceivedKey =  ((GetLnServiceData ()) [2] <<24) 
+											+ ((GetLnServiceData ()) [3] <<16) 
+											+ ((GetLnServiceData ()) [4] << 8) 
+											+ (GetLnServiceData ()) [5];
+							if((LnReceivedKey == GetOBD_4ByteKey())) {
+								PostiveResponse = true;
+							}  else {
+								PostiveResponse = false; 
+							}
+							break;
+						default:
+							break;
+						}
+						if (true == PostiveResponse) {
+							UnlockSecurityAccess_DCAN ();
+							LnDgSecAccessSpsBadKeyCounter = 0;
+							SendLnStandardPositiveAnswer (2);
+						} else {
+							LnDgSecAccessSpsBadKeyCounter ++;
+							if (LnDgSecAccessSpsBadKeyCounter == 2) {
+								SendLnStandardNegativeAnswer (ExceedNumberOfAttempts);
+								TriggerSecurityAccessTiming ();
+							} else {
+								SendLnStandardNegativeAnswer (InvalidKey);
+							}
+						}
+					} else {
+						SendLnStandardNegativeAnswer (RequestSequenceError);
+					}
+				}
+			}
+		} else {
+			if(GetLnServReqMsgAddressingMode () == FunctionalAddressing) {
+				PfrmDCAN_AckReqWithoutResponse ();
+			} else {
+				SendLnStandardNegativeAnswer (SubFunctionNotSupported_InvalidFormat);
+			}
+		}
+	}
 } /*** End of LnSecurityAccess ***/
 
 #endif
