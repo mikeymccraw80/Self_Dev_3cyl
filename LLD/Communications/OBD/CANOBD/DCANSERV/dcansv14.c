@@ -48,7 +48,7 @@
 /******************************************************************************
 * OBD Lib Service Include Files
 ******************************************************************************/
-#include "obdlfdtc.h"/*ClearDiagnosticData()*/
+//#include "obdlfdtc.h"/*ClearDiagnosticData()*/
 /******************************************************************************
 * CANOBD Service Include Files
 ******************************************************************************/
@@ -78,7 +78,7 @@ void LnClearDiagnosticInformation (void)
                  (GetLnServiceData ()) [3];               
       if((groupOfDTC == 0xffffff))
       {
-         ClearDiagnosticData ();
+         //ClearDiagnosticData ();
          SendLnStandardPositiveAnswer (1);
       } 
       else
