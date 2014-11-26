@@ -135,9 +135,9 @@ static void PerformCOND_CPU_SOH_DataProcessing(void)
     SbCOND_SOH_FltPrsnt = CbFALSE;
   }
 
-  SbCOND_SOH_MainCPU_TstCmp    = CbFALSE;
-  SbCOND_SOH_CommTstCmp   = CbFALSE;
-  SbCOND_SOH_CheckingCPU_TstCmp   = CbFALSE;
+  SbCOND_SOH_MainCPU_TstCmp    = CbTRUE;
+  SbCOND_SOH_CommTstCmp   = CbTRUE;
+  SbCOND_SOH_CheckingCPU_TstCmp   = CbTRUE;
 }
 
 
