@@ -178,6 +178,205 @@
 *-  description              = "SOH recover mode flag. (1=start SOH recovery, 0=stop SOH recovery)";
 *-}
 
+*-soh.Soh_LoopSeq_P0{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "SOHLPSEQ0";
+*-  variable_location.symbol = soh.Soh_LoopSeq[0];
+*-  ds_scaling_unit          = "hex";
+*-  description              = "loop sequence tag buffer 0";
+*-}
+
+*-soh.Soh_LoopSeq_P1{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "SOHLPSEQ1";
+*-  variable_location.symbol = soh.Soh_LoopSeq[1];
+*-  ds_scaling_unit          = "hex";
+*-  description              = "loop sequence tag buffer 1";
+*-}
+
+*-soh.Soh_LoopSeq_P2{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "SOHLPSEQ2";
+*-  variable_location.symbol = soh.Soh_LoopSeq[2];
+*-  ds_scaling_unit          = "hex";
+*-  description              = "loop sequence tag buffer 2";
+*-}
+
+*-soh.Soh_LoopSeq_P3{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "SOHLPSEQ3";
+*-  variable_location.symbol = soh.Soh_LoopSeq[3];
+*-  ds_scaling_unit          = "hex";
+*-  description              = "loop sequence tag buffer 3";
+*-}
+
+*-soh.Soh_LoopSeq_P4{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "SOHLPSEQ4";
+*-  variable_location.symbol = soh.Soh_LoopSeq[4];
+*-  ds_scaling_unit          = "hex";
+*-  description              = "loop sequence tag buffer 4";
+*-}
+
+*-soh.Soh_LoopSeq_P5{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "SOHLPSEQ5";
+*-  variable_location.symbol = soh.Soh_LoopSeq[5];
+*-  ds_scaling_unit          = "hex";
+*-  description              = "loop sequence tag buffer 5";
+*-}
+
+*-soh.Soh_LoopSeq_P6{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "SOHLPSEQ6";
+*-  variable_location.symbol = soh.Soh_LoopSeq[6];
+*-  ds_scaling_unit          = "hex";
+*-  description              = "loop sequence tag buffer 6";
+*-}
+
+*-soh.Soh_LoopSeq_P7{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "SOHLPSEQ7";
+*-  variable_location.symbol = soh.Soh_LoopSeq[7];
+*-  ds_scaling_unit          = "hex";
+*-  description              = "loop sequence tag buffer 7";
+*-}
+
+*-soh.Soh_LoopSeq_P8{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "SOHLPSEQ8";
+*-  variable_location.symbol = soh.Soh_LoopSeq[8];
+*-  ds_scaling_unit          = "hex";
+*-  description              = "loop sequence tag buffer 8";
+*-}
+
+*-soh.Soh_LoopSeq_P9{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "SOHLPSEQ9";
+*-  variable_location.symbol = soh.Soh_LoopSeq[9];
+*-  ds_scaling_unit          = "hex";
+*-  description              = "loop sequence tag buffer 9";
+*-}
+
+*-soh.Soh_LoopSeq_P10{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "SOHLPSEQ10";
+*-  variable_location.symbol = soh.Soh_LoopSeq[10];
+*-  ds_scaling_unit          = "hex";
+*-  description              = "loop sequence tag buffer 10";
+*-}
+
+*-soh.Soh_LoopSeq_P11{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "SOHLPSEQ11";
+*-  variable_location.symbol = soh.Soh_LoopSeq[11];
+*-  ds_scaling_unit          = "hex";
+*-  description              = "loop sequence tag buffer 11";
+*-}
+
+*-soh.Soh_LoopSeq_P12{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "SOHLPSEQ12";
+*-  variable_location.symbol = soh.Soh_LoopSeq[12];
+*-  ds_scaling_unit          = "hex";
+*-  description              = "loop sequence tag buffer 12";
+*-}
+
+*-soh.Soh_LoopSeq_P13{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "SOHLPSEQ13";
+*-  variable_location.symbol = soh.Soh_LoopSeq[13];
+*-  ds_scaling_unit          = "hex";
+*-  description              = "loop sequence tag buffer 13";
+*-}
+
+*-soh.Soh_LoopSeq_P14{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "SOHLPSEQ14";
+*-  variable_location.symbol = soh.Soh_LoopSeq[14];
+*-  ds_scaling_unit          = "hex";
+*-  description              = "loop sequence tag buffer 14";
+*-}
+
+*-soh.Soh_LoopSeq_P15{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "SOHLPSEQ15";
+*-  variable_location.symbol = soh.Soh_LoopSeq[15];
+*-  ds_scaling_unit          = "hex";
+*-  description              = "loop sequence tag buffer 15";
+*-}
+
+*-soh.Soh_LoopSeq_P16{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "SOHLPSEQ16";
+*-  variable_location.symbol = soh.Soh_LoopSeq[16];
+*-  ds_scaling_unit          = "hex";
+*-  description              = "loop sequence tag buffer 16";
+*-}
+
+*-soh.Soh_LoopSeq_P17{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "SOHLPSEQ17";
+*-  variable_location.symbol = soh.Soh_LoopSeq[17];
+*-  ds_scaling_unit          = "hex";
+*-  description              = "loop sequence tag buffer 17";
+*-}
+
+*-soh.Soh_LoopSeq_P18{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "SOHLPSEQ18";
+*-  variable_location.symbol = soh.Soh_LoopSeq[18];
+*-  ds_scaling_unit          = "hex";
+*-  description              = "loop sequence tag buffer 18";
+*-}
+
+*-soh.Soh_LoopSeq_P19{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "SOHLPSEQ19";
+*-  variable_location.symbol = soh.Soh_LoopSeq[19];
+*-  ds_scaling_unit          = "hex";
+*-  description              = "loop sequence tag buffer 19";
+*-}
+
+*-soh.Soh_LoopSeq_P20{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "SOHLPSEQ20";
+*-  variable_location.symbol = soh.Soh_LoopSeq[20];
+*-  ds_scaling_unit          = "hex";
+*-  description              = "loop sequence tag buffer 20";
+*-}
+
+*-soh.Soh_LoopSeq_P21{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "SOHLPSEQ21";
+*-  variable_location.symbol = soh.Soh_LoopSeq[21];
+*-  ds_scaling_unit          = "hex";
+*-  description              = "loop sequence tag buffer 21";
+*-}
+
+*-soh.Soh_SchdLoopSeqIdx{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "SOHSCHIDX";
+*-  variable_location.symbol = soh.Soh_SchdLoopSeqIdx;
+*-  ds_scaling_unit          = "hex";
+*-  description              = "loop sequence tag buffer schedule index";
+*-}
+
+*-soh.Soh_IrqLoopSeqIdx{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "SOHIRQIDX";
+*-  variable_location.symbol = soh.Soh_IrqLoopSeqIdx;
+*-  ds_scaling_unit          = "hex";
+*-  description              = "loop sequence tag buffer irq index";
+*-}
+
+*-soh.Soh_IdTagExpect{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "SOHLSIDTAG";
+*-  variable_location.symbol = soh.Soh_IdTagExpect;
+*-  ds_scaling_unit          = "hex";
+*-  description              = "loop sequence expected id tag";
+*-}
 
 /*===========================================================================*\
  * File Revision History (top to bottom: first revision to last revision)
