@@ -237,3 +237,16 @@ const bool    KbHwio_CheryCanID3C0_Enable = false ;
 */
 
 const bool    KbHwio_CheryCanID430_Enable = false ;
+
+/*
+*| vehicle_can_cald.{
+*|    KbHwio_CheryCanID300_Enable {
+*|       :is_calconst;
+*|       :units = "BOOLEAN";
+*|       :description = "enable receive can ID 0x300";
+*|    }
+*|   }
+*/
+
+const bool    KbHwio_CheryCanID300_Enable = false ;
+
