@@ -33,6 +33,6 @@ extern const bool KbHwio_CheryCanID310_Enable;
 extern const bool KbHwio_CheryCanID391_Enable;
 extern const bool KbHwio_CheryCanID3C0_Enable;
 extern const bool KbHwio_CheryCanID430_Enable;
-
+extern const bool KbHwio_CheryCanID300_Enable;
 #endif
 

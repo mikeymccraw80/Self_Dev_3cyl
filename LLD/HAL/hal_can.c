@@ -6,14 +6,8 @@
 #include "io_config_flexcan.h"
 #include "ccp2conf.h"
 #include "hal_can.h"
+#include "vehicle_can_cald.h"
 
-extern const bool    KbHwio_CheryCanID300_Enable;
-extern const bool    KbHwio_CheryCanID430_Enable;
-extern const bool    KbHwio_CheryCanID3C0_Enable;
-extern const bool    KbHwio_CheryCanID391_Enable;
-extern const bool    KbHwio_CheryCanID310_Enable;
-extern const bool    KbHwio_CheryCanID2E9_Enable;
-extern const bool    KbHwio_CheryCanID1AE_Enable;
 /* ============================================================================ *\
  * Local preprocessor #define commands.
 \* ============================================================================ */
