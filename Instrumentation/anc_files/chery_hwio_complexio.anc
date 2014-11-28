@@ -139,6 +139,42 @@
 *-  description              = "dd crank internal state";
 *-}
 
+*-dd_cam.CAM_Crank_Number_Gaps_Detected{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CRKGAPCNT";
+*-  variable_location.symbol = dd_cam.CAM_Crank_Number_Gaps_Detected;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.0";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "crank gaps detected in this crank cycle, updated in cam update event";
+*-}
+
+*-dd_cam.CAM_Stuck{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CAMSTUCK";
+*-  variable_location.symbol = dd_cam.CAM_Stuck;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.0";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = " CAM sensor1 and sensor2 stuck state ";
+*-}
+
+*-dd_crank.CRANK_Cylinder_ID{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CRANKCYLID";
+*-  variable_location.symbol = dd_crank.CRANK_Cylinder_ID;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.0";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = " crank lld cylinder id. ";
+*-}
+
 /******************************************************************************/
 /*                                                                            */
 /* Revision History:                                                          */
