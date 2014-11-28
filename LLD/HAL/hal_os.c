@@ -399,15 +399,15 @@ void HAL_OS_SYN_Task(void)
 //=============================================================================
 void HAL_OS_ToothInt_Hook(void)
 {
-	IO_Eng_ToothInt(); 
+	//Chery requirement
+	IO_CAM_Level_Update();
+	IO_Eng_ToothInt();
 }
 //=============================================================================
 // HAL_OS_CAM_W_Hook
 //=============================================================================
 void HAL_OS_CAM_W_Hook(void)
 {
-	//Chery requirement
-	IO_CAM_Level_Update();
 	//syn of chery
 	if (CRANK_Get_First_Sync_Set() == true) {
 		IO_VCPC_Convert_CAMW();
