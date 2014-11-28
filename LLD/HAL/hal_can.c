@@ -7,6 +7,13 @@
 #include "ccp2conf.h"
 #include "hal_can.h"
 
+extern const bool    KbHwio_CheryCanID300_Enable;
+extern const bool    KbHwio_CheryCanID430_Enable;
+extern const bool    KbHwio_CheryCanID3C0_Enable;
+extern const bool    KbHwio_CheryCanID391_Enable;
+extern const bool    KbHwio_CheryCanID310_Enable;
+extern const bool    KbHwio_CheryCanID2E9_Enable;
+extern const bool    KbHwio_CheryCanID1AE_Enable;
 /* ============================================================================ *\
  * Local preprocessor #define commands.
 \* ============================================================================ */
@@ -399,12 +406,32 @@ void HAL_CAN_Initialize(void)
 	HAL_CAN_TX_B07_Config();
 
 	/* for chery receive interrupt */
-	HAL_CAN_RX_B08_Config();
-	HAL_CAN_RX_B09_Config();
-	HAL_CAN_RX_B10_Config();
-	HAL_CAN_RX_B11_Config();
-	HAL_CAN_RX_B12_Config();
-	HAL_CAN_RX_B13_Config();
-	HAL_CAN_RX_B14_Config();
+	if(KbHwio_CheryCanID2E9_Enable)
+
+	    HAL_CAN_RX_B08_Config();
+	
+	if(KbHwio_CheryCanID310_Enable)
+
+	    HAL_CAN_RX_B09_Config();
+	
+	if(KbHwio_CheryCanID391_Enable)
+		
+	    HAL_CAN_RX_B10_Config();
+	
+	if(KbHwio_CheryCanID3C0_Enable)
+		
+	    HAL_CAN_RX_B11_Config();
+	
+	if(KbHwio_CheryCanID430_Enable)
+		
+	    HAL_CAN_RX_B12_Config();
+
+	if(KbHwio_CheryCanID1AE_Enable)
+
+	    HAL_CAN_RX_B13_Config();
+
+	if(KbHwio_CheryCanID300_Enable)
+
+	    HAL_CAN_RX_B14_Config();
 }
 
