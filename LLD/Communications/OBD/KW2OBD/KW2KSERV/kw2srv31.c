@@ -92,6 +92,10 @@ bool Pb_FuelPumpAdjust_stop;
 bool Pb_FuelPumpPreWork;
 bool Pb_EOL_Fueladjust;
 
+#pragma section DATA " " ".nc_nvram"
+bool Pb_FuelAdjustOnlyonetime_enable;
+#pragma section DATA " " ".bss"
+
 void KwJ14230StartRoutineByLocalIdentifier( void )
 {
 	uint8_t local_id;
@@ -154,7 +158,7 @@ void KwJ14230StartRoutineByLocalIdentifier( void )
 		}
 
 		if (KbCAN_CHERY_Fuel_Adjust_Enable) {
-			if (!KW31_EndofLine_FuelAdjustMode) {
+			if ((!KW31_EndofLine_FuelAdjustMode) && (Pb_FuelAdjustOnlyonetime_enable == false)) {
 				/* check the injector error */
 				result = (SaINJD_CktTestFailed[0] || SaINJD_CktTestFailed[1] || \
 				           SaINJD_CktTestFailed[2] || SaINJD_CktTestFailed[3]);
@@ -326,6 +330,7 @@ void LLD_Update_FuelCorrect_Model(void)
 			}
 			if(Pb_FuelInjAdjust_stop && Pb_FuelPumpAdjust_stop) {
 				Pb_FuelInjAdjust = false;
+				Pb_FuelAdjustOnlyonetime_enable = true;
 			}
 		}
 	}

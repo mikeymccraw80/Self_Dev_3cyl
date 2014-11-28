@@ -123,6 +123,7 @@ extern bool    KW31_EndofLine_FuelAdjustMode;
 extern TbBOOLEAN     SaINJD_CktTestFailed[4]; 
 extern TbBOOLEAN     SbEMSD_FPRDShortHiTestFailed;
 extern TbBOOLEAN     SbEMSD_FPRDShortLoTestFailed;
+extern bool Pb_FuelAdjustOnlyonetime_enable;
 /***********************************************************************
 *                                                                      *
 * FUNCTION:          StartRoutineByLocalIdentifier                     *
@@ -168,9 +169,9 @@ uint8_t StartRoutineByLocalIdentifier(void)
    if((( GetLnVulnerabilityState() ))
      && (GetVIOS_n_EngSpd() < V_RPM(200)))
    {
-     if (KbCAN_CHERY_Fuel_Adjust_Enable) {
+     if (KbCAN_CHERY_Fuel_Adjust_Enable ) {
 
-		if (!KW31_EndofLine_FuelAdjustMode) {
+		if ((!KW31_EndofLine_FuelAdjustMode) && (Pb_FuelAdjustOnlyonetime_enable == false)) {
 
             /* check the injector error */
 			result = (SaINJD_CktTestFailed[0] || SaINJD_CktTestFailed[1] || \
