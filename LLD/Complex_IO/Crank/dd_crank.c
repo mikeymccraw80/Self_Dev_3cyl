@@ -387,7 +387,7 @@ void CRANK_Recover_From_Synch_Error( void )
 
 	CRANK_Reset_Parameters();
 
-	CRANK_Internal_State.U32 = CRANK_Set_Run_Reset_Bypass_Filter( CRANK_Internal_State.U32, true );
+	// CRANK_Internal_State.U32 = CRANK_Set_Run_Reset_Bypass_Filter( CRANK_Internal_State.U32, true );
 	CRANK_Set_Flag( CRANK_FLAG_STALL_DETECTED, true );
 
 	CRANK_Enable_Synchronization();
@@ -401,41 +401,29 @@ void CRANK_Recover_From_Synch_Error( void )
 //=============================================================================
 static void CRANK_Filter_Crank_Signal( void )
 {
-   if( CRANK_Get_Run_Reset_Bypass_Filter( CRANK_Internal_State.U32 ) )
-   {
-	  CRANK_Internal_State.U32 = CRANK_Set_Filter_Enabled( CRANK_Internal_State.U32, false );
-	  CRANK_Internal_State.U32 = CRANK_Set_Sync_Started( CRANK_Internal_State.U32, true );	
-	  CRANK_Internal_State.U32 = CRANK_Set_Run_Reset_Bypass_Filter( CRANK_Internal_State.U32, false );
-	 CRANK_Set_Flag( CRANK_FLAG_STALL_DETECTED, false );
-   }
-   else
-   {
-	  // A tooth is valid if it corresponds to an engine speed
-	  // with tooth periods between the given min and max values or
-	  // we are measuring a gap tooth so the Max_Tooth_Period is not valid and could cause a stall.
-	   if( ( CRANK_Tooth_Duration > CRANK_Filtered_Min_Tooth_Period ) &&
-			( CRANK_Tooth_Duration< CRANK_Filtered_Max_Tooth_Period ) )
-	  
-	  {
-		 CRANK_Valid_Sync_Period++;
-		 // before disabling the filter:
-		 //
-		 CRANK_Internal_State.U32 = CRANK_Set_Valid_Tooth( CRANK_Internal_State.U32, true );
-		 if( CRANK_Valid_Sync_Period >= CRANK_Initialization_Parameters->valid_synchronization_tooth_periods )
-		 {
-			CRANK_Internal_State.U32 = CRANK_Set_Engine_Turning( CRANK_Internal_State.U32, true );
-			CRANK_Internal_State.U32 = CRANK_Set_Filter_Enabled( CRANK_Internal_State.U32, false );
-			CRANK_Internal_State.U32 = CRANK_Set_Sync_Started( CRANK_Internal_State.U32, true );
-		 CRANK_Set_Flag( CRANK_FLAG_STALL_DETECTED, false );
+	if( CRANK_Get_Run_Reset_Bypass_Filter( CRANK_Internal_State.U32 ) ) {
+		CRANK_Internal_State.U32 = CRANK_Set_Filter_Enabled( CRANK_Internal_State.U32, false );
+		CRANK_Internal_State.U32 = CRANK_Set_Sync_Started( CRANK_Internal_State.U32, true );
+		CRANK_Internal_State.U32 = CRANK_Set_Run_Reset_Bypass_Filter( CRANK_Internal_State.U32, false );
+		CRANK_Set_Flag( CRANK_FLAG_STALL_DETECTED, false );
+	} else {
+		// A tooth is valid if it corresponds to an engine speed  with tooth periods between the given min and max values or
+		// we are measuring a gap tooth so the Max_Tooth_Period is not valid and could cause a stall.
+		if( ( CRANK_Tooth_Duration > CRANK_Filtered_Min_Tooth_Period ) && (CRANK_Tooth_Duration < CRANK_Filtered_Max_Tooth_Period ) ) {
+			CRANK_Valid_Sync_Period++;
+			// before disabling the filter:
+			CRANK_Internal_State.U32 = CRANK_Set_Valid_Tooth( CRANK_Internal_State.U32, true );
+			if( CRANK_Valid_Sync_Period >= CRANK_Initialization_Parameters->valid_synchronization_tooth_periods ) {
+				CRANK_Internal_State.U32 = CRANK_Set_Engine_Turning( CRANK_Internal_State.U32, true );
+				CRANK_Internal_State.U32 = CRANK_Set_Filter_Enabled( CRANK_Internal_State.U32, false );
+				CRANK_Internal_State.U32 = CRANK_Set_Sync_Started( CRANK_Internal_State.U32, true );
+				CRANK_Set_Flag( CRANK_FLAG_STALL_DETECTED, false );
+				CRANK_Valid_Sync_Period = 0;
+			}
+		} else {
 			CRANK_Valid_Sync_Period = 0;
-	  
-		 }
-	  }
-	  else
-	  {
-		 CRANK_Valid_Sync_Period = 0;
-	  }
-   }
+		}
+	}
 }
 
 //=============================================================================
@@ -518,51 +506,29 @@ static bool CRANK_First_Gap_Cofirm( void )
 //=============================================================================
 static void CRANK_Search_For_First_Gap( void )
 {
+	bool sync_conditions_met;
 
-   bool   sync_conditions_met;
-   
-   if( CRANK_Get_Power_Up( CRANK_Internal_State.U32 ) )
-   {
-	  //
-	  // 1st time a GapSearch is done after powerup No prev. tooth time to get
-	  // duration.
-	  //
-	  CRANK_Internal_State.U32 = CRANK_Set_Power_Up( CRANK_Internal_State.U32, false );
-   }
-   else
-   {
-	  if ( CRANK_Get_Filter_Enabled( CRANK_Internal_State.U32 ))
-	  {
-		 //
-		 // Filter out any spike due to low signal to noise ratio from the
-		 // sensor on the first teeth during crank.
-		 //
-		 CRANK_Filter_Crank_Signal();
-	  }
-	  else
-	  {
-		 CRANK_Internal_State.U32 = CRANK_Set_Engine_Turning( CRANK_Internal_State.U32, true );
-		 CRANK_Internal_State.U32 = CRANK_Set_Valid_Tooth( CRANK_Internal_State.U32, true );
-		 OS_Engine_Start_Crank();
-		 if( !CRANK_Get_Sync_Started( CRANK_Internal_State.U32 ) )
-		 {
-			//
-			// 2 intervals are needed for gap identification if the software
-			// filter is disabled.
-			//
-			CRANK_Internal_State.U32 = CRANK_Set_Sync_Started( CRANK_Internal_State.U32, true );
-		  
-		 }
-		 else
-		 {
-			// Perform the gap search
-			sync_conditions_met =  CRANK_First_Gap_Cofirm();
-
-		 }
-	  }
-
-   }
-
+	if( CRANK_Get_Power_Up(CRANK_Internal_State.U32)) {
+		// 1st time a GapSearch is done after powerup No prev. tooth time to get duration.
+		CRANK_Internal_State.U32 = CRANK_Set_Power_Up( CRANK_Internal_State.U32, false );
+	} else {
+		if ( CRANK_Get_Filter_Enabled( CRANK_Internal_State.U32 )) {
+			// Filter out any spike due to low signal to noise ratio from the
+			// sensor on the first teeth during crank.
+			CRANK_Filter_Crank_Signal();
+		} else {
+			CRANK_Internal_State.U32 = CRANK_Set_Engine_Turning( CRANK_Internal_State.U32, true );
+			CRANK_Internal_State.U32 = CRANK_Set_Valid_Tooth( CRANK_Internal_State.U32, true );
+			OS_Engine_Start_Crank();
+			if( !CRANK_Get_Sync_Started( CRANK_Internal_State.U32 ) ) {
+				// 2 intervals are needed for gap identification if the software filter is disabled.
+				CRANK_Internal_State.U32 = CRANK_Set_Sync_Started( CRANK_Internal_State.U32, true );
+			} else {
+				// Perform the gap search
+				sync_conditions_met =  CRANK_First_Gap_Cofirm();
+			}
+		}
+	}
 }
 
 //=============================================================================
