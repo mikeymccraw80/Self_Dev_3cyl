@@ -131,6 +131,9 @@ Crank_State_T       CRANK_State;
 static uCrank_Count_T    CRANK_Teeth_In_Syn_Event_COUNT;
 static uCrank_Count_T    CRANK_Previous_Sys_Event_COUNT;
 
+/* this variable is to ensure the gap will be found in valid range */
+static uCrank_Count_T    CRANK_GapConfirm_Monitor_Count;
+
 //=============================================================================
 //   Local Variable Definitions
 //=============================================================================
@@ -557,6 +560,9 @@ bool CRANK_Validate_Synchronization( void )
 	}
 
 	if( gap_confirmed ) {
+		// set gap confirm monitor varible to zero
+		CRANK_GapConfirm_Monitor_Count = 0;
+		
 		// eliminate, the tooth count  difference in each loop
 		MCD5408_BACKUP_MODE_Get_Coherent_Real_Edge_Time_And_Count( EPPWMT_TPU_INDEX, TPU_CONFIG_IC_EPPWMT, &real_edge_time_count);
 		tooth_between_gap = real_edge_time_count.Count - CRANK_GAP_REAL_COUNT;
@@ -683,10 +689,11 @@ void CRANK_Process_Crank_Event( void )
 					IS_IN_RANGE(CRANK_Current_Event_Tooth, 115, 120) ||
 					IS_IN_RANGE(CRANK_Current_Event_Tooth, 1, 5))
 				{
+					CRANK_GapConfirm_Monitor_Count ++;
 					valid_result = CRANK_Validate_Synchronization();
 				}
 				
-				if (valid_result == true) {
+				if ((valid_result == true) && (CRANK_GapConfirm_Monitor_Count <= (KyHWIO_MaxErrorTeethMore + KyHWIO_MaxErrorTeethLess)*3)) {
 					if (CRANK_Get_Sync_First_Revolution(CRANK_Internal_State.U32)) {
 						if (IS_IN_RANGE(CRANK_Current_Event_Tooth, 3, 58)) {
 							CRANK_Manage_Execute_Event();
@@ -697,6 +704,7 @@ void CRANK_Process_Crank_Event( void )
 						}
 					}
 				} else {
+					CRANK_GapConfirm_Monitor_Count = 0;
 					//recovery and return
 					CRANK_Recover_From_Synch_Error();
 					return;
