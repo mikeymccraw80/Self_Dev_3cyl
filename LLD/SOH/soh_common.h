@@ -73,7 +73,7 @@
 #define REFCLK_FREQ_HZ							     ( 818UL )
 #define SOH_RUNTEST_PERIOD_MS					     ( SOH_IRQ_PERIOD_MS * 2 )
 
-#define SOH_LOOPSEQBUFSZ						     (uint8_t)( (SOH_RUNTEST_PERIOD_MS / Main_Loop_Time_mS)*SOH_10ms_loop_funciotn_NUM + 6 )
+#define SOH_LOOPSEQBUFSZ						     (uint8_t)( (SOH_RUNTEST_PERIOD_MS / Main_Loop_Time_mS)*SOH_10ms_loop_funciotn_NUM + 10 )
 
 #define SOH_10ms_loop_funciotn_NUM  4
 // This is the time base for SOH function, used to validate external frequency in and interrupt
