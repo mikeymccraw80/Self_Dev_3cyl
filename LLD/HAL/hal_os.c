@@ -201,6 +201,7 @@ void  HAL_OS_10ms_Task(void)
 {
 	OS_10ms_Cnt0++;
 	//IO_GPIO_DI_Task();
+	MngChery_Can_10ms();
 	IO_Analog_10ms_Update();
 	IO_Eng_Update_System_Time_Background();
 	Calculate_HiRes_Engine_Speed();
@@ -243,7 +244,6 @@ void  HAL_OS_10ms_Task(void)
 
 		OS_10ms_Cnt0 = 0;
 	}
-	MngChery_Can_10ms();
 	Update_DiagStatus_10ms();
 	
 	/* update vss counter per 10ms */
