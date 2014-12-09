@@ -215,7 +215,7 @@ void  HAL_OS_10ms_Task(void)
 		HAL_Set_HLS_Task_State(HLS_TASK_20MS);
 	}
 
-	HAL_SOH_Update_Loop_Sequence_10MS();
+	// HAL_SOH_Update_Loop_Sequence_10MS();
 	IO_GPIO_DO_Task();
 	if (KW31_EndofLine_FuelAdjustMode == true) {
 		LLD_Update_FuelCorrect_Model();

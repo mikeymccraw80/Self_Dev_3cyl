@@ -18,6 +18,7 @@
 #include "dd_vsep_est_select.h"
 #include "intr_ems.h"
 #include "hal_os.h"
+#include "hal_soh.h"
 #include "dd_sswt.h"
 #include "immo.h"
 #include "immo_exec.h"
@@ -88,6 +89,9 @@ void MngOSTK_10msTasks(void)
 
 	/* feed e200z3 core watch dog */
 	hwi_kick_wdg_local();
+
+	/* call the soh loop sequence instance */
+	HAL_SOH_Update_Loop_Sequence_10MS();
 
 	/* call device driver layer functions */
 	VSEP_SPI_SCHEDULER_10MS();
