@@ -155,6 +155,7 @@
 #define rdli_PID0173                      (0x0173)
 #define rdli_PID017C                      (0x017C)
 #define rdli_PID017D                      (0x017D)
+#define rdli_PID017E                      (0x017E)
 #define rdli_PID017F                      (0x017F)
 #define rdli_PID0180                      (0x0180)
 #define rdli_PID0181                      (0x0181)
@@ -687,6 +688,14 @@ void LnReadDataByCommonIdentifier (void)
 			WrtDCAN_ServiceData(Lo8Of16(ParamID), msglength++);
             WrtDCAN_ServiceData( Hi8Of16(MafPcv), msglength++);
 			WrtDCAN_ServiceData( Lo8Of16(MafPcv), msglength++);
+			SendLnStandardPositiveAnswer( msglength );
+			break;
+			
+		case rdli_PID017E:
+			
+			WrtDCAN_ServiceData(Hi8Of16(ParamID), msglength++);
+			WrtDCAN_ServiceData(Lo8Of16(ParamID), msglength++);
+            WrtDCAN_ServiceData( IgaBas, msglength++);
 			SendLnStandardPositiveAnswer( msglength );
 			break;
 																																																													
