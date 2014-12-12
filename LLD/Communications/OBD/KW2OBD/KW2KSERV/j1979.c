@@ -151,6 +151,7 @@ void J1979Mode1Handler (void)
 
 			case Cy1979_PID03: /*PID 03*/
 				WrtServiceData( telem_data.tele_B_FuelStatus,Li1979_DataIdx++);
+				WrtServiceData( 0x00,Li1979_DataIdx++);
 				break;
 
 			case Cy1979_PID04: /*PID 04*/
