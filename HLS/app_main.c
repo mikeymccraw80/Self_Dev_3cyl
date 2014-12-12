@@ -145,6 +145,7 @@ unsigned char  Ta;
  uint16_t uLsaAdc;
  uint8_t  B_Vis;
  uint8_t  B_Pmp;
+ int8_t   IgaBas;
  
 Freeze_Frame_Elem  DIAG_STATUS_FREEZE_FRAME[3];
 tele_type telem_data;

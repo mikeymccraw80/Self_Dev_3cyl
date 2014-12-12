@@ -644,6 +644,7 @@ extern uint16_t uLsbAdc;
 extern uint16_t uLsaAdc;
 extern uint8_t  B_Vis;
 extern uint8_t  B_Pmp;
+extern int8_t   IgaBas;
 
 extern bool                 B_EOL_FuelAdjust;
 extern bool                 E_EOL_FuelAdjust;
