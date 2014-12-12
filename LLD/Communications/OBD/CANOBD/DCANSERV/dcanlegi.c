@@ -225,6 +225,7 @@ void J1979Mode1Handler_DCAN (void)
 
 				case Cy1979_PID03: /*PID 03*/
 					WrtDCAN_ServiceData( telem_data.tele_B_FuelStatus,Li1979_DataIdx++);
+					WrtDCAN_ServiceData( 0x00,Li1979_DataIdx++);
 					break;
 
 				case Cy1979_PID04: /*PID 04*/
