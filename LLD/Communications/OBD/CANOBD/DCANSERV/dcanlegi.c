@@ -440,6 +440,7 @@ void J1979Mode2Handler_DCAN (void)
 				/*Freezeframe number*/
 				WrtDCAN_ServiceData( frame_index , Li1979_DataIdx++ ) ;
 				WrtDCAN_ServiceData( DIAG_STATUS_FREEZE_FRAME[frame_index].Ffm_B_FuelStatus, Li1979_DataIdx++ ) ;
+				WrtDCAN_ServiceData( 0x00, Li1979_DataIdx++ ) ;
 				//  WrtServiceData( 0x00 , Li1979_DataIdx++ ) ;
 				break;
 

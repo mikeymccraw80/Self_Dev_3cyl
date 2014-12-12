@@ -365,6 +365,7 @@ void J1979Mode2Handler (void)
 				/*Freezeframe number*/
 				WrtServiceData( frame_index , Li1979_DataIdx++ ) ;
 				WrtServiceData( DIAG_STATUS_FREEZE_FRAME[frame_index].Ffm_B_FuelStatus, Li1979_DataIdx++ ) ;
+				WrtServiceData( 0x00, Li1979_DataIdx++ ) ;
 				//  WrtServiceData( 0x00 , Li1979_DataIdx++ ) ;
 				break;
 
