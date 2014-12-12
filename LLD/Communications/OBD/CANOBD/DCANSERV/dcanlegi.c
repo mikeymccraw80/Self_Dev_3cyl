@@ -1550,6 +1550,7 @@ void FormJ1979_NextMode49_DCAN( void )
 
 	if( ( Vi1979_Mode09_MsgIdx > Cy1979_InitVal ) && (Vi1979_Mode09_CurrMsgIdx < Vi1979_Mode09_MsgIdx))
 	{
+		(GetLnServiceData ()) [0] = 0x09;
 		Li1979_DataIdx = Cy1979_Mode09_MsgNumLoc;
 		WrtDCAN_ServiceData( Vy1979_InfoType , Li1979_DataIdx++ );
 		WrtDCAN_ServiceData( ++Vi1979_Mode09_CurrMsgIdx, Li1979_DataIdx++ );
