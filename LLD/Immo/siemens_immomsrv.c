@@ -374,7 +374,7 @@ static void SiemensImmo_CntrlRLineSignal (void)
 			SySiemens_RLineTimerCntr++;
 		} else {
 			// DD_SetDiscrete(DISCRETE_OUT_IMMOREQ, FALSE);
-			HAL_GPIO_SET_IMMOREQ_Enable(false);
+			HAL_GPIO_SET_IMMOREQ_Enable(true);
 			SbSiemens_RLineStatus = CbOFF;
 			SbSiemens_RLineTriggerEnbl = CbFALSE;
 		}
