@@ -9,6 +9,7 @@
 ..\LLD\HWDiag\ETCD\etcd_type.cdf
 ..\LLD\HWDiag\CAND\cand_type.cdf
 ..\LLD\HWDiag\KNOD\knod_type.cdf
+..\LLD\HWDiag\ESTD\estd_type.cdf
 ..\LLD\Communications\OBD\OBDLIB\kw2cal.cdf
 
 -e
@@ -21,6 +22,7 @@
 ..\LLD\HWDiag\EMSD\emsdcald.c
 ..\LLD\HWDiag\EOSD\eosdcald.c
 ..\LLD\HWDiag\EPSD\epsdcald.c
+..\LLD\HWDiag\ESTD\estdcald.c
 ..\LLD\HWDiag\INJD\injdcald.c
 ..\LLD\HWDiag\PRGD\prgdcald.c
 ..\LLD\HWDiag\VVTD\vvtdcald.c
