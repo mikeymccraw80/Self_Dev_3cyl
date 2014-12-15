@@ -136,7 +136,7 @@ void KwJ14230ReadEcuIdentification( void )
 	    WrtKw2000ServiceData( GetKw2000ServiceData (CyId), TrBytes++ );
 
          
-         for ( idx = 0 ; idx < 17 ; idx++ )
+         for ( idx = 0 ; idx < VIN_Size ; idx++ )
          {
             WrtKw2000ServiceData( scnVehInfo.VIN[idx], TrBytes++);
          }
