@@ -129,6 +129,20 @@ void KwJ14230ReadEcuIdentification( void )
          }
          SendStandardPositiveAnswer( TrBytes ) ;
          break ;
+
+	case ioReportVIN:
+
+	   TrBytes = 1 ;
+	    WrtKw2000ServiceData( GetKw2000ServiceData (CyId), TrBytes++ );
+
+         
+         for ( idx = 0 ; idx < 17 ; idx++ )
+         {
+            WrtKw2000ServiceData( scnVehInfo.VIN[idx], TrBytes++);
+         }
+         SendStandardPositiveAnswer( TrBytes ) ;
+         break ;
+		 
       default :
          SendStandardNegativeAnswer( nrcSubFunctionNotSupported_InvalidFormat ) ;
          break ;
