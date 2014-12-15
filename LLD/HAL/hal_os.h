@@ -119,6 +119,10 @@ void Enable_1ms_interrupt(void) ;
 void LLD_disable_interrupt(void);
 void LLD_enable_interrupt(void);
 
+interrupt_state_t Enter_Critical_Section( void );
+interrupt_state_t Enter_Critical_Enable_Section( void );
+void Leave_Critical_Section( interrupt_state_t in_interrupt_state );
+
 /* The following functions are called in Hal Engine module */
 void Sinit_CrankToRun(void);
 void Sinit_CrankToStall(void);

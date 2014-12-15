@@ -3,7 +3,7 @@
 //=============================================================================
 #include "hal_analog.h"
 #include "HLS.h"
-
+#include "hal_os.h"
 
 //=============================================================================
 //  analogy default value
@@ -64,6 +64,7 @@
 //=============================================================================
   void IO_Analog_10ms_Update(void)
 { 
+  uint32_t irq_context;
   // O2 sensor A 
   if ( LLD_atd_input_table[LLD_ATD_OXYGEN_SENSOR_1].LLD_atd_status.B_failed )
   {
@@ -118,11 +119,12 @@
   LLD_atd_input_table[LLD_ATD_AC_PRESSURE].LLD_atd_val = HAL_Analog_Get_ACPREVI_Value()>>2;
 
   if (GetCOND_AD_RespETC_DoNotUseAPS_Data() == false) {
+      irq_context = Enter_Critical_Section();
       //PPS1
       LLD_atd_input_table[LLD_ATD_PEDAL_1].LLD_atd_val = HAL_Analog_Get_PPS1VI_Value()>>2;
-
       //PPS2 
       LLD_atd_input_table[LLD_ATD_PEDAL_2].LLD_atd_val = HAL_Analog_Get_PPS2VI_Value()>>2;
+      Leave_Critical_Section(irq_context);
   }
 
    //Protect Battery 
