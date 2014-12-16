@@ -196,7 +196,7 @@
 #define rdli_PIDF124                      (0xF124)
 #define rdli_PIDF125                      (0xF125)
 #define rdli_PIDF126                      (0xF126)
-
+#define rdli_PIDF190                      (0xF190)
 
 
 
@@ -1063,6 +1063,18 @@ void LnReadDataByCommonIdentifier (void)
 			for(Idx = 0; Idx < SCN_ECUID_PRGINF_LENGHT; Idx++)
 
 			   WrtDCAN_ServiceData( scnEcuId.PrgInf_No3[Idx], msglength++);
+			
+			SendLnStandardPositiveAnswer( msglength );
+			break;
+
+		case rdli_PIDF190:
+			
+			WrtDCAN_ServiceData(Hi8Of16(ParamID), msglength++);
+			WrtDCAN_ServiceData(Lo8Of16(ParamID), msglength++);
+
+			for(Idx = 0; Idx < VIN_Size; Idx++)
+
+			   WrtDCAN_ServiceData( scnVehInfo.VIN[Idx], msglength++);
 			
 			SendLnStandardPositiveAnswer( msglength );
 			break;
