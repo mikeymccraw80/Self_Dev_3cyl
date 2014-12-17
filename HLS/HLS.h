@@ -349,7 +349,7 @@ extern VehicleInformation scnVehInfo;
 #define SCN_ECUID_SWVERNUM_LENGHT	16
 #define SCN_ECUID_HWVERNUM_LENGHT	4
 #define SCN_ECUID_MDLSERNUM_LENGHT	30
-#define SCN_ECUID_PRGINF_LENGHT		18
+#define SCN_ECUID_PRGINF_LENGHT		20
 
 typedef struct ECU_Identification {
 	uint8_t	SwVerNum[SCN_ECUID_SWVERNUM_LENGHT];
