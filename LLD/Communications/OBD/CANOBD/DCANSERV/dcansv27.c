@@ -125,7 +125,8 @@ void LnSecurityAccess (void)
 	if(GetLnServiceDataLength() < 2) {
 		SendLnStandardNegativeAnswer (IncorrectMessageLength);
 	} else {
-		if(SecurityAccessSubFunction == SubFuncRequestSeed) {
+		if((SecurityAccessSubFunction == SubFuncRequestSeed)||
+		   (SecurityAccessSubFunction == SubFuncRequestSeed_Ext)) {
 			if (GetLnServiceDataLength() != SID27_MSG01_LENGTH) {
 				SendLnStandardNegativeAnswer (IncorrectMessageLength);
 			} else {
@@ -177,7 +178,8 @@ void LnSecurityAccess (void)
 					}
 				}
 			}
-		} else if(SubFuncSendKey == SecurityAccessSubFunction) {
+		} else if((SubFuncSendKey == SecurityAccessSubFunction)||
+		          (SubFuncSendKey_Ext == SecurityAccessSubFunction)) {
 			if (LnDiagSecurityDelayTimer) {
 				SendLnStandardNegativeAnswer (RequiredTimeDelayNotExpired);
 			} else {

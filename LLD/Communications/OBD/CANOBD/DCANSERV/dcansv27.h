@@ -56,6 +56,8 @@
 #if (XeDCAN_SID_27_Supported == CeDCAN_Supported)
 #define SubFuncRequestSeed (0x01)
 #define SubFuncSendKey     (0x02)
+#define SubFuncRequestSeed_Ext (0x03)
+#define SubFuncSendKey_Ext     (0x04)
 #define SubFuncRequestSeed_EOL (0x03) /* Kostal IMMO: Request SEED for EOL matching mode */
 #define SubFuncSendKey_EOL     (0x04) /* Kostal IMMO: Request security access for EOL matching mode */
 #define SubFuncRequestSeed_AS  (0x05) /* Kostal IMMO: Request SEED for after sales matching mode */
