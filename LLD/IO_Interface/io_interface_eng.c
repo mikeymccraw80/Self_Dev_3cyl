@@ -57,6 +57,8 @@ void  IO_Eng_Engine_Stall_Reset(void)
 	crank_sig.crank_status.B_crank_stall = ( bitfield16_t )1;
 	crank_sig.crank_status.B_crank_sync = ( bitfield16_t )0 ;
 	crank_sig.crank_status.B_crank_pre_sync = ( bitfield16_t )0 ;
+	/* clear limp home flag */
+	crank_sig.crank_status.B_crank_limp_home = ( bitfield16_t )0; 
 	crank_sig.engine_rpm =0;
 	crank_sig.segment_time = 0xFFFFFFFF;
 	if (!Is_IGN_Off()) {
@@ -64,7 +66,6 @@ void  IO_Eng_Engine_Stall_Reset(void)
 		HLS_rstsyn();
 	}
 }
-
 
 //=============================================================================
 // IO_Eng_Engine_Start_Crank

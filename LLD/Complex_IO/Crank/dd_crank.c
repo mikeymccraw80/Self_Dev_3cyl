@@ -248,58 +248,58 @@ void CRANK_Initialize(
 //=============================================================================
 void CRANK_Reset_Parameters( void )
 {
-   uCrank_Count_T new_gap_cnt;
-   uint32_t       cs;
-   uint32_t       time_base;
+	uCrank_Count_T new_gap_cnt;
+	uint32_t       cs;
+	uint32_t       time_base;
 
 
-	  CRANK_Parameters.F.virtual_teeth_per_cylinder_event = CRANK_VIRTUAL_TEETH_PER_REVOLUTION
-											   / CRANK_Initialization_Parameters->number_of_cylinders;
+	CRANK_Parameters.F.virtual_teeth_per_cylinder_event = CRANK_VIRTUAL_TEETH_PER_REVOLUTION
+										   / CRANK_Initialization_Parameters->number_of_cylinders;
 
-	  CRANK_Last_Cylinder_Event_Tooth = (uint8_t)( CRANK_Synchronization_Start_Tooth
-								 + ( (uint32_t)( CRANK_Initialization_Parameters->number_of_cylinders - 1 )
-									 * CRANK_Parameters.F.virtual_teeth_per_cylinder_event ) );
+	CRANK_Last_Cylinder_Event_Tooth = (uint8_t)( CRANK_Synchronization_Start_Tooth
+							 + ( (uint32_t)( CRANK_Initialization_Parameters->number_of_cylinders - 1 )
+								 * CRANK_Parameters.F.virtual_teeth_per_cylinder_event ) );
 
 
-	  // Initialize Crank reference event related variables
-	  CRANK_Cylinder_ID = CRANK_CYLINDER_A;
-	  CRANK_Cylinder_ID_Even = CRANK_CYLINDER_A;
-	  CRANK_Parameters.F.lo_res_reference_period = 0x00FFFFFF;
-	  CRANK_Parameters.F.engine_speed= 0;
-	  CRANK_Parameters.F.reference_tooth_error_count = 0;
-	  CRANK_Parameters.F.number_of_gaps_detected = 0;
+	// Initialize Crank reference event related variables
+	CRANK_Cylinder_ID = CRANK_CYLINDER_A;
+	CRANK_Cylinder_ID_Even = CRANK_CYLINDER_A;
+	CRANK_Parameters.F.lo_res_reference_period = 0x00FFFFFF;
+	CRANK_Parameters.F.engine_speed= 0;
+	CRANK_Parameters.F.reference_tooth_error_count = 0;
+	CRANK_Parameters.F.number_of_gaps_detected = 0;
 
-	  time_base = TPU_TIMER_Get_Base_Frequency( EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT );
+	time_base = TPU_TIMER_Get_Base_Frequency( EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT );
 
-	  // Magic number 60 is seconds per minute
-	  CRANK_Filtered_Min_Tooth_Period =
-		 ( time_base / ( ( CRANK_Initialization_Parameters->filter_max_rpm_for_synchronization * CRANK_VIRTUAL_TEETH_PER_CRANK ) / 60 ) );
+	// Magic number 60 is seconds per minute
+	CRANK_Filtered_Min_Tooth_Period =
+	 ( time_base / ( ( CRANK_Initialization_Parameters->filter_max_rpm_for_synchronization * CRANK_VIRTUAL_TEETH_PER_CRANK ) / 60 ) );
 
-	  CRANK_Filtered_Max_Tooth_Period =
-		 ( time_base / ( ( CRANK_Initialization_Parameters->filter_min_rpm_for_synchronization * CRANK_VIRTUAL_TEETH_PER_CRANK ) / 60 ) );
+	CRANK_Filtered_Max_Tooth_Period =
+	 ( time_base / ( ( CRANK_Initialization_Parameters->filter_min_rpm_for_synchronization * CRANK_VIRTUAL_TEETH_PER_CRANK ) / 60 ) );
 
-	  // init crank state flags
-	  CRANK_Internal_State.U32 = CRANK_INITIAL_INTERNAL_STATE;
+	// init crank state flags
+	CRANK_Internal_State.U32 = CRANK_INITIAL_INTERNAL_STATE;
 
-	  // Disable interrupts
-	  MCD5408_Disable_Host_Interrupt(EPPWMT_TPU_INDEX, &TPU, TPU_CONFIG_IC_EPPWMT);
-	  CRANK_Internal_State.U32 = CRANK_Set_Sync_Second_Revolution( CRANK_Internal_State.U32, false );
+	// Disable interrupts
+	MCD5408_Disable_Host_Interrupt(EPPWMT_TPU_INDEX, &TPU, TPU_CONFIG_IC_EPPWMT);
+	CRANK_Internal_State.U32 = CRANK_Set_Sync_Second_Revolution( CRANK_Internal_State.U32, false );
 
-	  new_gap_cnt = MCD5408_Get_IRQ_Count_At_Last_Interrupt( EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT, CRANK_EPPE_IRQ_Select ) + CRANK_COUNT_MAX;
-	  MCD5408_Set_New_Gap_Count( EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT, new_gap_cnt );
-	  MCD5408_Set_Previous_n_1(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT,0);
-	  MCD5408_Set_Previous_1_n(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT,0);
-	  /* resume the TPU crank channel, support limphome mode */
-	  SIU_GPIO_InputBuffer_Config(HAL_GPIO_CRANK_CHANNEL, true);
-	  SIU_Pad_Config(HAL_GPIO_CRANK_CHANNEL, SIU_GPIO_PIN_ASSIGNMENT_PRIMARY_0);
+	new_gap_cnt = MCD5408_Get_IRQ_Count_At_Last_Interrupt( EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT, CRANK_EPPE_IRQ_Select ) + CRANK_COUNT_MAX;
+	MCD5408_Set_New_Gap_Count( EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT, new_gap_cnt );
+	MCD5408_Set_Previous_n_1(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT,0);
+	MCD5408_Set_Previous_1_n(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT,0);
+	/* resume the TPU crank channel, support limphome mode */
+	SIU_GPIO_InputBuffer_Config(HAL_GPIO_CRANK_CHANNEL, true);
+	SIU_Pad_Config(HAL_GPIO_CRANK_CHANNEL, SIU_GPIO_PIN_ASSIGNMENT_PRIMARY_0);
 
-	  // Call the Resync functions based on a stall event:
-	  CAM_Reset_Parameters();
-	  SPARK_Reset_Parameters();
-	  PFI_Reset_Parameters();
-	  //   IO_KNOCK_Reset_Parameters
-	  OS_Engine_Stall_Reset();
-	  KNOCK_Initialize();
+	// Call the Resync functions based on a stall event:
+	CAM_Reset_Parameters();
+	SPARK_Reset_Parameters();
+	PFI_Reset_Parameters();
+	//   IO_KNOCK_Reset_Parameters
+	OS_Engine_Stall_Reset();
+	KNOCK_Initialize();
 }
 
 
