@@ -1233,7 +1233,7 @@ uint32_t  CRANK_Get_Tooth_Period( void )
 // This function may return a value greater than the timer you are using can 
 // support. Make sure that you mask it or check for saturation.
 //=============================================================================
-static uint32_t IO_PULSE_Convert_Counts_To_Time(
+uint32_t IO_PULSE_Convert_Counts_To_Time(
    uint32_t    counts_per_time,
    uint32_t    in_count,
    uint8_t     in_time_precision,
@@ -1417,31 +1417,48 @@ void CRANK_Process_Stall_Event(void)
 //=============================================================================
 // CRANK_EngineStall_Check
 //=============================================================================
+extern uint32_t     CAM1_Backup_Falling_Edge_Time;
 void CRANK_EngineStall_PerioCheck(void)
 {
 	uint32_t edge_time;
 	uint32_t stall_time_out;
-	uint32_t    counts_per_time;
+	uint32_t counts_per_time;
 	uint32_t current_time;
+	uint32_t delta_time;
 
 	//Need to do stall check only when engine running
 	if ( CRANK_Get_Flag( CRANK_FLAG_STALL_DETECTED ) != true ) {
-		stall_time_out = CRANK_Get_Parameter( CRANK_PARAMETER_LO_RES_REFERENCE_PERIOD, 0, 0 ) / 2;
-		edge_time  = CRANK_Get_Parameter(CRANK_PARAMETER_CURRENT_EDGE_TIME, 0, 0 );
-		counts_per_time = TPU_TIMER_Get_Base_Frequency( EPPWMT_TPU_INDEX, TPU_CONFIG_IC_EPPWMT);
-		current_time = TPU_TIMER_Get_Value_Channel( EPPWMT_TPU_INDEX, TPU_CONFIG_IC_EPPWMT);
-		current_time = IO_PULSE_Convert_Counts_To_Time(counts_per_time, current_time,0,0);
-
-		if ( ( (current_time - edge_time) & UINT24_MAX ) > stall_time_out) {
-			if (CRANK_Get_Flag(CRANK_FLAG_CAM_BACKUP) != false) {
-				MCD5408_BACKUP_MODE_Exit_Backup_Service_Request(EPPWMT_TPU_INDEX, &TPU, TPU_CONFIG_IC_EPPWMT, &EPPWMT_INIT);
-				CRANK_Set_Flag(CRANK_FLAG_CAM_BACKUP, false);
+		// counts_per_time = TPU_TIMER_Get_Base_Frequency( EPPWMT_TPU_INDEX, TPU_CONFIG_IC_EPPWMT);
+		// current_time = TPU_TIMER_Get_Value_Channel( EPPWMT_TPU_INDEX, TPU_CONFIG_IC_EPPWMT);
+		// current_time = IO_PULSE_Convert_Counts_To_Time(counts_per_time, current_time,0,0);
+		if ((CRANK_Get_Flag(CRANK_FLAG_TRANSITION_TO_CAM_BACKUP) == false) && (CRANK_Get_Flag(CRANK_FLAG_CAM_BACKUP) == false)) {
+			/* decay speed using tooth */
+			stall_time_out = CRANK_Get_Parameter( CRANK_PARAMETER_LO_RES_REFERENCE_PERIOD, 0, 0 ) / 2;
+			edge_time  = CRANK_Get_Parameter(CRANK_PARAMETER_CURRENT_EDGE_TIME, 0, 0 );
+			counts_per_time = TPU_TIMER_Get_Base_Frequency( EPPWMT_TPU_INDEX, TPU_CONFIG_IC_EPPWMT);
+			current_time = TPU_TIMER_Get_Value_Channel( EPPWMT_TPU_INDEX, TPU_CONFIG_IC_EPPWMT);
+			current_time = IO_PULSE_Convert_Counts_To_Time(counts_per_time, current_time,0,0);
+			if ( ( (current_time - edge_time) & UINT24_MAX ) > stall_time_out) {
+				CRANK_Process_Stall_Event();
 			}
-			CRANK_Process_Stall_Event();
+		} else {
+			/* transmit into cam backup, decay speed using cam edge */
+			/* decay speed using tooth */
+			stall_time_out = ((CAM_Get_CAM1_Period() << 4) & UINT24_MAX) / 2;
+			counts_per_time = TPU_TIMER_Get_Base_Frequency( EPPWMT_TPU_INDEX, TPU_CONFIG_IC_EPPWMT);
+			current_time = TPU_TIMER_Get_Value_Channel( EPPWMT_TPU_INDEX, TPU_CONFIG_IC_EPPWMT);
+			current_time = IO_PULSE_Convert_Counts_To_Time(counts_per_time, current_time,0,0);
+			delta_time = (current_time - CAM1_Backup_Falling_Edge_Time) & UINT24_MAX;
+			if (delta_time > stall_time_out) {
+				if (CRANK_Get_Flag(CRANK_FLAG_CAM_BACKUP) != false) {
+					MCD5408_BACKUP_MODE_Exit_Backup_Service_Request(EPPWMT_TPU_INDEX, &TPU, TPU_CONFIG_IC_EPPWMT, &EPPWMT_INIT);
+					CRANK_Set_Flag(CRANK_FLAG_CAM_BACKUP, false);
+				}
+				CRANK_Process_Stall_Event();
+			}
 		}
 	}
 }
-
 
 //=============================================================================
 // CRANK_Get_Diag_Tooth_Cnt, for crank status diagnose

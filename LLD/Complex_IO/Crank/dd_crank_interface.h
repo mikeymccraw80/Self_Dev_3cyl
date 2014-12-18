@@ -99,4 +99,10 @@ bool CRANK_Check_Real_Gap_In_Backup_Mode( void );
 
 void CRANK_Backup_Set_Syn_Status(void);
 
+uint32_t IO_PULSE_Convert_Counts_To_Time(
+   uint32_t    counts_per_time,
+   uint32_t    in_count,
+   uint8_t     in_time_precision,
+   uint8_t     in_time_resolution );
+
 #endif // DD_CRANK_INTERFACE_H
