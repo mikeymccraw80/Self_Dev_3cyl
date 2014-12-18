@@ -57,6 +57,11 @@ static bool              cam_active_state;
 //=============================================================================
 // Crank Limp Home Mode Realize, Local Definitions
 //=============================================================================
+typedef enum {
+	CAM_DutyCycle_X,
+	CAM_DutyCycle_Y,
+	CAM_DutyCycle_Z
+} CAM_DutyCycle_T;
 
 /* import global crank variables declairation */
 extern uCrank_Count_T   CRANK_Current_Event_Tooth;
@@ -68,7 +73,8 @@ extern uCrank_Count_T   CRANK_Current_Real_Edge_Count;
 /* import crank diagnose result */
 extern bool SbEPSD_CrankNoSigTestFailed;
 
-#define CAM_DUTY_CYCLE_LENGTH 8
+#define CAM_DUTY_CYCLE_LENGTH   4
+#define CAM_FALLING_EDGE_NUMBER 4
 static uint8_t      CAM1_DutyCycle_Circle_FIFO[CAM_DUTY_CYCLE_LENGTH];
 static uint8_t      CAM1_DutyCycle_Linear_BUF[CAM_DUTY_CYCLE_LENGTH];
 static uint8_t      CAM1_Falling_Edge_Tooth_Number[CAM_DUTY_CYCLE_LENGTH];
@@ -77,6 +83,8 @@ static uint32_t     CAM1_Period_Average_Value;
 static uint32_t     CAM1_Period_Off_Circle_FIFO[CAM_DUTY_CYCLE_LENGTH];
 static uint8_t      CAM1_Circle_FIFO_Index;
 static Crank_Cylinder_T CAM_Backup_Edge_Cylinder_ID;
+
+uint32_t     CAM1_Backup_Falling_Edge_Time;
 
 #define CAM_CRANK_DIAGNOSE_MAX_Fail_COUNT 2
 static uint8_t      CAM1_CRANK_Diagnose_Fail_Count;
@@ -92,7 +100,7 @@ static const Crank_Cylinder_T CAM_DutyCycle_Cylinder_Map[] =
 	CRANK_CYLINDER_A
 };
 
-static Crank_Cylinder_T CAM_Get_DutyCycle_Pattern_CylinderID(uint8_t buf_len, uint8_t *buf);
+static Crank_Cylinder_T CAM_Get_DutyCycle_Pattern_CylinderID(uint8_t *buf);
 
 #define IS_IN_RANGE(val, min, max) (((val) >= (min)) && ((val) <= (max)))
 
@@ -102,24 +110,52 @@ static Crank_Cylinder_T CAM_Get_DutyCycle_Pattern_CylinderID(uint8_t buf_len, ui
 // mark     : this function is called in cam edge interrupt, calculate the next syn
 //            cylinder id
 //=============================================================================
-
-static Crank_Cylinder_T CAM_Get_DutyCycle_Pattern_CylinderID(uint8_t buf_len, uint8_t *buf)
+static Crank_Cylinder_T CAM_Get_DutyCycle_Pattern_CylinderID(uint8_t *buf)
 {
-	Crank_Cylinder_T next_cylinder_id;
-	int buf_index = 0, pattern_position = 0, sub_index = 0;
-	while ((buf_index < buf_len) && (pattern_position < buf_len - KyHWIO_Number_Of_CAM_Pulses)) {
-		sub_index = 0;
-		buf_index = pattern_position;
-		while (IS_IN_RANGE(buf[buf_index], KyHWIO_CAM_Pulse_Duty_Min[sub_index], KyHWIO_CAM_Pulse_Duty_Max[sub_index])) {
-			sub_index ++;
-			buf_index ++;
-			if (sub_index >= KyHWIO_Number_Of_CAM_Pulses) {
-				// return pattern_position;
-				return CAM_DutyCycle_Cylinder_Map[pattern_position];
-			}
+	int buf_index = 0;
+	CAM_DutyCycle_T pattern_array[CAM_FALLING_EDGE_NUMBER];
+
+	for (buf_index = 0; buf_index < CAM_FALLING_EDGE_NUMBER; buf_index++) {
+		if (IS_IN_RANGE(buf[buf_index], 5, 50)) {
+			pattern_array[buf_index] = CAM_DutyCycle_X;
+		} else if (IS_IN_RANGE(buf[buf_index], 55, 95)) {
+			pattern_array[buf_index] = CAM_DutyCycle_Y;
+		} else {
+			pattern_array[buf_index] = CAM_DutyCycle_Z;
 		}
-		pattern_position ++;
 	}
+	if (pattern_array[0] == CAM_DutyCycle_X) {
+		if (pattern_array[1] == CAM_DutyCycle_X) {
+			if ((pattern_array[2] == CAM_DutyCycle_Y) && (pattern_array[3] == CAM_DutyCycle_Y))
+				return CRANK_CYLINDER_C;
+			else
+				return CRANK_CYLINDER_NULL;
+		} else if (pattern_array[1] == CAM_DutyCycle_Y) {
+			if ((pattern_array[2] == CAM_DutyCycle_Y) && (pattern_array[3] == CAM_DutyCycle_X))
+				return CRANK_CYLINDER_D;
+			else
+				return CRANK_CYLINDER_NULL;
+		} else {
+			return CRANK_CYLINDER_NULL;
+		}
+	} else if (pattern_array[0] == CAM_DutyCycle_Y) {
+		if (pattern_array[1] == CAM_DutyCycle_X) {
+			if ((pattern_array[2] == CAM_DutyCycle_X) && (pattern_array[3] == CAM_DutyCycle_Y))
+				return CRANK_CYLINDER_B;
+			else
+				return CRANK_CYLINDER_NULL;
+		} else if (pattern_array[1] == CAM_DutyCycle_Y) {
+			if ((pattern_array[2] == CAM_DutyCycle_X) && (pattern_array[3] == CAM_DutyCycle_X))
+				return CRANK_CYLINDER_A;
+			else
+				return CRANK_CYLINDER_NULL;
+		} else {
+			return CRANK_CYLINDER_NULL;
+		}
+	} else {
+		return CRANK_CYLINDER_NULL;
+	}
+
 	return CRANK_CYLINDER_NULL;
 }
 
@@ -147,6 +183,8 @@ void CAM_Reset_Parameters( void )
 	CAM_State_Change_Occurred_This_Rev  = 0;
 	CAM_EdgeDetected                    = 0;
 	CAM_Reset_Reference_Counter         = 0;
+	CAM1_Period_Average_Value           = UINT24_MAX;
+	CAM_Backup_Edge_Cylinder_ID         = CRANK_CYLINDER_NULL;
 
 	for (count = 0; count < CAM_DUTY_CYCLE_LENGTH; count++) {
 		CAM1_DutyCycle_Circle_FIFO[count] = 0;
@@ -363,7 +401,6 @@ void CAM_Update_State( void )
 					CAM_State_Change_Occurred_This_Rev = Insert_Bits( CAM_State_Change_Occurred_This_Rev, false, CAM_Sensor_In_Use, 1 );
 				}
 			} else {
-				// pattern_cylinder_id = CAM_Get_DutyCycle_Pattern_CylinderID(8, CAM1_DutyCycle_Linear_BUF);
 				pattern_cylinder_id = CAM_Backup_Edge_Cylinder_ID;
 				if (pattern_cylinder_id == CRANK_CYLINDER_D) {
 					/* Indicate correct cylinder event: */
@@ -584,6 +621,8 @@ void CAM_Edge_Process( uint32_t in_cam_sensor )
 	uint16_t backup_first_edge_count;
 	uint16_t backup_last_edge_count;
 	uint8_t  backups_between_cams;
+	uint32_t backup_counts_per_time;
+	uint32_t backup_current_time;
 
 	current_edge_index = CAM_Current_Edge[cam_sensor];
 	CAM_EdgeDetected = Insert_Bits( CAM_EdgeDetected, true, cam_sensor, 1 );
@@ -601,25 +640,29 @@ void CAM_Edge_Process( uint32_t in_cam_sensor )
 		CAM1_DutyCycle_Circle_FIFO[CAM1_Circle_FIFO_Index]  = IO_Convert_Counts_To_Percent(CAM1_Period_Off_Circle_FIFO[CAM1_Circle_FIFO_Index], 100, CAM1_Period_Circle_FIFO[CAM1_Circle_FIFO_Index]);
 		CAM1_Falling_Edge_Tooth_Number[CAM1_Circle_FIFO_Index] = (uint8_t)CRANK_Get_Engine_Tooth();
 		CAM1_Circle_FIFO_Index ++;
-		if (CAM1_Circle_FIFO_Index >= CAM_DUTY_CYCLE_LENGTH) {
+		if (CAM1_Circle_FIFO_Index >= CAM_DUTY_CYCLE_LENGTH)
 			CAM1_Circle_FIFO_Index = 0;
-		}
 
 		CAM1_Linear_BUF_Index = CAM1_Circle_FIFO_Index;
 		counter = 0;
 		average_period = 0;
 		while (counter < CAM_DUTY_CYCLE_LENGTH) {
 			CAM1_DutyCycle_Linear_BUF[counter] = CAM1_DutyCycle_Circle_FIFO[CAM1_Linear_BUF_Index];
-			if (counter >= (CAM_DUTY_CYCLE_LENGTH/2)) {
-				average_period += CAM1_Period_Circle_FIFO[CAM1_Linear_BUF_Index];
-			}
-			CAM1_Linear_BUF_Index++;
+			average_period += CAM1_Period_Circle_FIFO[CAM1_Linear_BUF_Index];
+			CAM1_Linear_BUF_Index ++;
 			if (CAM1_Linear_BUF_Index >= CAM_DUTY_CYCLE_LENGTH)
 				CAM1_Linear_BUF_Index = 0;
 			counter++;
 		}
-		CAM1_Period_Average_Value = (average_period >> 2);
-		CAM_Backup_Edge_Cylinder_ID = CAM_Get_DutyCycle_Pattern_CylinderID(CAM_DUTY_CYCLE_LENGTH, CAM1_DutyCycle_Linear_BUF);
+		CAM_Backup_Edge_Cylinder_ID = CAM_Get_DutyCycle_Pattern_CylinderID(CAM1_DutyCycle_Linear_BUF);
+		/* calculate the valid Period average value */
+		if (CAM_Backup_Edge_Cylinder_ID != CRANK_CYLINDER_NULL)
+			CAM1_Period_Average_Value = (average_period >> 2);
+		/* get current falling edge ETPU time */
+		backup_counts_per_time = TPU_TIMER_Get_Base_Frequency( EPPWMT_TPU_INDEX, TPU_CONFIG_IC_EPPWMT);
+		backup_current_time = TPU_TIMER_Get_Value_Channel( EPPWMT_TPU_INDEX, TPU_CONFIG_IC_EPPWMT);
+		backup_current_time = IO_PULSE_Convert_Counts_To_Time(backup_counts_per_time, backup_current_time,0,0);
+		CAM1_Backup_Falling_Edge_Time = backup_current_time;
 
 		if (CRANK_Get_Flag(CRANK_FLAG_CAM_BACKUP) == false) {
 			if (CRANK_Get_Diag_Tooth_Cnt() == 0) {
@@ -630,10 +673,10 @@ void CAM_Edge_Process( uint32_t in_cam_sensor )
 			if (CAM1_CRANK_Diagnose_Fail_Count >= CAM_CRANK_DIAGNOSE_MAX_Fail_COUNT) {
 				/* if diagnose fail count get the maximum, enable pre-syn value */
 				OS_Engine_Start_Crank();
-				CRANK_Set_Flag( CRANK_FLAG_STALL_DETECTED, false );
+				CRANK_Set_Flag(CRANK_FLAG_STALL_DETECTED, false);
+				CRANK_Set_Flag(CRANK_FLAG_TRANSITION_TO_CAM_BACKUP, true);
 
 				/* confirm current CAM Edge */
-				// CAM_Backup_Edge_Cylinder_ID = CAM_Get_DutyCycle_Pattern_CylinderID(CAM_DUTY_CYCLE_LENGTH, CAM1_DutyCycle_Linear_BUF);
 				if (((CAM_Backup_Edge_Cylinder_ID == CRANK_CYLINDER_B) || (CAM_Backup_Edge_Cylinder_ID == CRANK_CYLINDER_D)) \
 					&& (CAM_Get_CAM1_EngineSpeed() > KfVIOS_n_BackupModeEventScheduleThrsh))
 				{
@@ -702,7 +745,7 @@ void CAM_Edge_Process( uint32_t in_cam_sensor )
 			CRANK_Set_Flag( CRANK_FLAG_STALL_DETECTED, false );
 
 			/* confirm current CAM Edge */
-			CAM_Backup_Edge_Cylinder_ID = CAM_Get_DutyCycle_Pattern_CylinderID(CAM_DUTY_CYCLE_LENGTH, CAM1_DutyCycle_Linear_BUF);
+			CAM_Backup_Edge_Cylinder_ID = CAM_Get_DutyCycle_Pattern_CylinderID(CAM1_DutyCycle_Linear_BUF);
 
 			if ((CAM_Backup_Edge_Cylinder_ID == CRANK_CYLINDER_B) || (CAM_Backup_Edge_Cylinder_ID == CRANK_CYLINDER_D)) {
 				//todo nothing
