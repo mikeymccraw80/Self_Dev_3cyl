@@ -37,6 +37,7 @@
 #include "condpapi.h"
 #include "hal_mileage.h"
 #include "kw2srv31.h"
+#include "hal_eeprom_mfg.h"
 
 #define HLS_TASK_2MS_PATTERN (HLS_TASK_5MS   | HLS_TASK_10MS  | \
 							  HLS_TASK_20MS  | HLS_TASK_50MS  | \
@@ -496,7 +497,8 @@ void HAL_OS_CAM_READ_Hook(void)
 //=============================================================================
 void HAL_OS_Powerdown_Callback(void)
 {
-    IO_OS_Powerdown_Callback();
+	IO_OS_Powerdown_Callback();
+	MFG_UpdateEepromFromHLS();
 }
 
 

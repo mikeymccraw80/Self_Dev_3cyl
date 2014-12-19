@@ -261,7 +261,7 @@ void InitializeHardwareLast(void)
 	INST_Initialize_Calibration_Pages();
 
 	/* init vin for hls variable */
-	MFG_InitEepromWithHLS();
+	MFG_InitEepromToHLS();
 
 	/* read reset type, set power fail flag */
 	// if ((Reset_Status.bits.Power_On_Reset == false) 
