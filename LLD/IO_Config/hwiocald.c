@@ -222,7 +222,7 @@ const uint16_t KyHWIO_MaxErrorTeethLess = 3;
 *|   }
 *| }
 */
-const   uint8_t     KyHWIO_Num58xGapsUsingCamForSync = 12;
+const   uint8_t     KyHWIO_Num58xGapsUsingCamForSync = 255;
 
 
 /*

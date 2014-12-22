@@ -78,20 +78,19 @@ void InitializeComplexIO( void )
 	IO_Init_Crank_Initialization_Parameters.degrees_top_dead_center      = CRANK_Convert_Angle_To_uCrank_Angle(KfHWIO_phi_TopDeadCenter,S_CRANK_ANGLE );
 	IO_Init_Pfi_Initialization_Parameters.boundary_fraction = CRANK_Convert_Angle_To_uCrank_Angle(KfHWIO_phi_BoundaryFraction, S_CRANK_ANGLE);
 
-	IO_Init_Cam_Active_Cylinders[CAM1] = (KeHWIO_Cam1OccurredTrue) ? true : false;
-	IO_Init_Cam_Active_Cylinders[CAM2] = (KeHWIO_Cam2OccurredTrue) ? true : false;
+	/* use the pro-define const variable to init IO_Init_Cam_Initialization_Parameters */
+	IO_Init_Cam_Initialization_Parameters = CAM_INITIALIZATION_PARAMETERS;
+	IO_Init_Cam_Active_Cylinders[CAM1] = KeHWIO_Cam1OccurredTrue;
+	IO_Init_Cam_Active_Cylinders[CAM2] = KeHWIO_Cam2OccurredTrue;
 	IO_Init_Cam_Initialization_Parameters.number_of_gaps_before_sync = KyHWIO_Num58xGapsBeforeSeqn;
 	IO_Init_Cam_Initialization_Parameters.number_of_toggles_before_sync = KyHWIO_Num58xGapsUsingCamForSync;
 	IO_Init_Cam_Initialization_Parameters.cam_read_angle = CRANK_Convert_Angle_To_uCrank_Angle(KyHWIO_phi_ToothAngleForCamRead, S_CRANK_ANGLE);
-
 	IO_Init_Cam_Initialization_Parameters.CAM_Active_State = (bool * const )IO_Init_Cam_Active_Cylinders;
-	IO_Init_Cam_Initialization_Parameters.use_cam_toggle = CAM_INITIALIZATION_PARAMETERS.use_cam_toggle;
 
-	CRANK_Initialize(  (IO_Crank_Initialization_Parameters_T  * const)&IO_Init_Crank_Initialization_Parameters );
-
+	CRANK_Initialize((IO_Crank_Initialization_Parameters_T * const)&IO_Init_Crank_Initialization_Parameters );
 	CRANK_Scheduler_Initialize();
 
-	CAM_Initialize( (IO_Cam_Initialization_Parameters_T  * const)&CAM_INITIALIZATION_PARAMETERS );
+	CAM_Initialize((IO_Cam_Initialization_Parameters_T * const)&IO_Init_Cam_Initialization_Parameters);
 	CAM_Initialize_4X_Config(CAM1);
 	CAM_Initialize_4X_Config(CAM2);
 	// set CAM channel
