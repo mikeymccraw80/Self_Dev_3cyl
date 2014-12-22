@@ -362,15 +362,9 @@ typedef struct ECU_Identification {
 }ECU_Identification;
 extern ECU_Identification scnEcuId;
 
-/* the following data is stored in eeprom */
-/* structure size is packed 5bytes, total size is 40bytes*/
-#define		SY_FCMTSIZE				8
-typedef __packed__ struct {
-	uint8_t		FltID;		/* fault identity number */
-	uint16_t	FStat;		/* fault states and type */
-	uint16_t	FAttr;		/* fault attribute       */
-}FCMTabEntry;
-extern FCMTabEntry FCMTab[SY_FCMTSIZE];		/* Fault Code Memory table for storing fault entries */
+/* the following data is stored in eeprom, total size is 40bytes*/
+#define		HLS_DataStoreEEP_SIZE				8
+extern uint8_t HLS_DataStoreEEP[HLS_DataStoreEEP_SIZE];
 
 #define			SY_FCMTSIZE			8
 extern uint8_t 	count_DTCs_SID03;				/* DTC counter for service 03 */

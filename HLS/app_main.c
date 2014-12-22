@@ -154,7 +154,7 @@ uint16_t	DTCs_SID03[SY_FCMTSIZE];
 bool	B_DiagInfoClrReq;
 uint8_t 	count_DTCs_SID07;
 uint16_t	DTCs_SID07[SY_FCMTSIZE];
-FCMTabEntry FCMTab[SY_FCMTSIZE];
+uint8_t HLS_DataStoreEEP[HLS_DataStoreEEP_SIZE];
 
 /*the flowing is ISO14230 service 0x31&0x32 */
 // uint8_t  SupFlagC0[4];    /* 0xC0  ID Support Flag($C1-$E0) */
