@@ -181,7 +181,7 @@ const uint8_t KyHWIO_NumberOfCylinders = 4;
 *|   }
 *| }
 */
-const uint8_t KyHWIO_NumValidPeriodsBeforeSyncStart = 15;
+const uint8_t KyHWIO_NumValidPeriodsBeforeSyncStart = 7;
 
 /*
 *| hwiocald.{
