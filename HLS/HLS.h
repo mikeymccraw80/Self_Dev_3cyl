@@ -363,7 +363,7 @@ typedef struct ECU_Identification {
 extern ECU_Identification scnEcuId;
 
 /* the following data is stored in eeprom, total size is 40bytes*/
-#define		HLS_DataStoreEEP_SIZE				8
+#define		HLS_DataStoreEEP_SIZE				40
 extern uint8_t HLS_DataStoreEEP[HLS_DataStoreEEP_SIZE];
 
 #define			SY_FCMTSIZE			8
