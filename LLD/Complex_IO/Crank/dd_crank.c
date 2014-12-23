@@ -174,6 +174,10 @@ void CRANK_Process_Stall_Event(void) ;
 //=============================================================================
  void OS_Engine_First_Gap(void) ;
 
+//=============================================================================
+// CRANK_FS_Reset
+//=============================================================================
+static void CRANK_FS_Reset(void);
 
 //=============================================================================
 // CRANK_Convert_Ref_Period_To_RPM
@@ -300,6 +304,9 @@ void CRANK_Reset_Parameters( void )
 	//   IO_KNOCK_Reset_Parameters
 	OS_Engine_Stall_Reset();
 	KNOCK_Initialize();
+
+	// crank fast startup reset
+	CRANK_FS_Reset();
 }
 
 
@@ -318,44 +325,35 @@ void CRANK_Reset_Parameters( void )
 //=============================================================================
 void CRANK_Manage_Execute_Event( void )
 {
-   int8_t   counter;
-   uint32_t mask;
-   uint32_t current_event;
+	int8_t   counter;
+	uint32_t mask;
+	uint32_t current_event;
 
-   // Set the initial mask to be reduced each time through the loop:
-   mask = UINT32_MAX;
+	// Set the initial mask to be reduced each time through the loop:
+	mask = UINT32_MAX;
 
-   // Read the current row from the schedule table:
-   current_event = CRANK_Schedule_Table[ CRANK_Current_Event_Tooth - 1 ];
+	// Read the current row from the schedule table:
+	current_event = CRANK_Schedule_Table[ CRANK_Current_Event_Tooth - 1 ];
 
-   // Check each column of the schedule table:
-  for( counter = CRANK_EVENT_ID_MAX - 1; counter > -1; counter-- )
-   //	for( counter = 0; counter <CRANK_EVENT_ID_MAX; counter++ )
-   {
-	  // Reduce the mask:
-	  mask &= ~(Mask32( counter, 1));
+	// Check each column of the schedule table:
+	for( counter = CRANK_EVENT_ID_MAX - 1; counter > -1; counter-- ) {
+		// Reduce the mask:
+		mask &= ~(Mask32( counter, 1));
 
-	  // If the current event is selected (indicated by a '1' in the schedule
-	  // table), but the handler routine pointer is empty, a problem has occurred:
-	  //
-	  if( current_event & ( 0x1 << counter) )
-	  {
-
-		 // Call the handler routine in CRANK_Event_List which corresponds
-		 // to this bit in CRANK_Schedule_Table_Ptr[current_event]:
-		 //
-		 ( *CRANK_Event_List[ counter ] )();
-
-		 // If there are no more scheduled events on this tooth, exit:
-		 if( !( ( current_event ) & mask ) )
-		 {
-			break;
-		 }
-	  }
-   }
-
+		// If the current event is selected (indicated by a '1' in the schedule
+		// table), but the handler routine pointer is empty, a problem has occurred:
+		if( current_event & ( 0x1 << counter) ) {
+			// Call the handler routine in CRANK_Event_List which corresponds
+			// to this bit in CRANK_Schedule_Table_Ptr[current_event]:
+			( *CRANK_Event_List[ counter ] )();
+			// If there are no more scheduled events on this tooth, exit:
+			if( !( ( current_event ) & mask ) )
+			{
+				break;
+			}
+		}
+	}
 }
-
 
 //=============================================================================
 // /-----------------------------------------------------------------------\
@@ -462,7 +460,7 @@ static bool CRANK_First_Gap_Cofirm( void )
 	/* 1st criterion : gap at expected location,  2nd criterion : gap pattern recognized*/
 	if((CRANK_Next_Event_PA_Content == previous_n_1 ) && (((uCrank_Count_T)(previous_n_1 - previous_1_n)) == 1)) {
 		// 1st GAP found
-		CRANK_Parameters.F.number_of_gaps_detected = 0;    
+		CRANK_Parameters.F.number_of_gaps_detected = 0;
 		CRANK_Internal_State.U32 = CRANK_Set_Sync_Started( CRANK_Internal_State.U32, false );
 		CRANK_Internal_State.U32 = CRANK_Set_First_Sync_Occurred( CRANK_Internal_State.U32, true );
 		if (CRANK_Cylinder_ID == CRANK_CYLINDER_A) {
@@ -507,9 +505,9 @@ static bool CRANK_First_Gap_Cofirm( void )
 // this function is accessed from the crank interrupt service
 // routine when the first gap has not been detected
 //=============================================================================
-static void CRANK_Search_For_First_Gap( void )
+static bool CRANK_Search_For_First_Gap( void )
 {
-	bool sync_conditions_met;
+	bool sync_conditions_met = false;
 
 	if( CRANK_Get_Power_Up(CRANK_Internal_State.U32)) {
 		// 1st time a GapSearch is done after powerup No prev. tooth time to get duration.
@@ -532,6 +530,8 @@ static void CRANK_Search_For_First_Gap( void )
 			}
 		}
 	}
+	
+	return sync_conditions_met;
 }
 
 //=============================================================================
@@ -648,6 +648,99 @@ bool CRANK_Check_Real_Signal_In_Backup_Mode( void )
 //  Function:            CRANK_Process_Crank_Event
 //=============================================================================
 #define IS_IN_RANGE(val, min, max) (((val) >= (min)) && ((val) <= (max)))
+typedef enum {
+	FS_INIT_PARAMETER,
+	FS_WAITING_FOR_FIRST_EDGE,
+	FS_CRANK_PULSE_COUNT_INCREASE
+} CRANK_FS_State_T;
+
+static CRANK_FS_State_T CRANK_FS_State;
+static uCrank_Count_T   CRANK_FS_Pulse_Count;
+static uint8_t          CRANK_FS_Last_CAM_Edge_Count;
+
+#define FS_MAX_WAITING_COUNT  11
+
+static void CRANK_FS_Reset(void)
+{
+	CRANK_FS_State = FS_INIT_PARAMETER;
+}
+
+static bool CRANK_FS_Search_For_First_Syn(void)
+{
+	bool syn_detected;
+	uCrank_Count_T cam_edge_count;
+
+	syn_detected = false;
+	cam_edge_count = CAM_Get_Current_Edge(CAM1);
+	/* fast startup cylinder algorithm */
+	switch (CRANK_FS_State) {
+	case FS_INIT_PARAMETER:
+		CRANK_FS_Pulse_Count = 0;
+		CRANK_FS_Last_CAM_Edge_Count = cam_edge_count;
+		CRANK_FS_State = FS_WAITING_FOR_FIRST_EDGE;
+		break;
+	case FS_WAITING_FOR_FIRST_EDGE:
+		if (CRANK_FS_Last_CAM_Edge_Count != cam_edge_count) {
+			CRANK_FS_Last_CAM_Edge_Count = cam_edge_count;
+			CRANK_FS_Pulse_Count = 1;
+			CRANK_FS_State = FS_CRANK_PULSE_COUNT_INCREASE;
+		}
+		break;
+	case FS_CRANK_PULSE_COUNT_INCREASE:
+		if (CRANK_FS_Last_CAM_Edge_Count != cam_edge_count) {
+			CRANK_FS_Last_CAM_Edge_Count = cam_edge_count;
+			CRANK_FS_Pulse_Count = 1;
+		} else {
+			CRANK_FS_Pulse_Count ++;
+		}
+		break;
+	default:
+		break;
+	}
+
+	if (CRANK_FS_Pulse_Count > FS_MAX_WAITING_COUNT) {
+		syn_detected = true;
+		if (SIU_GPIO_DISCRETE_Get_State(HAL_GPIO_CAM1_CHANNEL) == true) {
+			// todo: identified to cylinder B
+			// note: this cylinder id will increase in high priority routine
+			CRANK_Cylinder_ID = CRANK_CYLINDER_A;
+			CRANK_Current_Event_Tooth = 32;
+		} else {
+			//todo: identified to cylinder D
+			CRANK_Cylinder_ID = CRANK_CYLINDER_C;
+			CRANK_Current_Event_Tooth = 92;
+		}
+		// set the first syn occured flag
+		CRANK_Parameters.F.number_of_gaps_detected = 0;
+		CRANK_Internal_State.U32 = CRANK_Set_Sync_Started(CRANK_Internal_State.U32, false );
+		CRANK_Internal_State.U32 = CRANK_Set_First_Sync_Occurred(CRANK_Internal_State.U32, true );
+		CRANK_Internal_State.U32 = CRANK_Set_Sync_Occurred( CRANK_Internal_State.U32, true );
+
+		if (CRANK_Cylinder_ID == CRANK_CYLINDER_A) {
+			CRANK_Internal_State.U32 = CRANK_Set_Sync_First_Revolution( CRANK_Internal_State.U32, true );
+			CRANK_Internal_State.U32 = CRANK_Set_Sync_Second_Revolution( CRANK_Internal_State.U32, false );
+		} else if (CRANK_Cylinder_ID == CRANK_CYLINDER_C) {
+			CRANK_Internal_State.U32 = CRANK_Set_Sync_First_Revolution( CRANK_Internal_State.U32, false );
+			CRANK_Internal_State.U32 = CRANK_Set_Sync_Second_Revolution( CRANK_Internal_State.U32, true );
+		}
+
+		// Estimate when previous CylinderEvent would have occurred
+		CRANK_Parameters.F.cylinder_event_reference_time = ( CRANK_Parameters.F.edge_time -
+														( (uint32_t)( CRANK_Tooth_Duration *
+														(  (uint8_t)( CRANK_Parameters.F.virtual_teeth_per_cylinder_event -
+														( CRANK_First_Cylinder_Event_Tooth -
+														CRANK_Synchronization_Start_Tooth ) ) ) ) ) ) & 0x00FFFFFF;
+		CRANK_Parameters.F.current_tooth = CRANK_Current_Event_Tooth;
+		OS_Engine_First_Gap();
+		CAM_Set_Current_Edge(CAM1);
+		CAM_Set_Current_Edge(CAM2);
+		CAM_Set_Total_Edge(CAM1);
+		CAM_Set_Total_Edge(CAM2);
+	}
+	
+	return syn_detected;
+}
+
 void CRANK_Process_Crank_Event( void )  
 {
 	EPPwMT_Coherent_Edge_Time_And_Count_T edgeTimeAndCount;
@@ -679,8 +772,10 @@ void CRANK_Process_Crank_Event( void )
 
 			// Check if first synchronization took place:
 			if (!CRANK_Get_First_Sync_Occurred( CRANK_Internal_State.U32 ) ) {
-				// Look for the first synchronization:
-				CRANK_Search_For_First_Gap();
+				// Look for the first gap(2, 62) or synchronization(32, 92)
+				if (CRANK_Search_For_First_Gap() || CRANK_FS_Search_For_First_Syn()){
+					CRANK_Internal_State.U32 = CRANK_Set_First_Sync_Occurred(CRANK_Internal_State.U32, true );
+				}
 			} else {
 				valid_result = true;
 				
