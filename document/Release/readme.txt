@@ -3,4 +3,5 @@ Please put the release document in this directory to trace.
 2, obd interface document.
 3, hardware diagnose variables document.
 4, hardware I/O calibration speccification
+5, CalGuide Document
 ...
