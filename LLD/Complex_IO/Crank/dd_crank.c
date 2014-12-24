@@ -663,8 +663,6 @@ static CRANK_FS_State_T CRANK_FS_State;
 static uCrank_Count_T   CRANK_FS_Pulse_Count;
 static uint8_t          CRANK_FS_Last_CAM_Edge_Count;
 
-#define FS_MAX_WAITING_COUNT  11
-
 static void CRANK_FS_Reset(void)
 {
 	CRANK_FS_State = FS_INIT_PARAMETER;
@@ -682,7 +680,6 @@ static bool CRANK_FS_Search_For_First_Syn(void)
 	switch (CRANK_FS_State) {
 	case FS_INIT_PARAMETER:
 		CRANK_FS_Pulse_Count = 0;
-		CRANK_FS_Last_CAM_Edge_Count = cam_edge_count;
 		CRANK_FS_State = FS_FILTER_VALID_TOOTH;
 		break;
 	case FS_FILTER_VALID_TOOTH:
@@ -690,6 +687,7 @@ static bool CRANK_FS_Search_For_First_Syn(void)
 			CRANK_FS_Pulse_Count ++;
 			if (CRANK_FS_Pulse_Count >= KyHWIO_NumValidPeriodsBeforeSyncStart) {
 				CRANK_FS_Pulse_Count = 0;
+				CRANK_FS_Last_CAM_Edge_Count = cam_edge_count;
 				CRANK_FS_State = FS_WAITING_FOR_FIRST_EDGE;
 			}
 		} else {
@@ -709,7 +707,7 @@ static bool CRANK_FS_Search_For_First_Syn(void)
 			CRANK_FS_Pulse_Count = 1;
 		} else {
 			CRANK_FS_Pulse_Count ++;
-			if (CRANK_FS_Pulse_Count > FS_MAX_WAITING_COUNT)
+			if (CRANK_FS_Pulse_Count > KyHWIO_NumDeltaToothUsingFastStartUp)
 				CRANK_FS_State = FS_CRANK_CYLINDER_ID_COMPLETE;
 		}
 		break;
