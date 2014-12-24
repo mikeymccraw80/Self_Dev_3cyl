@@ -843,10 +843,10 @@ void CRANK_Process_Crank_Event( void )
 		CRANK_Current_Event_Edge_Content = edgeTimeAndCount.Count;
 	} while (CRANK_Current_Event_Edge_Content !=temp_count);
 
-	// We would not miss any tooth since there are a time buffer in etpu
-	MCD5408_Set_New_IRQ_Count(EPPWMT_TPU_INDEX, TPU_CONFIG_IC_EPPWMT, CRANK_EPPE_IRQ_Select, CRANK_Next_Event_PA_Content);
 	// Clear the interrupt flag: false == clear
 	MCD5408_Set_Host_Interrupt_Status(EPPWMT_TPU_INDEX, &TPU,TPU_CONFIG_IC_EPPWMT, false);
+	// We would not miss any tooth since there are a time buffer in etpu
+	MCD5408_Set_New_IRQ_Count(EPPWMT_TPU_INDEX, TPU_CONFIG_IC_EPPWMT, CRANK_EPPE_IRQ_Select, CRANK_Next_Event_PA_Content);
 }
 
 //=============================================================================
