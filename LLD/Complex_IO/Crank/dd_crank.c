@@ -652,9 +652,11 @@ bool CRANK_Check_Real_Signal_In_Backup_Mode( void )
 #define IS_IN_RANGE(val, min, max) (((val) >= (min)) && ((val) <= (max)))
 typedef enum {
 	FS_INIT_PARAMETER,
+	FS_FILTER_VALID_TOOTH,
 	FS_WAITING_FOR_FIRST_EDGE,
 	FS_CRANK_PULSE_COUNT_INCREASE,
-	FS_CRANK_CYLINDER_ID_COMPLETE
+	FS_CRANK_CYLINDER_ID_COMPLETE,
+	FS_CRANK_CYLINDER_ID_ERROR
 } CRANK_FS_State_T;
 
 static CRANK_FS_State_T CRANK_FS_State;
@@ -681,7 +683,18 @@ static bool CRANK_FS_Search_For_First_Syn(void)
 	case FS_INIT_PARAMETER:
 		CRANK_FS_Pulse_Count = 0;
 		CRANK_FS_Last_CAM_Edge_Count = cam_edge_count;
-		CRANK_FS_State = FS_WAITING_FOR_FIRST_EDGE;
+		CRANK_FS_State = FS_FILTER_VALID_TOOTH;
+		break;
+	case FS_FILTER_VALID_TOOTH:
+		if((CRANK_Tooth_Duration > CRANK_Filtered_Min_Tooth_Period ) && (CRANK_Tooth_Duration < CRANK_Filtered_Max_Tooth_Period)) {
+			CRANK_FS_Pulse_Count ++;
+			if (CRANK_FS_Pulse_Count >= KyHWIO_NumValidPeriodsBeforeSyncStart) {
+				CRANK_FS_Pulse_Count = 0;
+				CRANK_FS_State = FS_WAITING_FOR_FIRST_EDGE;
+			}
+		} else {
+			CRANK_FS_State = FS_INIT_PARAMETER;
+		}
 		break;
 	case FS_WAITING_FOR_FIRST_EDGE:
 		if (CRANK_FS_Last_CAM_Edge_Count != cam_edge_count) {
@@ -696,14 +709,15 @@ static bool CRANK_FS_Search_For_First_Syn(void)
 			CRANK_FS_Pulse_Count = 1;
 		} else {
 			CRANK_FS_Pulse_Count ++;
+			if (CRANK_FS_Pulse_Count > FS_MAX_WAITING_COUNT)
+				CRANK_FS_State = FS_CRANK_CYLINDER_ID_COMPLETE;
 		}
 		break;
 	default:
 		break;
 	}
 
-	if (CRANK_FS_Pulse_Count > FS_MAX_WAITING_COUNT) {
-		CRANK_FS_State = FS_CRANK_CYLINDER_ID_COMPLETE;
+	if (CRANK_FS_State == FS_CRANK_CYLINDER_ID_COMPLETE) {
 		// toggle pin output
 		SIU.GPDO[HAL_GPIO_VGIS1CTL_CHANNEL].F.PDO = true;
 		syn_detected = true;
@@ -748,7 +762,7 @@ static bool CRANK_FS_Search_For_First_Syn(void)
 	return syn_detected;
 }
 
-void CRANK_Process_Crank_Event( void )  
+void CRANK_Process_Crank_Event( void )
 {
 	EPPwMT_Coherent_Edge_Time_And_Count_T edgeTimeAndCount;
 	uint32_t  temp_count;
@@ -829,10 +843,10 @@ void CRANK_Process_Crank_Event( void )
 		CRANK_Current_Event_Edge_Content = edgeTimeAndCount.Count;
 	} while (CRANK_Current_Event_Edge_Content !=temp_count);
 
-	//We would not miss any tooth since there are a time buffer in etpu
-	MCD5408_Set_New_IRQ_Count(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT, CRANK_EPPE_IRQ_Select, CRANK_Next_Event_PA_Content );
+	// We would not miss any tooth since there are a time buffer in etpu
+	MCD5408_Set_New_IRQ_Count(EPPWMT_TPU_INDEX, TPU_CONFIG_IC_EPPWMT, CRANK_EPPE_IRQ_Select, CRANK_Next_Event_PA_Content);
 	// Clear the interrupt flag: false == clear
-	MCD5408_Set_Host_Interrupt_Status(EPPWMT_TPU_INDEX,&TPU,TPU_CONFIG_IC_EPPWMT,false);
+	MCD5408_Set_Host_Interrupt_Status(EPPWMT_TPU_INDEX, &TPU,TPU_CONFIG_IC_EPPWMT, false);
 }
 
 //=============================================================================
