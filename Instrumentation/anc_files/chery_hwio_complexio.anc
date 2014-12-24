@@ -175,6 +175,30 @@
 *-  description              = " crank lld cylinder id. ";
 *-}
 
+*-dd_crank.CRANK_FS_Pulse_Count{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CRKFSPCNT";
+*-  variable_location.symbol = dd_crank.CRANK_FS_Pulse_Count;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.0";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = " crank fast startup pulse count ";
+*-}
+
+*-dd_crank.CRANK_FS_State{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CRKFSSTAT";
+*-  variable_location.symbol = dd_crank.CRANK_FS_State;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.0";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = " crank fast startup machine state";
+*-}
+
 /******************************************************************************/
 /*                                                                            */
 /* Revision History:                                                          */
