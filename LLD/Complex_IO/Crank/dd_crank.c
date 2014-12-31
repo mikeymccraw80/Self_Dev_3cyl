@@ -11,6 +11,7 @@
 #include "hwiocald.h"
 #include "io_config_siu.h"
 #include "dd_siu_interface.h"
+#include "v_ignit.h"
 
 uint8_t crank_b_syn;
 uint16_t crank_rpm;
@@ -680,6 +681,11 @@ static bool CRANK_FS_Search_For_First_Syn(void)
 {
 	bool syn_detected;
 	uCrank_Count_T cam_edge_count;
+
+	/* if keyoff, return false */
+	if ((bool)(IgnitionOnStatus.IgnitionIsOn) == false) {
+		return false;
+	}
 
 	syn_detected = false;
 	cam_edge_count = CAM_Get_Current_Edge(CAM1);
