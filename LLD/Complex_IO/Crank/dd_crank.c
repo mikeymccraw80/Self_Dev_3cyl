@@ -145,6 +145,21 @@ volatile uint8_t                 CRANK_Last_Cylinder_Event_Tooth;
 volatile uint8_t                 CRANK_Valid_Sync_Period;
 volatile uCrank_Count_T          CRANK_Tooth_Sync_Count;  // PA @ last sync
 
+//=============================================================================
+//   fast startup Variable Definitions
+//=============================================================================
+typedef enum {
+	FS_INIT_PARAMETER,
+	FS_FILTER_VALID_TOOTH,
+	FS_WAITING_FOR_FIRST_EDGE,
+	FS_CRANK_PULSE_COUNT_INCREASE,
+	FS_CRANK_CYLINDER_ID_COMPLETE,
+	FS_CRANK_CYLINDER_ID_ERROR
+} CRANK_FS_State_T;
+
+static CRANK_FS_State_T CRANK_FS_State;
+static uCrank_Count_T   CRANK_FS_Pulse_Count;
+static uint8_t          CRANK_FS_Last_CAM_Edge_Count;
 
 //=============================================================================
 // /------------------------------------------------------------------------
@@ -591,10 +606,14 @@ bool CRANK_Validate_Synchronization( void )
 		}
 
 		/* check whether need to recover from synch error */
-		if ((CRANK_Error_Count_Less >= KyHWIO_MaxErrorTeethLess) ||
-			(CRANK_Error_Count_More >= KyHWIO_MaxErrorTeethMore) )
-		{
-			return false;
+		if (CRANK_FS_State == FS_CRANK_CYLINDER_ID_COMPLETE) {
+			CRANK_FS_State = FS_INIT_PARAMETER;
+		} else {
+			if ((CRANK_Error_Count_Less >= KyHWIO_MaxErrorTeethLess) ||
+				(CRANK_Error_Count_More >= KyHWIO_MaxErrorTeethMore) )
+			{
+				return false;
+			}
 		}
 
 		if(CRANK_Get_Sync_First_Revolution( CRANK_Internal_State.U32 )) {
@@ -650,18 +669,6 @@ bool CRANK_Check_Real_Signal_In_Backup_Mode( void )
 //  Function:            CRANK_Process_Crank_Event
 //=============================================================================
 #define IS_IN_RANGE(val, min, max) (((val) >= (min)) && ((val) <= (max)))
-typedef enum {
-	FS_INIT_PARAMETER,
-	FS_FILTER_VALID_TOOTH,
-	FS_WAITING_FOR_FIRST_EDGE,
-	FS_CRANK_PULSE_COUNT_INCREASE,
-	FS_CRANK_CYLINDER_ID_COMPLETE,
-	FS_CRANK_CYLINDER_ID_ERROR
-} CRANK_FS_State_T;
-
-static CRANK_FS_State_T CRANK_FS_State;
-static uCrank_Count_T   CRANK_FS_Pulse_Count;
-static uint8_t          CRANK_FS_Last_CAM_Edge_Count;
 
 static void CRANK_FS_Reset(void)
 {
