@@ -88,6 +88,8 @@ extern HAL_Diag_T HAL_Diag;
 #define GetShortFault(function)     (DD_GetDiscreteDiagStatus(function,OUTPUT_SHORT_CKT_FAULT))
 #define GetAnyFault(function)       (GetOpenFault(function) || GetShortFault(function))
 
+#define ClearOpenFault(function)    (DD_ClearDiscreteDiagStatus(function, OUTPUT_OPEN_CKT_FAULT))
+#define ClearShortFault(function)   (DD_ClearDiscreteDiagStatus(function, OUTPUT_SHORT_CKT_FAULT))
 /******************************************************************************
  * FUEL PUMP
  ******************************************************************************/

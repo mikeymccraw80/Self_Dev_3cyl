@@ -794,12 +794,16 @@ INLINE void ConvertIntrParam_ETCDC(void)
 
 #define GetESTAShortFaultStatus()   (GetShortFault(PULSE_OUT_EST_A))
 #define GetESTAOpenFaultStatus()    (GetOpenFault(PULSE_OUT_EST_A))
+#define ClearESTAShortFaultStatus()   (ClearShortFault(PULSE_OUT_EST_A))
+#define ClearESTAOpenFaultStatus()    (ClearOpenFault(PULSE_OUT_EST_A))
 
 // #define GetESTBShortFaultStatus()   (GetShortFault(PULSE_OUT_EST_B)||GetEstLine2HighCurrentFlag())
 // #define GetESTBOpenFaultStatus()    (GetOpenFault(PULSE_OUT_EST_B))
 
 #define GetESTBShortFaultStatus()   (GetShortFault(PULSE_OUT_EST_B))
 #define GetESTBOpenFaultStatus()    (GetOpenFault(PULSE_OUT_EST_B))
+#define ClearESTBShortFaultStatus()   (ClearShortFault(PULSE_OUT_EST_B))
+#define ClearESTBOpenFaultStatus()    (ClearOpenFault(PULSE_OUT_EST_B))
 
 INLINE TeEST_CIRCUIT_STATE GetAPI_EST_CircuitState(uint8_t active_estline)
 {
@@ -809,6 +813,8 @@ INLINE TeEST_CIRCUIT_STATE GetAPI_EST_CircuitState(uint8_t active_estline)
 		(GetESTAShortFaultStatus()||GetESTAOpenFaultStatus()) )
 	{
 		est_line_fault = CeEST_FAULTED;
+		ClearESTAShortFaultStatus();
+		ClearESTAOpenFaultStatus();
 		// ClearEstLine1HighCurrentFlag();
 
 	}
@@ -816,6 +822,8 @@ INLINE TeEST_CIRCUIT_STATE GetAPI_EST_CircuitState(uint8_t active_estline)
 		(GetESTBShortFaultStatus()||GetESTBOpenFaultStatus()) )
 	{
 		est_line_fault = CeEST_FAULTED;
+		ClearESTBShortFaultStatus();
+		ClearESTBOpenFaultStatus();
 		// ClearEstLine2HighCurrentFlag();
 	}
 	else
