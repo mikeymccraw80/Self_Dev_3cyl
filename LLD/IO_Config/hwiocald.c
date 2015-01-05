@@ -185,6 +185,19 @@ const uint8_t KyHWIO_NumValidPeriodsBeforeSyncStart = 7;
 
 /*
 *| hwiocald.{
+*| KyHWIO_NumValidPeriodsBeforeFastSyncStart {
+*|     : is_calconst;
+*|     : description = "Number of valid 58x periods to be seen "
+*| "by the 58x logic before trying to fast startup synch ";
+*|     : type = types.t_count_byte;
+*|     : units = "count";
+*|   }
+*| }
+*/
+const uint8_t KyHWIO_NumValidPeriodsBeforeFastSyncStart = 7;
+
+/*
+*| hwiocald.{
 *| KyHWIO_MaxErrorTeethMore {
 *|     : is_calconst;
 *|     : description = "Number of error for 58x diagnose, if beyond this, resynchronize";

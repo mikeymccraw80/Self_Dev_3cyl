@@ -31,6 +31,7 @@ extern const uint8_t                KyHWIO_Num58xGapsBeforeSeqn;
 extern const T_CRANK_ANGLE          KfHWIO_phi_TopDeadCenter;
 extern const uint8_t                KyHWIO_NumberOfCylinders;
 extern const uint8_t                KyHWIO_NumValidPeriodsBeforeSyncStart;
+extern const uint8_t                KyHWIO_NumValidPeriodsBeforeFastSyncStart;
 extern const uint8_t                KyHWIO_Num58xGapsUsingCamForSync;
 //fast startup
 extern const uint8_t                KyHWIO_NumDeltaToothUsingFastStartUp;
