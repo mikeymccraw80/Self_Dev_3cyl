@@ -688,7 +688,7 @@ static bool CRANK_FS_Search_For_First_Syn(void)
 	}
 
 	syn_detected = false;
-	cam_edge_count = CAM_Get_Current_Edge(CAM1);
+	cam_edge_count = CAM_Get_Total_Edge(CAM1);
 	/* fast startup cylinder algorithm */
 	switch (CRANK_FS_State) {
 	case FS_INIT_PARAMETER:
@@ -698,7 +698,7 @@ static bool CRANK_FS_Search_For_First_Syn(void)
 	case FS_FILTER_VALID_TOOTH:
 		if((CRANK_Tooth_Duration > CRANK_Filtered_Min_Tooth_Period ) && (CRANK_Tooth_Duration < CRANK_Filtered_Max_Tooth_Period)) {
 			CRANK_FS_Pulse_Count ++;
-			if (CRANK_FS_Pulse_Count >= KyHWIO_NumValidPeriodsBeforeSyncStart) {
+			if (CRANK_FS_Pulse_Count >= KyHWIO_NumValidPeriodsBeforeFastSyncStart) {
 				CRANK_FS_Pulse_Count = 0;
 				CRANK_FS_Last_CAM_Edge_Count = cam_edge_count;
 				CRANK_FS_State = FS_WAITING_FOR_FIRST_EDGE;
