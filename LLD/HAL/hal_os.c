@@ -507,7 +507,7 @@ void HAL_OS_Powerdown_Callback(void)
 //=============================================================================
 bool HAL_OS_Get_PowerFail_Flag(void)
 {
-    return IO_OS_Get_PowerFail_Flag();
+	return IO_OS_Get_PowerFail_Flag();
 }
 
 //=============================================================================
@@ -515,7 +515,23 @@ bool HAL_OS_Get_PowerFail_Flag(void)
 //=============================================================================
 void HAL_OS_Set_PowerFail_Flag(bool flag)
 {
-    IO_OS_Set_PowerFail_Flag(flag);
+	IO_OS_Set_PowerFail_Flag(flag);
+}
+
+//=============================================================================
+// HAL_OS_Get_RunningReset_Flag
+//=============================================================================
+bool HAL_OS_Get_RunningReset_Flag(void)
+{
+	return IO_OS_Get_RunningReset_Flag();
+}
+
+//=============================================================================
+// HAL_OS_Set_RunningReset_Flag
+//=============================================================================
+void HAL_OS_Set_RunningReset_Flag(bool flag)
+{
+	IO_OS_Set_RunningReset_Flag(flag);
 }
 
 //=============================================================================

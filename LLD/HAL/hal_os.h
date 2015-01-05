@@ -113,6 +113,16 @@ bool HAL_OS_Get_PowerFail_Flag(void);
 //=============================================================================
 void HAL_OS_Set_PowerFail_Flag(bool flag);
 
+//=============================================================================
+// HAL_OS_Get_RunningReset_Flag
+//=============================================================================
+bool HAL_OS_Get_RunningReset_Flag(void);
+
+//=============================================================================
+// HAL_OS_Set_RunningReset_Flag
+//=============================================================================
+void HAL_OS_Set_RunningReset_Flag(bool flag);
+
 // interrupt control routines
 void Disable_1ms_interrupt(void) ;
 void Enable_1ms_interrupt(void) ;

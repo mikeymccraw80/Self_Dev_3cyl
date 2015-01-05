@@ -662,19 +662,8 @@ extern bool knock_flag_d;
 extern uint16_t IntegratorAverage[LLD_MAX_IGN_CHANNEL];      /* filtered value */
 extern uint16_t KnockThreshold[LLD_MAX_IGN_CHANNEL];         /* knock threshold */
 
-/* IUPR part, defined in HLS*/
-// extern uint16_t NcDGDM_RM_OFVC_IgnCycleCntr;  //=>  uint16 NumIgnCyc;
-// extern uint16_t NcDGDM_RM_Generic_Denom;      //=>  uint16 Dom;
-// extern uint16_t NcDGDM_RM_ICMD_B1_Numrtr;     //=>  uint16 NmeCat;
-// extern uint16_t NcDGDM_RM_ICMD_B1_Denom;      //=>  uint16 DomCat;
-// extern uint16_t NcDGDM_RM_EOSD_B1_S1_Numrtr;  //=>  uint16 NmeLsb;
-// extern uint16_t NcDGDM_RM_EOSD_B1_S1_Denom;   //=>  uint16 DomLsb;
-// extern uint16_t NcDGDM_RM_EOSD_B1_S2_Numrtr;  //=>  uint16 NmeLsaAg;
-// extern uint16_t NcDGDM_RM_EOSD_B1_S2_Denom;   //=>  uint16 DomLsaAg;
-// extern uint16_t NcDGDM_RM_VVT1_Numrtr;        //=>  uint16 NmeVVTIn;
-// extern uint16_t NcDGDM_RM_VVT1_Denom;         //=>  uint16 DomVVTIn;
-// extern uint16_t NcDGDM_RM_VVT2_Numrtr;        //=>  uint16 NmeVVTOut;
-// extern uint16_t NcDGDM_RM_VVT2_Denom;         //=>  uint16 DomVVTOut;
+/* running reset interface, define in LLD */
+extern bool     OS_RunningReset_Flag;
 
 /*VVT part, VCPC*/
 extern uint16_t angle_crank_cam_inlet;
@@ -710,6 +699,7 @@ extern   void Disable_1ms_interrupt(void) ;
 extern   void Enable_1ms_interrupt(void) ;
 extern   void LLD_disable_interrupt(void);
 extern   void LLD_enable_interrupt(void);
+
 /* Call back function for 1ms task */
 extern  void HLS_Task_1ms(void);
 /* Call back function for 2ms task */

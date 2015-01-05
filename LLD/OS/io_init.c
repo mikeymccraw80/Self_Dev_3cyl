@@ -274,6 +274,11 @@ void InitializeHardwareLast(void)
 		// HAL_OS_Set_PowerFail_Flag(true);
 	// }
 
+	/* detect the running reset */
+	if (Reset_Status.bits.Power_On_Reset == false) {
+		HAL_OS_Set_RunningReset_Flag(true);
+	}
+
 	/* feed tle4471 watchdog */
 	SetHWIO_ServiceExtCOP_1Time();
 

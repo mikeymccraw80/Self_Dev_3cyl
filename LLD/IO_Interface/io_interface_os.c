@@ -27,9 +27,15 @@ bool VsCAN_CHERY_EMS_ID_Disable_keyoff500ms;
 //=============================================================================
 // global variable
 //=============================================================================
-unsigned int IgnitionOffTimeVar;
-bool    B_HLS_afterrun;
+unsigned int   IgnitionOffTimeVar;
+bool           B_HLS_afterrun;
 unsigned int   Pwr_Afruncnt;
+
+//=============================================================================
+// local private variable
+//=============================================================================
+static bool    OS_RunningReset_Flag;
+
 //=============================================================================
 // extern variable
 //=============================================================================
@@ -126,6 +132,21 @@ void IO_OS_Set_PowerFail_Flag(bool flag)
     B_SW_Pwf = flag;
 }
 
+//=============================================================================
+// IO_OS_Get_RunningReset_Flag
+//=============================================================================
+bool IO_OS_Get_RunningReset_Flag(void)
+{
+    return OS_RunningReset_Flag;
+}
+
+//=============================================================================
+// IO_OS_Set_RunningReset_Flag
+//=============================================================================
+void IO_OS_Set_RunningReset_Flag(bool flag)
+{
+    OS_RunningReset_Flag = flag;
+}
 
 //=============================================================================
 // IO_OS_BackGround_1ms_Status_Check
@@ -152,6 +173,8 @@ void  IO_OS_BackGround_1ms_Status_Check(void)
 		(Ignition_On()) &&
 		(crank_sig.engine_rpm < MIN_RPM_CHERY))
 	{
+		/* chery require, clear the running reset flag when keyoff->keyon*/
+		IO_OS_Set_RunningReset_Flag(false);
 		/* Stop the all task containers */
 		Disable_Interrupts( );
 		/* called when the synch is lost/reset */
