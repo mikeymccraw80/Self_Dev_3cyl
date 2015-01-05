@@ -149,29 +149,6 @@ asm uint32_t Insert_Bits( uint32_t old_value, uint32_t value, uint32_t position,
 
 #define Put_Bit(value,address,position) (Ldmst((value),(address),(position),1))
 
-
-
-
-#if 0
-// Function to disable interrupts
-asm void Disable_Interrupts( void )
-{
-  !
-   .set noreorder /* needed to prevent DIAB to reorder the asm instructions */
-   // wrteei 0  /* force MSR[EE] to 0 */
-    .set reorder /* allow reordering of asm instruction from now on */
-}
-
-// Function to enable interrupts
-asm void Enable_Interrupts( void )
-{
-!
-    .set noreorder /* needed to prevent DIAB to reorder the asm instructions */
-    wrteei 1  /* force MSR[EE] to 1 */
-    .set reorder /* allow reordering of asm instruction from now on */
-}
-#endif
-
 // Function to disable interrupts
 asm void Disable_Interrupts( void )
 {
