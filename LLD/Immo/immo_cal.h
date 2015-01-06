@@ -49,6 +49,7 @@ extern const Every_16th_Loop_Sec_W K_ImmoNoAuthLimit;
 extern const uint8_t               KcMyImmoSourceAddr;
 extern const uint16_t              KwIMMO_SiemensPreReleaseTime;/* for Siemens Immo*/
 extern const uint8_t               KaIMMO_CustomerID[4];
+extern const Every_Loop_Sec_W      K_Immo_ECMDelayTime;
 /* ============================================================================ *\
  * File revision history (top to bottom, first revision to last revision
  * ============================================================================

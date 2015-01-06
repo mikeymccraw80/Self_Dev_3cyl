@@ -28,7 +28,7 @@
 #include "hal_eeprom_mfg.h"
 #include "immo_exec.h"
 #include "immo.h"
-
+#include "immo_cal.h"
 /*for Siemens immo*/
 #include "kw2srv27.h"
 #include "siemens_immossrv.h"
@@ -140,8 +140,8 @@ static void PerfmSiemens_ECMLearnImmo( uint8_t IOCtrl )
 				SendStandardPositiveAnswer (3);  
 				R_LineEnable = true;
 				//delay 2.5s after ECM learning is finished.			 
-				ECMLearnedDelayTime =V_COUNT_WORD(320);
-				ECMResetToDeliveryDlayTime=V_COUNT_WORD(320);
+				ECMLearnedDelayTime =K_Immo_ECMDelayTime;
+				ECMResetToDeliveryDlayTime=K_Immo_ECMDelayTime;
 				ECMLearnedDelayTime_En = true;
 				ECMResetToDeliveryDlayTime_En = false;
 			} else {
@@ -261,8 +261,8 @@ static void PerfmSiemens_ResetECMDelivery( uint8_t IOCtrl )
 
 				R_LineEnable = true;
 				//delay 2.5s after ECM learning is finished.			 
-				ECMResetToDeliveryDlayTime =V_COUNT_WORD(320);
-				ECMLearnedDelayTime =V_COUNT_WORD(320);
+				ECMResetToDeliveryDlayTime =K_Immo_ECMDelayTime;
+				ECMLearnedDelayTime =K_Immo_ECMDelayTime;
 				ECMResetToDeliveryDlayTime_En = true;
 				ECMLearnedDelayTime_En = false;
 				// ImmoInhibitEngine = true;
