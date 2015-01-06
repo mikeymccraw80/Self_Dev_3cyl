@@ -153,9 +153,9 @@ const uint16_t KwIMMO_SiemensPreReleaseTime = 180;
 *|    }
 */
 
-const Every_Loop_Sec_W K_Immo_ECMDelayTime  = FixDefConst (0.9375, Every_Loop_Sec_W);
+const Every_Loop_Sec_W K_Immo_ECMLearnedDelayTime  = FixDefConst (0.9375, Every_Loop_Sec_W);
 /*
-*|    K_Immo_ECMDelayTime
+*|    K_Immo_ECMLearnedDelayTime
 *|    {
 *|       :is_calconst;
 *|       :type = types.Every_Loop_Sec_W;
@@ -164,6 +164,16 @@ const Every_Loop_Sec_W K_Immo_ECMDelayTime  = FixDefConst (0.9375, Every_Loop_Se
 *|    }
 */
 
+const Every_Loop_Sec_W K_Immo_ECMResetToDeliveryDlayTime  = FixDefConst (0.9375, Every_Loop_Sec_W);
+/*
+*|    K_Immo_ECMResetToDeliveryDlayTime
+*|    {
+*|       :is_calconst;
+*|       :type = types.Every_Loop_Sec_W;
+*|       :units = "Seconds";
+*|       :description = "ECM Reset to Delivery Delay Time ";
+*|    }
+*/
 const uint8_t KaIMMO_CustomerID[4] = {0x53, 0x54, 0x45, 0x43};
 /*
 *|     KaIMMO_CustomerID
