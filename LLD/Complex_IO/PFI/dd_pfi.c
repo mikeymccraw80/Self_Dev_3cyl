@@ -92,59 +92,47 @@ static void PFI_Enable_Sequential( uint8_t in_delay_count );
 //
 // @end
 //=============================================================================
-static uint32_t PFI_Calculate_Boundary( 
-   uint8_t  in_channel )
+static uint32_t PFI_Calculate_Boundary( uint8_t  in_channel )
 {
-   uint8_t        counter;
-   uint32_t       angle_per_cylinder_event;
-   uint32_t       angle_per_boundary_frac;
-   uint32_t       angle;
-   uint32_t       normal_eoit_to_nextboundary;
-   uint32_t       trim_eoit_to_nextboundary;
+	uint8_t        counter;
+	uint32_t       angle_per_cylinder_event;
+	uint32_t       angle_per_boundary_frac;
+	uint32_t       angle;
+	uint32_t       normal_eoit_to_nextboundary;
+	uint32_t       trim_eoit_to_nextboundary;
 
-   //
-   // Get the time at the last lo res
-   //
-   angle = CRANK_Get_Parameter( CRANK_PARAMETER_CYLINDER_EVENT_ANGLE, 0, 0 );
+	// Get the time at the last lo res
+	angle = CRANK_Get_Parameter( CRANK_PARAMETER_CYLINDER_EVENT_ANGLE, 0, 0 );
+	angle_per_cylinder_event = CRANK_Convert_Angle_To_uCrank_Angle( CRANK_NUMBER_OF_DEGREES_PER_REVOLUTION / PFI_Number_Of_Cylinders, 0 );
 
-   angle_per_cylinder_event = CRANK_Convert_Angle_To_uCrank_Angle( CRANK_NUMBER_OF_DEGREES_PER_REVOLUTION / PFI_Number_Of_Cylinders, 0 );
+	// total number of degrees including the boundry fraction
+	angle_per_boundary_frac = PFI_Initialization_Parameters->boundary_fraction;
 
-   //
-   // total number of degrees including the boundry fraction
-   //
-   angle_per_boundary_frac = PFI_Initialization_Parameters->boundary_fraction;
+	for( counter = 0; counter < PFI_Number_Of_Cylinders; counter++ ) {
+		if( counter == in_channel ) {
+			PFI_Boundary_Time[ counter ] = ( PFI_Number_Of_Cylinders
+											* angle_per_cylinder_event )
+											+ angle_per_boundary_frac
+											+ angle;
+		} else if( counter < in_channel ) {
+			PFI_Boundary_Time[ counter ] = ( ( PFI_Number_Of_Cylinders 
+											- in_channel
+											+ counter )
+											* angle_per_cylinder_event )
+											+ angle_per_boundary_frac
+											+ angle;
+		} else { // counter > in_channel
+			PFI_Boundary_Time[ counter ] = ( ( counter 
+											- in_channel )
+											* angle_per_cylinder_event )
+											+ angle_per_boundary_frac
+											+ angle;
+		}
+		PFI_Boundary_Time[ counter ] = PFI_Boundary_Time[ counter ] & 0x00FFFFFF;
+	}
 
-   for( counter = 0; counter < PFI_Number_Of_Cylinders; counter++ )
-   {
-      if( counter == in_channel )
-      {
-         PFI_Boundary_Time[ counter ] = ( PFI_Number_Of_Cylinders
-                                         * angle_per_cylinder_event )
-                                       + angle_per_boundary_frac
-                                       + angle;
-      }
-      else if( counter < in_channel )
-      {
-         PFI_Boundary_Time[ counter ] = ( ( PFI_Number_Of_Cylinders 
-                                           - in_channel
-                                           + counter )
-                                           * angle_per_cylinder_event )
-                                             + angle_per_boundary_frac
-                                             + angle;
-      }
-      else // counter > in_channel
-      {
-         PFI_Boundary_Time[ counter ] = ( ( counter 
-                                           - in_channel )
-                                           * angle_per_cylinder_event )
-                                             + angle_per_boundary_frac
-                                             + angle;
-      }
-      PFI_Boundary_Time[ counter ] = PFI_Boundary_Time[ counter ] & 0x00FFFFFF;
-   }
-
-   PFI_Time_Per_Boundary_Fraction = angle_per_boundary_frac;
-   return PFI_Time_Per_Boundary_Fraction;
+	PFI_Time_Per_Boundary_Fraction = angle_per_boundary_frac;
+	return PFI_Time_Per_Boundary_Fraction;
 }
 //=============================================================================
 // PFI_Set_Pulse_Width
@@ -182,49 +170,42 @@ void PFI_Set_Pulse_Width(
 //=============================================================================
 // PFI_Set_Angle
 //=============================================================================
+	uCrank_Angle_T  in_angle_limit;
+	uCrank_Angle_T  eoit_angle_in_ucrank;
 void PFI_Set_Angle(
    Pfi_Angle_T    in_angle_type,
    uint32_t       in_angle,
    uint8_t        in_precision )
 {
-uCrank_Angle_T  in_angle_limit;
-uCrank_Angle_T  eoit_angle_in_ucrank;
+	in_angle_limit =  CRANK_Convert_Angle_To_uCrank_Angle( CRANK_NUMBER_OF_DEGREES_PER_REVOLUTION, 0 );
 
-   in_angle_limit =  CRANK_Convert_Angle_To_uCrank_Angle( CRANK_NUMBER_OF_DEGREES_PER_REVOLUTION, 0 );
+	eoit_angle_in_ucrank = CRANK_Convert_Angle_To_uCrank_Angle( in_angle, 0 );
 
-   eoit_angle_in_ucrank = CRANK_Convert_Angle_To_uCrank_Angle( in_angle, 0 );
+	if ( in_precision ) {
+		eoit_angle_in_ucrank = eoit_angle_in_ucrank / in_precision;
+	}
 
-   if ( in_precision )
-   {
-      eoit_angle_in_ucrank = eoit_angle_in_ucrank / in_precision;
-   }
+	if ( eoit_angle_in_ucrank >= in_angle_limit ) {
+		eoit_angle_in_ucrank = in_angle_limit;
+	}
 
-   if ( eoit_angle_in_ucrank >= in_angle_limit )
-   {
-       eoit_angle_in_ucrank = in_angle_limit;
-   }
-   
-   /* convert application EOIT angle (the last boundary event to EOIT) to 
-    * MCD EOIT angle (EOIT to next boundary event, MCD-5417 Rev 2.0)
-    */
-   eoit_angle_in_ucrank = in_angle_limit - eoit_angle_in_ucrank;
-   
-   switch( in_angle_type )
-   {
-      case PFI_ANGLE_NORMAL:
-         PFI_Normal_EOIT      = in_angle;
-         PFI_Normal_Offset    = eoit_angle_in_ucrank;
-         break;
+	/* convert application EOIT angle (the last boundary event to EOIT) to 
+	* MCD EOIT angle (EOIT to next boundary event, MCD-5417 Rev 2.0)
+	*/
+	eoit_angle_in_ucrank = in_angle_limit - eoit_angle_in_ucrank;
 
-      case PFI_ANGLE_TRIM:
-         PFI_Trim_EOIT        = in_angle;
-         PFI_Trim_Offset      = eoit_angle_in_ucrank;
-         break;
-
-      default:
-         break;
-
-   }
+	switch( in_angle_type ) {
+	case PFI_ANGLE_NORMAL:
+		PFI_Normal_EOIT      = in_angle;
+		PFI_Normal_Offset    = eoit_angle_in_ucrank;
+		break;
+	case PFI_ANGLE_TRIM:
+		PFI_Trim_EOIT        = in_angle;
+		PFI_Trim_Offset      = eoit_angle_in_ucrank;
+		break;
+	default:
+		break;
+	}
 }
 
 
