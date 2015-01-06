@@ -64,7 +64,7 @@
 /*---------------------------------------------*\
  *--- Number  ---*
 \*---------------------------------------------*/
-const Immo_Option_T K_Immo_option = CeImmo_Off;
+const Immo_Option_T K_Immo_option = CeImmo_STEC;
 /*
 *|immo_cal. {
 *|    K_Immo_option
@@ -150,6 +150,17 @@ const uint16_t KwIMMO_SiemensPreReleaseTime = 180;
 *|       : type = types.uint16_t;
 *|       :units = "count";
 *|       :description = "Pre-Release time of Siemens immobilizer (default: 1.8s). Note: it should not be greater than 512 (4s)";
+*|    }
+*/
+
+const Every_Loop_Sec_W K_Immo_ECMDelayTime  = FixDefConst (0.9375, Every_Loop_Sec_W);
+/*
+*|    K_Immo_ECMDelayTime
+*|    {
+*|       :is_calconst;
+*|       :type = types.Every_Loop_Sec_W;
+*|       :units = "Seconds";
+*|       :description = "ECM Learned Delay Time ";
 *|    }
 */
 
