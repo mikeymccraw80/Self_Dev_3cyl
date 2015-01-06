@@ -140,8 +140,8 @@ static void PerfmSiemens_ECMLearnImmo( uint8_t IOCtrl )
 				SendStandardPositiveAnswer (3);  
 				R_LineEnable = true;
 				//delay 2.5s after ECM learning is finished.			 
-				ECMLearnedDelayTime =K_Immo_ECMDelayTime;
-				ECMResetToDeliveryDlayTime=K_Immo_ECMDelayTime;
+				ECMLearnedDelayTime =K_Immo_ECMLearnedDelayTime;
+				ECMResetToDeliveryDlayTime=K_Immo_ECMResetToDeliveryDlayTime;
 				ECMLearnedDelayTime_En = true;
 				ECMResetToDeliveryDlayTime_En = false;
 			} else {
@@ -261,8 +261,8 @@ static void PerfmSiemens_ResetECMDelivery( uint8_t IOCtrl )
 
 				R_LineEnable = true;
 				//delay 2.5s after ECM learning is finished.			 
-				ECMResetToDeliveryDlayTime =K_Immo_ECMDelayTime;
-				ECMLearnedDelayTime =K_Immo_ECMDelayTime;
+				ECMResetToDeliveryDlayTime =K_Immo_ECMResetToDeliveryDlayTime;
+				ECMLearnedDelayTime =K_Immo_ECMLearnedDelayTime;
 				ECMResetToDeliveryDlayTime_En = true;
 				ECMLearnedDelayTime_En = false;
 				// ImmoInhibitEngine = true;

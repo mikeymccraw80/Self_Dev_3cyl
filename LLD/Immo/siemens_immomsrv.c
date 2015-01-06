@@ -183,7 +183,7 @@ void SiemensImmo_AuthResultLostService(void)
 			} else {
 				ECMLearnedDelayTime--;
 			}
-			ECMResetToDeliveryDlayTime=K_Immo_ECMDelayTime;
+			ECMResetToDeliveryDlayTime=K_Immo_ECMResetToDeliveryDlayTime;
 			ECMResetToDeliveryDlayTime_En = false;
 		} else if(ECMResetToDeliveryDlayTime_En) {
 			if(ECMResetToDeliveryDlayTime==0) {
@@ -191,7 +191,7 @@ void SiemensImmo_AuthResultLostService(void)
 			} else {
 				ECMResetToDeliveryDlayTime--;
 			}
-			ECMLearnedDelayTime = K_Immo_ECMDelayTime;
+			ECMLearnedDelayTime = K_Immo_ECMLearnedDelayTime;
 			ECMLearnedDelayTime_En = false;
 		}
 	}
