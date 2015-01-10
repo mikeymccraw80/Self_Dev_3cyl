@@ -62,8 +62,8 @@ void IO_Fuel_Syn_Update(void)
 		/*Convert the engineer value of Chery Injection end angle to Delphi engineer value */
 		//chery_inj_end_angle = (900 - 720)<<S_CRANK_ANGLE;
 		chery_inj_end_angle = 0;
-		SetHWIO_FuelInjectorEOIT(chery_inj_end_angle);
-		SetHWIO_FuelInjectorTrimEOIT(chery_inj_end_angle);
+		SetHWIO_FuelInjectorIllegalEOIT(chery_inj_end_angle);
+		// SetHWIO_FuelInjectorTrimEOIT(chery_inj_end_angle);
 
 		SetHWIO_SequentialFuelMode(0);
 		SetHWIO_PrimePulseComplete();
@@ -83,10 +83,14 @@ void IO_Fuel_Syn_Update(void)
 				chery_inj_width = 0;
 			}
 			PFI_PulseWidth = Convert_Chery_Inj_Width(chery_inj_width,S_MILLISECONDSb);
-			PFI_Set_Pulse_Width(INJ_CHANNEL_A, 0,              S_MILLISECONDSb, MILLISECOND_RESOLUTION );
-			PFI_Set_Pulse_Width(INJ_CHANNEL_B, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
-			PFI_Set_Pulse_Width(INJ_CHANNEL_C, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
-			PFI_Set_Pulse_Width(INJ_CHANNEL_D, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
+			PFI_Set_Pulse_Width_Ex(INJ_CHANNEL_A, 0,              S_MILLISECONDSb, MILLISECOND_RESOLUTION );
+			PFI_Set_Pulse_Width_Ex(INJ_CHANNEL_B, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
+			PFI_Set_Pulse_Width_Ex(INJ_CHANNEL_C, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
+			PFI_Set_Pulse_Width_Ex(INJ_CHANNEL_D, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
+			// PFI_Update_Boundary(INJ_CHANNEL_A);
+			// PFI_Update_Boundary(INJ_CHANNEL_B);
+			// PFI_Update_Boundary(INJ_CHANNEL_C);
+			// PFI_Update_Boundary(INJ_CHANNEL_D);
 		} else if (current_cylinder_id == IO_FUEL_CYLINDER_B) {
 			//enable post injection
 			PFI_Enable_Trim_Pulses(INJ_CHANNEL_A);
@@ -99,10 +103,10 @@ void IO_Fuel_Syn_Update(void)
 				chery_inj_width = 0;
 			}
 			PFI_PulseWidth =Convert_Chery_Inj_Width(chery_inj_width,S_MILLISECONDSb);
-			PFI_Set_Pulse_Width(INJ_CHANNEL_B, 0,              S_MILLISECONDSb, MILLISECOND_RESOLUTION );
-			PFI_Set_Pulse_Width(INJ_CHANNEL_A, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
-			PFI_Set_Pulse_Width(INJ_CHANNEL_C, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
-			PFI_Set_Pulse_Width(INJ_CHANNEL_D, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
+			PFI_Set_Pulse_Width_Ex(INJ_CHANNEL_B, 0,              S_MILLISECONDSb, MILLISECOND_RESOLUTION );
+			PFI_Set_Pulse_Width_Ex(INJ_CHANNEL_A, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
+			PFI_Set_Pulse_Width_Ex(INJ_CHANNEL_C, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
+			PFI_Set_Pulse_Width_Ex(INJ_CHANNEL_D, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
 		} else if (current_cylinder_id == IO_FUEL_CYLINDER_C){
 			//cylinder C,simultaneous inject cylA,cylB,cylD
 			//enable post injection
@@ -116,10 +120,14 @@ void IO_Fuel_Syn_Update(void)
 				chery_inj_width = 0;
 			}
 			PFI_PulseWidth =Convert_Chery_Inj_Width(chery_inj_width,S_MILLISECONDSb);
-			PFI_Set_Pulse_Width(INJ_CHANNEL_A, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
-			PFI_Set_Pulse_Width(INJ_CHANNEL_B, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
-			PFI_Set_Pulse_Width(INJ_CHANNEL_C, 0,              S_MILLISECONDSb, MILLISECOND_RESOLUTION );
-			PFI_Set_Pulse_Width(INJ_CHANNEL_D, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
+			PFI_Set_Pulse_Width_Ex(INJ_CHANNEL_A, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
+			PFI_Set_Pulse_Width_Ex(INJ_CHANNEL_B, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
+			PFI_Set_Pulse_Width_Ex(INJ_CHANNEL_C, 0,              S_MILLISECONDSb, MILLISECOND_RESOLUTION );
+			PFI_Set_Pulse_Width_Ex(INJ_CHANNEL_D, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
+			// PFI_Update_Boundary(INJ_CHANNEL_C);
+			// PFI_Update_Boundary(INJ_CHANNEL_A);
+			// PFI_Update_Boundary(INJ_CHANNEL_B);
+			// PFI_Update_Boundary(INJ_CHANNEL_D);
 		} else if (current_cylinder_id == IO_FUEL_CYLINDER_D) {
 			//enable post injection
 			PFI_Enable_Trim_Pulses(INJ_CHANNEL_A);
@@ -132,14 +140,15 @@ void IO_Fuel_Syn_Update(void)
 				chery_inj_width = 0;
 			}
 			PFI_PulseWidth =Convert_Chery_Inj_Width(chery_inj_width,S_MILLISECONDSb);
-			PFI_Set_Pulse_Width(INJ_CHANNEL_D, 0,              S_MILLISECONDSb, MILLISECOND_RESOLUTION );
-			PFI_Set_Pulse_Width(INJ_CHANNEL_A, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
-			PFI_Set_Pulse_Width(INJ_CHANNEL_B, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
-			PFI_Set_Pulse_Width(INJ_CHANNEL_C, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
+			PFI_Set_Pulse_Width_Ex(INJ_CHANNEL_D, 0,              S_MILLISECONDSb, MILLISECOND_RESOLUTION );
+			PFI_Set_Pulse_Width_Ex(INJ_CHANNEL_A, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
+			PFI_Set_Pulse_Width_Ex(INJ_CHANNEL_B, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
+			PFI_Set_Pulse_Width_Ex(INJ_CHANNEL_C, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
 		}
 
-		//PerfmHWIO_SimultaneousFuelDelivery();
+		PerfmHWIO_SimultaneousFuelDelivery();
 
+		
 		//SetHWIO_FuelSqSwitch(true);
 		/*Convert the engineer value of Chery Injection end angle to Delphi engineer value */
 		chery_inj_end_angle = (900 - Convert_Chery_Inj_angle(inj_sig[INJ_CHANNEL_A].inj_end_angle,Prec_Inj_end_angle_chery))<<S_CRANK_ANGLE;
@@ -184,6 +193,7 @@ void IO_Fuel_Syn_Update(void)
 		Startup_Counter++;
 		First_Syn_Flag = true;
 	} else {
+#if 0
 		if ( Startup_Counter <255)
 		{
 			Startup_Counter++;
@@ -195,7 +205,6 @@ void IO_Fuel_Syn_Update(void)
 		SetHWIO_FuelInjectorEOIT(chery_inj_end_angle);
 		SetHWIO_FuelInjectorTrimEOIT(chery_inj_end_angle);
 		//  PFI_Set_Angle( PFI_TRIM_ANGLE, chery_inj_end_angle, 1<<S_CRANK_ANGLE );
-
 
 		if(current_cylinder_id != INJ_CHANNEL_A) {
 			if(inj_sig[INJ_CHANNEL_A].B_post_inj) {
@@ -276,6 +285,7 @@ void IO_Fuel_Syn_Update(void)
 
 		PFI_PulseWidth =Convert_Chery_Inj_Width(chery_inj_width,S_MILLISECONDSb);
 		PFI_Set_Pulse_Width(INJ_CHANNEL_D, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
+#endif
 	}
 	//Clear the flag to tell the HLS that LLD get the parameters
 	B_syn_update = false;

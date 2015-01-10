@@ -95,12 +95,25 @@ void SetHWIO_AllFuelInjectorPulseWidths( T_MILLISECONDSb in_value )
 //=============================================================================
 void SetHWIO_FuelInjectorEOIT( T_CRANK_ANGLE LfVIOS_FuelEOIT )
 {
-   uint32_t cs;
+	uint32_t cs;
 
-   cs = Enter_Critical_Section();
-   PFI_Set_Angle( PFI_NORMAL_ANGLE, LfVIOS_FuelEOIT, 1<<S_CRANK_ANGLE );
-   Leave_Critical_Section( cs );
+	cs = Enter_Critical_Section();
+	PFI_Set_Angle( PFI_NORMAL_ANGLE, LfVIOS_FuelEOIT, 1<<S_CRANK_ANGLE );
+	Leave_Critical_Section( cs );
 }
+
+//=============================================================================
+// SetHWIO_FuelInjectorIllegalEOIT
+//=============================================================================
+void SetHWIO_FuelInjectorIllegalEOIT( void )
+{
+  uint32_t cs;
+
+  cs = Enter_Critical_Section();
+  PFI_Set_Illegal_Angle(PFI_NORMAL_ANGLE);
+  Leave_Critical_Section( cs );
+}
+
 
 //=============================================================================
 // SetHWIO_FuelInjectorPulseWidth
