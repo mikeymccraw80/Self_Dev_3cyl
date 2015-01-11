@@ -21,8 +21,8 @@ typedef enum
 
 typedef enum Pfi_Fuel_Delivery_Mode_Tag
 {
-	PFI_FUEL_DELIVERY_SIMULTANEOUS,
-	PFI_FUEL_DELIVERY_SEQUENTIAL
+	PFI_FUEL_DELIVERY_SIMULTANEOUS = 0,
+	PFI_FUEL_DELIVERY_SEQUENTIAL   = 1
 } Pfi_Fuel_Delivery_Mode_T;
 
 typedef enum Pfi_Angle_Tag
@@ -45,14 +45,20 @@ typedef struct IO_PFI_Initialization_Parameters_Tag
 typedef union PFI_Flags_Tag
 {
 	struct {
-		bitfield32_t Channel_Update_Enabled_A         :  1;
-		bitfield32_t Channel_Update_Enabled_B         :  1;
-		bitfield32_t Channel_Update_Enabled_C         :  1;
-		bitfield32_t Channel_Update_Enabled_D         :  1;
-		bitfield32_t Prime_Pulse_Complete             :  1;
-		bitfield32_t                                  : 27;
-	} f;
-	uint32_t u32;
+		bitfield32_t Channel_Update_Enabled_A          :  1;
+		bitfield32_t Channel_Update_Enabled_B          :  1;
+		bitfield32_t Channel_Update_Enabled_C          :  1;
+		bitfield32_t Channel_Update_Enabled_D          :  1;
+		bitfield32_t Boundary_Update_Enabled_A         :  1;
+		bitfield32_t Boundary_Update_Enabled_B         :  1;
+		bitfield32_t Boundary_Update_Enabled_C         :  1;
+		bitfield32_t Boundary_Update_Enabled_D         :  1;
+		bitfield32_t                                   :  8;
+		bitfield32_t PFI_DELIVERY_MODE                 :  1;
+		bitfield32_t Prime_Pulse_Complete              :  1;
+		bitfield32_t                                   : 14;
+	} F;
+	uint32_t U32;
 } PFI_Flags_T;
 
 #endif // DD_PFI_H

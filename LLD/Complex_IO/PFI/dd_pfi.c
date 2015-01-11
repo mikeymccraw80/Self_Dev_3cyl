@@ -48,8 +48,8 @@ static uint8_t                    PFI_IX_Boundary;
 static uint32_t                   PFI_Boundary_Crossed;
 static uint32_t                   PFI_Prime_Pulse_Fuel;
 static Pfi_Fuel_Delivery_Mode_T   PFI_Fueling_Mode;
-static uCrank_Angle_T             PFI_Normal_EOIT;
-static uCrank_Angle_T             PFI_Trim_EOIT;
+static uCrank_Angle_T             PFI_Normal_EOIT[PFI_MAX_CYLINDERS];
+static uCrank_Angle_T             PFI_Trim_EOIT[PFI_MAX_CYLINDERS];
 
 static volatile uint32_t          PFI_Time_Per_Boundary_Fraction;
 
@@ -57,8 +57,8 @@ static volatile uint32_t          PFI_Time_Per_Boundary_Fraction;
 //=============================================================================
 // local private function declaration
 //=============================================================================
-#define PFI_Set_Channel_Update_Flag(in_channel)    (PFI_Flags.u32 |= (0x80000000>>in_channel))
-#define PFI_Clear_Channel_Update_Flag(in_channel)  (PFI_Flags.u32 &= ~(0x80000000>>in_channel))
+#define PFI_Set_Channel_Update_Flag(in_channel)    (PFI_Flags.U32 |= (0x80000000>>in_channel))
+#define PFI_Clear_Channel_Update_Flag(in_channel)  (PFI_Flags.U32 &= ~(0x80000000>>in_channel))
 
 
 static void     PFI_INJ_Boundary(void);
@@ -120,9 +120,12 @@ static uint32_t PFI_Calculate_Boundary(uint8_t in_channel )
 	return PFI_Time_Per_Boundary_Fraction;
 }
 
-static void PFI_Set_Channel_Update_Enable(Crank_Cylinder_T in_channel, bool flag)
+//=============================================================================
+// PFI_Set_Channel_Update_Enable
+//=============================================================================
+void PFI_Set_Channel_Update_Enable(Crank_Cylinder_T in_channel, bool flag)
 {
-	if (flag = true)
+	if (flag == true)
 		PFI_Set_Channel_Update_Flag(in_channel);
 	else
 		PFI_Clear_Channel_Update_Flag(in_channel);
@@ -145,42 +148,6 @@ void PFI_Set_Pulse_Width(
 		IO_Convert_Time_To_Count(in_pulse_width, base_frequency, in_time_precision, in_time_resolution);
 }
 
-
-//=============================================================================
-// PFI_Update_Channel
-//=============================================================================
-void PFI_Update_Channel(void)
-{
-	uint8_t counter;
-
-	/* update related channel */
-	for(counter = 0; counter < PFI_MAX_CYLINDERS; counter ++)
-		if( PFI_Flags.u32 & (0x8000000 >> counter)) {
-			MCD5417_Update_Channel( PFI_FUEL_TPU_INDEX, 
-									PFI_Desfi[ counter ],
-									PFI_Desired_Pulse_Width[ counter ],
-									PFI_Boundary_Time[ counter ],
-									PFI_Normal_Offset,
-									PFI_Trim_Offset );
-		}
-	}
-}
-
-//=============================================================================
-// PFI_Update_Channel
-//=============================================================================
-void PFI_Update_Boundary(Crank_Cylinder_T in_channel)
-{
-	if( PFI_Flags.Update_Enabled ) {
-		MCD5417_Update_Boundary( PFI_FUEL_TPU_INDEX, 
-								PFI_Desfi[ in_channel ],
-								PFI_Desired_Pulse_Width[ in_channel ],
-								PFI_Boundary_Time[ in_channel ],
-								PFI_Normal_Offset,
-								PFI_Trim_Offset );
-	}
-}
-
 //=============================================================================
 // PFI_Set_Angle
 //=============================================================================
@@ -188,9 +155,10 @@ void PFI_Set_Angle(Pfi_Angle_T in_angle_type, uint32_t in_angle, uint8_t in_prec
 {
 	uCrank_Angle_T  in_angle_limit;
 	uCrank_Angle_T  eoit_angle_in_ucrank;
+	Crank_Cylinder_T cylinder_id;
 
+	cylinder_id    = CRANK_Get_Cylinder_ID();
 	in_angle_limit =  CRANK_Convert_Angle_To_uCrank_Angle( CRANK_NUMBER_OF_DEGREES_PER_REVOLUTION, 0 );
-
 	eoit_angle_in_ucrank = CRANK_Convert_Angle_To_uCrank_Angle(in_angle, 0);
 
 	if ( in_precision ) {
@@ -208,82 +176,36 @@ void PFI_Set_Angle(Pfi_Angle_T in_angle_type, uint32_t in_angle, uint8_t in_prec
 
 	switch( in_angle_type ) {
 	case PFI_ANGLE_NORMAL:
-		PFI_Normal_EOIT      = in_angle;
-		PFI_Normal_Offset    = eoit_angle_in_ucrank;
+		PFI_Normal_EOIT[cylinder_id] = in_angle;
+		PFI_Normal_Offset            = eoit_angle_in_ucrank;
 		break;
 	case PFI_ANGLE_TRIM:
-		PFI_Trim_EOIT        = in_angle;
-		PFI_Trim_Offset      = eoit_angle_in_ucrank;
+		PFI_Trim_EOIT[cylinder_id] = in_angle;
+		PFI_Trim_Offset            = eoit_angle_in_ucrank;
 		break;
 	default:
 		break;
 	}
 }
-
-//=============================================================================
-// PFI_Set_Angle
-//=============================================================================
-void PFI_Set_Illegal_Angle(Pfi_Angle_T in_angle_type)
-{
-	uint32_t current_time;
-	
-	current_time = TPU_TIMER_Get_Value(TPU_INDEX_0, TPU_TCR1_TIME_BASE);
-
-	switch( in_angle_type ) {
-	case PFI_ANGLE_NORMAL:
-		PFI_Normal_Offset    = current_time;
-		break;
-	case PFI_ANGLE_TRIM:
-		PFI_Trim_Offset      = current_time;
-		break;
-	default:
-		break;
-	}
-}
-
-
 
 //=============================================================================
 // PFI_Set_Fueling_Mode
 //=============================================================================
-void PFI_Set_Fueling_Mode(
-   Pfi_Fuel_Delivery_Mode_T   in_mode,
-   uint8_t                    in_delay_count)
+void PFI_Set_Fueling_Mode(Pfi_Fuel_Delivery_Mode_T   in_mode)
 {
-   PFI_Fueling_Mode = in_mode;
-   
-   PFI_Simultaneous_Delay_Count = in_delay_count;
-
-   if( in_mode == PFI_FUEL_DELIVERY_SEQUENTIAL )
-   {
-      PFI_Enable_Sequential( PFI_Simultaneous_Delay_Count );
-   }
+	PFI_Flags.F.PFI_DELIVERY_MODE = in_mode;
 }
-
-
-
-//=============================================================================
-// PFI_Set_Delay_Counter
-//=============================================================================
-void PFI_Set_Delay_Counter(
-   uint8_t     in_sequential_delay_counter )
-{
-   PFI_Simultaneous_Delay_Count = in_sequential_delay_counter;
-}
-
 
 //=============================================================================
 // PFI_Perform_Simultaneous_Delivery
 //=============================================================================
-void PFI_Perform_Simultaneous_Delivery( void )
+static void PFI_Perform_Simultaneous_Delivery( void )
 {
 	uint8_t        counter;
 	uint32_t       time;
 
 	// Get the time at the last lo res
 	time = CRANK_Get_Parameter( CRANK_PARAMETER_CYLINDER_EVENT_TIME, 0, 0 );
-
-	// time = (time + PFI_ADJUST_TIME ) & UINT24_MAX;//(2 * time_per_cylinder_event) ) & UINT24_MAX;
 
 	for(counter = 0; counter < PFI_Number_Of_Cylinders; counter++ ) {
 	   /* Write values to Boundary_Angle (all fuel channels) and
@@ -301,11 +223,10 @@ void PFI_Perform_Simultaneous_Delivery( void )
 				time );
 		}
 
-		MCD5417_Set_AFPW( PFI_FUEL_TPU_INDEX, PFI_Desfi[ counter ], 0 );
-		// MCD5417_Set_Min_Inj_Off( PFI_FUEL_TPU_INDEX, PFI_Desfi[ counter ], 0);
+		MCD5417_Set_AFPW(PFI_FUEL_TPU_INDEX, PFI_Desfi[counter], 0);
 	}
 
-	PFI_Flags.Prime_Pulse_Complete = false;
+	PFI_Flags.F.Prime_Pulse_Complete = false;
 }
 
 //=============================================================================
@@ -356,11 +277,11 @@ static void PFI_Perform_Boundary_Logic( uint8_t in_channel )
 		edge_time_and_count.Count,
 		period );
 
-	if(Startup_Counter<PFI_MAX_CYLINDERS+1) {
-		desired_pulse_width =0;
-	} else {
-		desired_pulse_width = PFI_Desired_Pulse_Width[ in_channel ];
-	}
+	// if(Startup_Counter<PFI_MAX_CYLINDERS+1) {
+	// 	desired_pulse_width =0;
+	// } else {
+	// 	desired_pulse_width = PFI_Desired_Pulse_Width[ in_channel ];
+	// }
 
 	// Update boundary:
 	// MCD5417_Update_Boundary(
@@ -382,22 +303,87 @@ static void PFI_Perform_Boundary_Logic( uint8_t in_channel )
 }
 
 //=============================================================================
+// PFI_Update_Channel
+//=============================================================================
+void PFI_Update_Channel(void)
+{
+	uint8_t counter;
+
+	/* update related channel */
+	for(counter = 0; counter < PFI_MAX_CYLINDERS; counter ++) {
+		if( PFI_Flags.U32 & (0x80000000 >> counter)) {
+			MCD5417_Update_Channel( PFI_FUEL_TPU_INDEX, 
+									PFI_Desfi[ counter ],
+									PFI_Desired_Pulse_Width[ counter ],
+									PFI_Boundary_Time[ counter ],
+									PFI_Normal_Offset,
+									PFI_Trim_Offset );
+		}
+	}
+
+	/* reset all update flag */
+	PFI_Flags.U32 &= 0x0FFFFFFF;
+}
+
+//=============================================================================
+// PFI_Update_Channel
+//=============================================================================
+void PFI_Update_Boundary(void)
+{
+	uint8_t counter;
+
+	/* update related channel */
+	for(counter = 0; counter < PFI_MAX_CYLINDERS; counter ++) {
+		if( PFI_Flags.U32 & (0x08000000 >> counter)) {
+			MCD5417_Update_Boundary( PFI_FUEL_TPU_INDEX, 
+									PFI_Desfi[ counter ],
+									PFI_Desired_Pulse_Width[ counter ],
+									PFI_Boundary_Time[ counter ],
+									PFI_Normal_Offset,
+									PFI_Trim_Offset );
+		}
+	}
+}
+
+//=============================================================================
+// PFI_INJ_Boundary, called in PFI boundary tooth event
+//=============================================================================
+void PFI_Perform_Injection_Tasks( void )
+{
+	if (PFI_Flags.F.PFI_DELIVERY_MODE == PFI_FUEL_DELIVERY_SEQUENTIAL) {
+		PFI_Calculate_Boundary( PFI_IX_Boundary );
+		PFI_Perform_Boundary_Logic( PFI_IX_Boundary );
+	}
+}
+
+//=============================================================================
 // PFI_Process_Cylinder_Event
 //=============================================================================
 void PFI_Process_Cylinder_Event(void)
 {
-#if 0
-	uint32_t          cylinder_event_period;
-	uint32_t          boundary;
-	uint8_t           channel;
+	Crank_Cylinder_T  cylinder_id;
 
-	if (PFI_Fueling_Mode == PFI_FUEL_DELIVERY_SEQUENTIAL) {
-		// Check to see if a boundary occurred in the previous lo-res interval:
+	if (PFI_Flags.F.PFI_DELIVERY_MODE == PFI_FUEL_DELIVERY_SIMULTANEOUS) {
+		/* perform three channel simultaneous injection */
+		PFI_Perform_Simultaneous_Delivery();
+
+		/* update current cylinder channel boundary */
+		cylinder_id = CRANK_Get_Next_Cylinder_ID();
+		PFI_Calculate_Boundary(cylinder_id);
+		PFI_Perform_Boundary_Logic(cylinder_id);
+
+		/* perform current cylinder channel normal injection */
+		PFI_Update_Channel();
+
+		/* set fuel delivery mode to sequential*/
+		PFI_Flags.F.PFI_DELIVERY_MODE = PFI_FUEL_DELIVERY_SEQUENTIAL;
+	} else {
+		/* Check to see if a boundary occurred in the previous lo-res interval */
 		if ( !Extract_Bits(PFI_Boundary_Crossed, PFI_IX_Boundary, 1) ) {
 			// Since no boundary occurred, perform the boundary logic now:
-			PFI_INJ_Boundary();
+			PFI_Calculate_Boundary( PFI_IX_Boundary );
+			PFI_Perform_Boundary_Logic( PFI_IX_Boundary );
 		}
-
 		// Get the cylinder ID for the upcoming lo-res interval:
 		PFI_Cylinder_Event_ID = CRANK_Get_Next_Cylinder_ID();
 
@@ -406,36 +392,9 @@ void PFI_Process_Cylinder_Event(void)
 
 		PFI_IX_Boundary = PFI_Cylinder_Event_ID;
 
-		cylinder_event_period = CRANK_Get_Parameter( CRANK_PARAMETER_LO_RES_REFERENCE_PERIOD, 0, 0 );
-		channel = CRANK_Get_Cylinder_ID();
-
-		MCD5417_Update_Channel(PFI_FUEL_TPU_INDEX,
-			PFI_Desfi[ channel ],
-			PFI_Desired_Pulse_Width[ channel ],
-			PFI_Boundary_Time[ channel ],
-			PFI_Normal_Offset,
-			PFI_Trim_Offset );
+		/* perform all channels prime pulse and trim pulse(untarget pulse) */
+		PFI_Update_Channel();
 	}
-#endif
-}
-
-//=============================================================================
-// PFI_Update_Prime_Pulse_Complete
-//=============================================================================
-void PFI_Update_Prime_Pulse_Complete( void )
-{
-   PFI_Prime_Pulse_Fuel = MCD5417_Get_AFPW( PFI_FUEL_TPU_INDEX, PFI_Desfi[ 0 ] );//PFI_Actual_Pulse_Width[ 0 ];
-
-   if( ( PFI_Fueling_Mode             == PFI_FUEL_DELIVERY_SIMULTANEOUS       )
-    && ( PFI_Desired_Pulse_Width[ 0 ] <= PFI_Prime_Pulse_Fuel )
-    && ( PFI_Prime_Pulse_Fuel         != 0                    ) )
-   {
-      PFI_Flags.Prime_Pulse_Complete = true;
-   }
-   else
-   {
-   }
-
 }
 
 //=============================================================================
@@ -457,6 +416,8 @@ void PFI_Reset_Parameters( void )
 
 	for (counter = 0; counter < PFI_Number_Of_Cylinders; counter++)
 		MCD5417_Set_AFPW(PFI_FUEL_TPU_INDEX, PFI_Desfi[counter], 0);
+
+	PFI_Flags.U32 = 0x0;
 }
 
 //=============================================================================
@@ -472,13 +433,6 @@ void PFI_Initialize(IO_PFI_Initialization_Parameters_T  * const  in_initializati
 	for( counter = 0; counter < PFI_Number_Of_Cylinders; counter++ ) {
 		MCD5417_Initialize_Channel(PFI_FUEL_TPU_INDEX, &TPU, PFI_Desfi[counter]);
 	}
-
-	//  if( PFI_Fueling_Mode == PFI_FUEL_DELIVERY_SIMULTANEOUS )
-	//  {
-	//    PFI_Perform_Simultaneous_Delivery();
-	//   }
-
-	//   PFI_Flags.Update_Enabled = true;
 
 	PFI_Reset_Parameters();
 }
@@ -599,69 +553,3 @@ void PFI_Set_Injector_Offset(
 
    MCD5417_Set_Kinj( PFI_FUEL_TPU_INDEX, conversion_time );
 }
-
-
-//=============================================================================
-// PFI_Set_Pulse_Width
-//=============================================================================
-void PFI_Set_Update_Enable(
-   bool        in_enable )
-{
-   PFI_Flags.Update_Enabled = in_enable;
-}
-
-//=============================================================================
-// PFI_Set_All_Pulse_Widths
-//=============================================================================
-void PFI_Set_All_Pulse_Widths(
-   uint32_t    in_pulse_width,
-   uint8_t     in_time_precision,
-   uint8_t     in_time_resolution )
-{
-  // save Fuel Pluse width for other usage
-   uint32_t base_frequency;
-   uint8_t  counter;
-
-   base_frequency =  TPU_TIMER_Get_Base_Frequency(PFI_FUEL_TPU_INDEX,  PFI_Desfi[ 0 ] );
-
-   for( counter = 0; counter < PFI_Number_Of_Cylinders; counter++ )
-   {
-      PFI_Desired_Pulse_Width[ counter ] = IO_Convert_Time_To_Count(
-         in_pulse_width,
-         base_frequency,
-         in_time_precision,
-         in_time_resolution ); 
-
-     MCD5417_Update_Channel(   
-	 	PFI_FUEL_TPU_INDEX, PFI_Desfi[ counter ],
-                              PFI_Desired_Pulse_Width[ counter ],
-                              PFI_Boundary_Time[ counter ],
-                              PFI_Normal_Offset,
-                              PFI_Trim_Offset );
-   }
-
-}
-
-//=============================================================================
-// PFI_INJ_Boundary
-//=============================================================================
-void PFI_INJ_Boundary( void )
-{
-   if (PFI_Fueling_Mode == PFI_FUEL_DELIVERY_SEQUENTIAL)
-   {
-      PFI_Calculate_Boundary( PFI_IX_Boundary );
-      PFI_Perform_Boundary_Logic( PFI_IX_Boundary );
-   }
-}
-
-//=============================================================================
-// PFI_INJ_Boundary
-//=============================================================================
-void PFI_Perform_Injection_Tasks( void )
-{
-   PFI_INJ_Boundary();
-}
-
-
-
-

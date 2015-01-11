@@ -15,14 +15,12 @@ extern uint8_t           PFI_Injector_Diagnostic;
 //=============================================================================
 // PFI_Disable_Channel
 //=============================================================================
-void PFI_Disable_Channel(
-   Crank_Cylinder_T  in_cylinder );
+void PFI_Disable_Channel(Crank_Cylinder_T  in_cylinder );
 
 //=============================================================================
 // PFI_Enable_Channel
 //=============================================================================
-void PFI_Enable_Channel(
-   Crank_Cylinder_T  in_cylinder );
+void PFI_Enable_Channel(Crank_Cylinder_T  in_cylinder );
 
 //=============================================================================
 // PFI_Enable_Trim_Pulses
@@ -34,21 +32,10 @@ void PFI_Enable_Trim_Pulses( uint8_t index);
 //=============================================================================
 void PFI_Disable_Trim_Pulses( uint8_t index);
 
-
-//=============================================================================
-// PFI_Get_Injector_Circuit_State
-//=============================================================================
-//bool PFI_Get_Injector_Circuit_State(
-//   uint8_t     inCylinderIndex);
-//=============================================================================
-// PFI_Perform_Simultaneous_Delivery
-//=============================================================================
-void PFI_Perform_Simultaneous_Delivery( void );
 //=============================================================================
 // IO_FUEL_Initialize
 //=============================================================================
 void PFI_Initialize(IO_PFI_Initialization_Parameters_T * const  in_initialization_parameters );
-
 
 //=============================================================================
 // PFI_Set_Angle
@@ -58,7 +45,7 @@ void PFI_Set_Angle( Pfi_Angle_T    in_pfi_angle_type, uint32_t       in_angle,  
 //=============================================================================
 // PFI_Set_Fueling_Mode
 //=============================================================================
-void PFI_Set_Fueling_Mode( Pfi_Fuel_Delivery_Mode_T   in_mode,   uint8_t  in_delay_count);
+void PFI_Set_Fueling_Mode(Pfi_Fuel_Delivery_Mode_T   in_mode);
 
 //=============================================================================
 // PFI_Update_Prime_Pulse_Complete
