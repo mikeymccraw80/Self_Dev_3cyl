@@ -31,14 +31,7 @@ void DisableHWIO_TrimPulse( uint8_t index)
 //=============================================================================
 void EnableHWIO_FuelInjector( T_COUNT_BYTE LeHWIO_FuelChannel )
 {
- //  if (C2MIO_Is_Channel_Fault_Threshold_Reach(C2MIO_Get_Channel( MTSA_CONFIG_FAULT_INJ1 ) + (C2MIO_Channel_T)LeHWIO_FuelChannel  )) 
-   //{
-   // PFI_Enable_Channel(LeHWIO_FuelChannel);
- //  }
- //  else
- //  {
-       PFI_Enable_Channel(LeHWIO_FuelChannel);
-   //}
+	PFI_Enable_Channel(LeHWIO_FuelChannel);
 }
 
 //=============================================================================

@@ -46,6 +46,7 @@ void  IO_Fuel_Syn_Init(void)
 //=============================================================================
 // IO_Fuel_Syn_Update
 //=============================================================================
+static Crank_Cylinder_T first_cylinder_id;
 void IO_Fuel_Syn_Update(void)
 {
 	Crank_Cylinder_T current_cylinder_id;
@@ -58,6 +59,7 @@ void IO_Fuel_Syn_Update(void)
 	current_cylinder_id = HAL_Eng_Get_Cyl_Number();
 
 	if (First_Syn_Flag == false) {
+		first_cylinder_id = current_cylinder_id;
 		/*Convert the engineer value of Chery Injection end angle to Delphi engineer value */
 		//chery_inj_end_angle = (900 - 720)<<S_CRANK_ANGLE;
 		SetHWIO_SequentialFuelMode(false);
@@ -175,12 +177,14 @@ void IO_Fuel_Syn_Update(void)
 
 		First_Syn_Flag = true;
 	} else {
+		/* set fuel delivery mode to sequential*/
+		SetHWIO_SequentialFuelMode(true);
+
 		/*Convert the engineer value of Chery Injection end angle to Delphi engineer value */
 		chery_inj_end_angle = (900 - Convert_Chery_Inj_angle(inj_sig[INJ_CHANNEL_A].inj_end_angle,Prec_Inj_end_angle_chery))<<S_CRANK_ANGLE;
 		chery_inj_end_angle = chery_inj_end_angle - KfHWIO_phi_BoundaryFraction;
 		SetHWIO_FuelInjectorEOIT(chery_inj_end_angle);
 		SetHWIO_FuelInjectorTrimEOIT(chery_inj_end_angle);
-		//  PFI_Set_Angle( PFI_TRIM_ANGLE, chery_inj_end_angle, 1<<S_CRANK_ANGLE );
 
 		if(current_cylinder_id != INJ_CHANNEL_A) {
 			if(inj_sig[INJ_CHANNEL_A].B_post_inj) {
@@ -200,6 +204,7 @@ void IO_Fuel_Syn_Update(void)
 		inj_sig[INJ_CHANNEL_A].B_post_inj = 0;
 		PFI_PulseWidth =Convert_Chery_Inj_Width(chery_inj_width,S_MILLISECONDSb);
 		PFI_Set_Pulse_Width(INJ_CHANNEL_A, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
+		PFI_Set_Channel_Update_Enable(INJ_CHANNEL_A, true);
 
 		if(current_cylinder_id != INJ_CHANNEL_B) {
 			if(inj_sig[INJ_CHANNEL_B].B_post_inj) {
@@ -217,8 +222,9 @@ void IO_Fuel_Syn_Update(void)
 		}
 
 		inj_sig[INJ_CHANNEL_B].B_post_inj = 0;
-		PFI_PulseWidth =Convert_Chery_Inj_Width(chery_inj_width,S_MILLISECONDSb);
+		PFI_PulseWidth = Convert_Chery_Inj_Width(chery_inj_width,S_MILLISECONDSb);
 		PFI_Set_Pulse_Width(INJ_CHANNEL_B, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
+		PFI_Set_Channel_Update_Enable(INJ_CHANNEL_B, true);
 
 		if(current_cylinder_id != INJ_CHANNEL_C) {
 			if(inj_sig[INJ_CHANNEL_C].B_post_inj) {
@@ -238,6 +244,7 @@ void IO_Fuel_Syn_Update(void)
 		inj_sig[INJ_CHANNEL_C].B_post_inj = 0;
 		PFI_PulseWidth =Convert_Chery_Inj_Width(chery_inj_width,S_MILLISECONDSb);
 		PFI_Set_Pulse_Width(INJ_CHANNEL_C, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
+		PFI_Set_Channel_Update_Enable(INJ_CHANNEL_C, true);
 
 		if(current_cylinder_id != INJ_CHANNEL_D) {
 			if(inj_sig[INJ_CHANNEL_D].B_post_inj) {
@@ -257,6 +264,7 @@ void IO_Fuel_Syn_Update(void)
 		inj_sig[INJ_CHANNEL_D].B_post_inj = 0;
 		PFI_PulseWidth =Convert_Chery_Inj_Width(chery_inj_width,S_MILLISECONDSb);
 		PFI_Set_Pulse_Width(INJ_CHANNEL_D, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
+		PFI_Set_Channel_Update_Enable(INJ_CHANNEL_D, true);
 	}
 	//Clear the flag to tell the HLS that LLD get the parameters
 	B_syn_update = false;
@@ -278,7 +286,5 @@ void IO_Fuel_Engine_Stall_Reset(void)
 	PFI_Disable_Trim_Pulses(INJ_CHANNEL_B);
 	PFI_Disable_Trim_Pulses(INJ_CHANNEL_C);
 	PFI_Disable_Trim_Pulses(INJ_CHANNEL_D);
-
-	Startup_Counter =0;
 }
 

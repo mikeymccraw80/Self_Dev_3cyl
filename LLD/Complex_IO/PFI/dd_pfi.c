@@ -2,6 +2,7 @@
 //  Include Files
 //=============================================================================
 #include "dd_pfi.h"
+#include "dd_stm_interface.h"
 #include "io_conversion.h"
 #include "io_config_fuel.h"
 #include "io_config_tpu.h"
@@ -60,11 +61,12 @@ static volatile uint32_t          PFI_Time_Per_Boundary_Fraction;
 #define PFI_Set_Channel_Update_Flag(in_channel)    (PFI_Flags.U32 |= (0x80000000>>in_channel))
 #define PFI_Clear_Channel_Update_Flag(in_channel)  (PFI_Flags.U32 &= ~(0x80000000>>in_channel))
 
+#define PFI_Set_Boundary_Update_Flag(in_channel)    (PFI_Flags.U32 |= (0x08000000>>in_channel))
+#define PFI_Clear_Boundary_Update_Flag(in_channel)  (PFI_Flags.U32 &= ~(0x08000000>>in_channel))
 
 static void     PFI_INJ_Boundary(void);
 static uint32_t PFI_Calculate_Boundary(uint8_t  in_channel);
 static void     PFI_Perform_Boundary_Logic(uint8_t in_channel);
-static void     PFI_Enable_Sequential(uint8_t in_delay_count);
 
 //=============================================================================
 // PFI_Calculate_Boundary
@@ -129,6 +131,17 @@ void PFI_Set_Channel_Update_Enable(Crank_Cylinder_T in_channel, bool flag)
 		PFI_Set_Channel_Update_Flag(in_channel);
 	else
 		PFI_Clear_Channel_Update_Flag(in_channel);
+}
+
+//=============================================================================
+// PFI_Set_Boundary_Update_Enable
+//=============================================================================
+void PFI_Set_Boundary_Update_Enable(Crank_Cylinder_T in_channel, bool flag)
+{
+	if (flag == true)
+		PFI_Set_Boundary_Update_Flag(in_channel);
+	else
+		PFI_Clear_Boundary_Update_Flag(in_channel);
 }
 
 //=============================================================================
@@ -203,6 +216,7 @@ static void PFI_Perform_Simultaneous_Delivery( void )
 {
 	uint8_t        counter;
 	uint32_t       time;
+	uint32_t       desired_pulse_width;
 
 	// Get the time at the last lo res
 	time = CRANK_Get_Parameter( CRANK_PARAMETER_CYLINDER_EVENT_TIME, 0, 0 );
@@ -213,58 +227,30 @@ static void PFI_Perform_Simultaneous_Delivery( void )
 	    * each fuel channel is equal to (or less than) the current timer value,
 	    * to start at once on all fuel channels simultaneously
 	    */
-		if (counter != CRANK_Get_Cylinder_ID()) {
-			MCD5417_Update_Boundary( 
-				PFI_FUEL_TPU_INDEX,
-				PFI_Desfi[ counter ],
-				PFI_Desired_Pulse_Width[ counter ],
-				time,
-				time,//PFI_Normal_Offset,
-				time );
+		if (counter == CRANK_Get_Cylinder_ID())  {
+			desired_pulse_width = 0;
+		} else {
+			desired_pulse_width = PFI_Desired_Pulse_Width[counter];
 		}
+		MCD5417_Update_Boundary( 
+			PFI_FUEL_TPU_INDEX,
+			PFI_Desfi[counter],
+			desired_pulse_width,
+			time,
+			time,//PFI_Normal_Offset,
+			time);
 
 		MCD5417_Set_AFPW(PFI_FUEL_TPU_INDEX, PFI_Desfi[counter], 0);
 	}
-
-	PFI_Flags.F.Prime_Pulse_Complete = false;
 }
 
 //=============================================================================
-// PFI_Enable_Sequential
+// PFI_Update_Engine_Data
 //=============================================================================
-static void PFI_Enable_Sequential(uint8_t in_delay_count )
-{
-	uint8_t           counter;
-	Crank_Cylinder_T  cylinder_id;
-
-	// We want one cylinder in the future.
-	cylinder_id = CRANK_Get_Next_Cylinder_ID();
-
-	PFI_IX_Boundary = cylinder_id;
-
-	// calculate boundry
-	PFI_Calculate_Boundary( cylinder_id );
-
-	// Setup next cylinder and previous cylinders based on application value
-	for( counter = 0; counter <= in_delay_count; counter++ ) {
-		PFI_Perform_Boundary_Logic( cylinder_id );
-
-		if( cylinder_id == 0 ) {
-			cylinder_id = PFI_Number_Of_Cylinders - 1;
-		} else {
-			cylinder_id--;
-		}
-	}
-}
-
-//=============================================================================
-// PFI_Perform_Boundary_Logic
-//=============================================================================
-static void PFI_Perform_Boundary_Logic( uint8_t in_channel )
+static void PFI_Update_Engine_Data(uint8_t in_channel)
 {
 	uint32_t period;
 	EPPwMT_Coherent_Edge_Time_And_Count_T edge_time_and_count;
-	uint32_t       desired_pulse_width;
 
 	MCD5408_Get_Coherent_Edge_Time_And_Count(EPPWMT_TPU_INDEX, TPU_CONFIG_IC_EPPWMT, &edge_time_and_count );
 	period = MCD5408_Get_Period(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT);
@@ -272,29 +258,31 @@ static void PFI_Perform_Boundary_Logic( uint8_t in_channel )
 	// Update engine data for DESFI MCD
 	MCD5417_Update_Engine_Data(
 		PFI_FUEL_TPU_INDEX,
-		PFI_Desfi[ in_channel ], // global data update, channel independent
+		PFI_Desfi[in_channel], // global data update, channel independent
 		edge_time_and_count.Time,
 		edge_time_and_count.Count,
-		period );
+		period);
+}
 
-	// if(Startup_Counter<PFI_MAX_CYLINDERS+1) {
-	// 	desired_pulse_width =0;
-	// } else {
-	// 	desired_pulse_width = PFI_Desired_Pulse_Width[ in_channel ];
-	// }
+//=============================================================================
+// PFI_Perform_Boundary_Logic
+//=============================================================================
+static void PFI_Perform_Boundary_Logic( uint8_t in_channel )
+{
+	uint32_t       desired_pulse_width;
 
-	// Update boundary:
-	// MCD5417_Update_Boundary(
-	// 	PFI_FUEL_TPU_INDEX,
-	// 	PFI_Desfi[ in_channel ],
-	// 	//PFI_Desired_Pulse_Width[ in_channel ],
-	// 	desired_pulse_width,
-	// 	PFI_Boundary_Time[ in_channel ],
-	// 	PFI_Normal_Offset,
-	// 	PFI_Trim_Offset );
+	desired_pulse_width =0;
 
-	// PFI_Actual_Pulse_Width[ in_channel ] = MCD5417_Get_AFPW( PFI_FUEL_TPU_INDEX, PFI_Desfi[ in_channel ] );
-	// MCD5417_Set_AFPW(PFI_FUEL_TPU_INDEX, PFI_Desfi[ in_channel ], 0 );
+	MCD5417_Update_Boundary(
+		PFI_FUEL_TPU_INDEX,
+		PFI_Desfi[in_channel],
+		desired_pulse_width,
+		PFI_Boundary_Time[in_channel],
+		PFI_Normal_Offset,
+		PFI_Trim_Offset );
+
+	PFI_Actual_Pulse_Width[in_channel] = MCD5417_Get_AFPW(PFI_FUEL_TPU_INDEX, PFI_Desfi[in_channel]);
+	MCD5417_Set_AFPW(PFI_FUEL_TPU_INDEX, PFI_Desfi[in_channel], 0 );
 
 	// If the hardware has slow fault detection then this code should be activated so that
 	// false faults are not reported.
@@ -341,8 +329,13 @@ void PFI_Update_Boundary(void)
 									PFI_Boundary_Time[ counter ],
 									PFI_Normal_Offset,
 									PFI_Trim_Offset );
+			PFI_Actual_Pulse_Width[counter] = MCD5417_Get_AFPW( PFI_FUEL_TPU_INDEX, PFI_Desfi[counter] );
+			MCD5417_Set_AFPW(PFI_FUEL_TPU_INDEX, PFI_Desfi[counter], 0 );
 		}
 	}
+
+	/* reset all update flag */
+	PFI_Flags.U32 &= 0xF0FFFFFF;
 }
 
 //=============================================================================
@@ -350,9 +343,15 @@ void PFI_Update_Boundary(void)
 //=============================================================================
 void PFI_Perform_Injection_Tasks( void )
 {
+	uint8_t counter;
+
 	if (PFI_Flags.F.PFI_DELIVERY_MODE == PFI_FUEL_DELIVERY_SEQUENTIAL) {
 		PFI_Calculate_Boundary( PFI_IX_Boundary );
 		PFI_Perform_Boundary_Logic( PFI_IX_Boundary );
+	} else {
+		/* abort the simultaneous injection pulse */
+		PFI_Calculate_Boundary( PFI_IX_Boundary );
+		PFI_Perform_Boundary_Logic(PFI_IX_Boundary);
 	}
 }
 
@@ -361,39 +360,43 @@ void PFI_Perform_Injection_Tasks( void )
 //=============================================================================
 void PFI_Process_Cylinder_Event(void)
 {
-	Crank_Cylinder_T  cylinder_id;
+	Crank_Cylinder_T  next_cylinder_id;
+	Crank_Cylinder_T  current_cylinder_id;
 
 	if (PFI_Flags.F.PFI_DELIVERY_MODE == PFI_FUEL_DELIVERY_SIMULTANEOUS) {
 		/* perform three channel simultaneous injection */
 		PFI_Perform_Simultaneous_Delivery();
 
 		/* update current cylinder channel boundary */
-		cylinder_id = CRANK_Get_Next_Cylinder_ID();
-		PFI_Calculate_Boundary(cylinder_id);
-		PFI_Perform_Boundary_Logic(cylinder_id);
+		current_cylinder_id = CRANK_Get_Cylinder_ID();
+		next_cylinder_id = CRANK_Get_Next_Cylinder_ID();
 
-		/* perform current cylinder channel normal injection */
+		/* init PFI_IX_Boundary for sequential mode use */
+		PFI_IX_Boundary = next_cylinder_id;
+
+		PFI_Calculate_Boundary(next_cylinder_id);
+		PFI_Update_Engine_Data(current_cylinder_id);
 		PFI_Update_Channel();
-
-		/* set fuel delivery mode to sequential*/
-		PFI_Flags.F.PFI_DELIVERY_MODE = PFI_FUEL_DELIVERY_SEQUENTIAL;
 	} else {
+#if 1
 		/* Check to see if a boundary occurred in the previous lo-res interval */
 		if ( !Extract_Bits(PFI_Boundary_Crossed, PFI_IX_Boundary, 1) ) {
 			// Since no boundary occurred, perform the boundary logic now:
-			PFI_Calculate_Boundary( PFI_IX_Boundary );
+			// PFI_Calculate_Boundary( PFI_IX_Boundary );
+			// PFI_Update_Engine_Data(PFI_IX_Boundary);
 			PFI_Perform_Boundary_Logic( PFI_IX_Boundary );
 		}
+		PFI_Update_Engine_Data(PFI_IX_Boundary);
+
 		// Get the cylinder ID for the upcoming lo-res interval:
 		PFI_Cylinder_Event_ID = CRANK_Get_Next_Cylinder_ID();
-
 		// Clear a flag to indicate that we are expecting a boundary in this lo-res:
 		PFI_Boundary_Crossed = Insert_Bits( PFI_Boundary_Crossed, false, PFI_Cylinder_Event_ID, 1 );
-
 		PFI_IX_Boundary = PFI_Cylinder_Event_ID;
 
 		/* perform all channels prime pulse and trim pulse(untarget pulse) */
 		PFI_Update_Channel();
+#endif
 	}
 }
 
@@ -406,16 +409,7 @@ void PFI_Reset_Parameters( void )
 
 	PFI_Normal_Offset = 0;
 	PFI_Trim_Offset = 0;
-
-	PFI_Number_Of_Cylinders = CRANK_Get_Number_Of_Cylinders();
-
-	for( counter = 0; counter < PFI_Number_Of_Cylinders; counter++ ) {
-		MCD5417_Shutdown(PFI_FUEL_TPU_INDEX, PFI_Desfi[counter]);
-		MCD5417_Initialize_Channel(PFI_FUEL_TPU_INDEX, &TPU, PFI_Desfi[counter]);
-	}
-
-	for (counter = 0; counter < PFI_Number_Of_Cylinders; counter++)
-		MCD5417_Set_AFPW(PFI_FUEL_TPU_INDEX, PFI_Desfi[counter], 0);
+	PFI_Boundary_Crossed = 0x0;
 
 	PFI_Flags.U32 = 0x0;
 }
@@ -539,17 +533,16 @@ void PFI_Set_Injector_Offset(
    uint8_t     in_time_precision,
    uint8_t     in_time_resolution )
 {
-   uint32_t    conversion_time;
-   uint32_t    base_frequency;
+	uint32_t    conversion_time;
+	uint32_t    base_frequency;
 
-   base_frequency = TPU_TIMER_Get_Base_Frequency(PFI_FUEL_TPU_INDEX, PFI_Desfi[ 0 ] );
+	base_frequency = TPU_TIMER_Get_Base_Frequency(PFI_FUEL_TPU_INDEX, PFI_Desfi[ 0 ] );
 
+	conversion_time = IO_Convert_Time_To_Count(
+		in_offset,
+		base_frequency,
+		in_time_precision,
+		in_time_resolution );
 
-   conversion_time = IO_Convert_Time_To_Count(
-      in_offset,
-      base_frequency,
-      in_time_precision,
-      in_time_resolution );
-
-   MCD5417_Set_Kinj( PFI_FUEL_TPU_INDEX, conversion_time );
+	MCD5417_Set_Kinj( PFI_FUEL_TPU_INDEX, conversion_time );
 }
