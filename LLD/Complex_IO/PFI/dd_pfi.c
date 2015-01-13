@@ -217,9 +217,10 @@ static void PFI_Perform_Simultaneous_Delivery( void )
 	uint8_t        counter;
 	uint32_t       time;
 	uint32_t       desired_pulse_width;
+	uint32_t       offset;
 
-	// Get the time at the last lo res
-	time = CRANK_Get_Parameter( CRANK_PARAMETER_CYLINDER_EVENT_TIME, 0, 0 );
+	/* Get the time at the last lo res */
+	time = CRANK_Get_Parameter( CRANK_PARAMETER_CYLINDER_EVENT_ANGLE, 0, 0 );
 
 	for(counter = 0; counter < PFI_Number_Of_Cylinders; counter++ ) {
 	   /* Write values to Boundary_Angle (all fuel channels) and
@@ -232,13 +233,16 @@ static void PFI_Perform_Simultaneous_Delivery( void )
 		} else {
 			desired_pulse_width = PFI_Desired_Pulse_Width[counter];
 		}
+		/* convert boundary angle to counter, and sub current time */
+		offset = PFI_Boundary_Time[counter] - time;
+
 		MCD5417_Update_Boundary( 
 			PFI_FUEL_TPU_INDEX,
 			PFI_Desfi[counter],
 			desired_pulse_width,
-			time,
-			time,//PFI_Normal_Offset,
-			time);
+			PFI_Boundary_Time[counter],
+			offset,//PFI_Normal_Offset,
+			offset);
 
 		MCD5417_Set_AFPW(PFI_FUEL_TPU_INDEX, PFI_Desfi[counter], 0);
 	}
@@ -345,14 +349,9 @@ void PFI_Perform_Injection_Tasks( void )
 {
 	uint8_t counter;
 
-	if (PFI_Flags.F.PFI_DELIVERY_MODE == PFI_FUEL_DELIVERY_SEQUENTIAL) {
-		PFI_Calculate_Boundary( PFI_IX_Boundary );
-		PFI_Perform_Boundary_Logic( PFI_IX_Boundary );
-	} else {
-		/* abort the simultaneous injection pulse */
-		PFI_Calculate_Boundary( PFI_IX_Boundary );
-		PFI_Perform_Boundary_Logic(PFI_IX_Boundary);
-	}
+	/* abort the simultaneous injection pulse */
+	PFI_Calculate_Boundary( PFI_IX_Boundary );
+	PFI_Perform_Boundary_Logic(PFI_IX_Boundary);
 }
 
 //=============================================================================
@@ -364,21 +363,21 @@ void PFI_Process_Cylinder_Event(void)
 	Crank_Cylinder_T  current_cylinder_id;
 
 	if (PFI_Flags.F.PFI_DELIVERY_MODE == PFI_FUEL_DELIVERY_SIMULTANEOUS) {
-		/* perform three channel simultaneous injection */
-		PFI_Perform_Simultaneous_Delivery();
-
 		/* update current cylinder channel boundary */
 		current_cylinder_id = CRANK_Get_Cylinder_ID();
 		next_cylinder_id = CRANK_Get_Next_Cylinder_ID();
 
+		PFI_Calculate_Boundary(next_cylinder_id);
+		PFI_Update_Engine_Data(current_cylinder_id);
+
+		/* perform three channel simultaneous injection */
+		PFI_Perform_Simultaneous_Delivery();
+
 		/* init PFI_IX_Boundary for sequential mode use */
 		PFI_IX_Boundary = next_cylinder_id;
 
-		PFI_Calculate_Boundary(next_cylinder_id);
-		PFI_Update_Engine_Data(current_cylinder_id);
 		PFI_Update_Channel();
 	} else {
-#if 1
 		/* Check to see if a boundary occurred in the previous lo-res interval */
 		if ( !Extract_Bits(PFI_Boundary_Crossed, PFI_IX_Boundary, 1) ) {
 			// Since no boundary occurred, perform the boundary logic now:
@@ -396,7 +395,6 @@ void PFI_Process_Cylinder_Event(void)
 
 		/* perform all channels prime pulse and trim pulse(untarget pulse) */
 		PFI_Update_Channel();
-#endif
 	}
 }
 
