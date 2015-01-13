@@ -475,8 +475,6 @@ static bool CRANK_First_Gap_Cofirm( void )
 	previous_1_n = MCD5408_Get_Previous_1_n(EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT);
 	/* 1st criterion : gap at expected location,  2nd criterion : gap pattern recognized*/
 	if((CRANK_Next_Event_PA_Content == previous_n_1 ) && (((uCrank_Count_T)(previous_n_1 - previous_1_n)) == 1)) {
-		// toggle pin out put
-		SIU.GPDO[HAL_GPIO_VGIS1CTL_CHANNEL].F.PDO = true;
 		// 1st GAP found
 		CRANK_Parameters.F.number_of_gaps_detected = 0;
 		CRANK_Internal_State.U32 = CRANK_Set_Sync_Started( CRANK_Internal_State.U32, false );
@@ -674,7 +672,6 @@ bool CRANK_Check_Real_Signal_In_Backup_Mode( void )
 static void CRANK_FS_Reset(void)
 {
 	CRANK_FS_State = FS_INIT_PARAMETER;
-	SIU.GPDO[HAL_GPIO_VGIS1CTL_CHANNEL].F.PDO = false;
 }
 
 static bool CRANK_FS_Search_For_First_Syn(void)
@@ -729,8 +726,6 @@ static bool CRANK_FS_Search_For_First_Syn(void)
 	}
 
 	if (CRANK_FS_State == FS_CRANK_CYLINDER_ID_COMPLETE) {
-		// toggle pin output
-		SIU.GPDO[HAL_GPIO_VGIS1CTL_CHANNEL].F.PDO = true;
 		syn_detected = true;
 		if (SIU_GPIO_DISCRETE_Get_State(HAL_GPIO_CAM1_CHANNEL) == true) {
 			// todo: identified to cylinder B

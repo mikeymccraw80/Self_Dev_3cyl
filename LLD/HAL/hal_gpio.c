@@ -119,7 +119,7 @@ void HAL_GPIO_SET_INJECTION_GPIO_Mode_Enable(bool in_enable)
 //=============================================================================
     void HAL_GPIO_SET_VGIS1_Enable(bool in_enable) 
  {
-     // SIU_GPIO_DISCRETE_Set_State(HAL_GPIO_VGIS1CTL_CHANNEL,in_enable);
+      SIU_GPIO_DISCRETE_Set_State(HAL_GPIO_VGIS1CTL_CHANNEL,in_enable);
  }
 
 //=============================================================================
