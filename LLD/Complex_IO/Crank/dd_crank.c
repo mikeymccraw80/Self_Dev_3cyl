@@ -805,7 +805,9 @@ void CRANK_Process_Crank_Event( void )
 			// Check if first synchronization took place:
 			if (!CRANK_Get_First_Sync_Occurred( CRANK_Internal_State.U32 ) ) {
 				// Look for the first gap(2, 62) or synchronization(32, 92)
-				if (CRANK_Search_For_First_Gap() || CRANK_FS_Search_For_First_Syn()){
+				if ((KbHWIO_Fast_Sync_Enable && (CRANK_Search_For_First_Gap() || CRANK_FS_Search_For_First_Syn())) || \
+					(!KbHWIO_Fast_Sync_Enable && CRANK_Search_For_First_Gap()))
+				{
 					CRANK_Internal_State.U32 = CRANK_Set_First_Sync_Occurred(CRANK_Internal_State.U32, true );
 				}
 			} else {

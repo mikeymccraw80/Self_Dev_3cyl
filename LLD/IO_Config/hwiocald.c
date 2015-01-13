@@ -185,6 +185,17 @@ const uint8_t KyHWIO_NumValidPeriodsBeforeSyncStart = 7;
 
 /*
 *| hwiocald.{
+*|    KbHWIO_Fast_Sync_Enable {
+*|       :is_calconst;
+*|       :units = "BOOLEAN";
+*|       :description = "This variable used to determine whether fast sync is enabled .";
+*|    }
+*| }
+*/
+const bool    KbHWIO_Fast_Sync_Enable = true ;
+
+/*
+*| hwiocald.{
 *| KyHWIO_NumValidPeriodsBeforeFastSyncStart {
 *|     : is_calconst;
 *|     : description = "Number of valid 58x periods to be seen "
