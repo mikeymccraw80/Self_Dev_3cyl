@@ -323,6 +323,9 @@ void CRANK_Reset_Parameters( void )
 
 	// crank fast startup reset
 	CRANK_Reset_Fast_Syn();
+
+	/* set gap monitor to zero */
+	CRANK_GapConfirm_Monitor_Count = 0;
 }
 
 
@@ -507,6 +510,9 @@ static bool CRANK_First_Gap_Cofirm( void )
 		CAM_Set_Current_Edge(CAM2);
 		CAM_Set_Total_Edge(CAM1);
 		CAM_Set_Total_Edge(CAM2);
+
+		/* set gap monitor count to zero*/
+		CRANK_GapConfirm_Monitor_Count = 0;
 
 		CRANK_Internal_State.U32 = CRANK_Set_Sync_Occurred( CRANK_Internal_State.U32, true );
 		MCD5408_Set_Gap_Count(EPPWMT_TPU_INDEX, TPU_CONFIG_IC_EPPWMT,CRANK_ACTUAL_TEETH_PER_CRANK);
@@ -765,6 +771,8 @@ static bool CRANK_Search_For_First_Fast_Syn(void)
 		CAM_Set_Current_Edge(CAM2);
 		CAM_Set_Total_Edge(CAM1);
 		CAM_Set_Total_Edge(CAM2);
+		/* set gap mointor count to zero */
+		CRANK_GapConfirm_Monitor_Count = 0;
 	}
 	
 	return syn_detected;
