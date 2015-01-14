@@ -322,7 +322,7 @@ void CRANK_Reset_Parameters( void )
 	KNOCK_Initialize();
 
 	// crank fast startup reset
-	CRANK_FS_Reset();
+	CRANK_Reset_Fast_Syn();
 }
 
 
@@ -669,12 +669,12 @@ bool CRANK_Check_Real_Signal_In_Backup_Mode( void )
 //=============================================================================
 #define IS_IN_RANGE(val, min, max) (((val) >= (min)) && ((val) <= (max)))
 
-static void CRANK_FS_Reset(void)
+static void CRANK_Reset_Fast_Syn(void)
 {
 	CRANK_FS_State = FS_INIT_PARAMETER;
 }
 
-static bool CRANK_FS_Search_For_First_Syn(void)
+static bool CRANK_Search_For_First_Fast_Syn(void)
 {
 	bool syn_detected;
 	uCrank_Count_T cam_edge_count;
@@ -800,7 +800,7 @@ void CRANK_Process_Crank_Event( void )
 			// Check if first synchronization took place:
 			if (!CRANK_Get_First_Sync_Occurred( CRANK_Internal_State.U32 ) ) {
 				// Look for the first gap(2, 62) or synchronization(32, 92)
-				if ((KbHWIO_Fast_Sync_Enable && (CRANK_Search_For_First_Gap() || CRANK_FS_Search_For_First_Syn())) || \
+				if ((KbHWIO_Fast_Sync_Enable && (CRANK_Search_For_First_Gap() || CRANK_Search_For_First_Fast_Syn())) || \
 					(!KbHWIO_Fast_Sync_Enable && CRANK_Search_For_First_Gap()))
 				{
 					CRANK_Internal_State.U32 = CRANK_Set_First_Sync_Occurred(CRANK_Internal_State.U32, true );
