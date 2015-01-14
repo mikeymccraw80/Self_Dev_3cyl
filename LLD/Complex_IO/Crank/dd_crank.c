@@ -193,7 +193,7 @@ void CRANK_Process_Stall_Event(void) ;
 //=============================================================================
 // CRANK_FS_Reset
 //=============================================================================
-static void CRANK_FS_Reset(void);
+static void CRANK_Reset_Fast_Syn(void);
 
 //=============================================================================
 // CRANK_Convert_Ref_Period_To_RPM
@@ -605,13 +605,15 @@ bool CRANK_Validate_Synchronization( void )
 		}
 
 		/* check whether need to recover from synch error */
-		if (CRANK_FS_State == FS_CRANK_CYLINDER_ID_COMPLETE) {
-			CRANK_FS_State = FS_INIT_PARAMETER;
-		} else {
-			if ((CRANK_Error_Count_Less >= KyHWIO_MaxErrorTeethLess) ||
-				(CRANK_Error_Count_More >= KyHWIO_MaxErrorTeethMore) )
-			{
-				return false;
+		if (KbHWIO_MoreOrLess_Logic_Enable == true) {
+			if (CRANK_FS_State == FS_CRANK_CYLINDER_ID_COMPLETE) {
+				CRANK_FS_State = FS_INIT_PARAMETER;
+			} else {
+				if ((CRANK_Error_Count_Less >= KyHWIO_MaxErrorTeethLess) ||
+					(CRANK_Error_Count_More >= KyHWIO_MaxErrorTeethMore) )
+				{
+					return false;
+				}
 			}
 		}
 

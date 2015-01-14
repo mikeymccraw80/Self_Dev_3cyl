@@ -209,6 +209,17 @@ const uint8_t KyHWIO_NumValidPeriodsBeforeFastSyncStart = 7;
 
 /*
 *| hwiocald.{
+*|    KbHWIO_MoreOrLess_Logic_Enable {
+*|       :is_calconst;
+*|       :units = "BOOLEAN";
+*|       :description = "This variable used to determine whether more or less logic is enabled .";
+*|    }
+*| }
+*/
+const bool    KbHWIO_MoreOrLess_Logic_Enable = true ;
+
+/*
+*| hwiocald.{
 *| KyHWIO_MaxErrorTeethMore {
 *|     : is_calconst;
 *|     : description = "Number of error for 58x diagnose, if beyond this, resynchronize";
