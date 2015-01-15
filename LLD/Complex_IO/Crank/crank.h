@@ -198,9 +198,9 @@ typedef enum
    CRANK_FLAG_STALL_DETECTED                = 13, // @emem 
    CRANK_FLAG_CAM_BACKUP                    = 14, // @emem 
    CRANK_FLAG_TRANSITION_TO_CAM_BACKUP      = 15, // @emem 
+   CRANK_FLAG_FAST_SYNC_OCCURRED            = 23, // @emem 
    CRANK_FLAG_SYNC_FIRST_REVOLUTION         = 30, // @emem 
    CRANK_FLAG_SYNC_SECOND_REVOLUTION        = 31  // @emem 
- 
 }  Crank_Flag_T;
 
 //=============================================================================

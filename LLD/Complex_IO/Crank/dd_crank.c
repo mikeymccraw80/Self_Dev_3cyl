@@ -29,7 +29,9 @@ typedef struct
 {
    bitfield32_t  sync_second_revolution        :  1; // bit 31   @emem 
    bitfield32_t  sync_first_revolution         :  1; // bit 30,  @emem 
-   bitfield32_t                                : 14; // bits
+   bitfield32_t                                :  6; // bits
+   bitfield32_t  fast_sync_occurred            :  1; // bit 23
+   bitfield32_t                                :  7; // bits
    bitfield32_t  transition_to_cam_backup      :  1; // bit 15,  @emem 
    bitfield32_t  cam_backup                    :  1; // bit 14,  @emem 
    bitfield32_t  stall_detected                :  1; // bit 13,  @emem 
@@ -46,8 +48,6 @@ typedef struct
    bitfield32_t  sync_error_in_progress        :  1; // bit  2,  @emem 
    bitfield32_t  first_sync_occurred           :  1; // bit  1,  @emem 
    bitfield32_t  sync_occurred                 :  1; // bit  0,  @emem 
-
-
 } CRANK_Flag_F_T;
 
 typedef union
@@ -193,7 +193,7 @@ void CRANK_Process_Stall_Event(void) ;
 //=============================================================================
 // CRANK_FS_Reset
 //=============================================================================
-static void CRANK_Reset_Fast_Syn(void);
+static void CRANK_Reset_Fast_Sync(void);
 
 //=============================================================================
 // CRANK_Convert_Ref_Period_To_RPM
@@ -322,7 +322,7 @@ void CRANK_Reset_Parameters( void )
 	KNOCK_Initialize();
 
 	// crank fast startup reset
-	CRANK_Reset_Fast_Syn();
+	CRANK_Reset_Fast_Sync();
 
 	/* set gap monitor to zero */
 	CRANK_GapConfirm_Monitor_Count = 0;
@@ -677,12 +677,12 @@ bool CRANK_Check_Real_Signal_In_Backup_Mode( void )
 //=============================================================================
 #define IS_IN_RANGE(val, min, max) (((val) >= (min)) && ((val) <= (max)))
 
-static void CRANK_Reset_Fast_Syn(void)
+static void CRANK_Reset_Fast_Sync(void)
 {
 	CRANK_FS_State = FS_INIT_PARAMETER;
 }
 
-static bool CRANK_Search_For_First_Fast_Syn(void)
+static bool CRANK_Search_For_First_Fast_Sync(void)
 {
 	bool syn_detected;
 	uCrank_Count_T cam_edge_count;
@@ -750,6 +750,7 @@ static bool CRANK_Search_For_First_Fast_Syn(void)
 		CRANK_Internal_State.U32 = CRANK_Set_Sync_Started(CRANK_Internal_State.U32, false );
 		CRANK_Internal_State.U32 = CRANK_Set_First_Sync_Occurred(CRANK_Internal_State.U32, true );
 		CRANK_Internal_State.U32 = CRANK_Set_Sync_Occurred( CRANK_Internal_State.U32, true );
+		CRANK_Internal_State.U32 = CRANK_Set_Fast_Sync_Occurred( CRANK_Internal_State.U32, true );
 
 		if (CRANK_Cylinder_ID == CRANK_CYLINDER_A) {
 			CRANK_Internal_State.U32 = CRANK_Set_Sync_First_Revolution( CRANK_Internal_State.U32, true );
@@ -810,7 +811,7 @@ void CRANK_Process_Crank_Event( void )
 			// Check if first synchronization took place:
 			if (!CRANK_Get_First_Sync_Occurred( CRANK_Internal_State.U32 ) ) {
 				// Look for the first gap(2, 62) or synchronization(32, 92)
-				if ((KbHWIO_Fast_Sync_Enable && (CRANK_Search_For_First_Gap() || CRANK_Search_For_First_Fast_Syn())) || \
+				if ((KbHWIO_Fast_Sync_Enable && (CRANK_Search_For_First_Gap() || CRANK_Search_For_First_Fast_Sync())) || \
 					(!KbHWIO_Fast_Sync_Enable && CRANK_Search_For_First_Gap()))
 				{
 					CRANK_Internal_State.U32 = CRANK_Set_First_Sync_Occurred(CRANK_Internal_State.U32, true );
