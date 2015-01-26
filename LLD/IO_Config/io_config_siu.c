@@ -909,7 +909,7 @@ const SIU_PCR_T SIU_INITIAL_PCR_141 =
       SIU_GPIO_BUFFER_IN_ENABLED,   //IBE    Input buffer enable
       SIU_GPIO_DRIVE_STRENGTH_10pF, //DSC  Drive strength control
       SIU_GPIO_OPEN_DRAIN_DISABLED, //ODE  Open drain output enable
-      SIU_GPIO_INPUT_HYSTERESIS_DISABLED, //HYS Input hysteresis
+      SIU_GPIO_INPUT_HYSTERESIS_ENABLED, //HYS Input hysteresis
       SIU_GPIO_SLEW_RATE_MINIMUM,  //SRC  Slew rate control
       SIU_GPIO_PULL_UP_Down_DISABLED,  //WPE  Weak pullup/down enable
       SIU_GPIO_PULL_DOWN  //WPS  Weak pullup/down select
