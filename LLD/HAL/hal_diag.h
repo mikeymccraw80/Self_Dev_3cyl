@@ -69,45 +69,53 @@ extern HAL_Diag_T HAL_Diag;
  * To test injectors A,B,C,D 
  ******************************************************************************/
 #define InjectorAFault()            (GetAnyFault(PULSE_OUT_INJ_CYL_A))
-#define InjectorAShortHi()          (GetSTBFault(PULSE_OUT_INJ_CYL_A))
-#define InjectorAShortLo()          (GetSTGFault(PULSE_OUT_INJ_CYL_A))
+#define InjectorAShortHi()          (GetShortFault(PULSE_OUT_INJ_CYL_A))
+#define InjectorAShortLo()          (GetOpenFault(PULSE_OUT_INJ_CYL_A))
 
 #define InjectorBFault()            (GetAnyFault(PULSE_OUT_INJ_CYL_B))
-#define InjectorBShortHi()          (GetSTBFault(PULSE_OUT_INJ_CYL_B))
-#define InjectorBShortLo()          (GetSTGFault(PULSE_OUT_INJ_CYL_B))
+#define InjectorBShortHi()          (GetShortFault(PULSE_OUT_INJ_CYL_B))
+#define InjectorBShortLo()          (GetOpenFault(PULSE_OUT_INJ_CYL_B))
 
 #define InjectorCFault()            (GetAnyFault(PULSE_OUT_INJ_CYL_C))
-#define InjectorCShortHi()          (GetSTBFault(PULSE_OUT_INJ_CYL_C))
-#define InjectorCShortLo()          (GetSTGFault(PULSE_OUT_INJ_CYL_C))
+#define InjectorCShortHi()          (GetShortFault(PULSE_OUT_INJ_CYL_C))
+#define InjectorCShortLo()          (GetOpenFault(PULSE_OUT_INJ_CYL_C))
 
 #define InjectorDFault()            (GetAnyFault(PULSE_OUT_INJ_CYL_D))
-#define InjectorDShortHi()          (GetSTBFault(PULSE_OUT_INJ_CYL_D))
-#define InjectorDShortLo()          (GetSTGFault(PULSE_OUT_INJ_CYL_D))
+#define InjectorDShortHi()          (GetShortFault(PULSE_OUT_INJ_CYL_D))
+#define InjectorDShortLo()          (GetOpenFault(PULSE_OUT_INJ_CYL_D))
 
 #define GetOpenFault(function)      (DD_GetDiscreteDiagStatus(function,OUTPUT_OPEN_CKT_FAULT))
-#define GetSTBFault(function)     (DD_GetDiscreteDiagStatus(function,OUTPUT_STB_CKT_FAULT))
-#define GetSTGFault(function)     (DD_GetDiscreteDiagStatus(function,OUTPUT_STG_CKT_FAULT))
-#define GetAnyFault(function)       (GetOpenFault(function)|| GetSTBFault(function) || GetSTGFault(function))
+#define GetShortFault(function)     (DD_GetDiscreteDiagStatus(function,OUTPUT_SHORT_CKT_FAULT))
+#define GetAnyFault(function)       (GetOpenFault(function)|| GetShortFault(function))
+
+#define GetOpenFault_EST(function)      (DD_GetDiscreteDiagStatus(function,OUTPUT_OPEN_CKT_FAULT))
+#define GetSTBFault_EST(function)     (DD_GetDiscreteDiagStatus(function,OUTPUT_STB_CKT_FAULT))
+#define GetSTGFault_EST(function)     (DD_GetDiscreteDiagStatus(function,OUTPUT_STG_CKT_FAULT))
+#define GetAnyFault_EST(function)       (GetOpenFault_EST(function)|| GetSTBFault_EST(function)|| GetSTGFault_EST(function))
 
 #define ClearOpenFault(function)    (DD_ClearDiscreteDiagStatus(function, OUTPUT_OPEN_CKT_FAULT))
-#define ClearShortFault(function)   (DD_ClearDiscreteDiagStatus(function, OUTPUT_STB_CKT_FAULT|OUTPUT_STG_CKT_FAULT))
+#define ClearShortFault(function)   (DD_ClearDiscreteDiagStatus(function, OUTPUT_SHORT_CKT_FAULT))
+
+#define ClearOpenFault_EST(function)    (DD_ClearDiscreteDiagStatus(function, OUTPUT_OPEN_CKT_FAULT))
+#define ClearSTBFault_EST(function)   (DD_ClearDiscreteDiagStatus(function, OUTPUT_STB_CKT_FAULT))
+#define ClearSTGFault_EST(function)   (DD_ClearDiscreteDiagStatus(function, OUTPUT_STG_CKT_FAULT))
 /******************************************************************************
  * FUEL PUMP
  ******************************************************************************/
-#define GetFuelPump_ShortHi()        (DD_GetDiscreteDiagStatus(DISCRETE_OUT_FUEL_PUMP,OUTPUT_STB_CKT_FAULT))
+#define GetFuelPump_ShortHi()        (DD_GetDiscreteDiagStatus(DISCRETE_OUT_FUEL_PUMP,OUTPUT_SHORT_CKT_FAULT))
 #define GetFuelPump_Open()           (DD_GetDiscreteDiagStatus(DISCRETE_OUT_FUEL_PUMP,OUTPUT_OPEN_CKT_FAULT))
 
 /******************************************************************************
  * AC CLUTCH
  ******************************************************************************/
-#define GetAcClutch_ShortFault() (DD_GetDiscreteDiagStatus(DISCRETE_OUT_AC_CLUTCH,OUTPUT_STB_CKT_FAULT|OUTPUT_STG_CKT_FAULT))
+#define GetAcClutch_ShortFault() (DD_GetDiscreteDiagStatus(DISCRETE_OUT_AC_CLUTCH,OUTPUT_SHORT_CKT_FAULT))
 #define GetAcClutch_OpenFault()  (DD_GetDiscreteDiagStatus(DISCRETE_OUT_AC_CLUTCH,OUTPUT_OPEN_CKT_FAULT))
 
 /******************************************************************************
  * TPIC Fault reading for AcClutch diagnostic 
  ******************************************************************************/
-#define GetVIOS_ACCD_FaultShortHi()    (DD_GetDiscreteDiagStatus(DISCRETE_OUT_AC_CLUTCH,OUTPUT_STB_CKT_FAULT))
-#define GetVIOS_ACCD_FaultShortLo()    (DD_GetDiscreteDiagStatus(DISCRETE_OUT_AC_CLUTCH,OUTPUT_STG_CKT_FAULT))
+#define GetVIOS_ACCD_FaultShortHi()    (DD_GetDiscreteDiagStatus(DISCRETE_OUT_AC_CLUTCH,OUTPUT_SHORT_CKT_FAULT))
+#define GetVIOS_ACCD_FaultShortLo()    (DD_GetDiscreteDiagStatus(DISCRETE_OUT_AC_CLUTCH,OUTPUT_OPEN_CKT_FAULT))
 #define GetVIOS_ACCD_FaultAny()        (GetVIOS_ACCD_FaultShortHi() ||\
                                             GetVIOS_ACCD_FaultShortLo() )
 #define GetVIOS_ACCD_Presnt()              (true)//(AcFlags.AcPresent)
@@ -115,8 +123,8 @@ extern HAL_Diag_T HAL_Diag;
 /******************************************************************************
  * TPIC Fault reading for Main Power Relay diagnostic 
  ******************************************************************************/
-#define GetVIOS_MPRD_FaultShortHi()    (DD_GetDiscreteDiagStatus(DISCRETE_OUT_MAINRLY,OUTPUT_STB_CKT_FAULT))
-#define GetVIOS_MPRD_FaultShortLo()    (DD_GetDiscreteDiagStatus(DISCRETE_OUT_MAINRLY,OUTPUT_STG_CKT_FAULT))
+#define GetVIOS_MPRD_FaultShortHi()    (DD_GetDiscreteDiagStatus(DISCRETE_OUT_MAINRLY,OUTPUT_SHORT_CKT_FAULT))
+#define GetVIOS_MPRD_FaultShortLo()    (DD_GetDiscreteDiagStatus(DISCRETE_OUT_MAINRLY,OUTPUT_OPEN_CKT_FAULT))
 #define GetVIOS_MPRD_FaultAny()        (GetVIOS_MPRD_FaultShortHi()||GetVIOS_MPRD_FaultShortLo() )
 #define GetVIOS_MPRD_Presnt()              (true)//(IsMPRPresent())
 
@@ -124,8 +132,8 @@ extern HAL_Diag_T HAL_Diag;
 /******************************************************************************
  * TPIC Fault reading for Fuel Pump Relay diagnostic 
  ******************************************************************************/
-#define GetVIOS_FPRD_FaultShortHi()    (DD_GetDiscreteDiagStatus(DISCRETE_OUT_FUEL_PUMP,OUTPUT_STB_CKT_FAULT))
-#define GetVIOS_FPRD_FaultShortLo()    (DD_GetDiscreteDiagStatus(DISCRETE_OUT_FUEL_PUMP,OUTPUT_STG_CKT_FAULT))
+#define GetVIOS_FPRD_FaultShortHi()    (DD_GetDiscreteDiagStatus(DISCRETE_OUT_FUEL_PUMP,OUTPUT_SHORT_CKT_FAULT))
+#define GetVIOS_FPRD_FaultShortLo()    (DD_GetDiscreteDiagStatus(DISCRETE_OUT_FUEL_PUMP,OUTPUT_OPEN_CKT_FAULT))
 #define GetVIOS_FPRD_FaultAny()        (GetVIOS_FPRD_FaultShortHi() ||\
                                             GetVIOS_FPRD_FaultShortLo())
 #define GetVIOS_FPRD_Presnt()              (CbTRUE)
@@ -133,16 +141,16 @@ extern HAL_Diag_T HAL_Diag;
 /******************************************************************************
  * TPIC Fault reading for FAN1 diagnostic 
  ******************************************************************************/
-#define GetVIOS_FANA_FaultShortHi()    (GetSTBFault(DISCRETE_OUT_FAN_1))
-#define GetVIOS_FANA_FaultShortLo()    (GetSTGFault(DISCRETE_OUT_FAN_1))
+#define GetVIOS_FANA_FaultShortHi()    (GetShortFault(DISCRETE_OUT_FAN_1))
+#define GetVIOS_FANA_FaultShortLo()    (GetOpenFault(DISCRETE_OUT_FAN_1))
 #define GetVIOS_FANA_FaultAny()        (GetAnyFault(DISCRETE_OUT_FAN_1))
 #define GetVIOS_FANA_Presnt()              (true)//(FanPresentFlags.bf.Fan1Present)
 
 /******************************************************************************
  * TPIC Fault reading for FAN2 diagnostic 
  ******************************************************************************/
-#define GetVIOS_FANB_FaultShortHi()    (GetSTBFault(DISCRETE_OUT_FAN_2))
-#define GetVIOS_FANB_FaultShortLo()    (GetSTGFault(DISCRETE_OUT_FAN_2))
+#define GetVIOS_FANB_FaultShortHi()    (GetShortFault(DISCRETE_OUT_FAN_2))
+#define GetVIOS_FANB_FaultShortLo()    (GetOpenFault(DISCRETE_OUT_FAN_2))
 #define GetVIOS_FANB_FaultAny()        (GetAnyFault(DISCRETE_OUT_FAN_2))
 #define GetVIOS_FANB_Presnt()              (true)//(FanPresentFlags.bf.Fan2Present)
 
@@ -150,24 +158,24 @@ extern HAL_Diag_T HAL_Diag;
 /******************************************************************************
  * PSVI Fault reading for MIL Lamp diagnostic 
  ******************************************************************************/
-#define GetVIOS_MILD_FaultShortHi()    (GetSTBFault(DISCRETE_OUT_OBD2_LAMP))
-#define GetVIOS_MILD_FaultShortLo()    (GetSTGFault(DISCRETE_OUT_OBD2_LAMP))
+#define GetVIOS_MILD_FaultShortHi()    (GetShortFault(DISCRETE_OUT_OBD2_LAMP))
+#define GetVIOS_MILD_FaultShortLo()    (GetOpenFault(DISCRETE_OUT_OBD2_LAMP))
 #define GetVIOS_MILD_FaultAny()        (GetAnyFault(DISCRETE_OUT_OBD2_LAMP))
 #define GetVIOS_MILD_Presnt()              (CbTRUE)
 
 /******************************************************************************
  * PSVI Fault reading for GIS Lamp diagnostic 
  ******************************************************************************/
-#define GetVIOS_GISD_FaultShortHi()    (GetSTBFault(DISCRETE_OUT_VIS_OUTPUT1))
-#define GetVIOS_GISD_FaultShortLo()    (GetSTGFault(DISCRETE_OUT_VIS_OUTPUT1))
+#define GetVIOS_GISD_FaultShortHi()    (GetShortFault(DISCRETE_OUT_VIS_OUTPUT1))
+#define GetVIOS_GISD_FaultShortLo()    (GetOpenFault(DISCRETE_OUT_VIS_OUTPUT1))
 #define GetVIOS_GISD_FaultAny()        (GetAnyFault(DISCRETE_OUT_VIS_OUTPUT1))
 #define GetVIOS_GISD_Presnt()              (CbTRUE)
 
 /******************************************************************************
  * PSVI Fault reading for MIL Lamp diagnostic 
  ******************************************************************************/
-#define GetVIOS_SVSD_FaultShortHi()    (GetSTBFault(DISCRETE_OUT_SES_LAMP))
-#define GetVIOS_SVSD_FaultShortLo()    (GetSTGFault(DISCRETE_OUT_SES_LAMP))
+#define GetVIOS_SVSD_FaultShortHi()    (GetShortFault(DISCRETE_OUT_SES_LAMP))
+#define GetVIOS_SVSD_FaultShortLo()    (GetOpenFault(DISCRETE_OUT_SES_LAMP))
 #define GetVIOS_SVSD_FaultAny()        (GetAnyFault(DISCRETE_OUT_SES_LAMP))
 #define GetVIOS_SVSD_Presnt()              (CbTRUE)
 
@@ -176,14 +184,14 @@ extern HAL_Diag_T HAL_Diag;
  ******************************************************************************/
 #define GetHWIO_PurgeSolOutputFault()        (GetAnyFault(PULSE_OUT_CANISTER_PURGE))
 #define GetHWIO_PurgeSolOutputFaultShortLo() (GetOpenFault(PULSE_OUT_CANISTER_PURGE))
-#define GetHWIO_PurgeSolOutputFaultShortHi() (GetSTBFault(PULSE_OUT_CANISTER_PURGE))
+#define GetHWIO_PurgeSolOutputFaultShortHi() (GetShortFault(PULSE_OUT_CANISTER_PURGE))
 
 #define GetVIOS_O2_11_Htr_PSVIFaultShortHi()\
-   ( DD_GetDiscreteDiagStatus(PULSE_OUT_O2_HEATER_11,OUTPUT_STB_CKT_FAULT) )
+   ( DD_GetDiscreteDiagStatus(PULSE_OUT_O2_HEATER_11,OUTPUT_SHORT_CKT_FAULT) )
 #define GetVIOS_O2_11_Htr_PSVIFaultShortLow()\
    ( DD_GetDiscreteDiagStatus(PULSE_OUT_O2_HEATER_11,OUTPUT_OPEN_CKT_FAULT) )
 #define GetVIOS_O2_12_Htr_PSVIFaultShortHi()\
-   ( DD_GetDiscreteDiagStatus(PULSE_OUT_O2_HEATER_12,OUTPUT_STB_CKT_FAULT) )
+   ( DD_GetDiscreteDiagStatus(PULSE_OUT_O2_HEATER_12,OUTPUT_SHORT_CKT_FAULT) )
 #define GetVIOS_O2_12_Htr_PSVIFaultShortLow()\
    ( DD_GetDiscreteDiagStatus(PULSE_OUT_O2_HEATER_12,OUTPUT_OPEN_CKT_FAULT) )
 
@@ -192,11 +200,11 @@ extern HAL_Diag_T HAL_Diag;
  ******************************************************************************/
 #define GetHWIO_VVT1OutputFault()        (GetAnyFault(PULSE_OUT_VCPS_B1_INTK))
 #define GetHWIO_VVT1OutputFaultShortLo() (GetOpenFault(PULSE_OUT_VCPS_B1_INTK))
-#define GetHWIO_VVT1OutputFaultShortHi() (GetSTBFault(PULSE_OUT_VCPS_B1_INTK))
+#define GetHWIO_VVT1OutputFaultShortHi() (GetShortFault(PULSE_OUT_VCPS_B1_INTK))
 
 #define GetHWIO_VVT2OutputFault()        (GetAnyFault(PULSE_OUT_VCPS_B1_EXH))
 #define GetHWIO_VVT2OutputFaultShortLo() (GetOpenFault(PULSE_OUT_VCPS_B1_EXH))
-#define GetHWIO_VVT2OutputFaultShortHi() (GetSTBFault(PULSE_OUT_VCPS_B1_EXH))
+#define GetHWIO_VVT2OutputFaultShortHi() (GetShortFault(PULSE_OUT_VCPS_B1_EXH))
 
 /******************************************************************************
  * IO Diagnostic Clear
