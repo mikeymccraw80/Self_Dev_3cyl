@@ -792,20 +792,22 @@ INLINE void ConvertIntrParam_ETCDC(void)
 // #define GetESTAShortFaultStatus()   (GetShortFault(PULSE_OUT_EST_A)||GetEstLine1HighCurrentFlag())
 // #define GetESTAOpenFaultStatus()    (GetOpenFault(PULSE_OUT_EST_A))
 
-#define GetESTASTBFaultStatus()   (GetSTBFault(PULSE_OUT_EST_A))
-#define GetESTASTGFaultStatus()   (GetSTGFault(PULSE_OUT_EST_A))
-#define GetESTAOpenFaultStatus()    (GetOpenFault(PULSE_OUT_EST_A))
-#define ClearESTAShortFaultStatus()   (ClearShortFault(PULSE_OUT_EST_A))
-#define ClearESTAOpenFaultStatus()    (ClearOpenFault(PULSE_OUT_EST_A))
+#define GetESTASTBFaultStatus()   (GetSTBFault_EST(PULSE_OUT_EST_A))
+#define GetESTASTGFaultStatus()   (GetSTGFault_EST(PULSE_OUT_EST_A))
+#define GetESTAOpenFaultStatus()    (GetOpenFault_EST(PULSE_OUT_EST_A))
+#define ClearESTASTBFaultStatus()   (ClearSTBFault_EST(PULSE_OUT_EST_A))
+#define ClearESTASTGFaultStatus()   (ClearSTGFault_EST(PULSE_OUT_EST_A))
+#define ClearESTAOpenFaultStatus()    (ClearOpenFault_EST(PULSE_OUT_EST_A))
 
 // #define GetESTBShortFaultStatus()   (GetShortFault(PULSE_OUT_EST_B)||GetEstLine2HighCurrentFlag())
 // #define GetESTBOpenFaultStatus()    (GetOpenFault(PULSE_OUT_EST_B))
 
-#define GetESTBSTBFaultStatus()   (GetSTBFault(PULSE_OUT_EST_B))
-#define GetESTBSTGFaultStatus()   (GetSTGFault(PULSE_OUT_EST_B))
-#define GetESTBOpenFaultStatus()    (GetOpenFault(PULSE_OUT_EST_B))
-#define ClearESTBShortFaultStatus()   (ClearShortFault(PULSE_OUT_EST_B))
-#define ClearESTBOpenFaultStatus()    (ClearOpenFault(PULSE_OUT_EST_B))
+#define GetESTBSTBFaultStatus()   (GetSTBFault_EST(PULSE_OUT_EST_B))
+#define GetESTBSTGFaultStatus()   (GetSTGFault_EST(PULSE_OUT_EST_B))
+#define GetESTBOpenFaultStatus()    (GetOpenFault_EST(PULSE_OUT_EST_B))
+#define ClearESTBSTBFaultStatus()   (ClearSTBFault_EST(PULSE_OUT_EST_B))
+#define ClearESTBSTGFaultStatus()   (ClearSTGFault_EST(PULSE_OUT_EST_B))
+#define ClearESTBOpenFaultStatus()    (ClearOpenFault_EST(PULSE_OUT_EST_B))
 /*
 INLINE TeEST_CIRCUIT_STATE GetAPI_EST_CircuitState(uint8_t active_estline)
 {
@@ -846,7 +848,8 @@ INLINE TeEST_CIRCUIT_STATE GetAPI_EST_CircuitState(uint8_t active_estline, TeEST
 			GetESTASTBFaultStatus() )
 		{
 			est_line_fault = CeEST_FAULTED;
-			ClearESTAShortFaultStatus();
+			ClearESTASTBFaultStatus();
+			ClearESTASTGFaultStatus();
 			ClearESTAOpenFaultStatus();
 			// ClearEstLine1HighCurrentFlag();
 
@@ -855,7 +858,8 @@ INLINE TeEST_CIRCUIT_STATE GetAPI_EST_CircuitState(uint8_t active_estline, TeEST
 			GetESTBSTBFaultStatus() )
 		{
 			est_line_fault = CeEST_FAULTED;
-			ClearESTBShortFaultStatus();
+			ClearESTBSTBFaultStatus();
+			ClearESTBSTGFaultStatus();
 			ClearESTBOpenFaultStatus();
 			// ClearEstLine2HighCurrentFlag();
 		}
@@ -868,10 +872,11 @@ INLINE TeEST_CIRCUIT_STATE GetAPI_EST_CircuitState(uint8_t active_estline, TeEST
 	else if( FaultType == CeEST_STGFAULT){
 		
 		if ( (active_estline == 0) &&
-			(GetESTBSTGFaultStatus()) )
+			(GetESTASTGFaultStatus()) )
 		{
 			est_line_fault = CeEST_FAULTED;
-			ClearESTAShortFaultStatus();
+			ClearESTASTBFaultStatus();
+			ClearESTASTGFaultStatus();
 			ClearESTAOpenFaultStatus();
 			// ClearEstLine1HighCurrentFlag();
 
@@ -880,7 +885,8 @@ INLINE TeEST_CIRCUIT_STATE GetAPI_EST_CircuitState(uint8_t active_estline, TeEST
 			(GetESTBSTGFaultStatus()) )
 		{
 			est_line_fault = CeEST_FAULTED;
-			ClearESTBShortFaultStatus();
+			ClearESTBSTBFaultStatus();
+			ClearESTBSTGFaultStatus();
 			ClearESTBOpenFaultStatus();
 			// ClearEstLine2HighCurrentFlag();
 		}
@@ -896,7 +902,8 @@ INLINE TeEST_CIRCUIT_STATE GetAPI_EST_CircuitState(uint8_t active_estline, TeEST
 			(GetESTAOpenFaultStatus()) )
 		{
 			est_line_fault = CeEST_FAULTED;
-			ClearESTAShortFaultStatus();
+			ClearESTASTBFaultStatus();
+			ClearESTASTGFaultStatus();
 			ClearESTAOpenFaultStatus();
 			// ClearEstLine1HighCurrentFlag();
 
@@ -905,7 +912,8 @@ INLINE TeEST_CIRCUIT_STATE GetAPI_EST_CircuitState(uint8_t active_estline, TeEST
 			(GetESTBOpenFaultStatus()) )
 		{
 			est_line_fault = CeEST_FAULTED;
-			ClearESTBShortFaultStatus();
+			ClearESTBSTBFaultStatus();
+			ClearESTBSTGFaultStatus();
 			ClearESTBOpenFaultStatus();
 			// ClearEstLine2HighCurrentFlag();
 		}
@@ -952,7 +960,7 @@ extern bool EOBD_CANH_Msg_NotReceived;
 
 #define GetHWIO_PurgeSolOutputFault()        (GetAnyFault(PULSE_OUT_CANISTER_PURGE))
 #define GetHWIO_PurgeSolOutputFaultShortLo() (GetOpenFault(PULSE_OUT_CANISTER_PURGE))
-#define GetHWIO_PurgeSolOutputFaultShortHi() (GetSTBFault(PULSE_OUT_CANISTER_PURGE))
+#define GetHWIO_PurgeSolOutputFaultShortHi() (GetShortFault(PULSE_OUT_CANISTER_PURGE))
 
 
 /* ============================================================================ *\
