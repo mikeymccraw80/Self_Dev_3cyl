@@ -999,6 +999,13 @@ typedef enum {
                CeEST_FAULTED,
                CeEST_NOMINAL
             } TeEST_CIRCUIT_STATE;
+
+typedef enum {
+               CeEST_STBFAULT,
+               CeEST_STGFAULT,
+               CeEST_OpenFAULT
+            } TeEST_CIRCUIT_FaultType;
+
 /* End enumerations defined by the hardware diagnostics */
 
 /* Enumerations defined by the Cruise subsystem */
