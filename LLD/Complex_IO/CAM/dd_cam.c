@@ -89,6 +89,12 @@ uint32_t     CAM1_Backup_Falling_Edge_Time;
 #define CAM_CRANK_DIAGNOSE_MAX_Fail_COUNT 2
 static uint8_t      CAM1_CRANK_Diagnose_Fail_Count;
 
+/* vcpc monitor variable */
+static uint8_t      CAM1_VCPC_Whole_Tooth_Count[4];
+static uint8_t      CAM2_VCPC_Whole_Tooth_Count[4];
+static uint32_t     CAM1_VCPC_Fraction_Angle[4];
+static uint32_t     CAM2_VCPC_Fraction_Angle[4];
+
 /* cam stuck backup */
 static bool         CAM1_BACKUP_FLAG;
 
@@ -816,6 +822,15 @@ void CAM_Edge_Process( uint32_t in_cam_sensor )
 	CAM_Edge_Data[( cam_sensor * CAM_Number_Of_Pulses ) + current_edge_index].Count = cam_event_angle_teeth + cam_event_angle_fraction;
 	CAM_Edge_Data[( cam_sensor * CAM_Number_Of_Pulses ) + current_edge_index].Time = cam_event_time;
 	CAM_Edge_Data[( cam_sensor * CAM_Number_Of_Pulses ) + current_edge_index].Edge_Period = tooth_period;
+	// start monitor the whole tooth counter and fraction
+	if (cam_sensor == CAM1) {
+		CAM1_VCPC_Fraction_Angle[current_edge_index]    = cam_event_angle_fraction;
+		CAM1_VCPC_Whole_Tooth_Count[current_edge_index] = whole_angle_in_teeth;
+	} else {
+		CAM2_VCPC_Fraction_Angle[current_edge_index]    = cam_event_angle_fraction;
+		CAM2_VCPC_Whole_Tooth_Count[current_edge_index] = whole_angle_in_teeth;
+	}
+	// end monitor the whole tooth counter and fraction
 	if (current_edge_index == 0) {
 		current_edge_index = 3;
 	} else {

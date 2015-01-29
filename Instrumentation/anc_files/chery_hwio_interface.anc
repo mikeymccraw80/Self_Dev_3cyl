@@ -1307,53 +1307,208 @@
 *-  description              = "CAM1 falling edge current tooth number";
 *-}
 
-*-CAM1_Falling_Edge_Tooth_Number_Plus_4{
+*-CAM1_VCPC_Whole_Tooth_Count_Plus_0{
 *-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "CAM1FETN4";
-*-  variable_location.symbol = CAM1_Falling_Edge_Tooth_Number[4];
+*-  label                    = "CAM1WTC0";
+*-  variable_location.symbol = CAM1_VCPC_Whole_Tooth_Count[0];
 *-  ds_scaling_unit          = "count";
 *-  ds_precision             = "4.2";
 *-  ds_scaling_mode          = "Ax + B";
 *-  ds_const_a               = "1.0";
 *-  ds_const_b               = "0.0";
-*-  description              = "CAM1 falling edge current tooth number";
+*-  description              = "CAM1 whole tooth counter 0";
 *-}
 
-*-CAM1_Falling_Edge_Tooth_Number_Plus_5{
+*-CAM1_VCPC_Whole_Tooth_Count_Plus_1{
 *-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "CAM1FETN5";
-*-  variable_location.symbol = CAM1_Falling_Edge_Tooth_Number[5];
+*-  label                    = "CAM1WTC0";
+*-  variable_location.symbol = CAM1_VCPC_Whole_Tooth_Count[1];
 *-  ds_scaling_unit          = "count";
 *-  ds_precision             = "4.2";
 *-  ds_scaling_mode          = "Ax + B";
 *-  ds_const_a               = "1.0";
 *-  ds_const_b               = "0.0";
-*-  description              = "CAM1 falling edge current tooth number";
+*-  description              = "CAM1 whole tooth counter 1";
 *-}
 
-
-*-CAM1_Falling_Edge_Tooth_Number_Plus_6{
+*-CAM1_VCPC_Whole_Tooth_Count_Plus_2{
 *-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "CAM1FETN6";
-*-  variable_location.symbol = CAM1_Falling_Edge_Tooth_Number[6];
+*-  label                    = "CAM1WTC2";
+*-  variable_location.symbol = CAM1_VCPC_Whole_Tooth_Count[2];
 *-  ds_scaling_unit          = "count";
 *-  ds_precision             = "4.2";
 *-  ds_scaling_mode          = "Ax + B";
 *-  ds_const_a               = "1.0";
 *-  ds_const_b               = "0.0";
-*-  description              = "CAM1 falling edge current tooth number";
+*-  description              = "CAM1 whole tooth counter 2";
 *-}
 
-*-CAM1_Falling_Edge_Tooth_Number_Plus_7{
+*-CAM1_VCPC_Whole_Tooth_Count_Plus_3{
 *-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "CAM1FETN7";
-*-  variable_location.symbol = CAM1_Falling_Edge_Tooth_Number[7];
+*-  label                    = "CAM1WTC3";
+*-  variable_location.symbol = CAM1_VCPC_Whole_Tooth_Count[3];
 *-  ds_scaling_unit          = "count";
 *-  ds_precision             = "4.2";
 *-  ds_scaling_mode          = "Ax + B";
 *-  ds_const_a               = "1.0";
 *-  ds_const_b               = "0.0";
-*-  description              = "CAM1 falling edge current tooth number";
+*-  description              = "CAM1 whole tooth counter 3";
+*-}
+
+*-CAM2_VCPC_Whole_Tooth_Count_Plus_0{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CAM2WTC0";
+*-  variable_location.symbol = CAM2_VCPC_Whole_Tooth_Count[0];
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "4.2";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.0";
+*-  ds_const_b               = "0.0";
+*-  description              = "CAM2 whole tooth counter 0";
+*-}
+
+*-CAM2_VCPC_Whole_Tooth_Count_Plus_1{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CAM2WTC0";
+*-  variable_location.symbol = CAM2_VCPC_Whole_Tooth_Count[1];
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "4.2";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.0";
+*-  ds_const_b               = "0.0";
+*-  description              = "CAM2 whole tooth counter 1";
+*-}
+
+*-CAM2_VCPC_Whole_Tooth_Count_Plus_2{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CAM2WTC2";
+*-  variable_location.symbol = CAM2_VCPC_Whole_Tooth_Count[2];
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "4.2";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.0";
+*-  ds_const_b               = "0.0";
+*-  description              = "CAM2 whole tooth counter 2";
+*-}
+
+*-CAM2_VCPC_Whole_Tooth_Count_Plus_3{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CAM2WTC3";
+*-  variable_location.symbol = CAM2_VCPC_Whole_Tooth_Count[3];
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "4.2";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.0";
+*-  ds_const_b               = "0.0";
+*-  description              = "CAM2 whole tooth counter 3";
+*-}
+
+*-CAM1_VCPC_Fraction_Angle_Plus_0{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CAM1FTA0";
+*-  variable_location.symbol = CAM1_VCPC_Fraction_Angle[0];
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "4.2";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.0";
+*-  ds_const_b               = "0.0";
+*-  description              = "CAM1 fraction tooth angle 0 ";
+*-}
+
+*-CAM1_VCPC_Fraction_Angle_Plus_1{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CAM1FTA1";
+*-  variable_location.symbol = CAM1_VCPC_Fraction_Angle[1];
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "4.2";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.0";
+*-  ds_const_b               = "0.0";
+*-  description              = "CAM1 fraction tooth angle 1";
+*-}
+
+*-CAM1_VCPC_Fraction_Angle_Plus_2{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CAM1FTA2";
+*-  variable_location.symbol = CAM1_VCPC_Fraction_Angle[2];
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "4.2";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.0";
+*-  ds_const_b               = "0.0";
+*-  description              = "CAM1 fraction tooth angle 2";
+*-}
+
+*-CAM1_VCPC_Fraction_Angle_Plus_3{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CAM1FTA3";
+*-  variable_location.symbol = CAM1_VCPC_Fraction_Angle[3];
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "4.2";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.0";
+*-  ds_const_b               = "0.0";
+*-  description              = "CAM1 fraction tooth angle 3";
+*-}
+
+*-CAM2_VCPC_Fraction_Angle_Plus_0{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CAM2FTA0";
+*-  variable_location.symbol = CAM2_VCPC_Fraction_Angle[0];
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "4.2";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.0";
+*-  ds_const_b               = "0.0";
+*-  description              = "CAM2 fraction tooth angle 0 ";
+*-}
+
+*-CAM2_VCPC_Fraction_Angle_Plus_1{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CAM2FTA1";
+*-  variable_location.symbol = CAM2_VCPC_Fraction_Angle[1];
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "4.2";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.0";
+*-  ds_const_b               = "0.0";
+*-  description              = "CAM2 fraction tooth angle 1";
+*-}
+
+*-CAM2_VCPC_Fraction_Angle_Plus_2{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CAM2FTA2";
+*-  variable_location.symbol = CAM2_VCPC_Fraction_Angle[2];
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "4.2";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.0";
+*-  ds_const_b               = "0.0";
+*-  description              = "CAM2 fraction tooth angle 2";
+*-}
+
+*-CAM2_VCPC_Fraction_Angle_Plus_3{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CAM2FTA3";
+*-  variable_location.symbol = CAM2_VCPC_Fraction_Angle[3];
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "4.2";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.0";
+*-  ds_const_b               = "0.0";
+*-  description              = "CAM2 fraction tooth angle 3";
+*-}
+
+*-CRANK_Current_Event_Tooth{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CRKCURET";
+*-  variable_location.symbol = CRANK_Current_Event_Tooth;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "4.2";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.0";
+*-  ds_const_b               = "0.0";
+*-  description              = "crank current eveth tooth counter 1-120";
 *-}
 
 *-CAM1_Period_Average_Value{
@@ -1367,7 +1522,6 @@
 *-  ds_const_b               = "0.0";
 *-  description              = "cam1 average period value of the past four periods";
 *-}
-
 
 *-hal_eng.VeVIOS_EngSt{
 *-  OBJECTS_CLASS: parameter_es_class;
