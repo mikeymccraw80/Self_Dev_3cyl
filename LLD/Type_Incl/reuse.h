@@ -157,6 +157,8 @@ typedef enum EMS_DIAGNOSTIC_Tag
    OUTPUT_OPEN_CKT_TESTED,
    OUTPUT_SHORT_CKT_FAULT,     /* Request short circuit fault   */
    OUTPUT_SHORT_CKT_TESTED,
+   OUTPUT_STB_CKT_FAULT,
+   OUTPUT_STG_CKT_FAULT,
    OUTPUT_GEN_FLT_PRESENT,
    OUTPUT_GEN_FLT_TESTED,
    OUTPUT_OVERTEMP_FAULT,      /* Request over voltage fault    */
