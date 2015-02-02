@@ -600,6 +600,10 @@ static uint8_t CAM_Increment_Cam_Edge_Counter(uint8_t in_cam_edge)
 // CAM_Edge_Interrupt_Handler
 //=============================================================================
 extern uCrank_Count_T    CRANK_GAP_COUNT;
+
+static uint32_t haha_cam_event_angle_fraction;
+static uint32_t haha_tooth_period;
+static uint32_t haha_delta_time;
 void CAM_Edge_Process( uint32_t in_cam_sensor )
 {
 	CAM_Sensors_T   cam_sensor = (CAM_Sensors_T)in_cam_sensor;
@@ -817,6 +821,7 @@ void CAM_Edge_Process( uint32_t in_cam_sensor )
 	tooth_period = (current_time - previous_time) & UINT24_MAX;
 
 	// convert to delta angle from time
+	haha_cam_event_angle_fraction = IO_Convert_uTime_To_uAngle(haha_delta_time, uCRANK_ANGLE_PRECISION, haha_tooth_period, 1);
 	cam_event_angle_fraction = IO_Convert_uTime_To_uAngle(delta_time, uCRANK_ANGLE_PRECISION, tooth_period, 1);
 	cam_event_angle_teeth    = CRANK_Convert_Teeth_To_uCrank_Angle(whole_angle_in_teeth);
 	CAM_Edge_Data[( cam_sensor * CAM_Number_Of_Pulses ) + current_edge_index].Count = cam_event_angle_teeth + cam_event_angle_fraction;
@@ -824,11 +829,11 @@ void CAM_Edge_Process( uint32_t in_cam_sensor )
 	CAM_Edge_Data[( cam_sensor * CAM_Number_Of_Pulses ) + current_edge_index].Edge_Period = tooth_period;
 	// start monitor the whole tooth counter and fraction
 	if (cam_sensor == CAM1) {
-		CAM1_VCPC_Fraction_Angle[current_edge_index]    = cam_event_angle_fraction;
-		CAM1_VCPC_Whole_Tooth_Count[current_edge_index] = whole_angle_in_teeth;
+		CAM1_VCPC_Fraction_Angle[current_edge_index]    = delta_time;
+		CAM1_VCPC_Whole_Tooth_Count[current_edge_index] = tooth_period;
 	} else {
-		CAM2_VCPC_Fraction_Angle[current_edge_index]    = cam_event_angle_fraction;
-		CAM2_VCPC_Whole_Tooth_Count[current_edge_index] = whole_angle_in_teeth;
+		CAM2_VCPC_Fraction_Angle[current_edge_index]    = delta_time;
+		CAM2_VCPC_Whole_Tooth_Count[current_edge_index] = tooth_period;
 	}
 	// end monitor the whole tooth counter and fraction
 	if (current_edge_index == 0) {
