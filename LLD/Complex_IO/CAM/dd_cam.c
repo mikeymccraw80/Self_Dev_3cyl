@@ -829,11 +829,11 @@ void CAM_Edge_Process( uint32_t in_cam_sensor )
 	CAM_Edge_Data[( cam_sensor * CAM_Number_Of_Pulses ) + current_edge_index].Edge_Period = tooth_period;
 	// start monitor the whole tooth counter and fraction
 	if (cam_sensor == CAM1) {
-		CAM1_VCPC_Fraction_Angle[current_edge_index]    = delta_time;
-		CAM1_VCPC_Whole_Tooth_Count[current_edge_index] = tooth_period;
+		CAM1_VCPC_Fraction_Angle[current_edge_index]    = current_time;
+		CAM1_VCPC_Whole_Tooth_Count[current_edge_index] = cam_event_time;
 	} else {
-		CAM2_VCPC_Fraction_Angle[current_edge_index]    = delta_time;
-		CAM2_VCPC_Whole_Tooth_Count[current_edge_index] = tooth_period;
+		CAM2_VCPC_Fraction_Angle[current_edge_index]    = current_time;
+		CAM2_VCPC_Whole_Tooth_Count[current_edge_index] = cam_event_time;
 	}
 	// end monitor the whole tooth counter and fraction
 	if (current_edge_index == 0) {
