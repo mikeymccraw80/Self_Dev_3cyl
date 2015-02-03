@@ -797,6 +797,17 @@ void CAM_Edge_Process( uint32_t in_cam_sensor )
 		}
 	}
 
+	// Crank_Count can be in error by + or – one count, so we need to avoid + one case
+	current_time = CRANK_Get_Edge_Time_From_Count(pa_tooth_count);
+	delta_time = (cam_event_time - current_time) & UINT24_MAX;
+	if (delta_time > (uint32_t)INT24_MAX) {
+		pa_tooth_count --;
+		current_time = CRANK_Get_Edge_Time_From_Count(pa_tooth_count);
+		delta_time = (cam_event_time - current_time) & UINT24_MAX;
+	}
+	previous_time = CRANK_Get_Edge_Time_From_Count(pa_tooth_count-1);
+	tooth_period = (current_time - previous_time) & UINT24_MAX;
+
 	// get the tooth before for the correct tooth period.
 	pa_tooth_count = CAM_Sensor_Coherent_data[cam_sensor].current_crank_count_at_critical_edge;
 	whole_angle_in_teeth = pa_tooth_count - CRANK_GAP_COUNT + 2;
@@ -813,12 +824,6 @@ void CAM_Edge_Process( uint32_t in_cam_sensor )
 	default:
 		break;
 	}
-
-	// Get the time from the previous edge out of the array
-	current_time = CRANK_Get_Edge_Time_From_Count(pa_tooth_count);
-	previous_time = CRANK_Get_Edge_Time_From_Count(pa_tooth_count-1);
-	delta_time = (cam_event_time - current_time) & UINT24_MAX;
-	tooth_period = (current_time - previous_time) & UINT24_MAX;
 
 	// convert to delta angle from time
 	haha_cam_event_angle_fraction = IO_Convert_uTime_To_uAngle(haha_delta_time, uCRANK_ANGLE_PRECISION, haha_tooth_period, 1);
