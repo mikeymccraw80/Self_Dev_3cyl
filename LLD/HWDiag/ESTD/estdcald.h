@@ -27,7 +27,8 @@
 extern const T_COUNT_BYTE       KcESTD_FailThrsh;
 extern const T_COUNT_BYTE       KcESTD_SampleThrsh;
 extern const T_COUNT_BYTE       KcESTD_NumOfEST_Outputs;
-extern const T_VOLTb            KfESTD_U_IgnVoltResetThrsh;
+extern const T_VOLTb            KfESTD_U_ShortIgnVoltResetThrsh;
+extern const T_VOLTb            KfESTD_U_OpenIgnVoltResetThrsh;
 extern const TwTIME_t_R7p8125ms KfESTD_t_EnableDelayTime;
 
 #endif
