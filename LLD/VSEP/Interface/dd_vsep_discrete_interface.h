@@ -36,7 +36,6 @@
 //extern const Discrete_T VSEP_PCH_DISCRETE_INTERFACE;
 #define VSEP_SPIDISCRETE(action,in_configuration,value)  VSEP_Discrete ## action ## (in_configuration, value)
 
-
 #define VSEP_DiscreteInitialize(in_configuration, value) \
 	VSEP_DISCRETE_Channel_Initialize(in_configuration)
 	
@@ -80,8 +79,7 @@
 	VSEP_Fault_Log[VSEP_Get_Channel(in_configuration)]=VSEP_FAULT_Clear_OUTPUT_OPEN_CKT_FAULT(VSEP_Fault_Log[VSEP_Get_Channel(in_configuration)]):\
 	(OUTPUT_OPEN_CKT_TESTED == value? \
 	VSEP_Fault_Log[VSEP_Get_Channel(in_configuration)]=VSEP_FAULT_Clear_OUTPUT_OPEN_CKT_TESTED(VSEP_Fault_Log[VSEP_Get_Channel(in_configuration)]):0))))
-
-
+	
 #endif // DD_VSEP_DISCRETE_INTERFACE_H
 /*===========================================================================*\
  * Revision Log                                                              *
