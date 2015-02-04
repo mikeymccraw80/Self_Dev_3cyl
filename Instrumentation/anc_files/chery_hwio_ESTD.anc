@@ -4,80 +4,40 @@
 /*                                                                            */
 /*============================================================================*/
 
-*-estdmall.SaESTD_STBFaultFailureCounter[0]{
+*-estdmall.SaESTD_ShortFaultFailureCounter[0]{
 *-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "ESTDSTBFC1";
-*-  variable_location.symbol = estdmall.SaESTD_STBFaultFailureCounter[0];
+*-  label                    = "ESTDSHFC1";
+*-  variable_location.symbol = estdmall.SaESTD_ShortFaultFailureCounter[0];
 *-  ds_scaling_unit          = "count";
 *-  ds_precision             = "4.0";
 *-  ds_scaling_mode          = "Ax + B";
 *-  ds_const_a               = "1.000000000000";
 *-  ds_const_b               = "0.000000000000";
 *-}
-*-estdmall.SaESTD_STBFaultFailureCounter[1]{
+*-estdmall.SaESTD_ShortFaultFailureCounter[1]{
 *-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "ESTDSTBFC2";
-*-  variable_location.symbol = estdmall.SaESTD_STBFaultFailureCounter[1];
+*-  label                    = "ESTDSHFC2";
+*-  variable_location.symbol = estdmall.SaESTD_ShortFaultFailureCounter[1];
 *-  ds_scaling_unit          = "count";
 *-  ds_precision             = "4.0";
 *-  ds_scaling_mode          = "Ax + B";
 *-  ds_const_a               = "1.000000000000";
 *-  ds_const_b               = "0.000000000000";
 *-}
-*-estdmall.SaESTD_STBFaultFailureCounter[2]{
+*-estdmall.SaESTD_ShortFaultFailureCounter[2]{
 *-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "ESTDSTBFC3";
-*-  variable_location.symbol = estdmall.SaESTD_STBFaultFailureCounter[2];
+*-  label                    = "ESTDSHFC3";
+*-  variable_location.symbol = estdmall.SaESTD_ShortFaultFailureCounter[2];
 *-  ds_scaling_unit          = "count";
 *-  ds_precision             = "4.0";
 *-  ds_scaling_mode          = "Ax + B";
 *-  ds_const_a               = "1.000000000000";
 *-  ds_const_b               = "0.000000000000";
 *-}
-*-estdmall.SaESTD_STBFaultFailureCounter[3]{
+*-estdmall.SaESTD_ShortFaultFailureCounter[3]{
 *-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "ESTDSTBFC4";
-*-  variable_location.symbol = estdmall.SaESTD_STBFaultFailureCounter[3];
-*-  ds_scaling_unit          = "count";
-*-  ds_precision             = "4.0";
-*-  ds_scaling_mode          = "Ax + B";
-*-  ds_const_a               = "1.000000000000";
-*-  ds_const_b               = "0.000000000000";
-*-}
-*-estdmall.SaESTD_STGFaultFailureCounter[0]{
-*-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "ESTDSTGFC1";
-*-  variable_location.symbol = estdmall.SaESTD_STGFaultFailureCounter[0];
-*-  ds_scaling_unit          = "count";
-*-  ds_precision             = "4.0";
-*-  ds_scaling_mode          = "Ax + B";
-*-  ds_const_a               = "1.000000000000";
-*-  ds_const_b               = "0.000000000000";
-*-}
-*-estdmall.SaESTD_STGFaultFailureCounter[1]{
-*-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "ESTDSTGFC2";
-*-  variable_location.symbol = estdmall.SaESTD_STGFaultFailureCounter[1];
-*-  ds_scaling_unit          = "count";
-*-  ds_precision             = "4.0";
-*-  ds_scaling_mode          = "Ax + B";
-*-  ds_const_a               = "1.000000000000";
-*-  ds_const_b               = "0.000000000000";
-*-}
-*-estdmall.SaESTD_STGFaultFailureCounter[2]{
-*-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "ESTDSTGFC3";
-*-  variable_location.symbol = estdmall.SaESTD_STGFaultFailureCounter[2];
-*-  ds_scaling_unit          = "count";
-*-  ds_precision             = "4.0";
-*-  ds_scaling_mode          = "Ax + B";
-*-  ds_const_a               = "1.000000000000";
-*-  ds_const_b               = "0.000000000000";
-*-}
-*-estdmall.SaESTD_STGFaultFailureCounter[3]{
-*-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "ESTDSTGFC4";
-*-  variable_location.symbol = estdmall.SaESTD_STGFaultFailureCounter[3];
+*-  label                    = "ESTDSHFC4";
+*-  variable_location.symbol = estdmall.SaESTD_ShortFaultFailureCounter[3];
 *-  ds_scaling_unit          = "count";
 *-  ds_precision             = "4.0";
 *-  ds_scaling_mode          = "Ax + B";
@@ -86,7 +46,7 @@
 *-}
 *-estdmall.SaESTD_OpenFaultFailureCounter[0]{
 *-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "ESTDOPFC1";
+*-  label                    = "ESTDOFC1";
 *-  variable_location.symbol = estdmall.SaESTD_OpenFaultFailureCounter[0];
 *-  ds_scaling_unit          = "count";
 *-  ds_precision             = "4.0";
@@ -96,7 +56,7 @@
 *-}
 *-estdmall.SaESTD_OpenFaultFailureCounter[1]{
 *-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "ESTDOPFC2";
+*-  label                    = "ESTDOFC2";
 *-  variable_location.symbol = estdmall.SaESTD_OpenFaultFailureCounter[1];
 *-  ds_scaling_unit          = "count";
 *-  ds_precision             = "4.0";
@@ -106,7 +66,7 @@
 *-}
 *-estdmall.SaESTD_OpenFaultFailureCounter[2]{
 *-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "ESTDOPFC3";
+*-  label                    = "ESTDOFC3";
 *-  variable_location.symbol = estdmall.SaESTD_OpenFaultFailureCounter[2];
 *-  ds_scaling_unit          = "count";
 *-  ds_precision             = "4.0";
@@ -116,7 +76,7 @@
 *-}
 *-estdmall.SaESTD_OpenFaultFailureCounter[3]{
 *-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "ESTDOPFC4";
+*-  label                    = "ESTDOFC4";
 *-  variable_location.symbol = estdmall.SaESTD_OpenFaultFailureCounter[3];
 *-  ds_scaling_unit          = "count";
 *-  ds_precision             = "4.0";
@@ -135,80 +95,40 @@
 *-  ds_const_b               = "0.000000000000";
 *-}
 
-*-estdmall.SaESTD_STBFaultSampleCounter[0]{
+*-estdmall.SaESTD_ShortFaultSampleCounter[0]{
 *-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "ESTDSTBSC1";
-*-  variable_location.symbol = estdmall.SaESTD_STBFaultSampleCounter[0];
+*-  label                    = "ESTDSHSC1";
+*-  variable_location.symbol = estdmall.SaESTD_ShortFaultSampleCounter[0];
 *-  ds_scaling_unit          = "count";
 *-  ds_precision             = "4.0";
 *-  ds_scaling_mode          = "Ax + B";
 *-  ds_const_a               = "1.000000000000";
 *-  ds_const_b               = "0.000000000000";
 *-}
-*-estdmall.SaESTD_STBFaultSampleCounter[1]{
+*-estdmall.SaESTD_ShortFaultSampleCounter[1]{
 *-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "ESTDSTBSC2";
-*-  variable_location.symbol = estdmall.SaESTD_STBFaultSampleCounter[1];
+*-  label                    = "ESTDSHSC2";
+*-  variable_location.symbol = estdmall.SaESTD_ShortFaultSampleCounter[1];
 *-  ds_scaling_unit          = "count";
 *-  ds_precision             = "4.0";
 *-  ds_scaling_mode          = "Ax + B";
 *-  ds_const_a               = "1.000000000000";
 *-  ds_const_b               = "0.000000000000";
 *-}
-*-estdmall.SaESTD_STBFaultSampleCounter[2]{
+*-estdmall.SaESTD_ShortFaultSampleCounter[2]{
 *-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "ESTDSTBSC3";
-*-  variable_location.symbol = estdmall.SaESTD_STBFaultSampleCounter[2];
+*-  label                    = "ESTDSHSC3";
+*-  variable_location.symbol = estdmall.SaESTD_ShortFaultSampleCounter[2];
 *-  ds_scaling_unit          = "count";
 *-  ds_precision             = "4.0";
 *-  ds_scaling_mode          = "Ax + B";
 *-  ds_const_a               = "1.000000000000";
 *-  ds_const_b               = "0.000000000000";
 *-}
-*-estdmall.SaESTD_STBFaultSampleCounter[3]{
+*-estdmall.SaESTD_ShortFaultSampleCounter[3]{
 *-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "ESTDSTBSC4";
-*-  variable_location.symbol = estdmall.SaESTD_STBFaultSampleCounter[3];
-*-  ds_scaling_unit          = "count";
-*-  ds_precision             = "4.0";
-*-  ds_scaling_mode          = "Ax + B";
-*-  ds_const_a               = "1.000000000000";
-*-  ds_const_b               = "0.000000000000";
-*-}
-*-estdmall.SaESTD_STGFaultSampleCounter[0]{
-*-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "ESTDSTGSC1";
-*-  variable_location.symbol = estdmall.SaESTD_STGFaultSampleCounter[0];
-*-  ds_scaling_unit          = "count";
-*-  ds_precision             = "4.0";
-*-  ds_scaling_mode          = "Ax + B";
-*-  ds_const_a               = "1.000000000000";
-*-  ds_const_b               = "0.000000000000";
-*-}
-*-estdmall.SaESTD_STGFaultSampleCounter[1]{
-*-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "ESTDSTGSC2";
-*-  variable_location.symbol = estdmall.SaESTD_STGFaultSampleCounter[1];
-*-  ds_scaling_unit          = "count";
-*-  ds_precision             = "4.0";
-*-  ds_scaling_mode          = "Ax + B";
-*-  ds_const_a               = "1.000000000000";
-*-  ds_const_b               = "0.000000000000";
-*-}
-*-estdmall.SaESTD_STGFaultSampleCounter[2]{
-*-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "ESTDSTGSC3";
-*-  variable_location.symbol = estdmall.SaESTD_STGFaultSampleCounter[2];
-*-  ds_scaling_unit          = "count";
-*-  ds_precision             = "4.0";
-*-  ds_scaling_mode          = "Ax + B";
-*-  ds_const_a               = "1.000000000000";
-*-  ds_const_b               = "0.000000000000";
-*-}
-*-estdmall.SaESTD_STGFaultSampleCounter[3]{
-*-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "ESTDSTGSC4";
-*-  variable_location.symbol = estdmall.SaESTD_STGFaultSampleCounter[3];
+*-  label                    = "ESTDSHSC4";
+*-  variable_location.symbol = estdmall.SaESTD_ShortFaultSampleCounter[3];
 *-  ds_scaling_unit          = "count";
 *-  ds_precision             = "4.0";
 *-  ds_scaling_mode          = "Ax + B";
@@ -217,7 +137,7 @@
 *-}
 *-estdmall.SaESTD_OpenFaultSampleCounter[0]{
 *-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "ESTDOPSC1";
+*-  label                    = "ESTDOSC1";
 *-  variable_location.symbol = estdmall.SaESTD_OpenFaultSampleCounter[0];
 *-  ds_scaling_unit          = "count";
 *-  ds_precision             = "4.0";
@@ -227,7 +147,7 @@
 *-}
 *-estdmall.SaESTD_OpenFaultSampleCounter[1]{
 *-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "ESTDOPSC2";
+*-  label                    = "ESTDOSC2";
 *-  variable_location.symbol = estdmall.SaESTD_OpenFaultSampleCounter[1];
 *-  ds_scaling_unit          = "count";
 *-  ds_precision             = "4.0";
@@ -237,7 +157,7 @@
 *-}
 *-estdmall.SaESTD_OpenFaultSampleCounter[2]{
 *-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "ESTDOPSC3";
+*-  label                    = "ESTDOSC3";
 *-  variable_location.symbol = estdmall.SaESTD_OpenFaultSampleCounter[2];
 *-  ds_scaling_unit          = "count";
 *-  ds_precision             = "4.0";
@@ -247,7 +167,7 @@
 *-}
 *-estdmall.SaESTD_OpenFaultSampleCounter[3]{
 *-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "ESTDOPSC4";
+*-  label                    = "ESTDOSC4";
 *-  variable_location.symbol = estdmall.SaESTD_OpenFaultSampleCounter[3];
 *-  ds_scaling_unit          = "count";
 *-  ds_precision             = "4.0";
@@ -300,10 +220,20 @@
 *-  ds_const_b               = "0.000000000000";
 *-}
 
-*-estdmall.SbESTD_FaultEnblCriteriaMet{
+*-estdmall.SbESTD_ShortFaultEnblCriteriaMet{
 *-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "ESTDECM";
-*-  variable_location.symbol = estdmall.SbESTD_FaultEnblCriteriaMet;
+*-  label                    = "ESTDSHECM";
+*-  variable_location.symbol = estdmall.SbESTD_ShortFaultEnblCriteriaMet;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-}
+*-estdmall.SbESTD_OpenFaultEnblCriteriaMet{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "ESTDOECM";
+*-  variable_location.symbol = estdmall.SbESTD_OpenFaultEnblCriteriaMet;
 *-  ds_scaling_unit          = "Boolean";
 *-  ds_precision             = "4.0";
 *-  ds_scaling_mode          = "Ax + B";
@@ -311,10 +241,10 @@
 *-  ds_const_b               = "0.000000000000";
 *-}
 
-*-estdmall.VaESTD_STBFailCriteriaMet[0]{
+*-estdmall.VaESTD_ShortFailCriteriaMet[0]{
 *-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "ESTDSBFCM1";
-*-  variable_location.symbol = estdmall.VaESTD_STBFailCriteriaMet[0];
+*-  label                    = "ESTDSHFCM1";
+*-  variable_location.symbol = estdmall.VaESTD_ShortFailCriteriaMet[0];
 *-  ds_scaling_unit          = "Boolean";
 *-  ds_precision             = "4.0";
 *-  ds_scaling_mode          = "Ax + B";
@@ -322,10 +252,10 @@
 *-  ds_const_b               = "0.000000000000";
 *-}
 
-*-estdmall.VaESTD_STBFailCriteriaMet[1]{
+*-estdmall.VaESTD_ShortFailCriteriaMet[1]{
 *-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "ESTDSBFCM2";
-*-  variable_location.symbol = estdmall.VaESTD_STBFailCriteriaMet[1];
+*-  label                    = "ESTDSHFCM2";
+*-  variable_location.symbol = estdmall.VaESTD_ShortFailCriteriaMet[1];
 *-  ds_scaling_unit          = "Boolean";
 *-  ds_precision             = "4.0";
 *-  ds_scaling_mode          = "Ax + B";
@@ -333,20 +263,20 @@
 *-  ds_const_b               = "0.000000000000";
 *-}
 
-*-estdmall.VaESTD_STBFailCriteriaMet[2]{
+*-estdmall.VaESTD_ShortFailCriteriaMet[2]{
 *-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "ESTDSBFCM3";
-*-  variable_location.symbol = estdmall.VaESTD_STBFailCriteriaMet[2];
+*-  label                    = "ESTDSHFCM3";
+*-  variable_location.symbol = estdmall.VaESTD_ShortFailCriteriaMet[2];
 *-  ds_scaling_unit          = "Boolean";
 *-  ds_precision             = "4.0";
 *-  ds_scaling_mode          = "Ax + B";
 *-  ds_const_a               = "1.000000000000";
 *-  ds_const_b               = "0.000000000000";
 *-}
-*-estdmall.VaESTD_STBFailCriteriaMet[3]{
+*-estdmall.VaESTD_ShortFailCriteriaMet[3]{
 *-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "ESTDSBFCM4";
-*-  variable_location.symbol = estdmall.VaESTD_STBFailCriteriaMet[3];
+*-  label                    = "ESTDSHFCM4";
+*-  variable_location.symbol = estdmall.VaESTD_ShortFailCriteriaMet[3];
 *-  ds_scaling_unit          = "Boolean";
 *-  ds_precision             = "4.0";
 *-  ds_scaling_mode          = "Ax + B";
@@ -354,49 +284,9 @@
 *-  ds_const_b               = "0.000000000000";
 *-}
 
-*-estdmall.VaESTD_STGFailCriteriaMet[0]{
-*-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "ESTDSGFCM1";
-*-  variable_location.symbol = estdmall.VaESTD_STGFailCriteriaMet[0];
-*-  ds_scaling_unit          = "Boolean";
-*-  ds_precision             = "4.0";
-*-  ds_scaling_mode          = "Ax + B";
-*-  ds_const_a               = "1.000000000000";
-*-  ds_const_b               = "0.000000000000";
-*-}
-*-estdmall.VaESTD_STGFailCriteriaMet[1]{
-*-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "ESTDSGFCM2";
-*-  variable_location.symbol = estdmall.VaESTD_STGFailCriteriaMet[1];
-*-  ds_scaling_unit          = "Boolean";
-*-  ds_precision             = "4.0";
-*-  ds_scaling_mode          = "Ax + B";
-*-  ds_const_a               = "1.000000000000";
-*-  ds_const_b               = "0.000000000000";
-*-}
-*-estdmall.VaESTD_STGFailCriteriaMet[2]{
-*-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "ESTDSGFCM3";
-*-  variable_location.symbol = estdmall.VaESTD_STGFailCriteriaMet[2];
-*-  ds_scaling_unit          = "Boolean";
-*-  ds_precision             = "4.0";
-*-  ds_scaling_mode          = "Ax + B";
-*-  ds_const_a               = "1.000000000000";
-*-  ds_const_b               = "0.000000000000";
-*-}
-*-estdmall.VaESTD_STGFailCriteriaMet[3]{
-*-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "ESTDSGFCM4";
-*-  variable_location.symbol = estdmall.VaESTD_STGFailCriteriaMet[3];
-*-  ds_scaling_unit          = "Boolean";
-*-  ds_precision             = "4.0";
-*-  ds_scaling_mode          = "Ax + B";
-*-  ds_const_a               = "1.000000000000";
-*-  ds_const_b               = "0.000000000000";
-*-}
 *-estdmall.VaESTD_OpenFailCriteriaMet[0]{
 *-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "ESTDOPFCM1";
+*-  label                    = "ESTDOFCM1";
 *-  variable_location.symbol = estdmall.VaESTD_OpenFailCriteriaMet[0];
 *-  ds_scaling_unit          = "Boolean";
 *-  ds_precision             = "4.0";
@@ -406,7 +296,7 @@
 *-}
 *-estdmall.VaESTD_OpenFailCriteriaMet[1]{
 *-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "ESTDOPFCM2";
+*-  label                    = "ESTDOFCM2";
 *-  variable_location.symbol = estdmall.VaESTD_OpenFailCriteriaMet[1];
 *-  ds_scaling_unit          = "Boolean";
 *-  ds_precision             = "4.0";
@@ -416,7 +306,7 @@
 *-}
 *-estdmall.VaESTD_OpenFailCriteriaMet[2]{
 *-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "ESTDOPFCM3";
+*-  label                    = "ESTDOFCM3";
 *-  variable_location.symbol = estdmall.VaESTD_OpenFailCriteriaMet[2];
 *-  ds_scaling_unit          = "Boolean";
 *-  ds_precision             = "4.0";
@@ -426,7 +316,7 @@
 *-}
 *-estdmall.VaESTD_OpenFailCriteriaMet[3]{
 *-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "ESTDOPFCM4";
+*-  label                    = "ESTDOFCM4";
 *-  variable_location.symbol = estdmall.VaESTD_OpenFailCriteriaMet[3];
 *-  ds_scaling_unit          = "Boolean";
 *-  ds_precision             = "4.0";
@@ -482,89 +372,50 @@
 *-  ds_const_b               = "0.000000000000";
 *-}
 
-*-estdmall.SaESTD_STBFaultTestFailed[0]{
+*-estdmall.SaESTD_ShortFaultTestFailed[0]{
 *-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "ESTDSTBTF1";
-*-  variable_location.symbol = estdmall.SaESTD_STBFaultTestFailed[0];
+*-  label                    = "ESTDSHTF1";
+*-  variable_location.symbol = estdmall.SaESTD_ShortFaultTestFailed[0];
 *-  ds_scaling_unit          = "Boolean";
 *-  ds_precision             = "4.0";
 *-  ds_scaling_mode          = "Ax + B";
 *-  ds_const_a               = "1.000000000000";
 *-  ds_const_b               = "0.000000000000";
 *-}
-*-estdmall.SaESTD_STBFaultTestFailed[1]{
+*-estdmall.SaESTD_ShortFaultTestFailed[1]{
 *-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "ESTDSTBTF2";
-*-  variable_location.symbol = estdmall.SaESTD_STBFaultTestFailed[1];
+*-  label                    = "ESTDSHTF2";
+*-  variable_location.symbol = estdmall.SaESTD_ShortFaultTestFailed[1];
 *-  ds_scaling_unit          = "Boolean";
 *-  ds_precision             = "4.0";
 *-  ds_scaling_mode          = "Ax + B";
 *-  ds_const_a               = "1.000000000000";
 *-  ds_const_b               = "0.000000000000";
 *-}
-*-estdmall.SaESTD_STBFaultTestFailed[2]{
+*-estdmall.SaESTD_ShortFaultTestFailed[2]{
 *-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "ESTDSTBTF3";
-*-  variable_location.symbol = estdmall.SaESTD_STBFaultTestFailed[2];
+*-  label                    = "ESTDSHTF3";
+*-  variable_location.symbol = estdmall.SaESTD_ShortFaultTestFailed[2];
 *-  ds_scaling_unit          = "Boolean";
 *-  ds_precision             = "4.0";
 *-  ds_scaling_mode          = "Ax + B";
 *-  ds_const_a               = "1.000000000000";
 *-  ds_const_b               = "0.000000000000";
 *-}
-*-estdmall.SaESTD_STBFaultTestFailed[3]{
+*-estdmall.SaESTD_ShortFaultTestFailed[3]{
 *-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "ESTDSTBTF4";
-*-  variable_location.symbol = estdmall.SaESTD_STBFaultTestFailed[3];
+*-  label                    = "ESTDSHTF4";
+*-  variable_location.symbol = estdmall.SaESTD_ShortFaultTestFailed[3];
 *-  ds_scaling_unit          = "Boolean";
 *-  ds_precision             = "4.0";
 *-  ds_scaling_mode          = "Ax + B";
 *-  ds_const_a               = "1.000000000000";
 *-  ds_const_b               = "0.000000000000";
 *-}
-*-estdmall.SaESTD_STGFaultTestFailed[0]{
-*-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "ESTDSTGTF1";
-*-  variable_location.symbol = estdmall.SaESTD_STGFaultTestFailed[0];
-*-  ds_scaling_unit          = "Boolean";
-*-  ds_precision             = "4.0";
-*-  ds_scaling_mode          = "Ax + B";
-*-  ds_const_a               = "1.000000000000";
-*-  ds_const_b               = "0.000000000000";
-*-}
-*-estdmall.SaESTD_STGFaultTestFailed[1]{
-*-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "ESTDSTGTF2";
-*-  variable_location.symbol = estdmall.SaESTD_STGFaultTestFailed[1];
-*-  ds_scaling_unit          = "Boolean";
-*-  ds_precision             = "4.0";
-*-  ds_scaling_mode          = "Ax + B";
-*-  ds_const_a               = "1.000000000000";
-*-  ds_const_b               = "0.000000000000";
-*-}
-*-estdmall.SaESTD_STGFaultTestFailed[2]{
-*-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "ESTDSTGTF3";
-*-  variable_location.symbol = estdmall.SaESTD_STGFaultTestFailed[2];
-*-  ds_scaling_unit          = "Boolean";
-*-  ds_precision             = "4.0";
-*-  ds_scaling_mode          = "Ax + B";
-*-  ds_const_a               = "1.000000000000";
-*-  ds_const_b               = "0.000000000000";
-*-}
-*-estdmall.SaESTD_STGFaultTestFailed[3]{
-*-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "ESTDSTGTF4";
-*-  variable_location.symbol = estdmall.SaESTD_STGFaultTestFailed[3];
-*-  ds_scaling_unit          = "Boolean";
-*-  ds_precision             = "4.0";
-*-  ds_scaling_mode          = "Ax + B";
-*-  ds_const_a               = "1.000000000000";
-*-  ds_const_b               = "0.000000000000";
-*-}
+
 *-estdmall.SaESTD_OpenFaultTestFailed[0]{
 *-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "ESTDOPTF1";
+*-  label                    = "ESTDOTF1";
 *-  variable_location.symbol = estdmall.SaESTD_OpenFaultTestFailed[0];
 *-  ds_scaling_unit          = "Boolean";
 *-  ds_precision             = "4.0";
@@ -574,7 +425,7 @@
 *-}
 *-estdmall.SaESTD_OpenFaultTestFailed[1]{
 *-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "ESTDOPTF2";
+*-  label                    = "ESTDOTF2";
 *-  variable_location.symbol = estdmall.SaESTD_OpenFaultTestFailed[1];
 *-  ds_scaling_unit          = "Boolean";
 *-  ds_precision             = "4.0";
@@ -584,7 +435,7 @@
 *-}
 *-estdmall.SaESTD_OpenFaultTestFailed[2]{
 *-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "ESTDOPTF3";
+*-  label                    = "ESTDOTF3";
 *-  variable_location.symbol = estdmall.SaESTD_OpenFaultTestFailed[2];
 *-  ds_scaling_unit          = "Boolean";
 *-  ds_precision             = "4.0";
@@ -594,7 +445,7 @@
 *-}
 *-estdmall.SaESTD_OpenFaultTestFailed[3]{
 *-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "ESTDOPTF4";
+*-  label                    = "ESTDOTF4";
 *-  variable_location.symbol = estdmall.SaESTD_OpenFaultTestFailed[3];
 *-  ds_scaling_unit          = "Boolean";
 *-  ds_precision             = "4.0";
@@ -602,7 +453,6 @@
 *-  ds_const_a               = "1.000000000000";
 *-  ds_const_b               = "0.000000000000";
 *-}
-
 /*============================================================================*/
 /* CHANGE LOG                                                                 */
 /*                                                                            */
