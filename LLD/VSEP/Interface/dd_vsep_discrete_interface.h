@@ -36,8 +36,6 @@
 //extern const Discrete_T VSEP_PCH_DISCRETE_INTERFACE;
 #define VSEP_SPIDISCRETE(action,in_configuration,value)  VSEP_Discrete ## action ## (in_configuration, value)
 
-#define VSEP_SPIDISCRETE_EST(action,in_configuration,value)  VSEP_DiscreteEST_ ## action ## (in_configuration, value)
-
 #define VSEP_DiscreteInitialize(in_configuration, value) \
 	VSEP_DISCRETE_Channel_Initialize(in_configuration)
 	
@@ -81,30 +79,6 @@
 	VSEP_Fault_Log[VSEP_Get_Channel(in_configuration)]=VSEP_FAULT_Clear_OUTPUT_OPEN_CKT_FAULT(VSEP_Fault_Log[VSEP_Get_Channel(in_configuration)]):\
 	(OUTPUT_OPEN_CKT_TESTED == value? \
 	VSEP_Fault_Log[VSEP_Get_Channel(in_configuration)]=VSEP_FAULT_Clear_OUTPUT_OPEN_CKT_TESTED(VSEP_Fault_Log[VSEP_Get_Channel(in_configuration)]):0))))
-
-#define VSEP_DiscreteEST_Get_Fault(in_configuration, value) \
-	(OUTPUT_STB_CKT_FAULT == value? \
-	VSEP_FAULT_Get_EST_OUTPUT_STB_CKT_FAULT(VSEP_Fault_Log[VSEP_Get_Channel(in_configuration)]):\
-	(OUTPUT_STG_CKT_FAULT == value? \
-	VSEP_FAULT_Get_EST_OUTPUT_STG_CKT_FAULT(VSEP_Fault_Log[VSEP_Get_Channel(in_configuration)]):\
-	(OUTPUT_SHORT_CKT_TESTED == value? \
-	VSEP_FAULT_Get_OUTPUT_SHORT_CKT_TESTED(VSEP_Fault_Log[VSEP_Get_Channel(in_configuration)]):\
-	(OUTPUT_OPEN_CKT_FAULT == value? \
-	VSEP_FAULT_Get_EST_OUTPUT_OPEN_CKT_FAULT(VSEP_Fault_Log[VSEP_Get_Channel(in_configuration)]):\
-	(OUTPUT_OPEN_CKT_TESTED == value? \
-	VSEP_FAULT_Get_OUTPUT_OPEN_CKT_TESTED(VSEP_Fault_Log[VSEP_Get_Channel(in_configuration)]):0)))))
-
-#define VSEP_DiscreteEST_Clear_Fault(in_configuration, value) \
-	(OUTPUT_STB_CKT_FAULT == value? \
-	VSEP_Fault_Log[VSEP_Get_Channel(in_configuration)]=VSEP_FAULT_Clear_EST_OUTPUT_STB_CKT_FAULT(VSEP_Fault_Log[VSEP_Get_Channel(in_configuration)]):\
-	(OUTPUT_STG_CKT_FAULT == value? \
-	VSEP_Fault_Log[VSEP_Get_Channel(in_configuration)]=VSEP_FAULT_Clear_EST_OUTPUT_STG_CKT_FAULT(VSEP_Fault_Log[VSEP_Get_Channel(in_configuration)]):\
-	(OUTPUT_SHORT_CKT_TESTED == value? \
-	VSEP_Fault_Log[VSEP_Get_Channel(in_configuration)]=VSEP_FAULT_Clear_OUTPUT_SHORT_CKT_TESTED(VSEP_Fault_Log[VSEP_Get_Channel(in_configuration)]):\
-	(OUTPUT_OPEN_CKT_FAULT == value? \
-	VSEP_Fault_Log[VSEP_Get_Channel(in_configuration)]=VSEP_FAULT_Clear_EST_OUTPUT_OPEN_CKT_FAULT(VSEP_Fault_Log[VSEP_Get_Channel(in_configuration)]):\
-	(OUTPUT_OPEN_CKT_TESTED == value? \
-	VSEP_Fault_Log[VSEP_Get_Channel(in_configuration)]=VSEP_FAULT_Clear_OUTPUT_OPEN_CKT_TESTED(VSEP_Fault_Log[VSEP_Get_Channel(in_configuration)]):0)))))
 	
 #endif // DD_VSEP_DISCRETE_INTERFACE_H
 /*===========================================================================*\

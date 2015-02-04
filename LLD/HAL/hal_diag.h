@@ -88,10 +88,6 @@ extern HAL_Diag_T HAL_Diag;
 #define GetShortFault(function)     (DD_GetDiscreteDiagStatus(function,OUTPUT_SHORT_CKT_FAULT))
 #define GetAnyFault(function)       (GetOpenFault(function)|| GetShortFault(function))
 
-#define GetOpenFault_EST(function)      (DD_GetDiscreteDiagStatus(function,OUTPUT_OPEN_CKT_FAULT))
-#define GetSTBFault_EST(function)     (DD_GetDiscreteDiagStatus(function,OUTPUT_STB_CKT_FAULT))
-#define GetSTGFault_EST(function)     (DD_GetDiscreteDiagStatus(function,OUTPUT_STG_CKT_FAULT))
-#define GetAnyFault_EST(function)       (GetOpenFault_EST(function)|| GetSTBFault_EST(function)|| GetSTGFault_EST(function))
 
 #define ClearOpenFault(function)    (DD_ClearDiscreteDiagStatus(function, OUTPUT_OPEN_CKT_FAULT))
 #define ClearShortFault(function)   (DD_ClearDiscreteDiagStatus(function, OUTPUT_SHORT_CKT_FAULT))

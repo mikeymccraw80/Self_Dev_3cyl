@@ -1001,8 +1001,7 @@ typedef enum {
             } TeEST_CIRCUIT_STATE;
 
 typedef enum {
-               CeEST_STBFAULT,
-               CeEST_STGFAULT,
+               CeEST_ShortFAULT,
                CeEST_OpenFAULT
             } TeEST_CIRCUIT_FaultType;
 

@@ -58,25 +58,25 @@ extern uint32_t     VSEP_Channel_Enabled;
 #define PULSE_OUT_INJ_CYL_D_DiagMask                  ((Mask32(VSEP_Get_Channel(MTSA_CONFIG_VSEP_PCH_12),1)))
 
 //PULSE_OUT_EST_A
-#define PULSE_OUT_EST_A_Fault                         VSEP_SPIDISCRETE_EST//for diagnostic imformation
+#define PULSE_OUT_EST_A_Fault                         VSEP_SPIDISCRETE//for diagnostic imformation
 #define PULSE_OUT_EST_A_Channel                       MTSA_CONFIG_VSEP_PCH_01//will be used in DD_GetDiscreteDiagStatus & DD_ClearDiscreteDiagStatus
 #define PULSE_OUT_EST_A_Flag                          VSEP_Channel_Enabled//this will be revised again
 #define PULSE_OUT_EST_A_DiagMask                      ((Mask32(VSEP_Get_Channel(MTSA_CONFIG_VSEP_PCH_01),1)))//this will be revised again
                                                 
 //PULSE_OUT_EST_B                               
-#define PULSE_OUT_EST_B_Fault                         VSEP_SPIDISCRETE_EST//for diagnostic imformation
+#define PULSE_OUT_EST_B_Fault                         VSEP_SPIDISCRETE//for diagnostic imformation
 #define PULSE_OUT_EST_B_Channel                       MTSA_CONFIG_VSEP_PCH_02//will be used in DD_GetDiscreteDiagStatus & DD_ClearDiscreteDiagStatus
 #define PULSE_OUT_EST_B_Flag                          VSEP_Channel_Enabled//this will be revised again
 #define PULSE_OUT_EST_B_DiagMask                      ((Mask32(VSEP_Get_Channel(MTSA_CONFIG_VSEP_PCH_02),1)))//this will be revised again
                                                 
 //PULSE_OUT_EST_C                               
-#define PULSE_OUT_EST_C_Fault                         VSEP_SPIDISCRETE_EST//for diagnostic imformation
+#define PULSE_OUT_EST_C_Fault                         VSEP_SPIDISCRETE//for diagnostic imformation
 #define PULSE_OUT_EST_C_Channel                       MTSA_CONFIG_VSEP_PCH_03//will be used in DD_GetDiscreteDiagStatus & DD_ClearDiscreteDiagStatus
 #define PULSE_OUT_EST_C_Flag                          VSEP_Channel_Enabled//this will be revised again
 #define PULSE_OUT_EST_C_DiagMask                      ((Mask32(VSEP_Get_Channel(MTSA_CONFIG_VSEP_PCH_03),1)))//this will be revised again
                                                 
 //PULSE_OUT_EST_D                               
-#define PULSE_OUT_EST_D_Fault                         VSEP_SPIDISCRETE_EST//for diagnostic imformation
+#define PULSE_OUT_EST_D_Fault                         VSEP_SPIDISCRETE//for diagnostic imformation
 #define PULSE_OUT_EST_D_Channel                       MTSA_CONFIG_VSEP_PCH_04//will be used in DD_GetDiscreteDiagStatus & DD_ClearDiscreteDiagStatus
 #define PULSE_OUT_EST_D_Flag                          VSEP_Channel_Enabled//this will be revised again
 #define PULSE_OUT_EST_D_DiagMask                      ((Mask32(VSEP_Get_Channel(MTSA_CONFIG_VSEP_PCH_04),1)))//this will be revised again
