@@ -797,6 +797,9 @@ void CAM_Edge_Process( uint32_t in_cam_sensor )
 		}
 	}
 
+	// get the tooth before for the correct tooth period.
+	pa_tooth_count = CAM_Sensor_Coherent_data[cam_sensor].current_crank_count_at_critical_edge;
+
 	// Crank_Count can be in error by + or – one count, so we need to avoid + one case
 	current_time = CRANK_Get_Edge_Time_From_Count(pa_tooth_count);
 	delta_time = (cam_event_time - current_time) & UINT24_MAX;
@@ -808,8 +811,7 @@ void CAM_Edge_Process( uint32_t in_cam_sensor )
 	previous_time = CRANK_Get_Edge_Time_From_Count(pa_tooth_count-1);
 	tooth_period = (current_time - previous_time) & UINT24_MAX;
 
-	// get the tooth before for the correct tooth period.
-	pa_tooth_count = CAM_Sensor_Coherent_data[cam_sensor].current_crank_count_at_critical_edge;
+	// calculate the whole tooth
 	whole_angle_in_teeth = pa_tooth_count - CRANK_GAP_COUNT + 2;
 	switch(CRANK_Get_Cylinder_ID()) {
 	case CRANK_CYLINDER_A:
