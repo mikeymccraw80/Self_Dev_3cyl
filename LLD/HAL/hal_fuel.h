@@ -10,7 +10,6 @@
 // DisableHWIO_FuelInjector
 //=============================================================================
 void DisableHWIO_FuelInjector( T_COUNT_BYTE LeHWIO_FuelChannel );
-
 //=============================================================================
 // DisableHWIO_TrimPulse
 //=============================================================================
@@ -19,16 +18,10 @@ void DisableHWIO_TrimPulse( uint8_t index);
 // EnableHWIO_FuelInjector
 //=============================================================================
 void EnableHWIO_FuelInjector( T_COUNT_BYTE LeHWIO_FuelChannel );
-
 //=============================================================================
 // EnableHWIO_TrimPulse
 //=============================================================================
 void EnableHWIO_TrimPulse( uint8_t index);
-//=============================================================================
-// GetHWIO_InjCktState
-//=============================================================================
-TeINJ_CIRCUIT_STATE GetHWIO_InjCktState( uint8_t in_index );
-
 //=============================================================================
 // PerfmHWIO_FuelChannelInit
 //=============================================================================
@@ -69,37 +62,8 @@ void SetHWIO_MinInjectorOffTime( T_MILLISECONDSb LfHWIO_FuelMinInjectorOffTime )
 //=============================================================================
 void SetHWIO_MinTrimPulseWidth( T_MILLISECONDSb LfHWIO_FuelMinTrimPulseWidth );
 //=============================================================================
-// SetHWIO_SequentialFuelMode
+// SetHWIO_FuelMode
 //=============================================================================
-void SetHWIO_SequentialFuelMode( uint8_t SeqModeDelayCtr );
-
-//=============================================================================
-// SetHWIO_SimultaneousFuelMode
-//=============================================================================
-void SetHWIO_SimultaneousFuelMode( void );
-//=============================================================================
-// UpdateHWIO_PrimePulseComplete
-//=============================================================================
-void UpdateHWIO_PrimePulseComplete( void );
-
-
-//=============================================================================
-// GetHWIO_PrimePulseComplete
-//=============================================================================
-TbBOOLEAN GetHWIO_PrimePulseComplete( void );
-
-//=============================================================================
-// ClrHWIO_PrimePulseComplete
-//=============================================================================
-void ClrHWIO_PrimePulseComplete( void );
-//=============================================================================
-// SetHWIO_PrimePulseComplete
-//=============================================================================
-void SetHWIO_PrimePulseComplete( void );
-//=============================================================================
-// SetHWIO_FuelSqSwitch
-//=============================================================================
-void SetHWIO_FuelSqSwitch( TbBOOLEAN LbHWIO_FuelSqSwitch );
-
+void SetHWIO_SequentialFuelMode(bool flag );
 
 #endif

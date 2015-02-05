@@ -97,6 +97,36 @@ extern IO_Callback_T CRANK_Event_List[];
    (bool)( Extract_Bits( x, CRANK_FLAG_SYNC_OCCURRED, 1 ) )
 
 //=============================================================================
+// CRANK_Set_Fast_Sync_Occurred
+//
+// @func Set the flag
+//
+// @parm uint32_t | x | A <t uint32_t> to store the flag
+//
+// @parm bool | y | A <t bool> element
+//
+// @rdesc <t uint32_t> containing the element <t bool>
+//
+// @end
+//=============================================================================
+#define CRANK_Set_Fast_Sync_Occurred(x,y) \
+   (uint32_t)( Insert_Bits( x, y, CRANK_FLAG_FAST_SYNC_OCCURRED, 1 ) )
+
+//=============================================================================
+// CRANK_Get_Fast_Sync_Occurred
+//
+// @func Get the flag
+//
+// @parm uint32_t | x | A <t uint32_t> that contains the flag
+//
+// @rdesc <t bool> element decoded from the <t uint32_t>
+//
+// @end
+//=============================================================================
+#define CRANK_Get_Fast_Sync_Occurred(x) \
+   (bool)( Extract_Bits( x, CRANK_FLAG_FAST_SYNC_OCCURRED, 1 ) )
+
+//=============================================================================
 // CRANK_Set_First_Sync_Occurred
 //
 // @func Set the flag

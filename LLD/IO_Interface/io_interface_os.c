@@ -32,9 +32,9 @@ bool           B_HLS_afterrun;
 unsigned int   Pwr_Afruncnt;
 
 //=============================================================================
-// local private variable
+// global variable, called by hls
 //=============================================================================
-static bool    OS_RunningReset_Flag;
+bool    OS_RunningReset_Flag;
 
 //=============================================================================
 // extern variable

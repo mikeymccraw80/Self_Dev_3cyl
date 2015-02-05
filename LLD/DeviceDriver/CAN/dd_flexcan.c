@@ -303,11 +303,11 @@ void FlexCAN_Receive_Interrupt(FlexCAN_Index_T in_FlexCAN, uint8_t *in_data_buff
 	config = FlexCAN_Set_Index(false, (uint32_t)(in_FlexCAN));
 
 	// If there is no interrupt set the Lower interrupt flage register
-	if(false != pFlexCAN->IFRL.U32) {
+	if(false != (pFlexCAN->IFRL.U32 & pFlexCAN->IMRL.U32)) {
 		// Get the first message object index whose interrupt flag is set
 		msg_obj_index = (FlexCAN_MSGOBJ_INDEX_T)Count_Leading_Zeros_For_UINT32((pFlexCAN->IFRL.U32 & pFlexCAN->IMRL.U32));
 		msg_obj_index = THIRTYONE - msg_obj_index;
-	} else if(false != pFlexCAN->IFRH.U32) {
+	} else if(false != (pFlexCAN->IFRH.U32 & pFlexCAN->IMRH.U32)) {
 		// Get the first message object index whose interrupt flag is set
 		msg_obj_index = (FlexCAN_MSGOBJ_INDEX_T)Count_Leading_Zeros_For_UINT32((pFlexCAN->IFRH.U32 & pFlexCAN->IMRH.U32));
 		msg_obj_index = THIRTYONE - msg_obj_index + THIRTYTWO;

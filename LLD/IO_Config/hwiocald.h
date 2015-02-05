@@ -31,7 +31,11 @@ extern const uint8_t                KyHWIO_Num58xGapsBeforeSeqn;
 extern const T_CRANK_ANGLE          KfHWIO_phi_TopDeadCenter;
 extern const uint8_t                KyHWIO_NumberOfCylinders;
 extern const uint8_t                KyHWIO_NumValidPeriodsBeforeSyncStart;
+extern const bool                   KbHWIO_Fast_Sync_Enable;
+extern const uint8_t                KyHWIO_NumValidPeriodsBeforeFastSyncStart;
 extern const uint8_t                KyHWIO_Num58xGapsUsingCamForSync;
+//fast startup
+extern const uint8_t                KyHWIO_NumDeltaToothUsingFastStartUp;
 //crank limp home mode         
 extern const T_COUNT_BYTE           KyHWIO_Number_Of_CAM_Pulses;
 extern const T_COUNT_BYTE           KyHWIO_Crank_Angle_Per_CAM_Pulse[];
@@ -40,6 +44,7 @@ extern const T_COUNT_BYTE           KyHWIO_CAM_Pulse_Duty_Max[];
 extern const T_CRANK_ANGLE          KyHWIO_Delta_Angle_From_Edge_To_Tooth_1;
 extern const T_RPMa                 KfVIOS_n_BackupModeEventScheduleThrsh;
 
+extern const bool                   KbHWIO_MoreOrLess_Logic_Enable;
 extern const uint16_t               KyHWIO_MaxErrorTeethMore;
 extern const uint16_t               KyHWIO_MaxErrorTeethLess;
 

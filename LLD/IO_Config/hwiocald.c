@@ -181,7 +181,42 @@ const uint8_t KyHWIO_NumberOfCylinders = 4;
 *|   }
 *| }
 */
-const uint8_t KyHWIO_NumValidPeriodsBeforeSyncStart = 15;
+const uint8_t KyHWIO_NumValidPeriodsBeforeSyncStart = 7;
+
+/*
+*| hwiocald.{
+*|    KbHWIO_Fast_Sync_Enable {
+*|       :is_calconst;
+*|       :units = "BOOLEAN";
+*|       :description = "This variable used to determine whether fast sync is enabled .";
+*|    }
+*| }
+*/
+const bool    KbHWIO_Fast_Sync_Enable = true ;
+
+/*
+*| hwiocald.{
+*| KyHWIO_NumValidPeriodsBeforeFastSyncStart {
+*|     : is_calconst;
+*|     : description = "Number of valid 58x periods to be seen "
+*| "by the 58x logic before trying to fast startup synch ";
+*|     : type = types.t_count_byte;
+*|     : units = "count";
+*|   }
+*| }
+*/
+const uint8_t KyHWIO_NumValidPeriodsBeforeFastSyncStart = 7;
+
+/*
+*| hwiocald.{
+*|    KbHWIO_MoreOrLess_Logic_Enable {
+*|       :is_calconst;
+*|       :units = "BOOLEAN";
+*|       :description = "This variable used to determine whether more or less logic is enabled .";
+*|    }
+*| }
+*/
+const bool    KbHWIO_MoreOrLess_Logic_Enable = true ;
 
 /*
 *| hwiocald.{
@@ -224,6 +259,17 @@ const uint16_t KyHWIO_MaxErrorTeethLess = 3;
 */
 const   uint8_t     KyHWIO_Num58xGapsUsingCamForSync = 255;
 
+/*
+*| hwiocald.{
+*|   KyHWIO_NumDeltaToothUsingFastStartUp {
+*|     : is_calconst;
+*|     : description = "Number of tooth between valid cam falling edge to tooth 2/62";
+*|     : type = types.t_count_byte;
+*|     : units = "tooth";
+*|   }
+*| }
+*/
+const   uint8_t     KyHWIO_NumDeltaToothUsingFastStartUp = 12;
 
 /*
 *| hwiocald.{
