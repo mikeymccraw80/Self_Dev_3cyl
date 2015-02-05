@@ -92,9 +92,6 @@ extern HAL_Diag_T HAL_Diag;
 #define ClearOpenFault(function)    (DD_ClearDiscreteDiagStatus(function, OUTPUT_OPEN_CKT_FAULT))
 #define ClearShortFault(function)   (DD_ClearDiscreteDiagStatus(function, OUTPUT_SHORT_CKT_FAULT))
 
-#define ClearOpenFault_EST(function)    (DD_ClearDiscreteDiagStatus(function, OUTPUT_OPEN_CKT_FAULT))
-#define ClearSTBFault_EST(function)   (DD_ClearDiscreteDiagStatus(function, OUTPUT_STB_CKT_FAULT))
-#define ClearSTGFault_EST(function)   (DD_ClearDiscreteDiagStatus(function, OUTPUT_STG_CKT_FAULT))
 /******************************************************************************
  * FUEL PUMP
  ******************************************************************************/
