@@ -89,12 +89,6 @@ uint32_t     CAM1_Backup_Falling_Edge_Time;
 #define CAM_CRANK_DIAGNOSE_MAX_Fail_COUNT 2
 static uint8_t      CAM1_CRANK_Diagnose_Fail_Count;
 
-/* vcpc monitor variable */
-static uint8_t      CAM1_VCPC_Whole_Tooth_Count[4];
-static uint8_t      CAM2_VCPC_Whole_Tooth_Count[4];
-static uint32_t     CAM1_VCPC_Fraction_Angle[4];
-static uint32_t     CAM2_VCPC_Fraction_Angle[4];
-
 /* cam stuck backup */
 static bool         CAM1_BACKUP_FLAG;
 
@@ -600,6 +594,10 @@ static uint8_t CAM_Increment_Cam_Edge_Counter(uint8_t in_cam_edge)
 // CAM_Edge_Interrupt_Handler
 //=============================================================================
 extern uCrank_Count_T    CRANK_GAP_COUNT;
+
+static uint32_t haha_cam_event_angle_fraction;
+static uint32_t haha_tooth_period;
+static uint32_t haha_delta_time;
 void CAM_Edge_Process( uint32_t in_cam_sensor )
 {
 	CAM_Sensors_T   cam_sensor = (CAM_Sensors_T)in_cam_sensor;
@@ -795,6 +793,19 @@ void CAM_Edge_Process( uint32_t in_cam_sensor )
 
 	// get the tooth before for the correct tooth period.
 	pa_tooth_count = CAM_Sensor_Coherent_data[cam_sensor].current_crank_count_at_critical_edge;
+
+	// Crank_Count can be in error by + or – one count, so we need to avoid + one case
+	current_time = CRANK_Get_Edge_Time_From_Count(pa_tooth_count);
+	delta_time = (cam_event_time - current_time) & UINT24_MAX;
+	if (delta_time > (uint32_t)INT24_MAX) {
+		pa_tooth_count --;
+		current_time = CRANK_Get_Edge_Time_From_Count(pa_tooth_count);
+		delta_time = (cam_event_time - current_time) & UINT24_MAX;
+	}
+	previous_time = CRANK_Get_Edge_Time_From_Count(pa_tooth_count-1);
+	tooth_period = (current_time - previous_time) & UINT24_MAX;
+
+	// calculate the whole tooth
 	whole_angle_in_teeth = pa_tooth_count - CRANK_GAP_COUNT + 2;
 	switch(CRANK_Get_Cylinder_ID()) {
 	case CRANK_CYLINDER_A:
@@ -810,27 +821,13 @@ void CAM_Edge_Process( uint32_t in_cam_sensor )
 		break;
 	}
 
-	// Get the time from the previous edge out of the array
-	current_time = CRANK_Get_Edge_Time_From_Count(pa_tooth_count);
-	previous_time = CRANK_Get_Edge_Time_From_Count(pa_tooth_count-1);
-	delta_time = (cam_event_time - current_time) & UINT24_MAX;
-	tooth_period = (current_time - previous_time) & UINT24_MAX;
-
 	// convert to delta angle from time
+	haha_cam_event_angle_fraction = IO_Convert_uTime_To_uAngle(haha_delta_time, uCRANK_ANGLE_PRECISION, haha_tooth_period, 1);
 	cam_event_angle_fraction = IO_Convert_uTime_To_uAngle(delta_time, uCRANK_ANGLE_PRECISION, tooth_period, 1);
 	cam_event_angle_teeth    = CRANK_Convert_Teeth_To_uCrank_Angle(whole_angle_in_teeth);
 	CAM_Edge_Data[( cam_sensor * CAM_Number_Of_Pulses ) + current_edge_index].Count = cam_event_angle_teeth + cam_event_angle_fraction;
 	CAM_Edge_Data[( cam_sensor * CAM_Number_Of_Pulses ) + current_edge_index].Time = cam_event_time;
 	CAM_Edge_Data[( cam_sensor * CAM_Number_Of_Pulses ) + current_edge_index].Edge_Period = tooth_period;
-	// start monitor the whole tooth counter and fraction
-	if (cam_sensor == CAM1) {
-		CAM1_VCPC_Fraction_Angle[current_edge_index]    = cam_event_angle_fraction;
-		CAM1_VCPC_Whole_Tooth_Count[current_edge_index] = whole_angle_in_teeth;
-	} else {
-		CAM2_VCPC_Fraction_Angle[current_edge_index]    = cam_event_angle_fraction;
-		CAM2_VCPC_Whole_Tooth_Count[current_edge_index] = whole_angle_in_teeth;
-	}
-	// end monitor the whole tooth counter and fraction
 	if (current_edge_index == 0) {
 		current_edge_index = 3;
 	} else {

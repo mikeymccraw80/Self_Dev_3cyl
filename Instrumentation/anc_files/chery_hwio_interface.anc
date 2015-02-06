@@ -1369,7 +1369,7 @@
 
 *-CAM2_VCPC_Whole_Tooth_Count_Plus_1{
 *-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "CAM2WTC0";
+*-  label                    = "CAM2WTC1";
 *-  variable_location.symbol = CAM2_VCPC_Whole_Tooth_Count[1];
 *-  ds_scaling_unit          = "count";
 *-  ds_precision             = "4.2";
