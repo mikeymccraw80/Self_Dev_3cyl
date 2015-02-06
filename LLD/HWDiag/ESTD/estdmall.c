@@ -40,7 +40,8 @@
 *****************************************************************************/
 enum /* ESTD steady state timers */
 {
-	CeESTD_FaultEnblDlyTmr,
+	CeESTD_ShortFaultEnblDlyTmr,
+	CeESTD_OpenFaultEnblDlyTmr,
 	CcESTD_Num7p8Tmrs
 };
 
@@ -57,17 +58,31 @@ DefTIMC_StopWatches16(VaESTD_t_7p8msTimerArray,
 /******************************************************************************
 *  Static Data Define
 ******************************************************************************/
-TbBOOLEAN     VaESTD_FailCriteriaMet[CcSYST_NUM_OF_EST_OUTPUTS];
-TbBOOLEAN     SbESTD_FaultEnblCriteriaMet;
-T_COUNT_BYTE  SaESTD_FaultFailureCounter[CcSYST_NUM_OF_EST_OUTPUTS];
-T_COUNT_BYTE  SaESTD_FaultSampleCounter[CcSYST_NUM_OF_EST_OUTPUTS];
+//TbBOOLEAN     VaESTD_FailCriteriaMet[CcSYST_NUM_OF_EST_OUTPUTS];
+TbBOOLEAN     VaESTD_ShortFailCriteriaMet[CcSYST_NUM_OF_EST_OUTPUTS];
+TbBOOLEAN     VaESTD_OpenFailCriteriaMet[CcSYST_NUM_OF_EST_OUTPUTS];
+
+TbBOOLEAN     SbESTD_ShortFaultEnblCriteriaMet;
+TbBOOLEAN     SbESTD_OpenFaultEnblCriteriaMet;
+
+//T_COUNT_BYTE  SaESTD_FaultFailureCounter[CcSYST_NUM_OF_EST_OUTPUTS];
+T_COUNT_BYTE  SaESTD_ShortFaultFailureCounter[CcSYST_NUM_OF_EST_OUTPUTS];
+T_COUNT_BYTE  SaESTD_OpenFaultFailureCounter[CcSYST_NUM_OF_EST_OUTPUTS];
+
+//T_COUNT_BYTE  SaESTD_FaultSampleCounter[CcSYST_NUM_OF_EST_OUTPUTS];
+T_COUNT_BYTE  SaESTD_ShortFaultSampleCounter[CcSYST_NUM_OF_EST_OUTPUTS];
+T_COUNT_BYTE  SaESTD_OpenFaultSampleCounter[CcSYST_NUM_OF_EST_OUTPUTS];
+
 TbBOOLEAN     SaESTD_FaultTestComplete[CcSYST_NUM_OF_EST_OUTPUTS];
 #pragma section DATA " " ".nc_nvram"
-TbBOOLEAN     SaESTD_FaultTestFailed[CcSYST_NUM_OF_EST_OUTPUTS];
+TbBOOLEAN     SaESTD_ShortFaultTestFailed[CcSYST_NUM_OF_EST_OUTPUTS];
+TbBOOLEAN     SaESTD_OpenFaultTestFailed[CcSYST_NUM_OF_EST_OUTPUTS];
 #pragma section DATA " " ".bss"
 T_COUNT_BYTE  ScESTD_EST_OutputNumber;
-TbBOOLEAN     SbESTD_EST_FaultResetRequest;
-TbBOOLEAN     SaESTD_FaultTestComplete_Internal[CcSYST_NUM_OF_EST_OUTPUTS];
+TbBOOLEAN     SbESTD_EST_ShortFaultResetRequest;
+TbBOOLEAN     SbESTD_EST_OpenFaultResetRequest;
+TbBOOLEAN     SaESTD_ShortFaultTestComplete_Internal[CcSYST_NUM_OF_EST_OUTPUTS];
+TbBOOLEAN     SaESTD_OpenFaultTestComplete_Internal[CcSYST_NUM_OF_EST_OUTPUTS];
 /*****************************************************************************/
 
 /******************************************************************************
@@ -126,22 +141,35 @@ static void InitESTD_Common(void)
 {
 	BYTE LcESTD_EST_Count;
 
-	SbESTD_FaultEnblCriteriaMet = CbFALSE;
+	SbESTD_ShortFaultEnblCriteriaMet = CbFALSE;
+	SbESTD_OpenFaultEnblCriteriaMet = CbFALSE;
 	ScESTD_EST_OutputNumber = V_COUNT_BYTE(0);
 
-	HaltTIMC_StopWatch (VaESTD_7p8msTimerEnbl, CeESTD_FaultEnblDlyTmr);
-	SetTIMC_StopWatch16 (VaESTD_t_7p8msTimerArray,CeESTD_FaultEnblDlyTmr, C_R7p8125ms16(0));
+	HaltTIMC_StopWatch (VaESTD_7p8msTimerEnbl, CeESTD_ShortFaultEnblDlyTmr);
+	HaltTIMC_StopWatch (VaESTD_7p8msTimerEnbl, CeESTD_OpenFaultEnblDlyTmr);
+	SetTIMC_StopWatch16 (VaESTD_t_7p8msTimerArray,CeESTD_ShortFaultEnblDlyTmr, C_R7p8125ms16(0));
+	SetTIMC_StopWatch16 (VaESTD_t_7p8msTimerArray,CeESTD_OpenFaultEnblDlyTmr, C_R7p8125ms16(0));
 
 	for (LcESTD_EST_Count = 0;
 		LcESTD_EST_Count < CcSYST_NUM_OF_EST_OUTPUTS;
 		LcESTD_EST_Count++)
 	{
-		VaESTD_FailCriteriaMet[LcESTD_EST_Count] = CbFALSE;
-		SaESTD_FaultFailureCounter[LcESTD_EST_Count] = V_COUNT_BYTE(0);
-		SaESTD_FaultSampleCounter[LcESTD_EST_Count] = V_COUNT_BYTE(0);
+		VaESTD_ShortFailCriteriaMet[LcESTD_EST_Count] = CbFALSE;
+		VaESTD_OpenFailCriteriaMet[LcESTD_EST_Count] = CbFALSE;
+		
+		SaESTD_ShortFaultFailureCounter[LcESTD_EST_Count] = V_COUNT_BYTE(0);
+		SaESTD_OpenFaultFailureCounter[LcESTD_EST_Count] = V_COUNT_BYTE(0);
+		
+		SaESTD_ShortFaultSampleCounter[LcESTD_EST_Count] = V_COUNT_BYTE(0);
+        SaESTD_OpenFaultSampleCounter[LcESTD_EST_Count] = V_COUNT_BYTE(0);
+		
 		//SaESTD_FaultTestComplete[LcESTD_EST_Count] = CbFALSE;
-		SaESTD_FaultTestComplete_Internal[LcESTD_EST_Count] = CbFALSE;
-		SaESTD_FaultTestFailed[LcESTD_EST_Count] = CbFALSE;
+		SaESTD_ShortFaultTestComplete_Internal[LcESTD_EST_Count] = CbFALSE;
+		SaESTD_ShortFaultTestFailed[LcESTD_EST_Count] = CbFALSE;
+			
+		SaESTD_OpenFaultTestComplete_Internal[LcESTD_EST_Count] = CbFALSE;
+		SaESTD_OpenFaultTestFailed[LcESTD_EST_Count] = CbFALSE;
+		
 	}
 }
 
@@ -172,7 +200,8 @@ void MngESTD_RefEventTasks(void)
 
 	for (LcESTD_EST_Count = 0; LcESTD_EST_Count < CcSYST_NUM_OF_EST_OUTPUTS; LcESTD_EST_Count++) {
 		SaESTD_FaultTestComplete[LcESTD_EST_Count] |= \
-			SaESTD_FaultTestComplete_Internal[LcESTD_EST_Count];
+			SaESTD_ShortFaultTestComplete_Internal[LcESTD_EST_Count]\
+			|SaESTD_OpenFaultTestComplete_Internal[LcESTD_EST_Count];
 	}
 }
 
@@ -207,36 +236,66 @@ void MngESTD_7p81msTasks (void)
  *****************************************************************************/
 static void EvalESTD_EnableCriteria(void)
 {
-	if( GetVIOS_U_IgnVolt() < KfESTD_U_IgnVoltResetThrsh)
+    //Short to battery
+	if( GetVIOS_U_IgnVolt() < KfESTD_U_ShortIgnVoltResetThrsh)
 	{
-		SbESTD_FaultEnblCriteriaMet = CbFALSE;
-		HaltTIMC_StopWatch (VaESTD_7p8msTimerEnbl, CeESTD_FaultEnblDlyTmr);
-		SetTIMC_StopWatch16 (VaESTD_t_7p8msTimerArray,CeESTD_FaultEnblDlyTmr,
+		SbESTD_ShortFaultEnblCriteriaMet = CbFALSE;
+		HaltTIMC_StopWatch (VaESTD_7p8msTimerEnbl, CeESTD_ShortFaultEnblDlyTmr);
+		SetTIMC_StopWatch16 (VaESTD_t_7p8msTimerArray,CeESTD_ShortFaultEnblDlyTmr,
 						  C_R7p8125ms16(0));
-		SbESTD_EST_FaultResetRequest = CbTRUE;
+		SbESTD_EST_ShortFaultResetRequest = CbTRUE;
 	}
 	else
 	{
-		SbESTD_EST_FaultResetRequest = CbFALSE;
+		SbESTD_EST_ShortFaultResetRequest = CbFALSE;
 	}
+    //Short to ground & Open
+	if( GetVIOS_U_IgnVolt() < KfESTD_U_OpenIgnVoltResetThrsh)
+	{
+		SbESTD_OpenFaultEnblCriteriaMet = CbFALSE;
+		HaltTIMC_StopWatch (VaESTD_7p8msTimerEnbl, CeESTD_OpenFaultEnblDlyTmr);
+		SetTIMC_StopWatch16 (VaESTD_t_7p8msTimerArray,CeESTD_OpenFaultEnblDlyTmr,
+						  C_R7p8125ms16(0));
+		SbESTD_EST_OpenFaultResetRequest = CbTRUE;
+	}
+	else
+	{
+		SbESTD_EST_OpenFaultResetRequest = CbFALSE;
+	}
+
+	
 	if ( (GetVIOS_IgnSt() == CeIGN_ON))
 		// && (GetVIOS_FirstValidCrankTooth()) )
-	{
-		if(GetTIMC_t_StopWatch16(VaESTD_t_7p8msTimerArray,CeESTD_FaultEnblDlyTmr)
+	{   
+	    //Short to battery
+		if(GetTIMC_t_StopWatch16(VaESTD_t_7p8msTimerArray,CeESTD_ShortFaultEnblDlyTmr)
 							  >= KfESTD_t_EnableDelayTime )
 		{
-			SbESTD_FaultEnblCriteriaMet = CbTRUE;
-			HaltTIMC_StopWatch (VaESTD_7p8msTimerEnbl, CeESTD_FaultEnblDlyTmr);
+			SbESTD_ShortFaultEnblCriteriaMet = CbTRUE;
+			HaltTIMC_StopWatch (VaESTD_7p8msTimerEnbl, CeESTD_ShortFaultEnblDlyTmr);
 		}
 		else
 		{
-			SbESTD_FaultEnblCriteriaMet = CbFALSE;
-			ResumeTIMC_StopWatch(VaESTD_7p8msTimerEnbl,CeESTD_FaultEnblDlyTmr);
+			SbESTD_ShortFaultEnblCriteriaMet = CbFALSE;
+			ResumeTIMC_StopWatch(VaESTD_7p8msTimerEnbl,CeESTD_ShortFaultEnblDlyTmr);
+		}
+        //Short to ground & Open
+		if(GetTIMC_t_StopWatch16(VaESTD_t_7p8msTimerArray,CeESTD_OpenFaultEnblDlyTmr)
+							  >= KfESTD_t_EnableDelayTime )
+		{
+			SbESTD_OpenFaultEnblCriteriaMet = CbTRUE;
+			HaltTIMC_StopWatch (VaESTD_7p8msTimerEnbl, CeESTD_OpenFaultEnblDlyTmr);
+		}
+		else
+		{
+			SbESTD_OpenFaultEnblCriteriaMet = CbFALSE;
+			ResumeTIMC_StopWatch(VaESTD_7p8msTimerEnbl,CeESTD_OpenFaultEnblDlyTmr);
 		}
 	}
 	else
 	{
-		SbESTD_FaultEnblCriteriaMet = CbFALSE;
+		SbESTD_ShortFaultEnblCriteriaMet = CbFALSE;
+		SbESTD_OpenFaultEnblCriteriaMet = CbFALSE;
 	}
 }
 
@@ -271,17 +330,32 @@ static void DtrmnESTD_EST_OutputNumber(void)
  *****************************************************************************/
 static void CheckESTD_FaultStatus(void)
 {
-	if (SbESTD_FaultEnblCriteriaMet != CbFALSE)
+    //Short to battery
+	if (SbESTD_ShortFaultEnblCriteriaMet != CbFALSE)
 	{
-		if (GetAPI_EST_CircuitState(ScESTD_EST_OutputNumber) == CeEST_FAULTED)
+
+		if (GetAPI_EST_CircuitState(ScESTD_EST_OutputNumber,CeEST_ShortFAULT) == CeEST_FAULTED)
 		{
-			VaESTD_FailCriteriaMet[ScESTD_EST_OutputNumber] = CbTRUE;
+			VaESTD_ShortFailCriteriaMet[ScESTD_EST_OutputNumber] = CbTRUE;
 		}
 		else
 		{
-			VaESTD_FailCriteriaMet[ScESTD_EST_OutputNumber] = CbFALSE;
+			VaESTD_ShortFailCriteriaMet[ScESTD_EST_OutputNumber] = CbFALSE;
 		}
-	}    /* END IF Enable Criteria Met = TRUE */
+	}
+    //short to ground & Open
+	if (SbESTD_OpenFaultEnblCriteriaMet != CbFALSE)
+	{
+
+		if (GetAPI_EST_CircuitState(ScESTD_EST_OutputNumber,CeEST_OpenFAULT) == CeEST_FAULTED)
+		{
+			VaESTD_OpenFailCriteriaMet[ScESTD_EST_OutputNumber] = CbTRUE;
+		}
+		else
+		{
+			VaESTD_OpenFailCriteriaMet[ScESTD_EST_OutputNumber] = CbFALSE;
+		}
+	}/* END IF Enable Criteria Met = TRUE */
 }
 
 
@@ -301,34 +375,77 @@ static void UpdateESTD_FaultCounters (void)
 {
 	BYTE LcESTD_EST_Count;
 
-	if(SbESTD_EST_FaultResetRequest)
+	if(SbESTD_EST_ShortFaultResetRequest)
 	{
 		for (LcESTD_EST_Count = 0;
 			 LcESTD_EST_Count < CcSYST_NUM_OF_EST_OUTPUTS;
 			 LcESTD_EST_Count++)
 		{
-			SaESTD_FaultFailureCounter[LcESTD_EST_Count] = V_COUNT_BYTE(0);
-			SaESTD_FaultSampleCounter[LcESTD_EST_Count] = V_COUNT_BYTE(0);
+
+			SaESTD_ShortFaultSampleCounter[ScESTD_EST_OutputNumber] = V_COUNT_BYTE(0);
+			SaESTD_ShortFaultFailureCounter[ScESTD_EST_OutputNumber] = V_COUNT_BYTE(0);
+
 		}
 	}
-
-	if (SbESTD_FaultEnblCriteriaMet != CbFALSE)
+	
+	if(SbESTD_EST_OpenFaultResetRequest)
 	{
-		if (SaESTD_FaultTestComplete_Internal[ScESTD_EST_OutputNumber] != CbFALSE)
+		for (LcESTD_EST_Count = 0;
+			 LcESTD_EST_Count < CcSYST_NUM_OF_EST_OUTPUTS;
+			 LcESTD_EST_Count++)
 		{
-			SaESTD_FaultSampleCounter[ScESTD_EST_OutputNumber] = V_COUNT_BYTE(0);
-			SaESTD_FaultFailureCounter[ScESTD_EST_OutputNumber] = V_COUNT_BYTE(0);
+
+			SaESTD_OpenFaultSampleCounter[ScESTD_EST_OutputNumber] = V_COUNT_BYTE(0);
+			SaESTD_OpenFaultFailureCounter[ScESTD_EST_OutputNumber] = V_COUNT_BYTE(0);
 		}
-		SaESTD_FaultSampleCounter[ScESTD_EST_OutputNumber]++;
-		if (VaESTD_FailCriteriaMet[ScESTD_EST_OutputNumber] != CbFALSE)
+	}
+	//Short to battery
+	if (SbESTD_ShortFaultEnblCriteriaMet != CbFALSE)
+	{
+		if (SaESTD_ShortFaultTestComplete_Internal[ScESTD_EST_OutputNumber] != CbFALSE)
 		{
-			SaESTD_FaultFailureCounter[ScESTD_EST_OutputNumber]++;
+			SaESTD_ShortFaultSampleCounter[ScESTD_EST_OutputNumber] = V_COUNT_BYTE(0);
+			SaESTD_ShortFaultFailureCounter[ScESTD_EST_OutputNumber] = V_COUNT_BYTE(0);
+
+		}
+
+		SaESTD_ShortFaultSampleCounter[ScESTD_EST_OutputNumber]++;
+		
+		if (VaESTD_ShortFailCriteriaMet[ScESTD_EST_OutputNumber] != CbFALSE)
+		{
+			SaESTD_ShortFaultFailureCounter[ScESTD_EST_OutputNumber]++;
+		}
+
+	}
+	else 
+	{
+		SaESTD_ShortFaultSampleCounter[ScESTD_EST_OutputNumber] = V_COUNT_BYTE(0);
+		SaESTD_ShortFaultFailureCounter[ScESTD_EST_OutputNumber] = V_COUNT_BYTE(0);
+		
+	}
+    //short to ground&Open
+	if (SbESTD_OpenFaultEnblCriteriaMet != CbFALSE)
+	{
+		if (SaESTD_OpenFaultTestComplete_Internal[ScESTD_EST_OutputNumber] != CbFALSE)
+		{
+			SaESTD_OpenFaultSampleCounter[ScESTD_EST_OutputNumber] = V_COUNT_BYTE(0);
+			SaESTD_OpenFaultFailureCounter[ScESTD_EST_OutputNumber] = V_COUNT_BYTE(0);
+
+		}
+
+		SaESTD_OpenFaultSampleCounter[ScESTD_EST_OutputNumber]++;
+		
+		if (VaESTD_OpenFailCriteriaMet[ScESTD_EST_OutputNumber] != CbFALSE)
+		{
+			SaESTD_OpenFaultFailureCounter[ScESTD_EST_OutputNumber]++;
 		}
 	}
 	else 
 	{
-		SaESTD_FaultSampleCounter[ScESTD_EST_OutputNumber] = V_COUNT_BYTE(0);
-		SaESTD_FaultFailureCounter[ScESTD_EST_OutputNumber] = V_COUNT_BYTE(0);
+
+		SaESTD_OpenFaultSampleCounter[ScESTD_EST_OutputNumber] = V_COUNT_BYTE(0);
+		SaESTD_OpenFaultFailureCounter[ScESTD_EST_OutputNumber] = V_COUNT_BYTE(0);
+		
 	}
 }
 
@@ -349,32 +466,60 @@ static void PerfmESTD_CounterEvaluation (void)
 {
 	BYTE LcESTD_EST_Count;
 
-	if(SbESTD_EST_FaultResetRequest)
+	if(SbESTD_EST_ShortFaultResetRequest)
 	{
 		for (LcESTD_EST_Count = 0;
 		LcESTD_EST_Count < CcSYST_NUM_OF_EST_OUTPUTS;
 		LcESTD_EST_Count++)
 		{
-			SaESTD_FaultTestComplete_Internal[LcESTD_EST_Count] = CbFALSE;
-			SaESTD_FaultTestFailed[LcESTD_EST_Count] = CbFALSE; 
+			SaESTD_ShortFaultTestComplete_Internal[LcESTD_EST_Count] = CbFALSE;
+			SaESTD_ShortFaultTestFailed[LcESTD_EST_Count] = CbFALSE; 
 		}
 	}
 
-	if(SaESTD_FaultTestComplete_Internal[ScESTD_EST_OutputNumber])
+	if(SbESTD_EST_OpenFaultResetRequest)
 	{
-		SaESTD_FaultTestComplete_Internal[ScESTD_EST_OutputNumber] = CbFALSE;
+		for (LcESTD_EST_Count = 0;
+		LcESTD_EST_Count < CcSYST_NUM_OF_EST_OUTPUTS;
+		LcESTD_EST_Count++)
+		{
+			SaESTD_OpenFaultTestComplete_Internal[LcESTD_EST_Count] = CbFALSE;
+			SaESTD_OpenFaultTestFailed[LcESTD_EST_Count] = CbFALSE; 
+		}
+	}
+    //short to battery
+	if(SaESTD_ShortFaultTestComplete_Internal[ScESTD_EST_OutputNumber])
+	{
+		SaESTD_ShortFaultTestComplete_Internal[ScESTD_EST_OutputNumber] = CbFALSE;
 	}
 
-	if (SaESTD_FaultFailureCounter[ScESTD_EST_OutputNumber] >= KcESTD_FailThrsh)
+	if (SaESTD_ShortFaultFailureCounter[ScESTD_EST_OutputNumber] >= KcESTD_FailThrsh)
 	{
-		SaESTD_FaultTestFailed[ScESTD_EST_OutputNumber] = CbTRUE;
-		SaESTD_FaultTestComplete_Internal[ScESTD_EST_OutputNumber] = CbTRUE;
+		SaESTD_ShortFaultTestFailed[ScESTD_EST_OutputNumber] = CbTRUE;
+		SaESTD_ShortFaultTestComplete_Internal[ScESTD_EST_OutputNumber] = CbTRUE;
 	}
-	else if (SaESTD_FaultSampleCounter[ScESTD_EST_OutputNumber] >= 
+	else if (SaESTD_ShortFaultSampleCounter[ScESTD_EST_OutputNumber] >= 
 			KcESTD_SampleThrsh)
 	{
-		SaESTD_FaultTestFailed[ScESTD_EST_OutputNumber] = CbFALSE;
-		SaESTD_FaultTestComplete_Internal[ScESTD_EST_OutputNumber] = CbTRUE;
+		SaESTD_ShortFaultTestFailed[ScESTD_EST_OutputNumber] = CbFALSE;
+		SaESTD_ShortFaultTestComplete_Internal[ScESTD_EST_OutputNumber] = CbTRUE;
+	}
+    //short to ground & Open
+	if(SaESTD_OpenFaultTestComplete_Internal[ScESTD_EST_OutputNumber])
+	{
+		SaESTD_OpenFaultTestComplete_Internal[ScESTD_EST_OutputNumber] = CbFALSE;
+	}
+
+	if (SaESTD_OpenFaultFailureCounter[ScESTD_EST_OutputNumber] >= KcESTD_FailThrsh)
+	{
+		SaESTD_OpenFaultTestFailed[ScESTD_EST_OutputNumber] = CbTRUE;
+		SaESTD_OpenFaultTestComplete_Internal[ScESTD_EST_OutputNumber] = CbTRUE;
+	}
+	else if (SaESTD_OpenFaultSampleCounter[ScESTD_EST_OutputNumber] >= 
+			KcESTD_SampleThrsh)
+	{
+		SaESTD_OpenFaultTestFailed[ScESTD_EST_OutputNumber] = CbFALSE;
+		SaESTD_OpenFaultTestComplete_Internal[ScESTD_EST_OutputNumber] = CbTRUE;
 	}
 }
 

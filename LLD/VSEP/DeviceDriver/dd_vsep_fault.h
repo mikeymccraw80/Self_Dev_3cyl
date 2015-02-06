@@ -193,16 +193,16 @@ typedef enum
 
 #define VSEP_FAULT_Get_OUTPUT_OPEN_CKT_FAULT(x) \
 	(FAULT_Get_Occured_Open_Circuit(x)||FAULT_Get_Occured_Short_To_Ground(x))
-
+	
 #define VSEP_FAULT_Clear_OUTPUT_OPEN_CKT_FAULT(x) \
 	(FAULT_Clear_Occured_Open_Circuit(x)&FAULT_Clear_Occured_Short_To_Ground(x))
 
 #define VSEP_FAULT_Clear_OUTPUT_SHORT_CKT_FAULT(x) \
 	FAULT_Set_Occured_Short_To_Battery(x,false) 
-
+	
 #define VSEP_FAULT_Get_OUTPUT_SHORT_CKT_FAULT(x) \
 	(FAULT_Get_Occured_Short_To_Battery(x)) 
-
+	
 #define VSEP_FAULT_Get_OUTPUT_OPEN_CKT_TESTED(x) \
 	(FAULT_Get_Tested_Open_Circuit(x)||FAULT_Get_Tested_Short_To_Ground(x))
 
