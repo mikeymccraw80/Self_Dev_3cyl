@@ -473,7 +473,7 @@ static void PerfmESTD_CounterEvaluation (void)
 		LcESTD_EST_Count++)
 		{
 			SaESTD_ShortFaultTestComplete_Internal[LcESTD_EST_Count] = CbFALSE;
-			SaESTD_ShortFaultTestFailed[LcESTD_EST_Count] = CbFALSE; 
+			//SaESTD_ShortFaultTestFailed[LcESTD_EST_Count] = CbFALSE; 
 		}
 	}
 
@@ -484,7 +484,7 @@ static void PerfmESTD_CounterEvaluation (void)
 		LcESTD_EST_Count++)
 		{
 			SaESTD_OpenFaultTestComplete_Internal[LcESTD_EST_Count] = CbFALSE;
-			SaESTD_OpenFaultTestFailed[LcESTD_EST_Count] = CbFALSE; 
+			//SaESTD_OpenFaultTestFailed[LcESTD_EST_Count] = CbFALSE; 
 		}
 	}
     //short to battery
