@@ -204,6 +204,11 @@ SUBDIRS += knock
 SUBDIRS += LLD/EMS
 SUBDIRS += LLD/Immo
 SUBDIRS += LLD/File
+SUBDIRS += Testability
+SUBDIRS += Testability/MCAMOS
+SUBDIRS += Testability/Testability_Application
+SUBDIRS += Testability/Testability_HAL
+SUBDIRS += Testability/Testability_OS
 endif
 
 ifneq ($(TARGET),INTEGRATION)
