@@ -242,6 +242,7 @@ INCDIRS += LLD/DeviceDriver/TPU
 INCDIRS += LLD/DeviceDriver/STM
 INCDIRS += LLD/DeviceDriver/DFILTER
 INCDIRS += LLD/DeviceDriver/SCI
+INCDIRS += LLD/DeviceDriver/KP254/10.DeviceDriver
 INCDIRS += LLD/VSEP/SPI_Scheduler
 INCDIRS += LLD/VSEP/DeviceDriver
 INCDIRS += LLD/VSEP/Configuration
@@ -296,7 +297,11 @@ INCDIRS += LLD/LUX_Library
 INCDIRS += knock
 INCDIRS += LLD/Immo
 INCDIRS += LLD/File
-
+INCDIRS += Testability
+INCDIRS += Testability/MCAMOS
+INCDIRS += Testability/Testability_Application
+INCDIRS += Testability/Testability_HAL
+INCDIRS += Testability/Testability_OS
 # ifneq ($(TARGET),INTEGRATION)
 INCDIRS += HLS
 # endif
