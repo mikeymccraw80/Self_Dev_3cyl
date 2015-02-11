@@ -141,14 +141,218 @@
 
 *-dd_crank.CRANK_Internal_State.U32{
 *-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "CRKSTATE";
-*-  variable_location.symbol = dd_crank.CRANK_Internal_State.U32;
+*-  label                    = "CRK_STATE";
+*-  variable_location.symbol = CRANK_Internal_State.U32;
 *-  ds_scaling_unit          = "count";
 *-  ds_precision             = "2.0";
 *-  ds_scaling_mode          = "Ax + B";
 *-  ds_const_a               = "1.0";
 *-  ds_const_b               = "0.000000000000";
 *-  description              = "dd crank internal state";
+*-}
+
+*-dd_crank.CRANK_Internal_State_plus_0x00{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CRK_SYN";
+*-  variable_location.symbol = CRANK_Internal_State.F.sync_occurred;
+*-  ds_scaling_unit          = "boolean";
+*-  ds_precision             = "1.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.0";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "dd crank internal state, sync occured";
+*-}
+
+*-dd_crank.CRANK_Internal_State_plus_0x01{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CRK_FRTSYN";
+*-  variable_location.symbol = CRANK_Internal_State.F.first_sync_occurred;
+*-  ds_scaling_unit          = "boolean";
+*-  ds_precision             = "1.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.0";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "dd crank internal state, first sync occured";
+*-}
+
+*-dd_crank.CRANK_Internal_State_plus_0x02{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CRK_SYNERR";
+*-  variable_location.symbol = CRANK_Internal_State.F.sync_error_in_progress;
+*-  ds_scaling_unit          = "boolean";
+*-  ds_precision             = "1.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.0";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "dd crank internal state, sync error in progress";
+*-}
+
+*-dd_crank.CRANK_Internal_State_plus_0x03{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CRK_FRTCYL";
+*-  variable_location.symbol = CRANK_Internal_State.F.first_cylinder_event_occured;
+*-  ds_scaling_unit          = "boolean";
+*-  ds_precision             = "1.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.0";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "dd crank internal state, first cylinder event occured";
+*-}
+
+*-dd_crank.CRANK_Internal_State_plus_0x05{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CRK_FTREN";
+*-  variable_location.symbol = CRANK_Internal_State.F.filter_enabled;
+*-  ds_scaling_unit          = "boolean";
+*-  ds_precision             = "1.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.0";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "dd crank internal state, crank tooth filter enable, means filter in progress";
+*-}
+
+*-dd_crank.CRANK_Internal_State_plus_0x06{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CRK_RRBYPF";
+*-  variable_location.symbol = CRANK_Internal_State.F.run_reset_bypass_filter;
+*-  ds_scaling_unit          = "boolean";
+*-  ds_precision             = "1.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.0";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "dd crank internal state, run_reset_bypass_filter flag";
+*-}
+
+*-dd_crank.CRANK_Internal_State_plus_0x07{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CRK_SYNSTD";
+*-  variable_location.symbol = CRANK_Internal_State.F.sync_started;
+*-  ds_scaling_unit          = "boolean";
+*-  ds_precision             = "1.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.0";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "dd crank internal state, sync started";
+*-}
+
+*-dd_crank.CRANK_Internal_State_plus_0x08{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CRK_VLDTTH";
+*-  variable_location.symbol = CRANK_Internal_State.F.valid_tooth;
+*-  ds_scaling_unit          = "boolean";
+*-  ds_precision             = "1.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.0";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "dd crank internal state, valid tooth flag";
+*-}
+
+*-dd_crank.CRANK_Internal_State_plus_0x09{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CRK_RSYNIP";
+*-  variable_location.symbol = CRANK_Internal_State.F.resync_attempt_in_prog;
+*-  ds_scaling_unit          = "boolean";
+*-  ds_precision             = "1.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.0";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "dd crank internal state, resync_attempt_in_prog flag";
+*-}
+
+*-dd_crank.CRANK_Internal_State_plus_0x10{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CRK_ENGTUN";
+*-  variable_location.symbol = CRANK_Internal_State.F.engine_turning;
+*-  ds_scaling_unit          = "boolean";
+*-  ds_precision             = "1.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.0";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "dd crank internal state, engine turning flag";
+*-}
+
+*-dd_crank.CRANK_Internal_State_plus_0x12{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CRK_DYNSCH";
+*-  variable_location.symbol = CRANK_Internal_State.F.using_dynamic_scheduler;
+*-  ds_scaling_unit          = "boolean";
+*-  ds_precision             = "1.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.0";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "dd crank internal state, using_dynamic_scheduler flag";
+*-}
+
+*-dd_crank.CRANK_Internal_State_plus_0x13{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CRK_STLDET";
+*-  variable_location.symbol = CRANK_Internal_State.F.stall_detected;
+*-  ds_scaling_unit          = "boolean";
+*-  ds_precision             = "1.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.0";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "dd crank internal state, stall detected flag";
+*-}
+
+*-dd_crank.CRANK_Internal_State_plus_0x14{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CRK_CAMBP";
+*-  variable_location.symbol = CRANK_Internal_State.F.cam_backup;
+*-  ds_scaling_unit          = "boolean";
+*-  ds_precision             = "1.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.0";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "dd crank internal state, cam_backup flag";
+*-}
+
+*-dd_crank.CRANK_Internal_State_plus_0x15{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CRK_TCAMBP";
+*-  variable_location.symbol = CRANK_Internal_State.F.transition_to_cam_backup;
+*-  ds_scaling_unit          = "boolean";
+*-  ds_precision             = "1.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.0";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "dd crank internal state, transition_to_cam_backup flag";
+*-}
+
+*-dd_crank.CRANK_Internal_State_plus_0x23{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CRK_FATSYN";
+*-  variable_location.symbol = CRANK_Internal_State.F.fast_sync_occurred;
+*-  ds_scaling_unit          = "boolean";
+*-  ds_precision             = "1.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.0";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "dd crank internal state, fast_sync_occurred flag";
+*-}
+
+*-dd_crank.CRANK_Internal_State_plus_0x30{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CRK_FRTREV";
+*-  variable_location.symbol = CRANK_Internal_State.F.sync_first_revolution;
+*-  ds_scaling_unit          = "boolean";
+*-  ds_precision             = "1.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.0";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "dd crank internal state, sync_first_revolution flag";
+*-}
+
+*-dd_crank.CRANK_Internal_State_plus_0x31{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CRK_SECREV";
+*-  variable_location.symbol = CRANK_Internal_State.F.sync_second_revolution;
+*-  ds_scaling_unit          = "boolean";
+*-  ds_precision             = "1.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.0";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "dd crank internal state, sync_second_revolution flag";
 *-}
 
 *-dd_cam.CAM_Crank_Number_Gaps_Detected{

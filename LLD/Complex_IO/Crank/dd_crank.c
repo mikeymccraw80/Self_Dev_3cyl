@@ -27,27 +27,27 @@ uint16_t crank_rpm;
 //=============================================================================
 typedef struct
 {
-   bitfield32_t  sync_second_revolution        :  1; // bit 31   @emem 
-   bitfield32_t  sync_first_revolution         :  1; // bit 30,  @emem 
-   bitfield32_t                                :  6; // bits
-   bitfield32_t  fast_sync_occurred            :  1; // bit 23
-   bitfield32_t                                :  7; // bits
-   bitfield32_t  transition_to_cam_backup      :  1; // bit 15,  @emem 
-   bitfield32_t  cam_backup                    :  1; // bit 14,  @emem 
-   bitfield32_t  stall_detected                :  1; // bit 13,  @emem 
-   bitfield32_t  using_dynamic_scheduler       :  1; // bit 12,  @emem 
-   bitfield32_t                                :  1; // bit 11,  @emem 
-   bitfield32_t  engine_turning                :  1; // bit 10,  @emem 
-   bitfield32_t  resync_attempt_in_prog        :  1; // bit  9,  @emem 
-   bitfield32_t  valid_tooth                   :  1; // bit  8,  @emem 
-   bitfield32_t  sync_started                  :  1; // bit  7,  @emem 
-   bitfield32_t  run_reset_bypass_filter       :  1; // bit  6,  @emem 
-   bitfield32_t  filter_enabled                :  1; // bit  5,  @emem 
-   bitfield32_t  power_up                      :  1; // bit  4,  @emem 
-   bitfield32_t  first_cylinder_event_occured  :  1; // bit  3,  @emem 
-   bitfield32_t  sync_error_in_progress        :  1; // bit  2,  @emem 
-   bitfield32_t  first_sync_occurred           :  1; // bit  1,  @emem 
-   bitfield32_t  sync_occurred                 :  1; // bit  0,  @emem 
+   bitfield8_t  sync_second_revolution        :  1; // bit 31   @emem 
+   bitfield8_t  sync_first_revolution         :  1; // bit 30,  @emem 
+   bitfield8_t                                :  6; // bits
+   bitfield8_t  fast_sync_occurred            :  1; // bit 23
+   bitfield8_t                                :  7; // bits
+   bitfield8_t  transition_to_cam_backup      :  1; // bit 15,  @emem 
+   bitfield8_t  cam_backup                    :  1; // bit 14,  @emem 
+   bitfield8_t  stall_detected                :  1; // bit 13,  @emem 
+   bitfield8_t  using_dynamic_scheduler       :  1; // bit 12,  @emem 
+   bitfield8_t                                :  1; // bit 11,  @emem 
+   bitfield8_t  engine_turning                :  1; // bit 10,  @emem 
+   bitfield8_t  resync_attempt_in_prog        :  1; // bit  9,  @emem 
+   bitfield8_t  valid_tooth                   :  1; // bit  8,  @emem 
+   bitfield8_t  sync_started                  :  1; // bit  7,  @emem 
+   bitfield8_t  run_reset_bypass_filter       :  1; // bit  6,  @emem 
+   bitfield8_t  filter_enabled                :  1; // bit  5,  @emem 
+   bitfield8_t  power_up                      :  1; // bit  4,  @emem 
+   bitfield8_t  first_cylinder_event_occured  :  1; // bit  3,  @emem 
+   bitfield8_t  sync_error_in_progress        :  1; // bit  2,  @emem 
+   bitfield8_t  first_sync_occurred           :  1; // bit  1,  @emem 
+   bitfield8_t  sync_occurred                 :  1; // bit  0,  @emem 
 } CRANK_Flag_F_T;
 
 typedef union
@@ -1345,7 +1345,7 @@ uint32_t CRANK_Get_Engine_Reference_Time( void )
 //=============================================================================
 bool CRANK_Get_Loss_Of_Sync( void )
 {
-   return( CRANK_Internal_State.F.sync_error_in_progress);
+   return CRANK_Get_Sync_Error_In_Progress(CRANK_Internal_State.U32);
 }
 
 //=============================================================================
