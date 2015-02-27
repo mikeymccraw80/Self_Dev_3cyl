@@ -78,7 +78,9 @@ typedef struct
 /*****************************************/
 #define TX_MESSAGE_NUM_OF_CANOBD (2)
 #define RX_MESSAGE_NUM_OF_CANOBD (3)
-#define MESSAGE_NUM_OF_CANOBD    (TX_MESSAGE_NUM_OF_CANOBD + RX_MESSAGE_NUM_OF_CANOBD)
+#define TX_MESSAGE_NUM_OF_CANTSW (0)	//note, tsw can config and callback share canobd can config structure.
+#define RX_MESSAGE_NUM_OF_CANTSW (2)	//note, tsw can config and callback share canobd can config structure.
+#define MESSAGE_NUM_OF_CANOBD    (TX_MESSAGE_NUM_OF_CANOBD + RX_MESSAGE_NUM_OF_CANOBD + TX_MESSAGE_NUM_OF_CANTSW + RX_MESSAGE_NUM_OF_CANTSW)
 
 extern CAN_Message_Parameter_T CANOBD_Message_Parameter_Table[MESSAGE_NUM_OF_CANOBD];
 extern CAN_Message_Parameter_T Get_CANOBD_Message_Parameter_Table(uint8_t index);
