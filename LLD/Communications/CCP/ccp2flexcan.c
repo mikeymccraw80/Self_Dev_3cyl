@@ -140,8 +140,7 @@ void FlexCAN_RX_CallBack (uint32_t in_message_id, uint8_t *in_data_buffer, uint8
 	/* search the canobd table */
 	if (msg_location == CAN_MESSAGE_NOT_IN_TABLE) {
 		for (obd_message = 0; obd_message < MESSAGE_NUM_OF_CANOBD; obd_message ++) {
-			if (( CANOBD_Message_Parameter_Table[obd_message].CAN_message_ID == in_message_id) &&
-			   (CANOBD_Message_Parameter_Table[obd_message].message_dir == HAL_CAN_MESSAGE_DIRECTION_RECEIVE)) {
+			if (CANOBD_Message_Parameter_Table[obd_message].CAN_message_ID == in_message_id) {
 				msg_location = CAN_MESSAGE_IN_CANOBD_TABLE;
 				break;
 			}
@@ -193,8 +192,7 @@ void FlexCAN_TX_CallBack (uint32_t message_id)
 	/* search the canobd table */
 	if (msg_location == CAN_MESSAGE_NOT_IN_TABLE) {
 		for (obd_message = 0; obd_message < MESSAGE_NUM_OF_CANOBD; obd_message ++) {
-			if (( CANOBD_Message_Parameter_Table[obd_message].CAN_message_ID == message_id) &&
-			   (CANOBD_Message_Parameter_Table[obd_message].message_dir == HAL_CAN_MESSAGE_DIRECTION_TRANSMIT)) {
+			if (CANOBD_Message_Parameter_Table[obd_message].CAN_message_ID == message_id) {
 				msg_location = CAN_MESSAGE_IN_CANOBD_TABLE;
 				break;
 			}

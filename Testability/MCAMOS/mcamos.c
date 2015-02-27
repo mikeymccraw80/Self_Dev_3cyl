@@ -155,7 +155,8 @@ void MCAMOS_Upload_Data_By_Frame(void)
       MCAMOS_size -= bytecnt;
 
       // FlexCAN_Transmit_Message( MCAMOS_MESSAGE_TRANSMIT_CONFIGURATION, MCAMOS_CANID_7EF, tx_message, 8);
-      Transmit_Message(MCAMOS_CANID_7EF, tx_message);
+      // Transmit_Message(MCAMOS_CANID_7EF, tx_message);
+      HAL_CAN_Transmit_Message(MCAMOS_CANID_7EF, 8, tx_message);
    }
 
 }
