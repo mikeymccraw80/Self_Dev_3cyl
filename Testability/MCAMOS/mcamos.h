@@ -73,8 +73,8 @@
 extern bool MCAMOS_enable;
 
 
-void MCAMOS_Process_7EE_Message(void);
-void MCAMOS_Process_7EF_Message(void);
+void MCAMOS_Process_7EE_Message(uint8_t *pdata);
+void MCAMOS_Process_7EF_Message(uint8_t *pdata);
 void MCAMOS_Upload_Data_By_Frame(void);
 
 extern uint16_t MCAMOS_Get_Message_Size(void);
