@@ -204,7 +204,7 @@ SUBDIRS += knock
 SUBDIRS += LLD/EMS
 SUBDIRS += LLD/Immo
 SUBDIRS += LLD/File
-SUBDIRS += Testability
+
 SUBDIRS += Testability/MCAMOS
 SUBDIRS += Testability/Testability_Application
 SUBDIRS += Testability/Testability_HAL
@@ -297,7 +297,7 @@ INCDIRS += LLD/LUX_Library
 INCDIRS += knock
 INCDIRS += LLD/Immo
 INCDIRS += LLD/File
-INCDIRS += Testability
+
 INCDIRS += Testability/MCAMOS
 INCDIRS += Testability/Testability_Application
 INCDIRS += Testability/Testability_HAL
