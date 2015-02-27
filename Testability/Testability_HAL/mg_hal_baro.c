@@ -1,3 +1,4 @@
+#if 0
 #include "mg_hal_config.h"
 #include "mg_hal_fault.h"
 #include "dd_kp254.h"
@@ -24,3 +25,4 @@ uint8_t mg_HAL_Baro_Get_Diagnostic(void)
     mg_HAL_BARO_Fault_Read();
     return mg_HAL_BARO_Fault_Get(0);
 }
+#endif

@@ -7,7 +7,7 @@
 *	%date_created:	Thu May  2 16:26:18 2013 %
 *
 **********************************************************************/
-
+#if 0
 
 #include "reuse.h"
 #include "mg_mailbox.h"
@@ -68,3 +68,4 @@ void mg_memory_checksum_test(void)
 
 }
 
+#endif

@@ -1,3 +1,4 @@
+#if 0
 #include "mg_hal_config.h"
 #include "mg_hal.h"
 #include "io_pulse.h"
@@ -190,3 +191,4 @@ uint32_t mg_HAL_Timer_Get_MPTAC_Value(HIODEVICE in_device)
     return mptac->P->Timer.Get_Value(mptac->Configuration);
 }
 
+#endif

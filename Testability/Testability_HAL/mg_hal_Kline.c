@@ -1,3 +1,4 @@
+#if 0
 #include "mg_hal_config.h"
 #include "dd_sci.h"
 /*=============================================================================
@@ -67,3 +68,4 @@ void mg_HAL_Kline_Write(uint8_t data)
 }
 
 
+#endif

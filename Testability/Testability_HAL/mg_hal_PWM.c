@@ -1,3 +1,4 @@
+#if 0
 #include "mg_hal_config.h"
 #include "mg_hal.h"
 #include "mg_hal_discrete.h"
@@ -185,3 +186,4 @@ void mg_HAL_PWM_Discrete_Out_Cycling(void)
     }
 }
 
+#endif

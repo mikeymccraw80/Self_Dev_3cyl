@@ -21,10 +21,11 @@
 //
 //=============================================================================
 
-#include "io.h"
-#include "io_interface.h"
-#include "mg_io_interface_override.h"
-
+// #include "io.h"
+// #include "io_interface.h"
+// #include "mg_io_interface_override.h"
+#include "io_config_qadc.h"
+#if 0
 #define MG_MTSA_CONFIG_KP254_TRIG_DIAG \
          (   KP254_Set_Device_Index( 0,KP254_INDEX_0                 ) |\
            KP254_Set_Reset_Strategy( 0,KP254_RESET_FAILURES          ) |\
@@ -34,49 +35,58 @@
          (   KP254_Set_Device_Index( 0,KP254_INDEX_0                 ) |\
            KP254_Set_Reset_Strategy( 0,KP254_RESET_FAILURES          ) |\
                   KP254_Set_Message( 0,KP254_MESSAGE_ACQ_ID) )
+#endif
 
 // analog input map
-#define   MG_HIODEVICE_AN00                      (void *)&ESCHiVI
-#define   MG_HIODEVICE_AN01                      (void *)&ESCLoVI
-#define   MG_HIODEVICE_AN02                      (void *)&MAPSVI
-#define   MG_HIODEVICE_AN03                      (void *)&ACPVI
-#define   MG_HIODEVICE_AN04                      (void *)&EGRFBVI
-#define   MG_HIODEVICE_AN05                      (void *)&TPS1VI
-#define   MG_HIODEVICE_AN06                      (void *)&TPS2VI
-#define   MG_HIODEVICE_AN07                      (void *)&PPS1VI
+// #define   MG_HIODEVICE_AN00                      (void *)&ESCHiVI
+// #define   MG_HIODEVICE_AN01                      (void *)&ESCLoVI
+#define   MG_HIODEVICE_AN00                      NULL
+#define   MG_HIODEVICE_AN01                      NULL
+#define   MG_HIODEVICE_AN02                      AD_MAPVI_Channel
+#define   MG_HIODEVICE_AN03                      AD_ACPREVI_Channel
+#define   MG_HIODEVICE_AN04                      AD_LEGRFBVI_Channel
+// #define   MG_HIODEVICE_AN05                      (void *)&TPS1VI
+// #define   MG_HIODEVICE_AN06                      (void *)&TPS2VI
+#define   MG_HIODEVICE_AN05                      NULL
+#define   MG_HIODEVICE_AN06                      NULL
+#define   MG_HIODEVICE_AN07                      AD_PPS1VI_Channel
 #define   MG_HIODEVICE_AN08                      NULL
-#define   MG_HIODEVICE_AN09                      (void *)&PPS2VI 
+#define   MG_HIODEVICE_AN09                      AD_PPS2VI_Channel
 #define   MG_HIODEVICE_AN10                      NULL
-#define   MG_HIODEVICE_AN11                      (void *)&FLVI 
-#define   MG_HIODEVICE_AN12                      (void *)&SPA1VI
-#define   MG_HIODEVICE_AN13                      (void *)&O2AVI
-#define   MG_HIODEVICE_AN14                      (void *)&O2BVI
-#define   MG_HIODEVICE_AN15                      (void *)&CRUCTLVI
-#define   MG_HIODEVICE_AN16                      (void *)&CLTVI 
-#define   MG_HIODEVICE_AN17                      (void *)&MATVI
-#define   MG_HIODEVICE_AN18                      (void *)&BSTATVI
+#define   MG_HIODEVICE_AN11                      AD_FLVVI_Channel
+#define   MG_HIODEVICE_AN12                      AD_SPA1VI_Channel
+#define   MG_HIODEVICE_AN13                      AD_O2AVI_Channel
+#define   MG_HIODEVICE_AN14                      AD_O2BVI_Channel
+#define   MG_HIODEVICE_AN15                      AD_CRSVI_Channel
+#define   MG_HIODEVICE_AN16                      AD_CLTVI_Channel
+#define   MG_HIODEVICE_AN17                      AD_MATVI_Channel
+#define   MG_HIODEVICE_AN18                      AD_BSTATVI_Channel
 #define   MG_HIODEVICE_AN19                      NULL
 #define   MG_HIODEVICE_AN20                      NULL
-#define   MG_HIODEVICE_AN21                      (void *)&FETVI
-#define   MG_HIODEVICE_AN22                      (void *)&BRKPVI
-#define   MG_HIODEVICE_AN23                      (void *)&RREPVI
-#define   MG_HIODEVICE_AN24                      (void *)&BSTPVI
-#define   MG_HIODEVICE_AN25                      (void *)&RRVI 
+#define   MG_HIODEVICE_AN21                      AD_FREPVI_Channel
+#define   MG_HIODEVICE_AN22                      AD_BKVAVII_Channel
+#define   MG_HIODEVICE_AN23                      AD_RREPVI_Channel
+#define   MG_HIODEVICE_AN24                      AD_BSTPREVI_Channel
+#define   MG_HIODEVICE_AN25                      AD_RRVI_Channel
 #define   MG_HIODEVICE_AN26                      NULL
-#define   MG_HIODEVICE_AN27                      (void *)&PSREF1
-#define   MG_HIODEVICE_AN28                      (void *)&PSREF2
+#define   MG_HIODEVICE_AN27                      AD_PSREF1_Channel
+#define   MG_HIODEVICE_AN28                      AD_PSREF2_Channel
 #define   MG_HIODEVICE_AN29                      NULL
-#define   MG_HIODEVICE_AN30                      (void *)&IGNVI
-#define   MG_HIODEVICE_AN31                      (void *)&_58XRAWIN
-#define   MG_HIODEVICE_AN32                      (void *)&PBATTVI
-#define   MG_HIODEVICE_AN33                      (void *)&GND123VI
-#define   MG_HIODEVICE_AN34                      (void *)&GND122VI 
-#define   MG_HIODEVICE_AN35                      (void *)&GND121VI 
+#define   MG_HIODEVICE_AN30                      AD_IGNVI_Channel
+#define   MG_HIODEVICE_AN31                      AD_58XRAWIN_Channel
+#define   MG_HIODEVICE_AN32                      AD_PBATTVI_Channel
+// #define   MG_HIODEVICE_AN33                      (void *)&GND123VI
+// #define   MG_HIODEVICE_AN34                      (void *)&GND122VI 
+// #define   MG_HIODEVICE_AN35                      (void *)&GND121VI 
+#define   MG_HIODEVICE_AN33                      NULL
+#define   MG_HIODEVICE_AN34                      NULL
+#define   MG_HIODEVICE_AN35                      NULL
 #define   MG_HIODEVICE_AN36                      NULL
 #define   MG_HIODEVICE_AN37                      NULL
-#define   MG_HIODEVICE_AN38                      (void *)&HWCFGVI
-#define   MG_HIODEVICE_AN39                      (void *)&DETVCC2
+#define   MG_HIODEVICE_AN38                      AD_HWCFGVI_Channel
+#define   MG_HIODEVICE_AN39                      AD_VCC2_Channel
 
+#if 0
 // knock analog map
 #define   MG_HIODEVICE_KNOCK_HIGH          (void *)&ESCHiVI
 #define   MG_HIODEVICE_KNOCK_LOW           (void *)&ESCLoVI
@@ -157,5 +167,5 @@
 // Baro
 #define	MG_HIODEVICE_BARO_PRESSURE		(void *)&BARO_Prussure_I
 #define	MG_HIODEVICE_BARO_TEMPERATURE	(void *)&BARO_Temperature_I
-
+#endif
 #endif /* end of include guard: MG_HAL_IO_MAP_H */

@@ -18,7 +18,7 @@
 // %version:         7 %
 //
 //=============================================================================
-
+#if 0
 #include "reuse.h"
 #include "mg_mailbox.h"
 #include "mg_config.h"
@@ -799,3 +799,4 @@ void mg_HAL_Output_Cycling_Validation_Config(void)
     MG_HAL_ETC_GROUP.freq = VALIDATION_ETC_FREQ;
     MG_HAL_ETC_GROUP.duty = 95; 
 }
+#endif

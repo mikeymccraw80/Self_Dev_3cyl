@@ -1,3 +1,4 @@
+#if 0
 #include "io_flash.h"
 
 bool mg_HAL_Flash_Set_Lock(uint32_t in_address, bool state)
@@ -14,3 +15,5 @@ bool mg_HAL_FLash_Program_Flash(uint32_t byte_length, uint32_t source_address, u
 {
     return io_flash_interface->FLASH_Program_Memory(byte_length, source_address, destination_address, call_function);
 }
+
+#endif

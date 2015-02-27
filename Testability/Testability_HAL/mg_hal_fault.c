@@ -1,3 +1,4 @@
+#if 0
 #include "mg_config.h"
 #ifdef __MG_C2MIO_USED
 #include "dd_c2mio.h"
@@ -426,3 +427,4 @@ uint8_t mg_HAL_BARO_Fault_Get(uint8_t index)
     return fault_result;
 }
 
+#endif

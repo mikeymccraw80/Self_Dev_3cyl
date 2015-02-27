@@ -1,3 +1,4 @@
+#if 0
 #include "mg_hal_config.h"
 #include "mg_hal_timer.h"
 #include "io_discrete.h"
@@ -195,3 +196,4 @@ void mg_HAL_EST_Toggle(void)
     }
     mg_HAL_EST_Shutdown();
 }
+#endif

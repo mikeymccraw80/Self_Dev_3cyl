@@ -1,12 +1,13 @@
 #include "mg_hal_config.h"
-#include "io_analog.h"
+// #include "io_analog.h"
+#include "dd_qadc_interface.h"
 
 uint16_t mg_HAL_Analog_Get_Analog_Value(uint8_t index)
 {
     uint16_t value;
-    if (NULL != MG_HAL_ANALOG_GROUP[index].io)
+    if (NULL != MG_HAL_ANALOG_GROUP[index])
     {
-        value = IO_ANALOG_Get_Immediate_Value(MG_HAL_ANALOG_GROUP[index].io);
+        value = QADC_Analog_Get_Value(MG_HAL_ANALOG_GROUP[index]);
     }
     else
     {
@@ -15,6 +16,7 @@ uint16_t mg_HAL_Analog_Get_Analog_Value(uint8_t index)
     return value;
 }
 
+#if 0
 uint16_t mg_HAL_Analog_Get_Baro_Pressure(void)
 {
     return IO_ANALOG_Get_Immediate_Value(MG_HIODEVICE_BARO_PRESSURE);
@@ -53,3 +55,4 @@ uint16_t mg_HAL_Analog_Get_Knock(uint8_t index)
     }
     return value;
 }
+#endif

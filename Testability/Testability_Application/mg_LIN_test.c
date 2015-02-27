@@ -18,7 +18,7 @@
 // %version:         3 %
 //
 //=============================================================================
-
+#if 0
 #include "reuse.h"
 #include "mg_mailbox.h"
 #include "mg_hal_config.h"
@@ -95,4 +95,4 @@ void mg_LIN_test(void)
     }
 }
 
-
+#endif

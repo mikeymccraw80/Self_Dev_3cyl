@@ -18,7 +18,7 @@
 // %version:         2 %
 //
 //=============================================================================
-
+#if 0
 #include "reuse.h"
 #include "mg_mailbox.h"
 #include "mg_hal_discrete.h"
@@ -55,4 +55,4 @@ void mg_TLE4471_reset_volt_test(void)
     mg_HAL_Discrete_Set_TACH(true);
 }
 
-
+#endif

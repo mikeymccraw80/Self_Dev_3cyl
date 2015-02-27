@@ -18,7 +18,7 @@
 // %version:         5 %
 //
 //=============================================================================
-
+#if 0
 #include "reuse.h"
 #include "mg_mailbox.h"
 #include "mg_hal_config.h"
@@ -69,4 +69,4 @@ void mg_Baro_sensor_test(void)
     MG_MAILBOX_OUT(parameter[3]) = (uint8_t)(temperature >> 8);
     MG_MAILBOX_OUT(parameter[4]) = (uint8_t)(temperature & 0xFF);
 }
-
+#endif

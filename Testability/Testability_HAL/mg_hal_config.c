@@ -20,13 +20,13 @@
 //=============================================================================
 
 #include "reuse.h"
-#include "mg_hal_config.h"
+// #include "mg_hal_config.h"
 #include "mg_hal_io_map.h"
 
 #define NOT_CARE            0
 
 //============================================ analog group ======================================
-const MG_HAL_ANALOG_T MG_HAL_ANALOG_GROUP[] =
+const AD_Analog_T MG_HAL_ANALOG_GROUP[] =
 {
     MG_HIODEVICE_AN00,
     MG_HIODEVICE_AN01,
@@ -70,10 +70,11 @@ const MG_HAL_ANALOG_T MG_HAL_ANALOG_GROUP[] =
     MG_HIODEVICE_AN39
 };
 
-#define MG_SIZE_OF_ANALOG_GROUP   (sizeof(MG_HAL_ANALOG_GROUP)/sizeof(MG_HAL_ANALOG_T))
+#define MG_SIZE_OF_ANALOG_GROUP   (sizeof(MG_HAL_ANALOG_GROUP)/sizeof(AD_Analog_T))
 
 const uint8_t MG_Number_of_Analog_Device = MG_SIZE_OF_ANALOG_GROUP;
 
+#if 0
 //============================================ analog group end ==================================
 
 //============================================ discrete in group ==================================
@@ -216,4 +217,4 @@ const uint8_t MG_Number_of_KNOCK_Device = MG_SIZE_OF_KNOCK_GROUP;
 //============================================ Knock group end ==================================
 
 
-
+#endif

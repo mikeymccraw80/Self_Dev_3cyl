@@ -1,3 +1,4 @@
+#if 0
 #include "mg_hal_config.h"
 #include "mg_hal_timer.h"
 
@@ -142,3 +143,4 @@ void mg_HAL_Injector_Discrete_Cycling(void)
    }
 }
 
+#endif

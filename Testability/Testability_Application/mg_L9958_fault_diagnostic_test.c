@@ -18,7 +18,7 @@
 // %version:         2 %
 //
 //=============================================================================
-
+#if 0
 #include "reuse.h"
 #include "mg_mailbox.h"
 #include "mg_hal_config.h"
@@ -142,3 +142,4 @@ void mg_L9958_fault_diagnostic_test(void)
     mg_HAL_ETC_Fault_Read();
     
 }
+#endif

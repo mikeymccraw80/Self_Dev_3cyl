@@ -1,3 +1,4 @@
+#if 0
 #include "mg_config.h"
 #include "mg_hal_config.h"
 #include "mg_hal_timer.h"
@@ -250,3 +251,4 @@ void mg_HAL_ETC_Discrete_Cycling_120(void)
     }
 }
 
+#endif

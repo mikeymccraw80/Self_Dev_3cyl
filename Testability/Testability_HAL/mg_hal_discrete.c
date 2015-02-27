@@ -18,7 +18,7 @@
 // %version:         6 %
 //
 //=============================================================================
-
+#if 0
 #include "mg_config.h"
 #include "mg_hal_config.h"
 #include "io_discrete.h"
@@ -277,3 +277,4 @@ void mg_HAL_Discrete_Reconfigure_CAL(void)
     MTSA_D_IN_J1_34.Configuration = SIU_GPIO_Set_Polarity(MTSA_CONFIG_D_IN_J1_34, IO_ACTIVE_HIGH);
     MTSA_D_IN_J1_35.Configuration = SIU_GPIO_Set_Polarity(MTSA_CONFIG_D_IN_J1_35, IO_ACTIVE_HIGH);
 }
+#endif

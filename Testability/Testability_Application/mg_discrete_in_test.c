@@ -18,6 +18,7 @@
 // %version:         3 %
 //
 //=============================================================================
+#if 0
 #include "reuse.h"
 #include "mg_mailbox.h"
 #include "mg_hal_config.h"
@@ -62,3 +63,4 @@ void mg_discrete_in_test(void)
     MG_MAILBOX_OUT(parameter[3]) = mg_bitmap[2];
 
 }
+#endif

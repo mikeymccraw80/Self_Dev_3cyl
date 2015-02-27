@@ -18,6 +18,7 @@
 // %version:         1 %
 //
 //=============================================================================
+#if 0
 #include "reuse.h"
 #include "mg_mailbox.h"
 #include "mg_hal.h"
@@ -59,3 +60,4 @@ void mg_Baro_fault_diagnositc_test(void)
 //    mg_HAL_Time_Hard_Delay_ms(20, NULL);
 
 }
+#endif

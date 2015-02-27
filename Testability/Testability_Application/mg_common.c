@@ -18,7 +18,7 @@
 // %version:         1 %
 //
 //=============================================================================
-
+#if 0
 #include "mg_common.h"
 
 
@@ -73,5 +73,5 @@ bool MG_Bitmap_Test_Value_In_Map(uint8_t value)
     return return_code;
 }
 
-
+#endif
 

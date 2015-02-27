@@ -18,7 +18,7 @@
 // %version:         2 %
 //
 //=============================================================================
-
+#if 0
 #include "reuse.h"
 #include "mg_mailbox.h"
 #include "mg_hal_config.h"
@@ -69,4 +69,4 @@ void mg_MicroP_freq_test(void)
     mg_HAL_Discrete_Set_FAN2( false);
 }
 
-
+#endif

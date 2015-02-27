@@ -1,3 +1,4 @@
+#if 0
 #include "mg_config.h"
 #include "mg_hal_config.h"
 #include "mg_hal_discrete.h"
@@ -147,4 +148,4 @@ void mg_HAL_SOH_Init(bool Is_Disarmed)
     // --END MIO SOH INITIAL SEQUENCE--
 }
 
-
+#endif

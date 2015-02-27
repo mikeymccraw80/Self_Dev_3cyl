@@ -18,6 +18,7 @@
 // %version:         2 %
 //
 //=============================================================================
+#if 0
 #include "reuse.h"
 #include "mg_mailbox.h"
 #include "mg_hal_config.h"
@@ -172,3 +173,4 @@ void mg_general_port_write_test(void)
     }
 }
 
+#endif

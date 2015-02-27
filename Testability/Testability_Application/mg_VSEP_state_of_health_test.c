@@ -18,7 +18,7 @@
 // %version:         2 %
 //
 //=============================================================================
-
+#if 0
 #include "reuse.h"
 #include "mg_mailbox.h"
 #include "mg_hal_config.h"
@@ -136,4 +136,4 @@ void mg_VSEP_state_of_health_test(void)
     }
 }
 
-
+#endif

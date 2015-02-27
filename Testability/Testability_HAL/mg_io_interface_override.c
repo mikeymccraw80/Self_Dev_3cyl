@@ -1,3 +1,4 @@
+#if 0
 //=============================================================================
 //
 //       COPYRIGHT, 2008, Delphi Technologies, Inc. All Rights reserved
@@ -806,3 +807,4 @@ void MG_Init_SCI(const CommPort_T * in_port)
     SCI_Set_Speed(in_port->Configuration, sci_init->speed );
 }
 
+#endif

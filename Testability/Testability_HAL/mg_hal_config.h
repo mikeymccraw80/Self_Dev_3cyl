@@ -23,13 +23,7 @@
 
 #include "io_type.h"
 #include "mg_hal_io_map.h"
-
-
-typedef struct MG_HAL_ANALOG_Tag 
-{
-   HIODEVICE   io;
-} MG_HAL_ANALOG_T;
-
+#if 0
 typedef struct TIME_KEEPER_Tag
 {
    uint16_t  start_time;
@@ -146,11 +140,11 @@ typedef union
    }byte_access;
 #endif
 }MG_HAL_WORD_ACCESS_T;
-
-
-extern const MG_HAL_ANALOG_T MG_HAL_ANALOG_GROUP[];
+#endif
+extern const AD_Analog_T MG_HAL_ANALOG_GROUP[];
 extern const uint8_t MG_Number_of_Analog_Device;
 
+#if 0
 extern MG_HAL_DISCRETE_OUT_T MG_HAL_DISCRETE_OUT_GROUP[];
 extern const uint8_t MG_Number_of_Discrete_Out_Device;
 
@@ -171,5 +165,5 @@ extern const MG_HAL_ANALOG_T MG_HAL_KNOCK_GROUP[];
 extern const uint8_t MG_Number_of_KNOCK_Device;
 
 extern const MG_HAL_BARO_IN_T MG_HAL_BARO_GROUP[];
-
+#endif
 #endif /* end of include guard: MG_HAL_CONFIG_H */

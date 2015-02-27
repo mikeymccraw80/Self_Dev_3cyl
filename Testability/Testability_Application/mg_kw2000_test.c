@@ -18,7 +18,7 @@
 // %version:         3 %
 //
 //=============================================================================
-
+#if 0
 #include "reuse.h"
 #include "mg_mailbox.h"
 #include "mg_hal_config.h"
@@ -94,3 +94,4 @@ void mg_kw2000_test(void)
         MG_MAILBOX_OUT(parameter[1]) = 0xFF;
     }
 }
+#endif

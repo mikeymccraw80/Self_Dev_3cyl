@@ -18,7 +18,7 @@
 // %version:         3 %
 //
 //=============================================================================
-
+#if 0
 
 #include "reuse.h"
 #include "mg_mailbox.h"
@@ -95,3 +95,4 @@ void mg_EEEP_PML_write_test(void)
     }
     MG_MAILBOX_OUT(parameter[0]) = MG_MAILBOX_IN(testid);
 }
+#endif

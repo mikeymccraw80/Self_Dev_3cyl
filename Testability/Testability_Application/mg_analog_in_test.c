@@ -44,15 +44,8 @@ void mg_analog_test(void)
 
    for (idx = 0; idx < MG_Number_of_Analog_Device; idx++, outptr++) 
    {
-      if (NULL != MG_HAL_ANALOG_GROUP[idx].io) 
-      {
-         *outptr = mg_HAL_Analog_Get_Analog_Value(idx);
-      }
-      else 
-      {
-         *outptr = 0;
-      }
-      mg_HAL_Service_WatchDog();
+      *outptr = mg_HAL_Analog_Get_Analog_Value(idx);
+      // mg_HAL_Service_WatchDog();
    }
 
 }

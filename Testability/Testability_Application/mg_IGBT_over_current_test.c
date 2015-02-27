@@ -18,7 +18,7 @@
 // %version:         3 %
 //
 //=============================================================================
-
+#if 0
 #include "reuse.h"
 #include "mg_mailbox.h"
 #include "mg_hal_config.h"
@@ -124,3 +124,4 @@ void mg_IGBT_over_current_test(void)
     MG_MAILBOX_OUT(parameter[1]) = PCH;
 }
 
+#endif

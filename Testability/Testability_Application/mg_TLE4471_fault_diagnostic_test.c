@@ -18,7 +18,7 @@
 // %version:         2 %
 //
 //=============================================================================
-
+#if 0
 #include "reuse.h"
 #include "mg_mailbox.h"
 #include "mg_hal_config.h"
@@ -73,3 +73,4 @@ void mg_TLE4471_fault_diagnostic_test(void)
     MG_MAILBOX_OUT(parameter[1]) = mg_HAL_PowerDevice_Fault_Get(0);
 }
 
+#endif

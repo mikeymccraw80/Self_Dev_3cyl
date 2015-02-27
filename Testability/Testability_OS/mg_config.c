@@ -1,3 +1,4 @@
+#include "reuse.h"
 #include "mg_config.h"
 #include "mg_mailbox.h"
 
@@ -320,7 +321,6 @@ const mgFnPtr_T mgFn[] = {
 };
 
 const uint8_t max_number_of_tests =  (sizeof(mgFn)/sizeof(mgFnPtr_T));
-
 /*=============================================================================
  * mg_unimplemented_test
  * @func  

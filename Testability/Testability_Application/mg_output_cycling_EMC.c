@@ -18,7 +18,7 @@
 // %version:         6 %
 //
 //=============================================================================
-
+#if 0
 #include "reuse.h"
 #include "mg_mailbox.h"
 #include "mg_config.h"
@@ -136,3 +136,4 @@ void mg_output_cycling_EMC(void)
     }
     mg_HAL_Output_Cycling_EMC_Uninit();
 }
+#endif

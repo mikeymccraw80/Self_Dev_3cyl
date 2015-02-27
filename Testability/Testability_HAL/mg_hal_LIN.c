@@ -1,3 +1,4 @@
+#if 0
 #include "mg_hal_config.h"
 #include "dd_sci.h"
 #include "dd_lin.h"
@@ -81,3 +82,4 @@ void mg_HAL_LIN_Set_DMA_Enable(bool state)
     LIN_Device_Set_DMA_Enable(LIN_PORT_A.configuration, LIN_DMA_CHANNEL_TX, state);
 }
 
+#endif

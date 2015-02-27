@@ -30,20 +30,6 @@ typedef enum
    MODE_MAX
 } MG_MODE_T;
 
-
-
-
-
-
-
-
-
-
-
-#if 0
-typedef void (* mgFnPtr_T)(void);
-#endif
-
 void mg_main(void);
 
 #endif
