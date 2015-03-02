@@ -5,9 +5,9 @@
 uint16_t mg_HAL_Analog_Get_Analog_Value(uint8_t index)
 {
     uint16_t value;
-    if (NULL != MG_HAL_ANALOG_GROUP[index])
+    if (MG_HIODEVICE_NULL != MG_HAL_ANALOG_GROUP[index])
     {
-        value = QADC_Analog_Get_Value(MG_HAL_ANALOG_GROUP[index]);
+        value = QADC_Analog_Get_Value(MG_HAL_ANALOG_GROUP[index]) >> 2;
     }
     else
     {

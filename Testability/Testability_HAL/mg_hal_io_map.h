@@ -37,22 +37,25 @@
                   KP254_Set_Message( 0,KP254_MESSAGE_ACQ_ID) )
 #endif
 
+
 // analog input map
+//remap null to 0xff, for NULL(0x00) is conflicted with AD_Analog_T
+#define   MG_HIODEVICE_NULL                      0XFF 
 // #define   MG_HIODEVICE_AN00                      (void *)&ESCHiVI
 // #define   MG_HIODEVICE_AN01                      (void *)&ESCLoVI
-#define   MG_HIODEVICE_AN00                      NULL
-#define   MG_HIODEVICE_AN01                      NULL
+#define   MG_HIODEVICE_AN00                      MG_HIODEVICE_NULL
+#define   MG_HIODEVICE_AN01                      MG_HIODEVICE_NULL
 #define   MG_HIODEVICE_AN02                      AD_MAPVI_Channel
 #define   MG_HIODEVICE_AN03                      AD_ACPREVI_Channel
 #define   MG_HIODEVICE_AN04                      AD_LEGRFBVI_Channel
 // #define   MG_HIODEVICE_AN05                      (void *)&TPS1VI
 // #define   MG_HIODEVICE_AN06                      (void *)&TPS2VI
-#define   MG_HIODEVICE_AN05                      NULL
-#define   MG_HIODEVICE_AN06                      NULL
+#define   MG_HIODEVICE_AN05                      MG_HIODEVICE_NULL
+#define   MG_HIODEVICE_AN06                      MG_HIODEVICE_NULL
 #define   MG_HIODEVICE_AN07                      AD_PPS1VI_Channel
-#define   MG_HIODEVICE_AN08                      NULL
+#define   MG_HIODEVICE_AN08                      MG_HIODEVICE_NULL
 #define   MG_HIODEVICE_AN09                      AD_PPS2VI_Channel
-#define   MG_HIODEVICE_AN10                      NULL
+#define   MG_HIODEVICE_AN10                      MG_HIODEVICE_NULL
 #define   MG_HIODEVICE_AN11                      AD_FLVVI_Channel
 #define   MG_HIODEVICE_AN12                      AD_SPA1VI_Channel
 #define   MG_HIODEVICE_AN13                      AD_O2AVI_Channel
@@ -61,28 +64,28 @@
 #define   MG_HIODEVICE_AN16                      AD_CLTVI_Channel
 #define   MG_HIODEVICE_AN17                      AD_MATVI_Channel
 #define   MG_HIODEVICE_AN18                      AD_BSTATVI_Channel
-#define   MG_HIODEVICE_AN19                      NULL
-#define   MG_HIODEVICE_AN20                      NULL
+#define   MG_HIODEVICE_AN19                      MG_HIODEVICE_NULL
+#define   MG_HIODEVICE_AN20                      MG_HIODEVICE_NULL
 #define   MG_HIODEVICE_AN21                      AD_FREPVI_Channel
 #define   MG_HIODEVICE_AN22                      AD_BKVAVII_Channel
 #define   MG_HIODEVICE_AN23                      AD_RREPVI_Channel
 #define   MG_HIODEVICE_AN24                      AD_BSTPREVI_Channel
 #define   MG_HIODEVICE_AN25                      AD_RRVI_Channel
-#define   MG_HIODEVICE_AN26                      NULL
+#define   MG_HIODEVICE_AN26                      MG_HIODEVICE_NULL
 #define   MG_HIODEVICE_AN27                      AD_PSREF1_Channel
 #define   MG_HIODEVICE_AN28                      AD_PSREF2_Channel
-#define   MG_HIODEVICE_AN29                      NULL
+#define   MG_HIODEVICE_AN29                      MG_HIODEVICE_NULL
 #define   MG_HIODEVICE_AN30                      AD_IGNVI_Channel
 #define   MG_HIODEVICE_AN31                      AD_58XRAWIN_Channel
 #define   MG_HIODEVICE_AN32                      AD_PBATTVI_Channel
 // #define   MG_HIODEVICE_AN33                      (void *)&GND123VI
 // #define   MG_HIODEVICE_AN34                      (void *)&GND122VI 
 // #define   MG_HIODEVICE_AN35                      (void *)&GND121VI 
-#define   MG_HIODEVICE_AN33                      NULL
-#define   MG_HIODEVICE_AN34                      NULL
-#define   MG_HIODEVICE_AN35                      NULL
-#define   MG_HIODEVICE_AN36                      NULL
-#define   MG_HIODEVICE_AN37                      NULL
+#define   MG_HIODEVICE_AN33                      MG_HIODEVICE_NULL
+#define   MG_HIODEVICE_AN34                      MG_HIODEVICE_NULL
+#define   MG_HIODEVICE_AN35                      MG_HIODEVICE_NULL
+#define   MG_HIODEVICE_AN36                      MG_HIODEVICE_NULL
+#define   MG_HIODEVICE_AN37                      MG_HIODEVICE_NULL
 #define   MG_HIODEVICE_AN38                      AD_HWCFGVI_Channel
 #define   MG_HIODEVICE_AN39                      AD_VCC2_Channel
 
