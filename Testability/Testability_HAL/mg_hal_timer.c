@@ -1,17 +1,16 @@
-#if 0
 #include "mg_hal_config.h"
 #include "mg_hal.h"
-#include "io_pulse.h"
+// #include "io_pulse.h"
 #include "io_conversion.h"
-#include "io_scale.h"
-#include "dd_stm.h"
+// #include "io_scale.h"
+#include "dd_stm_interface.h"
 
 /*----------------------------------------------------------------------------*/
 /*   Definition of local macros                                               */
 /*----------------------------------------------------------------------------*/
 #define MG_STM_CNT_REG                     (uint32_t volatile  *)(0xFFF3C004)
-#define MG_STM_OVERFLOW_VALUE      (0xFFFFFFFF)
-#define MG_STM_PRESCALE                                  80
+#define MG_STM_OVERFLOW_VALUE              (0xFFFFFFFF)
+#define MG_STM_PRESCALE                    80
 
 /*=============================================================================
  * mg_HAL_Timer_Get_STM_In_ms
@@ -21,7 +20,8 @@
  *===========================================================================*/
 uint32_t mg_HAL_Timer_Get_STM_In_ms(void)
 {
-   return IO_PULSE_Timer_Get_Value( &MTSA_SYSTEM_TIMER, 0, MILLISECOND_RESOLUTION );
+    /* us -> ms */
+    return (time_get(0)/1000);
 }
 
 /*=============================================================================
@@ -33,14 +33,9 @@ uint32_t mg_HAL_Timer_Get_STM_In_ms(void)
 uint32_t mg_HAL_Timer_Get_STM_Diff_In_ms(uint32_t current_time,uint32_t start_time)
 {
     uint32_t time_diff;
-    if (current_time >= start_time)
-    {
-       time_diff = current_time - start_time;
-    }
-    else 
-    {
-       time_diff = current_time + (IO_Convert_Count_To_Time(MG_STM_OVERFLOW_VALUE,SYSTEM_FREQUENCY_HZ,0,MILLISECOND_RESOLUTION) - start_time);
-    }
+
+    time_diff = (uint32_t)(current_time - start_time)/1000;
+
     return time_diff;
 }
 
@@ -52,7 +47,7 @@ uint32_t mg_HAL_Timer_Get_STM_Diff_In_ms(uint32_t current_time,uint32_t start_ti
  *===========================================================================*/
 uint32_t mg_HAL_Timer_Get_STM_In_us(void)
 {
-   return IO_PULSE_Timer_Get_Value( &MTSA_SYSTEM_TIMER, 0, MICROSECOND_RESOLUTION );
+   return time_get(0);
 }
 
 /*=============================================================================
@@ -64,14 +59,9 @@ uint32_t mg_HAL_Timer_Get_STM_In_us(void)
 uint32_t mg_HAL_Timer_Get_STM_Diff_In_us(uint32_t current_time,uint32_t start_time)
 {
     uint32_t time_diff;
-    if (current_time >= start_time)
-    {
-       time_diff = current_time - start_time;
-    }
-    else 
-    {
-       time_diff = current_time + (IO_Convert_Count_To_Time(MG_STM_OVERFLOW_VALUE,SYSTEM_FREQUENCY_HZ,0,MICROSECOND_RESOLUTION) - start_time);
-    }
+
+    time_diff = (uint32_t)(current_time - start_time);
+
     return time_diff;
 }
 
@@ -135,15 +125,7 @@ uint32_t mg_HAL_Timer_Get_STM_Diff_In_us_By_CNT(uint32_t current_time,uint32_t s
  *===========================================================================*/
 void mg_HAL_Time_Hard_Delay_us(uint32_t wait_time)
 {
-    uint32_t start_timer;
-    uint32_t current_timer;
-    uint32_t diff;
-    start_timer = mg_HAL_Timer_Get_STM_In_us();
-    do {
-        current_timer = mg_HAL_Timer_Get_STM_In_us();
-        diff = mg_HAL_Timer_Get_STM_Diff_In_us(current_timer, start_timer);
-        mg_HAL_Service_WatchDog();
-    } while (diff < wait_time);
+    time_udelay(wait_time);
 }
 
 /*=============================================================================
@@ -154,18 +136,12 @@ void mg_HAL_Time_Hard_Delay_us(uint32_t wait_time)
  *===========================================================================*/
 void mg_HAL_Time_Hard_Delay_ms(uint32_t wait_time, void (*callback)(void))
 {
-    uint32_t start_timer;
-    uint32_t current_timer;
-    uint32_t diff;
-    start_timer = mg_HAL_Timer_Get_STM_In_ms();
-    do {
-        current_timer = mg_HAL_Timer_Get_STM_In_ms();
-        diff = mg_HAL_Timer_Get_STM_Diff_In_ms(current_timer, start_timer);
-        if (NULL != callback)
-        {
+    uint32_t deadline = time_get(0) + wait_time;
+    while (time_left(deadline) > 0) {
+        if (NULL != callback) {
             callback();
         }
-    } while (diff < wait_time);
+    }
 }
 
 /*=============================================================================
@@ -185,10 +161,8 @@ void mg_HAL_Timer_Set_STM_Enable(bool state)
  * @parm  in_device
  * @rdesc  none
  *===========================================================================*/
-uint32_t mg_HAL_Timer_Get_MPTAC_Value(HIODEVICE in_device)
-{
-    const IO_Mptac_T *mptac = (IO_Mptac_T*)in_device;
-    return mptac->P->Timer.Get_Value(mptac->Configuration);
-}
-
-#endif
+// uint32_t mg_HAL_Timer_Get_MPTAC_Value(HIODEVICE in_device)
+// {
+//     const IO_Mptac_T *mptac = (IO_Mptac_T*)in_device;
+//     return mptac->P->Timer.Get_Value(mptac->Configuration);
+// }

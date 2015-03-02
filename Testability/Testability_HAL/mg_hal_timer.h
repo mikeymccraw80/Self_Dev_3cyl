@@ -57,6 +57,6 @@ uint32_t mg_HAL_Timer_Get_STM_Diff_In_CNT(uint32_t current_time,uint32_t start_t
 uint32_t mg_HAL_Timer_Get_STM_Diff_In_us_By_CNT(uint32_t current_time,uint32_t start_time);
 void mg_HAL_Time_Hard_Delay_us(uint32_t wait_time);
 void mg_HAL_Timer_Set_STM_Enable(bool state);
-uint32_t mg_HAL_Timer_Get_MPTAC_Value( HIODEVICE in_device);
+// uint32_t mg_HAL_Timer_Get_MPTAC_Value( HIODEVICE in_device);
 
 #endif
