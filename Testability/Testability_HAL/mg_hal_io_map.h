@@ -25,6 +25,7 @@
 // #include "io_interface.h"
 // #include "mg_io_interface_override.h"
 #include "io_config_qadc.h"
+#include "io_config_siu.h"
 #if 0
 #define MG_MTSA_CONFIG_KP254_TRIG_DIAG \
          (   KP254_Set_Device_Index( 0,KP254_INDEX_0                 ) |\
@@ -139,25 +140,41 @@
 
 // RTI
 #define   MG_HIODEVICE_RTI                       (void *)&MTSA_RTI_TIMER
+#endif
+
 
 // discrete in map
-#define   MG_HIODEVICE_DI_MPIO1                  (void *)&MTSA_D_IN_J1_79
-#define   MG_HIODEVICE_DI_MPIO2                  (void *)&MTSA_D_IN_J1_60
-#define   MG_HIODEVICE_DI_MPIO3                  (void *)&MTSA_D_IN_J1_40
-#define   MG_HIODEVICE_DI_GPIO139                (void *)&MTSA_D_IN_J1_35
-#define   MG_HIODEVICE_DI_GPIO138                (void *)&MTSA_D_IN_J1_34
-#define   MG_HIODEVICE_DI_GPIO224                (void *)&MTSA_D_IN_J1_33
-#define   MG_HIODEVICE_DI_GPIO121                (void *)&MTSA_D_IN_J1_69
-#define   MG_HIODEVICE_DI_GPIO122                (void *)&MTSA_D_IN_J1_45
-#define   MG_HIODEVICE_DI_AN4                    (void *)&MTSA_D_IN_Analog_J1_55_LoActive
-#define   MG_HIODEVICE_DI_AN12                   (void *)&MTSA_D_IN_Analog_J1_56_LoActive
-#define   MG_HIODEVICE_DI_AN24                   (void *)&MTSA_D_IN_Analog_J1_57_LoActive
-#define   MG_HIODEVICE_DI_AN3                    (void *)&MTSA_D_IN_Analog_J1_53_HighActive
-#define   MG_HIODEVICE_DI_AN25                   (void *)&MTSA_D_IN_Analog_J1_59_HighActive
-#define   MG_HIODEVICE_DI_AN23                   (void *)&MTSA_D_IN_Analog_J1_29_LoActive
-#define   MG_HIODEVICE_DI_AN18                   (void *)&MTSA_D_IN_Analog_J1_72_LoActive
-#define   MG_HIODEVICE_DI_AN15                   (void *)&MTSA_D_IN_Analog_J1_26_HighActive
+#define   MG_HIODEVICE_DI_NULL                   0xFFFFFFFF
+// #define   MG_HIODEVICE_DI_MPIO1                  (void *)&MTSA_D_IN_J1_79
+// #define   MG_HIODEVICE_DI_MPIO2                  (void *)&MTSA_D_IN_J1_60
+// #define   MG_HIODEVICE_DI_MPIO3                  (void *)&MTSA_D_IN_J1_40
+#define   MG_HIODEVICE_DI_MPIO1                  MG_HIODEVICE_DI_NULL
+#define   MG_HIODEVICE_DI_MPIO2                  MG_HIODEVICE_DI_NULL
+#define   MG_HIODEVICE_DI_MPIO3                  MG_HIODEVICE_DI_NULL
+#define   MG_HIODEVICE_DI_GPIO139                HAL_GPIO_ELOAD1DI_CHANNEL
+#define   MG_HIODEVICE_DI_GPIO138                HAL_GPIO_ELOAD2DI_CHANNEL
+#define   MG_HIODEVICE_DI_GPIO224                HAL_GPIO_BRKLMPDI_CHANNEL
+#define   MG_HIODEVICE_DI_GPIO121                HAL_GPIO_BRKSWDI_CHANNEL
+// #define   MG_HIODEVICE_DI_GPIO122                (void *)&MTSA_D_IN_J1_45
+#define   MG_HIODEVICE_DI_GPIO122                MG_HIODEVICE_DI_NULL
+// #define   MG_HIODEVICE_DI_AN4                    (void *)&MTSA_D_IN_Analog_J1_55_LoActive
+// #define   MG_HIODEVICE_DI_AN12                   (void *)&MTSA_D_IN_Analog_J1_56_LoActive
+// #define   MG_HIODEVICE_DI_AN24                   (void *)&MTSA_D_IN_Analog_J1_57_LoActive
+// #define   MG_HIODEVICE_DI_AN3                    (void *)&MTSA_D_IN_Analog_J1_53_HighActive
+// #define   MG_HIODEVICE_DI_AN25                   (void *)&MTSA_D_IN_Analog_J1_59_HighActive
+// #define   MG_HIODEVICE_DI_AN23                   (void *)&MTSA_D_IN_Analog_J1_29_LoActive
+// #define   MG_HIODEVICE_DI_AN18                   (void *)&MTSA_D_IN_Analog_J1_72_LoActive
+// #define   MG_HIODEVICE_DI_AN15                   (void *)&MTSA_D_IN_Analog_J1_26_HighActive
+#define   MG_HIODEVICE_DI_AN4                    MG_HIODEVICE_DI_NULL
+#define   MG_HIODEVICE_DI_AN12                   MG_HIODEVICE_DI_NULL
+#define   MG_HIODEVICE_DI_AN24                   MG_HIODEVICE_DI_NULL
+#define   MG_HIODEVICE_DI_AN3                    MG_HIODEVICE_DI_NULL
+#define   MG_HIODEVICE_DI_AN25                   MG_HIODEVICE_DI_NULL
+#define   MG_HIODEVICE_DI_AN23                   MG_HIODEVICE_DI_NULL
+#define   MG_HIODEVICE_DI_AN18                   MG_HIODEVICE_DI_NULL
+#define   MG_HIODEVICE_DI_AN15                   MG_HIODEVICE_DI_NULL
 
+#if 0
 // Frequency in map
 #define   MG_HIODEVICE_FI_CAM1                   (void *)&MG_MTSA_IC_CAM1
 #define   MG_HIODEVICE_FI_ABSPWM                 (void *)&MTSA_IC_WSSFI

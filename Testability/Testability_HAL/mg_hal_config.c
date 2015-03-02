@@ -74,11 +74,11 @@ const AD_Analog_T MG_HAL_ANALOG_GROUP[] =
 
 const uint8_t MG_Number_of_Analog_Device = MG_SIZE_OF_ANALOG_GROUP;
 
-#if 0
+
 //============================================ analog group end ==================================
 
 //============================================ discrete in group ==================================
-const MG_HAL_DISCRETE_IN_T MG_HAL_DISCRETE_IN_GROUP[] =
+const SIU_GPIO_Channel_T MG_HAL_DISCRETE_IN_GROUP[] =
 {
     MG_HIODEVICE_DI_MPIO1,
     MG_HIODEVICE_DI_MPIO2,
@@ -98,13 +98,13 @@ const MG_HAL_DISCRETE_IN_T MG_HAL_DISCRETE_IN_GROUP[] =
     MG_HIODEVICE_DI_AN15,
 };
 
-#define MG_SIZE_OF_DISCRETE_IN_GROUP   (sizeof(MG_HAL_DISCRETE_IN_GROUP)/sizeof(MG_HAL_DISCRETE_IN_T))
+#define MG_SIZE_OF_DISCRETE_IN_GROUP   (sizeof(MG_HAL_DISCRETE_IN_GROUP)/sizeof(SIU_GPIO_Channel_T))
 
 const uint8_t MG_Number_of_Discrete_In_Device = MG_SIZE_OF_DISCRETE_IN_GROUP;
 
 
 //============================================ discrete in group end ==================================
-
+#if 0
 //============================================ discrete out group ================================
 // must be located in RAM
 MG_HAL_DISCRETE_OUT_T MG_HAL_DISCRETE_OUT_GROUP[] = 

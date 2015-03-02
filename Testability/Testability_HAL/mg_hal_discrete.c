@@ -18,15 +18,15 @@
 // %version:         6 %
 //
 //=============================================================================
-#if 0
+
 #include "mg_config.h"
 #include "mg_hal_config.h"
-#include "io_discrete.h"
 #include "io_config_siu.h"
+#include "dd_siu_interface.h"
 #ifdef __MG_VSEP_USED
 #include "dd_vsep_discrete.h"
 #endif
-
+#if 0
 void mg_HAL_Discrete_Set_Discrete_Out_Group_Value(uint8_t index, bool state)
 {
     if (NULL != MG_HAL_DISCRETE_OUT_GROUP[index].io)
@@ -241,13 +241,15 @@ void mg_HAL_Discrete_Set_C2PS_VIGNF(bool state)
     IO_DISCRETE_Set_Immediate_State(&MTSA_C2PS_CONFIG_VIGNF_CONFIGURATION, state);
 }
 #endif
+#endif
+
 
 bool mg_HAL_Discrete_Get_Discrete_In_Group(uint8_t index)
 {
     bool state;
-    if (NULL != MG_HAL_DISCRETE_IN_GROUP[index].io)
+    if (MG_HIODEVICE_DI_NULL != MG_HAL_DISCRETE_IN_GROUP[index])
     {
-        state = IO_DISCRETE_Get_Immediate_State(MG_HAL_DISCRETE_IN_GROUP[index].io);
+        state = SIU_GPIO_DISCRETE_Get_State(MG_HAL_DISCRETE_IN_GROUP[index]);
     }
     else
     {
@@ -256,6 +258,7 @@ bool mg_HAL_Discrete_Get_Discrete_In_Group(uint8_t index)
     return state;
 }
 
+#if 0
 bool mg_HAL_Discrete_Get_BRkSW(void)
 {
     return IO_DISCRETE_Get_Immediate_State(&MTSA_D_IN_J1_69);

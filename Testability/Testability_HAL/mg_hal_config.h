@@ -153,11 +153,12 @@ extern MG_HAL_EST_OUT_T MG_HAL_EST_GROUP;
 extern MG_HAL_PFI_OUT_T MG_HAL_INJ_GROUP;
 extern const uint8_t MG_Number_of_INJ_Device;
 extern MG_HAL_ETC_OUT_T MG_HAL_ETC_GROUP;
+#endif
 
-
-extern const MG_HAL_DISCRETE_IN_T MG_HAL_DISCRETE_IN_GROUP[];
+extern const SIU_GPIO_Channel_T MG_HAL_DISCRETE_IN_GROUP[];
 extern const uint8_t MG_Number_of_Discrete_In_Device;
 
+#if 0
 extern const MT_HAL_FREQUENCY_IN_T MG_HAL_FREQUENCY_IN_GROUP[];
 extern const uint8_t MG_Number_of_Frequency_In_Device;
 

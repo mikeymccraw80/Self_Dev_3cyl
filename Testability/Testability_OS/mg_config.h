@@ -3,7 +3,7 @@
 
 /* External Device Used List */
 #undef __MG_C2MIO_USED
-#undef __MG_VSEP_USED
+#define __MG_VSEP_USED
 #undef __MG_C2PS_USED
 #undef __MG_TLE4471_USED
 #undef __MG_PHDL_USED
@@ -46,7 +46,7 @@
 #undef __MG_BARO_SENSOR_TEST_H
 #undef __MG_LIN_TEST
 #undef __MG_DISCRETE_OUT_TEST
-#undef __MG_DISCRETE_IN_TEST
+#define __MG_DISCRETE_IN_TEST
 #undef __MG_KW2000_TEST
 #undef __MG_OUTPUT_CYCLING
 #undef __MG_OUTPUT_CYCLING_EMC

@@ -18,14 +18,14 @@
 // %version:         3 %
 //
 //=============================================================================
-#if 0
+
 #include "reuse.h"
 #include "mg_mailbox.h"
 #include "mg_hal_config.h"
 #include "mg_common.h"
 #include "mg_hal.h"
 #include "mg_hal_discrete.h"
-#include "mg_hal_timer.h"
+// #include "mg_hal_timer.h"
 
 /*****************************************************************************
  * Function Prototype: void mg_Baro_sensor_Test(void)
@@ -56,11 +56,10 @@ void mg_discrete_in_test(void)
         {
             MG_Bitmap_Clr(idx);
         }
-        mg_HAL_Service_WatchDog();
+        // mg_HAL_Service_WatchDog();
     }
     MG_MAILBOX_OUT(parameter[1]) = mg_bitmap[0];
     MG_MAILBOX_OUT(parameter[2]) = mg_bitmap[1];
     MG_MAILBOX_OUT(parameter[3]) = mg_bitmap[2];
 
 }
-#endif
