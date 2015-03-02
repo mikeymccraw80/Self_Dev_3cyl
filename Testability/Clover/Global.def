@@ -1,0 +1,15 @@
+//----------------------------------//
+// Global defines                   //
+//----------------------------------//
+
+//Global Macro definition
+#define CommandID   7EE // Command ID for project
+#define DataID      7EF // Data ID for project
+#define Inbox_Addr 40 01 74 00 // Inbox start address
+#define Outbox_Addr 40 01 74 20 // Outbox start address
+
+//Global Type definition
+#typedef Precision_T Enum=1:1us,0A:10us,64:100us;StartupValue=1;StartupFormat=Hex
+#typedef Channel_Selection_Bit_T Enum=0:Not_Selected,1:Selected;StartupFormat=Hex
+#typedef Direction_T Enum=1:Forward,2:Reverse;StartupValue=1;StartupFormat=Hex
+#typedef Hex_T StartupFormat=Hex

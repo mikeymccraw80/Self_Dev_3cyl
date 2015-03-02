@@ -1,0 +1,63 @@
+//----------------------------------//
+// Analog input test defines        //
+//----------------------------------//
+
+// define type for the test
+#typedef Error_Code_T Enum=11:No_Error;StartupFormat=Hex
+#typedef AnalogIn EngineeringGradient=0.001220703125;EngineeringUnit=Volt;StartupFormat=Eng
+// Set all type to the defined type
+#settype ALL AnalogIn
+#settype Error_Code Error_Code_T
+// Define test ID
+#define Test_ID 08
+// Define test items
+#define AD0 xx xx
+#define AD1 xx xx
+#define AD2 (MAPVI) (MAPVI)
+#define AD3_H (ACPREVI)
+#define AD3_L (ACPREVI)
+#define AD4 (LEGRFBVI) (LEGRFBVI)
+#define AD5 xx xx
+#define AD6 xx xx
+#define AD7_H (PPS1VI)
+#define AD7_L (PPS1VI)
+#define AD8 xx xx
+#define AD9 (PPS2VI) (PPS2VI)
+#define AD10 xx xx
+#define AD11_H (FLVVI)
+#define AD11_L (FLVVI)
+#define AD12 (SPA1VI) (SPA1VI)
+#define AD13 (O2AVI) (O2AVI)
+#define AD14 (O2BVI) (O2BVI)
+#define AD15_H (CRSVI)
+#define AD15_L (CRSVI)
+#define AD16 (CLTVI) (CLTVI)
+#define AD17 (MATVI) (MATVI)
+#define AD18 (BSTATVI) (BSTATVI)
+#define AD19_H xx
+#define AD19_L xx
+#define AD20 xx xx
+#define AD21 (FREPVI) (FREPVI)
+#define AD22 (BKVAVII) (BKVAVII)
+#define AD23_H (RREPVI)
+#define AD23_L (RREPVI)
+#define AD24 (BSTPREVI) (BSTPREVI)
+#define AD25 (RRVI) (RRVI)
+#define AD26 xx xx
+#define AD27_H (PSREF1)
+#define AD27_L (PSREF1)
+#define AD28 (PSREF2) (PSREF2)
+#define AD29 xx xx
+#define AD30 (IGNVI) (IGNVI)
+#define AD31_H (58XRAWIN)
+#define AD31_L (58XRAWIN)
+#define AD32 (PBATTVI) (PBATTVI)
+#define AD33 xx xx
+#define AD34 xx xx
+#define AD35_H xx
+#define AD35_L xx
+#define AD36 xx xx
+#define AD37 xx xx
+#define AD38 (HWCFGVI) (HWCFGVI)
+#define AD39_H (VCC2)
+#define AD39_L (VCC2)
