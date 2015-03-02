@@ -90,5 +90,10 @@ void InitializeHardwareLast(void);
 //=============================================================================
 bool Get_BatteryRemove_Status(void);
 
+//=============================================================================
+// check the illegal condition .
+//=============================================================================
+bool InitializeIllegalConditionCheck(void);
+
 #endif // IO_INIT_H
 

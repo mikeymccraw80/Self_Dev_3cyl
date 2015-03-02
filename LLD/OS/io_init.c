@@ -27,7 +27,8 @@
 #include "dd_sswt.h"
 #include "hal_eeprom_mfg.h"
 #include "cn_io_transfer.h"
-
+#include "hal_analog.h"
+#include "hal_gpio.h"
 
 /* private variable define */
 static bool BatteryRemoved;
@@ -341,4 +342,41 @@ void exit(void)
 	INTC_EXCEPTION_Halt();
 	// Wait in an infinite loop for the power supply to shutdown
 	do {} while (true);
+}
+
+//=============================================================================
+// Defination
+//=============================================================================
+#define VOLT(x)                                                 (x * 1000)
+#define UNIT                                                    (65535 / 5000)
+#define MANIFOLD_AIR_PRESSURE                                   (VOLT(0.5) * UNIT)
+#define MANIFOLD_AIR_TEMPERATURE                                (VOLT(0.5) * UNIT)
+#define ENGINE_COOLANT_TEMPERATURE                              (VOLT(4.5) * UNIT)
+#define THROTTLE_POSITION_SENSOR1                               (VOLT(4.5) * UNIT)
+#define THROTTLE_POSITION_SENSOR2                               (VOLT(4.5) * UNIT)
+
+//=============================================================================
+// This procedure is to check the illegal condition to brach into testability
+// software
+// The illegal condition should be defined in TSR as:
+// 1. function test:
+//    TPS1 > 4.5v
+//    TPS2 > 4.5v
+//    MAP  < 0.5v
+//    MAT  < 0.5
+//    CLT  > 4.5v
+//    Break swith == 0v
+//=============================================================================
+
+bool InitializeIllegalConditionCheck(void)
+{
+   bool return_code = false;
+   return_code = ( (HAL_Analog_Get_TPS1VI_Value() << 2) > THROTTLE_POSITION_SENSOR1 &&
+                   (HAL_Analog_Get_TPS2VI_Value() << 2) > THROTTLE_POSITION_SENSOR2 &&
+                   (HAL_Analog_Get_MAPVI_Value()  << 2) < MANIFOLD_AIR_PRESSURE &&
+                   (HAL_Analog_Get_MATVI_Value()  << 2) < MANIFOLD_AIR_TEMPERATURE &&
+                   (HAL_Analog_Get_CLTVI_Value()  << 2) > ENGINE_COOLANT_TEMPERATURE &&
+                   (HAL_GPIO_GET_BRKSWDI_Status()) == false
+                 )?true:false;
+   return return_code;
 }

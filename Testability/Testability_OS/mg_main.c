@@ -144,7 +144,7 @@ void mg_main(void)
 #endif
 #endif
    // stay in cycling until a reset occurs or IGN OFF
-    // while(1)
+    while(1)
     {
         // mg_HAL_Service_WatchDog();
         switch(Mg_Mode)
@@ -180,6 +180,5 @@ void mg_main(void)
                 break;
         }
         // mg_HAL_Service_WatchDog();
-
     }
 }
