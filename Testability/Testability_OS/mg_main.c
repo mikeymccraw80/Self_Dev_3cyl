@@ -68,10 +68,10 @@ static void clear_mailbox(void)
  *===========================================================================*/
 static void Initialize_Testability(void)
 {
-    // uint8_t  idx;
+    uint8_t  idx;
 
-    // mg_HAL_SWT_Enable_WatchDog( false );
-    // clear_mailbox();
+    mg_HAL_SWT_Enable_WatchDog( false );
+    clear_mailbox();
 
     // MG_SIU_GPIO_DISCRETE_Initialize_Device_Override();
 
@@ -111,7 +111,7 @@ static void Initialize_Testability(void)
     {
         MCAMOS_enable = true;
     }
-    // Enable_Interrupts();
+    Enable_Interrupts();
 }
 
 /*=============================================================================
@@ -125,28 +125,20 @@ void mg_main(void)
     uint8_t volatile  testIdx;
     Mg_Mode = MG_FUNCTION_TEST;
 
-#if 0
+
     Initialize_Testability();
-    // mg_HAL_Service_WatchDog();
+    mg_HAL_Service_WatchDog();
     // mg_HAL_Disable_CAN_10ms_Task_Timer();
     
     /* Detect IGN OFF by TOD function */
-#ifdef __MG_C2PS_USED
-
-    mg_HAL_Discrete_Set_TODO(false);
-#endif
 #ifdef __MG_TLE4471_USED
     mg_HAL_Discrete_Set_TODO(false);
 #endif
 
-#ifdef EMC_CYCLING
-    Mg_Mode = MG_OUTPUT_CYCLING_EMC;
-#endif
-#endif
    // stay in cycling until a reset occurs or IGN OFF
     while(1)
     {
-        // mg_HAL_Service_WatchDog();
+        mg_HAL_Service_WatchDog();
         switch(Mg_Mode)
         {
             case MG_FUNCTION_TEST:
@@ -179,6 +171,6 @@ void mg_main(void)
             default:
                 break;
         }
-        // mg_HAL_Service_WatchDog();
+        mg_HAL_Service_WatchDog();
     }
 }
