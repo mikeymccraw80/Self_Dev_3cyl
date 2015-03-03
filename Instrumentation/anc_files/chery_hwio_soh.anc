@@ -141,14 +141,6 @@
 *-  description              = "SOH test result history. (1=test fail, 0=test pass)";
 *-}
 
-*-soh_nvm.Soh_FaultLogNVM{
-*-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "SOHFLTNVM";
-*-  variable_location.symbol = soh_nvm.Soh_FaultLogNVM.Word;
-*-  ds_scaling_unit          = "hex no scale";
-*-  description              = "ETC SOH fault NVM. (1=error logged, 0=no error)";
-*-}
-
 *-soh.Soh_FaultLog{
 *-  OBJECTS_CLASS: parameter_es_class;
 *-  label                    = "SOHFAULT";
