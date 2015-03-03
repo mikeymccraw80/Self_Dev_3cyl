@@ -25,31 +25,35 @@
 #include "dd_siu_interface.h"
 #ifdef __MG_VSEP_USED
 #include "dd_vsep_discrete.h"
+#include "dd_vsep_discrete_interface.h"
 #endif
-#if 0
+#include "hal_gpio.h"
+
 void mg_HAL_Discrete_Set_Discrete_Out_Group_Value(uint8_t index, bool state)
 {
     if (NULL != MG_HAL_DISCRETE_OUT_GROUP[index].io)
     {
-        IO_DISCRETE_Set_Immediate_State(MG_HAL_DISCRETE_OUT_GROUP[index].io, state);
+        VSEP_DiscreteSetImmediate(MG_HAL_DISCRETE_OUT_GROUP[index].io, state);
     }
 }
 
 void mg_HAL_Discrete_Set_ELOAD1(bool state)
 {
-    IO_DISCRETE_Set_Immediate_State(&MTSA_D_OUT_ELOAD1DICTL, state);
+    HAL_GPIO_SET_ELOAD1DICTL_Enable(state);
 }
 
 void mg_HAL_Discrete_Set_ELOAD2(bool state)
 {
-    IO_DISCRETE_Set_Immediate_State(&MTSA_D_OUT_ELOAD2DICTL, state);
+    HAL_GPIO_SET_ELOAD2DICTL_Enable(state);
 }
-
+#if 0
 void mg_HAL_Discrete_Set_BRKLDI(bool state)
 {
     IO_DISCRETE_Set_Immediate_State(&MTSA_D_OUT_BRKLDICTL, state);
 }
+#endif
 
+#if 0
 void mg_HAL_Discrete_Set_FPO1(bool state)
 {
     IO_DISCRETE_Set_Immediate_State(&MG_MTSA_D_OUT_FPO1, state);
@@ -84,12 +88,12 @@ void mg_HAL_Discrete_Set_FPO7(bool state)
 {
     IO_DISCRETE_Set_Immediate_State(&MG_MTSA_D_OUT_FPO7, state);
 }
-
+#endif
 void mg_HAL_Discrete_Set_FSE(bool state)
 {
-    IO_DISCRETE_Set_Immediate_State(&MTSA_D_OUT_FSE_ENABLE_REQ, state);
+    HAL_GPIO_SET_FSE_Enable(state);
 }
-
+#if 0
 void mg_HAL_Discrete_Set_TACH(bool state)
 {
     IO_DISCRETE_Set_Immediate_State(&MTSA_PWM_TACH, state);
