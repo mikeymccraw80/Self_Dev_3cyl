@@ -63,6 +63,9 @@ SetDuty	SetPeriodImmediate	SetDutyImmediate		GetDuty Getperiod
 #define VSEP_PWM_PWMSetFreq(in_configuration, value) \
 	VSEP_PWM_Set_Period_And_Duty_Cycle(in_configuration,value,VSEP_PWM_Period_InType_HZ,20,VSEP_PWM_DutyCycle_InType_Percent,true,false)
 
+#define VSEP_PWM_PWMSetFreqImmediate(in_configuration,value)\
+       VSEP_PWM_Set_Period_And_Duty_Cycle_Immediate(in_configuration,value,VSEP_PWM_Period_InType_HZ,20,VSEP_PWM_DutyCycle_InType_Percent,true,false)
+
 #define VSEP_PWM_PWMGetFreq(in_configuration, value)\
 	VSEP_PWM_Get_Period(in_configuration,VSEP_PWM_Period_ReturnType_HZ)
 

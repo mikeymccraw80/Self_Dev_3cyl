@@ -22,7 +22,10 @@
 #include "reuse.h"
 #include "mg_hal_config.h"
 #include "mg_hal_io_map.h"
+#include "io_type.h"
 #include "dd_vsep.h"
+#include "dd_vsep_discrete.h"
+#include "dd_vsep_pwm.h"
 #include "io_config_vsep.h"
 
 #define NOT_CARE            0

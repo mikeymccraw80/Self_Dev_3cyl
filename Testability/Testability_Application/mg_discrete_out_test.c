@@ -122,11 +122,11 @@ void mg_discrete_out_test(void)
                         }
                     }
                 }
-                mg_HAL_Service_WatchDog();
+                // mg_HAL_Service_WatchDog();
             }
         }
-        mg_HAL_PWM_Discrete_Out_Cycling();
-        mg_HAL_Service_WatchDog();
+        // mg_HAL_PWM_Discrete_Out_Cycling();
+        // mg_HAL_Service_WatchDog();
    }
     
    /* Shut down all Discrete output after finish this test */
@@ -134,5 +134,5 @@ void mg_discrete_out_test(void)
    {
       mg_HAL_Discrete_Set_Discrete_Out_Group_Value(idx, false);
    }
-   mg_HAL_Service_WatchDog();
+   // mg_HAL_Service_WatchDog();
 }

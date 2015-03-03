@@ -29,7 +29,7 @@ void mg_HAL_PWM_Set_Discrete_Out_Group_Frequency_And_Duty_Immediate(uint8_t inde
 {
     if (NULL != MG_HAL_DISCRETE_OUT_GROUP[index].io)
     {
-        VSEP_PWM_PWMSetPeriodImmediate(MG_HAL_DISCRETE_OUT_GROUP[index].io, MG_HAL_DISCRETE_OUT_GROUP[index].frequency);
+        VSEP_PWM_PWMSetFreqImmediate(MG_HAL_DISCRETE_OUT_GROUP[index].io, MG_HAL_DISCRETE_OUT_GROUP[index].frequency);
         VSEP_PWM_PWMSetDutyImmediate(MG_HAL_DISCRETE_OUT_GROUP[index].io, MG_HAL_DISCRETE_OUT_GROUP[index].duty);
     }
 }
