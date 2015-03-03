@@ -29,5 +29,6 @@ extern void SWT_Set_Timeout_Value( uint32_t time);
 
 extern void SWT_Service_WatchDog(void);
 
+extern void SWT_Enable_WatchDog(bool state);
 #endif
 

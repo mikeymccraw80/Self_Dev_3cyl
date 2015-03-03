@@ -13,6 +13,7 @@ SWT_T SWT;
 //==========================================================================
 // Local object-like(name and constant) macros
 //==========================================================================
+#define SWT_LOCK_MASK            (0x00000030UL)
 #define SWT_UNLOCK_SEQ_A         (0xC520)
 #define SWT_UNLOCK_SEQ_B         (0xD928)
 #define SWT_SERVICE_KEY_A        (0xA602UL)
@@ -22,6 +23,75 @@ SWT_T SWT;
 //SKn+1 = (17*SKn+3) mod 2^16  is the formula used
 #define SWT_Get_PseudoRandom_Key(key)  (((17UL*(key))+3UL) % 0x00010000UL)
 
+//=============================================================================
+// SWT_Get_Lock_Status
+//=============================================================================
+INLINE SWT_Lock_Status_T SWT_Get_Lock_Status(void)
+{
+   SWT_Lock_Status_T lock_status;
+   SWT_Lock_Status_T temp_lock;
+
+   temp_lock = (SWT_Lock_Status_T)((SWT.SWT_MCR.U32 & SWT_LOCK_MASK) >> SWT_LOCK_STATE_SHIFT);
+
+   if((temp_lock == SWT_BOTH_LOCK) ||(temp_lock == SWT_HARD_LOCK) )
+   {
+      lock_status = SWT_HARD_LOCK;
+   }
+   else if(temp_lock == SWT_SOFT_LOCK)
+   {
+      lock_status = SWT_SOFT_LOCK;
+   }
+   else 
+   {
+      lock_status = SWT_NO_LOCK;
+   }
+
+   return (lock_status);
+}
+
+
+//=============================================================================
+// SWT_Set_Lock_Status
+//=============================================================================
+static void SWT_Set_Reset_Lock(SWT_Lock_T lock_key)
+{
+   SWT_MCR_T temp_MCR;                        // local varible created as register is not bit accessible
+   temp_MCR.U32 = SWT.SWT_MCR.U32;
+   if (!(temp_MCR.F.HLK))                    // exit on hard lock
+   {
+      switch (lock_key)
+      {
+      case (SWT_SET_SOFT_LOCK):
+         if(!(temp_MCR.F.SLK))
+         {
+            temp_MCR.F.SLK = 1;
+            SWT.SWT_MCR.U32 = temp_MCR.U32;             // SWT is Soft locked
+         }
+      break;
+
+      case (SWT_RESET_SOFT_LOCK):
+         if((temp_MCR.F.SLK == 1))
+         {
+            SWT.SWT_SR.U32 = SWT_UNLOCK_SEQ_A;
+            SWT.SWT_SR.U32 = SWT_UNLOCK_SEQ_B;       //SWT is unlocked
+         }
+      break;
+
+      case (SWT_SET_HARD_LOCK):
+         if((temp_MCR.F.SLK == 1))
+         {
+            SWT.SWT_SR.U32 = SWT_UNLOCK_SEQ_A;
+            SWT.SWT_SR.U32 = SWT_UNLOCK_SEQ_B;       //unlock soft lock
+         }
+         temp_MCR.F.HLK  = 1;
+         SWT.SWT_MCR.U32 = temp_MCR.U32;               // SWT is hard locked
+      break;
+
+      default:
+      break;
+     }
+   }
+}
 
 //=============================================================================
 // SWT_Initialize_Device
@@ -81,6 +151,24 @@ void SWT_Service_WatchDog(void)
 	}
 }
 
-
+//=============================================================================
+// SWT_Enable_WatchDog
+//=============================================================================
+void SWT_Enable_WatchDog(bool state)
+{
+	SWT_MCR_T temp_MCR;
+	SWT_Lock_Status_T lock_status;
+	lock_status = SWT_Get_Lock_Status();
+	if(lock_status != SWT_HARD_LOCK )                    //exit on Hard lock
+	{
+		if(lock_status == SWT_SOFT_LOCK )
+		{
+			SWT_Set_Reset_Lock(SWT_RESET_SOFT_LOCK);       // unlock  on soft lock
+		}
+		temp_MCR.U32 = SWT.SWT_MCR.U32;
+		temp_MCR.F.WEN = state;                              //Enable the SWT only when no hard lock and no soft lock
+		SWT.SWT_MCR.U32 = temp_MCR.U32;
+	}
+}
 
 
