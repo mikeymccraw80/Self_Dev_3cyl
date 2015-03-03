@@ -203,6 +203,7 @@ void mg_HAL_Discrete_Set_GEN_No_Affect(bool state)
 #ifdef __MG_VSEP_USED
 #endif
 }
+#endif
 
 void mg_HAL_Discrete_Set_GEN_ENABLE(bool state)
 {
@@ -210,9 +211,10 @@ void mg_HAL_Discrete_Set_GEN_ENABLE(bool state)
     IO_DISCRETE_Set_Immediate_State(&MTSA_C2PS_CONFIG_IOEN_CONTROL, state);
 #endif
 #ifdef __MG_TLE4471_USED
-    IO_DISCRETE_Set_Immediate_State(&MTSA_D_OUT_GEN_ENABLE_REQ, state);
+    HAL_GPIO_SET_GEN_Enable(state);
 #endif
 }
+
 
 void mg_HAL_Discrete_Set_TODO(bool state)
 {
@@ -220,10 +222,10 @@ void mg_HAL_Discrete_Set_TODO(bool state)
     IO_DISCRETE_Set_Immediate_State(&MTSA_C2PS_CONFIG_TURN_OFF_INHIBIT_CONTROL, state);
 #endif
 #ifdef __MG_TLE4471_USED
-    IO_DISCRETE_Set_Immediate_State(&MTSA_D_OUT_TLE4471_TODO, state);
+    HAL_GPIO_SET_TODO_Enable(state);
 #endif
 }
-
+#if 0
 #ifdef  __MG_C2PS_USED
 void mg_HAL_Discrete_Set_C2PS_WTO(bool state)
 {

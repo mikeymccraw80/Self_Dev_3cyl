@@ -1,4 +1,3 @@
-#if 0
 #include "mg_config.h"
 #include "mg_hal_config.h"
 #include "mg_hal_discrete.h"
@@ -23,7 +22,7 @@ uint32_t mg_HAL_SOH_Get_Challenge(void)
     return C2MIO_SOH_Get_Challenge(C2MIO_Set_Device_Index( 0, C2MIO_INDEX_0 ));
 #endif
 #ifdef __MG_VSEP_STATE_OF_HEALTH_TEST
-    return VSEP_SOH_Get_Challenge(VSEP_Set_Device_Index( 0, VSEP_INDEX_0 ));
+    return VSEP_SOH_Get_Challenge(0);
 #endif
 }
 
@@ -55,7 +54,7 @@ void mg_HAL_SOH_Set_Response(uint32_t response)
     C2MIO_SOH_Set_Response(C2MIO_Set_Device_Index( 0, C2MIO_INDEX_0 ), response);
 #endif
 #ifdef __MG_VSEP_STATE_OF_HEALTH_TEST
-    VSEP_SOH_Set_Response(VSEP_Set_Device_Index( 0, VSEP_INDEX_0 ), response);
+    VSEP_SOH_Set_Response(0, response);
 #endif
 }
 
@@ -104,7 +103,7 @@ void mg_HAL_SOH_Init(bool Is_Disarmed)
         C2MIO_Set_SOH_Disable_Request_Value(C2MIO_Set_Device_Index( 0, C2MIO_INDEX_0 ), C2MIO_SELECT_SOH_DISABLE_REQUDISARM);
 #endif
 #ifdef __MG_VSEP_STATE_OF_HEALTH_TEST
-        VSEP_Set_SOH_Disable_Request_Value(VSEP_Set_Device_Index( 0, VSEP_INDEX_0 ), VSEP_SELECT_SOH_DISABLE_REQUDISARM);
+        VSEP_Disable_SOH();
 #endif
     }
     else
@@ -113,7 +112,7 @@ void mg_HAL_SOH_Init(bool Is_Disarmed)
         C2MIO_Set_SOH_Disable_Request_Value(C2MIO_Set_Device_Index( 0, C2MIO_INDEX_0 ), C2MIO_SELECT_SOH_DISABLE_NO_REQUEST);
 #endif
 #ifdef __MG_VSEP_STATE_OF_HEALTH_TEST
-        VSEP_Set_SOH_Disable_Request_Value(VSEP_Set_Device_Index( 0, VSEP_INDEX_0 ), VSEP_SELECT_SOH_DISABLE_NO_REQUEST);
+        VSEP_Disable_SOH();
 #endif
     }
 
@@ -148,4 +147,3 @@ void mg_HAL_SOH_Init(bool Is_Disarmed)
     // --END MIO SOH INITIAL SEQUENCE--
 }
 
-#endif

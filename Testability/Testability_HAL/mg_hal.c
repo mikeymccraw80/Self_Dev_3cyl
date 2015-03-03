@@ -18,7 +18,7 @@
 // %version:         7 %
 //
 //=============================================================================
-#if 0
+
 #include "reuse.h"
 #include "mg_mailbox.h"
 #include "mg_config.h"
@@ -26,20 +26,21 @@
 #include "mg_hal_analog.h"
 #include "mg_hal_discrete.h"
 #include "mg_hal_pwm.h"
-#include "mg_hal_soh.h"
-#include "mg_hal_lin.h"
+#include "io_config_fmpll.h"
+// #include "mg_hal_soh.h"
+// #include "mg_hal_lin.h"
 #include "mg_hal_timer.h"
 #include "mg_hal_fault.h"
-#include "io_discrete.h"
-#include "io_interface.h"
-#include "dd_swt.h"
+// #include "io_discrete.h"
+// #include "io_interface.h"
+#include "dd_swt_interface.h"
 #ifdef __MG_C2PS_WATCHDOG_RESET_TEST
 #include "dd_c2ps.h"
 #endif
 #ifdef __MG_TLE4471_WATCHDOG_RESET_TEST
-#include "dd_TLE4471.h"
+#include "dd_tle4471.h"
 #endif
-
+#if 0
 #define MG_STM_OVERFLOW_VALUE              0xFFFFFFFF
 #define STM_CNT_REG                                    (uint32_t volatile  *)(0xFFF3C004)
 #define STM_PRESCALE                                  80
@@ -128,6 +129,7 @@
 #define PC_ETC_FREQ            3300
 #define PC_ETC_FREQ_MAX            (PC_ETC_FREQ * 1.05)
 #define PC_ETC_FREQ_MIN            (PC_ETC_FREQ * 0.95)
+#endif
 
 #ifdef __MG_C2PS_WATCHDOG_RESET_TEST
 #if (C2PS_CONFIG_TIMEOUT_MODE_INIT_0 == C2PS_COP_TIMEOUT_MODE_15P625)
@@ -146,11 +148,11 @@
     #endif
 #endif
 #endif
-#ifdef __MG_TLE4471_WATCHDOG_RESET_TEST
+// #ifdef __MG_TLE4471_WATCHDOG_RESET_TEST
 #define MG_COP_MIN_PERIOD                       (10 * (SYSTEM_FREQUENCY_HZ / 1000))    /* 10ms */
-#endif
+// #endif
 
-
+#if 0
 
 /*=============================================================================
  * mg_HAL_Entey_Critical
@@ -183,6 +185,7 @@ void mg_HAL_Exit_Critical(void)
 #ifdef __MG_TLE4471_USED
 #endif
 }
+#endif
 
 /*=============================================================================
  * mg_HAL_Service_WatchDog
@@ -207,7 +210,7 @@ void mg_HAL_Service_WatchDog(void)
         C2PS_SPI_Immediate_Transfer( C2PS_Set_Device_Index(0,C2PS_INDEX_0), C2PS_MESSAGE_COP );
 #endif
 #ifdef __MG_TLE4471_WATCHDOG_RESET_TEST
-        TLE4471_WatchDog_Toggle();
+        TLE4471_WD_Toggle_Immediate();
         CHALLENGE_TEMP = mg_HAL_SOH_Get_Challenge();
         RESPONSE_TEMP = mg_HAL_SOH_Calculate_Response( CHALLENGE_TEMP );
         mg_HAL_SOH_Set_Response(RESPONSE_TEMP);
@@ -225,7 +228,7 @@ void mg_HAL_SWT_Enable_WatchDog(bool state)
 {
     SWT_Enable_WatchDog( state );
 }
-
+#if 0
 void mg_HAL_Disable_CAN_10ms_Task_Timer(void)
 {
     IO_INTERRUPT_Set_Enable( &MTSA_PIT_TIMER_3, false );

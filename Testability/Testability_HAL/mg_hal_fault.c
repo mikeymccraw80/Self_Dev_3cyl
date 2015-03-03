@@ -1,4 +1,4 @@
-#if 0
+
 #include "mg_config.h"
 #ifdef __MG_C2MIO_USED
 #include "dd_c2mio.h"
@@ -24,7 +24,7 @@
 #include "dd_kp254_fault.h"
 #endif
 #include "mg_hal_config.h"
-
+#if 0
 #ifdef __MG_C2MIO_USED
 /*----------------------------------------------------------------------------*/
 /*   Definition of C2MIO Channel Maximom                                              */
@@ -217,7 +217,7 @@ void mg_HAL_ComplexIO_Fault_Read(void)
     VSEP_SPI_Immediate_Transfer( VSEP_Set_Device_Index( 0, VSEP_INDEX_0 ), VSEP_MESSAGE_FAULT_READ);
 #endif
 }
-
+#endif
 /*=============================================================================
  * mg_HAL_PowerDevice_Fault_Read
  * @func  read external device fault buff
@@ -233,6 +233,7 @@ void mg_HAL_PowerDevice_Fault_Read(void)
 #endif
 }
 
+#if 0
 /*=============================================================================
  * mg_HAL_ETC_Fault_Read
  * @func  read external device fault buff
@@ -362,7 +363,7 @@ uint8_t mg_HAL_ComplexIO_Fault_Get(uint8_t index)
 #endif
     return fault_result;
 }
-
+#endif
 /*=============================================================================
  * mg_HAL_PowerDevice_Fault_Get
  * @func  get external fault information
@@ -380,7 +381,7 @@ uint8_t mg_HAL_PowerDevice_Fault_Get(uint8_t index)
 #endif
     return fault_result;
 }
-
+#if 0
 /*=============================================================================
  * mg_HAL_ETC_Fault_Get
  * @func  get external fault information
