@@ -38,11 +38,13 @@ void main(void)
     InitializeHardwareRegisters();
     InitializeHardwareLast();
 
-    if (InitializeIllegalConditionCheck == false) {
+    if (InitializeIllegalConditionCheck() == false) {
         Mode = AM_normal;
     } else {
         Mode = AM_ManufacturingTest;
     }
+    /* force entry manufacturing test for test */
+    Mode = AM_ManufacturingTest;
 
     //go into os schedule, event and time schedule
     if( Mode == AM_normal ) {
