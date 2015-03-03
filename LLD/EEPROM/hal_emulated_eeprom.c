@@ -1171,7 +1171,7 @@ EEPROM_Operation_Status_T EEPROM_Restore_MFG_NVM_Block(void)
 
    return(return_Value);
 }
-
+#if 0
 /*******************************************************************************
  *
  * Function:    EEPROM_Restore_MFG_NVM_Block_Again
@@ -1233,7 +1233,7 @@ EEPROM_Operation_Status_T EEPROM_Restore_MFG_NVM_Block_Again(void)
 
    return(return_Value);
 }
-
+#endif
 /*=============================================================================
  * EEPROM_Fix_ECC_Error
  * @func Check the address where the double bit error occurred then erase its
