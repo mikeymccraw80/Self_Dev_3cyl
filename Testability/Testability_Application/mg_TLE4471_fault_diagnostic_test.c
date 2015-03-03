@@ -18,7 +18,7 @@
 // %version:         2 %
 //
 //=============================================================================
-#if 0
+
 #include "reuse.h"
 #include "mg_mailbox.h"
 #include "mg_hal_config.h"
@@ -56,7 +56,7 @@ void mg_TLE4471_fault_diagnostic_test(void)
 {
     uint8_t read_item;
     MG_MAILBOX_OUT(parameter[0]) = MG_MAILBOX_IN(testid);
-#if 0    
+#if __MG_C2PS_USED
     mg_HAL_Discrete_Set_C2PS_VIGNF( false);
     mg_HAL_Discrete_Set_C2PS_WTO( false);
     mg_HAL_Discrete_Set_C2PS_WP_Config( false);
@@ -72,5 +72,3 @@ void mg_TLE4471_fault_diagnostic_test(void)
     mg_HAL_PowerDevice_Fault_Read();
     MG_MAILBOX_OUT(parameter[1]) = mg_HAL_PowerDevice_Fault_Get(0);
 }
-
-#endif
