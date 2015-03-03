@@ -114,8 +114,22 @@ SECTIONS
   
     .testability:
     {
-        start_of_testability = .;
-        end_of_testability = .;
+      start_of_testability = .;
+      mcamos.o (.text_vle)
+      mg_main.o (.text_vle)
+      mg_io_interface_override.o (.text_vle)
+      mg_hal_sys_timer.o (.text_vle)
+      mg_hal_discrete_out.o (.text_vle)
+      mg_hal_config.o (.text_vle)
+      mg_pfi_test.o (.text_vle)
+      mg_output_cycling_EMC.o (.text_vle)
+      mg_output_cycling.o (.text_vle)
+      mg_fact_test.o (.text_vle)
+      mg_etc_test.o (.text_vle)
+      mg_est_test.o (.text_vle)
+      mg_discrete_out_test.o (.text_vle)
+      mg_analog_in_test.o (.text_vle)
+      end_of_testability = .;
   } > tsw_code
   
   .ucram:
