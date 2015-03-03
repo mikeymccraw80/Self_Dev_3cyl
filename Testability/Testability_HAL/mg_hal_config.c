@@ -20,8 +20,10 @@
 //=============================================================================
 
 #include "reuse.h"
-// #include "mg_hal_config.h"
+#include "mg_hal_config.h"
 #include "mg_hal_io_map.h"
+#include "dd_vsep.h"
+#include "io_config_vsep.h"
 
 #define NOT_CARE            0
 
@@ -104,7 +106,7 @@ const uint8_t MG_Number_of_Discrete_In_Device = MG_SIZE_OF_DISCRETE_IN_GROUP;
 
 
 //============================================ discrete in group end ==================================
-#if 0
+
 //============================================ discrete out group ================================
 // must be located in RAM
 MG_HAL_DISCRETE_OUT_T MG_HAL_DISCRETE_OUT_GROUP[] = 
@@ -137,7 +139,7 @@ MG_HAL_DISCRETE_OUT_T MG_HAL_DISCRETE_OUT_GROUP[] =
 
 const uint8_t MG_Number_of_Discrete_Out_Device = MG_SIZE_OF_DISCRETE_OUT_GROUP;
 //============================================ discrete out group end ==============================
-
+#if 0
 //============================================ EST =================================================
 const HIODEVICE MG_HAL_SPARK = MG_HIODEVICE_SPARK;
 

@@ -1,7 +1,6 @@
 #ifndef MG_HAL_TIMER_H
 #define MG_HAL_TIMER_H
 
-#include "io_scale.h"
 #include "io_config_tpu.h"
 
 #define FREQ_0P5_50_ON          (1 * SYSTEM_FREQUENCY_HZ)         //  80000000 = 1000000 us * 80(prescale)

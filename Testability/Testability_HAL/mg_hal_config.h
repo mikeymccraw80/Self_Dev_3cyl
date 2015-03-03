@@ -23,7 +23,7 @@
 
 #include "io_type.h"
 #include "mg_hal_io_map.h"
-#if 0
+
 typedef struct TIME_KEEPER_Tag
 {
    uint16_t  start_time;
@@ -45,16 +45,16 @@ typedef enum
 
 typedef struct MG_HAL_DISCRETE_OUT_Tag 
 {
-   HIODEVICE        io;
-   uint32_t         on_time_us;                     /* For Validation Test*/
-   uint32_t         off_time_us;                    /* For Validation Test */
-   uint32_t         frequency;
-   uint32_t         duty;
-   OUTPUT_TYPE_T   type;
-   bool             current_state;
+   IO_Configuration_T  io;
+   uint32_t            on_time_us;                     /* For Validation Test*/
+   uint32_t            off_time_us;                    /* For Validation Test */
+   uint32_t            frequency;
+   uint32_t            duty;
+   OUTPUT_TYPE_T       type;
+   bool                current_state;
    TIME_KEEPER_US_T    timer;
 } MG_HAL_DISCRETE_OUT_T;
-
+#if 0
 typedef enum 
 {
    MG_INJ_IDX_1,
@@ -144,10 +144,10 @@ typedef union
 extern const AD_Analog_T MG_HAL_ANALOG_GROUP[];
 extern const uint8_t MG_Number_of_Analog_Device;
 
-#if 0
+
 extern MG_HAL_DISCRETE_OUT_T MG_HAL_DISCRETE_OUT_GROUP[];
 extern const uint8_t MG_Number_of_Discrete_Out_Device;
-
+#if 0
 extern const HIODEVICE MG_HAL_SPARK;
 extern MG_HAL_EST_OUT_T MG_HAL_EST_GROUP;
 extern MG_HAL_PFI_OUT_T MG_HAL_INJ_GROUP;
