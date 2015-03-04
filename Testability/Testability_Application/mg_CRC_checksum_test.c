@@ -18,7 +18,6 @@
 // %version:         4 %
 //
 //=============================================================================
-#if 0
 
 #include "reuse.h"
 #include "mg_mailbox.h"
@@ -114,4 +113,3 @@ void mg_CRC_checksum_test(void)
 	MG_MAILBOX_OUT(parameter[2]) = (uint8_t)(calculatedCRC & 0x00FF);
   }
 }
-#endif

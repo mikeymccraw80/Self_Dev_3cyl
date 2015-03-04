@@ -5,16 +5,16 @@
 #undef __MG_C2MIO_USED
 #define __MG_VSEP_USED
 #undef __MG_C2PS_USED
-#undef __MG_TLE4471_USED
+#define __MG_TLE4471_USED
 #undef __MG_PHDL_USED
 #undef __MG_L9958_USED
 #undef __MG_KP254_USED
 
 /* Test Functions Defination */
 #undef __MG_FACT_TEST
-#undef __MG_CRC_CHECKSUM_TEST
-#undef __MG_MEMORY_CHECKSUM_TEST
-#undef __MG_KKSUM_CHECKSUM_TEST
+#define __MG_CRC_CHECKSUM_TEST
+#define __MG_MEMORY_CHECKSUM_TEST
+#define __MG_KKSUM_CHECKSUM_TEST
 #undef __MG_RAM_TEST
 #undef __MG_MEMORY_READ_TEST
 #undef __MG_MEMORY_WRITE_TEST
