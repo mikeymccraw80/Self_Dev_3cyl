@@ -1,0 +1,15 @@
+//----------------------------------//
+// Discrete input test defines      //
+//----------------------------------//
+
+// define type for the test
+#typedef DiscreteIN Enum=0:Low,1:High;StartupFormat=Hex
+#typedef Error_Code_T Enum=11:No_Error;StartupFormat=Hex
+// Set all type to the defined type
+#settype ALL DiscreteIN
+#settype Error_Code Error_Code_T
+// Define test ID
+#define Test_ID 1F
+// Define test items
+#define DI0_7 (DI0_7)
+#define DI8_15 xx
