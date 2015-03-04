@@ -1,9 +1,10 @@
-#if 0
 #include "mg_config.h"
 #include "mg_hal_config.h"
 #include "mg_hal_timer.h"
-#include "io_discrete.h"
-#include "io_pulse.h"
+#include "hal_gpio.h"
+#include "hal_pulse.h"
+#include "dd_mios_interface.h"
+// #include "io_pulse.h"
 /*----------------------------------------------------------------------------*/
 /*   Definition of static objects                                             */
 /*----------------------------------------------------------------------------*/
@@ -21,10 +22,7 @@
  *===========================================================================*/
 void mg_HAL_ETC_Set_Freq_And_Duty(void)
 {
-    if (NULL != MG_HAL_ETC_GROUP.io[MG_ETC_PWM])
-    {
-        IO_PULSE_PWM_Set_Frequency_And_Duty_Cycle( MG_HAL_ETC_GROUP.io[MG_ETC_PWM], MG_HAL_ETC_GROUP.freq, 0, MG_HAL_ETC_GROUP.duty, 100 );
-    }
+    MIOS_PWM_Set_Frequency_And_DutyCycle( MG_HAL_ETC_GROUP.io[MG_ETC_PWM], MG_HAL_ETC_GROUP.freq, MG_HAL_ETC_GROUP.duty);
 }
 
 /*=============================================================================
@@ -48,7 +46,7 @@ void mg_HAL_ETC_Discrete_Direction(bool direction)
 #ifdef __MG_L9958_USED
         if (NULL != MG_HAL_ETC_GROUP.io[MG_ETC_DIR])
         {
-            IO_DISCRETE_Set_Immediate_State(MG_HAL_ETC_GROUP.io[MG_ETC_DIR],true);
+            SIU_GPIO_DISCRETE_Set_State(MG_HAL_ETC_GROUP.io[MG_ETC_DIR], true);
         }
 #endif
     }
@@ -64,7 +62,7 @@ void mg_HAL_ETC_Discrete_Direction(bool direction)
 #ifdef __MG_L9958_USED
         if (NULL != MG_HAL_ETC_GROUP.io[MG_ETC_DIR])
         {
-            IO_DISCRETE_Set_Immediate_State(MG_HAL_ETC_GROUP.io[MG_ETC_DIR],false);
+            SIU_GPIO_DISCRETE_Set_State(MG_HAL_ETC_GROUP.io[MG_ETC_DIR], false);
         }
 #endif
     }
@@ -90,7 +88,7 @@ void mg_HAL_ETC_Discrete_Enable(bool enable)
 #ifdef __MG_L9958_USED
         if (NULL != MG_HAL_ETC_GROUP.io[MG_ETC_DIS])
         {
-            IO_DISCRETE_Set_Immediate_State(MG_HAL_ETC_GROUP.io[MG_ETC_DIS],false);
+            SIU_GPIO_DISCRETE_Set_State(MG_HAL_ETC_GROUP.io[MG_ETC_DIS],false);
         }
 #endif
     }
@@ -105,7 +103,7 @@ void mg_HAL_ETC_Discrete_Enable(bool enable)
 #ifdef __MG_L9958_USED
         if (NULL != MG_HAL_ETC_GROUP.io[MG_ETC_DIS])
         {
-            IO_DISCRETE_Set_Immediate_State(MG_HAL_ETC_GROUP.io[MG_ETC_DIS],true);
+            SIU_GPIO_DISCRETE_Set_State(MG_HAL_ETC_GROUP.io[MG_ETC_DIS],true);
         }
 #endif
     }
@@ -250,5 +248,3 @@ void mg_HAL_ETC_Discrete_Cycling_120(void)
         mg_HAL_ETC_Discrete_Direction(dir);
     }
 }
-
-#endif

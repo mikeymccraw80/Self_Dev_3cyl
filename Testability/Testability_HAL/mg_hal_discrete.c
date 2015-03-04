@@ -93,12 +93,19 @@ void mg_HAL_Discrete_Set_FSE(bool state)
 {
     HAL_GPIO_SET_FSE_Enable(state);
 }
-#if 0
+
 void mg_HAL_Discrete_Set_TACH(bool state)
 {
-    IO_DISCRETE_Set_Immediate_State(&MTSA_PWM_TACH, state);
+    /* use pwm to simulate GPIO */
+    if (state) {
+       VSEP_PWM_PWMSetPeriod(VSEP_PO_TACH_CH, 100*64);
+       VSEP_PWM_PWMSetDuty(VSEP_PO_TACH_CH, 32768);
+    } else {
+       VSEP_PWM_PWMSetPeriod(VSEP_PO_TACH_CH, 100*64);
+       VSEP_PWM_PWMSetDuty(VSEP_PO_TACH_CH, 0);
+    }
 }
-
+#if 0
 void mg_HAL_Discrete_Set_ACREQDI(bool state)
 {
 #ifdef __MG_VSEP_USED
@@ -163,17 +170,17 @@ void mg_HAL_Discrete_Set_FAN1(bool state)
     IO_DISCRETE_Set_Immediate_State(&MTSA_PWM_FAN, state);
 #endif
 }
-
+#endif
 void mg_HAL_Discrete_Set_FAN2(bool state)
 {
 #ifdef  __MG_C2MIO_USED
     IO_DISCRETE_Set_Immediate_State(&MTSA_C2MIO_DISCRETE_OUT_FAN2, state);
 #endif
 #ifdef  __MG_VSEP_USED
-    IO_DISCRETE_Set_Immediate_State(&MTSA_VSEP_D_OUT_FAN2, state);
+    HAL_GPIO_SET_FAN2_Enable(state);
 #endif
 }
-
+#if 0
 void mg_HAL_Discrete_Set_O2_1_Pump_Current(bool state)
 {
 #ifdef  __MG_C2MIO_USED

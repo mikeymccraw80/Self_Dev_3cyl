@@ -27,6 +27,7 @@
 #include "io_config_qadc.h"
 #include "io_config_siu.h"
 #include "io_config_vsep.h"
+#include "io_config_mios.h"
 #if 0
 #define MG_MTSA_CONFIG_KP254_TRIG_DIAG \
          (   KP254_Set_Device_Index( 0,KP254_INDEX_0                 ) |\
@@ -144,13 +145,18 @@
 #define   MG_HIODEVICE_DO_DFB10                  (void *)&MG_MTSA_D_OUT_INJ2
 #define   MG_HIODEVICE_DO_DFB11                  (void *)&MG_MTSA_D_OUT_INJ3
 #define   MG_HIODEVICE_DO_DFB12                  (void *)&MG_MTSA_D_OUT_INJ4
-
+#endif
 // ETC
-#define   MG_HIODEVICE_ETC_PWM                   (void *)&MTSA_PWM_ETCCTLPWM
-#define   MG_HIODEVICE_ETCDIR                   (void *)&MTSA_D_OUT_ETC_DIR
-#define   MG_HIODEVICE_ETCDIS                    (void *)&MTSA_D_OUT_ETC_DIS
-#define   MG_HIODEVICE_ETCCS                     (void *)&MTSA_D_OUT_ETCCS
-
+// #define   MG_HIODEVICE_ETC_PWM                   (void *)&MTSA_PWM_ETCCTLPWM
+// #define   MG_HIODEVICE_ETCDIR                    (void *)&MTSA_D_OUT_ETC_DIR
+// #define   MG_HIODEVICE_ETCDIS                    (void *)&MTSA_D_OUT_ETC_DIS
+// #define   MG_HIODEVICE_ETCCS                     (void *)&MTSA_D_OUT_ETCCS
+#define   MG_HIODEVICE_ETC_NULL                  0xFFFFFFFF
+#define   MG_HIODEVICE_ETC_PWM                   MIOS_ETCCTLPWM_CH
+#define   MG_HIODEVICE_ETCDIR                    HAL_GPIO_ETCDIR_CHANNEL
+#define   MG_HIODEVICE_ETCDIS                    HAL_GPIO_ETCDIS_CHANNEL
+#define   MG_HIODEVICE_ETCCS                     MG_HIODEVICE_ETC_NULL
+#if 0
 // RTI
 #define   MG_HIODEVICE_RTI                       (void *)&MTSA_RTI_TIMER
 #endif

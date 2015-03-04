@@ -8,7 +8,7 @@
 *	%date_created:	Thu May  2 16:28:16 2013 %
 *
 **********************************************************************/
-#if 0
+
 #include "reuse.h"
 #include "mg_mailbox.h"
 #include "mg_config.h"
@@ -450,5 +450,3 @@ void mg_RAM_test(void)
   	MG_MAILBOX_OUT(parameter[1]) = 0xFF;
   }
 }
-   	   
-#endif

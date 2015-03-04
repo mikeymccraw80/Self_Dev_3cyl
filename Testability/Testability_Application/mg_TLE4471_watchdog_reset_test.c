@@ -18,7 +18,7 @@
 // %version:         2 %
 //
 //=============================================================================
-#if 0
+
 #include "reuse.h"
 #include "mg_mailbox.h"
 #include "mg_hal_config.h"
@@ -72,4 +72,3 @@ void mg_TLE4471_watchdog_reset_test(void)
     }
 }
 
-#endif
