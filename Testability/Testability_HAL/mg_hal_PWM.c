@@ -3,6 +3,7 @@
 #include "mg_hal_discrete.h"
 #include "mg_hal_timer.h"
 #include "dd_vsep_pwm_interface.h"
+#include "dd_mios_interface.h"
 
 /*=============================================================================
  * mg_HAL_PWM_Set_Discrete_Out_Group_Frequency_And_Duty
@@ -12,10 +13,13 @@
  *===========================================================================*/
 void mg_HAL_PWM_Set_Discrete_Out_Group_Frequency_And_Duty(uint8_t index)
 {
-    if (NULL != MG_HAL_DISCRETE_OUT_GROUP[index].io)
+    if (MG_HIODEVICE_DO_NULL != MG_HAL_DISCRETE_OUT_GROUP[index].io)
     {
-        VSEP_PWM_PWMSetFreq(MG_HAL_DISCRETE_OUT_GROUP[index].io, MG_HAL_DISCRETE_OUT_GROUP[index].frequency);
-        VSEP_PWM_PWMSetDuty(MG_HAL_DISCRETE_OUT_GROUP[index].io, MG_HAL_DISCRETE_OUT_GROUP[index].duty);
+        //period in us
+        //duty resoultion is 1/1000
+        MIOS_PWM_Set_Period_And_DutyCycle_US(MG_HAL_DISCRETE_OUT_GROUP[index].io,
+                                             (uint32_t)(1000 * 1000)/MG_HAL_DISCRETE_OUT_GROUP[index].frequency,
+                                             (uint32_t)MG_HAL_DISCRETE_OUT_GROUP[index].duty*1000/100);
     }
 }
 
@@ -27,10 +31,12 @@ void mg_HAL_PWM_Set_Discrete_Out_Group_Frequency_And_Duty(uint8_t index)
  *===========================================================================*/
 void mg_HAL_PWM_Set_Discrete_Out_Group_Frequency_And_Duty_Immediate(uint8_t index)
 {
-    if (NULL != MG_HAL_DISCRETE_OUT_GROUP[index].io)
+    if (MG_HIODEVICE_DO_NULL != MG_HAL_DISCRETE_OUT_GROUP[index].io)
     {
-        VSEP_PWM_PWMSetFreqImmediate(MG_HAL_DISCRETE_OUT_GROUP[index].io, MG_HAL_DISCRETE_OUT_GROUP[index].frequency);
-        VSEP_PWM_PWMSetDutyImmediate(MG_HAL_DISCRETE_OUT_GROUP[index].io, MG_HAL_DISCRETE_OUT_GROUP[index].duty);
+        /* convert hz and duty(0-100) to vsep pwm module accuracy */
+        /* VSEP channel: period resoultion is 1/64ms; duty resoultion is 1/32768 */
+        VSEP_PWM_PWMSetPeriodImmediate(MG_HAL_DISCRETE_OUT_GROUP[index].io, (1000 * 64)/MG_HAL_DISCRETE_OUT_GROUP[index].frequency);
+        VSEP_PWM_PWMSetDutyImmediate(MG_HAL_DISCRETE_OUT_GROUP[index].io, (MG_HAL_DISCRETE_OUT_GROUP[index].duty * 32768)/100);
     }
 }
 

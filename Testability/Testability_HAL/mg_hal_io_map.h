@@ -107,31 +107,24 @@
 #define   MG_HIODEVICE_DO_DFB08                  VSEP_DO_FAN2_CH
 //#define   MG_HIODEVICE_DO_DFB11                  (void *)&MG_MTSA_D_OUT_INJ4
 //#define   MG_HIODEVICE_DO_DFB12                  (void *)&MG_MTSA_D_OUT_INJ2
-#define   MG_HIODEVICE_DO_DFB13                  VSEP_DO_FUELCON_CH
+#define   MG_HIODEVICE_DO_DFB13                  MIOS_FUELCONCTL_CH
 #define   MG_HIODEVICE_DO_DFB14                  VSEP_DO_IMMOREQ_CH
 #define   MG_HIODEVICE_DO_DFB15                  VSEP_PO_FAN1_CH
 #define   MG_HIODEVICE_DO_DFB16                  VSEP_PO_CCP_CH
-// #define   MG_HIODEVICE_DO_DFB17                  (void *)&MTSA_PWM_VVT1//&MTSA_PWM_SAIC
-// #define   MG_HIODEVICE_DO_DFB18                  (void *)&MTSA_PWM_VVT2//&MTSA_PWM_EGR
-#define   MG_HIODEVICE_DO_DFB17                  MG_HIODEVICE_DO_NULL
-#define   MG_HIODEVICE_DO_DFB18                  MG_HIODEVICE_DO_NULL
+#define   MG_HIODEVICE_DO_DFB17                  MIOS_VVT1CTL_CH
+#define   MG_HIODEVICE_DO_DFB18                  MIOS_VVT2CTL_CH
 #define   MG_HIODEVICE_DO_DFB19                  VSEP_DO_VGIS1_CH
 #define   MG_HIODEVICE_DO_DFB20                  VSEP_DO_VGIS2_CH
-// #define   MG_HIODEVICE_DO_DFB21                  (void *)&MTSA_PWM_FRONT_O2HEATER
-// #define   MG_HIODEVICE_DO_DFB22                  (void *)&MTSA_PWM_REAR_O2HEATER
+#define   MG_HIODEVICE_DO_DFB21                  VSEP_PO_O2AHTR_CH
+#define   MG_HIODEVICE_DO_DFB22                  VSEP_PO_O2BHTR_CH
 // #define   MG_HIODEVICE_DO_DFB23                  (void *)&MTSA_PWM_CLTPUMPCTL
-#define   MG_HIODEVICE_DO_DFB21                  MG_HIODEVICE_DO_NULL
-#define   MG_HIODEVICE_DO_DFB22                  MG_HIODEVICE_DO_NULL
 #define   MG_HIODEVICE_DO_DFB23                  MG_HIODEVICE_DO_NULL
 #define   MG_HIODEVICE_DO_DFB24                  VSEP_PO_ALTCTL_CH
 #define   MG_HIODEVICE_DO_DFB25                  VSEP_DO_MIL_CH
 #define   MG_HIODEVICE_DO_DFB26                  VSEP_DO_SVS_CH
-// #define   MG_HIODEVICE_DO_DFB27                  (void *)&MTSA_PWM_CLTGAUGE
-// #define   MG_HIODEVICE_DO_DFB28                  (void *)&MTSA_PWM_SMR
-// #define   MG_HIODEVICE_DO_DFB29                  (void *)&MTSA_PWM_TACH
-#define   MG_HIODEVICE_DO_DFB27                  MG_HIODEVICE_DO_NULL
-#define   MG_HIODEVICE_DO_DFB28                  MG_HIODEVICE_DO_NULL
-#define   MG_HIODEVICE_DO_DFB29                  MG_HIODEVICE_DO_NULL
+#define   MG_HIODEVICE_DO_DFB27                  VSEP_PO_CLTGAUGE_CH
+#define   MG_HIODEVICE_DO_DFB28                  VSEP_PO_SMR_CH
+#define   MG_HIODEVICE_DO_DFB29                  VSEP_PO_TACH_CH
 #define   MG_HIODEVICE_DO_DFB30                  VSEP_PO_CRUISI_CH
 
 #if 0
