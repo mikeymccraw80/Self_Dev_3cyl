@@ -250,7 +250,7 @@ void mg_HAL_Internal_Device_Init(void)
     MG_Init_SCI(&SCI_PORT_0);
     MG_Init_SCI(&SCI_PORT_1);
 }
-
+#endif
 /*=============================================================================
  * mg_External_Device_Init
  * @func  Initialize the external devices
@@ -276,6 +276,7 @@ void mg_HAL_External_Device_Init(void)
     }
 }
 
+#if 0
 void mg_HAL_SPI_Timer_Enable(bool state)
 {
     IO_INTERRUPT_Set_Enable( &MTSA_SPI_TIMER, state );

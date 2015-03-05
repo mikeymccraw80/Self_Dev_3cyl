@@ -126,63 +126,63 @@ void mg_HAL_PWM_Set_Discrete_Out_Group_Frequency_And_Duty_Immediate(uint8_t inde
  * @parm  none
  * @rdesc none 
  *===========================================================================*/
-// void mg_HAL_PWM_Discrete_Out_Cycling(void)
-// {
-//     uint8_t idx;
-//     uint32_t time_diff;
+void mg_HAL_PWM_Discrete_Out_Cycling(void)
+{
+    uint8_t idx;
+    uint32_t time_diff;
 
-//     for (idx = 0; idx < MG_Number_of_Discrete_Out_Device; idx++) 
-//     {
-//         if (NULL != MG_HAL_DISCRETE_OUT_GROUP[idx].io) 
-//         {
-//             if (DISCRETE == MG_HAL_DISCRETE_OUT_GROUP[idx].type)
-//             {
-//                 if ((0 != MG_HAL_DISCRETE_OUT_GROUP[idx].on_time_us) && (0!=MG_HAL_DISCRETE_OUT_GROUP[idx].off_time_us)) 
-//                 {
-//                     MG_HAL_DISCRETE_OUT_GROUP[idx].timer.current_time = mg_HAL_Timer_Get_STM_In_CNT();
+    for (idx = 0; idx < MG_Number_of_Discrete_Out_Device; idx++) 
+    {
+        if (NULL != MG_HAL_DISCRETE_OUT_GROUP[idx].io) 
+        {
+            if (DISCRETE == MG_HAL_DISCRETE_OUT_GROUP[idx].type)
+            {
+                if ((0 != MG_HAL_DISCRETE_OUT_GROUP[idx].on_time_us) && (0!=MG_HAL_DISCRETE_OUT_GROUP[idx].off_time_us)) 
+                {
+                    MG_HAL_DISCRETE_OUT_GROUP[idx].timer.current_time = mg_HAL_Timer_Get_STM_In_CNT();
 
-//                     time_diff = mg_HAL_Timer_Get_STM_Diff_In_CNT(MG_HAL_DISCRETE_OUT_GROUP[idx].timer.current_time,MG_HAL_DISCRETE_OUT_GROUP[idx].timer.start_time);
+                    time_diff = mg_HAL_Timer_Get_STM_Diff_In_CNT(MG_HAL_DISCRETE_OUT_GROUP[idx].timer.current_time,MG_HAL_DISCRETE_OUT_GROUP[idx].timer.start_time);
 
-//                     switch(MG_HAL_DISCRETE_OUT_GROUP[idx].current_state)
-//                     {
-//                         case true:
-//                             if (time_diff >= MG_HAL_DISCRETE_OUT_GROUP[idx].on_time_us)
-//                             {
-//                                 mg_HAL_Discrete_Set_Discrete_Out_Group_Value(idx, false);
-//                                 MG_HAL_DISCRETE_OUT_GROUP[idx].timer.start_time = MG_HAL_DISCRETE_OUT_GROUP[idx].timer.current_time;
-//                                 MG_HAL_DISCRETE_OUT_GROUP[idx].current_state = false;
-//                             }
-//                             break;
-//                         case false:
-//                             if (time_diff >= MG_HAL_DISCRETE_OUT_GROUP[idx].off_time_us)
-//                             {
-//                                 mg_HAL_Discrete_Set_Discrete_Out_Group_Value(idx, true);
-//                                 MG_HAL_DISCRETE_OUT_GROUP[idx].timer.start_time = MG_HAL_DISCRETE_OUT_GROUP[idx].timer.current_time;
-//                                 MG_HAL_DISCRETE_OUT_GROUP[idx].current_state = true;
-//                             }
-//                             break;
-//                         default:
-//                             break;
-//                     }
-//                 }
-//                 else if (0 == MG_HAL_DISCRETE_OUT_GROUP[idx].on_time_us)
-//                 {
-//                     mg_HAL_Discrete_Set_Discrete_Out_Group_Value(idx, false);
-//                 }
-//                 else if (0 == MG_HAL_DISCRETE_OUT_GROUP[idx].off_time_us)
-//                 {
-//                     mg_HAL_Discrete_Set_Discrete_Out_Group_Value(idx, true);
-//                 }
-//                 else
-//                 {
-//                     /* do nothing */
-//                 }
-//             }
-//             else
-//             {
-//                 /* do nothing */
-//             }
-//         }
-//         mg_HAL_Service_WatchDog();
-//     }
-// }
+                    switch(MG_HAL_DISCRETE_OUT_GROUP[idx].current_state)
+                    {
+                        case true:
+                            if (time_diff >= MG_HAL_DISCRETE_OUT_GROUP[idx].on_time_us)
+                            {
+                                mg_HAL_Discrete_Set_Discrete_Out_Group_Value(idx, false);
+                                MG_HAL_DISCRETE_OUT_GROUP[idx].timer.start_time = MG_HAL_DISCRETE_OUT_GROUP[idx].timer.current_time;
+                                MG_HAL_DISCRETE_OUT_GROUP[idx].current_state = false;
+                            }
+                            break;
+                        case false:
+                            if (time_diff >= MG_HAL_DISCRETE_OUT_GROUP[idx].off_time_us)
+                            {
+                                mg_HAL_Discrete_Set_Discrete_Out_Group_Value(idx, true);
+                                MG_HAL_DISCRETE_OUT_GROUP[idx].timer.start_time = MG_HAL_DISCRETE_OUT_GROUP[idx].timer.current_time;
+                                MG_HAL_DISCRETE_OUT_GROUP[idx].current_state = true;
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                else if (0 == MG_HAL_DISCRETE_OUT_GROUP[idx].on_time_us)
+                {
+                    mg_HAL_Discrete_Set_Discrete_Out_Group_Value(idx, false);
+                }
+                else if (0 == MG_HAL_DISCRETE_OUT_GROUP[idx].off_time_us)
+                {
+                    mg_HAL_Discrete_Set_Discrete_Out_Group_Value(idx, true);
+                }
+                else
+                {
+                    /* do nothing */
+                }
+            }
+            else
+            {
+                /* do nothing */
+            }
+        }
+        mg_HAL_Service_WatchDog();
+    }
+}

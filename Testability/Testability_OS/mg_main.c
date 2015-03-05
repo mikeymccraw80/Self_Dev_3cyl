@@ -30,6 +30,7 @@
 #include "mg_hal_discrete.h"
 #include "mg_output_cycling_EMC.h"
 #include "mg_output_cycling_validation.h"
+#include "hal_pulse.h"
 
 /* macro define */
 #define MAX_NUMBER_OF_TESTS mg_Get_Test_Max_Number()
@@ -79,9 +80,9 @@ static void Initialize_Testability(void)
 
     // mg_HAL_Internal_Device_Init();
 
-    // mg_HAL_External_Device_Init();
+    mg_HAL_External_Device_Init();
     
-
+    HAL_Pulse_CCP_Set_Period_Duty( 100*64, 128*128);
     // mg_HAL_SPI_Timer_Enable( false );
 
 
