@@ -31,20 +31,19 @@ extern void exit(void);
 //
 //=============================================================================
 
-
+static int app_selection;
 void main(void)
 {
     int Mode = AM_ManufacturingTest;
     InitializeHardwareRegisters();
     InitializeHardwareLast();
 
-    if (InitializeIllegalConditionCheck() == false) {
+    // if (InitializeIllegalConditionCheck() == false) {
+    if (app_selection == 1) {
         Mode = AM_normal;
     } else {
         Mode = AM_ManufacturingTest;
     }
-    /* force entry manufacturing test for test */
-    Mode = AM_ManufacturingTest;
 
     //go into os schedule, event and time schedule
     if( Mode == AM_normal ) {
