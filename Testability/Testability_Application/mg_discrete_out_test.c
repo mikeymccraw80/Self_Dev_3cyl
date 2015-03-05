@@ -63,8 +63,8 @@ void mg_discrete_out_test(void)
         {
             if (DISCRETE == MG_HAL_DISCRETE_OUT_GROUP[idx].type)
             {
-                MG_HAL_DISCRETE_OUT_GROUP[idx].on_time_us = duty * (SYSTEM_FREQUENCY_HZ / freq) / 100;
-                MG_HAL_DISCRETE_OUT_GROUP[idx].off_time_us = (100 - duty) * (SYSTEM_FREQUENCY_HZ / freq) / 100;
+                MG_HAL_DISCRETE_OUT_GROUP[idx].on_time_us = duty * (1000000 / freq) / 100;
+                MG_HAL_DISCRETE_OUT_GROUP[idx].off_time_us = (100 - duty) * (1000000 / freq) / 100;
             }
             else
             {

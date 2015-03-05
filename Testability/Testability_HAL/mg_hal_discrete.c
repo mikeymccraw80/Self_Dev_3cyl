@@ -31,7 +31,7 @@
 
 void mg_HAL_Discrete_Set_Discrete_Out_Group_Value(uint8_t index, bool state)
 {
-    if (NULL != MG_HAL_DISCRETE_OUT_GROUP[index].io)
+    if (MG_HIODEVICE_DO_NULL != MG_HAL_DISCRETE_OUT_GROUP[index].io)
     {
         VSEP_DiscreteSetImmediate(MG_HAL_DISCRETE_OUT_GROUP[index].io, state);
     }

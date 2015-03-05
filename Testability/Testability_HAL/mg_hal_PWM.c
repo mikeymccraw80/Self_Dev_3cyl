@@ -139,7 +139,7 @@ void mg_HAL_PWM_Discrete_Out_Cycling(void)
 
     for (idx = 0; idx < MG_Number_of_Discrete_Out_Device; idx++) 
     {
-        if (NULL != MG_HAL_DISCRETE_OUT_GROUP[idx].io) 
+        if (MG_HIODEVICE_DO_NULL != MG_HAL_DISCRETE_OUT_GROUP[idx].io) 
         {
             if (DISCRETE == MG_HAL_DISCRETE_OUT_GROUP[idx].type)
             {
