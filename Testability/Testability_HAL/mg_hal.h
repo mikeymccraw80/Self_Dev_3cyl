@@ -21,10 +21,6 @@
 //
 //=============================================================================
 
-
-
-
-
 void mg_HAL_Entey_Critical(void);
 void mg_HAL_Exit_Critical(void);
 void mg_HAL_Service_WatchDog(void);

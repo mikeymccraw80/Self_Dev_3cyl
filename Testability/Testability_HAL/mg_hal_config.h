@@ -74,7 +74,7 @@ typedef struct MG_HAL_PFI_OUT_Tag
    TIME_KEEPER_US_T    timer;
 } MG_HAL_PFI_OUT_T;
 
-#if 0
+
 typedef enum 
 {
    MG_EST1,
@@ -84,13 +84,13 @@ typedef enum
 
 typedef struct MG_HAL_EST_OUT_Tag 
 {
-   HIODEVICE        io[MG_EST_NUMBER];
+   uint32_t         io[MG_EST_NUMBER];
    uint32_t         on_time_us;
    uint32_t         delay_time_us;
    bool             current_state;
    TIME_KEEPER_US_T    timer;
-} MG_HAL_EST_OUT_T;33
-#endif
+} MG_HAL_EST_OUT_T;
+
 
 typedef enum 
 {
@@ -150,10 +150,9 @@ extern const uint8_t MG_Number_of_Analog_Device;
 
 extern MG_HAL_DISCRETE_OUT_T MG_HAL_DISCRETE_OUT_GROUP[];
 extern const uint8_t MG_Number_of_Discrete_Out_Device;
-#if 0
-extern const HIODEVICE MG_HAL_SPARK;
+
 extern MG_HAL_EST_OUT_T MG_HAL_EST_GROUP;
-#endif
+
 extern MG_HAL_PFI_OUT_T MG_HAL_INJ_GROUP;
 extern const uint8_t MG_Number_of_INJ_Device;
 extern MG_HAL_ETC_OUT_T MG_HAL_ETC_GROUP;

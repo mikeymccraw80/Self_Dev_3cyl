@@ -18,7 +18,7 @@
 // %version:         5 %
 //
 //=============================================================================
-#if 0
+
 #include "reuse.h"
 #include "mg_mailbox.h"
 #include "mg_hal_config.h"
@@ -91,5 +91,3 @@ void mg_est_test(void)
     } while(period != 0);
     mg_HAL_EST_Shutdown();
 }
-
-#endif

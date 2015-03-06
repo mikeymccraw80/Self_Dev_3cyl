@@ -127,12 +127,10 @@
 #define   MG_HIODEVICE_DO_DFB29                  VSEP_PO_TACH_CH
 #define   MG_HIODEVICE_DO_DFB30                  VSEP_PO_CRUISI_CH
 
-#if 0
 // EST - EST1:DFB01 EST2:DFB02 EST3:DFB03 EST4:DFB04
-#define   MG_HIODEVICE_SPARK                     (void *)&MTSA_SPARK
-#define   MG_HIODEVICE_DO_EST1                   (void *)&MG_MTSA_D_OUT_EST1
-#define   MG_HIODEVICE_DO_ESTSYNC                (void *)&MG_MTSA_D_OUT_ESTSYNC
-#endif
+// #define   MG_HIODEVICE_SPARK                     (void *)&MTSA_SPARK
+#define   MG_HIODEVICE_DO_EST1                   HAL_GPIO_EST1_CHANNEL
+#define   MG_HIODEVICE_DO_ESTSYNC                HAL_GPIO_ESTSYNC_CHANNEL
 
 // INJ
 #define   MG_HIODEVICE_DO_DFB09                  HAL_GPIO_INJECTION1_CHANNEL

@@ -739,15 +739,11 @@ const IO_Input_Capture_T MG_MTSA_IC_ENS =
 void MG_SIU_GPIO_DISCRETE_Initialize_Device_Override(void)
 {
     // override application's configuration, force est stay gpio mode
-#if 0
-    SIU.GPDO[SIU_GPIO_CHANNEL_131] = MG_DO_SIU_INITIAL_GPDO;
-    SIU.GPDO[SIU_GPIO_CHANNEL_132] = MG_DO_SIU_INITIAL_GPDO;
+    SIU.GPDO[SIU_GPIO_CHANNEL_131] = DO_SIU_INITIAL_PDO;
+    SIU.GPDO[SIU_GPIO_CHANNEL_132] = DO_SIU_INITIAL_PDO;
+    SIU.PCR[SIU_GPIO_CHANNEL_131]  = DO_SIU_INITIAL_PCR;
+    SIU.PCR[SIU_GPIO_CHANNEL_132]  = DO_SIU_INITIAL_PCR;
 
-    SIU.PCR[SIU_GPIO_CHANNEL_131] = MG_DO_SIU_INITIAL_PCR;
-    SIU.PCR[SIU_GPIO_CHANNEL_132] = MG_DO_SIU_INITIAL_PCR;
-#endif
-
-#if 1
     // override application's configuration, force inj stay gpio mode
     SIU.GPDO[SIU_GPIO_CHANNEL_133] = DO_SIU_INITIAL_PDO;
     SIU.GPDO[SIU_GPIO_CHANNEL_134] = DO_SIU_INITIAL_PDO;
@@ -757,7 +753,7 @@ void MG_SIU_GPIO_DISCRETE_Initialize_Device_Override(void)
     SIU.PCR[SIU_GPIO_CHANNEL_134]  = DO_SIU_INITIAL_PCR;
     SIU.PCR[SIU_GPIO_CHANNEL_135]  = DO_SIU_INITIAL_PCR;
     SIU.PCR[SIU_GPIO_CHANNEL_136]  = DO_SIU_INITIAL_PCR;
-#endif
+
 
 #if 0
     // override application's configuration, force FPO stay gpio mod

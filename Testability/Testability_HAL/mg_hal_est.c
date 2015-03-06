@@ -1,11 +1,14 @@
-#if 0
 #include "mg_hal_config.h"
 #include "mg_hal_timer.h"
-#include "io_discrete.h"
-#include "io_spark.h"
-#include "io_mptac.h"
+// #include "io_discrete.h"
+// #include "io_spark.h"
+// #include "io_mptac.h"
+#include "dd_vsep_est_select.h"
+#include "dd_mcd5412.h"
+#include "dd_siu_interface.h"
+#include "dd_mcd5412_interface.h"
+#include "io_config_tpu.h"
 
-#define MG_EST_SEQUENTIAL_MODE             (uint8_t volatile  *)(0x00000019)
 
 /*=============================================================================
  * mg_HAL_EST_Set_EST1
@@ -17,7 +20,7 @@ void mg_HAL_EST_Set_EST1(bool state)
 {
     if (NULL != MG_HAL_EST_GROUP.io[MG_EST1])
     {
-        IO_DISCRETE_Set_Immediate_State(MG_HAL_EST_GROUP.io[MG_EST1], state);
+        SIU_GPIO_DISCRETE_Set_State(MG_HAL_EST_GROUP.io[MG_EST1], state);
     }
 }
 
@@ -31,7 +34,7 @@ void mg_HAL_EST_Set_ESTSYNC(bool state)
 {
     if (NULL != MG_HAL_EST_GROUP.io[MG_ESTSYNC])
     {
-        IO_DISCRETE_Set_Immediate_State(MG_HAL_EST_GROUP.io[MG_ESTSYNC], state);
+        SIU_GPIO_DISCRETE_Set_State(MG_HAL_EST_GROUP.io[MG_ESTSYNC], state);
     }
 }
 
@@ -46,11 +49,11 @@ void mg_HAL_EST_Set_Sequential_Mode(bool seq_mode)
 {
    if (seq_mode == true) 
    {
-      IO_SPARK_Set_Mode( MG_HAL_SPARK, SPARK_SEQUENTIAL_MODE );
+      VSEP_EST_Set_PF_Mode(VSEP_INDEX_0,VSEP_EST_SELECT_PAIRED_FIRE_MODE_DISABLED);
    }
    else 
    {
-      IO_SPARK_Set_Mode( MG_HAL_SPARK, SPARK_SIMULTANEOUS_MODE );
+       VSEP_EST_Set_PF_Mode(VSEP_INDEX_0,VSEP_EST_SELECT_PAIRED_FIRE_MODE_ENABLED);
    }
 }
 
@@ -131,45 +134,47 @@ void mg_HAL_EST_Discrete_Cycling_EMC(void)
 
 bool mg_HAL_Get_EST_Sequential_Mode(void)
 {
-    return (*MG_EST_SEQUENTIAL_MODE == 00) ? true : false;
+    return false;
 }
 
 void mg_HAL_EST_Init(MPTAC_Time_Mode_T mode, uint32_t during, uint32_t during_max, uint32_t during_min, uint32_t min_off_time, uint32_t comp_time)
 {
-    uint32_t start_time = mg_HAL_Timer_Get_MPTAC_Value(&MTSA_OC_MPTAC_0);
-    MPTAC_Set_Interrupt_Enable((HIODEVICE)&MTSA_OC_MPTAC_0, false);
-    MPTAC_Set_Time_Mode((HIODEVICE)&MTSA_OC_MPTAC_0, mode, true);
-    MPTAC_Initialize_Channel((HIODEVICE)&MTSA_OC_MPTAC_0, NULL);
-    MPTAC_Set_Duration((HIODEVICE)&MTSA_OC_MPTAC_0, during);
-    MPTAC_Set_Max_Duration((HIODEVICE)&MTSA_OC_MPTAC_0, during_max);
-    MPTAC_Set_Min_Duration((HIODEVICE)&MTSA_OC_MPTAC_0, during_min);
-    MPTAC_Set_CPU_Start_Time((HIODEVICE)&MTSA_OC_MPTAC_0, start_time);
-    MPTAC_Set_Min_Off_Time((HIODEVICE)&MTSA_OC_MPTAC_0, min_off_time);
-    MPTAC_Set_Comp_Time((HIODEVICE)&MTSA_OC_MPTAC_0, comp_time);
+    uint32_t start_time = TPU_TIMER_Get_Value_Channel(MPTAC_TPU_INDEX, SPARK_Mptac[0]);
+    MCD5412_Set_Host_Interrupt_Enable(MPTAC_TPU_INDEX, &TPU, SPARK_Mptac[0], false );
+    MCD5412_Initialize_Channel( MPTAC_TPU_INDEX,  SPARK_Mptac[0]);
+    MCD5412_Set_Flag(MPTAC_TPU_INDEX,             SPARK_Mptac[0], MPTAC_MULTI_PULSE_MODE_FLAG, false);
+    MCD5412_Set_Time_Mode( MPTAC_TPU_INDEX, &TPU, SPARK_Mptac[0], mode);
+    MCD5412_Set_Duration(MPTAC_TPU_INDEX,         SPARK_Mptac[0], during);
+    MCD5412_Set_Max_Duration(MPTAC_TPU_INDEX,     SPARK_Mptac[0], during_max);
+    MCD5412_Set_Min_Duration(MPTAC_TPU_INDEX,     SPARK_Mptac[0], during_min);
+    MCD5412_Set_CPU_Start_Time(MPTAC_TPU_INDEX,   SPARK_Mptac[0], start_time);
+    MCD5412_Set_Min_Off_Time(MPTAC_TPU_INDEX,     SPARK_Mptac[0], min_off_time);
+    MCD5412_Set_Comp_Time(MPTAC_TPU_INDEX,        SPARK_Mptac[0], comp_time);
     MG_HAL_EST_GROUP.timer.current_time = start_time;
 }
 
 void mg_HAL_EST_Start(void)
 {
-    MPTAC_Request_Pulse((HIODEVICE)&MTSA_OC_MPTAC_0);
+    MCD5412_Request_Pulse( MPTAC_TPU_INDEX, SPARK_Mptac[0]);
 }
 
 void mg_HAL_EST_cycling(void)
 {
-    if (MPTAC_Get_Interrupt_Status((HIODEVICE)&MTSA_OC_MPTAC_0))
+    if (MCD5412_Get_Host_Interrupt_Status(MPTAC_TPU_INDEX, &TPU, SPARK_Mptac[0], false))
     {
-        MPTAC_Set_Interrupt_Status((HIODEVICE)&MTSA_OC_MPTAC_0, false);
+        MCD5412_Set_Host_Interrupt_Status(MPTAC_TPU_INDEX, &TPU, SPARK_Mptac[0], false);
         MG_HAL_EST_GROUP.timer.current_time += (MG_HAL_EST_GROUP.on_time_us + MG_HAL_EST_GROUP.delay_time_us);
         mg_HAL_EST_Set_ESTSYNC(true);
         mg_HAL_EST_Set_ESTSYNC(false);
-        MPTAC_Set_CPU_Start_Time((HIODEVICE)&MTSA_OC_MPTAC_0, MG_HAL_EST_GROUP.timer.current_time);
-        MPTAC_Request_Pulse((HIODEVICE)&MTSA_OC_MPTAC_0);
+        MCD5412_Set_CPU_Start_Time(MPTAC_TPU_INDEX,   SPARK_Mptac[0], MG_HAL_EST_GROUP.timer.current_time);
+        // Request that a new pulse be set up:
+        MCD5412_Request_Pulse( MPTAC_TPU_INDEX, SPARK_Mptac[0]);
     }
 }
 
 void mg_HAL_EST_Shutdown(void)
 {
-    MPTAC_Set_Interrupt_Enable((HIODEVICE)&MTSA_OC_MPTAC_0, false);
+    MCD5412_Set_Host_Interrupt_Enable(MPTAC_TPU_INDEX, &TPU, SPARK_Mptac[0], false );
 }
 
 void mg_HAL_EST_Toggle(void)
@@ -182,18 +187,17 @@ void mg_HAL_EST_Toggle(void)
     mg_HAL_EST_Start();
     while (count < 4)
     {
-        if (MPTAC_Get_Interrupt_Status((HIODEVICE)&MTSA_OC_MPTAC_0))
+        if (MCD5412_Get_Host_Interrupt_Status(MPTAC_TPU_INDEX, &TPU, SPARK_Mptac[0], false))
         {
-            MPTAC_Set_Interrupt_Status((HIODEVICE)&MTSA_OC_MPTAC_0, false);
-            MG_HAL_EST_GROUP.timer.current_time = MPTAC_Get_Start_Time((HIODEVICE)&MTSA_OC_MPTAC_0);
+            MCD5412_Set_Host_Interrupt_Status(MPTAC_TPU_INDEX, &TPU, SPARK_Mptac[0], false);
+            MG_HAL_EST_GROUP.timer.current_time = MCD5412_Get_Start_Time(MPTAC_TPU_INDEX, SPARK_Mptac[0]);
             MG_HAL_EST_GROUP.timer.current_time += (MG_HAL_EST_GROUP.on_time_us + MG_HAL_EST_GROUP.delay_time_us);
             mg_HAL_EST_Set_ESTSYNC(true);
             mg_HAL_EST_Set_ESTSYNC(false);
-            MPTAC_Set_CPU_Start_Time((HIODEVICE)&MTSA_OC_MPTAC_0, MG_HAL_EST_GROUP.timer.current_time);
-            MPTAC_Request_Pulse((HIODEVICE)&MTSA_OC_MPTAC_0);
+            MCD5412_Set_CPU_Start_Time(MPTAC_TPU_INDEX,   SPARK_Mptac[0], MG_HAL_EST_GROUP.timer.current_time);
+            MCD5412_Request_Pulse( MPTAC_TPU_INDEX, SPARK_Mptac[0]);
             count++;
         }
     }
     mg_HAL_EST_Shutdown();
 }
-#endif

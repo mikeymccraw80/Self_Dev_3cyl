@@ -1,6 +1,8 @@
 #ifndef MG_HAL_EST_H
 #define MG_HAL_EST_H
 
+#include "dd_mcd5412.h"
+
 void mg_HAL_EST_Set_EST1(bool state);
 void mg_HAL_EST_Set_ESTSYNC(bool state);
 void mg_HAL_EST_Set_Sequential_Mode(bool seq_mode);

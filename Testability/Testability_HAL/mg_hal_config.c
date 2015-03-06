@@ -142,9 +142,8 @@ MG_HAL_DISCRETE_OUT_T MG_HAL_DISCRETE_OUT_GROUP[] =
 
 const uint8_t MG_Number_of_Discrete_Out_Device = MG_SIZE_OF_DISCRETE_OUT_GROUP;
 //============================================ discrete out group end ==============================
-#if 0
+
 //============================================ EST =================================================
-const HIODEVICE MG_HAL_SPARK = MG_HIODEVICE_SPARK;
 
 MG_HAL_EST_OUT_T MG_HAL_EST_GROUP =
 {
@@ -154,7 +153,7 @@ MG_HAL_EST_OUT_T MG_HAL_EST_GROUP =
     }
 };
 //============================================ EST end =============================================
-#endif
+
 //============================================ PFI =================================================
 MG_HAL_PFI_OUT_T MG_HAL_INJ_GROUP = 
 {
