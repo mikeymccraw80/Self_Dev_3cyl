@@ -9,7 +9,6 @@
 #include "dd_mcd5412_interface.h"
 #include "io_config_tpu.h"
 
-
 /*=============================================================================
  * mg_HAL_EST_Set_EST1
  * @func  set EST1 state
@@ -139,6 +138,7 @@ bool mg_HAL_Get_EST_Sequential_Mode(void)
 
 void mg_HAL_EST_Init(MPTAC_Time_Mode_T mode, uint32_t during, uint32_t during_max, uint32_t during_min, uint32_t min_off_time, uint32_t comp_time)
 {
+    // EnableHWIO_Spark_Overide();
     uint32_t start_time = TPU_TIMER_Get_Value_Channel(MPTAC_TPU_INDEX, SPARK_Mptac[0]);
     MCD5412_Set_Host_Interrupt_Enable(MPTAC_TPU_INDEX, &TPU, SPARK_Mptac[0], false );
     MCD5412_Initialize_Channel( MPTAC_TPU_INDEX,  SPARK_Mptac[0]);

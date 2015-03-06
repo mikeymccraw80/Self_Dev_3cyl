@@ -26,7 +26,6 @@
 #include "mg_hal_est.h"
 #include "mg_hal_timer.h"
 
-
 #define MCD5412_TIME_UNIT_ON_US     4
 
 /*=============================================================================
