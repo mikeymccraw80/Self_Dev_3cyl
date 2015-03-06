@@ -31,6 +31,8 @@
 // #include "mg_hal_lin.h"
 #include "mg_hal_timer.h"
 #include "mg_hal_fault.h"
+#include "hal_soh.h"
+#include "dd_vsep_soh.h"
 // #include "io_discrete.h"
 // #include "io_interface.h"
 #include "dd_swt_interface.h"
@@ -149,7 +151,7 @@
 #endif
 #endif
 // #ifdef __MG_TLE4471_WATCHDOG_RESET_TEST
-#define MG_COP_MIN_PERIOD                       (10 * (SYSTEM_FREQUENCY_HZ / 1000))    /* 10ms */
+#define MG_COP_MIN_PERIOD                       (10 * (1000000 / 1000))    /* 10ms */
 // #endif
 
 #if 0
@@ -211,9 +213,7 @@ void mg_HAL_Service_WatchDog(void)
 #endif
 #ifdef __MG_TLE4471_WATCHDOG_RESET_TEST
         TLE4471_WD_Toggle_Immediate();
-        CHALLENGE_TEMP = mg_HAL_SOH_Get_Challenge();
-        RESPONSE_TEMP = mg_HAL_SOH_Calculate_Response( CHALLENGE_TEMP );
-        mg_HAL_SOH_Set_Response(RESPONSE_TEMP);
+        SOH_VSEP_CR_Service();
 #endif
     }
 }
