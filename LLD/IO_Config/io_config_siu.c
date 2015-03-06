@@ -1894,6 +1894,25 @@ const SIU_PCR_T SIU_INITIAL_PCR_397 =
       0  //WPS  Weak pullup/down select
 };
 
+//MG_DO_SIU_INITIAL_PCR, difined for tsw
+const SIU_PCR_T DO_SIU_INITIAL_PCR = 
+{
+      SIU_GPIO_PIN_ASSIGNMENT_GPIO,  //PA Pin assignment 
+      SIU_GPIO_BUFFER_OUT_ENABLED, //OBE  Output buffer enable
+      SIU_GPIO_BUFFER_IN_DISABLED,   //IBE    Input buffer enable
+      SIU_GPIO_DRIVE_STRENGTH_10pF, //DSC  Drive strength control
+      SIU_GPIO_OPEN_DRAIN_DISABLED, //ODE  Open drain output enable
+      SIU_GPIO_INPUT_HYSTERESIS_DISABLED, //HYS Input hysteresis
+      SIU_GPIO_SLEW_RATE_MEDIMUM,  //SRC  Slew rate control
+      SIU_GPIO_PULL_UP_Down_DISABLED,  //WPE  Weak pullup/down enable
+      SIU_GPIO_PULL_DOWN  //WPS  Weak pullup/down select
+};
+
+//not active setting, defined for tsw
+const SIU_GPDO_T DO_SIU_INITIAL_PDO = 
+{
+      IO_INACTIVE
+};
 
 //The SIU_PCR390 ¨C SIU_PCR413 registers control the muxing of the signals to the DSPI. PA field values
 //are shown in Table 140.

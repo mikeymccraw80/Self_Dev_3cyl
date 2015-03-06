@@ -749,7 +749,11 @@ extern const SIU_PCR_T SIU_INITIAL_PCR_396;
 //=============================================================================
 extern const SIU_PCR_T SIU_INITIAL_PCR_397;
 
-
+//=============================================================================
+// settings defined for tsw
+//=============================================================================
+extern const SIU_PCR_T DO_SIU_INITIAL_PCR;
+extern const SIU_GPDO_T DO_SIU_INITIAL_PDO;
 
 #endif // IO_CONFIG_SIU_H
 

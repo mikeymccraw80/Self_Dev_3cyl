@@ -1,4 +1,3 @@
-#if 0
 //=============================================================================
 //
 //       COPYRIGHT, 2008, Delphi Technologies, Inc. All Rights reserved
@@ -20,40 +19,38 @@
 //
 //=============================================================================
 
-#include "io_config.h"
 #include "io_type.h"
-#include "io_scale.h"
-#include "dd_vsep_init.h"
-#include "dd_siu.h"
+// #include "io_scale.h"
+// #include "dd_vsep_init.h"
 #include "mg_hal_config.h"
+#include "io_config_siu.h"
+// #include "io_interrupt.h"
 
-#include "io_interrupt.h"
-
-#include "dd_mcd5402_interface.h"
-#include "dd_tpu_discrete_interface.h"
-#include "dd_tpu_interrupt_interface.h"
+// #include "dd_mcd5402_interface.h"
+// #include "dd_tpu_discrete_interface.h"
+// #include "dd_tpu_interrupt_interface.h"
 
 
 //=============================================================================
 // SIU
 //=============================================================================
-#include "dd_siu.h"
-#include "dd_siu_general_purpose_io_interface.h"
-#include "dd_siu_dspi_general_purpose_io_interface.h"
-#include "dd_siu_interrupt_interface.h"
-#include "dd_siu_init_macros.h"
+// #include "dd_siu.h"
+// #include "dd_siu_general_purpose_io_interface.h"
+// #include "dd_siu_dspi_general_purpose_io_interface.h"
+// #include "dd_siu_interrupt_interface.h"
+// #include "dd_siu_init_macros.h"
 
-#include "mg_io_interface_override.h"
-#include "dd_mcd5403_interface.h"
-#include "dd_vsep.h"
-#include "dd_vsep_interface.h"
-#include "dd_vsep_fault_interface.h"
-#include "dd_mios_discrete_interface.h"
-#include "dd_mios_interrupt_interface.h"
-#include "com_sci_port_driver.h"
-#include "dd_vsep_fault.h"
-#include "dd_vsep_pwm_interface.h"
-
+// #include "mg_io_interface_override.h"
+// #include "dd_mcd5403_interface.h"
+// #include "dd_vsep.h"
+// #include "dd_vsep_interface.h"
+// #include "dd_vsep_fault_interface.h"
+// #include "dd_mios_discrete_interface.h"
+// #include "dd_mios_interrupt_interface.h"
+// #include "com_sci_port_driver.h"
+// #include "dd_vsep_fault.h"
+// #include "dd_vsep_pwm_interface.h"
+#if 0
 #define MG_MTSA_CONFIG_D_OUT_EST1 \
              ( SIU_GPIO_Set_Polarity( 0, IO_ACTIVE_HIGH                       ) | \
    SIU_GPIO_Set_Initial_Output_State( 0, IO_INACTIVE                          ) | \
@@ -79,7 +76,10 @@
     SIU_GPIO_Set_Pull_Up_Down_Enable( 0, SIU_GPIO_PULL_UP_DISABLED            ) | \
                 SIU_GPIO_Set_Pull_Up( 0, SIU_GPIO_PULL_DOWN                   ) | \
                 SIU_GPIO_Set_Channel( 0, SIU_GPIO_CHANNEL_132                 ) )
-#if 1
+
+#endif
+
+#if 0
 #define MG_MTSA_CONFIG_D_OUT_INJ1 \
              ( SIU_GPIO_Set_Polarity( 0, IO_ACTIVE_HIGH                       ) | \
    SIU_GPIO_Set_Initial_Output_State( 0, IO_INACTIVE                          ) | \
@@ -184,7 +184,7 @@
     SIU_GPIO_Set_Pull_Up_Down_Enable( 0, SIU_GPIO_PULL_UP_DISABLED            ) | \
                 SIU_GPIO_Set_Pull_Up( 0, SIU_GPIO_PULL_DOWN                   ) | \
                 SIU_GPIO_Set_Channel( 0, SIU_GPIO_CHANNEL_124                 ) )
-#endif
+
 #define MG_SIU_GPIO_OUT \
              ( SIU_GPIO_Set_Polarity( 0, IO_ACTIVE_HIGH                       ) | \
    SIU_GPIO_Set_Initial_Output_State( 0, IO_INACTIVE                          ) | \
@@ -624,13 +624,14 @@ const SIU_PCR_T MG_PWM_SIU_INITIAL_PCR =
    SIU_PCR_Initialize_WPE(MG_SIU_VSEP_PWM),
    SIU_PCR_Initialize_WPS(MG_SIU_VSEP_PWM)
 };
+#endif
 
 // SIU GPDO register intialization group for gpio out
-const SIU_GPDO_T  MG_DO_SIU_INITIAL_GPDO =
-{
-   SIU_PCR_Initialize_GPDO(MG_SIU_GPIO_OUT)
-};
-
+// const SIU_GPDO_T  MG_DO_SIU_INITIAL_GPDO =
+// {
+//    SIU_PCR_Initialize_GPDO(DO_SIU_INITIAL_PCR)
+// };
+#if 0
 // SIU GPDO register intialization group for gpio in
 const SIU_GPDO_T  MG_DI_SIU_INITIAL_GPDO =
 {
@@ -728,6 +729,7 @@ const IO_Input_Capture_T MG_MTSA_IC_ENS =
    true
 };
 
+#endif
 /*=============================================================================
  * MG_SIU_GPIO_DISCRETE_Initialize_Device_Override
  * @func  override application SIU initialization
@@ -747,15 +749,14 @@ void MG_SIU_GPIO_DISCRETE_Initialize_Device_Override(void)
 
 #if 1
     // override application's configuration, force inj stay gpio mode
-    SIU.GPDO[SIU_GPIO_CHANNEL_133] = MG_DO_SIU_INITIAL_GPDO;
-    SIU.GPDO[SIU_GPIO_CHANNEL_134] = MG_DO_SIU_INITIAL_GPDO;
-    SIU.GPDO[SIU_GPIO_CHANNEL_135] = MG_DO_SIU_INITIAL_GPDO;
-    SIU.GPDO[SIU_GPIO_CHANNEL_136] = MG_DO_SIU_INITIAL_GPDO;
-
-    SIU.PCR[SIU_GPIO_CHANNEL_133] = MG_DO_SIU_INITIAL_PCR;
-    SIU.PCR[SIU_GPIO_CHANNEL_134] = MG_DO_SIU_INITIAL_PCR;
-    SIU.PCR[SIU_GPIO_CHANNEL_135] = MG_DO_SIU_INITIAL_PCR;
-    SIU.PCR[SIU_GPIO_CHANNEL_136] = MG_DO_SIU_INITIAL_PCR;
+    SIU.GPDO[SIU_GPIO_CHANNEL_133] = DO_SIU_INITIAL_PDO;
+    SIU.GPDO[SIU_GPIO_CHANNEL_134] = DO_SIU_INITIAL_PDO;
+    SIU.GPDO[SIU_GPIO_CHANNEL_135] = DO_SIU_INITIAL_PDO;
+    SIU.GPDO[SIU_GPIO_CHANNEL_136] = DO_SIU_INITIAL_PDO;
+    SIU.PCR[SIU_GPIO_CHANNEL_133]  = DO_SIU_INITIAL_PCR;
+    SIU.PCR[SIU_GPIO_CHANNEL_134]  = DO_SIU_INITIAL_PCR;
+    SIU.PCR[SIU_GPIO_CHANNEL_135]  = DO_SIU_INITIAL_PCR;
+    SIU.PCR[SIU_GPIO_CHANNEL_136]  = DO_SIU_INITIAL_PCR;
 #endif
 
 #if 0
@@ -777,9 +778,9 @@ void MG_SIU_GPIO_DISCRETE_Initialize_Device_Override(void)
     SIU.PCR[SIU_GPIO_CHANNEL_123] = MG_DO_SIU_INITIAL_PCR;
 #endif
     // disable RTI, cause it will operate ETC
-    IO_INTERRUPT_Set_Enable( MG_HIODEVICE_RTI, false);
+    // IO_INTERRUPT_Set_Enable( MG_HIODEVICE_RTI, false);
 }
-
+#if 0
 void MG_SIU_GPIO_PWM_Initialize_Device_Override(void)
 {
     SIU.PCR[SIU_GPIO_CHANNEL_391] = MG_PWM_SIU_INITIAL_PCR;
