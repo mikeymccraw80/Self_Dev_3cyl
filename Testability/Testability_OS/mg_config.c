@@ -220,7 +220,7 @@ const mgFnPtr_T mgFn[] = {
 #else
    mg_unimplemented_test,
 #endif
-#ifdef __MG_EST_TEST
+#ifdef __MG_ETC_TEST
    mg_etc_test,                                    /* testID 0x10 */
 #else
    mg_unimplemented_test,
