@@ -132,13 +132,14 @@
 #define   MG_HIODEVICE_SPARK                     (void *)&MTSA_SPARK
 #define   MG_HIODEVICE_DO_EST1                   (void *)&MG_MTSA_D_OUT_EST1
 #define   MG_HIODEVICE_DO_ESTSYNC                (void *)&MG_MTSA_D_OUT_ESTSYNC
+#endif
 
 // INJ
-#define   MG_HIODEVICE_DO_DFB09                  (void *)&MG_MTSA_D_OUT_INJ1
-#define   MG_HIODEVICE_DO_DFB10                  (void *)&MG_MTSA_D_OUT_INJ2
-#define   MG_HIODEVICE_DO_DFB11                  (void *)&MG_MTSA_D_OUT_INJ3
-#define   MG_HIODEVICE_DO_DFB12                  (void *)&MG_MTSA_D_OUT_INJ4
-#endif
+#define   MG_HIODEVICE_DO_DFB09                  HAL_GPIO_INJECTION1_CHANNEL
+#define   MG_HIODEVICE_DO_DFB10                  HAL_GPIO_INJECTION2_CHANNEL
+#define   MG_HIODEVICE_DO_DFB11                  HAL_GPIO_INJECTION3_CHANNEL
+#define   MG_HIODEVICE_DO_DFB12                  HAL_GPIO_INJECTION4_CHANNEL
+
 // ETC
 // #define   MG_HIODEVICE_ETC_PWM                   (void *)&MTSA_PWM_ETCCTLPWM
 // #define   MG_HIODEVICE_ETCDIR                    (void *)&MTSA_D_OUT_ETC_DIR

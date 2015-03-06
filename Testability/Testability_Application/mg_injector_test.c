@@ -18,7 +18,6 @@
 // %version:         1 %
 //
 //=============================================================================
-#if 0
 #include "reuse.h"
 #include "mg_mailbox.h"
 #include "mg_hal_config.h"
@@ -48,8 +47,8 @@ void mg_injector_test(void)
     // duty cycly can't exceed 25%
     if ((duty!=0)&&(duty<=25)&&(freq!=0)) 
     {
-        MG_HAL_INJ_GROUP.on_time_us = (SYSTEM_FREQUENCY_HZ / freq) * duty / 100;
-        MG_HAL_INJ_GROUP.delay_time_us = (SYSTEM_FREQUENCY_HZ / freq) / 4 - MG_HAL_INJ_GROUP.on_time_us;
+        MG_HAL_INJ_GROUP.on_time_us = (1000000 / freq) * duty / 100;
+        MG_HAL_INJ_GROUP.delay_time_us = (1000000 / freq) / 4 - MG_HAL_INJ_GROUP.on_time_us;
         mg_HAL_Injector_Set_Group_Value(MG_INJ_IDX_1,true);
         MG_HAL_INJ_GROUP.current_state = true;
         MG_HAL_INJ_GROUP.current_inj = MG_INJ_IDX_1;
@@ -71,5 +70,3 @@ void mg_injector_test(void)
 
 
 }
-
-#endif

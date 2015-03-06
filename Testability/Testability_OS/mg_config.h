@@ -38,7 +38,7 @@
 #undef __MG_EST_TEST
 #define __MG_ETC_TEST
 #undef __MG_FUEL_PUMP_OUTPUT_TEST
-#undef __MG_INJECTOR_TEST
+#define __MG_INJECTOR_TEST
 #undef __MG_KNOCK_TEST
 #undef __MG_TOD_TEST
 #undef __MG_IGBT_OVER_CURRENT_TEST

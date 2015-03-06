@@ -1,6 +1,6 @@
-#if 0
 #include "mg_hal_config.h"
 #include "mg_hal_timer.h"
+#include "dd_siu_interface.h"
 
 /*=============================================================================
  * mg_HAL_Injector_Set_Group_Value
@@ -12,7 +12,8 @@ void mg_HAL_Injector_Set_Group_Value(uint8_t index, bool state)
 {
     if (NULL != MG_HAL_INJ_GROUP.io[index])
     {
-        IO_DISCRETE_Set_Immediate_State(MG_HAL_INJ_GROUP.io[index], state);
+        // IO_DISCRETE_Set_Immediate_State(MG_HAL_INJ_GROUP.io[index], state);
+        SIU_GPIO_DISCRETE_Set_State(MG_HAL_INJ_GROUP.io[index], state);
     }
 }
 
@@ -142,5 +143,3 @@ void mg_HAL_Injector_Discrete_Cycling(void)
          break;
    }
 }
-
-#endif
