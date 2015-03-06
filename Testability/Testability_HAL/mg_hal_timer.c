@@ -73,7 +73,8 @@ uint32_t mg_HAL_Timer_Get_STM_Diff_In_us(uint32_t current_time,uint32_t start_ti
  *===========================================================================*/
 uint32_t mg_HAL_Timer_Get_STM_In_CNT(void)
 {
-   return *MG_STM_CNT_REG;
+   // return *MG_STM_CNT_REG;
+   return time_get(0);
 }
 
 /*=============================================================================
