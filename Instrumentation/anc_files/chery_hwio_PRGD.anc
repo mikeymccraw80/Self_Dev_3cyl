@@ -79,7 +79,7 @@
 
 *-prgdmall.SbPRGD_Purge_TestFailedHi{
 *-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "PRGTSTFAIL";
+*-  label                    = "PRGTSTFAHI";
 *-  variable_location.symbol = prgdmall.SbPRGD_Purge_TestFailedHi;
 *-  ds_scaling_unit          = "Boolean";
 *-  ds_precision             = "2.0";
@@ -91,7 +91,7 @@
 
 *-prgdmall.SbPRGD_Purge_TestFailedLo{
 *-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "PRGTSTFAIL";
+*-  label                    = "PRGTSTFALO";
 *-  variable_location.symbol = prgdmall.SbPRGD_Purge_TestFailedLo;
 *-  ds_scaling_unit          = "Boolean";
 *-  ds_precision             = "2.0";
