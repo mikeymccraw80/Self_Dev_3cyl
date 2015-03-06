@@ -74,7 +74,7 @@ static void Initialize_Testability(void)
     mg_HAL_SWT_Enable_WatchDog( false );
     clear_mailbox();
 
-    // MG_SIU_GPIO_DISCRETE_Initialize_Device_Override();
+    MG_SIU_GPIO_DISCRETE_Initialize_Device_Override();
 
     // mg_HAL_Discrete_Reconfigure_CAL();
 
@@ -82,7 +82,6 @@ static void Initialize_Testability(void)
 
     mg_HAL_External_Device_Init();
     
-    HAL_Pulse_CCP_Set_Period_Duty( 100*64, 128*128);
     // mg_HAL_SPI_Timer_Enable( false );
 
 
