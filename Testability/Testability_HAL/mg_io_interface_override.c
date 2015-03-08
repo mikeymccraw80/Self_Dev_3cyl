@@ -610,7 +610,7 @@ const IO_Discrete_T MG_MTSA_D_OUT_FPO7 =
    &SIU_GPIO_DISCRETE,
    &SIU_GPIO_INTERRUPT
 };
-
+#endif
 // SIU PCR register  initialization group for pwm
 const SIU_PCR_T MG_PWM_SIU_INITIAL_PCR =
 {
@@ -624,7 +624,7 @@ const SIU_PCR_T MG_PWM_SIU_INITIAL_PCR =
    SIU_PCR_Initialize_WPE(MG_SIU_VSEP_PWM),
    SIU_PCR_Initialize_WPS(MG_SIU_VSEP_PWM)
 };
-#endif
+
 
 // SIU GPDO register intialization group for gpio out
 // const SIU_GPDO_T  MG_DO_SIU_INITIAL_GPDO =
@@ -776,12 +776,13 @@ void MG_SIU_GPIO_DISCRETE_Initialize_Device_Override(void)
     // disable RTI, cause it will operate ETC
     // IO_INTERRUPT_Set_Enable( MG_HIODEVICE_RTI, false);
 }
-#if 0
+
 void MG_SIU_GPIO_PWM_Initialize_Device_Override(void)
 {
     SIU.PCR[SIU_GPIO_CHANNEL_391] = MG_PWM_SIU_INITIAL_PCR;
 }
 
+#if 0
 void MG_Reset_SCI(const CommPort_T * in_port)
 {
     IO_Configuration_T  in_configuration = in_port->Configuration;

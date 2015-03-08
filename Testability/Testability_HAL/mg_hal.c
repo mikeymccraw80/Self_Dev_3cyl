@@ -281,6 +281,7 @@ void mg_HAL_SPI_Timer_Enable(bool state)
 {
     IO_INTERRUPT_Set_Enable( &MTSA_SPI_TIMER, state );
 }
+#endif
 
 void mg_HAL_Output_Cycling_Init(void)
 {
@@ -426,7 +427,7 @@ void mg_HAL_Output_Cycling_Diagnostic(uint8_t *pch)
 #endif
 
 }
-
+#if 0
 void mg_HAL_Output_Cycling_EMC_Init(void)
 {
     MG_SIU_GPIO_PWM_Initialize_Device_Override();
