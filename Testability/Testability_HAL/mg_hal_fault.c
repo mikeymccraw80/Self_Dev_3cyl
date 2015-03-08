@@ -18,7 +18,7 @@
 #endif
 #ifdef __MG_L9958_USED
 #include "dd_l9958.h"
-#include "dd_l9958_init.h"
+#include "dd_l9958_interface.h"
 #endif
 #ifdef __MG_KP254_USED
 #include "dd_kp254_fault.h"
@@ -124,6 +124,7 @@ void mg_PHD_Set_Slew_Time(uint8_t data)
 
 #ifdef __MG_L9958_USED
 #endif
+#endif
 
 /*=============================================================================
  * mg_HAL_Fault_ETC_Open_Test_Configure
@@ -141,12 +142,13 @@ void mg_HAL_Fault_ETC_Open_Test_Configure(void)
     mg_PHD_Set_Auto_Thermal_Warning_Slew_Time(1);
 #endif
 #ifdef __MG_L9958_USED
-    L9958_Diag_Rst_Disable_Set((IO_Configuration_T)L9958_CONFIGURATION_REG_INIT_0, L9958_DIAG_RST_DISABLE_FLASE);
-    L9958_Regulation_Curr_Level_Set((IO_Configuration_T)L9958_CONFIGURATION_REG_INIT_0, L9958_CURRENT_LEVEL_8P6);
-    L9958_OL_ON_Enable_Set((IO_Configuration_T)L9958_CONFIGURATION_REG_INIT_0, L9958_OPEN_LOAD_ON_ENABLE);
-    L9958_VSR_Set((IO_Configuration_T)L9958_CONFIGURATION_REG_INIT_0, L9958_VSR_LO);
-    L9958_ISR_Set((IO_Configuration_T)L9958_CONFIGURATION_REG_INIT_0, L9958_ISR_LO);
-    L9958_ISR_Disable_Set((IO_Configuration_T)L9958_CONFIGURATION_REG_INIT_0, L9958_ISR_DISABLE_FALSE);
+    L9958_Diag_Rst_Disable_Set(L9958_DIAG_RST_DISABLE_FALSE);
+    L9958_Regulation_Curr_Level_Set(L9958_CURRENT_LEVEL_8P6);
+    L9958_OL_ON_Enable_Set(L9958_OPEN_LOAD_ON_ENABLE);
+    L9958_VSR_Set(L9958_VSR_LO);
+    L9958_ISR_Set(L9958_ISR_LO);
+    L9958_ISR_Disable_Set(L9958_ISR_DISABLE_FALSE);
+    L9958_SPI_Immediate_Transfer();
 #endif
 }
 
@@ -166,12 +168,13 @@ void mg_HAL_Fault_ETC_STB_STG_Test_Configure(void)
     mg_PHD_Set_Auto_Thermal_Warning_Slew_Time(1);
 #endif
 #ifdef __MG_L9958_USED
-    L9958_Diag_Rst_Disable_Set((IO_Configuration_T)L9958_CONFIGURATION_REG_INIT_0, L9958_DIAG_RST_DISABLE_FLASE);
-    L9958_Regulation_Curr_Level_Set((IO_Configuration_T)L9958_CONFIGURATION_REG_INIT_0, L9958_CURRENT_LEVEL_8P6);
-    L9958_OL_ON_Enable_Set((IO_Configuration_T)L9958_CONFIGURATION_REG_INIT_0, L9958_OPEN_LOAD_ON_DISABLE);
-    L9958_VSR_Set((IO_Configuration_T)L9958_CONFIGURATION_REG_INIT_0, L9958_VSR_LO);
-    L9958_ISR_Set((IO_Configuration_T)L9958_CONFIGURATION_REG_INIT_0, L9958_ISR_LO);
-    L9958_ISR_Disable_Set((IO_Configuration_T)L9958_CONFIGURATION_REG_INIT_0, L9958_ISR_DISABLE_TRUE);
+    L9958_Diag_Rst_Disable_Set(L9958_DIAG_RST_DISABLE_FALSE);
+    L9958_Regulation_Curr_Level_Set(L9958_CURRENT_LEVEL_8P6);
+    L9958_OL_ON_Enable_Set(L9958_OPEN_LOAD_ON_DISABLE);
+    L9958_VSR_Set(L9958_VSR_LO);
+    L9958_ISR_Set(L9958_ISR_LO);
+    L9958_ISR_Disable_Set(L9958_ISR_DISABLE_TRUE);
+    L9958_SPI_Immediate_Transfer();
 #endif
 }
 
@@ -191,15 +194,17 @@ void mg_HAL_Fault_ETC_Over_Current_Test_Configure(uint8_t slew_rate)
     mg_PHD_Set_Auto_Thermal_Warning_Slew_Time(1);
 #endif
 #ifdef __MG_L9958_USED
-    L9958_Diag_Rst_Disable_Set((IO_Configuration_T)L9958_CONFIGURATION_REG_INIT_0, L9958_DIAG_RST_DISABLE_FLASE);
-    L9958_Regulation_Curr_Level_Set((IO_Configuration_T)L9958_CONFIGURATION_REG_INIT_0, L9958_CURRENT_LEVEL_2P5);
-    L9958_OL_ON_Enable_Set((IO_Configuration_T)L9958_CONFIGURATION_REG_INIT_0, L9958_OPEN_LOAD_ON_ENABLE);
-    L9958_VSR_Set((IO_Configuration_T)L9958_CONFIGURATION_REG_INIT_0, L9958_VSR_LO);
-    L9958_ISR_Set((IO_Configuration_T)L9958_CONFIGURATION_REG_INIT_0, L9958_ISR_LO);
-    L9958_ISR_Disable_Set((IO_Configuration_T)L9958_CONFIGURATION_REG_INIT_0, L9958_ISR_DISABLE_FALSE);
+    L9958_Diag_Rst_Disable_Set(L9958_DIAG_RST_DISABLE_FALSE);
+    L9958_Regulation_Curr_Level_Set(L9958_CURRENT_LEVEL_2P5);
+    L9958_OL_ON_Enable_Set(L9958_OPEN_LOAD_ON_ENABLE);
+    L9958_VSR_Set(L9958_VSR_LO);
+    L9958_ISR_Set(L9958_ISR_LO);
+    L9958_ISR_Disable_Set(L9958_ISR_DISABLE_FALSE);
+    L9958_SPI_Immediate_Transfer();
 #endif
 }
 
+#if 0
 /*=============================================================================
  * mg_HAL_ComplexIO_Fault_Read
  * @func  read external device fault buff
@@ -233,7 +238,6 @@ void mg_HAL_PowerDevice_Fault_Read(void)
 #endif
 }
 
-#if 0
 /*=============================================================================
  * mg_HAL_ETC_Fault_Read
  * @func  read external device fault buff
@@ -247,11 +251,12 @@ void mg_HAL_ETC_Fault_Read(void)
     mg_PHD_Set_Clear_Fault(0);
 #endif
 #ifdef __MG_L9958_USED
-    L9958_Diag_Rst_Disable_Set((IO_Configuration_T)L9958_CONFIGURATION_REG_INIT_0, L9958_DIAG_RST_DISABLE_FLASE);
-    L9958_SPI_Immediate_Transfer( L9958_Set_Device_Index( 0, L9958_INDEX_0 ) );
+    L9958_Diag_Rst_Disable_Set(L9958_DIAG_RST_DISABLE_FALSE);
+    L9958_SPI_Immediate_Transfer();
 #endif
 }
 
+#if 0
 /*=============================================================================
  * mg_HAL_BARO_Fault_Read
  * @func  read external device fault buff
@@ -297,6 +302,7 @@ void mg_HAL_PowerDevice_Fault_Clear(void)
 #ifdef __MG_TLE4471_USED
 #endif
 }
+#endif
 
 /*=============================================================================
  * mg_HAL_ETC_Fault_Clear
@@ -310,11 +316,13 @@ void mg_HAL_ETC_Fault_Clear(void)
     mg_PHD_Set_Clear_Fault(1);
 #endif
 #ifdef __MG_L9958_USED
-    L9958_Diag_Rst_Disable_Set((IO_Configuration_T)L9958_CONFIGURATION_REG_INIT_0, L9958_DIAG_RST_DISABLE_FLASE);
-    L9958_SPI_Immediate_Transfer( L9958_Set_Device_Index( 0, L9958_INDEX_0 ) );
+    /* get the fault reg value from l9958, and then pick up information to Fault_log*/
+    L9958_Diag_Rst_Disable_Set(L9958_DIAG_RST_DISABLE_FALSE);
+    L9958_SPI_Immediate_Transfer();
 #endif
 }
 
+#if 0
 /*=============================================================================
  * mg_HAL_BARO_Fault_Clear
  * @func  clear external device fault buff
@@ -381,7 +389,7 @@ uint8_t mg_HAL_PowerDevice_Fault_Get(uint8_t index)
 #endif
     return fault_result;
 }
-#if 0
+
 /*=============================================================================
  * mg_HAL_ETC_Fault_Get
  * @func  get external fault information
@@ -396,7 +404,7 @@ uint8_t mg_HAL_ETC_Fault_Get(uint8_t index)
 #endif
 #ifdef __MG_L9958_USED
     MG_HAL_WORD_ACCESS_T fault_log;
-    fault_log.word = (uint16_t)L9958_Get_Fault_Status((IO_Configuration_T)L9958_CONFIGURATION_REG_INIT_0);
+    fault_log.word = (uint16_t)L9958_Get_Fault_Status();
     switch (index)
     {
         case 0:
@@ -413,6 +421,7 @@ uint8_t mg_HAL_ETC_Fault_Get(uint8_t index)
     return fault_result;
 }
 
+#if 0
 /*=============================================================================
  * mg_HAL_BARO_Fault_Get
  * @func  get external fault information

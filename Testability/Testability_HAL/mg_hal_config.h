@@ -125,7 +125,7 @@ typedef struct MG_HAL_BARO_IN_Tag
 {
    HIODEVICE   io;
 } MG_HAL_BARO_IN_T;
-
+#endif
 typedef union
 {
    uint16_t word;
@@ -143,7 +143,7 @@ typedef union
    }byte_access;
 #endif
 }MG_HAL_WORD_ACCESS_T;
-#endif
+
 extern const AD_Analog_T MG_HAL_ANALOG_GROUP[];
 extern const uint8_t MG_Number_of_Analog_Device;
 

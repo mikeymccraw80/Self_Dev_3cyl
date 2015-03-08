@@ -46,10 +46,11 @@ void mg_HAL_PWM_Set_Discrete_Out_Group_Frequency_And_Duty_Immediate(uint8_t inde
  * @parm  frequency, duty
  * @rdesc none 
  *===========================================================================*/
-// void mg_HAL_PWM_Set_ETCCTLPWM_Frequency_And_Duty(uint32_t frequency, uint32_t duty)
-// {
-//     IO_PULSE_PWM_Set_Frequency_And_Duty_Cycle(&MTSA_PWM_ETCCTLPWM, frequency, 0, duty, 100);
-// }
+void mg_HAL_PWM_Set_ETCCTLPWM_Frequency_And_Duty(uint32_t frequency, uint32_t duty)
+{
+    MIOS_PWM_Set_Period_And_DutyCycle_US(MIOS_ETCCTLPWM_CH, (uint32_t)(1000 * 1000)/frequency, duty*1000/100);
+    // IO_PULSE_PWM_Set_Frequency_And_Duty_Cycle(&MTSA_PWM_ETCCTLPWM, frequency, 0, duty, 100);
+}
 
 /*=============================================================================
  * mg_HAL_PWM_Set_Fuel_Pump_High_Frequency_And_Duty

@@ -7,7 +7,7 @@
 #undef __MG_C2PS_USED
 #define __MG_TLE4471_USED
 #undef __MG_PHDL_USED
-#undef __MG_L9958_USED
+#define __MG_L9958_USED
 #undef __MG_KP254_USED
 
 /* Test Functions Defination */
@@ -22,7 +22,7 @@
 #define __MG_ANALOG_IN_TEST
 #undef __MG_FREQ_IN_TEST
 #undef __MG_PHDL_FAULT_DIAGNOSTIC_TEST
-#undef __MG_L9958_FAULT_DIAGNOSTIC_TEST
+#define __MG_L9958_FAULT_DIAGNOSTIC_TEST
 #define __MG_MICROP_FREQ_TEST
 #undef __MG_C2MIO_FAULT_DIAGNOSTIC_TEST
 #undef __MG_VSEP_FAULT_DIAGNOSTIC_TEST

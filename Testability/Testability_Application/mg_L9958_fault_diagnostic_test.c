@@ -18,7 +18,6 @@
 // %version:         2 %
 //
 //=============================================================================
-#if 0
 #include "reuse.h"
 #include "mg_mailbox.h"
 #include "mg_hal_config.h"
@@ -84,8 +83,6 @@ void mg_L9958_fault_diagnostic_test(void)
         mg_HAL_ETC_Discrete_Enable(false);
         /* Low Side Current Limit Set 0x03 */
         mg_HAL_Fault_ETC_Open_Test_Configure();
-//        mg_HAL_ETC_Fault_Read();
-//    mg_HAL_ETC_Fault_Clear();
         mg_HAL_Time_Hard_Delay_us(DELAY_200_MS);
     }
     else if (STB_STG_TEST == test_mode)
@@ -94,19 +91,7 @@ void mg_L9958_fault_diagnostic_test(void)
         mg_HAL_ETC_Discrete_Enable(false);
         /* Low Side Current Limit Set 0x03 */
         mg_HAL_Fault_ETC_STB_STG_Test_Configure();
-//        mg_HAL_ETC_Fault_Read();
-//    mg_HAL_ETC_Fault_Clear();
         mg_HAL_Time_Hard_Delay_us(DELAY_200_MS);
-//        mg_HAL_PWM_Set_ETCCTLPWM_Frequency_And_Duty(10000, 0);
-//        mg_HAL_ETC_Discrete_Direction( true);
-//        mg_HAL_Time_Hard_Delay_us(DELAY_2_S);
-//        mg_HAL_ETC_Discrete_Direction( false);
-//        mg_HAL_Time_Hard_Delay_us(DELAY_2_S);
-//        mg_HAL_PWM_Set_ETCCTLPWM_Frequency_And_Duty(10000, 100);
-//        mg_HAL_ETC_Discrete_Direction( true);
-//        mg_HAL_Time_Hard_Delay_us(DELAY_2_S);
-//        mg_HAL_ETC_Discrete_Direction( false);
-//        mg_HAL_Time_Hard_Delay_us(DELAY_2_S);
     }
     else if (OVER_CURRENT_TEST == test_mode)
     {
@@ -114,7 +99,6 @@ void mg_L9958_fault_diagnostic_test(void)
         mg_HAL_ETC_Discrete_Enable(true);
         /* Low Side Current Limit Set 0x00 */
         mg_HAL_Fault_ETC_Over_Current_Test_Configure(test_slew_rate);
-//    mg_HAL_ETC_Fault_Clear();
         mg_HAL_PWM_Set_ETCCTLPWM_Frequency_And_Duty(10000, 100);
         mg_HAL_ETC_Discrete_Direction( true);
         mg_HAL_Time_Hard_Delay_us(DELAY_500_US);
@@ -125,21 +109,13 @@ void mg_L9958_fault_diagnostic_test(void)
     {
 
     }
-//    mg_HAL_ETC_Fault_Clear();
-//        mg_HAL_PWM_Set_ETCCTLPWM_Frequency_And_Duty(10000, 100);
-//        mg_HAL_ETC_Discrete_Direction( true);
-//        mg_HAL_Time_Hard_Delay_us(DELAY_500_US);
-//        mg_HAL_ETC_Discrete_Direction( false);
-//        mg_HAL_Time_Hard_Delay_us(DELAY_500_US);
+
     /* Read Fault State */
     mg_HAL_ETC_Fault_Read();
     MG_MAILBOX_OUT(parameter[1]) = mg_HAL_ETC_Fault_Get(0);
     MG_MAILBOX_OUT(parameter[2]) = mg_HAL_ETC_Fault_Get(1);
-    
     mg_HAL_Time_Hard_Delay_us(DELAY_500_US);
     // Clear fault after over current
     mg_HAL_ETC_Fault_Clear();
     mg_HAL_ETC_Fault_Read();
-    
 }
-#endif
