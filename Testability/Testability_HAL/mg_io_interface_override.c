@@ -24,6 +24,7 @@
 // #include "dd_vsep_init.h"
 #include "mg_hal_config.h"
 #include "io_config_siu.h"
+#include "io_config_sci.h"
 // #include "io_interrupt.h"
 
 // #include "dd_mcd5402_interface.h"
@@ -782,9 +783,8 @@ void MG_SIU_GPIO_PWM_Initialize_Device_Override(void)
     // SIU.PCR[SIU_GPIO_CHANNEL_391] = MG_PWM_SIU_INITIAL_PCR;
 }
 
-void MG_Reset_SCI(const CommPort_T * in_port)
+void MG_Reset_SCI(IO_Configuration_T in_configuration)
 {
-    IO_Configuration_T  in_configuration = in_port->Configuration;
     SCI_T *sci = SCI_Get_Device_Register( in_configuration );
     sci->CR1.U32 = 0;
     sci->CR2.U16 = 0;
@@ -796,10 +796,8 @@ void MG_Reset_SCI(const CommPort_T * in_port)
     sci->LPR.U32 = 0;
 }
 
-void MG_Init_SCI(const CommPort_T * in_port)
+void MG_Init_SCI(IO_Configuration_T in_configuration)
 {
-    SCIPort_Init_T *sci_init;
-    sci_init = (SCIPort_Init_T *)in_port->Init;
-    SCI_Configure_Device(in_port->Configuration, sci_init->loopback);
-    SCI_Set_Speed(in_port->Configuration, sci_init->speed );
+    SCI_Configure_Device(in_configuration, SCI_NO_LOOPBACK);
+    SCI_Set_Speed(in_configuration, 10400 );
 }

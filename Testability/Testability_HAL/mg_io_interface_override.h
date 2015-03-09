@@ -2,8 +2,8 @@
 #define MG_IO_INTERFACE_OVERRIDE_H
 
 #include "discrete.h"
-#include "Pulse_width_modulation.h"
-#include "com_sci_port.h"
+// #include "Pulse_width_modulation.h"
+// #include "com_sci_port.h"
 
 
 extern const IO_Discrete_T MG_MTSA_D_OUT_EST1;
@@ -37,8 +37,7 @@ extern const IO_Discrete_T MG_MTSA_D_OUT_FPO7;
 void MG_SIU_GPIO_DISCRETE_Initialize_Device_Override(void);
 void MG_SIU_GPIO_PWM_Initialize_Device_Override(void);
 
-extern void MG_Reset_SCI(const CommPort_T * in_port);
-extern void MG_Init_SCI(const CommPort_T * in_port);
-
+extern void MG_Init_SCI(IO_Configuration_T in_configuration);
+extern void MG_Reset_SCI(IO_Configuration_T in_configuration);
 
 #endif /* end of include guard: MG_IO_INTERFACE_OVERRIDE_H */

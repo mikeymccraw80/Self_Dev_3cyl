@@ -27,6 +27,7 @@
 #include "mg_hal_discrete.h"
 #include "mg_hal_pwm.h"
 #include "io_config_fmpll.h"
+#include "io_config_sci.h"
 // #include "mg_hal_soh.h"
 // #include "mg_hal_lin.h"
 #include "mg_hal_timer.h"
@@ -249,7 +250,7 @@ void mg_HAL_Internal_Device_Init(void)
     
     // MG_Reset_SCI(&SCI_PORT_0);
     // MG_Init_SCI(&SCI_PORT_0);
-    MG_Init_SCI(&SCI_PORT_1);
+    MG_Init_SCI(SCI_DEVICE_1);
 }
 
 /*=============================================================================

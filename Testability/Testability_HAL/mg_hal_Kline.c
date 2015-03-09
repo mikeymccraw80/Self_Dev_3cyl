@@ -1,6 +1,7 @@
 #include "mg_hal_config.h"
 #include "dd_sci.h"
 #include "dd_sci_interface.h"
+#include "io_config_sci.h"
 
 /*=============================================================================
  * mg_HAL_Kline_Get_Read_Status
@@ -10,7 +11,7 @@
  *===========================================================================*/
 bool mg_HAL_Kline_Get_Read_Status(void)
 {
-    return SCI_Get_Status(SCI_PORT_1.Configuration, SCI_INTERRUPT_CHANNEL_RX);
+    return SCI_Get_Status(SCI_DEVICE_1, SCI_INTERRUPT_CHANNEL_RX);
 }
 
 /*=============================================================================
@@ -21,7 +22,7 @@ bool mg_HAL_Kline_Get_Read_Status(void)
  *===========================================================================*/
 void mg_HAL_Kline_Reset_Read_Status(void)
 {
-    SCI_Reset_Status(SCI_PORT_1.Configuration, SCI_INTERRUPT_CHANNEL_RX);
+    SCI_Reset_Status(SCI_DEVICE_1, SCI_INTERRUPT_CHANNEL_RX);
 }
 
 /*=============================================================================
@@ -32,7 +33,7 @@ void mg_HAL_Kline_Reset_Read_Status(void)
  *===========================================================================*/
 bool mg_HAL_Kline_Get_Write_Status(void)
 {
-    return SCI_Get_Status(SCI_PORT_1.Configuration, SCI_INTERRUPT_CHANNEL_TX_COMPLETE);
+    return SCI_Get_Status(SCI_DEVICE_1, SCI_INTERRUPT_CHANNEL_TX_COMPLETE);
 }
 
 /*=============================================================================
@@ -43,7 +44,7 @@ bool mg_HAL_Kline_Get_Write_Status(void)
  *===========================================================================*/
 void mg_HAL_Kline_Reset_Write_Status(void)
 {
-    SCI_Reset_Status(SCI_PORT_1.Configuration, SCI_INTERRUPT_CHANNEL_TX_COMPLETE);
+    SCI_Reset_Status(SCI_DEVICE_1, SCI_INTERRUPT_CHANNEL_TX_COMPLETE);
 }
 
 /*=============================================================================
@@ -54,7 +55,7 @@ void mg_HAL_Kline_Reset_Write_Status(void)
  *===========================================================================*/
 uint8_t mg_HAL_Kline_Read(void)
 {
-    return (uint8_t)SCI_Read(SCI_PORT_1.Configuration);
+    return (uint8_t)SCI_Read(SCI_DEVICE_1);
 }
 
 /*=============================================================================
@@ -65,5 +66,5 @@ uint8_t mg_HAL_Kline_Read(void)
  *===========================================================================*/
 void mg_HAL_Kline_Write(uint8_t data)
 {
-    SCI_Write(SCI_PORT_1.Configuration, (uint16_t)data);
+    SCI_Write(SCI_DEVICE_1, (uint16_t)data);
 }
