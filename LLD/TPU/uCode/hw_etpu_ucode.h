@@ -574,22 +574,22 @@ extern const unsigned long etpu_ucode_image [( 0x1000 )];
 /**********************************************************/
 /* MARKAB eTPU microcode set primitive function numbers   */
 /**********************************************************/
-#define RQOMBE_FUNCTION_NUM    ( 16 )
-#define RQOME_FUNCTION_NUM     ( 17 )
-#define EPPE_FUNCTION_NUM      ( 18 )
-#define CAME_FUNCTION_NUM      ( 19 )
-#define PWMIE_FUNCTION_NUM     ( 20 )
-#define SPWME_FUNCTION_NUM     ( 21 )
-#define PWMOE_FUNCTION_NUM     ( 22 )
-#define FIE_FUNCTION_NUM       ( 23 )
-#define ECE_FUNCTION_NUM       ( 24 )
-#define VSSBE_FUNCTION_NUM     ( 25 )
-#define ICPCE_FUNCTION_NUM     ( 26 )
-#define GDFBE_FUNCTION_NUM     ( 27 )
-#define MPTACE_FUNCTION_NUM    ( 28 )
-#define DESFIE_FUNCTION_NUM    ( 29 )
-#define SENTDE_FUNCTION_NUM    ( 30 )
-#define ROCBE_FUNCTION_NUM     ( 31 )
+#define RQOMBE_FUNCTION_NUM    ( 16 )//MCD-5413: Repeating Queued Output Match, Version B (Dual-Action) 
+#define RQOME_FUNCTION_NUM     ( 17 )//MCD-5406: Repeating Queued Output Match 
+#define EPPE_FUNCTION_NUM      ( 18 )//MCD-5408: Engine Position Processing (Crank) 
+#define CAME_FUNCTION_NUM      ( 19 )//MCD-5411: Cam Input Processing 
+#define PWMIE_FUNCTION_NUM     ( 20 )//MCD-5402: PWM Input 
+#define SPWME_FUNCTION_NUM     ( 21 )//MCD-5421: Synchronous PWM Output 
+#define PWMOE_FUNCTION_NUM     ( 22 )//MCD-5403: PWM Output 
+#define FIE_FUNCTION_NUM       ( 23 )//MCD-5401: Frequency Input 
+#define ECE_FUNCTION_NUM       ( 24 )//MCD-5409: Event Capture 
+#define VSSBE_FUNCTION_NUM     ( 25 )//MCD-5416: Vehicle Speed Sensor, Version B 
+#define ICPCE_FUNCTION_NUM     ( 26 )//MCD-5407: Input Capture / Pulse Counter 
+#define GDFBE_FUNCTION_NUM     ( 27 )//MCD-5434: General Diagnostic Feedback 
+#define MPTACE_FUNCTION_NUM    ( 28 )//MCD-5412: Multi-Pulse Time-Angle Combination (Spark) 
+#define DESFIE_FUNCTION_NUM    ( 29 )//MCD-5417: Dual End-Angle Sequential Fuel Injection 
+#define SENTDE_FUNCTION_NUM    ( 30 )//MCD-5446: SENT Signal Processing, Version D 
+#define ROCBE_FUNCTION_NUM     ( 31 )//MCD-5415: Repeating Output Compare with Digital Ratio Adapter, Version B
 
 /*********************************************************/
 /* MARKAB eTPU microcode set primitive entry table type  */

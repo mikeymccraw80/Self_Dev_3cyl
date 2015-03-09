@@ -93,6 +93,8 @@ typedef enum
 
 extern const TPU_CHANNEL_Configuration_T   TPU_CONFIG_IC_FI[FEI_INDEX_MAX];
 
+#define PWMIE_TPU_INDEX  TPU_INDEX_0
+
 // ETPUA26 - SPFI
 //extern const TPU_CHANNEL_Configuration_T   TPU_CONFIG_IC_SPFI;
 #define TPU_A_CHANNEL_26_INIT_SDM_SIZE   FIE_SPRAM_FRAME_SIZE
