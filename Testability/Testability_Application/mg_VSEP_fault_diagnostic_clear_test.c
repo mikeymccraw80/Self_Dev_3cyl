@@ -18,7 +18,6 @@
 // %version:         2 %
 //
 //=============================================================================
-#if 0
 #include "reuse.h"
 #include "mg_mailbox.h"
 #include "mg_hal_config.h"
@@ -73,5 +72,3 @@ void mg_VSEP_fault_diagnostic_clear_test(void)
         MG_MAILBOX_OUT(parameter[idx + 1]) = PCH[idx];
     }
 }
-
-#endif

@@ -427,20 +427,20 @@ void mg_HAL_Output_Cycling_Diagnostic(uint8_t *pch)
 #endif
 
 }
-#if 0
+
 void mg_HAL_Output_Cycling_EMC_Init(void)
 {
-    MG_SIU_GPIO_PWM_Initialize_Device_Override();
+    // MG_SIU_GPIO_PWM_Initialize_Device_Override();
 //    mg_HAL_PWM_EMC_Cycling_Initialize();
 //    MG_HAL_DISCRETE_OUT_GROUP[13].io = (void *)&MG_MTSA_PWM_FUEL_CONSUM;
-    MG_HAL_DISCRETE_OUT_GROUP[19].type = DISCRETE;
+    // MG_HAL_DISCRETE_OUT_GROUP[19].type = DISCRETE;
 }
-#endif
+
 void mg_HAL_Output_Cycling_EMC_Uninit(void)
 {
     
 }
-#if 0
+
 void mg_HAL_Output_Cycling_EMC_Config(void)
 {
     if (mg_HAL_Analog_Get_TPS1() < 0x7fff)
@@ -730,7 +730,7 @@ void mg_HAL_Output_Cycling_Thermal_Config_120(void)
     MG_HAL_ETC_GROUP.freq = THERMAL_120_ETC_FREQ;
     MG_HAL_ETC_GROUP.duty = 25; 
 }
-#endif
+
 void mg_HAL_Output_Cycling_Validation_Init(void)
 {
     // MG_SIU_GPIO_PWM_Initialize_Device_Override();
