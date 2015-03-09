@@ -18,7 +18,6 @@
 // %version:         3 %
 //
 //=============================================================================
-#if 0
 #include "reuse.h"
 #include "mg_mailbox.h"
 #include "mg_hal_config.h"
@@ -100,19 +99,7 @@ void mg_VSEP_fault_diagnostic_test(void)
         mg_HAL_ComplexIO_Fault_Clear();
         mg_HAL_Time_Hard_Delay_us(DIAG_WAIT_SPI_US);
         mg_HAL_EST_Toggle();
-#if 0        
-        for (idx = 0; idx < EST_NUMBER; idx++)
-        {
-            mg_HAL_EST_Set_EST1(false);
-            mg_HAL_Time_Hard_Delay_us(DIAG_WAIT_IO_US);
-            mg_HAL_EST_Set_EST1(true);
-            mg_HAL_Time_Hard_Delay_us(DIAG_WAIT_IO_US);
-            mg_HAL_EST_Set_ESTSYNC(false);
-            mg_HAL_Time_Hard_Delay_us(DIAG_WAIT_IO_US);
-            mg_HAL_EST_Set_ESTSYNC(true);
-            mg_HAL_Service_WatchDog();
-        }
-#endif            
+
         for (idx = 0; idx < INJ_NUMBER; idx++)
         {
             mg_HAL_Injector_Set_Group_Value(idx, false);
@@ -146,17 +133,7 @@ void mg_VSEP_fault_diagnostic_test(void)
         mg_HAL_ComplexIO_Fault_Clear();
         mg_HAL_Time_Hard_Delay_us(DIAG_WAIT_SPI_US);
         mg_HAL_EST_Toggle();
-#if 0        
-        for (idx = 0; idx < EST_NUMBER; idx++)
-        {
-            mg_HAL_EST_Set_EST1(false);
-            mg_HAL_Time_Hard_Delay_us(DIAG_WAIT_IO_US);
-            mg_HAL_EST_Set_ESTSYNC(false);
-            mg_HAL_Time_Hard_Delay_us(DIAG_WAIT_IO_US);
-            mg_HAL_EST_Set_ESTSYNC(true);
-            mg_HAL_Service_WatchDog();
-        }
-#endif        
+
         for (idx = 0; idx < INJ_NUMBER; idx++)
         {
             mg_HAL_Injector_Set_Group_Value(idx, false);
@@ -233,5 +210,3 @@ void mg_VSEP_fault_diagnostic_test(void)
         MG_MAILBOX_OUT(parameter[idx + 1]) = PCH[idx];
     }
 }
-
-#endif

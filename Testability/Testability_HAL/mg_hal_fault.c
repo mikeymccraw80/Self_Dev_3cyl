@@ -7,6 +7,8 @@
 #ifdef __MG_VSEP_USED
 #include "dd_vsep.h"
 #include "dd_vsep_fault.h"
+#include "vsep_spi_scheduler.h"
+#include "dd_vsep_msg_config.h"
 #endif
 #ifdef __MG_C2PS_USED
 #include "dd_c2ps.h"
@@ -51,6 +53,8 @@ const uint8_t MG_COMPLEXIO_CHANNEL_MAX = 30;//VSEP_CHANNEL_MAX;
 const uint8_t MG_COMPLEXIO_FAULT_OPEN = VSEP_FAULT_PCH_OPEN_FAULT;
 const uint8_t MG_COMPLEXIO_FAULT_SHORT_TO_GROUND = VSEP_FAULT_PCH_SHORT_TO_GROUND_FAULT;
 const uint8_t MG_COMPLEXIO_FAULT_SHORT_TO_BATTERY = VSEP_FAULT_PCH_SHORT_TO_BATTERY_FAULT;
+
+extern const SPI_Message_Definition_T VSEP_FAULT_MESSAGE_DEFINITION;
 #endif
 
 
@@ -204,7 +208,7 @@ void mg_HAL_Fault_ETC_Over_Current_Test_Configure(uint8_t slew_rate)
     L9958_SPI_Immediate_Transfer();
 #endif
 }
-#if 0
+
 /*=============================================================================
  * mg_HAL_ComplexIO_Fault_Read
  * @func  read external device fault buff
@@ -217,12 +221,14 @@ void mg_HAL_ComplexIO_Fault_Read(void)
     C2MIO_SPI_Immediate_Transfer( C2MIO_Set_Device_Index( 0, C2MIO_INDEX_0 ), C2MIO_MESSAGE_PCH_FAULTS_STATUS_READ);
 #endif
 #ifdef __MG_VSEP_USED
-    SPIPort_Transfer_Immediate( VSEP_EST_FAULT_SYNC_MESSAGE[VSEP_INDEX_0].port, &VSEP_EST_FAULT_SYNC_MESSAGE[VSEP_INDEX_0] );
-    SPIPort_Transfer_Immediate( VSEP_SDOA06_MESSAGE[VSEP_INDEX_0].port, &VSEP_SDOA06_MESSAGE[VSEP_INDEX_0] );
-    VSEP_SPI_Immediate_Transfer( VSEP_Set_Device_Index( 0, VSEP_INDEX_0 ), VSEP_MESSAGE_FAULT_READ);
+    /* read the est channel fault status */
+    // SPIPort_Transfer_Immediate( VSEP_EST_FAULT_SYNC_MESSAGE[VSEP_INDEX_0].port, &VSEP_EST_FAULT_SYNC_MESSAGE[VSEP_INDEX_0] );
+    // SPIPort_Transfer_Immediate( VSEP_SDOA06_MESSAGE[VSEP_INDEX_0].port, &VSEP_SDOA06_MESSAGE[VSEP_INDEX_0] );
+    /* read pch discrete or pwm or compare channel fault status */
+    VSEP_SPI_Immediate_Transfer(0, VSEP_MESSAGE_FAULT);
 #endif
 }
-#endif
+
 /*=============================================================================
  * mg_HAL_PowerDevice_Fault_Read
  * @func  read external device fault buff
@@ -269,7 +275,7 @@ void mg_HAL_BARO_Fault_Read(void)
     KP254_FAULT_Diagnose_Device_Fault(MG_MTSA_CONFIG_KP254_TRIG_DIAG);
 #endif
 }
-
+#endif
 /*=============================================================================
  * mg_HAL_ComplexIO_Fault_Clear
  * @func  clear external device fault buff
@@ -282,9 +288,9 @@ void mg_HAL_ComplexIO_Fault_Clear(void)
     C2MIO_SPI_Immediate_Transfer( C2MIO_Set_Device_Index( 0, C2MIO_INDEX_0 ), C2MIO_MESSAGE_PCH_FAULTS_STATUS_READ);
 #endif
 #ifdef __MG_VSEP_USED
-    SPIPort_Transfer_Immediate( VSEP_EST_FAULT_SYNC_MESSAGE[VSEP_INDEX_0].port, &VSEP_EST_FAULT_SYNC_MESSAGE[VSEP_INDEX_0] );
-    SPIPort_Transfer_Immediate( VSEP_SDOA06_MESSAGE[VSEP_INDEX_0].port, &VSEP_SDOA06_MESSAGE[VSEP_INDEX_0] );
-    VSEP_SPI_Immediate_Transfer( VSEP_Set_Device_Index( 0, VSEP_INDEX_0 ), VSEP_MESSAGE_FAULT);
+    // SPIPort_Transfer_Immediate( VSEP_EST_FAULT_SYNC_MESSAGE[VSEP_INDEX_0].port, &VSEP_EST_FAULT_SYNC_MESSAGE[VSEP_INDEX_0] );
+    // SPIPort_Transfer_Immediate( VSEP_SDOA06_MESSAGE[VSEP_INDEX_0].port, &VSEP_SDOA06_MESSAGE[VSEP_INDEX_0] );
+    VSEP_SPI_Immediate_Transfer(0, VSEP_MESSAGE_FAULT);
 #endif
 }
 
@@ -302,7 +308,6 @@ void mg_HAL_PowerDevice_Fault_Clear(void)
 #ifdef __MG_TLE4471_USED
 #endif
 }
-#endif
 
 /*=============================================================================
  * mg_HAL_ETC_Fault_Clear
@@ -335,6 +340,7 @@ void mg_HAL_BARO_Fault_Clear(void)
     KP254_FAULT_Clear_Device_Fault(MG_MTSA_CONFIG_KP254_TRIG_DIAG);
 #endif
 }
+#endif
 
 /*=============================================================================
  * mg_HAL_ComplexIO_Fault_Get
@@ -354,24 +360,24 @@ uint8_t mg_HAL_ComplexIO_Fault_Get(uint8_t index)
     fault_result = (uint8_t)Extract_Bits( C2MIO_PCH_Fault_Rxd[ C2MIO_INDEX_0 ][fault_map_index], fault_map_position, BIT_2 );
 #endif
 #ifdef __MG_VSEP_USED
-    fault_map_index = (uint8_t)VSEP_FAULT_Map_Get_Index( VSEP_FAULT_CHANNEL_MAP[index]);
-    fault_map_position = (uint8_t)VSEP_FAULT_Map_Get_Position( VSEP_FAULT_CHANNEL_MAP[index]);
+    fault_map_index = diagnostic_index[index];
+    fault_map_position = diagnostic_bit_position[index];
     if ( index >= VSEP_CHANNEL_PCH_01_FLT_LVL_1 && index <= VSEP_CHANNEL_PCH_04_FLT_LVL_1_2)
     {
-      fault_result = (uint8_t)Extract_Bits( VSEP_EST_Fault_SYNC_Rxd[VSEP_INDEX_0][fault_map_index],fault_map_position, BIT_2 );
+      fault_result = (uint8_t)Extract_Bits( VSEP_EST_Fault_SYNC_Rxd[fault_map_index],fault_map_position, BIT_2 );
     }
-    else if ( index >= VSEP_CHANNEL_PCH_05_FLT_LVL_1_2 && index <= VSEP_CHANNEL_PCH_08_FLT_LVL_1_2)
+    // else if ( index >= VSEP_CHANNEL_PCH_05_FLT_LVL_1_2 && index <= VSEP_CHANNEL_PCH_08_FLT_LVL_1_2)
+    // {
+    //   fault_result = (uint8_t)Extract_Bits( VSEP_SDOA06_Rxd[VSEP_INDEX_0][fault_map_index],fault_map_position, BIT_2 );
+    // }
+    else//for PCH05~PCH30
     {
-      fault_result = (uint8_t)Extract_Bits( VSEP_SDOA06_Rxd[VSEP_INDEX_0][fault_map_index],fault_map_position, BIT_2 );
-    }
-    else//for PCH09~PCH30
-    {
-      fault_result = (uint8_t)Extract_Bits( VSEP_Fault_Rxd[VSEP_INDEX_0][fault_map_index],fault_map_position, BIT_2 );
+      fault_result = (uint8_t)Extract_Bits( VSEP_Fault_Rxd[fault_map_index],fault_map_position, BIT_2 );
     }
 #endif
     return fault_result;
 }
-#endif
+
 /*=============================================================================
  * mg_HAL_PowerDevice_Fault_Get
  * @func  get external fault information

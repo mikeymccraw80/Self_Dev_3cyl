@@ -28,8 +28,6 @@
 // none
 //
 //=============================================================================
-
-
 #include "fault.h"
 #include "dd_vsep_fault_config.h"
 #include "dd_vsep_pwm_interface.h"
@@ -75,7 +73,8 @@ typedef unsigned long                                                    COUNT_D
 #define VSEP_FAULT_UPDATE_TIME (7.8125) /* the periodic time to update VSEP fault -- VSEP_Fault_Diagnose_Channels() */
 #define VSEP_FAULT_COUNTER_DECREMENT_TIME (20000) /* 20 sec */
 
-
+extern const uint8_t  diagnostic_index[30];
+extern const uint8_t  diagnostic_bit_position[30];
 
 
 

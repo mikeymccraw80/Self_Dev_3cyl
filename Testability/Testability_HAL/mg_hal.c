@@ -395,15 +395,15 @@ void mg_HAL_Output_Cycling_Diagnostic(uint8_t *pch)
     mg_HAL_ComplexIO_Fault_Clear();
 #endif
 #ifdef __MG_VSEP_USED
-    // mg_HAL_ComplexIO_Fault_Read();
+    mg_HAL_ComplexIO_Fault_Read();
     for (idx = 0; idx < MG_COMPLEXIO_CHANNEL_MAX; idx++)
     {
         out_map_index = (idx >> 2);
         out_map_position = ((idx & 0x03) << 1);
-        // *(pch_idx +out_map_index) |= mg_HAL_ComplexIO_Fault_Get( idx) << out_map_position;
+        *(pch_idx +out_map_index) |= mg_HAL_ComplexIO_Fault_Get( idx) << out_map_position;
     }
     pch_idx += (out_map_index + 1);
-    // mg_HAL_ComplexIO_Fault_Clear();
+    mg_HAL_ComplexIO_Fault_Clear();
 #endif
 #ifdef __MG_PHDL_USED
     ETC_freq = mg_HAL_PWM_Get_ETCCTLPWM_Frequency();
