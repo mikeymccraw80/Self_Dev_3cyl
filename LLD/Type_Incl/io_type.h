@@ -146,6 +146,53 @@ typedef struct
 
 } IO_Array_T;
 
+//=============================================================================
+//
+//                         Edge Information
+//
+//=============================================================================
+
+typedef struct
+{
+   uint32_t          Count;          // Edge count
+   uint32_t          Time;           // Edge time
+   bool              Valid_Edge;     // Set first time a valid edge is
+                                     // seen
+   uint16_t          Zero_Edge_Count;// Background counter incremented
+                                     // in a periodic loop and cleared
+                                     // on each edge.
+
+}  IO_Edge_Data_T;
+
+typedef struct
+{
+   uint32_t          Period;          // Pulse Period
+   bool              Valid_Pulse;     // New Pulse Occurred
+}  IO_Pulse_Period_Data_T;
+
+//
+// @struct PulseData_T | Used for PWM single pulse edge information
+//
+typedef struct
+{
+   IO_Edge_Data_T  Rising;    // @field Rising  edge data
+   IO_Edge_Data_T  Falling;   // @field Falling edge data
+
+}  IO_Pulse_Data_T;
+
+
+//
+// @struct PulseHistory_T | Used for PWM history information
+//
+typedef struct
+{
+   IO_Pulse_Data_T   Current;       // @field Current  pulse data
+   IO_Pulse_Data_T   Previous;      // @field Previous pulse data
+   IO_Edge_T         Current_Edge;  // @field the edge that just occured.
+
+
+}  IO_Pulse_History_T;
+
 
 //=============================================================================
 // @enum IO_Fault_Status_T | Fault Status type
