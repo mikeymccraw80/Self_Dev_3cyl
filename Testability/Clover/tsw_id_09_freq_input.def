@@ -1,0 +1,33 @@
+// define type for the test
+#typedef Error_Code_T Enum=11:No_Error;StartupFormat=Hex
+#typedef FreqIn EngineeringGradient=1;EngineeringUnit=Us;StartupFormat=Eng
+// Set all type to the defined type
+#settype ALL FreqIn
+#settype Error_Code Error_Code_T
+// Define test ID
+#define Test_ID 09
+// Define test items
+#define FI1_H (58XPOS)
+#define FI1_M (58XPOS)
+#define FI1_L (58XPOS)
+#define FI2_H (VSS)
+#define FI2_M (VSS)
+#define FI2_L (VSS)
+#define FI3_H (CAM1)
+#define FI3_M (CAM1)
+#define FI3_L (CAM1)
+#define FI4_H (CAM2)
+#define FI4_M (CAM2)
+#define FI4_L (CAM2)
+#define FI5_H (WSS)
+#define FI5_M (WSS)
+#define FI5_L (WSS)
+#define FI6_H (ENS)
+#define FI6_M (ENS)
+#define FI6_L (ENS)
+#define FI7_H (SPF)
+#define FI7_M (SPF)
+#define FI7_L (SPF)
+#define FI8_H xx
+#define FI8_M xx
+#define FI8_L xx
