@@ -7,7 +7,7 @@ uint16_t mg_HAL_Analog_Get_Analog_Value(uint8_t index)
     uint16_t value;
     if (MG_HIODEVICE_NULL != MG_HAL_ANALOG_GROUP[index])
     {
-        value = QADC_Analog_Get_Value(MG_HAL_ANALOG_GROUP[index]) >> 2;
+        value = QADC_Analog_Get_Value(MG_HAL_ANALOG_GROUP[index]) << 2;
     }
     else
     {
@@ -31,17 +31,19 @@ uint16_t mg_HAL_Analog_Get_HWCFG(void)
 {
     return IO_ANALOG_Get_Immediate_Value(&HWCFGVI);
 }
+#endif
 
 uint16_t mg_HAL_Analog_Get_TPS1(void)
 {
-    return IO_ANALOG_Get_Immediate_Value(&TPS1VI);
+    return (QADC_Analog_FIFO1_Get_Value(AD_TPS1VI_Channel) << 2);
 }
 
 uint16_t mg_HAL_Analog_Get_TPS2(void)
 {
-    return IO_ANALOG_Get_Immediate_Value(&TPS2VI);
+    return (QADC_Analog_FIFO1_Get_Value(AD_TPS2VI_Channel) << 2);
 }
 
+#if 0
 uint16_t mg_HAL_Analog_Get_Knock(uint8_t index)
 {
     uint16_t value;

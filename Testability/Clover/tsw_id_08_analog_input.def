@@ -4,7 +4,7 @@
 
 // define type for the test
 #typedef Error_Code_T Enum=11:No_Error;StartupFormat=Hex
-#typedef AnalogIn EngineeringGradient=0.001220703125;EngineeringUnit=Volt;StartupFormat=Eng
+#typedef AnalogIn EngineeringGradient=0.0000762939453125;EngineeringUnit=Volt;StartupFormat=Eng
 // Set all type to the defined type
 #settype ALL AnalogIn
 #settype Error_Code Error_Code_T
