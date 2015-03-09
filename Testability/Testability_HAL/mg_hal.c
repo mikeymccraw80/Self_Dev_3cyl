@@ -42,7 +42,7 @@
 #ifdef __MG_TLE4471_WATCHDOG_RESET_TEST
 #include "dd_tle4471.h"
 #endif
-#if 0
+
 #define MG_STM_OVERFLOW_VALUE              0xFFFFFFFF
 #define STM_CNT_REG                                    (uint32_t volatile  *)(0xFFF3C004)
 #define STM_PRESCALE                                  80
@@ -117,7 +117,7 @@
 #endif
 #define EMC_MODE_3_INJ_ON                                (10000 * (SYSTEM_FREQUENCY_HZ / 1000000))
 #define EMC_MODE_3_INJ_OFF                               (0 * (SYSTEM_FREQUENCY_HZ / 1000000))
-#endif
+
 #if MG_MCD5412_USED
 #define PC_EST_US_ON                    (3400 * (TPU_A_TCR1_CLOCK_FREQ / 1000000))
 #define PC_EST_US_DELAY              (6600 * (TPU_A_TCR1_CLOCK_FREQ / 1000000))
@@ -730,11 +730,11 @@ void mg_HAL_Output_Cycling_Thermal_Config_120(void)
     MG_HAL_ETC_GROUP.freq = THERMAL_120_ETC_FREQ;
     MG_HAL_ETC_GROUP.duty = 25; 
 }
-
+#endif
 void mg_HAL_Output_Cycling_Validation_Init(void)
 {
-    MG_SIU_GPIO_PWM_Initialize_Device_Override();
-    MG_HAL_DISCRETE_OUT_GROUP[19].type = DISCRETE;
+    // MG_SIU_GPIO_PWM_Initialize_Device_Override();
+    // MG_HAL_DISCRETE_OUT_GROUP[19].type = DISCRETE;
 }
 
 void mg_HAL_Output_Cycling_Validation_Uninit(void)
@@ -804,4 +804,3 @@ void mg_HAL_Output_Cycling_Validation_Config(void)
     MG_HAL_ETC_GROUP.freq = VALIDATION_ETC_FREQ;
     MG_HAL_ETC_GROUP.duty = 95; 
 }
-#endif
