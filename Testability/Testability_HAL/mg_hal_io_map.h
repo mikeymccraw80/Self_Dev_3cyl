@@ -28,6 +28,7 @@
 #include "io_config_siu.h"
 #include "io_config_vsep.h"
 #include "io_config_mios.h"
+#include "mg_hal.h"
 #if 0
 #define MG_MTSA_CONFIG_KP254_TRIG_DIAG \
          (   KP254_Set_Device_Index( 0,KP254_INDEX_0                 ) |\
@@ -185,16 +186,17 @@
 #define   MG_HIODEVICE_DI_AN18                   MG_HIODEVICE_DI_NULL
 #define   MG_HIODEVICE_DI_AN15                   MG_HIODEVICE_DI_NULL
 
-#if 0
 // Frequency in map
-#define   MG_HIODEVICE_FI_CAM1                   (void *)&MG_MTSA_IC_CAM1
-#define   MG_HIODEVICE_FI_ABSPWM                 (void *)&MTSA_IC_WSSFI
-#define   MG_HIODEVICE_FI_CAM2                   (void *)&MG_MTSA_IC_CAM2
-#define   MG_HIODEVICE_FI_VSS                    (void *)&MG_MTSA_IC_VSS
-#define   MG_HIODEVICE_FI_ENS                    (void *)&MG_MTSA_IC_ENS
-#define   MG_HIODEVICE_FI_Alternator             (void *)&MTSA_IC_Alternator//zhoushenghui20131217
-#define   MG_HIODEVICE_FI_58XPOS                 (void *)&MG_MTSA_IC_58XPOS
+#define   MG_HIODEVICE_FI_NULL                   0xFFFFFFFF
+#define   MG_HIODEVICE_FI_CAM1                   MG_FEI_INDEX_CAM1
+#define   MG_HIODEVICE_FI_ABSPWM                 MG_FEI_INDEX_WSSFI
+#define   MG_HIODEVICE_FI_CAM2                   MG_FEI_INDEX_CAM2
+#define   MG_HIODEVICE_FI_VSS                    MG_FEI_INDEX_VSSFI
+#define   MG_HIODEVICE_FI_ENS                    MG_FEI_INDEX_ENSFI
+#define   MG_HIODEVICE_FI_Alternator             MG_HIODEVICE_FI_NULL
+#define   MG_HIODEVICE_FI_58XPOS                 MG_FEI_INDEX_58XPOS
 
+#if 0
 // Baro
 #define	MG_HIODEVICE_BARO_PRESSURE		(void *)&BARO_Prussure_I
 #define	MG_HIODEVICE_BARO_TEMPERATURE	(void *)&BARO_Temperature_I

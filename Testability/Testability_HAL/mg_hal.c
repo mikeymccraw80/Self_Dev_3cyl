@@ -28,6 +28,7 @@
 #include "mg_hal_pwm.h"
 #include "io_config_fmpll.h"
 #include "io_config_sci.h"
+#include "io_config_tpu.h"
 // #include "mg_hal_soh.h"
 // #include "mg_hal_lin.h"
 #include "mg_hal_timer.h"
@@ -43,6 +44,7 @@
 #ifdef __MG_TLE4471_WATCHDOG_RESET_TEST
 #include "dd_tle4471.h"
 #endif
+#include "mg_hal.h"
 
 #define MG_STM_OVERFLOW_VALUE              0xFFFFFFFF
 #define STM_CNT_REG                                    (uint32_t volatile  *)(0xFFF3C004)
@@ -155,6 +157,137 @@
 #define MG_COP_MIN_PERIOD                       (10 * (1000000 / 1000))    /* 10ms */
 // #endif
 
+const TPU_CHANNEL_Configuration_T MG_TPU_CONFIG_IC_PWMIE[MG_PWMIE_INDEX_MAX] =
+{
+    // channel 58x position or hall
+    {
+        TPU_EVENT_ABSOLUTE,                  // Set the desired value for TPU configuration
+        0,                                   // PWM Update Mode 1- Coherent,0- synchronus
+        0,                                   // Refernce channel number
+        TPU_CHANNEL_0,                       // Channel
+        0,                                   // Channel Function Mode1
+        TPU_TCR1_TIME_BASE,                  // Channel Function Mode0
+        0,                                   // Entry Table Condition Select
+        TPU_CHANNEL_INTERRUPT_DISABLE,       // Interrupt Request Enable
+        TPU_TRANSFER_REQUEST_DISABLE,        // Transfer Request Enable
+        TPU_CHANNEL_PRIORITY_MEDIUM,         // Channel Priority Index
+        ACTIVE_HIGH,                         // Active state of channel
+        TPU_OFF_OUTPUT_DISABLE,              // 8   Output Disable
+        EDGE_FALLING,                        // Host Service Request Type
+        PWMIE_FUNCTION_NUM                   // TPU Primitives or Channel function Select
+    },
+
+    // ETPUA27 - VSSFI
+    {
+        TPU_EVENT_ABSOLUTE,                  // Set the desired value for TPU configuration
+        0,                                   // PWM Update Mode 1- Coherent,0- synchronus
+        0,                                   // Refernce channel number
+        TPU_CHANNEL_27,                      // Channel
+        0,                                   // Channel Function Mode1
+        TPU_TCR1_TIME_BASE,                  // Channel Function Mode0
+        0,                                   // Entry Table Condition Select
+        TPU_CHANNEL_INTERRUPT_DISABLE,       // Interrupt Request Enable
+        TPU_TRANSFER_REQUEST_DISABLE,        // Transfer Request Enable
+        TPU_CHANNEL_PRIORITY_MEDIUM,         // Channel Priority Index
+        ACTIVE_HIGH,                         // Active state of channel
+        TPU_OFF_OUTPUT_DISABLE,              // 8   Output Disable
+        EDGE_FALLING,                        // Host Service Request Type
+        PWMIE_FUNCTION_NUM                   // TPU Primitives or Channel function Select
+    },
+
+    // channel cam1
+    {
+        TPU_EVENT_ABSOLUTE,                  // Set the desired value for TPU configuration
+        0,                                   // PWM Update Mode 1- Coherent,0- synchronus
+        0,                                   // Refernce channel number
+        TPU_CHANNEL_1,                       // Channel
+        0,                                   // Channel Function Mode1
+        TPU_TCR1_TIME_BASE,                  // Channel Function Mode0
+        0,                                   // Entry Table Condition Select
+        TPU_CHANNEL_INTERRUPT_DISABLE,       // Interrupt Request Enable
+        TPU_TRANSFER_REQUEST_DISABLE,        // Transfer Request Enable
+        TPU_CHANNEL_PRIORITY_MEDIUM,         // Channel Priority Index
+        ACTIVE_HIGH,                         // Active state of channel
+        TPU_OFF_OUTPUT_DISABLE,              // 8   Output Disable
+        EDGE_FALLING,                        // Host Service Request Type
+        PWMIE_FUNCTION_NUM                   // TPU Primitives or Channel function Select
+    },
+
+    // channel cam2
+    {
+        TPU_EVENT_ABSOLUTE,                  // Set the desired value for TPU configuration
+        0,                                   // PWM Update Mode 1- Coherent,0- synchronus
+        0,                                   // Refernce channel number
+        TPU_CHANNEL_16,                      // Channel
+        0,                                   // Channel Function Mode1
+        TPU_TCR1_TIME_BASE,                  // Channel Function Mode0
+        0,                                   // Entry Table Condition Select
+        TPU_CHANNEL_INTERRUPT_DISABLE,       // Interrupt Request Enable
+        TPU_TRANSFER_REQUEST_DISABLE,        // Transfer Request Enable
+        TPU_CHANNEL_PRIORITY_MEDIUM,         // Channel Priority Index
+        ACTIVE_HIGH,                         // Active state of channel
+        TPU_OFF_OUTPUT_DISABLE,              // 8   Output Disable
+        EDGE_FALLING,                        // Host Service Request Type
+        PWMIE_FUNCTION_NUM                   // TPU Primitives or Channel function Select
+    },
+
+    // ETPUA26 - SPFI
+    {
+        TPU_EVENT_ABSOLUTE,   //   Set the desired value for TPU configuration
+        0,                                   //      PWM Update Mode 1- Coherent,0- synchronus
+        0,                                   //     Refernce channel number
+        TPU_CHANNEL_26,            //     Channel
+        0,                                   //    Channel Function Mode1
+        TPU_TCR1_TIME_BASE,                                     //   Channel Function Mode0
+        0,                                      //  Entry Table Condition Select
+        TPU_CHANNEL_INTERRUPT_DISABLE,  //1  //Interrupt Request Enable
+        TPU_TRANSFER_REQUEST_DISABLE,   //Transfer Request Enable
+        TPU_CHANNEL_PRIORITY_MEDIUM,  // Channel Priority Index
+        ACTIVE_HIGH,  //    Active state of channel
+        TPU_OFF_OUTPUT_DISABLE,            //       8   Output Disable
+        EDGE_FALLING,                 //   Host Service Request Type
+        PWMIE_FUNCTION_NUM          //   TPU Primitives or Channel function Select
+    },
+
+    // ETPUA28  - WSSFI
+    //const TPU_CHANNEL_Configuration_T   TPU_CONFIG_IC_WSSFI =
+    {
+        TPU_EVENT_ABSOLUTE,   //   Set the desired value for TPU configuration
+        0,                                   //      PWM Update Mode 1- Coherent,0- synchronus
+        0,                                   //     Refernce channel number
+        TPU_CHANNEL_28,            //     Channel
+        0,                                   //    Channel Function Mode1
+        TPU_TCR1_TIME_BASE,                                     //   Channel Function Mode0
+        0,                                      //  Entry Table Condition Select
+        TPU_CHANNEL_INTERRUPT_DISABLE,  //1  //Interrupt Request Enable
+        TPU_TRANSFER_REQUEST_DISABLE,   //Transfer Request Enable
+        TPU_CHANNEL_PRIORITY_MEDIUM,  // Channel Priority Index
+        ACTIVE_HIGH,  //    Active state of channel
+        TPU_OFF_OUTPUT_DISABLE,            //       8   Output Disable
+        EDGE_FALLING,                 //   Host Service Request Type
+        PWMIE_FUNCTION_NUM          //   TPU Primitives or Channel function Select
+    },
+
+    //TPUA 29  - ENSFI
+    //const TPU_CHANNEL_Configuration_T   TPU_CONFIG_IC_ENSFI =
+    {
+        TPU_EVENT_ABSOLUTE,   //   Set the desired value for TPU configuration
+        0,                                   //      PWM Update Mode 1- Coherent,0- synchronus
+        0,                                   //     Refernce channel number
+        TPU_CHANNEL_29,            //     Channel
+        0,                                   //    Channel Function Mode1
+        TPU_TCR1_TIME_BASE,                                     //   Channel Function Mode0
+        0,                                      //  Entry Table Condition Select
+        TPU_CHANNEL_INTERRUPT_DISABLE,  //1  //Interrupt Request Enable
+        TPU_TRANSFER_REQUEST_DISABLE,   //Transfer Request Enable
+        TPU_CHANNEL_PRIORITY_MEDIUM,  // Channel Priority Index
+        ACTIVE_HIGH,  //    Active state of channel
+        TPU_OFF_OUTPUT_DISABLE,            //       8   Output Disable
+        EDGE_FALLING,                 //   Host Service Request Type
+        PWMIE_FUNCTION_NUM          //   TPU Primitives or Channel function Select
+    }
+};
+
 #if 0
 
 /*=============================================================================
@@ -238,11 +371,17 @@ void mg_HAL_Disable_CAN_10ms_Task_Timer(void)
 
 void mg_HAL_Internal_Device_Init(void)
 {
+    uint32_t counter;
     // IO_PULSE_IC_Initialize_Channel(&MG_MTSA_IC_58XPOS);
     // IO_PULSE_IC_Initialize_Channel(&MG_MTSA_IC_CAM1);
     // IO_PULSE_IC_Initialize_Channel(&MG_MTSA_IC_CAM2);
     // IO_PULSE_IC_Initialize_Channel(&MG_MTSA_IC_VSS);
     // IO_PULSE_IC_Initialize_Channel(&MG_MTSA_IC_ENS);
+
+    for( counter = 0; counter < MG_PWMIE_INDEX_MAX; counter++ )
+    {
+        MCD5402_Initialize_Channel(PWMIE_TPU_INDEX, &TPU, MG_TPU_CONFIG_IC_PWMIE[counter]);
+    }
 
     mg_HAL_Timer_Set_STM_Enable(true);
 

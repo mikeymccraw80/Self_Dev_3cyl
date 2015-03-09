@@ -4,6 +4,8 @@
 #include "mg_hal_timer.h"
 #include "dd_vsep_pwm_interface.h"
 #include "dd_mios_interface.h"
+#include "io_config_tpu.h"
+#include "dd_mcd5402_interface.h"
 
 /*=============================================================================
  * mg_HAL_PWM_Set_Discrete_Out_Group_Frequency_And_Duty
@@ -102,15 +104,18 @@ void mg_HAL_PWM_Set_ETCCTLPWM_Frequency_And_Duty(uint32_t frequency, uint32_t du
  * @parm  index
  * @rdesc period 
  *===========================================================================*/
-// uint32_t mg_HAL_PWM_Get_Frequency_In_Group_Period(uint8_t index)
-// {
-//     PWM_Data_T PWM_Data;
-//     if (NULL != MG_HAL_FREQUENCY_IN_GROUP[index].io)
-//     {
-//         IO_PULSE_IC_Get_Period_And_Duty_Cycle(MG_HAL_FREQUENCY_IN_GROUP[index].io, &PWM_Data, 100, 0, MICROSECOND_RESOLUTION);
-//     }
-//     return PWM_Data.Period;
-// }
+uint32_t mg_HAL_PWM_Get_Frequency_In_Group_Period(uint8_t index)
+{
+    PWM_Data_T PWM_Data;
+    if (MG_HIODEVICE_FI_NULL != MG_HAL_FREQUENCY_IN_GROUP[index].io)
+    {
+        // IO_PULSE_IC_Get_Period_And_Duty_Cycle(MG_HAL_FREQUENCY_IN_GROUP[index].io, &PWM_Data, 100, 0, MICROSECOND_RESOLUTION);
+         PWM_Data.Period = MCD5402_Get_Period(PWMIE_TPU_INDEX, MG_TPU_CONFIG_IC_PWMIE[MG_HAL_FREQUENCY_IN_GROUP[index].io]);
+    } else {
+        PWM_Data.Period = 0;
+    }
+    return PWM_Data.Period;
+}
 
 /*=============================================================================
  * mg_HAL_PWM_Get_ETCCTLPWM_Frequency

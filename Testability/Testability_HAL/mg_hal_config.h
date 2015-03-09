@@ -110,17 +110,17 @@ typedef struct MG_HAL_ETC_OUT_Tag
    TIME_KEEPER_US_T    timer;
 } MG_HAL_ETC_OUT_T;
 
-#if 0
 typedef struct MG_HAL_DISCRETE_IN_Tag 
 {
-   HIODEVICE        io;
+   uint32_t        io;
 } MG_HAL_DISCRETE_IN_T;
 
 typedef struct MT_HAL_FREQUENCY_IN_Tag 
 {
-   HIODEVICE        io;
+   uint32_t        io;
 } MT_HAL_FREQUENCY_IN_T;
 
+#if 0
 typedef struct MG_HAL_BARO_IN_Tag 
 {
    HIODEVICE   io;
@@ -160,10 +160,9 @@ extern MG_HAL_ETC_OUT_T MG_HAL_ETC_GROUP;
 extern const SIU_GPIO_Channel_T MG_HAL_DISCRETE_IN_GROUP[];
 extern const uint8_t MG_Number_of_Discrete_In_Device;
 
-#if 0
 extern const MT_HAL_FREQUENCY_IN_T MG_HAL_FREQUENCY_IN_GROUP[];
 extern const uint8_t MG_Number_of_Frequency_In_Device;
-
+#if 0
 extern const MG_HAL_ANALOG_T MG_HAL_KNOCK_GROUP[];
 extern const uint8_t MG_Number_of_KNOCK_Device;
 

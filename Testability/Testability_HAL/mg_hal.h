@@ -1,5 +1,6 @@
 #ifndef MG_HAL_H
 #define MG_HAL_H
+#include "io_config_tpu.h"
 //=============================================================================
 //
 //       COPYRIGHT, 2008, Delphi Technologies, Inc. All Rights reserved
@@ -20,6 +21,19 @@
 // %version:         6 %
 //
 //=============================================================================
+typedef enum
+{
+    MG_PWMIE_INDEX_58XPOS,
+    MG_PWMIE_INDEX_VSSFI,
+    MG_PWMIE_INDEX_CAM1,
+    MG_PWMIE_INDEX_CAM2,
+    MG_PWMIE_INDEX_SPFI,
+    MG_PWMIE_INDEX_WSSFI,
+    MG_PWMIE_INDEX_ENSFI,
+    MG_PWMIE_INDEX_MAX
+} MG_PWMIE_INDEX_T;
+
+extern const TPU_CHANNEL_Configuration_T MG_TPU_CONFIG_IC_PWMIE[MG_PWMIE_INDEX_MAX];
 
 void mg_HAL_Entey_Critical(void);
 void mg_HAL_Exit_Critical(void);

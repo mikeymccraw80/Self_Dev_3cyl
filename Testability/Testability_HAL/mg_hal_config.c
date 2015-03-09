@@ -178,7 +178,7 @@ MG_HAL_ETC_OUT_T MG_HAL_ETC_GROUP =
     }
 };
 //============================================ ETC end =============================================
-#if 0
+
 //============================================ Frequency Input =====================================
 const MT_HAL_FREQUENCY_IN_T MG_HAL_FREQUENCY_IN_GROUP[] = 
 {
@@ -195,7 +195,7 @@ const MT_HAL_FREQUENCY_IN_T MG_HAL_FREQUENCY_IN_GROUP[] =
 
 const uint8_t MG_Number_of_Frequency_In_Device = MG_SIZE_OF_FREQUENCY_IN_GROUP;
 //============================================ Frequency Input =====================================
-
+#if 0
 //============================================ Baro =================================================
 const MG_HAL_BARO_IN_T MG_HAL_BARO_GROUP[] =
 {
