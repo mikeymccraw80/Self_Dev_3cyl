@@ -6,6 +6,7 @@
 #include "dd_mios_interface.h"
 #include "io_config_tpu.h"
 #include "dd_mcd5402_interface.h"
+#include "dd_swt_interface.h"
 
 /*=============================================================================
  * mg_HAL_PWM_Set_Discrete_Out_Group_Frequency_And_Duty
@@ -71,10 +72,10 @@ void mg_HAL_PWM_Set_ETCCTLPWM_Frequency_And_Duty(uint32_t frequency, uint32_t du
  * @parm  time
  * @rdesc none 
  *===========================================================================*/
-// void mg_HAL_PWM_Set_SWT_Timer(uint32_t time)
-// {
-//     IO_PULSE_Timer_Set_Value( &MTSA_SWT, time, 0, MICROSECOND_RESOLUTION);
-// }
+void mg_HAL_PWM_Set_SWT_Timer(uint32_t time)
+{
+    SWT_Set_Timeout_Value(time * 8);
+}
 
 /*=============================================================================
  * mg_HAL_PWM_EMC_Cycling_Initialize

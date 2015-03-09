@@ -160,6 +160,7 @@ void mg_HAL_Discrete_Set_Fuel_Pump_Low(bool state)
     IO_DISCRETE_Set_Immediate_State(&MTSA_VSEP_D_OUT_FPR, state);
 #endif
 }
+#endif
 
 void mg_HAL_Discrete_Set_FAN1(bool state)
 {
@@ -167,10 +168,10 @@ void mg_HAL_Discrete_Set_FAN1(bool state)
     IO_DISCRETE_Set_Immediate_State(&MTSA_C2MIO_PWM_2_FAN1, state);
 #endif
 #ifdef  __MG_VSEP_USED
-    IO_DISCRETE_Set_Immediate_State(&MTSA_PWM_FAN, state);
+    HAL_GPIO_SET_FAN1_Enable(state);
 #endif
 }
-#endif
+
 void mg_HAL_Discrete_Set_FAN2(bool state)
 {
 #ifdef  __MG_C2MIO_USED
