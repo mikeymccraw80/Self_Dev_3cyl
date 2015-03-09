@@ -1914,13 +1914,6 @@ const SIU_GPDO_T DO_SIU_INITIAL_PDO =
       IO_INACTIVE
 };
 
-const SIU_PCR_T PWM_SIU_INITIAL_PCR = 
-{
-
-
-   
-}
-
 //The SIU_PCR390 ¨C SIU_PCR413 registers control the muxing of the signals to the DSPI. PA field values
 //are shown in Table 140.
 

@@ -117,7 +117,7 @@
 #endif
 #define EMC_MODE_3_INJ_ON                                (10000 * (SYSTEM_FREQUENCY_HZ / 1000000))
 #define EMC_MODE_3_INJ_OFF                               (0 * (SYSTEM_FREQUENCY_HZ / 1000000))
-
+#endif
 #if MG_MCD5412_USED
 #define PC_EST_US_ON                    (3400 * (TPU_A_TCR1_CLOCK_FREQ / 1000000))
 #define PC_EST_US_DELAY              (6600 * (TPU_A_TCR1_CLOCK_FREQ / 1000000))
@@ -131,7 +131,7 @@
 #define PC_ETC_FREQ            3300
 #define PC_ETC_FREQ_MAX            (PC_ETC_FREQ * 1.05)
 #define PC_ETC_FREQ_MIN            (PC_ETC_FREQ * 0.95)
-#endif
+
 
 #ifdef __MG_C2PS_WATCHDOG_RESET_TEST
 #if (C2PS_CONFIG_TIMEOUT_MODE_INIT_0 == C2PS_COP_TIMEOUT_MODE_15P625)
@@ -395,15 +395,15 @@ void mg_HAL_Output_Cycling_Diagnostic(uint8_t *pch)
     mg_HAL_ComplexIO_Fault_Clear();
 #endif
 #ifdef __MG_VSEP_USED
-    mg_HAL_ComplexIO_Fault_Read();
+    // mg_HAL_ComplexIO_Fault_Read();
     for (idx = 0; idx < MG_COMPLEXIO_CHANNEL_MAX; idx++)
     {
         out_map_index = (idx >> 2);
         out_map_position = ((idx & 0x03) << 1);
-        *(pch_idx +out_map_index) |= mg_HAL_ComplexIO_Fault_Get( idx) << out_map_position;
+        // *(pch_idx +out_map_index) |= mg_HAL_ComplexIO_Fault_Get( idx) << out_map_position;
     }
     pch_idx += (out_map_index + 1);
-    mg_HAL_ComplexIO_Fault_Clear();
+    // mg_HAL_ComplexIO_Fault_Clear();
 #endif
 #ifdef __MG_PHDL_USED
     ETC_freq = mg_HAL_PWM_Get_ETCCTLPWM_Frequency();
@@ -435,12 +435,12 @@ void mg_HAL_Output_Cycling_EMC_Init(void)
 //    MG_HAL_DISCRETE_OUT_GROUP[13].io = (void *)&MG_MTSA_PWM_FUEL_CONSUM;
     MG_HAL_DISCRETE_OUT_GROUP[19].type = DISCRETE;
 }
-
+#endif
 void mg_HAL_Output_Cycling_EMC_Uninit(void)
 {
     
 }
-
+#if 0
 void mg_HAL_Output_Cycling_EMC_Config(void)
 {
     if (mg_HAL_Analog_Get_TPS1() < 0x7fff)

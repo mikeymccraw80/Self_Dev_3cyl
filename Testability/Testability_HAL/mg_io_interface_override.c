@@ -610,7 +610,7 @@ const IO_Discrete_T MG_MTSA_D_OUT_FPO7 =
    &SIU_GPIO_DISCRETE,
    &SIU_GPIO_INTERRUPT
 };
-#endif
+
 // SIU PCR register  initialization group for pwm
 const SIU_PCR_T MG_PWM_SIU_INITIAL_PCR =
 {
@@ -631,7 +631,7 @@ const SIU_PCR_T MG_PWM_SIU_INITIAL_PCR =
 // {
 //    SIU_PCR_Initialize_GPDO(DO_SIU_INITIAL_PCR)
 // };
-#if 0
+
 // SIU GPDO register intialization group for gpio in
 const SIU_GPDO_T  MG_DI_SIU_INITIAL_GPDO =
 {
@@ -779,7 +779,7 @@ void MG_SIU_GPIO_DISCRETE_Initialize_Device_Override(void)
 
 void MG_SIU_GPIO_PWM_Initialize_Device_Override(void)
 {
-    SIU.PCR[SIU_GPIO_CHANNEL_391] = MG_PWM_SIU_INITIAL_PCR;
+    // SIU.PCR[SIU_GPIO_CHANNEL_391] = MG_PWM_SIU_INITIAL_PCR;
 }
 
 #if 0

@@ -38,6 +38,7 @@ const uint8_t MG_COMPLEXIO_FAULT_OPEN = C2MIO_FAULT_PCH_OPEN_FAULT;
 const uint8_t MG_COMPLEXIO_FAULT_SHORT_TO_GROUND = C2MIO_FAULT_PCH_SHORT_TO_GROUND_FAULT;
 const uint8_t MG_COMPLEXIO_FAULT_SHORT_TO_BATTERY = C2MIO_FAULT_PCH_SHORT_TO_BATTERY_FAULT;
 #endif
+#endif
 #ifdef __MG_VSEP_USED
 /*----------------------------------------------------------------------------*/
 /*   Definition of VSEP Channel Maximom                                              */
@@ -53,7 +54,7 @@ const uint8_t MG_COMPLEXIO_FAULT_SHORT_TO_BATTERY = VSEP_FAULT_PCH_SHORT_TO_BATT
 #endif
 
 
-
+#if 0
 #ifdef __MG_PHDL_USED
 /*=============================================================================
  * mg_PHD_Set_Clear_Fault
@@ -203,7 +204,6 @@ void mg_HAL_Fault_ETC_Over_Current_Test_Configure(uint8_t slew_rate)
     L9958_SPI_Immediate_Transfer();
 #endif
 }
-
 #if 0
 /*=============================================================================
  * mg_HAL_ComplexIO_Fault_Read

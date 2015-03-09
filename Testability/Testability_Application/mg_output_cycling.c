@@ -111,7 +111,7 @@ void mg_output_cycling(void)
             if (time_diff > DURING_10_S)
             {
                 start_timer = mg_HAL_Timer_Get_STM_In_CNT();
-                mg_HAL_Output_Cycling_Diagnostic((uint8_t*)(&MG_MAILBOX_OUT(parameter[1])));
+                // mg_HAL_Output_Cycling_Diagnostic((uint8_t*)(&MG_MAILBOX_OUT(parameter[1])));
             }
             
             data_byte = MG_MAILBOX_IN(parameter[0]);
