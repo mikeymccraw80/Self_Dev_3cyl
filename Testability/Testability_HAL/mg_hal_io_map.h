@@ -188,13 +188,13 @@
 
 // Frequency in map
 #define   MG_HIODEVICE_FI_NULL                   0xFFFFFFFF
-#define   MG_HIODEVICE_FI_CAM1                   MG_FEI_INDEX_CAM1
-#define   MG_HIODEVICE_FI_ABSPWM                 MG_FEI_INDEX_WSSFI
-#define   MG_HIODEVICE_FI_CAM2                   MG_FEI_INDEX_CAM2
-#define   MG_HIODEVICE_FI_VSS                    MG_FEI_INDEX_VSSFI
-#define   MG_HIODEVICE_FI_ENS                    MG_FEI_INDEX_ENSFI
+#define   MG_HIODEVICE_FI_CAM1                   MG_PWMIE_INDEX_CAM1
+#define   MG_HIODEVICE_FI_ABSPWM                 MG_PWMIE_INDEX_WSSFI
+#define   MG_HIODEVICE_FI_CAM2                   MG_PWMIE_INDEX_CAM2
+#define   MG_HIODEVICE_FI_VSS                    MG_PWMIE_INDEX_VSSFI
+#define   MG_HIODEVICE_FI_ENS                    MG_PWMIE_INDEX_ENSFI
 #define   MG_HIODEVICE_FI_Alternator             MG_HIODEVICE_FI_NULL
-#define   MG_HIODEVICE_FI_58XPOS                 MG_FEI_INDEX_58XPOS
+#define   MG_HIODEVICE_FI_58XPOS                 MG_PWMIE_INDEX_58XPOS
 
 #if 0
 // Baro

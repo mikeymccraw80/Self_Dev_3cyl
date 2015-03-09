@@ -114,7 +114,7 @@ uint32_t mg_HAL_PWM_Get_Frequency_In_Group_Period(uint8_t index)
     } else {
         PWM_Data.Period = 0;
     }
-    return PWM_Data.Period;
+    return (PWM_Data.Period >> 2);
 }
 
 /*=============================================================================
