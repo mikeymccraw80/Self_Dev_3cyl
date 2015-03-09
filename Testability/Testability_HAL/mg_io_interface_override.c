@@ -782,7 +782,6 @@ void MG_SIU_GPIO_PWM_Initialize_Device_Override(void)
     // SIU.PCR[SIU_GPIO_CHANNEL_391] = MG_PWM_SIU_INITIAL_PCR;
 }
 
-#if 0
 void MG_Reset_SCI(const CommPort_T * in_port)
 {
     IO_Configuration_T  in_configuration = in_port->Configuration;
@@ -804,5 +803,3 @@ void MG_Init_SCI(const CommPort_T * in_port)
     SCI_Configure_Device(in_port->Configuration, sci_init->loopback);
     SCI_Set_Speed(in_port->Configuration, sci_init->speed );
 }
-
-#endif

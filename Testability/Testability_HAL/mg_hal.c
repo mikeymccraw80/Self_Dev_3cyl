@@ -233,24 +233,25 @@ void mg_HAL_Disable_CAN_10ms_Task_Timer(void)
 {
     IO_INTERRUPT_Set_Enable( &MTSA_PIT_TIMER_3, false );
 }
+#endif
 
 void mg_HAL_Internal_Device_Init(void)
 {
-    IO_PULSE_IC_Initialize_Channel(&MG_MTSA_IC_58XPOS);
-    IO_PULSE_IC_Initialize_Channel(&MG_MTSA_IC_CAM1);
-    IO_PULSE_IC_Initialize_Channel(&MG_MTSA_IC_CAM2);
-    IO_PULSE_IC_Initialize_Channel(&MG_MTSA_IC_VSS);
-    IO_PULSE_IC_Initialize_Channel(&MG_MTSA_IC_ENS);
+    // IO_PULSE_IC_Initialize_Channel(&MG_MTSA_IC_58XPOS);
+    // IO_PULSE_IC_Initialize_Channel(&MG_MTSA_IC_CAM1);
+    // IO_PULSE_IC_Initialize_Channel(&MG_MTSA_IC_CAM2);
+    // IO_PULSE_IC_Initialize_Channel(&MG_MTSA_IC_VSS);
+    // IO_PULSE_IC_Initialize_Channel(&MG_MTSA_IC_ENS);
 
     mg_HAL_Timer_Set_STM_Enable(true);
 
-    mg_HAL_LIN_Set_DMA_Enable(false);
+    // mg_HAL_LIN_Set_DMA_Enable(false);
     
-    MG_Reset_SCI(&SCI_PORT_0);
-    MG_Init_SCI(&SCI_PORT_0);
+    // MG_Reset_SCI(&SCI_PORT_0);
+    // MG_Init_SCI(&SCI_PORT_0);
     MG_Init_SCI(&SCI_PORT_1);
 }
-#endif
+
 /*=============================================================================
  * mg_External_Device_Init
  * @func  Initialize the external devices

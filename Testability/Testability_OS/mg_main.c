@@ -78,7 +78,7 @@ static void Initialize_Testability(void)
 
     // mg_HAL_Discrete_Reconfigure_CAL();
 
-    // mg_HAL_Internal_Device_Init();
+    mg_HAL_Internal_Device_Init();
 
     mg_HAL_External_Device_Init();
     
@@ -151,7 +151,6 @@ void mg_main(void)
                     if(testIdx < MAX_NUMBER_OF_TESTS)
                     {
                         mg_Execute_Test(testIdx);
-//                        (*mgFn[testIdx])();
                     }
                     /* Test is finished. Overwrite te mailbox with MG_FINISHED */
                     MG_MAILBOX_IN(testid) = MG_FINISHED;

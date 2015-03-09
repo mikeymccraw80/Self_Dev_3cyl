@@ -1,6 +1,7 @@
-#if 0
 #include "mg_hal_config.h"
 #include "dd_sci.h"
+#include "dd_sci_interface.h"
+
 /*=============================================================================
  * mg_HAL_Kline_Get_Read_Status
  * @func  get Kline status
@@ -66,6 +67,3 @@ void mg_HAL_Kline_Write(uint8_t data)
 {
     SCI_Write(SCI_PORT_1.Configuration, (uint16_t)data);
 }
-
-
-#endif
