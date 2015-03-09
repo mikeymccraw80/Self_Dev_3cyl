@@ -296,8 +296,8 @@ void InitializeHardwareLast(void)
 
 	/* init tpu device, this part must placed behind nvram erase */
 	TPU_Initialize_Device();
-	InitializeComplexIO();
-	FI_Initialize();
+	// InitializeComplexIO();
+	// FI_Initialize();
 
 	/* feed tle4471 watchdog */
 	SetHWIO_ServiceExtCOP_1Time();

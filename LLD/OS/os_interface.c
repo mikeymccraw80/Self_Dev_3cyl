@@ -30,6 +30,9 @@
 //=============================================================================
 void OS_Startup_Hook(void)
 {
+	InitializeComplexIO();
+	FI_Initialize();
+
 	HAL_GPIO_SET_TODO_Enable(true);
 
 	HAL_OS_Init_Task();
