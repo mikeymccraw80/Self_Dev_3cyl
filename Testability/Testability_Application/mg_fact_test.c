@@ -18,7 +18,6 @@
 // %version:         7 %
 //
 //=============================================================================
-#if 0
 #include "reuse.h"
 #include "mg_mailbox.h"
 #include "mg_hal_config.h"
@@ -64,5 +63,3 @@ void mg_fact_test(void)
     mg_HAL_ETC_Discrete_Enable(false);
     mg_HAL_Discrete_Set_GEN_No_Affect(false);
 }
-
-#endif

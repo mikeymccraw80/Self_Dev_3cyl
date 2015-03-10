@@ -201,7 +201,7 @@ void mg_HAL_Discrete_Set_O2_2_Pump_Current(bool state)
     IO_DISCRETE_Set_Immediate_State(&MTSA_D_OUT_O2BPUMP, state);
 #endif
 }
-
+#endif
 void mg_HAL_Discrete_Set_GEN_No_Affect(bool state)
 {
 #ifdef  __MG_C2MIO_USED
@@ -211,7 +211,7 @@ void mg_HAL_Discrete_Set_GEN_No_Affect(bool state)
 #ifdef __MG_VSEP_USED
 #endif
 }
-#endif
+
 
 void mg_HAL_Discrete_Set_GEN_ENABLE(bool state)
 {

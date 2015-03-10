@@ -11,7 +11,7 @@
 #undef __MG_KP254_USED
 
 /* Test Functions Defination */
-#undef __MG_FACT_TEST
+#define __MG_FACT_TEST
 #define __MG_CRC_CHECKSUM_TEST
 #define __MG_MEMORY_CHECKSUM_TEST
 #define __MG_KKSUM_CHECKSUM_TEST
@@ -41,7 +41,7 @@
 #define __MG_INJECTOR_TEST
 #undef __MG_KNOCK_TEST
 #define __MG_TOD_TEST
-#undef __MG_IGBT_OVER_CURRENT_TEST
+#define __MG_IGBT_OVER_CURRENT_TEST
 #define __MG_COP_TIME_OVERFLOW_TEST
 #undef __MG_BARO_SENSOR_TEST_H
 #undef __MG_LIN_TEST
