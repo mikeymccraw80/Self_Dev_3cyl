@@ -995,6 +995,28 @@ const bool    KbCAN_CHERY_Fuel_Adjust_Enable = true ;
 
 /*
 *| hwiocald.{
+*|    KbVIOS_O2APumpingCurrentEnabled {
+*|       :is_calconst;
+*|       :units = "BOOLEAN";
+*|       :description = "Enable Pumping Current for OSP type Front O2 sensor";
+*|    }
+*| }
+*/
+const bool    KbVIOS_O2APumpingCurrentEnabled = false ;
+
+/*
+*| hwiocald.{
+*|    KbVIOS_O2BPumpingCurrentEnabled {
+*|       :is_calconst;
+*|       :units = "BOOLEAN";
+*|       :description = "Enable Pumping Current for OSP type Rear O2 sensor";
+*|    }
+*| }
+*/
+const bool    KbVIOS_O2BPumpingCurrentEnabled = false ;
+
+/*
+*| hwiocald.{
 *|   KySYST_BrainDeadBOOT_RecovEnbld
 *|   {
 *|     : is_calconst;

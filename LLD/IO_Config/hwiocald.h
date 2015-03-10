@@ -97,5 +97,8 @@ extern const TwTIME_t_R7p8125ms     K_VAL_tFuelPumpAdjust;
 extern const TwTIME_t_R7p8125ms     K_VAL_tFuelPumpPreWork;
 extern const bool                   KbCAN_CHERY_Fuel_Adjust_Enable;
 
+extern const bool                   KbVIOS_O2APumpingCurrentEnabled;
+extern const bool                   KbVIOS_O2BPumpingCurrentEnabled;
+
 extern const T_COUNT_BYTE           KySYST_BrainDeadBOOT_RecovEnbld;
 #endif

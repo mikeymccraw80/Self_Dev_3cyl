@@ -533,6 +533,7 @@ const SIU_PCR_T SIU_INITIAL_PCR_119 =
       SIU_GPIO_PULL_DOWN  //WPS  Weak pullup/down select
 };
 
+
 //GPIO 120
 //O2BPUMP
 //The SIU_PCR120 register controls the function, direction, and static electrical attributes of the

@@ -416,6 +416,23 @@ bool HAL_GPIO_GET_CRUISI_Status(void)
    }	 
  }
 
+//=============================================================================
+//HAL_GPIO_SET_O2APUMP_Enable
+//=============================================================================
+ void HAL_GPIO_SET_O2APUMP_Enable(bool in_enable)
+ {
+    SIU_GPIO_DISCRETE_Set_State(HAL_GPIO_O2APUMP_CHANNEL,in_enable);
+ }
+
+ //=============================================================================
+//HAL_GPIO_SET_O2BPUMP_Enable
+//=============================================================================
+ void HAL_GPIO_SET_O2BPUMP_Enable(bool in_enable)
+ {
+    SIU_GPIO_DISCRETE_Set_State(HAL_GPIO_O2BPUMP_CHANNEL,in_enable);
+ }
+ 
+ 
  //=============================================================================
 //HAL_GPIO_SET_BRKLMPDICTL_Enable
 //=============================================================================
@@ -480,12 +497,13 @@ bool HAL_GPIO_GET_CRUISI_Status(void)
 //=============================================================================
 //HAL_GPIO_DI_Active_Status_Init 
 //=============================================================================		
-   void HAL_GPIO_DI_Active_Status_Init(void) 
- {
-
+void HAL_GPIO_DI_Active_Status_Init(void) 
+{
    HAL_GPIO_SET_ELOAD1DICTL_Enable(!KbHWIO_ELOAD1_Active_High);
    HAL_GPIO_SET_ELOAD2DICTL_Enable(!KbHWIO_ELOAD2_Active_High);
    HAL_GPIO_SET_BRKLMPDICTL_Enable(!KbHWIO_BRKLMP_Active_High);
 
+   HAL_GPIO_SET_O2APUMP_Enable(KbVIOS_O2APumpingCurrentEnabled);
+   HAL_GPIO_SET_O2BPUMP_Enable(KbVIOS_O2APumpingCurrentEnabled);
 }
 

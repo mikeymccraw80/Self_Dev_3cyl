@@ -190,7 +190,7 @@ extern const SIU_PCR_T SIU_INITIAL_PCR_118;
 //characteristics (drive strength using the slew rate field).
 //O2APUMP
 extern const SIU_PCR_T SIU_INITIAL_PCR_119;
-
+#define  HAL_GPIO_O2APUMP_CHANNEL       SIU_GPIO_CHANNEL_119
 
 
 //etpu06
@@ -198,6 +198,7 @@ extern const SIU_PCR_T SIU_INITIAL_PCR_119;
 //The SIU_PCR120 register controls the function, direction, and static electrical attributes of the
 //eTPU_A[6]_eTPU_A[18]_DSPI_B_SCK_LVDS+_GPIO[120] pin.
 extern const SIU_PCR_T SIU_INITIAL_PCR_120;
+#define  HAL_GPIO_O2BPUMP_CHANNEL       SIU_GPIO_CHANNEL_120
 
 //etpu07
 //BRKSWDI 
