@@ -18,14 +18,13 @@
 // %version:         2 %
 //
 //=============================================================================
-
 #include "reuse.h"
 #include "mg_mailbox.h"
 #include "mg_hal_config.h"
 #include "mg_hal_discrete.h"
 #include "mg_hal_PWM.h"
 #include "mg_hal_etc.h"
-#if 0
+
 /*****************************************************************************
  * Function Prototype: void mg_general_port_write_test(void)
  *
@@ -172,4 +171,3 @@ void mg_general_port_write_test(void)
         }
     }
 }
-#endif

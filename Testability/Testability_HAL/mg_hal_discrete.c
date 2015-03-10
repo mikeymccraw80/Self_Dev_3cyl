@@ -24,6 +24,7 @@
 #include "io_config_siu.h"
 #include "dd_siu_interface.h"
 #ifdef __MG_VSEP_USED
+#include "io_config_vsep.h"
 #include "dd_vsep_discrete.h"
 #include "dd_vsep_discrete_interface.h"
 #endif
@@ -46,12 +47,12 @@ void mg_HAL_Discrete_Set_ELOAD2(bool state)
 {
     HAL_GPIO_SET_ELOAD2DICTL_Enable(state);
 }
-#if 0
+
 void mg_HAL_Discrete_Set_BRKLDI(bool state)
 {
-    IO_DISCRETE_Set_Immediate_State(&MTSA_D_OUT_BRKLDICTL, state);
+    HAL_GPIO_SET_BRKLMPDICTL_Enable(state);
 }
-#endif
+
 
 #if 0
 void mg_HAL_Discrete_Set_FPO1(bool state)
@@ -105,18 +106,18 @@ void mg_HAL_Discrete_Set_TACH(bool state)
        VSEP_PWM_PWMSetDuty(VSEP_PO_TACH_CH, 0);
     }
 }
-#if 0
+
 void mg_HAL_Discrete_Set_ACREQDI(bool state)
 {
 #ifdef __MG_VSEP_USED
 //    IO_DISCRETE_Set_Immediate_State(&MTSA_D_IN_ACREQDI, state);
     if (state)
     {
-        VSEP_MPIO_Set_MODE_Immediate(MTSA_D_IN_ACREQDI.Configuration, VSEP_MPIO_INPUT_MODE_ACTIVE_HIGH_SWITCH_DETECT);
+        VSEP_MPIO_Set_MODE_Immediate(VSEP_MPIO_ACRequest_CH, VSEP_MPIO_INPUT_MODE_ACTIVE_HIGH_SWITCH_DETECT);
     }
     else
     {
-        VSEP_MPIO_Set_MODE_Immediate(MTSA_D_IN_ACREQDI.Configuration, VSEP_MPIO_INPUT_MODE_ACTIVE_LOW_SWITCH_DETECT);
+        VSEP_MPIO_Set_MODE_Immediate(VSEP_MPIO_ACRequest_CH, VSEP_MPIO_INPUT_MODE_ACTIVE_LOW_SWITCH_DETECT);
     }
 #endif
 }
@@ -127,11 +128,11 @@ void mg_HAL_Discrete_Set_PSPSDI(bool state)
 //    IO_DISCRETE_Set_Immediate_State(&MTSA_D_IN_PSPSDI, state);
     if (state)
     {
-        VSEP_MPIO_Set_MODE_Immediate(MTSA_D_IN_PSPSDI.Configuration, VSEP_MPIO_INPUT_MODE_ACTIVE_HIGH_SWITCH_DETECT);
+        VSEP_MPIO_Set_MODE_Immediate(VSEP_MPIO_PSPS_CH, VSEP_MPIO_INPUT_MODE_ACTIVE_HIGH_SWITCH_DETECT);
     }
     else
     {
-        VSEP_MPIO_Set_MODE_Immediate(MTSA_D_IN_PSPSDI.Configuration, VSEP_MPIO_INPUT_MODE_ACTIVE_LOW_SWITCH_DETECT);
+        VSEP_MPIO_Set_MODE_Immediate(VSEP_MPIO_PSPS_CH, VSEP_MPIO_INPUT_MODE_ACTIVE_LOW_SWITCH_DETECT);
     }
 #endif
 }
@@ -142,15 +143,16 @@ void mg_HAL_Discrete_Set_MIDACDI(bool state)
 //    IO_DISCRETE_Set_Immediate_State(&MTSA_D_IN_MIDACDI, state);
     if (state)
     {
-        VSEP_MPIO_Set_MODE_Immediate(MTSA_D_IN_MIDACDI.Configuration, VSEP_MPIO_INPUT_MODE_ACTIVE_HIGH_SWITCH_DETECT);
+        VSEP_MPIO_Set_MODE_Immediate(VSEP_MPIO_MIDAC_CH, VSEP_MPIO_INPUT_MODE_ACTIVE_HIGH_SWITCH_DETECT);
     }
     else
     {
-        VSEP_MPIO_Set_MODE_Immediate(MTSA_D_IN_MIDACDI.Configuration, VSEP_MPIO_INPUT_MODE_ACTIVE_LOW_SWITCH_DETECT);
+        VSEP_MPIO_Set_MODE_Immediate(VSEP_MPIO_MIDAC_CH, VSEP_MPIO_INPUT_MODE_ACTIVE_LOW_SWITCH_DETECT);
     }
 #endif
 }
 
+#if 0
 void mg_HAL_Discrete_Set_Fuel_Pump_Low(bool state)
 {
 #ifdef  __MG_C2MIO_USED
@@ -181,14 +183,15 @@ void mg_HAL_Discrete_Set_FAN2(bool state)
     HAL_GPIO_SET_FAN2_Enable(state);
 #endif
 }
-#if 0
+
 void mg_HAL_Discrete_Set_O2_1_Pump_Current(bool state)
 {
 #ifdef  __MG_C2MIO_USED
     IO_DISCRETE_Set_Immediate_State(&MTSA_C2MIO_O2_1_PUMPING_CURRENT, state);
 #endif
 #ifdef  __MG_VSEP_USED
-    IO_DISCRETE_Set_Immediate_State(&MTSA_D_OUT_O2APUMP, state);
+    // IO_DISCRETE_Set_Immediate_State(&MTSA_D_OUT_O2APUMP, state);
+    HAL_GPIO_SET_O2APUMP_Enable(state);
 #endif
 }
 
@@ -198,10 +201,11 @@ void mg_HAL_Discrete_Set_O2_2_Pump_Current(bool state)
     IO_DISCRETE_Set_Immediate_State(&MTSA_C2MIO_O2_2_PUMPING_CURRENT, state);
 #endif
 #ifdef  __MG_VSEP_USED
-    IO_DISCRETE_Set_Immediate_State(&MTSA_D_OUT_O2BPUMP, state);
+    // IO_DISCRETE_Set_Immediate_State(&MTSA_D_OUT_O2BPUMP, state);
+    HAL_GPIO_SET_O2BPUMP_Enable(state);
 #endif
 }
-#endif
+
 void mg_HAL_Discrete_Set_GEN_No_Affect(bool state)
 {
 #ifdef  __MG_C2MIO_USED
