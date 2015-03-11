@@ -237,7 +237,7 @@ void mg_HAL_Discrete_Set_TODO(bool state)
     HAL_GPIO_SET_TODO_Enable(state);
 #endif
 }
-#if 0
+
 #ifdef  __MG_C2PS_USED
 void mg_HAL_Discrete_Set_C2PS_WTO(bool state)
 {
@@ -259,8 +259,6 @@ void mg_HAL_Discrete_Set_C2PS_VIGNF(bool state)
     IO_DISCRETE_Set_Immediate_State(&MTSA_C2PS_CONFIG_VIGNF_CONFIGURATION, state);
 }
 #endif
-#endif
-
 
 bool mg_HAL_Discrete_Get_Discrete_In_Group(uint8_t index)
 {
@@ -276,22 +274,22 @@ bool mg_HAL_Discrete_Get_Discrete_In_Group(uint8_t index)
     return state;
 }
 
-#if 0
 bool mg_HAL_Discrete_Get_BRkSW(void)
 {
-    return IO_DISCRETE_Get_Immediate_State(&MTSA_D_IN_J1_69);
+    return HAL_GPIO_GET_BRKSWDI_Status();
 }
 
 bool mg_HAL_Discrete_Get_ELOAD1(void)
 {
-    return IO_DISCRETE_Get_Immediate_State(&MTSA_D_IN_J1_35);
+    return HAL_GPIO_GET_ELOAD1_Status();
 }
 
 bool mg_HAL_Discrete_Get_ELOAD2(void)
 {
-    return IO_DISCRETE_Get_Immediate_State(&MTSA_D_IN_J1_34);
+    return HAL_GPIO_GET_ELOAD2_Status();
 }
 
+#if 0
 void mg_HAL_Discrete_Reconfigure_CAL(void)
 {
     MTSA_D_IN_J1_33.Configuration = SIU_GPIO_Set_Polarity(MTSA_CONFIG_D_IN_J1_33, IO_ACTIVE_HIGH);

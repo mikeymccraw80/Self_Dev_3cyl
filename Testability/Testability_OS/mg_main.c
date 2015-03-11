@@ -85,25 +85,25 @@ static void Initialize_Testability(void)
     // mg_HAL_SPI_Timer_Enable( false );
 
 
-    // for (idx = 0; idx < MG_Number_of_Discrete_Out_Device; idx++)
-    // {
-    //     mg_HAL_Discrete_Set_Discrete_Out_Group_Value(idx, false);
-    // }
-    // if (!mg_HAL_Discrete_Get_ELOAD1())
-    // {
-    //     Mg_Mode = MG_FUNCTION_TEST;
-    // }
-    // else
-    // {
-    //     if (!mg_HAL_Discrete_Get_ELOAD2())
-    //     {
-    //         Mg_Mode = MG_OUTPUT_CYCLING_VALIDATION;
-    //     }
-    //     else
-    //     {
-    //         Mg_Mode = MG_OUTPUT_CYCLING_EMC;
-    //     }
-    // }
+    for (idx = 0; idx < MG_Number_of_Discrete_Out_Device; idx++)
+    {
+        mg_HAL_Discrete_Set_Discrete_Out_Group_Value(idx, false);
+    }
+    if (!mg_HAL_Discrete_Get_ELOAD1())
+    {
+        Mg_Mode = MG_FUNCTION_TEST;
+    }
+    else
+    {
+        if (!mg_HAL_Discrete_Get_ELOAD2())
+        {
+            Mg_Mode = MG_OUTPUT_CYCLING_VALIDATION;
+        }
+        else
+        {
+            Mg_Mode = MG_OUTPUT_CYCLING_EMC;
+        }
+    }
     Mg_Mode = MG_FUNCTION_TEST;
     if ( (Mg_Mode == MG_FUNCTION_TEST) || 
         (Mg_Mode == MG_OUTPUT_CYCLING_EMC)||
