@@ -26,12 +26,12 @@ uint16_t mg_HAL_Analog_Get_Baro_Temperature(void)
 {
     return IO_ANALOG_Get_Immediate_Value(MG_HIODEVICE_BARO_TEMPERATURE);
 }
+#endif
 
 uint16_t mg_HAL_Analog_Get_HWCFG(void)
 {
-    return IO_ANALOG_Get_Immediate_Value(&HWCFGVI);
+    return (QADC_Analog_Get_Value(AD_HWCFGVI_Channel) << 2);
 }
-#endif
 
 uint16_t mg_HAL_Analog_Get_TPS1(void)
 {
