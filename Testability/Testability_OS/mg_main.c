@@ -159,12 +159,12 @@ void mg_main(void)
             }
             case MG_OUTPUT_CYCLING_EMC:
             {
-                // mg_output_cycling_EMC();
+                mg_output_cycling_EMC();
                 break;
             }
             case MG_OUTPUT_CYCLING_VALIDATION:
             {
-                // mg_output_cycling_validation();
+                mg_output_cycling_validation();
                 break;
             }
             default:
