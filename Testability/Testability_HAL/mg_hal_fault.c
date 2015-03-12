@@ -58,7 +58,6 @@ extern const SPI_Message_Definition_T VSEP_FAULT_MESSAGE_DEFINITION;
 #endif
 
 
-#if 0
 #ifdef __MG_PHDL_USED
 /*=============================================================================
  * mg_PHD_Set_Clear_Fault
@@ -125,10 +124,6 @@ void mg_PHD_Set_Slew_Time(uint8_t data)
 {
     PHD_Txd[ 0 ] = PHD_Msg_Set_Slew_Time(PHD_Txd[ 0 ], data);
 }
-#endif
-
-#ifdef __MG_L9958_USED
-#endif
 #endif
 
 /*=============================================================================
@@ -288,7 +283,7 @@ void mg_HAL_ComplexIO_Fault_Clear(void)
     C2MIO_SPI_Immediate_Transfer( C2MIO_Set_Device_Index( 0, C2MIO_INDEX_0 ), C2MIO_MESSAGE_PCH_FAULTS_STATUS_READ);
 #endif
 #ifdef __MG_VSEP_USED
-    // SPIPort_Transfer_Immediate( VSEP_EST_FAULT_SYNC_MESSAGE[VSEP_INDEX_0].port, &VSEP_EST_FAULT_SYNC_MESSAGE[VSEP_INDEX_0] );
+    VSEP_SPI_Immediate_Transfer(0, VSEP_MESSAGE_EST_FAULT);
     // SPIPort_Transfer_Immediate( VSEP_SDOA06_MESSAGE[VSEP_INDEX_0].port, &VSEP_SDOA06_MESSAGE[VSEP_INDEX_0] );
     VSEP_SPI_Immediate_Transfer(0, VSEP_MESSAGE_FAULT);
 #endif
