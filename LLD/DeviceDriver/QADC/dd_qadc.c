@@ -630,5 +630,124 @@ void QADC_Knock_SIU_Init(void )
    return QADC_Queue_Result_1[channel];
 }
 
+//=============================================================================
+// QADC_ANALOG_Get_Immediate_Value
+//=============================================================================
+uint16_t QADC_ANALOG_Get_Knock_Immediate_Value(QADC_Channel_T ch)
+{
+	// Do a conversion now of this channel how to manage with DMA used in the Command and Receive Fifo
+	ADC_CMF_T               cmf;
+	QADC_IDCR_T             idcr;
+	QADC_CFCR_T             cfcr;
+	QADC_Justify_Result_T   justify_result = QADC_JUSTIFY_RESULT_LEFT;
+	QADC_Fifo_Index_T       fifo_index     = QADC_FIFO_0;
+	QADC_T                  *qadc          = &QADC;
+	QADC_Index_T            qadc_index     = QADC_DEVICE_A;
+	uint16_t                result;
+	uint32_t                reg_value;
+	bool                    command_fifo_dma_enabled;
+	bool                    result_fifo_dma_enabled;
+	uint32_t                counter;
+	static uint32_t         pop;
 
+	// Use the FIFO index in the configuration
+	// Disable FIFO
+	cfcr.U16 = qadc->CFCR[fifo_index].U16;
 
+	// Store FIFO trigger request information
+	idcr.U16 = qadc->IDCR[fifo_index].U16;
+
+	// Use the FIFO index in the configuration
+	// Disable FIFO
+	qadc->CFCR[fifo_index].F.MODE = QADC_TRIGGER_MODE_DISABLED;
+
+	//
+	// Now flush the remaining conversions out of the queue)
+	//
+	while ( QADC_COMMAND_FIFO_STATUS_IDLE != Extract_Bits(qadc->CFSR.U32, ( BIT_30 - ( fifo_index * BIT_2 ) ),BIT_2 ) )
+	{
+		// Certify that CFS has changed to IDLE before setting CFINVn.
+	}
+
+	// ONLY write to this when mode is configured as disabled!!!
+	qadc->CFCR[fifo_index].F.CFINV = 1;
+
+	qadc->CFTCR[fifo_index].F.TC_CF = 0;
+
+	qadc->CFCR[fifo_index].F.MODE = QADC_TRIGGER_MODE_SOFTWARE_TRIGGER_Single_Scan;
+
+	// enable single scan for QADC_TRIGGER_MODE_SOFTWARE_TRIGGER mode
+	qadc->CFCR[fifo_index].F.SSE = 1;
+
+	// if there is something still left, remove it.
+	for ( counter = 0; counter < qadc->FISR[fifo_index].F.RFCTR; counter++ )
+	{
+		pop = (uint16_t)qadc->RFPR[fifo_index].F.RF_POP;
+	}
+	// resets RFIFO status  
+	reg_value = qadc->FISR[fifo_index].U32;
+	reg_value = (reg_value & QADC_RFOF_RFDF_CLEAR);
+	qadc->FISR[fifo_index].U32 = reg_value;
+
+	// Build conversion command using configuration
+	cmf.U32              =  0;
+	cmf.CF.MESSAGE_TAG   =  fifo_index;
+	cmf.CF.EOQ           =  1;
+	cmf.CF.PAUSE         =  0;
+	cmf.CF.EB            =  0;
+	cmf.CF.BN            =  ADC_CONVERTER_0;
+	cmf.CF.CAL           =  false;
+	cmf.CF.LST           =  QADC_SAMPLE_CYCLES_64;
+	cmf.CF.TSR           =  false;
+	cmf.CF.FFMT          =  QADC_CHANNEL_CONVERSION_FORMAT_RIGHT_JUSTIFIED_UNSIGNED;
+	cmf.CF.CHANNEL       =  ch;
+
+	// Push command into fifo
+	qadc->CFPR[fifo_index] = cmf.U32;
+
+	// clear the underflow status flag. The eQADC will not transfer
+	// entries from an underflowing CFIFO.
+	//
+	reg_value = qadc->FISR[fifo_index].U32;
+	reg_value = (reg_value & QADC_CFUF_CLEAR);
+	qadc->FISR[fifo_index].U32 = reg_value;
+	// Wait for completion
+	while ( qadc->FISR[fifo_index].F.RFDF == QADC_RESULT_FIFO_EMPTY )
+	{
+		// Do Nothing
+	}
+
+	// read result
+	result = (uint16_t)qadc->RFPR[fifo_index].F.RF_POP;
+
+	// reset to disabled before returning to a running state.
+	qadc->CFCR[fifo_index].F.MODE = QADC_TRIGGER_MODE_DISABLED;
+
+	while ( QADC_COMMAND_FIFO_STATUS_IDLE != Extract_Bits(qadc->CFSR.U32, ( BIT_30 - ( fifo_index * BIT_2 ) ),BIT_2 ) )
+	{
+		// Certify that CFS has changed to IDLE before setting CFINVn.
+	}
+
+	// ONLY write to this when mode is configured as disabled!!!
+	qadc->CFCR[fifo_index].F.CFINV = 1;
+	qadc->CFTCR[fifo_index].F.TC_CF = 0;
+	reg_value = qadc->FISR[fifo_index].U32;
+	reg_value = (reg_value & QADC_RFDF_CLEAR);
+	qadc->FISR[fifo_index].U32 = reg_value;// resets RFIFO status
+
+	// restore values for FIFO
+	qadc->IDCR[fifo_index].U16 = idcr.U16;
+	qadc->CFCR[fifo_index].U16 = cfcr.U16;
+
+	if ( justify_result == QADC_JUSTIFY_RESULT_LEFT )
+	{
+		result = (uint16_t)( result << 2U );
+	}
+	else
+	{
+		result = (uint16_t)( (int16_t)result >> 2U );
+	}
+
+	// return value
+	return result;
+}

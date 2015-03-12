@@ -36,4 +36,6 @@ extern  void  QADC_Enable_APS1_Diag(void);
 //=============================================================================
 extern  void  QADC_Disable_APS1_Diag(void);
 
+extern uint16_t QADC_ANALOG_Get_Knock_Immediate_Value(QADC_Channel_T ch);
+
 #endif

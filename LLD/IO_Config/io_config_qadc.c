@@ -217,7 +217,7 @@ const ADC_CCMF_T  QADC_KNOCK_ADC0=
 {
 
     false,    //EOQ      
-   0,    //PAUSE 
+  0,    //PAUSE 
    0,    // REP     
    0,    //EB   
    ADC_CONVERTER_0,    //BN    
