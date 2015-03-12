@@ -207,7 +207,7 @@ const MG_HAL_BARO_IN_T MG_HAL_BARO_GROUP[] =
 
 const uint8_t MG_Number_of_BARO_Device = MG_SIZE_OF_BARO_GROUP;
 //============================================ Baro end =============================================
-
+#endif
 //============================================ Knock group ======================================
 const MG_HAL_ANALOG_T MG_HAL_KNOCK_GROUP[] =
 {
@@ -220,6 +220,3 @@ const MG_HAL_ANALOG_T MG_HAL_KNOCK_GROUP[] =
 const uint8_t MG_Number_of_KNOCK_Device = MG_SIZE_OF_KNOCK_GROUP;
 
 //============================================ Knock group end ==================================
-
-
-#endif

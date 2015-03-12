@@ -18,15 +18,12 @@
 // %version:         5 %
 //
 //=============================================================================
-#if 0
 #include "reuse.h"
 #include "mg_mailbox.h"
 #include "mg_hal_config.h"
 #include "mg_hal.h"
 #include "mg_hal_analog.h"
 #include "mg_hal_timer.h"
-
-
 
 /*----------------------------------------------------------------------------*/
 /*   Definition of local macros                                               */
@@ -171,5 +168,3 @@ void mg_knock_test(void)
     MG_MAILBOX_OUT(parameter[12]) = (uint8_t)(minAD_value[1] & 0xFF);
 
 }
-
-#endif

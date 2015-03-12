@@ -24,6 +24,11 @@
 #include "io_type.h"
 #include "mg_hal_io_map.h"
 
+typedef struct MG_HAL_ANALOG_Tag 
+{
+   uint32_t   io;
+} MG_HAL_ANALOG_T;
+
 typedef struct TIME_KEEPER_Tag
 {
    uint16_t  start_time;
@@ -162,10 +167,10 @@ extern const uint8_t MG_Number_of_Discrete_In_Device;
 
 extern const MT_HAL_FREQUENCY_IN_T MG_HAL_FREQUENCY_IN_GROUP[];
 extern const uint8_t MG_Number_of_Frequency_In_Device;
-#if 0
+
 extern const MG_HAL_ANALOG_T MG_HAL_KNOCK_GROUP[];
 extern const uint8_t MG_Number_of_KNOCK_Device;
-
+#if 0
 extern const MG_HAL_BARO_IN_T MG_HAL_BARO_GROUP[];
 #endif
 #endif /* end of include guard: MG_HAL_CONFIG_H */

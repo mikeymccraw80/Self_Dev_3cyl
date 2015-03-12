@@ -43,13 +43,13 @@ uint16_t mg_HAL_Analog_Get_TPS2(void)
     return (QADC_Analog_FIFO1_Get_Value(AD_TPS2VI_Channel) << 2);
 }
 
-#if 0
+
 uint16_t mg_HAL_Analog_Get_Knock(uint8_t index)
 {
     uint16_t value;
-    if (NULL != MG_HAL_KNOCK_GROUP[index].io)
+    if (MG_HIODEVICE_KNOCK_NULL != MG_HAL_KNOCK_GROUP[index].io)
     {
-        value = IO_ANALOG_Get_Immediate_Value(MG_HAL_KNOCK_GROUP[index].io);
+        value = QADC_ANALOG_Get_Knock_Immediate_Value(MG_HAL_KNOCK_GROUP[index].io);
     }
     else
     {
@@ -57,4 +57,3 @@ uint16_t mg_HAL_Analog_Get_Knock(uint8_t index)
     }
     return value;
 }
-#endif

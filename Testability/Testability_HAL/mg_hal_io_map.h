@@ -93,11 +93,10 @@
 #define   MG_HIODEVICE_AN38                      AD_HWCFGVI_Channel
 #define   MG_HIODEVICE_AN39                      AD_VCC2_Channel
 
-#if 0
 // knock analog map
-#define   MG_HIODEVICE_KNOCK_HIGH          (void *)&ESCHiVI
-#define   MG_HIODEVICE_KNOCK_LOW           (void *)&ESCLoVI
-#endif
+#define   MG_HIODEVICE_KNOCK_NULL                0xFFFFFFFF
+#define   MG_HIODEVICE_KNOCK_HIGH                QADC_CHANNEL_AN0_DAN_0_P
+#define   MG_HIODEVICE_KNOCK_LOW                 QADC_CHANNEL_AN1_DAN_0_N
 
 
 // discrete out map
