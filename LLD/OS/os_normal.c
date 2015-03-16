@@ -14,7 +14,7 @@
 //=============================================================================
 
 
-#pragma section SECTION_PF_KKSUM address=0x00160000
+#pragma section SECTION_PF_KKSUM address=0x0017FFF8
 #pragma use_section SECTION_PF_KKSUM PF_KKSUM
 const uint16_t PF_KKSUM = 0x6D27;
 #pragma section

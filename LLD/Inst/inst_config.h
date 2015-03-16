@@ -16,8 +16,8 @@
 #define APP_CAL_PRESENCE_PATTERN                       (0x3223)
 
 
-#define Cw_SOFTWARE_LEVEL       0x03
-#define Cw_REVISION_LEVEL       0x00
+#define Cw_SOFTWARE_LEVEL       0x01
+#define Cw_REVISION_LEVEL       0x01
 #define Cw_CalFORM_ID           ( ( (0xff & Cw_SOFTWARE_LEVEL) << 8) + (0xff & Cw_REVISION_LEVEL) )
 
 
