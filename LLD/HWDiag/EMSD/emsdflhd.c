@@ -40,6 +40,11 @@ TbBOOLEAN        SbEMSD_FileROMTestComplete ;
 #pragma section DATA " " ".nc_nvram"
 TbBOOLEAN        SbEMSD_FileROMTestFailed ;
 #pragma section DATA " " ".bss"
+
+extern bool Vb_AppCksum_Test_Failed;
+extern bool Vb_CalCksum_Test_Failed;
+
+#define GetEMSD_FileROM_ChecksumState() (Vb_AppCksum_Test_Failed || Vb_CalCksum_Test_Failed)
 /*****************************************************************************
  *  Function definition
  ******************************************************************************/
@@ -73,7 +78,6 @@ TbBOOLEAN        SbEMSD_FileROMTestFailed ;
  *****************************************************************************/
 void MngEMSD_FileROM200msTasks (void)
 {
-#if 0
 	if(!SbEMSD_FileROMTestComplete) {
 	/*     
 	*      ==================================================
@@ -86,7 +90,7 @@ void MngEMSD_FileROM200msTasks (void)
 	*      DTC_Identifier. Multiple results will be reported
 	*      successively. */
 
-		if( (GetVIOS_IgnSt() == CeIGN_ON) &&GetEMSD_FileROM_ChecksumState()) {
+		if( (GetVIOS_IgnSt() == CeIGN_ON) && GetEMSD_FileROM_ChecksumState()) {
 			SbEMSD_FileROMTestFailed   = CbTRUE;
 			SbEMSD_FileROMTestComplete = CbTRUE;
 		} else {
@@ -96,7 +100,6 @@ void MngEMSD_FileROM200msTasks (void)
 	} else {
 		/* do nothing*/
 	}
-#endif
 }
 /* ============================================================================ *\
  * File revision history (top to bottom, first revision to last revision

@@ -18,6 +18,7 @@
 #include "io_config_swt.h"
 #include "io_config_dma.h"
 #include "io_config_pit.h"
+#include "io_config_eeprom.h"
 #include "hal_emulated_eeprom.h"
 #include "dd_l9958.h"
 #include "dd_tle4471.h"
@@ -37,6 +38,8 @@ static bool BatteryRemoved;
 CPU_Info_T CPU_Info;
 FLASH_MODULE_T Flash_Info;
 HWIO_Reset_Status_T Reset_Status;
+bool Vb_AppCksum_Test_Failed;
+bool Vb_CalCksum_Test_Failed;
 
 /* global variable reference */
 //The address of these variables are the size numbers because these variables are calculated by the linker
@@ -80,6 +83,28 @@ asm void CPU_DIAB_Set_Data_Area_Pointers(void)
     addi     r13,r13,__SDA_BASE_@l  # (provided by linker).
 }
 
+/*=============================================================================
+ * Calculate_Pflash_Checksum 
+ * @func  
+ * @parm  
+ * @rdesc  
+ *===========================================================================*/
+static uint16_t Calculate_App_Checksum(void)
+{ 
+   uint16_t Checksum_Result;
+   uint16_t *pflash_add;
+
+   Checksum_Result=0;
+   for((pflash_add = (uint16_t*)(0x40000));(pflash_add < (uint16_t*)(PF_KKSUM_ADDRESS));(pflash_add++))
+   {
+      Checksum_Result = (uint16_t)(*pflash_add + Checksum_Result);
+   }
+   for((pflash_add = (uint16_t*)(PF_KKSUM_ADDRESS + sizeof(uint16_t)));(pflash_add < (uint16_t*)(0x180000));(pflash_add++))
+   {
+      Checksum_Result=(uint16_t)(*pflash_add + Checksum_Result);
+   }
+   return(Checksum_Result);
+}
 
 //=============================================================================
 // Initialize all hardware related registers.  It is assumed that
@@ -111,6 +136,11 @@ void InitializeHardwareRegisters(void)
 		XBAR_MPC5634M_Initialize_Device();
 	}
 	flash_init_sucess = flash_memory_interface->FLASH_Memory_Initial();
+
+	/* validate the cksum */
+	if (Calculate_App_Checksum() != *((uint16_t*)PF_KKSUM_ADDRESS)) {
+		Vb_AppCksum_Test_Failed = true;
+	}
 
 	SIU_Initialize_Device();
 	SIU_GPIO_Initialize_Device();
