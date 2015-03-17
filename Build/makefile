@@ -449,8 +449,9 @@ endif
 # Section 5.5
 ###############################################################################
 DDUMP = $(COMP_DIR)\ddump -R -m3 -w16 -v -o $(OUTPUT_DIR)\$(OUTFILE).s19  $(OUTPUT_DIR)\$(OUTFILE).elf
-PTP_FILL = $(subst /,\,$(TOOLS_DIR))\$(PTP) cut -fill_byte=00 -InputType=s19 -replace -output=$(subst /,\,$(OUTPUT_DIR))\$(OUTFILE).s19 $(subst /,\,$(OUTPUT_DIR))\$(OUTFILE).s19 00020000:0003ffff,00020000 00040000:0017ffff,00040000
-PTP_CONV = $(subst /,\,$(TOOLS_DIR))\$(PTP) convert -ValuesPerLine=16 -InputType=s19 -replace -recordtype=3 -output= $(subst /,\,$(OUTPUT_DIR))\$(OUTFILE).s19  $(subst /,\,$(OUTPUT_DIR))\$(OUTFILE).s19
+PTP_FILL  = $(subst /,\,$(TOOLS_DIR))\$(PTP) cut -fill_byte=00 -InputType=s19 -replace -output=$(subst /,\,$(OUTPUT_DIR))\$(OUTFILE).s19 $(subst /,\,$(OUTPUT_DIR))\$(OUTFILE).s19 00020000:0003ffff,00020000 00040000:0017ffff,00040000
+PTP_CONV  = $(subst /,\,$(TOOLS_DIR))\$(PTP) convert -ValuesPerLine=16 -InputType=s19 -replace -recordtype=3 -output= $(subst /,\,$(OUTPUT_DIR))\$(OUTFILE).s19  $(subst /,\,$(OUTPUT_DIR))\$(OUTFILE).s19
+PTP_CKSUM = $(subst /,\,$(TOOLS_DIR))\tool_cksum $(subst /,\,$(OUTPUT_DIR))\$(OUTFILE).s19 $(subst /,\,$(OUTPUT_DIR))\new.s19 kksum
 
 ###############################################################################
 # Command to generate i6l file
@@ -640,7 +641,7 @@ build_target:	;
 # Generating *.ptp
 ###############################################################################
 	@$(ECHO) Generating PTP file, And do necessary adjustment
-	@cd ..\bin && $(DDUMP) && $(PTP_FILL) && $(PTP_CONV)
+	@cd ..\bin && $(DDUMP) && $(PTP_FILL) && $(PTP_CONV) && $(PTP_CKSUM)
 ifneq ($(TARGET),HWIO_HLS_INTEGRATION)
 	@cd ..\objs && @if exist *.lst $(COPY) *.lst	$(subst /,\,$(LISTING_DIR))\. >nul
 	@cd ..\objs && @if exist *.lst $(DEL) *.lst
