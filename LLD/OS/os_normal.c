@@ -16,7 +16,7 @@
 
 #pragma section SECTION_PF_KKSUM address=0x0017FFF8
 #pragma use_section SECTION_PF_KKSUM PF_KKSUM
-const uint16_t PF_KKSUM = 0x6D27;
+const uint16_t PF_KKSUM = 0x0000;
 #pragma section
 
 #pragma section SECTION_APP_PRESENCE_PATTERN address=0x0017FFFE
