@@ -30,7 +30,6 @@ extern void exit(void);
 //
 //
 //=============================================================================
-
 static int app_selection;
 void main(void)
 {
@@ -39,7 +38,7 @@ void main(void)
     InitializeHardwareLast();
 
     // if (InitializeIllegalConditionCheck() == false) {
-    if (app_selection == 1) {
+    if (app_selection == 0) {
         Mode = AM_normal;
     } else {
         Mode = AM_ManufacturingTest;
