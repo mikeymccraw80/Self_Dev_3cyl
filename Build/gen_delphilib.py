@@ -12,10 +12,10 @@ def gen_objs_lib():
 			continue
 		if "intr_var.o" in line:
 			continue
-		if len(line) == 0:
+		if len(line) <= 2:
 			break
 		# print line
-		obj_str = "..\\objs\\" + line[0:len(line)-2] + " "
+		obj_str = line[0:len(line)-2] + " "
 		print obj_str
 		bat_file.write(obj_str)
 	objs_file.close()
