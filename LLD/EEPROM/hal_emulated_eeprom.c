@@ -1086,9 +1086,9 @@ void EEPROM_Backup_MFG_NVM_Block(bool erase_enable)
 
 	  //Restore RAM buffer data to flash Address 0x0000000 to 0x000003FF;
       context = Enter_Critical_Section();
-      io_flash_interface->FLASH_Set_Lock(EEP_NVM_START_ADDR,0);
-      io_flash_interface->FLASH_Program_Memory((EEP_NVM_MFG_START_ADDR-EEP_NVM_START_ADDR),(uint32_t)&pml_dongle_ram[0],EEP_NVM_START_ADDR,EEP_Operation_CALLBACK);
-      io_flash_interface->FLASH_Set_Lock(EEP_NVM_START_ADDR,1);
+      flash_memory_interface->FLASH_Set_Lock(EEP_NVM_START_ADDR,0);
+      flash_memory_interface->FLASH_Program_Memory((EEP_NVM_MFG_START_ADDR-EEP_NVM_START_ADDR),(uint32_t)&pml_dongle_ram[0],EEP_NVM_START_ADDR,EEP_Operation_CALLBACK);
+      flash_memory_interface->FLASH_Set_Lock(EEP_NVM_START_ADDR,1);
       Leave_Critical_Section( context );
 	  
 	  //write to page 0
@@ -1148,7 +1148,8 @@ EEPROM_Operation_Status_T EEPROM_Restore_MFG_NVM_Block(void)
 
    nvm_data_start_addr =(uint32_t *)RAM_MFG_START_ADDR; // get NVM MFG mirror ram area addr
    pass_fail = Get_EEP_NVM_Active_Page(); // Get active page from EEP NVM
-   if(( EEPROM_ACTIVE_PAGE_FOUND == pass_fail)&&(0 == EEP_NVM_full_flg))
+   if ((( EEPROM_ACTIVE_PAGE_FOUND == pass_fail)&&(0 == EEP_NVM_full_flg)) ||
+       (( EEPROM_ACTIVE_PAGE_FOUND == pass_fail) && (1 == No_active_page_flg)))
    {
       page = High_sequence_No_EEP_NVM -1 ;
       src = (uint32_t*)((uint32_t)(EEP_NVM_MFG_START_ADDR + page*MFG_PAGE_SIZE));
@@ -1160,6 +1161,7 @@ EEPROM_Operation_Status_T EEPROM_Restore_MFG_NVM_Block(void)
       Leave_Critical_Section( context );
       return_Value= EEPROM_READ_SUCCESS;
    }
+#if 0
    else if (( EEPROM_ACTIVE_PAGE_FOUND == pass_fail) && (1 == No_active_page_flg))
    {
       page = High_sequence_No_EEP_NVM - 1;
@@ -1173,6 +1175,7 @@ EEPROM_Operation_Status_T EEPROM_Restore_MFG_NVM_Block(void)
       return_Value= EEPROM_READ_SUCCESS;
 
    }
+#endif
    else if( EEPROM_ACTIVE_PAGE_NOT_FOUND == pass_fail)
    {
        //Calculate the MFG Checksum of NVRAM 
@@ -1199,69 +1202,7 @@ EEPROM_Operation_Status_T EEPROM_Restore_MFG_NVM_Block(void)
 
    return(return_Value);
 }
-#if 0
-/*******************************************************************************
- *
- * Function:    EEPROM_Restore_MFG_NVM_Block_Again
- *
- * Description: This MFG NVM data restore operation takes place only if the
- *              Application requested after it void the MFG data
- *              (1)Here it copies the most recent and valid MFG data stored in active PFlash or DFlash region
- *                 back to the mirror memory (RAM).
- *
- * Parameters:  none
- * Return:      EEPROM_Operation_Status_T
- *
- *******************************************************************************/
-EEPROM_Operation_Status_T EEPROM_Restore_MFG_NVM_Block_Again(void)
-{
-   uint16_t        page;
-   uint16_t        ram_index;
-   uint32_t        *nvm_data_start_addr;
-   uint32_t        *src;
-   interrupt_state_t context;
 
-   EEPROM_Operation_Status_T return_Value = EEPROM_READ_SUCCESS;
-
-   EEPROM_ACTIVE_PAGE_T   op_return;
-
-   op_return = Get_EEP_NVM_Active_Page();
-
-   nvm_data_start_addr =(uint32_t *)RAM_MFG_START_ADDR; // get NVM MFG mirror ram area addr
-
-   if (High_sequence_No_EEP_NVM <= EEP_NVM_MFG_SEQUENCE_NO_MAX)
-   {
-      if (0 == High_sequence_No_EEP_NVM)
-      {
-         return_Value = EEPROM_READ_BAD_ADDRESS;
-      }
-      else
-      {
-         page = High_sequence_No_EEP_NVM -1 ;
-         src = (uint32_t*)((uint32_t)(RAM_MFG_START_ADDR + page*MFG_PAGE_SIZE));
-         context = Enter_Critical_Section();
-         for( ram_index = 0; ram_index < (MFG_PAGE_SIZE/sizeof(uint32_t)); ram_index++ )
-         {
-            *nvm_data_start_addr++ = *src++;
-         }
-         Leave_Critical_Section( context );
-      }
-   }
-   else
-   {
-      src = EEPROM_Pages[EEP_NVRAM_active_page].Current;
-      src = (uint32_t *)(((uint8_t *)src) + NVRAM_MFG_START_ADDR_OFFSET);
-      context = Enter_Critical_Section();
-      for( ram_index = 0; ram_index < (MFG_PAGE_SIZE/sizeof(uint32_t)); ram_index++ )
-      {
-         *nvm_data_start_addr++ = *src++;
-      }
-      Leave_Critical_Section( context );
-   }
-
-   return(return_Value);
-}
-#endif
 /*=============================================================================
  * EEPROM_Fix_ECC_Error
  * @func Check the address where the double bit error occurred then erase its
