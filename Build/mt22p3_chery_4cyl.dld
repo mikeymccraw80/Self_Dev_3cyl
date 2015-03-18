@@ -194,8 +194,13 @@ SECTIONS
      }
      end_of_mfgram = .;
 
-     /* offset 264 bytes from start of NVRAM. */
-     . = start_of_nvram + 264;
+     /* offset 392 bytes from start of NVRAM. */
+     /* 256 -> original MFG size */
+     /* 4   -> Mfg NVM Page Identifier + 16bit Sequence Page Counter */
+     /* 12  -> 0x0C which was reserved for check pattern and seq no. */
+     /* 128 -> The new reserved 128 bytes for mfg */
+     /* 256 - 4 + 12 + 128 = 392 */
+     . = start_of_nvram + 392;
      start_of_crit_nvram = .; 
      .c_nvram :
      {

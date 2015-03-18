@@ -9,14 +9,20 @@
 #define EEP_NVRAM_PER_BANK_PAGES                (2)
 #define EEP_NVRAM_MAX_PAGE                      (4)
 // MFG macros
-#define MFG_PAGE_SIZE                           (256)           //256 bytes page size
+#define MFG_PAGE_SIZE                           (384)           //384 bytes page size
 #define MFG_PATTERN_ADDR_OFFSET                 (0)             //offset from MFG_*** start address
 #define MFG_SEQNO_ADDR_OFFSET                   (2)             //offset from MFG_*** start address
-#define MFG_CHKSUM_ADDR_OFFSET                  (254)           //offset from MFG_*** start address
+#define MFG_CHKSUM_ADDR_OFFSET                  (382)           //offset from MFG_*** start address
 #define MFG_CHKSUM_OFFSET_SIZE                  (MFG_PAGE_SIZE - MFG_CHKSUM_ADDR_OFFSET)
-#define EEP_NVM_MFG_SEQUENCE_NO_MAX             (62)            // max sequence no. in NVM
+#define EEP_NVM_MFG_SEQUENCE_NO_MAX             (40)            // max sequence no. in NVM
 
 #define NVRAM_MFG_START_ADDR_OFFSET             (8)             // MFG start address offset from NVRAM start address
+
+// DONGLE macros
+#define EEP_NVM_DONGLE_SEQUENCE_NO_MAX          (21)           // Times for Record dongle information
+
+// Reflash Times Number
+#define EEP_NVM_REFLASH_TIMES_NO_MAX            (22)           // Reflash Times Number
 
 //NVRAM Flash Related Constants
 
@@ -24,9 +30,11 @@
 #define EEP_NVRAM_BANK0_START_ADDR              (0x00018000)   // block 2b
 #define EEP_NVRAM_BANK1_START_ADDR              (0x0001C000)   // block 3
 
-#define EEP_NVM_START_ADDR                      (0x00000000)   // block 1a
-#define EEP_NVM_MFG_START_ADDR                  (0x00000200)   // block 1a start address + PML offset
-#define EEP_NVM_MFG_END_ADDR                    (0x00003FFF)   // block 1a end address
+#define EEP_NVM_START_ADDR                      (0x00000000)   // block 0, PML:          0x000~0x1FF;
+#define EEP_NVM_DONGLE_START_ADDR               (0x00000200)   // block 0, Dongle Info:  0x200~0x34F;
+#define EEP_NVM_REFLASH_TIMES_START_ADDR        (0x00000350)   // block 0, Reflash Times:0x350~0x3FF;
+#define EEP_NVM_MFG_START_ADDR                  (0x00000400)   // block 0, NVM:          0x400~0x3FFF;
+#define EEP_NVM_MFG_END_ADDR                    (0x00003FFF)   // block 0 end address
 
 #define Get_EEP_NVM_MFG_ADDRESS(page)           (EEP_NVM_MFG_START_ADDR + ((page) * MFG_PAGE_SIZE))
 

@@ -1068,7 +1068,9 @@ void EEPROM_Backup_MFG_NVM_Block(bool erase_enable)
    uint16_t*              mfg_nvm_addr;
    uint8_t                blank_page;
    EEPROM_ACTIVE_PAGE_T   op_return;
-
+   uint8_t                pml_dongle_ram[EEP_NVM_MFG_START_ADDR-EEP_NVM_START_ADDR];
+   interrupt_state_t      context;
+   
    op_return = Get_EEP_NVM_Active_Page();
 
 
@@ -1077,9 +1079,19 @@ void EEPROM_Backup_MFG_NVM_Block(bool erase_enable)
     */
    if(( EEPROM_ACTIVE_PAGE_NOT_FOUND == op_return ) && (erase_enable == true))
    {
+      //READ Address 0x0000000 to 0x000003FF to RAM Buffer;
+      memcpy(&pml_dongle_ram[0], (uint8_t *)EEP_NVM_START_ADDR, (EEP_NVM_MFG_START_ADDR-EEP_NVM_START_ADDR));
 
-      EEPROM_Erase_NVM_BLOCK();
-      //write to page 0
+	  EEPROM_Erase_NVM_BLOCK();
+
+	  //Restore RAM buffer data to flash Address 0x0000000 to 0x000003FF;
+      context = Enter_Critical_Section();
+      io_flash_interface->FLASH_Set_Lock(EEP_NVM_START_ADDR,0);
+      io_flash_interface->FLASH_Program_Memory((EEP_NVM_MFG_START_ADDR-EEP_NVM_START_ADDR),(uint32_t)&pml_dongle_ram[0],EEP_NVM_START_ADDR,EEP_Operation_CALLBACK);
+      io_flash_interface->FLASH_Set_Lock(EEP_NVM_START_ADDR,1);
+      Leave_Critical_Section( context );
+	  
+	  //write to page 0
       High_sequence_No_EEP_NVM =0;
       EEPROM_Write_Mfg_Block((uint32_t *) RAM_MFG_DATA_START_ADDR, 0);
 
@@ -1127,6 +1139,9 @@ EEPROM_Operation_Status_T EEPROM_Restore_MFG_NVM_Block(void)
    uint16_t                   ram_index;
    uint32_t                   *nvm_data_start_addr;
    uint32_t                   *src;
+   uint16_t                   *src_nvm;
+   uint16_t                   calculated_checksum;
+   uint16_t                   stored_checksum;
    interrupt_state_t          context;
    EEPROM_ACTIVE_PAGE_T       pass_fail;
    EEPROM_Operation_Status_T return_Value = EEPROM_READ_SUCCESS;
@@ -1160,13 +1175,26 @@ EEPROM_Operation_Status_T EEPROM_Restore_MFG_NVM_Block(void)
    }
    else if( EEPROM_ACTIVE_PAGE_NOT_FOUND == pass_fail)
    {
-      context = Enter_Critical_Section();
-      for( ram_index = 0; ram_index < (MFG_PAGE_SIZE/sizeof(uint32_t)); ram_index++ )
-      {
-         *nvm_data_start_addr++ = 0x0;
-      }
-      Leave_Critical_Section( context );
-      return_Value= EEPROM_READ_BAD_ADDRESS;
+       //Calculate the MFG Checksum of NVRAM 
+       src_nvm = (uint16_t*)(RAM_MFG_START_ADDR);
+       calculated_checksum = EEPROM_Calc_Page_Checksum(src_nvm, (MFG_PAGE_SIZE - MFG_CHKSUM_OFFSET_SIZE)/2);
+       stored_checksum = *((uint16_t *)( (uint8_t *)src_nvm + MFG_CHKSUM_ADDR_OFFSET ));
+       // If MFG in NVRAM is valid, then skip the clear MFG
+       if ( (*(uint16_t *)src_nvm == VALID_PAGE_DATA) && (calculated_checksum == stored_checksum) )
+       {
+          return_Value= EEPROM_READ_SUCCESS;
+       }
+       else
+       {
+          context = Enter_Critical_Section();
+          for( ram_index = 0; ram_index < (MFG_PAGE_SIZE/sizeof(uint32_t)); ram_index++ )
+          {
+         
+            *nvm_data_start_addr++ = 0x0;
+          }
+          Leave_Critical_Section( context );
+          return_Value= EEPROM_READ_BAD_ADDRESS;
+       }
    }
 
    return(return_Value);
@@ -1253,337 +1281,3 @@ void EEPROM_Fix_ECC_Error(uint32_t err_addr)
       EEP_NVRAM_Erase(bank);
    }
 }
-
-// FIXME - A... error correction code
-#if 0
-/*=============================================================================
- * EEPROM_Scan_For_Errors
- * @func Scan through both banks to trigger double bit error (DBE) trap if there's any.
- Read once every 64 bits (8bytes) to catch any DBE.
- * @parm  none
- * @rdesc  none
- *===========================================================================*/
-void EEPROM_Scan_For_Errors(void)
-{
-   uint32_t page_loop;
-   volatile uint32_t mem_dump;
-
-   if(BANK_CORRUPTED_PATTERN != Backup_Disrupted.Bank0_Corrupted)
-   {
-      for (page_loop = EEPROM_SECTOR1_START_ADDR;
-            page_loop < (EEPROM_SECTOR1_START_ADDR + TC17xx_FLASH_PROGRAM_SECTOR_SIZE);
-            page_loop += (DFLASH_SCAN_MAX))
-      {
-         mem_dump = *(uint32_t *)page_loop;
-         mem_dump = *(uint32_t *)(page_loop+DFLASH_SCAN_MIN);
-         mem_dump = *(uint32_t *)(page_loop+DFLASH_SCAN_2X);
-         mem_dump = *(uint32_t *)(page_loop+DFLASH_SCAN_3X);
-      }
-   }
-
-   if(BANK_CORRUPTED_PATTERN != Backup_Disrupted.Bank1_Corrupted)
-   {
-      for (page_loop = EEPROM_SECTOR2_START_ADDR;
-            page_loop < (EEPROM_SECTOR2_START_ADDR + TC17xx_FLASH_PROGRAM_SECTOR_SIZE);
-            page_loop += (DFLASH_SCAN_MAX))
-      {
-         mem_dump = *(uint32_t *)page_loop;
-         mem_dump = *(uint32_t *)(page_loop+DFLASH_SCAN_MIN);
-         mem_dump = *(uint32_t *)(page_loop+DFLASH_SCAN_2X);
-         mem_dump = *(uint32_t *)(page_loop+DFLASH_SCAN_3X);
-      }
-   }
-}
-
-/*=============================================================================
- * EEPROM_Fix_Dflash_Error
- * @func Check the address where the double bit error occurred then erase its
- *     corresponding bank.
- * @parm  none
- * @rdesc  none
- *===========================================================================*/
-void EEPROM_Fix_Dflash_Error(void)
-{
-   uint8_t bank = INVALID_BANK;
-   uint32_t err_addr = INVALID_ADDR;
-   uint32_t *nvram_start_addr = (uint32_t *)START_NVRAM_ADDR;
-
-   if (LMB_ERROR_LOCK_BIT == 1)
-   {
-      err_addr = LMB_ERROR_ADDRESS_REGISTER;
-      bank = EEPROM_Get_Current_Bank(err_addr);
-
-      if (bank != INVALID_BANK)
-      {
-         if( DFLASH_BANK0 == bank )
-         {
-            Backup_Disrupted.Bank0_Corrupted = BANK_CORRUPTED_PATTERN;
-         }
-         else if( DFLASH_BANK1 == bank )
-         {
-            Backup_Disrupted.Bank1_Corrupted = BANK_CORRUPTED_PATTERN;
-         }
-         if (Present_EEPROM_State == EEPROM_RESTORE)
-         {
-            EEPROM_Set_PF_DF_Checksum((uint32_t*) nvram_start_addr,0);
-         }
-
-         /* Calculate and store the NVM checksum */
-         UpdateFILE_NVM_Checksum();
-      }
-      LMB_ERROR_LOCK_BIT = 0;
-   }
-}
-#endif //if 0
-
-// FIXME - A... temporary patch
-#if 0
-/////////////START OF TEMPORARY PATCH TO BE REMOVED//////////////////////////////
-bool check_after_backup_done;
-extern volatile TsFILE_EE_ManufactData NsFILE_NVM_EE_ManufactData;
-#define CwFILE_EE_ManufactDataSize (sizeof(NsFILE_NVM_EE_ManufactData)/sizeof(WORD))
-#define CwFILE_EE_ManufactDataSize_byte (sizeof(NsFILE_NVM_EE_ManufactData)/sizeof(BYTE))
-/* THIS FUNCTION RETURNS 0xFFFF IF MFG DATA BLOCK CHECKSUM IS GOOD */
-WORD SumHWIO_EE_ManufactBlock(void)
-{
-   WORD     LwFILE_EE_DataSum = 0;
-   WORD     LwFILE_EE_Index;
-   LONGWORD LgFILE_EE_IntStatusRegister;
-
-   LgFILE_EE_IntStatusRegister = DisableHWIO_MasterIRQ();
-   for(LwFILE_EE_Index = 0;
-         LwFILE_EE_Index < CwFILE_EE_ManufactDataSize;
-         LwFILE_EE_Index++)
-   {
-      LwFILE_EE_DataSum +=
-         ((WORD *)&NsFILE_NVM_EE_ManufactData)[LwFILE_EE_Index];
-   }
-   RestoreHWIO_MasterIRQ(LgFILE_EE_IntStatusRegister);
-   return (LwFILE_EE_DataSum);
-}
-
-/*=============================================================================
- * EEPROM_MFG_Data_Compare_And_Update_Debug_Data
- * @func  Compare the data in two addresses
- *
- * @parm EEPROM addresses,NVRAM Mfg addresses,size of data
- *
- * @rdesc return true or false
- *===========================================================================*/
-bool EEPROM_MFG_Data_Compare_And_Update_Debug_Data(
-      MFG_Data_Debug_T *debug_data,
-      uint8_t * in_data1_ptr,
-      uint8_t * in_data2_ptr,
-      uint16_t  in_size )
-{
-   uint16_t index;
-
-   bool data_valid = true;
-
-   for(index = 0; index < in_size; index++)
-   {
-      if(*in_data1_ptr++ != *in_data2_ptr++)
-      {
-         data_valid = false;
-         debug_data->offset = index;
-         debug_data->expected_data = *(--in_data1_ptr);
-         debug_data->actual_data = *(--in_data2_ptr);
-         debug_data->sequence_num = High_sequence_No_PFLASH;
-         break;
-      }
-   }
-   return data_valid;
-}
-
-/*******************************************************************************
- *
- * Function:    EEPROM_MFG_NVM_Block_Check_Before_Backup
- *
- * Description: This function performs the MFG NVM check before backup operation
- *              (1) It compares the MFG NVM content in the mirror memory with
- *                  active MFG region in PFlash if number of writes to PFlash
- *                  has not exceeded 62 or in DFlash is exceed 62.
- *
- *              (2) It records debugging data if check fail.
- *
- *              (3) It restore good MFG data from Flash if check fail.
- *
- * Parameters:  none
- * Return:      none
- *
- *******************************************************************************/
-void EEPROM_MFG_NVM_Block_Check_Before_Backup(void)
-{
-   bool check_result;
-   EEPROM_Operation_Status_T op_return; // = EEPROM_READ_SUCCESS;
-   EEPROM_ACTIVE_PAGE_T   page_op_return = EEPROM_ACTIVE_PAGE_NOT_FOUND;
-
-   /* If MFG data has error, restore good data from Flash into RAM. Record debugging data. */
-   if (SumHWIO_EE_ManufactBlock() != 0xFFFF)
-   {
-      page_op_return = Get_Pflash_Active_Page();
-      page_op_return = Get_Dflash_Active_Page();
-
-      /* Pflash is not full */
-      if (0 == Pflash_full_flg)
-      {
-         /* Log 2 set of debug data only */
-         if (MFG_Data_Before_Backup_Debug_Counter < NUMBER_OF_DEBUG_DATA_SET)
-         {
-            check_result = EEPROM_MFG_Data_Compare_And_Update_Debug_Data(
-                  &MFG_Data_Before_Backup[MFG_Data_Before_Backup_Debug_Counter],
-                  (uint8_t*)(Get_MFG_NVM_ADDRESS(High_sequence_No_PFLASH-1)) + 6,
-                  (uint8_t*)(&NsFILE_NVM_EE_ManufactData),
-                  (CwFILE_EE_ManufactDataSize_byte));
-         }
-      }
-      else
-      {
-         /* Log 2 set of debug data only */
-         if (MFG_Data_Before_Backup_Debug_Counter < NUMBER_OF_DEBUG_DATA_SET)
-         {
-            check_result = EEPROM_MFG_Data_Compare_And_Update_Debug_Data(
-                  &MFG_Data_Before_Backup[MFG_Data_Before_Backup_Debug_Counter],
-                  (uint8_t*)((uint8_t*)EEPROM_Pages[Dflash_active_page].Current + 12),
-                  (uint8_t*)(&NsFILE_NVM_EE_ManufactData),
-                  (CwFILE_EE_ManufactDataSize_byte));
-         }
-      }
-
-      if  (MFG_Data_Before_Backup_Debug_Counter < 0xff) MFG_Data_Before_Backup_Debug_Counter++;
-      op_return = EEPROM_Restore_MFG_NVM_Block_Again();
-   }
-
-   check_after_backup_done = false;
-}
-
-
-/*******************************************************************************
- *
- * Function:    EEPROM_MFG_NVM_Block_Check_After_Backup
- *
- * Description: This function performs the MFG NVM check after backup operation
- *              (1) It compares the MFG NVM content in the mirror memory with
- *                  active MFG region in PFlash if number of writes to PFlash
- *                  has not exceeded 62 or in DFlash is exceed 62.
- *
- *              (2) It will record debugging data if check fail.
- *
- *              (3) It backup MFG data to Flash again if check fail.
- *
- * Parameters:  none
- * Return:      none
- *
- *******************************************************************************/
-bool EEPROM_MFG_NVM_Block_Check_After_Backup(void)
-{
-   bool check_result = true;
-   EEPROM_ACTIVE_PAGE_T   op_return = EEPROM_ACTIVE_PAGE_NOT_FOUND;
-
-   op_return = Get_Pflash_Active_Page();
-   op_return = Get_Dflash_Active_Page();
-
-   if (false == check_after_backup_done)
-   {
-      /* Pflash is not full */
-      if (0 == Pflash_full_flg)
-      {
-         /* If MFG data has error, record debugging data. */
-         /* Log 2 set of debug data only */
-         if (MFG_Data_After_Backup_Debug_Counter < NUMBER_OF_DEBUG_DATA_SET)
-         {
-            check_result = EEPROM_MFG_Data_Compare_And_Update_Debug_Data(
-                  &MFG_Data_After_Backup[MFG_Data_After_Backup_Debug_Counter],
-                  (uint8_t*)(&NsFILE_NVM_EE_ManufactData),
-                  (uint8_t*)(Get_MFG_NVM_ADDRESS(High_sequence_No_PFLASH-1)) + 6,
-                  (CwFILE_EE_ManufactDataSize_byte));
-         }
-         else
-         {
-            check_result = EEPROM_NVM_Compare_Data(
-                  (uint8_t*)(&NsFILE_NVM_EE_ManufactData),
-                  (uint8_t*)(Get_MFG_NVM_ADDRESS(High_sequence_No_PFLASH-1)) + 6,
-                  (CwFILE_EE_ManufactDataSize_byte));
-         }
-
-         check_after_backup_done = true;
-      }
-
-      /* Pflash is full */
-      else
-      {
-         /* If MFG data has error, record debugging data. */
-         /* Log 2 set of debug data only */
-         if (MFG_Data_After_Backup_Debug_Counter < NUMBER_OF_DEBUG_DATA_SET)
-         {
-            check_result = EEPROM_MFG_Data_Compare_And_Update_Debug_Data(
-                  &MFG_Data_After_Backup[MFG_Data_After_Backup_Debug_Counter],
-                  (uint8_t*)(&NsFILE_NVM_EE_ManufactData),
-                  (uint8_t*)((uint8_t*)EEPROM_Pages[Dflash_active_page].Current + 12),
-                  (CwFILE_EE_ManufactDataSize_byte));
-         }
-         else
-         {
-            check_result = EEPROM_NVM_Compare_Data(
-                  (uint8_t*)(&NsFILE_NVM_EE_ManufactData),
-                  (uint8_t*)((uint8_t*)EEPROM_Pages[Dflash_active_page].Current + 12),
-                  (CwFILE_EE_ManufactDataSize_byte));
-         }
-      }
-
-      if (false == check_result)
-      {
-         /* If MFG data has error, restore good data from Flash into RAM. Record debugging data. */
-         if (SumHWIO_EE_ManufactBlock() != 0xFFFF)
-         {
-            High_sequence_No_PFLASH--;
-            op_return = EEPROM_Restore_MFG_NVM_Block_Again();
-         }
-
-         if (MFG_Data_After_Backup_Debug_Counter < 0xff) MFG_Data_After_Backup_Debug_Counter++;
-         check_after_backup_done = false;
-      }
-   }
-   else
-   {
-      // do nothing
-   }
-
-   return (check_result);
-}
-
-/*******************************************************************************
- *
- * Function:    EEPROM_Initialize_Internal_NVM_Variables
- *
- * Description: This function is to set the NVM variables
- *
- * Parameters:  EEPROM_Init_T
- * Return:      none
- *
- *******************************************************************************/
-void EEPROM_Initialize_Internal_NVM_Variables(EEPROM_Init_T in_init_type)
-{
-   switch(in_init_type )
-   {
-      case EEPROM_INIT_POWER_ON:
-         Backup_Disrupted.Bank0_Corrupted = BANK_NOT_CORRUPTED_PATTERN;
-         Backup_Disrupted.Bank1_Corrupted = BANK_NOT_CORRUPTED_PATTERN;
-         break;
-
-      case EEPROM_INIT_BEFORE_RESTORE:
-         Backup_Disrupted_temp.Bank0_Corrupted= Backup_Disrupted.Bank0_Corrupted;
-         Backup_Disrupted_temp.Bank1_Corrupted= Backup_Disrupted.Bank1_Corrupted;
-         break;
-
-      case EEPROM_INIT_AFTER_RESTORE:
-         Backup_Disrupted.Bank0_Corrupted= Backup_Disrupted_temp.Bank0_Corrupted;
-         Backup_Disrupted.Bank1_Corrupted= Backup_Disrupted_temp.Bank1_Corrupted;
-         break;
-
-      default:
-         break;
-   }
-}
-/////////////END OF TEMPORARY PATCH TO BE REMOVED//////////////////////////////
-#endif // if 0
