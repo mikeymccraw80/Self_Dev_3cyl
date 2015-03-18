@@ -1015,6 +1015,27 @@ const bool    KbVIOS_O2APumpingCurrentEnabled = false ;
 */
 const bool    KbVIOS_O2BPumpingCurrentEnabled = false ;
 
+/******************************************************************************
+*  Calibration definition for ROM filesystem
+******************************************************************************/
+/*
+*| hwiocald.{
+*|   KwFILE_COND_ROM_CalbrtnChecksum
+*|   {
+*|     : is_calconst;
+*|     : description = "Indicates the checksum of Calibration portion of ROM. "
+*|                     "It is computed by summing all the used Calibration ROM "
+*|                     "space word at a time (excluding KwFILE_COND_ROM_CalbrtnChecksum) "
+*|                     "and taking a 2's complement of the sum.";
+*|     : units = "count";
+*|   }
+*| }
+*/
+#pragma section SECTION_ROM_CAL_CKSUM_CAL address=0x0003FFF8
+#pragma use_section SECTION_ROM_CAL_CKSUM_CAL KwFILE_COND_ROM_CalbrtnChecksum
+const uint16_t         KwFILE_COND_ROM_CalbrtnChecksum = 0;
+#pragma section
+
 /*
 *| hwiocald.{
 *|   KySYST_BrainDeadBOOT_RecovEnbld

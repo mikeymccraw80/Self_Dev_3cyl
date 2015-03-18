@@ -84,7 +84,7 @@ asm void CPU_DIAB_Set_Data_Area_Pointers(void)
 }
 
 /*=============================================================================
- * Calculate_Pflash_Checksum 
+ * Calculate_App_Checksum 
  * @func  
  * @parm  
  * @rdesc  
@@ -103,6 +103,30 @@ static uint16_t Calculate_App_Checksum(void)
    {
       Checksum_Result=(uint16_t)(*pflash_add + Checksum_Result);
    }
+   return(Checksum_Result);
+}
+
+/*=============================================================================
+ * Calculate_Cal_Checksum 
+ * @func  
+ * @parm  
+ * @rdesc  
+ *===========================================================================*/
+static uint16_t Calculate_Cal_Checksum(void)
+{ 
+   uint16_t Checksum_Result;
+   uint16_t *pflash_add;
+
+   Checksum_Result=0;
+   for((pflash_add = (uint16_t*)(0x20000));(pflash_add < (uint16_t*)(CAL_CKSUM_ADDRESS));(pflash_add++))
+   {
+      Checksum_Result = (uint16_t)(*pflash_add + Checksum_Result);
+   }
+   for((pflash_add = (uint16_t*)(CAL_CKSUM_ADDRESS + sizeof(uint16_t)));(pflash_add < (uint16_t*)(0x40000));(pflash_add++))
+   {
+      Checksum_Result=(uint16_t)(*pflash_add + Checksum_Result);
+   }
+   Checksum_Result = ~Checksum_Result;
    return(Checksum_Result);
 }
 
@@ -141,6 +165,11 @@ void InitializeHardwareRegisters(void)
 	if (Calculate_App_Checksum() != *((uint16_t*)PF_KKSUM_ADDRESS)) {
 		Vb_AppCksum_Test_Failed = true;
 	}
+	
+	if (Calculate_Cal_Checksum() != *((uint16_t*)CAL_CKSUM_ADDRESS)) {
+		Vb_CalCksum_Test_Failed = true;
+	}
+
 
 	SIU_Initialize_Device();
 	SIU_GPIO_Initialize_Device();
