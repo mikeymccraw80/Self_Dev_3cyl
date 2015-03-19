@@ -60,6 +60,7 @@ static uint32_t LOOP_OF_CNT_ARRAY[4];
 //=============================================================================
 // StartOS_Task_Normal
 //=============================================================================
+static uint32_t haha4;
 void StartOS_Task_Normal(void)
 {
 	union SPR_TSRVAL tsr_temp;
@@ -76,7 +77,7 @@ void StartOS_Task_Normal(void)
 	hwi_init_watchdog(HWI_WATCHDOG_ENABLE);
 	hwi_kick_watchdog_position(SSWT_EXPIRATION_TIME_26MS);
 	hwi_kick_wdg_local();
-
+	haha4 = time_get(0);
 	/* turn on interrupts and start real os */
 	Enable_Interrupts();
 
