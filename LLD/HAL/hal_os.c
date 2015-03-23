@@ -266,8 +266,9 @@ void  HAL_OS_10ms_Task(void)
 	MngEOSD_O2_12_Htr10msTasks();
 	MngESTD_7p81msTasks();
 	MngEPSD_Crank7p81msTasks();
-    MngCOND_AD_InputResp15p6msTasksA();
+	MngCOND_AD_InputResp15p6msTasksA();
 	MngCAND_31p2msTCU_Tasks();
+	MngEMSD_FileROM10msTasks();
 }
 
 //=============================================================================
@@ -305,7 +306,6 @@ void HAL_OS_100ms_Task(void)
 		MngEMSD_GIS200msTasks();
 		MngEMSD_FanA200msTasks();
 		MngEMSD_FanB200msTasks();
-		MngEMSD_FileROM200msTasks();
 		MngCOND_CheckCPU_31p2Tasks();
 	}
 
@@ -364,6 +364,7 @@ void HAL_OS_Init_Task(void)
 	/*Initialize the Engine State value at power up. */
 	InitVIOS_EngSt();
 	InitEPSD_CrankRstToKeyOn();
+	InitEMSD_FileROMRstToKeyOn();
 	InitCOND_AD_InputRespRstKeyOn();
 }
 

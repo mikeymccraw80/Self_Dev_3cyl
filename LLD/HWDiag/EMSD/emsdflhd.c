@@ -22,32 +22,45 @@
 #include "mall_lib.h"
 #include "intr_ems.h"
 #include "v_power.h"
-
-/*****************************************************************************
- *  Local Include Files
- *****************************************************************************/
-
-
-/*****************************************************************************
-*   Local Function Declarations
-******************************************************************************/
-
+#include "hal_memory.h"
+#include "io_config_eeprom.h"
+ 
 /*****************************************************************************
  *  Static Data Define
  *****************************************************************************/
-TbBOOLEAN        SbEMSD_FileROMTestComplete ;
-
 #pragma section DATA " " ".nc_nvram"
 TbBOOLEAN        SbEMSD_FileROMTestFailed ;
 #pragma section DATA " " ".bss"
 
-extern bool Vb_AppCksum_Test_Failed;
-extern bool Vb_CalCksum_Test_Failed;
+static TbBOOLEAN   SbEMSD_FileROMTestComplete;
+static TbBOOLEAN   Sb_AppCksum_Test_Failed;
+static TbBOOLEAN   Sb_CalCksum_Test_Failed;
+static TbBOOLEAN   Sb_AppCksum_Calc_Complete;
+static TbBOOLEAN   Sb_CalCksum_Calc_Complete;
+static uint16_t    Vc_AppCksum;
+static uint16_t    Vc_CalCksum;
+static uint16_t *  SpFILE_AppROM_ChecksumLocation;
+static uint16_t *  SpFILE_CalROM_ChecksumLocation;
 
-#define GetEMSD_FileROM_ChecksumState() (Vb_AppCksum_Test_Failed || Vb_CalCksum_Test_Failed)
+#define        CcFILE_ROM_NumOfWordsToSumAtOnce        (64)
+
+#define GetEMSD_FileROM_ChecksumState() (Sb_AppCksum_Test_Failed || Sb_CalCksum_Test_Failed)
 /*****************************************************************************
  *  Function definition
  ******************************************************************************/
+
+
+uint16_t PerfmFILE_ROM_Checksum(uint16_t * start_addr, uint16_t * end_addr)
+{
+	uint16_t cksum = 0;
+
+	while( start_addr < end_addr ) {
+		cksum += *start_addr;
+		start_addr ++;
+	}
+
+	return cksum;
+}
 
 /*****************************************************************************
  *
@@ -58,13 +71,19 @@ extern bool Vb_CalCksum_Test_Failed;
  * Parameters:   None
  * Return:       None
  *****************************************************************************/
-//void InitEMSD_FileROMRstToKeyOn(void)
-//{
-  
-  //SbEMSD_FileROMTestComplete= CbFALSE;
-  //SbEMSD_FileROMTestFailed  = CbFALSE;
+void InitEMSD_FileROMRstToKeyOn(void)
+{
+	SbEMSD_FileROMTestComplete = CbFALSE;
+	Sb_AppCksum_Test_Failed    = CbFALSE;
+	Sb_CalCksum_Test_Failed    = CbFALSE;
+	Sb_AppCksum_Calc_Complete  = CbFALSE;
+	Sb_CalCksum_Calc_Complete  = CbFALSE;
 
-//}
+	Vc_AppCksum                    = 0;
+	Vc_CalCksum                    = 0;
+	SpFILE_AppROM_ChecksumLocation = 0;
+	SpFILE_CalROM_ChecksumLocation = 0;
+}
 
  /*****************************************************************************
  *
@@ -76,9 +95,52 @@ extern bool Vb_CalCksum_Test_Failed;
  * Parameters:   None
  * Return:       None
  *****************************************************************************/
-void MngEMSD_FileROM200msTasks (void)
+void MngEMSD_FileROM10msTasks (void)
 {
-	if(!SbEMSD_FileROMTestComplete) {
+	uint16_t cksum_portion;
+
+	if (!Sb_AppCksum_Calc_Complete) {
+		if (SpFILE_AppROM_ChecksumLocation == 0) {
+			SpFILE_AppROM_ChecksumLocation = IO_MEM_ROM_Block_Checksum[2].VpHWIO_MemSegmentStartAddress;
+		} else if (SpFILE_AppROM_ChecksumLocation < IO_MEM_ROM_Block_Checksum[2].VpHWIO_MemSegmentEndAddress) {
+			cksum_portion = PerfmFILE_ROM_Checksum(SpFILE_AppROM_ChecksumLocation, SpFILE_AppROM_ChecksumLocation + CcFILE_ROM_NumOfWordsToSumAtOnce);
+			Vc_AppCksum += cksum_portion;
+			SpFILE_AppROM_ChecksumLocation += CcFILE_ROM_NumOfWordsToSumAtOnce;
+		} else {
+			Sb_AppCksum_Calc_Complete = CbTRUE;
+			/*calculate the app cksum */
+			Vc_AppCksum = Vc_AppCksum - *(uint16_t*)(PF_KKSUM_ADDRESS);
+			/* validate the cksum, this should be palce behind siu init */
+			if (Vc_AppCksum != *((uint16_t*)PF_KKSUM_ADDRESS)) {
+				Sb_AppCksum_Test_Failed = CbTRUE;
+			} else {
+				Sb_AppCksum_Test_Failed = CbFALSE;
+			}
+		}
+	} else if (!Sb_CalCksum_Calc_Complete) {
+		if (SpFILE_CalROM_ChecksumLocation == 0) {
+			SpFILE_CalROM_ChecksumLocation = IO_MEM_ROM_Block_Checksum[1].VpHWIO_MemSegmentStartAddress;
+		} else if (SpFILE_CalROM_ChecksumLocation < IO_MEM_ROM_Block_Checksum[1].VpHWIO_MemSegmentEndAddress) {
+			cksum_portion = PerfmFILE_ROM_Checksum(SpFILE_CalROM_ChecksumLocation, SpFILE_CalROM_ChecksumLocation + CcFILE_ROM_NumOfWordsToSumAtOnce);
+			Vc_CalCksum += cksum_portion;
+			SpFILE_CalROM_ChecksumLocation += CcFILE_ROM_NumOfWordsToSumAtOnce;
+		} else {
+			Sb_CalCksum_Calc_Complete = CbTRUE;
+			/*calculate the app cksum */
+			Vc_CalCksum = Vc_CalCksum - *(uint16_t*)(CAL_CKSUM_ADDRESS);
+			Vc_CalCksum = ~Vc_CalCksum;
+			/* validate the cksum, this should be palce behind siu init */
+			if ((Vc_CalCksum + *((uint16_t*)CAL_CKSUM_ADDRESS)) == 0) {
+				Sb_CalCksum_Test_Failed = CbFALSE;
+			} else {
+				Sb_CalCksum_Test_Failed = CbTRUE;
+			}
+		}
+	} else {
+		// todo nothing
+	}
+
+	if((!SbEMSD_FileROMTestComplete) && (GetVIOS_IgnSt() == CeIGN_ON)) {
 	/*     
 	*      ==================================================
 	*      This process activates the Data Manager and reports
@@ -89,13 +151,17 @@ void MngEMSD_FileROM200msTasks (void)
 	*      "CbTRUE", and reports the test result identified by
 	*      DTC_Identifier. Multiple results will be reported
 	*      successively. */
-
-		if( (GetVIOS_IgnSt() == CeIGN_ON) && GetEMSD_FileROM_ChecksumState()) {
+		if (Sb_AppCksum_Calc_Complete && Sb_AppCksum_Test_Failed) {
+			SbEMSD_FileROMTestFailed   = CbTRUE;
+			SbEMSD_FileROMTestComplete = CbTRUE;
+		} else if (Sb_CalCksum_Calc_Complete && Sb_CalCksum_Test_Failed) {
 			SbEMSD_FileROMTestFailed   = CbTRUE;
 			SbEMSD_FileROMTestComplete = CbTRUE;
 		} else {
-			SbEMSD_FileROMTestFailed   = CbFALSE;
-			SbEMSD_FileROMTestComplete = CbTRUE;
+			SbEMSD_FileROMTestComplete = (Sb_AppCksum_Calc_Complete && Sb_CalCksum_Calc_Complete);
+			if (SbEMSD_FileROMTestComplete) {
+				SbEMSD_FileROMTestFailed = CbFALSE;
+			}
 		}
 	} else {
 		/* do nothing*/

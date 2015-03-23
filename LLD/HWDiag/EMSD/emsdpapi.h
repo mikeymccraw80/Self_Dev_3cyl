@@ -83,8 +83,8 @@ void MngEMSD_FanB200msTasks (void);
 /******************************************************************************
  *  FileROM Function Prototype
  *****************************************************************************/
-//void InitEMSD_FileROMRstToKeyOn(void);
-void MngEMSD_FileROM200msTasks (void);
+void InitEMSD_FileROMRstToKeyOn(void);
+void MngEMSD_FileROM10msTasks (void);
 
 
 

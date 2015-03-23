@@ -29,6 +29,78 @@
 *-}
 
 
+*-emsdflhd.Vc_AppCksum{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "FLHCSAPP";
+*-  variable_location.symbol = emsdflhd.Vc_AppCksum;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "ECU APP ROM Checksum, calculated by MCU";
+*-}
+
+*-emsdflhd.Vc_CalCksum{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "FLHCSCAL";
+*-  variable_location.symbol = emsdflhd.Vc_CalCksum;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "ECU Cal ROM Checksum, calculated by MCU";
+*-}
+
+*-emsdflhd.Vb_AppCksum_Test_Failed{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "FLHCSAPPF";
+*-  variable_location.symbol = emsdflhd.Vb_AppCksum_Test_Failed;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "1.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "ECU APP checksum validate failed";
+*-}
+
+*-emsdflhd.Vb_CalCksum_Test_Failed{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "FLHCSCALF";
+*-  variable_location.symbol = emsdflhd.Vb_CalCksum_Test_Failed;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "1.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "ECU CAL checksum validate failed";
+*-}
+
+*-emsdflhd.Sb_AppCksum_Calc_Complete{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "FLHTSTAPPC";
+*-  variable_location.symbol = emsdflhd.Sb_AppCksum_Calc_Complete;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "1.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "ECU APP checksum test complete flag";
+*-}
+
+*-emsdflhd.Sb_CalCksum_Calc_Complete{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "FLHTSTCALC";
+*-  variable_location.symbol = emsdflhd.Sb_CalCksum_Calc_Complete;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "1.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "ECU CAL checksum test complete flag";
+*-}
+
 
 
 /*============================================================================*/

@@ -39,12 +39,6 @@ CPU_Info_T CPU_Info;
 FLASH_MODULE_T Flash_Info;
 HWIO_Reset_Status_T Reset_Status;
 
-/* variables used to validate the cksum */
-bool            Vb_AppCksum_Test_Failed;
-bool            Vb_CalCksum_Test_Failed;
-static uint16_t Vc_AppCksum;
-static uint16_t Vc_CalCksum;
-
 /* global variable reference */
 //The address of these variables are the size numbers because these variables are calculated by the linker
 extern char HWIO_DATA_ROM_START[];
@@ -87,74 +81,6 @@ asm void CPU_DIAB_Set_Data_Area_Pointers(void)
     addi     r13,r13,__SDA_BASE_@l  # (provided by linker).
 }
 
-/*=============================================================================
- * Calculate_App_Checksum 
- * @func  
- * @parm  
- * @rdesc  
- *===========================================================================*/
-static uint32_t hehe1, hehe2;
-static uint16_t Calculate_App_Checksum(void)
-{ 
-   uint32_t Checksum_Result;
-   uint32_t *pflash_add;
-
-   Checksum_Result=0;
-   for((pflash_add = (uint32_t*)(0x40000));(pflash_add < (uint32_t*)(PF_KKSUM_ADDRESS));(pflash_add++))
-   {
-      Checksum_Result = (uint32_t)(*pflash_add + Checksum_Result);
-      /* toogle the hardware dog every 128k, about 10.9 ms */
-      // if (((uint32_t)pflash_add & 0x0001ffff) == 0) {
-      //    TLE4471_WD_Toggle_Immediate();
-      //    hehe1++;
-      // }
-   }
-   for((pflash_add = (uint32_t*)(PF_KKSUM_ADDRESS + sizeof(uint32_t)));(pflash_add < (uint32_t*)(0x180000));(pflash_add++))
-   {
-      Checksum_Result=(uint32_t)(*pflash_add + Checksum_Result);
-      /* toogle the hardware dog every 128k, about 10.9 ms */
-      // if (((uint32_t)pflash_add & 0x0001ffff) == 0) {
-      //    TLE4471_WD_Toggle_Immediate();
-      //    hehe2++;
-      // }
-   }
-   Vc_AppCksum = (uint16_t)(Checksum_Result & 0x0000ffff);
-   return (uint16_t)(Checksum_Result & 0x0000ffff);
-}
-
-/*=============================================================================
- * Calculate_Cal_Checksum 
- * @func  
- * @parm  
- * @rdesc  
- *===========================================================================*/
-static uint32_t Calculate_Cal_Checksum(void)
-{ 
-   uint32_t Checksum_Result;
-   uint32_t *pflash_add;
-
-   Checksum_Result=0;
-   for((pflash_add = (uint32_t*)(0x20000));(pflash_add < (uint32_t*)(CAL_CKSUM_ADDRESS));(pflash_add++))
-   {
-      Checksum_Result = (uint32_t)(*pflash_add + Checksum_Result);
-      /* toogle the hardware dog every 128k, about 10.9 ms */
-      // if (((uint32_t)pflash_add & 0x0001ffff) == 0) {
-      //    TLE4471_WD_Toggle_Immediate();
-      // }
-   }
-   for((pflash_add = (uint32_t*)(CAL_CKSUM_ADDRESS + sizeof(uint32_t)));(pflash_add < (uint32_t*)(0x40000));(pflash_add++))
-   {
-      Checksum_Result=(uint32_t)(*pflash_add + Checksum_Result);
-      /* toogle the hardware dog every 128k, about 10.9 ms */
-      // if (((uint32_t)pflash_add & 0x0001ffff) == 0) {
-      //    TLE4471_WD_Toggle_Immediate();
-      // }
-   }
-   Checksum_Result = ~Checksum_Result;
-   Vc_CalCksum = (uint16_t)(Checksum_Result & 0x0000ffff);
-   return(uint16_t)(Checksum_Result & 0x0000ffff);
-}
-static uint32_t haha1, haha2, haha3, hahaapp, hahacal;
 //=============================================================================
 // Initialize all hardware related registers.  It is assumed that
 // the processor has just come out of reset.
@@ -192,23 +118,14 @@ void InitializeHardwareRegisters(void)
 	/* set tle4471 watchdog, , typical expire time is 50ms, min is 35ms */
 	InitRamVariable_EnableLogMaxHWWDTime();
 	SetHWIO_ServiceExtCOP_1Time();
+
+	/* init the INTC */
 	INTC_Initialize_Device();
 
 	/* init STM device */
 	STM_Initialize_Device();
 	STM_Set_Timer_Enable(true);
-	haha1  = time_get(0);
-	/* validate the cksum, this should be palce behind siu init */
-	if (Calculate_App_Checksum() != *((uint16_t*)PF_KKSUM_ADDRESS)) {
-		Vb_AppCksum_Test_Failed = true;
-	}
-	haha2 = time_get(0);
-	if (Calculate_Cal_Checksum() != *((uint16_t*)CAL_CKSUM_ADDRESS)) {
-		Vb_CalCksum_Test_Failed = true;
-	}
-	haha3 = time_get(0);
-	hahaapp = haha2-haha1;
-	hahacal = haha3-haha2;
+
 	ECSM_Initialize_Device();
 
 	Enable_MachineCheck(); // enable machine check exception to capture ECC
