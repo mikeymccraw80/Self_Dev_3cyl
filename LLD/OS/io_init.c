@@ -330,7 +330,7 @@ void exit(void)
 	hwi_kick_watchdog_position(SSWT_EXPIRATION_TIME_419MS);
 	hwi_kick_wdg_local();
 
-	EEPROM_Backup_MFG_NVM_Block( true );
+	EEPROM_Backup_MFG_NVM_Block( false );
 	EEPROM_Backup_Vehicle_NVRAM_Block();
 
 	// only LCI will do the instrumentation operation, backup cal 
