@@ -53,10 +53,10 @@
 *-  description              = "ECU Cal ROM Checksum, calculated by MCU";
 *-}
 
-*-emsdflhd.Vb_AppCksum_Test_Failed{
+*-emsdflhd.Sb_AppCksum_Test_Failed{
 *-  OBJECTS_CLASS: parameter_es_class;
 *-  label                    = "FLHCSAPPF";
-*-  variable_location.symbol = emsdflhd.Vb_AppCksum_Test_Failed;
+*-  variable_location.symbol = emsdflhd.Sb_AppCksum_Test_Failed;
 *-  ds_scaling_unit          = "Boolean";
 *-  ds_precision             = "1.0";
 *-  ds_scaling_mode          = "Ax + B";
@@ -65,10 +65,10 @@
 *-  description              = "ECU APP checksum validate failed";
 *-}
 
-*-emsdflhd.Vb_CalCksum_Test_Failed{
+*-emsdflhd.Sb_CalCksum_Test_Failed{
 *-  OBJECTS_CLASS: parameter_es_class;
 *-  label                    = "FLHCSCALF";
-*-  variable_location.symbol = emsdflhd.Vb_CalCksum_Test_Failed;
+*-  variable_location.symbol = emsdflhd.Sb_CalCksum_Test_Failed;
 *-  ds_scaling_unit          = "Boolean";
 *-  ds_precision             = "1.0";
 *-  ds_scaling_mode          = "Ax + B";
