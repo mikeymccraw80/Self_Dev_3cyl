@@ -36,3 +36,13 @@
 *-  ds_const_a               = "1.000000000000";
 *-  ds_const_b               = "0.000000000000";
 *-}
+
+*-os_sw_intc.HAL_Last_ECC_Address{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "LECCADDR";
+*-  variable_location.symbol = os_sw_intc.HAL_Last_ECC_Address;
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-}
