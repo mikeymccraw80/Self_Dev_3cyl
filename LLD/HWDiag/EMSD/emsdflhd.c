@@ -32,7 +32,8 @@
 TbBOOLEAN        SbEMSD_FileROMTestFailed ;
 #pragma section DATA " " ".bss"
 
-static TbBOOLEAN   SbEMSD_FileROMTestComplete;
+TbBOOLEAN   SbEMSD_FileROMTestComplete;
+
 static TbBOOLEAN   Sb_AppCksum_Test_Failed;
 static TbBOOLEAN   Sb_CalCksum_Test_Failed;
 static TbBOOLEAN   Sb_AppCksum_Calc_Complete;
