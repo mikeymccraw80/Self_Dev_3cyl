@@ -174,6 +174,7 @@
 #define CcFILE_EE_Odometer_Size                     (4)
 #define CcFILE_EE_ReservedForCustomer_Size          (40)
 #define CcFILE_EE_Reserved1_Size                    (181)  //Mfg Reserved Data
+#define CcFILE_EE_Reserved2_Size                    (0)  //Mfg Reserved Data
 
 #endif /* FILEPCFG_H */
 

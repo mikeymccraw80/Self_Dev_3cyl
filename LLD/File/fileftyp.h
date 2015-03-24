@@ -621,9 +621,424 @@ typedef __packed__ struct
 #endif
 
   volatile WORD VaFILE_EE_Checksum;
+} TsFILE_EE_ManufactData_Pre;
+
+
+typedef __packed__ struct
+{
+#if CcFILE_EE_Block_Status_Size > 0
+  BYTE PROCALGN VaFILE_EE_Block_Status[CcFILE_EE_Block_Status_Size];
+#endif
+
+#if CcFILE_EE_HexBaseModelNumber_Size > 0
+  BYTE PROCALGN VaFILE_EE_HexBaseModelNumber[CcFILE_EE_HexBaseModelNumber_Size];
+#endif
+
+#if CcFILE_EE_HexEndModelNumber_Size > 0
+  BYTE PROCALGN VaFILE_EE_HexEndModelNumber[CcFILE_EE_HexEndModelNumber_Size];
+#endif
+
+#if CcFILE_EE_Broadcast_Code_Size > 0
+  BYTE PROCALGN VaFILE_EE_Broadcast_Code[CcFILE_EE_Broadcast_Code_Size];
+#endif
+
+#if CcFILE_EE_VehMfgCalIdentityNumber_Size > 0
+  BYTE PROCALGN VaFILE_EE_VehMfgCalIdentityNumber[CcFILE_EE_VehMfgCalIdentityNumber_Size];
+#endif
+
+#if CcFILE_EE_CalibrationRepairShopCode_Size > 0
+  BYTE PROCALGN VaFILE_EE_CalibrationRepairShopCode[CcFILE_EE_CalibrationRepairShopCode_Size];
+#endif
+
+#if CcFILE_EE_CalibrationProgrammingDate_Size > 0
+  BYTE PROCALGN VaFILE_EE_CalibrationProgrammingDate[CcFILE_EE_CalibrationProgrammingDate_Size];
+#endif
+
+#if CcFILE_EE_ReservedCalProgrammingDate_Size > 0
+  BYTE PROCALGN VaFILE_EE_ReservedCalProgrammingDate[CcFILE_EE_ReservedCalProgrammingDate_Size];
+#endif
+
+#if CcFILE_EE_SupplHexEndModelNumber_Size > 0
+  BYTE PROCALGN VaFILE_EE_SupplHexEndModelNumber[CcFILE_EE_SupplHexEndModelNumber_Size];
+#endif
+
+#if CcFILE_EE_VIN_Size > 0
+  BYTE PROCALGN VaFILE_EE_VIN[CcFILE_EE_VIN_Size];
+#endif
+
+#if CcFILE_EE_VIN_Expansion_Size > 0
+  BYTE PROCALGN VaFILE_EE_VIN_Expansion[CcFILE_EE_VIN_Expansion_Size];
+#endif
+
+#if CcFILE_EE_VehMfgHardwareNumber_Size > 0
+  BYTE PROCALGN VaFILE_EE_VehMfgHardwareNumber[CcFILE_EE_VehMfgHardwareNumber_Size];
+#endif
+
+#if CcFILE_EE_SupplECU_HardwareNumber_Size > 0
+  BYTE PROCALGN VaFILE_EE_SupplECU_HardwareNumber[CcFILE_EE_SupplECU_HardwareNumber_Size];
+#endif
+
+#if CcFILE_EE_SystemNameOrVehEngType_Size > 0
+  BYTE PROCALGN VaFILE_EE_SystemNameOrVehEngType[CcFILE_EE_SystemNameOrVehEngType_Size];
+#endif
+
+#if CcFILE_EE_RepairShopCode_Size > 0
+  BYTE PROCALGN VaFILE_EE_RepairShopCode[CcFILE_EE_RepairShopCode_Size];
+#endif
+
+#if CcFILE_EE_ProgrammingDate_Size > 0
+  BYTE PROCALGN VaFILE_EE_ProgrammingDate[CcFILE_EE_ProgrammingDate_Size];
+#endif
+
+#if CcFILE_EE_InstrumentationDatasetID_Size > 0
+  BYTE PROCALGN VaFILE_EE_InstrumentationDatasetID[CcFILE_EE_InstrumentationDatasetID_Size];
+#endif
+
+#if CcFILE_EE_Odometer_Update_Locked_Size> 0
+  BYTE PROCALGN VaFILE_EE_Odometer_Update_Locked[CcFILE_EE_Odometer_Update_Locked_Size];
+#endif
+
+#if CcFILE_EE_Seed_Size > 0
+  BYTE PROCALGN VaFILE_EE_Seed[CcFILE_EE_Seed_Size];
+#endif
+
+#if CcFILE_EE_Key_Size > 0
+  BYTE PROCALGN VaFILE_EE_Key[CcFILE_EE_Key_Size];
+#endif
+
+#if CcFILE_EE_ManufacturesEnableCounter_Size > 0
+  BYTE PROCALGN VaFILE_EE_ManufacturesEnableCounter[CcFILE_EE_ManufacturesEnableCounter_Size];
+#endif
+
+#if CcFILE_EE_CrankShaftAdaptive_Size > 0
+  BYTE PROCALGN VaFILE_EE_CrankShaftAdaptive[CcFILE_EE_CrankShaftAdaptive_Size];
+#endif
+
+#if CcFILE_EE_CrankShaftAdaptiveCntr_Size > 0
+  BYTE PROCALGN VaFILE_EE_CrankShaftAdaptiveCntr[CcFILE_EE_CrankShaftAdaptiveCntr_Size];
+#endif
+
+#if CcFILE_EE_Mfg_Traceability_Size > 0
+  BYTE PROCALGN VaFILE_EE_Mfg_Traceability[CcFILE_EE_Mfg_Traceability_Size];
+#endif
+
+#if CcFILE_EE_Auto_Detect_DWMC_Immo_Size > 0
+  BYTE PROCALGN VaFILE_EE_Auto_Detect_DWMC_Immo[CcFILE_EE_Auto_Detect_DWMC_Immo_Size];
+#endif
+
+#if CcFILE_EE_PIC_Immo_VIN_Size > 0
+  BYTE PROCALGN VaFILE_EE_PIC_Immo_VIN[CcFILE_EE_PIC_Immo_VIN_Size];
+#endif
+
+#if CcFILE_EE_PIC_Immo_Status_Size > 0
+  BYTE PROCALGN VaFILE_EE_PIC_Immo_Status[CcFILE_EE_PIC_Immo_Status_Size];
+#endif
+
+#if CcFILE_EE_Vehicle_Specific_Data_Size > 0
+  BYTE PROCALGN VaFILE_EE_Vehicle_Specific_Data[CcFILE_EE_Vehicle_Specific_Data_Size];
+#endif
+
+#if CcFILE_EE_User_Password_Size > 0
+  BYTE PROCALGN VaFILE_EE_User_Password[CcFILE_EE_User_Password_Size];
+#endif
+
+#if CcFILE_EE_Key_1_IDE_Size > 0
+  BYTE PROCALGN VaFILE_EE_Key_1_IDE[CcFILE_EE_Key_1_IDE_Size];
+#endif
+
+#if CcFILE_EE_Key_2_IDE_Size > 0
+  BYTE PROCALGN VaFILE_EE_Key_2_IDE[CcFILE_EE_Key_2_IDE_Size];
+#endif
+
+#if CcFILE_EE_Key_3_IDE_Size > 0
+  BYTE PROCALGN VaFILE_EE_Key_3_IDE[CcFILE_EE_Key_3_IDE_Size];
+#endif
+
+#if CcFILE_EE_Key_4_IDE_Size > 0
+  BYTE PROCALGN VaFILE_EE_Key_4_IDE[CcFILE_EE_Key_4_IDE_Size];
+#endif
+
+#if CcFILE_EE_LimpHome_Starts_Tester_Size > 0
+  BYTE PROCALGN VaFILE_EE_LimpHome_Starts_Tester[CcFILE_EE_LimpHome_Starts_Tester_Size];
+#endif
+
+#if CcFILE_EE_Twice_Ign_Seq_Size > 0
+  BYTE PROCALGN VaFILE_EE_Twice_Ign_Seq[CcFILE_EE_Twice_Ign_Seq_Size];
+#endif
+
+#if CcFILE_EE_Key_Learnt_Size > 0
+  BYTE PROCALGN VaFILE_EE_Key_Learnt[CcFILE_EE_Key_Learnt_Size];
+#endif
+
+#if CcFILE_EE_Transponder_Fault_Size > 0
+  BYTE PROCALGN VaFILE_EE_Transponder_Fault[CcFILE_EE_Transponder_Fault_Size];
+#endif
+
+#if CcFILE_EE_Immob_EMS_Status_Size > 0
+  BYTE PROCALGN VaFILE_EE_Immob_EMS_Status[CcFILE_EE_Immob_EMS_Status_Size];
+#endif
+
+#if CcFILE_EE_Password_Status_Size > 0
+  BYTE PROCALGN VaFILE_EE_Password_Status[CcFILE_EE_Password_Status_Size];
+#endif
+
+#if CcFILE_EE_LockByTimer_Size > 0
+  BYTE PROCALGN VaFILE_EE_LockByTimer[CcFILE_EE_LockByTimer_Size];
+#endif
+
+#if CcFILE_EE_Wrong_Inputs_Passwd_Teach_Size > 0
+  BYTE PROCALGN VaFILE_EE_Wrong_Inputs_Passwd_Teach[CcFILE_EE_Wrong_Inputs_Passwd_Teach_Size];
+#endif
+
+#if CcFILE_EE_Wrong_VSD_Key_Teach_Size > 0
+  BYTE PROCALGN VaFILE_EE_Wrong_VSD_Key_Teach[CcFILE_EE_Wrong_VSD_Key_Teach_Size];
+#endif
+
+#if CcFILE_EE_Wrong_PassWord_LimpHome_Size > 0
+  BYTE PROCALGN VaFILE_EE_Wrong_PassWord_LimpHome[CcFILE_EE_Wrong_PassWord_LimpHome_Size];
+#endif
+
+#if CcFILE_EE_Wrong_VSD_Neutral_Size > 0
+  BYTE PROCALGN VaFILE_EE_Wrong_VSD_Neutral[CcFILE_EE_Wrong_VSD_Neutral_Size];
+#endif
+
+#if CcFILE_EE_Auto_Detect_DWMC_ABS_Size > 0
+  BYTE PROCALGN VaFILE_EE_Auto_Detect_DWMC_ABS[CcFILE_EE_Auto_Detect_DWMC_ABS_Size];
+#endif
+
+#if CcFILE_EE_VIN_HighByte_Size > 0
+  BYTE PROCALGN VaFILE_EE_VIN_HighByte[CcFILE_EE_VIN_HighByte_Size];
+#endif
+
+#if CcFILE_EE_VIN_LowByte_Size > 0
+  BYTE PROCALGN VaFILE_EE_VIN_LowByte[CcFILE_EE_VIN_LowByte_Size];
+#endif
+
+#if CcFILE_EE_VTDS_Config_Size > 0
+  BYTE PROCALGN VaFILE_EE_VTDS_Config[CcFILE_EE_VTDS_Config_Size];
+#endif
+
+#if CcFILE_EE_VTDS_Last_RandomNumber_Size > 0
+  BYTE PROCALGN VaFILE_EE_VTDS_Last_RandomNumber[CcFILE_EE_VTDS_Last_RandomNumber_Size];
+#endif
+
+#if CcFILE_EE_VTDS_Polynomial_AsLongword_Size > 0
+  BYTE PROCALGN VaFILE_EE_VTDS_Polynomial_AsLongword[CcFILE_EE_VTDS_Polynomial_AsLongword_Size];
+#endif
+
+#if CcFILE_EE_COA_Factor_Size > 0
+  BYTE PROCALGN VaFILE_EE_COA_Factor[CcFILE_EE_COA_Factor_Size];
+#endif
+
+#if CcFILE_EE_RandomNumberPolynomial_Size > 0
+  BYTE PROCALGN VaFILE_EE_RandomNumberPolynomial[CcFILE_EE_RandomNumberPolynomial_Size];
+#endif
+
+#if CcFILE_EE_SecurityCode_Size > 0
+  BYTE PROCALGN VaFILE_EE_SecurityCode[CcFILE_EE_SecurityCode_Size];
+#endif
+
+#if CcFILE_EE_RandomNumberBuffer_Size > 0
+  BYTE PROCALGN VaFILE_EE_RandomNumberBuffer[CcFILE_EE_RandomNumberBuffer_Size];
+#endif
+
+#if CcFILE_EE_SecretKey_Size > 0
+  BYTE PROCALGN VaFILE_EE_SecretKey[CcFILE_EE_SecretKey_Size];
+#endif
+
+#if CcFILE_EE_New_Vehicle_Start_Cntr_Size > 0
+  BYTE PROCALGN VaFILE_EE_New_Vehicle_Start_Cntr[CcFILE_EE_New_Vehicle_Start_Cntr_Size];
+#endif
+
+#if CcFILE_EE_SecCodeEntryCntr_Size > 0
+  BYTE PROCALGN VaFILE_EE_SecCodeEntryCntr[CcFILE_EE_SecCodeEntryCntr_Size];
+#endif
+
+#if CcFILE_EE_SecurityBlockAccess_Size > 0
+  BYTE PROCALGN VaFILE_EE_SecurityBlockAccess[CcFILE_EE_SecurityBlockAccess_Size];
+#endif
+
+#if CcFILE_EE_Dynamic_Status_Size > 0
+  BYTE PROCALGN VaFILE_EE_Dynamic_Status[CcFILE_EE_Dynamic_Status_Size];
+#endif
+
+#if CcFILE_EE_XmsnOilLifeMonitor_Size > 0
+  BYTE PROCALGN VaFILE_EE_XmsnOilLifeMonitor[CcFILE_EE_XmsnOilLifeMonitor_Size];
+#endif
+
+#if CcFILE_EE_AutoLearnVSS_Size > 0
+  BYTE PROCALGN VaFILE_EE_AutoLearnVSSType[CcFILE_EE_AutoLearnVSS_Size];
+#endif
+
+#if CcFILE_EE_AutoLearnPSS_Size > 0
+  BYTE PROCALGN VaFILE_EE_AutoLearnPSSType[CcFILE_EE_AutoLearnPSS_Size];
+#endif
+
+#if CcFILE_EE_AutoLearnChassisCtrl_Size > 0
+  BYTE PROCALGN VaFILE_EE_AutoLearnChassisCtrlType[CcFILE_EE_AutoLearnChassisCtrl_Size];
+#endif
+
+#if CcFILE_EE_AutoLearnCruz_Size > 0
+  BYTE PROCALGN VaFILE_EE_AutoLearnCruzCtlType[CcFILE_EE_AutoLearnCruz_Size];
+#endif
+
+#if CcFILE_EE_VIN_Update_Size > 0
+  BYTE PROCALGN VaFILE_EE_VIN_Update[CcFILE_EE_VIN_Update_Size];
+#endif
+
+#if CcFILE_EE_DriveLineType_Size > 0
+  BYTE PROCALGN VaFILE_EE_DriveLineType[CcFILE_EE_DriveLineType_Size];
+#endif
+
+#if CcFILE_EE_DriveLineTypeLrnd_Size > 0
+  BYTE PROCALGN VaFILE_EE_DriveLineTypeLrnd[CcFILE_EE_DriveLineTypeLrnd_Size];
+#endif
+
+#if CcFILE_EE_Smartra3_Status_Size > 0
+  BYTE PROCALGN VaFILE_EE_Smartra3_Status[CcFILE_EE_Smartra3_Status_Size];
+#endif
+
+#if CcFILE_EE_Key_5_IDE_Size > 0
+  BYTE PROCALGN VaFILE_EE_Key_5_IDE[CcFILE_EE_Key_5_IDE_Size];
+#endif
+
+#if CcFILE_EE_Key_6_IDE_Size > 0
+  BYTE PROCALGN VaFILE_EE_Key_6_IDE[CcFILE_EE_Key_6_IDE_Size];
+#endif
+
+#if CcFILE_EE_Key_7_IDE_Size > 0
+  BYTE PROCALGN VaFILE_EE_Key_7_IDE[CcFILE_EE_Key_7_IDE_Size];
+#endif
+
+#if CcFILE_EE_Key_8_IDE_Size > 0
+  BYTE PROCALGN VaFILE_EE_Key_8_IDE[CcFILE_EE_Key_8_IDE_Size];
+#endif
+
+#if CcFILE_EE_Smartra3_SEK_Size > 0
+  BYTE PROCALGN VaFILE_EE_Smartra3_SEK[CcFILE_EE_Smartra3_SEK_Size];
+#endif
+
+#if CcFILE_EE_GMTargetVehicle_Size > 0
+  BYTE PROCALGN VaFILE_EE_GMTargetVehicle[CcFILE_EE_GMTargetVehicle_Size];
+#endif
+
+#if CcFILE_EE_DynamTireCirc_Size > 0
+  BYTE PROCALGN VaFILE_EE_DynamTireCirc[CcFILE_EE_DynamTireCirc_Size];
+#endif
+
+#if CcFILE_EE_OctSelSwitch_Size > 0
+  BYTE PROCALGN VaFILE_EE_OctSelSwitch[CcFILE_EE_OctSelSwitch_Size];
+#endif
+
+#if CcFILE_EE_EngPerfIdent_Size > 0
+  BYTE PROCALGN VaFILE_EE_EngPerfIdent[CcFILE_EE_EngPerfIdent_Size];
+#endif
+
+#if CcFILE_EE_FuelConsCalcCorrFctr_Size > 0
+  BYTE PROCALGN VaFILE_EE_FuelConsCalcCorrFctr[CcFILE_EE_FuelConsCalcCorrFctr_Size];
+#endif
+
+#if CcFILE_EE_VehCANConfig_Size > 0
+  BYTE PROCALGN VaFILE_EE_VehCANConfig[CcFILE_EE_VehCANConfig_Size];
+#endif
+
+#if CcFILE_EE_XMLDataFilePN_Size > 0
+  BYTE PROCALGN VaFILE_EE_XMLDataFilePN[CcFILE_EE_XMLDataFilePN_Size];
+#endif
+
+#if CcFILE_EE_XMLDataFileAC_Size > 0
+  BYTE PROCALGN VaFILE_EE_XMLDataFileAC[CcFILE_EE_XMLDataFileAC_Size];
+#endif
+
+#if CcFILE_EE_BootSWPNAC_Size > 0
+  BYTE PROCALGN VaFILE_EE_BootSWPNAC[CcFILE_EE_BootSWPNAC_Size];
+#endif
+
+#if CcFILE_EE_XMLConfCompIdent_Size > 0
+  BYTE PROCALGN VaFILE_EE_XMLConfCompIdent[CcFILE_EE_XMLConfCompIdent_Size];
+#endif
+
+#if CcFILE_EE_SWModIdent2AC_Size > 0
+  BYTE PROCALGN VaFILE_EE_SWModIdent2AC[CcFILE_EE_SWModIdent2AC_Size];
+#endif
+
+#if CcFILE_EE_EndModelPNAC_Size > 0
+  BYTE PROCALGN VaFILE_EE_EndModelPNAC[CcFILE_EE_EndModelPNAC_Size];
+#endif
+
+#if CcFILE_EE_BaseModelPNAC_Size > 0
+  BYTE PROCALGN VaFILE_EE_BaseModelPNAC[CcFILE_EE_BaseModelPNAC_Size];
+#endif
+
+#if CcFILE_EE_ImmoPtPreRelease_Size > 0
+  BYTE PROCALGN VaFILE_EE_ImmoPtPreRelease[CcFILE_EE_ImmoPtPreRelease_Size];
+#endif
+
+#if CcFILE_EE_ImmoPtSecretKey_Size > 0
+  BYTE PROCALGN VaFILE_EE_ImmoPtSecretKey[CcFILE_EE_ImmoPtSecretKey_Size];
+#endif
+
+#if CcFILE_EE_ImmoPtGenericInfo_Size > 0
+  BYTE PROCALGN VaFILE_EE_ImmoPtGenericInfo[CcFILE_EE_ImmoPtGenericInfo_Size];
+#endif
+
+#if CcFILE_EE_ImmoSecretInfo_Size > 0
+  BYTE PROCALGN VaFILE_EE_ImmoSecretInfo[CcFILE_EE_ImmoSecretInfo_Size];
+#endif
+
+#if CcFILE_EE_ImmoSecureCode_Size > 0
+  BYTE PROCALGN VaFILE_EE_ImmoSecureCode[CcFILE_EE_ImmoSecureCode_Size];
+#endif
+
+#if CcFILE_EE_ImmoSecureCodeCtr_Size > 0
+  BYTE PROCALGN VaFILE_EE_ImmoSecureCodeCtr[CcFILE_EE_ImmoSecureCodeCtr_Size];
+#endif
+
+#if CcFILE_EE_ImmoSecureCodeRstCtr_Size > 0
+  BYTE PROCALGN VaFILE_EE_ImmoSecureCodeRstCtr[CcFILE_EE_ImmoSecureCodeRstCtr_Size];
+#endif
+
+#if CcFILE_EE_OdoVINvalue_Size > 0
+  BYTE PROCALGN VaFILE_EE_OdoVINvalue[CcFILE_EE_OdoVINvalue_Size];
+#endif
+
+#if CcFILE_EE_OdoVINwritten_Size > 0
+  BYTE PROCALGN VaFILE_EE_OdoVINwritten[CcFILE_EE_OdoVINwritten_Size];
+#endif
+
+#if CcFILE_EE_NumberOfWarmupCycles_Size > 0
+  BYTE PROCALGN VaFILE_EE_NumberOfWarmupCycles[CcFILE_EE_NumberOfWarmupCycles_Size];
+#endif
+
+#if CcFILE_EE_VINWrittenCount_Size > 0
+  BYTE PROCALGN VaFILE_EE_VINWrittenCount[CcFILE_EE_VINWrittenCount_Size];
+#endif
+
+#if CcFILE_EE_PrevRepairShopCode_Size > 0
+  BYTE PROCALGN VaFILE_EE_PrevRepairShopCode[CcFILE_EE_PrevRepairShopCode_Size];
+#endif
+
+#if CcFILE_EE_GreenEngCompComplete_Size > 0
+  BYTE PROCALGN VaFILE_EE_GreenEngCompComplete[CcFILE_EE_GreenEngCompComplete_Size];
+#endif
+
+#if CcFILE_EE_TDC_CrankShaftAdaptive_Size > 0
+  BYTE PROCALGN VaFILE_EE_TDC_CrankShaftAdaptive[CcFILE_EE_TDC_CrankShaftAdaptive_Size];
+#endif
+
+#if CcFILE_EE_Odometer_Size > 0
+  BYTE PROCALGN VaFILE_EE_Odometer[CcFILE_EE_Odometer_Size];
+#endif
+
+#if CcFILE_EE_ReservedForCustomer_Size > 0
+  BYTE PROCALGN VaFILE_EE_ReservedForCustomer[CcFILE_EE_ReservedForCustomer_Size];
+#endif
+
+  /* calculate the reserved size, 0x17a - sizeof(TsFILE_EE_ManufactData_Pre)*/
+  BYTE PROCALGN VaFILE_EE_Reserved1Data[0x17a - sizeof(TsFILE_EE_ManufactData_Pre)];
+
+  volatile WORD VaFILE_EE_Checksum;
 } TsFILE_EE_ManufactData;
-
-
 
 #endif  /* FILEFTYP_H */
 
