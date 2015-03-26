@@ -247,6 +247,13 @@ uint32_t  nvram_test2;
 #define STOP_SECTION_static_nonvolatile_SlowRam_32bit
 #include "PRAGMA_CHERY.h"
 
+#define START_SECTION_static_fcm_SlowRam_32bit
+#include "PRAGMA_CHERY.h"
+uint32_t fcm_test0;
+uint32_t fcm_test1;
+uint32_t fcm_test2;
+#define STOP_SECTION_static_fcm_SlowRam_32bit
+#include "PRAGMA_CHERY.h"
 
 T_CRANK_ANGLEa PfKNOC_phi_FinalWindow2Begin;/* Start angle of  knock window 2 */
 T_CRANK_ANGLEa PfKNOC_phi_FinalWindow2End;/* End angle of  knock window 2 */
