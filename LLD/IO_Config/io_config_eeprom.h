@@ -6,8 +6,10 @@
  *===========================================================================*/
 // NVRAM macros
 #define NVRAM_PAGE_SIZE                         ((8) * 1024)    //8K page size
+#define NVRAM_FCM_SIZE                          (640)
 #define EEP_NVRAM_PER_BANK_PAGES                (2)
 #define EEP_NVRAM_MAX_PAGE                      (4)
+
 // MFG macros
 #define MFG_PAGE_SIZE                           (384)           //384 bytes page size
 #define MFG_PATTERN_ADDR_OFFSET                 (0)             //offset from MFG_*** start address
@@ -17,7 +19,8 @@
 #define EEP_NVM_MFG_SEQUENCE_NO_MAX             (40)            // max sequence no. in NVM
 
 #define NVRAM_MFG_START_ADDR_OFFSET             (8)             // MFG start address offset from NVRAM start address
-
+#define NVRAM_FCM_START_ADDR_OFFSET             (188)           // FCM start address offset from NVRAM start address
+#
 // DONGLE macros
 #define EEP_NVM_DONGLE_SEQUENCE_NO_MAX          (21)           // Times for Record dongle information
 
@@ -51,6 +54,7 @@
 
 #define RAM_MFG_START_ADDR                      (0x40000008)
 #define RAM_MFG_DATA_START_ADDR                 (0x4000000C)
+#define RAM_FCM_START_ADDR                      (0x40000188)
 
 #define BANK_CORRUPTED_PATTERN                  (0x2222) /* pattern to indicate that Bank (0 or 1) of NVRAM pflash block is corrupted */
 #define BANK_NOT_CORRUPTED_PATTERN              (0x4444) /* pattern to indicate that Bank (0 or 1) of NVRAM pflash block is NOT corrupted*/

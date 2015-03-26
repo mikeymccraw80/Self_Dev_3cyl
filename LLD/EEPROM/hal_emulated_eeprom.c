@@ -893,10 +893,8 @@ void EEPROM_Backup_Vehicle_NVRAM_Block(void)
       Mfg_change_flg = 1;
       High_sequence_No_EEP_NVM = EEP_NVM_MFG_SEQUENCE_NO_MAX;
       EEPROM_Write_Block((uint32_t*)nvram_start_addr,page,EEPROM_ACTIVE_PAGE_NOT_FOUND);
-
    }
    No_active_page_flg = 0;
-
 }
 
 /*******************************************************************************
@@ -924,6 +922,7 @@ void EEPROM_Restore_Vehicle_NVRAM_Block(HWIO_Reset_Status_T status_poweron)
    uint32_t *             nvram_start_addr;
    uint32_t *             src;
    uint32_t *             mfg_data_start_addr;
+   uint32_t *             fcm_data_start_addr;
    uint8_t                page;
    uint16_t               ram_index;
    interrupt_state_t      context;
@@ -938,14 +937,15 @@ void EEPROM_Restore_Vehicle_NVRAM_Block(HWIO_Reset_Status_T status_poweron)
    //LMB_ERROR_LOCK_BIT = 0;
    //EEPROM_Scan_For_Errors();
 
-   nvram_start_addr = (uint32_t *)MIRROR_RAM_START_ADDR;
+   nvram_start_addr    = (uint32_t *)MIRROR_RAM_START_ADDR;
    mfg_data_start_addr = (uint32_t *)RAM_MFG_START_ADDR;
+   fcm_data_start_addr = (uint32_t *)RAM_FCM_START_ADDR;
 
    op_return = Get_EEP_NVM_Active_Page();
    op_return = Get_EEP_NVRAM_Active_Page();
    pf_kksum = Get_KKSUM_checksum();
 
-   if(( EEPROM_ACTIVE_PAGE_NOT_FOUND == op_return) || HAL_OS_Get_Battery_Remove() || HAL_uncleard_ram.data[NCRAM_REPROGRAM_FLAG])
+   if( EEPROM_ACTIVE_PAGE_NOT_FOUND == op_return)
    {
       EEP_NVRAM_Erase(EEP_NVRAM_BANK0);
       EEP_NVRAM_Erase(EEP_NVRAM_BANK1);
@@ -961,7 +961,8 @@ void EEPROM_Restore_Vehicle_NVRAM_Block(HWIO_Reset_Status_T status_poweron)
    {
       page = EEP_NVRAM_active_page;
       df_kksum = Get_KKSUM_EEP_NVRAM(page);
-      if(pf_kksum != df_kksum)  // restore MFG only
+      /* restore MFG only and chery fcm section */
+      if((pf_kksum != df_kksum) ||  HAL_OS_Get_Battery_Remove() || HAL_uncleard_ram.data[NCRAM_REPROGRAM_FLAG])
       {
          Clear_Vehicle_NVRAM_In_Mirror();
          EEPROM_Set_Mirror_RAM_Pattern((uint32_t*)nvram_start_addr, (uint16_t)VALID_PAGE_DATA);
@@ -969,13 +970,13 @@ void EEPROM_Restore_Vehicle_NVRAM_Block(HWIO_Reset_Status_T status_poweron)
          src = EEPROM_Pages[page].Current;
          src = (uint32_t*)(((uint8_t *)src) + NVRAM_MFG_START_ADDR_OFFSET);
          context = Enter_Critical_Section();
-         for( ram_index = 0; ram_index < (MFG_PAGE_SIZE/sizeof(uint32_t)); ram_index++ )
+         for( ram_index = 0; ram_index < ((MFG_PAGE_SIZE + NVRAM_FCM_SIZE)/sizeof(uint32_t)); ram_index++ )
          {
             *mfg_data_start_addr++ = *src++;
          }
          Leave_Critical_Section( context );
          EEPROM_Set_Mirror_RAM_KKSUM_Checksum((uint32_t*) nvram_start_addr,pf_kksum);
-        EEP_NVM_Fault = true;
+         EEP_NVM_Fault = true;
       }
       else if((1 == status_poweron.bits.Power_On_Reset) && (pf_kksum == df_kksum))
       {
@@ -986,8 +987,7 @@ void EEPROM_Restore_Vehicle_NVRAM_Block(HWIO_Reset_Status_T status_poweron)
          {
             *nvram_start_addr++ = *src++;
          }
-	  EEP_NVM_Fault = false;
-
+         EEP_NVM_Fault = false;
       }
       else if((pf_kksum == df_kksum)&&(0 == status_poweron.bits.Power_On_Reset))
       {
@@ -998,7 +998,6 @@ void EEPROM_Restore_Vehicle_NVRAM_Block(HWIO_Reset_Status_T status_poweron)
             EEPROM_Set_Mirror_RAM_KKSUM_Checksum( (uint32_t*) nvram_start_addr,0);
             page = EEP_NVRAM_active_page;
             src = EEPROM_Pages[page].Current;
-//            src = ((uint8_t *)src);
             for( ram_index = 0; ram_index < NVRAM_PAGE_SIZE/sizeof(uint32_t); ram_index++ )
             {
                *nvram_start_addr++ = *src++;
@@ -1008,11 +1007,9 @@ void EEPROM_Restore_Vehicle_NVRAM_Block(HWIO_Reset_Status_T status_poweron)
          else
          {
          }
-          EEP_NVM_Fault = false;	 
+         EEP_NVM_Fault = false;
       }
-
    }
-
 }
 
 /*******************************************************************************

@@ -201,6 +201,16 @@ SECTIONS
      /* 128 -> The new reserved 128 bytes for mfg */
      /* 256 - 4 + 12 + 128 = 392 */
      . = start_of_nvram + 392;
+     start_of_fcm_nvram = .; 
+     .fcm_nvram :
+     {
+        
+     }
+     end_of_fcm_nvram = .;
+
+     /* offset 640 bytes from start of FCM NVRAM. */
+     /* 640 -> FCM Section size */
+     . = start_of_fcm_nvram + 640;
      start_of_crit_nvram = .; 
      .c_nvram :
      {

@@ -544,6 +544,22 @@
     #undef PRAGMA_UNUSED
 #endif
 
+/*************************************************************************************/
+/*   Memory: NonVolatile, Slow, 8bits                                                */
+/*   Pragma: static_nonvolatile_SlowRam_8bit                                         */
+/*************************************************************************************/
+
+#ifdef START_SECTION_static_fcm_SlowRam_8bit
+    #pragma section DATA " " ".fcm_nvram"
+    #undef START_SECTION_static_fcm_SlowRam_8bit
+    #undef PRAGMA_UNUSED
+#endif
+
+#ifdef STOP_SECTION_static_fcm_SlowRam_8bit
+    #pragma section DATA " " ".bss"
+    #undef STOP_SECTION_static_fcm_SlowRam_8bit
+    #undef PRAGMA_UNUSED
+#endif
 
 /*************************************************************************************/
 /*   Memory: Volatile, Fast, 16bits                                                  */
@@ -616,6 +632,22 @@
     #undef PRAGMA_UNUSED
 #endif
 
+/*************************************************************************************/
+/*   Memory: NonVolatile, Slow, 16bits                                               */
+/*   Pragma: static_nonvolatile_SlowRam_16bit                                        */
+/*************************************************************************************/
+
+#ifdef START_SECTION_static_fcm_SlowRam_16bit
+    #pragma section DATA " " ".fcm_nvram"
+    #undef START_SECTION_static_fcm_SlowRam_16bit
+    #undef PRAGMA_UNUSED
+#endif
+
+#ifdef STOP_SECTION_static_fcm_SlowRam_16bit
+    #pragma section DATA " " ".bss"
+    #undef STOP_SECTION_static_fcm_SlowRam_16bit
+    #undef PRAGMA_UNUSED
+#endif
 
 /*************************************************************************************/
 /*   Memory: Volatile, Fast, 32bits                                                  */
@@ -683,6 +715,23 @@
 #endif
 
 #ifdef STOP_SECTION_static_nonvolatile_SlowRam_32bit
+    #pragma section DATA " " ".bss"
+    #undef STOP_SECTION_static_nonvolatile_SlowRam_32bit
+    #undef PRAGMA_UNUSED
+#endif
+
+/*************************************************************************************/
+/*   Memory: section, Slow, 32bits                                               */
+/*   Pragma: static_nonvolatile_SlowRam_32bit                                        */
+/*************************************************************************************/
+
+#ifdef START_SECTION_static_fcm_SlowRam_32bit
+    #pragma section DATA " " ".fcm_nvram"
+    #undef START_SECTION_static_nonvolatile_SlowRam_32bit
+    #undef PRAGMA_UNUSED
+#endif
+
+#ifdef STOP_SECTION_static_fcm_SlowRam_32bit
     #pragma section DATA " " ".bss"
     #undef STOP_SECTION_static_nonvolatile_SlowRam_32bit
     #undef PRAGMA_UNUSED
