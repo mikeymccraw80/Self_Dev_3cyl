@@ -88,11 +88,11 @@ void InitEMSD_FileROMRstToKeyOn(void)
 
  /*****************************************************************************
  *
- * Function:     MngEMSD_FileROM125msTasks
+ * Function:     MngEMSD_FileROM10msTasks
  * Description:  This procedure will be called by the operating system
  *               during every 0.125 sec timer event. The procedure
  *               includes calls to all timer triggered functions.
- *
+ *               code execution time is about 12us
  * Parameters:   None
  * Return:       None
  *****************************************************************************/
