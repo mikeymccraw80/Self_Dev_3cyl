@@ -52,10 +52,8 @@
 #define   MG_HIODEVICE_AN02                      AD_MAPVI_Channel
 #define   MG_HIODEVICE_AN03                      AD_ACPREVI_Channel
 #define   MG_HIODEVICE_AN04                      AD_LEGRFBVI_Channel
-// #define   MG_HIODEVICE_AN05                      (void *)&TPS1VI
-// #define   MG_HIODEVICE_AN06                      (void *)&TPS2VI
-#define   MG_HIODEVICE_AN05                      MG_HIODEVICE_NULL
-#define   MG_HIODEVICE_AN06                      MG_HIODEVICE_NULL
+#define   MG_HIODEVICE_AN05                      AD_TPS1VI_Channel
+#define   MG_HIODEVICE_AN06                      AD_TPS2VI_Channel
 #define   MG_HIODEVICE_AN07                      AD_PPS1VI_Channel
 #define   MG_HIODEVICE_AN08                      MG_HIODEVICE_NULL
 #define   MG_HIODEVICE_AN09                      AD_PPS2VI_Channel
@@ -82,12 +80,9 @@
 #define   MG_HIODEVICE_AN30                      AD_IGNVI_Channel
 #define   MG_HIODEVICE_AN31                      AD_58XRAWIN_Channel
 #define   MG_HIODEVICE_AN32                      AD_PBATTVI_Channel
-// #define   MG_HIODEVICE_AN33                      (void *)&GND123VI
-// #define   MG_HIODEVICE_AN34                      (void *)&GND122VI 
-// #define   MG_HIODEVICE_AN35                      (void *)&GND121VI 
-#define   MG_HIODEVICE_AN33                      MG_HIODEVICE_NULL
-#define   MG_HIODEVICE_AN34                      MG_HIODEVICE_NULL
-#define   MG_HIODEVICE_AN35                      MG_HIODEVICE_NULL
+#define   MG_HIODEVICE_AN33                      AD_Reserved_1_Channel
+#define   MG_HIODEVICE_AN34                      AD_Reserved_2_Channel
+#define   MG_HIODEVICE_AN35                      AD_Reserved_3_Channel
 #define   MG_HIODEVICE_AN36                      MG_HIODEVICE_NULL
 #define   MG_HIODEVICE_AN37                      MG_HIODEVICE_NULL
 #define   MG_HIODEVICE_AN38                      AD_HWCFGVI_Channel
@@ -117,8 +112,7 @@
 #define   MG_HIODEVICE_DO_DFB20                  VSEP_DO_VGIS2_CH
 #define   MG_HIODEVICE_DO_DFB21                  VSEP_PO_O2AHTR_CH
 #define   MG_HIODEVICE_DO_DFB22                  VSEP_PO_O2BHTR_CH
-// #define   MG_HIODEVICE_DO_DFB23                  (void *)&MTSA_PWM_CLTPUMPCTL
-#define   MG_HIODEVICE_DO_DFB23                  MG_HIODEVICE_DO_NULL
+#define   MG_HIODEVICE_DO_DFB23                  MIOS_CLTPUMPCTL_CH
 #define   MG_HIODEVICE_DO_DFB24                  VSEP_PO_ALTCTL_CH
 #define   MG_HIODEVICE_DO_DFB25                  VSEP_DO_MIL_CH
 #define   MG_HIODEVICE_DO_DFB26                  VSEP_DO_SVS_CH
@@ -159,9 +153,9 @@
 // #define   MG_HIODEVICE_DI_MPIO1                  (void *)&MTSA_D_IN_J1_79
 // #define   MG_HIODEVICE_DI_MPIO2                  (void *)&MTSA_D_IN_J1_60
 // #define   MG_HIODEVICE_DI_MPIO3                  (void *)&MTSA_D_IN_J1_40
-#define   MG_HIODEVICE_DI_MPIO1                  MG_HIODEVICE_DI_NULL
-#define   MG_HIODEVICE_DI_MPIO2                  MG_HIODEVICE_DI_NULL
-#define   MG_HIODEVICE_DI_MPIO3                  MG_HIODEVICE_DI_NULL
+#define   MG_HIODEVICE_DI_MPIO1                  VSEP_MPIO_ACRequest_CH
+#define   MG_HIODEVICE_DI_MPIO2                  VSEP_MPIO_PSPS_CH
+#define   MG_HIODEVICE_DI_MPIO3                  VSEP_MPIO_MIDAC_CH
 #define   MG_HIODEVICE_DI_GPIO139                HAL_GPIO_ELOAD1DI_CHANNEL
 #define   MG_HIODEVICE_DI_GPIO138                HAL_GPIO_ELOAD2DI_CHANNEL
 #define   MG_HIODEVICE_DI_GPIO224                HAL_GPIO_BRKLMPDI_CHANNEL

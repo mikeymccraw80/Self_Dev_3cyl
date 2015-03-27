@@ -663,53 +663,53 @@ const ADC_CCMF_T  QADC_CMD_Timebase[AD_ANALOG_MAX_SIGNAL_NAMES]=
    0
 },
 
-//AD_Reserved_1_Channel 
-//{
- //  1,    //EOQ      
-//   0,    //PAUSE 
-//   0,    // REP     
- //  0,    //EB   
- //  ADC_CONVERTER_1,    //BN    
- //  false,   // CAL  
-//   QADC_FIFO_4,   //MESSAGE_TAG 
- //  QADC_SAMPLE_CYCLES_2,   //LST        
-//   0,   //TSR       
- //  QADC_CHANNEL_CONVERSION_FORMAT_RIGHT_JUSTIFIED_UNSIGNED,   //FMT         
- //  QADC_CHANNEL_AN33,    // CHANNEL 
- //  QADC_CONFIGURATION_REGISTER_1
-//},
+// AD_Reserved_1_Channel 
+{
+  1,    //EOQ      
+  0,    //PAUSE 
+  0,    // REP     
+  0,    //EB   
+  ADC_CONVERTER_1,    //BN    
+  false,   // CAL  
+  QADC_FIFO_4,   //MESSAGE_TAG 
+  QADC_SAMPLE_CYCLES_2,   //LST        
+  0,   //TSR       
+  QADC_CHANNEL_CONVERSION_FORMAT_RIGHT_JUSTIFIED_UNSIGNED,   //FMT         
+  QADC_CHANNEL_AN33,    // CHANNEL 
+  0
+},
 
-//AD_Reserved_2_Channel 
-//{
- //  1,    //EOQ      
- //  0,    //PAUSE 
-  // 0,    // REP     
- //  0,    //EB   
- //  ADC_CONVERTER_1,    //BN    
-   //true,   // CAL  
-  // QADC_FIFO_4,   //MESSAGE_TAG 
-  // QADC_SAMPLE_CYCLES_2,   //LST        
-  // 0,   //TSR       
- //  QADC_CHANNEL_CONVERSION_FORMAT_RIGHT_JUSTIFIED_UNSIGNED,   //FMT         
-   //QADC_CHANNEL_AN34,    // CHANNEL 
-  // QADC_CONFIGURATION_REGISTER_1
-//},
+// AD_Reserved_2_Channel 
+{
+  1,    //EOQ      
+  0,    //PAUSE 
+  0,    // REP     
+  0,    //EB   
+  ADC_CONVERTER_1,    //BN    
+   true,   // CAL  
+  QADC_FIFO_4,   //MESSAGE_TAG 
+  QADC_SAMPLE_CYCLES_2,   //LST        
+  0,   //TSR       
+  QADC_CHANNEL_CONVERSION_FORMAT_RIGHT_JUSTIFIED_UNSIGNED,   //FMT         
+   QADC_CHANNEL_AN34,    // CHANNEL 
+  0
+},
 
-//AD_Reserved_3_Channel 
-//{
-  // 1,    //EOQ      
-   //0,    //PAUSE 
-   //0,    // REP     
-   //0,    //EB   
-   //ADC_CONVERTER_1,    //BN    
-  // true,   // CAL  
-   //QADC_FIFO_4,   //MESSAGE_TAG 
-   //QADC_SAMPLE_CYCLES_2,   //LST        
-   //0,   //TSR       
-   //QADC_CHANNEL_CONVERSION_FORMAT_RIGHT_JUSTIFIED_UNSIGNED,   //FMT         
-   //QADC_CHANNEL_AN35,    // CHANNEL 
-   //QADC_CONFIGURATION_REGISTER_1
-//},
+// AD_Reserved_3_Channel 
+{
+  1,    //EOQ      
+   0,    //PAUSE 
+   0,    // REP     
+   0,    //EB   
+   ADC_CONVERTER_1,    //BN    
+  true,   // CAL  
+   QADC_FIFO_4,   //MESSAGE_TAG 
+   QADC_SAMPLE_CYCLES_2,   //LST        
+   0,   //TSR       
+   QADC_CHANNEL_CONVERSION_FORMAT_RIGHT_JUSTIFIED_UNSIGNED,   //FMT         
+   QADC_CHANNEL_AN35,    // CHANNEL 
+   0
+},
 
 //AD_HWCFGVI_Channel  
 {
