@@ -263,7 +263,10 @@ void mg_HAL_Discrete_Set_C2PS_VIGNF(bool state)
 bool mg_HAL_Discrete_Get_Discrete_In_Group(uint8_t index)
 {
     bool state;
-    if (MG_HIODEVICE_DI_NULL != MG_HAL_DISCRETE_IN_GROUP[index])
+    if ((index >= 0) && (index <= 2)) {
+        state = VSEP_DiscreteGet(MG_HAL_DISCRETE_IN_GROUP[index]);
+    }
+    else if (MG_HIODEVICE_DI_NULL != MG_HAL_DISCRETE_IN_GROUP[index])
     {
         state = SIU_GPIO_DISCRETE_Get_State(MG_HAL_DISCRETE_IN_GROUP[index]);
     }

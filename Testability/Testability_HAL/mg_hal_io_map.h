@@ -159,9 +159,9 @@
 // #define   MG_HIODEVICE_DI_MPIO1                  (void *)&MTSA_D_IN_J1_79
 // #define   MG_HIODEVICE_DI_MPIO2                  (void *)&MTSA_D_IN_J1_60
 // #define   MG_HIODEVICE_DI_MPIO3                  (void *)&MTSA_D_IN_J1_40
-#define   MG_HIODEVICE_DI_MPIO1                  MG_HIODEVICE_DI_NULL
-#define   MG_HIODEVICE_DI_MPIO2                  MG_HIODEVICE_DI_NULL
-#define   MG_HIODEVICE_DI_MPIO3                  MG_HIODEVICE_DI_NULL
+#define   MG_HIODEVICE_DI_MPIO1                  VSEP_MPIO_ACRequest_CH
+#define   MG_HIODEVICE_DI_MPIO2                  VSEP_MPIO_PSPS_CH
+#define   MG_HIODEVICE_DI_MPIO3                  VSEP_MPIO_MIDAC_CH
 #define   MG_HIODEVICE_DI_GPIO139                HAL_GPIO_ELOAD1DI_CHANNEL
 #define   MG_HIODEVICE_DI_GPIO138                HAL_GPIO_ELOAD2DI_CHANNEL
 #define   MG_HIODEVICE_DI_GPIO224                HAL_GPIO_BRKLMPDI_CHANNEL
