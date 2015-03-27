@@ -48,7 +48,7 @@ sys_status_bits sys_status;
 sys_cmmd_bits sys_cmd;
 
 /* HLS mileage variable */
-uint32_t odometer;
+// uint32_t odometer;
 /* LLD variable to inform HLS turn on the mil light */
 /* Attention: Do not defined as hls_bss variable */
 uint32_t Sys_time;

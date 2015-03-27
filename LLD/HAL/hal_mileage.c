@@ -43,19 +43,19 @@
 
 void InitialiseMileage(void)
 {
-   uint32_t *p;
-   p = (uint32_t *)NsFILE_NVM_EE_ManufactData.VaFILE_EE_Odometer;
+   // uint32_t *p;
+   // p = (uint32_t *)NsFILE_NVM_EE_ManufactData.VaFILE_EE_Odometer;
 
-   odometer = *p;
+   // odometer = *p;
 }
 
 
 void UpdateMileage( void )
 {
-   uint32_t *p;
-   p = (uint32_t *)NsFILE_NVM_EE_ManufactData.VaFILE_EE_Odometer;
+   // uint32_t *p;
+   // p = (uint32_t *)NsFILE_NVM_EE_ManufactData.VaFILE_EE_Odometer;
 
-   *p = odometer;
+   // *p = odometer;
 }
 
 /* ============================================================================ *\

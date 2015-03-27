@@ -154,7 +154,6 @@ uint16_t	DTCs_SID03[SY_FCMTSIZE];
 bool	B_DiagInfoClrReq;
 uint8_t 	count_DTCs_SID07;
 uint16_t	DTCs_SID07[SY_FCMTSIZE];
-uint8_t HLS_DataStoreEEP[HLS_DataStoreEEP_SIZE];
 
 /*the flowing is ISO14230 service 0x31&0x32 */
 // uint8_t  SupFlagC0[4];    /* 0xC0  ID Support Flag($C1-$E0) */
@@ -252,7 +251,14 @@ uint32_t  nvram_test2;
 uint32_t fcm_test0;
 uint32_t fcm_test1;
 uint32_t fcm_test2;
+uint32_t odometer;
 #define STOP_SECTION_static_fcm_SlowRam_32bit
+#include "PRAGMA_CHERY.h"
+
+#define START_SECTION_static_fcm_SlowRam_8bit
+#include "PRAGMA_CHERY.h"
+uint8_t HLS_DataStoreEEP[HLS_DataStoreEEP_SIZE];
+#define STOP_SECTION_static_fcm_SlowRam_8bit
 #include "PRAGMA_CHERY.h"
 
 T_CRANK_ANGLEa PfKNOC_phi_FinalWindow2Begin;/* Start angle of  knock window 2 */

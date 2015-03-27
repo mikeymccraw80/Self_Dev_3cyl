@@ -19,9 +19,9 @@ void MFG_InitEepromToHLS(void)
 		scnVehInfo.VIN[idx]= NsFILE_NVM_EE_ManufactData.VaFILE_EE_VIN[idx];
 	}
 
-	for (idx = 0; idx < HLS_DataStoreEEP_SIZE; idx ++) {
-		HLS_DataStoreEEP[idx] = NsFILE_NVM_EE_ManufactData.VaFILE_EE_ReservedForCustomer[idx];
-	}
+	// for (idx = 0; idx < HLS_DataStoreEEP_SIZE; idx ++) {
+	// 	HLS_DataStoreEEP[idx] = NsFILE_NVM_EE_ManufactData.VaFILE_EE_ReservedForCustomer[idx];
+	// }
 }
 
 //=============================================================================
@@ -31,7 +31,7 @@ void MFG_UpdateEepromFromHLS(void)
 {
 	unsigned char idx;
 
-	for (idx = 0; idx < HLS_DataStoreEEP_SIZE; idx ++) {
-		NsFILE_NVM_EE_ManufactData.VaFILE_EE_ReservedForCustomer[idx] = HLS_DataStoreEEP[idx];
-	}
+	// for (idx = 0; idx < HLS_DataStoreEEP_SIZE; idx ++) {
+	// 	NsFILE_NVM_EE_ManufactData.VaFILE_EE_ReservedForCustomer[idx] = HLS_DataStoreEEP[idx];
+	// }
 }
