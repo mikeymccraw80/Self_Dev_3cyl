@@ -21,8 +21,6 @@ else
 LINKFILE= mt22p3_chery_4cyl
 endif
 
-
-
 export HOME_DIR = $(CURDIR)/..
 export BUILD_DIR = $(CURDIR)
 
@@ -32,11 +30,9 @@ COMPILER_DIR = $(HOME_DIR)/tools/diab/WIN32/bin
 COMP_DIR     = $(subst /,\,$(COMPILER_DIR))
 TOOLS_PATH   = $(subst /,\,$(TOOLS_DIR))
 PROJECT_ROOT = $(HOME_DIR)
-# ifeq ($(TARGET), INTEGRATION)
 CHERY_LIB_DIR = $(HOME_DIR)/tools/cherylib
-# else
 DELPHI_LIB_DIR = $(HOME_DIR)/tools/delphilib/outputlib
-# endif
+
 
 VERSION = 1.1
 LAST_UPDATE = April 2013
@@ -127,11 +123,7 @@ BUILD_DIR = $(HOME_DIR)/Build
 ifeq ($(TARGET),HWIO_Test)
 INSTRUMT_DIR = $(HOME_DIR)/Function_test/Instrumentation
 else
-ifeq ($(TARGET),HWIO_HLS_INTEGRATION_TEST)
-INSTRUMT_DIR = $(HOME_DIR)/Function_test/Instrumentation
-else
 INSTRUMT_DIR = $(HOME_DIR)/Instrumentation
-endif
 endif
 
 ###############################################################################
@@ -139,7 +131,6 @@ endif
 # Section 3
 ###############################################################################
 ifneq ($(TARGET),HWIO_HLS_INTEGRATION)
-ifneq ($(TARGET),HWIO_HLS_INTEGRATION_TEST)
 ifneq ($(TARGET),HWIO_LIB)
 SUBDIRS += LLD/IO_Config
 SUBDIRS += LLD/DeviceDriver/SWT
@@ -230,9 +221,6 @@ SUBDIRS += Function_test/HLS
 endif
 
 endif
-
-
-endif
 endif
 
 
@@ -241,7 +229,6 @@ endif
 # Section 4
 ###############################################################################
 ifneq ($(TARGET),HWIO_HLS_INTEGRATION)
-ifneq ($(TARGET),HWIO_HLS_INTEGRATION_TEST)
 INCDIRS += LLD/IO_Config
 INCDIRS += LLD/DeviceDriver/SWT
 INCDIRS += LLD/DeviceDriver/FMPLL
@@ -328,9 +315,7 @@ INCDIRS += HLS
 else
 INCDIRS += Function_test/HLS
 endif
-# endif
 
-endif
 endif
 
 export INCLUDE_DIR += $(patsubst %,-I$(HOME_DIR)/%,$(INCDIRS))
@@ -451,13 +436,6 @@ DIAB_PPC_LINKER_LIB +=\
                      -A $(DELPHI_LIB_DIR)/$(DELPHI_HWIO_LIB_NAME).a\
                      -A $(CHERY_LIB_DIR)/$(CHERY_HLS_LIB_NAME).a
 endif
-ifeq ($(TARGET),HWIO_HLS_INTEGRATION_TEST)
-DIAB_PPC_LINKER_LIB +=\
-                     -L$(DIABLIBS_DIR)\
-                     -lc\
-                     -A $(DELPHI_LIB_DIR)/$(DELPHI_HWIO_LIB_NAME).a\
-                     -A $(CHERY_LIB_DIR)/$(CHERY_HLS_LIB_NAME).a
-endif
 DIAB_PPC_LINKER_COMMANDLINE =\
 		$(PPC_DIAB_TARGET) \
 		$(DIAB_PPC_LINKER_FLAGS)\
@@ -469,11 +447,7 @@ DIAB_PPC_LINKER_COMMANDLINE =\
 ifeq ($(TARGET),HWIO_HLS_INTEGRATION)
 LINK = $(COMP_DIR)\dld $(DIAB_PPC_LINKER_COMMANDLINE)
 else
-ifeq ($(TARGET),HWIO_HLS_INTEGRATION_TEST)
-LINK = $(COMP_DIR)\dld $(DIAB_PPC_LINKER_COMMANDLINE)
-else
 LINK = $(COMP_DIR)\dld $(DIAB_PPC_LINKER_COMMANDLINE) $(BUILD_DIR)/obj_list.txt 
-endif
 endif
 
 ifeq ($(TARGET),HWIO_HLS_INTEGRATION)
@@ -482,11 +456,7 @@ else
 ifeq ($(TARGET),HWIO_Test)
 LINK_COMMAND = cd ../objs && $(LINK) $(HOME_DIR)/Function_test/$(LINKFILE).dld
 else
-ifeq ($(TARGET),HWIO_HLS_INTEGRATION_TEST)
-LINK_COMMAND = $(LINK) $(HOME_DIR)/Function_test/$(LINKFILE).dld
-else
 LINK_COMMAND = cd ../objs && $(LINK) $(HOME_DIR)/Build/$(LINKFILE).dld
-endif
 endif
 endif
 
@@ -693,10 +663,8 @@ build_target:	;
 	@$(ECHO) Generating PTP file, And do necessary adjustment
 	@cd ..\bin && $(DDUMP) && $(PTP_FILL) && $(PTP_CONV) && $(PTP_CKSUM)
 ifneq ($(TARGET),HWIO_HLS_INTEGRATION)
-ifneq ($(TARGET),HWIO_HLS_INTEGRATION_TEST)
 	@cd ..\objs && @if exist *.lst $(COPY) *.lst	$(subst /,\,$(LISTING_DIR))\. >nul
 	@cd ..\objs && @if exist *.lst $(DEL) *.lst
-endif
 endif
 ###############################################################################
 # Build EXMAP file from elf file target
