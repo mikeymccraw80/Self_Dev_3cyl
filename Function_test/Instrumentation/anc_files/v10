@@ -1,0 +1,1300 @@
+#**************************************************#
+# Ancillary Template for generating ASAP2 Objects  #
+#                                                  #
+#                Version 10.0                      #
+#**************************************************#
+#**************************************************#
+
+
+#**************************************************#
+#               Base Definitions                   #
+#**************************************************#
+
+match_ancillary_object_ft{
+  FIELD_TEMPLATE;
+  TYPE: ident;
+  RULE: MATCH_ANCILLARY_CLASS_AND_OBJECT;
+}
+
+restricted_length_string_ft{
+  FIELD_TEMPLATE;
+  TYPE: string;
+  RULE: RESTRICTED_STRING_LENGTH;
+}
+
+restricted_string_ft{
+  FIELD_TEMPLATE;
+  TYPE: string;
+  RULE: RESTRICTED_STRING;
+}
+
+restricted_8bit_ft{
+  FIELD_TEMPLATE;
+  TYPE: uint8;
+  RULE: RESTRICTED_RANGE;
+}
+
+restricted_32bit_ft{
+  FIELD_TEMPLATE;
+  TYPE: uint32;
+  RULE: RESTRICTED_RANGE;
+}
+
+restricted_16bit_ft{
+  FIELD_TEMPLATE;
+  TYPE: uint16;
+  RULE: RESTRICTED_RANGE;
+}
+
+restricted_s16bit_ft{
+  FIELD_TEMPLATE;
+  TYPE: sint16;
+  RULE: RESTRICTED_RANGE;
+}
+
+location_num_ft{
+  FIELD_TEMPLATE;
+  TYPE: uint32;
+  RULE: RESTRICTED_RANGE;
+}
+
+
+#**************************************************#
+#                 Comment Definition               #
+#**************************************************#
+comment_template{
+  TEMPLATE;
+  ACTION: RECORD_IN_ANCILLARY_SECTION;
+  FIELD:  (restricted_length_string_ft) comment;
+}
+
+comment_class {
+  CLASS_FROM: comment_template;
+  record_id                     = 10000;
+  comment.allowed_string_length = 255;
+}
+
+version_num {
+  OBJECTS_CLASS: comment_class;
+  comment = "!!Template version 09.5";  #<< Template Version >>#
+}
+
+
+#**************************************************#
+#            ASAP2 Memory Map Definition           #
+#**************************************************#
+memory_map_template{
+  TEMPLATE;
+  ACTION: RECORD_IN_ANCILLARY_SECTION;
+  FIELD: (restricted_length_string_ft) name;
+  FIELD: (restricted_length_string_ft) description;
+  FIELD: (restricted_string_ft)        prg_type;
+  FIELD: (restricted_string_ft)        memory_type;
+  FIELD: (restricted_string_ft)        attribute;
+  FIELD: (uint32)                      start_address;
+  FIELD: (uint32)                      size;
+}
+
+memory_map_class{
+  CLASS_FROM: memory_map_template;
+  record_id			       	=  6000;
+  name.allowed_string_length		=  255;
+  description.allowed_string_length	=  255;
+  prg_type.allowed_strings		=  "CODE", "DATA", "OFFLINE_DATA", "VARIABLES", "SERAM", "CALIBRATION_VARIABLES", "RESERVED";
+  memory_type.allowed_strings		=  "RAM", "EEPROM", "EPROM", "ROM", "REGISTER", "FLASH";
+  attribute.allowed_strings		=  "INTERN", "EXTERN";
+}
+
+#**************************************************#
+#            ITS Memory Map Definition             #
+#**************************************************#
+
+attr_ft{
+  FIELD_TEMPLATE;
+  RULE:  RESTRICTED_REPEATS;
+  FIELD: (restricted_string_ft) attr;
+}
+
+ITS_mem_map_template{
+  TEMPLATE;
+  ACTION: RECORD_IN_ANCILLARY_SECTION;
+  FIELD: (restricted_length_string_ft) name;
+  FIELD: (restricted_length_string_ft) description;
+  FIELD: (restricted_string_ft)        prg_type;
+  FIELD: (restricted_string_ft)        memory_type;
+  FIELD: (restricted_string_ft)        attribute;
+  FIELD: (uint32)                      start_address;
+  FIELD: (uint32)                      size;
+  FIELD: (restricted_string_ft)        cat_type;
+  FIELD: (attr_ft)                     mem;
+}
+
+ITS_mem_map_class{
+  CLASS_FROM: ITS_mem_map_template;
+  record_id			       	=  6100;
+  name.allowed_string_length		=  255;
+  description.allowed_string_length	=  255;
+  prg_type.allowed_strings		=  "CODE", "DATA", "OFFLINE_DATA", "VARIABLES", "SERAM", "CALIBRATION_VARIABLES", "RESERVED";
+  memory_type.allowed_strings		=  "RAM", "EEPROM", "EPROM", "ROM", "REGISTER", "FLASH";
+  attribute.allowed_strings		=  "INTERN", "EXTERN";
+  cat_type.allowed_strings		=  "DEVELOPMENT", "COMMUNICATION", "DATA ACQ BLOCK",
+      "DATA ACQ BYTE";
+  mem.allowed_repeat_limit          = 6;
+  mem.attr.allowed_strings		=  "READ", "WRITE", "AUTODOWNLOAD", "WRITE PROTECT",
+       "CAL MEM A/B", "ROM1 EMULATION";
+ }
+
+
+
+#**************************************************#
+#                 Parameter Definition's           #
+#**************************************************#
+location_symbol_ft{
+  FIELD_TEMPLATE;
+  TYPE: ident;
+  RULE: MATCH_IEEE_SYMBOL;
+}
+trigger_ft{
+  FIELD_TEMPLATE;
+  RULE:  RESTRICTED_REPEATS;
+  FIELD: (match_ancillary_object_ft) trigger;
+}
+sym_offset_ft{
+  FIELD_TEMPLATE;
+  FIELD: (location_symbol_ft) symbol;
+  FIELD: (restricted_8bit_ft) offset;
+}
+
+enum_ft{
+    FIELD_TEMPLATE;
+    RULE: RESTRICTED_REPEATS;
+    FIELD: (uint32)			  value;
+    FIELD: (restricted_length_string_ft)  desc;
+}
+
+
+#**************************************************#
+#       Parameter with Explicit Scaling            #
+#**************************************************#
+parameter_es_template{
+  TEMPLATE;
+  ACTION: RECORD_IN_ANCILLARY_SECTION;
+  FIELD: (restricted_length_string_ft) label;
+  FIELD: (sym_offset_ft)               variable_location;
+  FIELD: (match_ancillary_object_ft)   display_trigger;
+  FIELD: (trigger_ft)                  log;
+  FIELD: (restricted_string_ft)        ds_scaling_mode;
+  FIELD: (restricted_string_ft)        ds_precision;
+  FIELD: (string)                      ds_const_a;
+  FIELD: (string)                      ds_const_b;
+  FIELD: (match_ancillary_object_ft)   ds_lin_tbl;
+  FIELD: (restricted_length_string_ft) ds_scaling_unit;
+  FIELD: (restricted_string_ft)        as_scaling_mode;
+  FIELD: (string)                      as_const_a;
+  FIELD: (string)                      as_const_b;
+  FIELD: (match_ancillary_object_ft)   as_lin_tbl;
+  FIELD: (restricted_length_string_ft) as_scaling_unit;
+  FIELD: (uint32)                      bit_mask;
+  FIELD: (restricted_length_string_ft) description;
+  FIELD: (restricted_length_string_ft) symbol_name;
+  FIELD: (enum_ft) 			   enum;
+
+#  THESE ARE THE DEFAULT SETTINGS FOR THE PARAMETER DEFINITION:  #
+
+  ds_scaling_mode          = "Ax + B";
+  ds_precision             = "4.0";
+  ds_const_a               = "1.0";
+  ds_const_b               = "0";
+  as_scaling_mode          = "Ax + B";
+  as_const_a               = "1.0";
+  as_const_b               = "0";
+  bit_mask                 = 0;
+  variable_location.symbol = nosymbol;
+  display_trigger	   = Dflt_Trg;
+  ds_lin_tbl               = Dflt_Lin;
+  as_lin_tbl               = Dflt_Lin;
+  log[0].trigger	   = Dflt_Trg;
+}
+
+parameter_es_class{
+  CLASS_FROM: parameter_es_template;
+  record_id                               = 12100;
+  label.allowed_string_length             = 10;
+  variable_location.offset.lower_boundary = 0x0;
+  variable_location.offset.upper_boundary = 0xFF;
+  display_trigger.objects_class_id        = trigger_class;
+  log.allowed_repeat_limit                = 8;
+  log.trigger.objects_class_id            = trigger_class;
+  ds_scaling_mode.allowed_strings         = "Ax + B", "A/x + B", "invert", "Lin";
+  ds_precision.allowed_strings            =
+   "10.6", "10.5", "10.4", "10.3", "10.2", "10.1", "10.0",
+    "9.6",  "9.5",  "9.4",  "9.3",  "9.2",  "9.1",  "9.0",
+    "8.6",  "8.5",  "8.4",  "8.3",  "8.2",  "8.1",  "8.0",
+    "7.6",  "7.5",  "7.4",  "7.3",  "7.2",  "7.1",  "7.0",
+    "6.6",  "6.5",  "6.4",  "6.3",  "6.2",  "6.1",  "6.0",
+            "5.5",  "5.4",  "5.3",  "5.2",  "5.1",  "5.0",
+                    "4.4",  "4.3",  "4.2",  "4.1",  "4.0",
+                            "3.3",  "3.2",  "3.1",  "3.0",
+                                    "2.2",  "2.1",  "2.0",
+                                            "1.1",  "1.0";
+  ds_lin_tbl.objects_class_id             = lin_tbl_entries_class;
+  as_scaling_mode.allowed_strings         = "Ax + B", "A/x + B", "Lin";
+  as_lin_tbl.objects_class_id             = lin_tbl_entries_class;
+  ds_scaling_unit.allowed_string_length   = 255;
+  as_scaling_unit.allowed_string_length   = 255;
+  description.allowed_string_length       = 255;
+  symbol_name.allowed_string_length	  = 255;
+}
+
+
+#******************************************************#
+#       EDAM Parameter with Explicit Scaling           #
+#******************************************************#
+edam_parameter_es_template{
+  TEMPLATE;
+  ACTION: RECORD_IN_ANCILLARY_SECTION;
+  FIELD: (restricted_length_string_ft) label;
+  FIELD: (sym_offset_ft)               variable_location;
+  FIELD: (match_ancillary_object_ft)   display_trigger;
+  FIELD: (trigger_ft)                  log;
+  FIELD: (restricted_string_ft)        ds_scaling_mode;
+  FIELD: (restricted_string_ft)        ds_precision;
+  FIELD: (string)                      ds_const_a;
+  FIELD: (string)                      ds_const_b;
+  FIELD: (match_ancillary_object_ft)   ds_lin_tbl;
+  FIELD: (restricted_length_string_ft) ds_scaling_unit;
+  FIELD: (restricted_string_ft)        as_scaling_mode;
+  FIELD: (string)                      as_const_a;
+  FIELD: (string)                      as_const_b;
+  FIELD: (match_ancillary_object_ft)   as_lin_tbl;
+  FIELD: (restricted_length_string_ft) as_scaling_unit;
+  FIELD: (restricted_8bit_ft)	       connector_no;
+  FIELD: (restricted_string_ft)        mode_word;
+  FIELD: (restricted_string_ft)        zero_crossing_threshold;
+  FIELD: (string)       	       min_volt;
+  FIELD: (string)       	       max_volt;
+  FIELD: (restricted_length_string_ft) description;
+
+#  THESE ARE THE DEFAULT SETTINGS FOR THE PARAMETER DEFINITION:  #
+
+  ds_scaling_mode          = "Ax + B";
+  ds_precision             = "4.0";
+  ds_const_a               = "1.0";
+  ds_const_b               = "0";
+  ds_lin_tbl               = Dflt_Lin;
+  as_scaling_mode          = "Ax + B";
+  as_const_a               = "1.0";
+  as_const_b               = "0";
+  as_lin_tbl               = Dflt_Lin;
+  variable_location.symbol = nosymbol;
+  display_trigger	   = Dflt_Trg;
+  log[0].trigger	   = Dflt_Trg;
+  connector_no		   = 0;
+  mode_word		   = "Period";
+  zero_crossing_threshold  = "";
+  min_volt			   = "";
+  max_volt			   = "";
+}
+
+edam_parameter_es_class{
+  CLASS_FROM: edam_parameter_es_template;
+  record_id                               = 22100;
+  label.allowed_string_length             = 10;
+  variable_location.offset.lower_boundary = 0x0;
+  variable_location.offset.upper_boundary = 0xFF;
+  display_trigger.objects_class_id        = trigger_class;
+  log.allowed_repeat_limit                = 8;
+  log.trigger.objects_class_id            = trigger_class;
+  ds_scaling_mode.allowed_strings         = "Ax + B", "A/x + B", "Lin";
+  ds_lin_tbl.objects_class_id             = lin_tbl_entries_class;
+  ds_precision.allowed_strings            =
+   "10.6", "10.5", "10.4", "10.3", "10.2", "10.1", "10.0",
+    "9.6",  "9.5",  "9.4",  "9.3",  "9.2",  "9.1",  "9.0",
+    "8.6",  "8.5",  "8.4",  "8.3",  "8.2",  "8.1",  "8.0",
+    "7.6",  "7.5",  "7.4",  "7.3",  "7.2",  "7.1",  "7.0",
+    "6.6",  "6.5",  "6.4",  "6.3",  "6.2",  "6.1",  "6.0",
+            "5.5",  "5.4",  "5.3",  "5.2",  "5.1",  "5.0",
+                    "4.4",  "4.3",  "4.2",  "4.1",  "4.0",
+                            "3.3",  "3.2",  "3.1",  "3.0",
+                                    "2.2",  "2.1",  "2.0",
+                                            "1.1",  "1.0";
+
+  as_scaling_mode.allowed_strings         = "Ax + B", "A/x + B", "Lin";
+  as_lin_tbl.objects_class_id             = lin_tbl_entries_class;
+  ds_scaling_unit.allowed_string_length   = 255;
+  as_scaling_unit.allowed_string_length   = 255;
+  connector_no.lower_boundary			= 0;
+  connector_no.upper_boundary			= 16;
+  mode_word.allowed_strings			= 
+   "Period", "PWM on time", "ABS", "VCM", "Analog", "Thermocouple";
+  zero_crossing_threshold.allowed_strings = "4.3/4.0", "2.3/0.4", "3.4/2.8", "1.4/0.17";
+  description.allowed_string_length       = 255;
+}
+
+
+
+#**************************************************#
+#          Slewing with Explicit Scaling           #
+#**************************************************#
+slew_es_template{
+  TEMPLATE;
+  ACTION: RECORD_IN_ANCILLARY_SECTION;
+	FIELD: (restricted_length_string_ft) label;
+	FIELD: (sym_offset_ft) variable_location;
+	FIELD: (match_ancillary_object_ft) display_trigger;
+	FIELD: (trigger_ft) log;
+	FIELD: (restricted_string_ft) ds_scaling_mode;
+	FIELD: (restricted_string_ft) ds_precision;
+	FIELD: (string) ds_const_a;
+	FIELD: (string) ds_const_b;
+      FIELD: (match_ancillary_object_ft)   ds_lin_tbl;
+	FIELD: (restricted_length_string_ft) ds_scaling_unit;
+	FIELD: (restricted_string_ft) as_scaling_mode;
+	FIELD: (string) as_const_a;
+	FIELD: (string) as_const_b;
+      FIELD: (match_ancillary_object_ft)   as_lin_tbl;
+	FIELD: (restricted_length_string_ft) as_scaling_unit;
+	FIELD: (location_num_ft) min_slew_value;
+	FIELD: (location_num_ft) max_slew_value;
+	FIELD: (sym_offset_ft) slew_active_flag;
+	FIELD: (sym_offset_ft) slew_value;
+	FIELD: (restricted_string_ft) slew_scaling_mode;
+	FIELD: (string) slew_const_a;
+	FIELD: (string) slew_const_b;
+	FIELD: (restricted_length_string_ft) slew_scaling_unit;
+	FIELD: (restricted_length_string_ft) description;
+	FIELD: (restricted_length_string_ft) symbol_name;
+
+#  THESE ARE THE DEFAULT SETTINGS FOR THE PARAMETER DEFINITION:  #
+
+ ds_precision = "4.0";
+ ds_scaling_mode = "Ax + B";
+ ds_const_a = "1.0";
+ ds_const_b = "0";
+ ds_lin_tbl = Dflt_Lin;
+ as_scaling_mode = "Ax + B";
+ as_const_a = "1.0";
+ as_const_b = "0";
+ as_lin_tbl = Dflt_Lin;
+ variable_location.symbol = nosymbol;
+ slew_scaling_mode = "Ax + B";
+ slew_const_a = "1.0";
+ slew_const_b = "0.0";
+}
+
+slew_es_class{
+	CLASS_FROM: slew_es_template;
+	record_id=12600;
+	label.allowed_string_length			=  10;
+	variable_location.offset.lower_boundary	=  0;
+	variable_location.offset.upper_boundary	=  0xff;
+	ds_precision.allowed_strings = 
+   "10.6", "10.5", "10.4", "10.3", "10.2", "10.1", "10.0",
+    "9.6",  "9.5",  "9.4",  "9.3",  "9.2",  "9.1",  "9.0",
+    "8.6",  "8.5",  "8.4",  "8.3",  "8.2",  "8.1",  "8.0",
+    "7.6",  "7.5",  "7.4",  "7.3",  "7.2",  "7.1",  "7.0",
+    "6.6",  "6.5",  "6.4",  "6.3",  "6.2",  "6.1",  "6.0",
+            "5.5",  "5.4",  "5.3",  "5.2",  "5.1",  "5.0",
+                    "4.4",  "4.3",  "4.2",  "4.1",  "4.0",
+                            "3.3",  "3.2",  "3.1",  "3.0",
+                                    "2.2",  "2.1",  "2.0",
+                                            "1.1",  "1.0";
+
+	ds_scaling_mode.allowed_strings = "Ax + B", "A/x + B", "Lin";
+        ds_lin_tbl.objects_class_id     = lin_tbl_entries_class;
+	as_scaling_mode.allowed_strings = "Ax + B", "A/x + B", "Lin";
+        as_lin_tbl.objects_class_id     = lin_tbl_entries_class;
+	min_slew_value.lower_boundary	=  -9999;
+	min_slew_value.upper_boundary	=  9999;
+	max_slew_value.lower_boundary	=  -9999;
+	max_slew_value.upper_boundary	=  9999;
+	slew_active_flag.offset.lower_boundary	=  0;
+	slew_active_flag.offset.upper_boundary	=  0xff;
+	slew_value.offset.lower_boundary	=  0;
+	slew_value.offset.upper_boundary	=  0xff;
+	slew_scaling_mode.allowed_strings = "Ax + B", "A/x + B";
+	display_trigger.objects_class_id = trigger_class;
+	log.allowed_repeat_limit			=  8;
+	log.trigger.objects_class_id = trigger_class;
+	ds_scaling_unit.allowed_string_length = 255;
+	as_scaling_unit.allowed_string_length = 255; 
+	slew_scaling_unit.allowed_string_length = 255;
+	description.allowed_string_length		=  255;
+	symbol_name.allowed_string_length		=  255;
+}
+#**************************************************#
+#           Status Bits                            #
+#**************************************************#
+status_bit_template{
+  TEMPLATE;
+  ACTION: RECORD_IN_ANCILLARY_SECTION;
+  FIELD: (restricted_length_string_ft) label;
+  FIELD: (sym_offset_ft)               variable_location;
+  FIELD: (match_ancillary_object_ft)   display_trigger;
+  FIELD: (trigger_ft)                  log;
+  FIELD: (uint32)                      bit_mask;
+  FIELD: (restricted_string_ft)        invert_state;
+  FIELD: (restricted_length_string_ft) description;
+  FIELD: (restricted_length_string_ft) symbol_name;
+
+#  THESE ARE THE DEFAULT SETTINGS FOR THE STATUS DEFINITION:  #
+
+  bit_mask                 = 0;
+  invert_state		   = "N";
+  variable_location.symbol = nosymbol;
+  display_trigger	   	   = Dflt_Trg;
+  log[0].trigger	   	   = Dflt_Trg;
+}
+
+status_bit_class{
+  CLASS_FROM: status_bit_template;
+  record_id                               = 12800;
+  label.allowed_string_length             = 10;
+  variable_location.offset.lower_boundary = 0x0;
+  variable_location.offset.upper_boundary = 0xFF;
+  display_trigger.objects_class_id        = trigger_class;
+  log.allowed_repeat_limit                = 8;
+  log.trigger.objects_class_id            = trigger_class;
+  invert_state.allowed_strings		= "Y", "N", "n", "y";
+  description.allowed_string_length       = 255;
+  symbol_name.allowed_string_length       = 255;
+}
+
+
+
+#**************************************************#
+#            Scaling Definition                    #
+#**************************************************#
+scaling_template{
+  TEMPLATE;
+  ACTION: RECORD_IN_ANCILLARY_SECTION;
+  FIELD: (restricted_string_ft)        scaling_mode;
+  FIELD: (restricted_string_ft)        precision;
+  FIELD: (string)                      const_a;
+  FIELD: (string)                      const_b;
+  FIELD: (restricted_length_string_ft) scaling_unit;
+
+#  THESE ARE THE DEFAULTS FOR THE SCALING TEMPLATE  #
+
+  scaling_mode = "Ax + B";
+  precision    = "4.0";
+  const_a      = "1.0";
+  const_b      = "0";
+}
+
+scaling_class{
+  CLASS_FROM: scaling_template;
+  record_id                             = 11200;
+  scaling_mode.allowed_strings          = "Ax + B", "A/x + B";
+  precision.allowed_strings             =
+   "10.6", "10.5", "10.4", "10.3", "10.2", "10.1", "10.0",
+    "9.6",  "9.5",  "9.4",  "9.3",  "9.2",  "9.1",  "9.0",
+    "8.6",  "8.5",  "8.4",  "8.3",  "8.2",  "8.1",  "8.0",
+    "7.6",  "7.5",  "7.4",  "7.3",  "7.2",  "7.1",  "7.0",
+    "6.6",  "6.5",  "6.4",  "6.3",  "6.2",  "6.1",  "6.0",
+            "5.5",  "5.4",  "5.3",  "5.2",  "5.1",  "5.0",
+                    "4.4",  "4.3",  "4.2",  "4.1",  "4.0",
+                            "3.3",  "3.2",  "3.1",  "3.0",
+                                    "2.2",  "2.1",  "2.0",
+                                            "1.1",  "1.0";
+  scaling_unit.allowed_string_length	= 255;
+}
+
+
+#**************************************************#
+#                 CHARACTERIZATION CODE            #
+#**************************************************#
+
+characterization_template{
+  TEMPLATE;
+  ACTION: RECORD_IN_ANCILLARY_SECTION;
+  FIELD: (restricted_string_ft) processor;
+  FIELD: (restricted_string_ft) instrumentation;
+ }
+
+characterization_class{
+  CLASS_FROM: characterization_template;
+  record_id=1550;
+  processor.allowed_strings	= "GMP4", "GMSCM", "GMCM", "6801", "6301", "GMPX", "CASM",
+      "C167CR", "CPU32X", "CPU12", "CPU16X";
+  instrumentation.allowed_strings	="IDEA","XPOD","CPOD",
+     "LEVEL1", "SERIAL", "none";
+}
+
+
+#**************************************************#
+#                 Auto Download                    #
+#**************************************************#
+
+autodownload_template{
+  TEMPLATE;
+  ACTION: RECORD_IN_ANCILLARY_SECTION;
+  FIELD: (sym_offset_ft) start_download_ptr;
+  FIELD: (sym_offset_ft) block_size_ptr;
+  FIELD: (sym_offset_ft) checksum_ptr;
+  FIELD: (sym_offset_ft) subroutine;
+
+# DEFAULT SETTINGS FOR AUTODOWNLOAD_TEMPLATE #
+
+	start_download_ptr.symbol	= nosymbol;
+	block_size_ptr.symbol		= nosymbol;
+	checksum_ptr.symbol		= nosymbol;
+	subroutine				= nosymbol;
+}
+
+autodownload_class{
+  CLASS_FROM: autodownload_template;
+  record_id=1500;
+  start_download_ptr.offset.lower_boundary	=  0;
+  start_download_ptr.offset.upper_boundary	=  0xff;
+  block_size_ptr.offset.lower_boundary		=  0;
+  block_size_ptr.offset.upper_boundary		=  0xff;
+  checksum_ptr.offset.lower_boundary		=  0;
+  checksum_ptr.offset.upper_boundary		=  0xff;
+}
+
+
+#**************************************************#
+#                  Chip Select                     #
+#**************************************************#
+
+chip_select_ft{
+  FIELD_TEMPLATE;
+  RULE: RESTRICTED_REPEATS;
+  FIELD: (restricted_string_ft) type;
+  FIELD: (restricted_32bit_ft) start_address;
+  FIELD: (restricted_32bit_ft) block_size;
+  FIELD: (restricted_string_ft) bus_access;
+}
+
+chip_select_template{
+  TEMPLATE;
+  ACTION: RECORD_IN_ANCILLARY_SECTION;
+  FIELD: (chip_select_ft) chip_select;
+}
+
+chip_select_class{
+  CLASS_FROM: chip_select_template;
+  record_id=9000;
+  chip_select.allowed_repeat_limit			=  12;
+  chip_select.type.allowed_strings	=  "CS0", "CS1", "CS2", 
+	"CS3", "CS4", "CS5", "CS6", "CS7", "CS8", "CS9", "CS10", "CSBOOT";
+  chip_select.start_address.lower_boundary	=  0x000000;
+  chip_select.start_address.upper_boundary	=  0xffffff;
+  chip_select.block_size.lower_boundary		=  0x000000;
+  chip_select.block_size.upper_boundary		=  0xffffff;
+  chip_select.bus_access.allowed_strings		=  "upper byte",
+	"lower byte", "disabled","word";
+}
+
+#**************************************************#
+#          External Data Block Transfer            #
+#**************************************************#
+
+ext_data_block_template{
+  TEMPLATE;
+  ACTION: RECORD_IN_ANCILLARY_SECTION;
+  FIELD: (sym_offset_ft) block_start;
+  FIELD: (restricted_16bit_ft) num_of_parameters;
+  FIELD: (match_ancillary_object_ft) block_logging_trigger;
+  FIELD: (sym_offset_ft) valid_data_flag;
+  FIELD: (sym_offset_ft) refresh_counter;
+
+# DEFAULT SETTINGS FOR EXT_DATA_BLOCK_TEMPLATE #
+
+	block_start.symbol = nosymbol;
+	block_logging_trigger = Dflt_Trg;
+	valid_data_flag.symbol = nosymbol;
+	refresh_counter.symbol = nosymbol;
+
+}
+
+ext_data_block_class{
+  CLASS_FROM: ext_data_block_template;
+  record_id=3000;
+  block_start.offset.lower_boundary				=  0;
+  block_start.offset.upper_boundary				=  0xff;
+  num_of_parameters.lower_boundary			=  0;
+  num_of_parameters.upper_boundary			=  255;
+  block_logging_trigger.objects_class_id		=  trigger_class;
+  valid_data_flag.offset.lower_boundary		=  0;
+  valid_data_flag.offset.upper_boundary		=  0xff;
+  refresh_counter.offset.lower_boundary			=  0;
+  refresh_counter.offset.upper_boundary			=  0xff;
+}
+
+#**************************************************#
+#             General Instrumentation              #
+#**************************************************#
+
+general_instrument_template{
+  TEMPLATE;
+  ACTION: RECORD_IN_ANCILLARY_SECTION;
+  FIELD: (sym_offset_ft) function_ptr;
+  FIELD: (sym_offset_ft) presence_ptr;
+  FIELD: (restricted_16bit_ft) presence_pattern;
+  FIELD: (sym_offset_ft) slew_refresh_counter;
+  FIELD: (match_ancillary_object_ft) slew_refresh_trigger;
+
+# DEFAULT SETTINGS FOR GENERAL_INSTRUMENT_TEMPLATE #
+
+	function_ptr.symbol	= nosymbol;
+	presence_ptr.symbol	= nosymbol;
+	slew_refresh_counter.symbol = nosymbol;
+	slew_refresh_trigger = Dflt_Trg;
+
+}
+
+general_instrument_class{
+  CLASS_FROM: general_instrument_template;
+  record_id=3500;
+  function_ptr.offset.lower_boundary			=  0;
+  function_ptr.offset.upper_boundary			=  0xff;
+  presence_ptr.offset.lower_boundary			=  0;
+  presence_ptr.offset.upper_boundary			=  0xff;
+  presence_pattern.lower_boundary			=  0;
+  presence_pattern.upper_boundary			=  0xffff;
+  slew_refresh_counter.offset.lower_boundary	=  0;
+  slew_refresh_counter.offset.upper_boundary	=  0xff;
+  slew_refresh_trigger.objects_class_id		=  trigger_class;
+}
+
+
+#**************************************************#
+#               Miscellaneous Setup                #
+#**************************************************#
+
+misc_setup{
+  TEMPLATE;
+  ACTION: RECORD_IN_ANCILLARY_SECTION;
+  FIELD: (sym_offset_ft) romdis_control_ptr;
+  FIELD: (sym_offset_ft) a_b_switch_trigger_ptr;
+  FIELD: (sym_offset_ft) reset_status_ptr;
+  FIELD: (restricted_8bit_ft) reset_status_byte;
+
+# DEFAULT SETTINGS FOR MISC_SETUP #
+
+	romdis_control_ptr.symbol = nosymbol;
+	a_b_switch_trigger_ptr.symbol = nosymbol;
+	reset_status_ptr.symbol = nosymbol;
+}
+
+misc_setup_class{
+  CLASS_FROM: misc_setup;
+  record_id=5000;
+  romdis_control_ptr.offset.lower_boundary	=  0;
+  romdis_control_ptr.offset.upper_boundary	=  0xff;
+  a_b_switch_trigger_ptr.offset.lower_boundary=  0;
+  a_b_switch_trigger_ptr.offset.upper_boundary=  0xff;
+  reset_status_ptr.offset.lower_boundary	=  0;
+  reset_status_ptr.offset.upper_boundary	=  0xff;
+  reset_status_byte.lower_boundary		=  0;
+  reset_status_byte.upper_boundary		=  0xff;
+
+}
+
+#**************************************************#
+#               Product/Program ID                 #
+#**************************************************#
+
+product_program_id_template{
+  TEMPLATE;
+  ACTION: RECORD_IN_ANCILLARY_SECTION;
+  FIELD: (restricted_length_string_ft) program_id;
+  FIELD: (restricted_8bit_ft) revision_level;
+  FIELD: (sym_offset_ft) program_id_ptr;
+  FIELD: (restricted_8bit_ft) malfunction_value;
+  FIELD: (match_ancillary_object_ft) malfunction_trigger;
+  FIELD: (sym_offset_ft) malfunction_ptr;
+  FIELD: (restricted_string_ft) romdis_active_high;
+
+# DEFAULT SETTINGS FOR PRODUCT_PROGRAM_ID_TEMPLATE #
+
+	romdis_active_high	=  "n";
+	program_id_ptr.symbol	= nosymbol;
+	malfunction_ptr.symbol	= nosymbol;
+}
+
+
+product_program_id_class{
+  CLASS_FROM: product_program_id_template;
+  record_id=5500;
+  program_id.allowed_string_length			=  10;
+  revision_level.lower_boundary			=  0;
+  revision_level.upper_boundary			=  255;
+  program_id_ptr.offset.lower_boundary	=  0;
+  program_id_ptr.offset.upper_boundary	=  0xff;
+  malfunction_value.lower_boundary			=  0;
+  malfunction_value.upper_boundary			=  0xff;
+  malfunction_trigger.objects_class_id		=  trigger_class;
+  malfunction_ptr.offset.lower_boundary			=  0;
+  malfunction_ptr.offset.upper_boundary			=  0xff;
+  romdis_active_high.allowed_strings		=  "y","n";
+ }
+
+#**************************************************#
+#                 RAM Capabilities			   #
+#**************************************************#
+
+
+addr_num_sym_ft{
+  FIELD_TEMPLATE;
+  FIELD: (location_num_ft) address;
+  FIELD: (restricted_8bit_ft) offset;
+  FIELD: (location_symbol_ft) symbol;
+}
+
+ram_block_ft{
+  FIELD_TEMPLATE;
+  RULE: RESTRICTED_REPEATS;
+  FIELD: (addr_num_sym_ft) start;
+  FIELD: (uint16) block_size;
+}
+
+ram_capabilities_template{
+  TEMPLATE;
+  ACTION: RECORD_IN_ANCILLARY_SECTION;
+  FIELD: (sym_offset_ft) ram_edit_subroutine;
+  FIELD: (sym_offset_ft) buffer_location;
+  FIELD: (uint16) buffer_size;
+  FIELD: (ram_block_ft) ram_blocks;
+  FIELD: (sym_offset_ft) start_address_ptr;
+  FIELD: (sym_offset_ft) block_size_ptr;
+  FIELD: (sym_offset_ft) access_flag_ptr;
+
+# DEFAULT SETTINGS FOR RAM_CAPABILITIES_TEMPLATE #
+
+	ram_edit_subroutine.symbol = nosymbol;
+	buffer_location.symbol = nosymbol;
+	start_address_ptr.symbol = nosymbol;
+	block_size_ptr.symbol = nosymbol;
+	ram_blocks.start.symbol = nosymbol;
+	access_flag_ptr.symbol = nosymbol;
+}
+
+ram_capabilities_class{
+  CLASS_FROM: ram_capabilities_template;
+  record_id=8000;
+  ram_edit_subroutine.offset.lower_boundary	=  0;
+  ram_edit_subroutine.offset.upper_boundary	=  0xff;
+  buffer_location.offset.lower_boundary		=  0;
+  buffer_location.offset.upper_boundary		=  0xff;
+  ram_blocks.allowed_repeat_limit			=  10;
+  ram_blocks.start.address.lower_boundary	=  0x80000000;
+  ram_blocks.start.address.upper_boundary	=  0x7fffffff;
+  ram_blocks.start.offset.lower_boundary	=  0;
+  ram_blocks.start.offset.upper_boundary	=  0xff;
+  start_address_ptr.offset.lower_boundary	=  0;
+  start_address_ptr.offset.upper_boundary	=  0xff;
+  block_size_ptr.offset.lower_boundary	=  0;
+  block_size_ptr.offset.upper_boundary	=  0xff;
+  access_flag_ptr.offset.lower_boundary			=  0;
+  access_flag_ptr.offset.upper_boundary			=  0xff;
+}
+
+#**************************************************#
+#          Data Acquisition Specifications         #
+#**************************************************#
+
+trigger_access_template{
+  TEMPLATE;
+  ACTION: RECORD_IN_ANCILLARY_SECTION;
+  FIELD: (restricted_8bit_ft) group_num;
+  FIELD: (sym_offset_ft) trigger;
+  FIELD: (sym_offset_ft) qualifier;
+  FIELD: (restricted_string_ft) trigger_access_type;
+  FIELD: (restricted_string_ft) qualifier_access_type;
+
+# DEFAULT SETTINGS FOR GROUP TEMPLATE  #
+	trigger.symbol = nosymbol;
+	qualifier.symbol = nosymbol;
+}
+
+trigger_access_class{
+  CLASS_FROM: trigger_access_template;
+  record_id=6500;
+  group_num.lower_boundary		=  1;
+  group_num.upper_boundary		=  8;
+  trigger.offset.lower_boundary		=  0x00;
+  trigger.offset.upper_boundary		=  0xff;
+  qualifier.offset.lower_boundary	=  0x00;
+  qualifier.offset.upper_boundary	=  0xff;
+  trigger_access_type.allowed_strings	=  
+	"read","write","read/write","";
+  qualifier_access_type.allowed_strings =  
+	"read","write","";
+}
+
+Dflt_Grp{
+	OBJECTS_CLASS: trigger_access_class;
+	group_num = 1;
+	trigger_access_type = "read/write";
+	qualifier_access_type = "write";
+}
+
+trigger_template{
+  TEMPLATE;
+  ACTION: RECORD_IN_ANCILLARY_SECTION;
+  FIELD: (match_ancillary_object_ft) group_reference;
+  FIELD: (restricted_length_string_ft) segment_id_name;
+  FIELD: (restricted_8bit_ft) qualifier_value;
+}
+
+trigger_class{
+  CLASS_FROM: trigger_template;
+  record_id=11000;
+  group_reference.objects_class_id	=  trigger_access_class;
+  segment_id_name.allowed_string_length	=  10;
+  qualifier_value.lower_boundary	=  0x00;
+  qualifier_value.upper_boundary	=  0xff;
+}
+
+Dflt_Trg{
+	OBJECTS_CLASS: trigger_class;
+	group_reference = Dflt_Grp;	
+	segment_id_name = "";
+	qualifier_value = 0;
+}
+
+#**************************************************#
+#            User Defined Subroutine		   #
+#**************************************************#
+
+unrestricted_num_ft{
+  FIELD_TEMPLATE;
+  TYPE: uint32;
+}
+
+subroutine_ft{
+  FIELD_TEMPLATE;
+  RULE: RESTRICTED_REPEATS;
+  FIELD: (restricted_length_string_ft) name;
+  FIELD: (unrestricted_num_ft) execution_time_in_secs;
+  FIELD: (sym_offset_ft) start;
+}
+
+user_defined_subroutine_template{
+  TEMPLATE;
+  ACTION: RECORD_IN_ANCILLARY_SECTION;
+  FIELD: (subroutine_ft) define_subroutine;
+
+# DEFAULT SETTINGS FOR USER_DEFINE_SUBROUTINE_TEMPLATE #
+
+	define_subroutine.start.symbol = nosymbol;
+
+}
+
+user_defined_subroutine_class{
+  CLASS_FROM: user_defined_subroutine_template;
+  record_id=7500;
+  define_subroutine.allowed_repeat_limit		=  10;
+  define_subroutine.name.allowed_string_length	=  10;
+  define_subroutine.start.offset.lower_boundary	=  0;
+  define_subroutine.start.offset.upper_boundary	=  0xff;
+}
+
+#**************************************************#
+#              Linearization Tables		   #
+#**************************************************#
+
+entry_ft {
+  FIELD_TEMPLATE;
+  RULE:RESTRICTED_REPEATS;
+  FIELD: (uint16) inval;
+  FIELD: (uint16) outval;
+}
+
+lin_tbl_entries {
+  TEMPLATE;
+  ACTION: RECORD_IN_ANCILLARY_SECTION;
+  FIELD: (restricted_length_string_ft) label;
+  FIELD: (uint16) no_entries;
+  FIELD: (entry_ft) entry;
+}
+
+lin_tbl_entries_class {
+  CLASS_FROM: lin_tbl_entries;
+  record_id=22300;
+  label.allowed_string_length = 10;
+  entry.allowed_repeat_limit = 65535;
+}
+
+Dflt_Lin{
+  OBJECTS_CLASS: lin_tbl_entries_class;
+  label = "DFLT_LIN";
+  no_entries = 1;
+  entry[0].inval = 1;
+  entry[0].outval = 1;
+}
+#**************************************************#
+#                  EDAM Setup        		   #
+#**************************************************#
+
+edam_setup{
+  TEMPLATE;
+  ACTION: RECORD_IN_ANCILLARY_SECTION;
+  FIELD:(restricted_string_ft) enable_timers;
+  FIELD:(restricted_length_string_ft) timer1;
+  FIELD:(restricted_length_string_ft) timer2;
+  FIELD:(restricted_length_string_ft) timer3;
+  FIELD:(restricted_length_string_ft) timer4;
+  FIELD:(restricted_length_string_ft) timer5;
+  FIELD:(restricted_length_string_ft) timer6;
+  FIELD:(restricted_length_string_ft) timer7;
+  FIELD:(restricted_length_string_ft) timer8;
+  FIELD:(string) mv_at_70C;
+  FIELD:(string) mv_at_60C;
+  FIELD:(string) mv_at_50C;
+  FIELD:(string) mv_at_40C;
+  FIELD:(string) mv_at_30C;
+  FIELD:(string) mv_at_20C;
+  FIELD:(string) mv_at_10C;
+  FIELD:(string) mv_at_0C;
+  FIELD:(string) mv_at_m10C;
+  FIELD:(string) mv_at_m20C;
+  FIELD:(string) mv_at_m30C;
+  FIELD:(string) mv_at_m40C;
+ 
+ #  THESE ARE THE DEFAULT SETTINGS FOR EDAM SETUP #
+	enable_timers	= "n";
+	timer1		= "000:00:00:000";
+	timer2		= "000:00:00:000";
+	timer3		= "000:00:00:000";
+	timer4		= "000:00:00:000";
+	timer5		= "000:00:00:000";
+	timer6		= "000:00:00:000";
+	timer7		= "000:00:00:000";
+	timer8		= "000:00:00:000";
+	mv_at_70C	= "0.0";
+	mv_at_60C	= "0.0";
+	mv_at_50C	= "0.0";
+	mv_at_40C	= "0.0";
+	mv_at_30C	= "0.0";
+	mv_at_20C	= "0.0";
+	mv_at_10C	= "0.0";
+	mv_at_0C	= "0.0";
+	mv_at_m10C	= "0.0";
+	mv_at_m20C	= "0.0";
+	mv_at_m30C	= "0.0";
+	mv_at_m40C	= "0.0";
+}
+
+edam_setup_class {
+  CLASS_FROM: edam_setup;
+  record_id=22400;
+  enable_timers.allowed_strings = "y", "Y", "n", "N";
+  timer1.allowed_string_length  =  13;  #hhh:mm:ss:ms   000:00:00:000 #
+  timer2.allowed_string_length  =  13;  #hhh:mm:ss:ms   000:00:00:000 # 
+  timer3.allowed_string_length  =  13;  #hhh:mm:ss:ms   000:00:00:000 #
+  timer4.allowed_string_length  =  13;  #hhh:mm:ss:ms   000:00:00:000 #
+  timer5.allowed_string_length  =  13;  #hhh:mm:ss:ms   000:00:00:000 #
+  timer6.allowed_string_length  =  13;  #hhh:mm:ss:ms   000:00:00:000 #
+  timer7.allowed_string_length  =  13;  #hhh:mm:ss:ms   000:00:00:000 #
+  timer8.allowed_string_length  =  13;  #hhh:mm:ss:ms   000:00:00:000 #
+}
+#**************************************************#
+#                 ETAS QP BLOB			   #
+#**************************************************#
+
+etas_etk_qp_blob_template{
+  TEMPLATE;
+  ACTION: RECORD_IN_ANCILLARY_SECTION;
+  FIELD: (restricted_length_string_ft) name;
+  FIELD: (restricted_16bit_ft) cse_scaling_unit_1;
+  FIELD: (restricted_8bit_ft) cse_scaling_unit_2;
+  FIELD: (restricted_8bit_ft) raster_num;
+  FIELD: (uint8) max_num;
+  FIELD: (sym_offset_ft) display_tab_start_addr;
+  FIELD: (sym_offset_ft) display_tab_output_addr;
+  FIELD: (sym_offset_ft) trigger_addr;
+  FIELD: (restricted_32bit_ft) repetitions;
+  FIELD: (restricted_8bit_ft) bypass_max;
+  FIELD: (restricted_8bit_ft) bypass_out;
+
+# DEFAULT SETTINGS FOR Etas_qp_blob_template #
+
+	cse_scaling_unit_2 = 1;
+	max_num = 1;
+	repetitions = 10;
+	bypass_max = 0;
+	bypass_out = 0;
+}
+
+etas_etk_qp_blob_class{
+  CLASS_FROM: etas_etk_qp_blob_template;
+  record_id=8500;
+  name.allowed_string_length				= 12;
+  cse_scaling_unit_1.lower_boundary	=  0;
+  cse_scaling_unit_1.upper_boundary	=  1000;
+  cse_scaling_unit_2.lower_boundary	=  0;
+  cse_scaling_unit_2.upper_boundary	=  10;
+  raster_num.lower_boundary		=  0;
+  raster_num.upper_boundary		=  3;
+  repetitions.lower_boundary	=  0;
+  repetitions.upper_boundary	=  100000;
+  bypass_max.lower_boundary	=  0;
+  bypass_max.upper_boundary	=  1;
+  bypass_out.lower_boundary	=  0;
+  bypass_out.upper_boundary	=  1;
+}
+
+#**************************************************#
+#                 ETAS TP BLOB			   #
+#**************************************************#
+etk_cfg_ft{
+	FIELD_TEMPLATE;
+	RULE: RESTRICTED_REPEATS;
+	FIELD: (uint8) num;
+}
+
+etas_etk_tp_blob_template{
+  TEMPLATE;
+  ACTION: RECORD_IN_ANCILLARY_SECTION;
+  FIELD: (uint32) version;
+  FIELD: (restricted_32bit_ft) project_base_addr;
+  FIELD: (uint32) reset_cfg;
+  FIELD: (restricted_8bit_ft) display_tab_num;
+  FIELD: (restricted_8bit_ft) data_mod;
+  FIELD: (restricted_8bit_ft) rfg;
+  FIELD: (sym_offset_ft) trigger_seg_addr;
+  FIELD: (uint32) trigger_cfg;
+  FIELD: (restricted_8bit_ft) trigger_mod_id;
+  FIELD: (uint8) trigger_mod_ras_def_1;
+  FIELD: (uint8) trigger_mod_ras_def_2;
+  FIELD: (uint8) trigger_mod_ras_def_3;
+  FIELD: (uint8) trigger_mod_ras_def_4;
+  FIELD: (etk_cfg_ft) etk_cfg;
+ 
+
+# DEFAULT SETTINGS FOR RAM_CAPABILITIES_TEMPLATE #
+
+	version = 0x1000001;
+	project_base_addr  = 0;
+	display_tab_num = 13;
+	data_mod = 2;
+	rfg = 1;
+      trigger_cfg = 0;
+      trigger_mod_ras_def_1 = 0x27;
+      trigger_mod_ras_def_2 = 0;
+	trigger_mod_ras_def_3 = 0;
+      trigger_mod_ras_def_4 = 0;
+}
+
+etas_etk_tp_blob_class{
+  CLASS_FROM: etas_etk_tp_blob_template;
+  record_id=8600;
+  project_base_addr.lower_boundary = 0x000000;
+  project_base_addr.upper_boundary = 0xffffff;
+  display_tab_num.lower_boundary = 0x00;
+  display_tab_num.upper_boundary = 0x0f;
+  data_mod.lower_boundary = 0x00;
+  data_mod.upper_boundary = 0x02;
+  rfg.lower_boundary = 0x01;
+  rfg.upper_boundary = 0x02;
+  trigger_seg_addr.offset.lower_boundary = 0x00;
+  trigger_seg_addr.offset.upper_boundary = 0xff;
+  trigger_mod_id.lower_boundary	=  0;
+  trigger_mod_id.upper_boundary	=  0x0f;
+  etk_cfg.allowed_repeat_limit = 50;
+}
+
+
+#**************************************************#
+#                 ETAS SLEW GROUP			   #
+#**************************************************#
+etas_slew_template{
+  TEMPLATE;
+  ACTION: RECORD_IN_ANCILLARY_SECTION;
+  FIELD: (sym_offset_ft) mode;
+  FIELD: (sym_offset_ft) abs;
+  FIELD: (sym_offset_ft) rel;
+  FIELD: (sym_offset_ft) value;
+
+
+# DEFAULT SETTINGS FOR Etas_slew_template #
+
+	mode.symbol = nosymbol;
+	abs.symbol = nosymbol;
+	rel.symbol = nosymbol;
+	value.symbol = nosymbol;
+}
+
+etas_slew_class{
+  CLASS_FROM: etas_slew_template;
+  record_id=8800;
+  mode.offset.lower_boundary = 0x00;
+  mode.offset.upper_boundary = 0xff;
+  abs.offset.lower_boundary = 0x00;
+  abs.offset.upper_boundary = 0xff;
+  rel.offset.lower_boundary = 0x00;
+  rel.offset.upper_boundary = 0xff;
+  value.offset.lower_boundary = 0x00;
+  value.offset.upper_boundary = 0xff;
+}
+
+
+#**************************************************#
+#                 ATI Vision IF Data Section       #
+#**************************************************#
+dev_ft{
+	FIELD_TEMPLATE;
+	RULE: RESTRICTED_REPEATS;
+	FIELD: (restricted_length_string_ft) setting;
+}
+memreg_ft{
+	FIELD_TEMPLATE;
+	RULE: RESTRICTED_REPEATS;
+	FIELD: (restricted_length_string_ft) name;
+	FIELD: (uint32) addr;
+	FIELD: (uint32) sz;
+	FIELD: (restricted_16bit_ft)  flag;
+	FIELD: (restricted_8bit_ft) chksm_type;
+	FIELD: (restricted_string_ft) chksm_print;
+	FIELD: (uint32) chksm_addr;
+}
+
+ati_vision_template{
+  TEMPLATE;
+  ACTION: RECORD_IN_ANCILLARY_SECTION;
+  FIELD: (dev_ft) dev;
+  FIELD: (memreg_ft) mem;
+ 
+
+# DEFAULT SETTINGS FOR ati_vision_template #
+  mem.chksm_print		= "N";
+}
+
+ati_vision_class{
+  CLASS_FROM: ati_vision_template;
+  record_id=8700;
+  dev.setting.allowed_string_length = 255;
+  dev.allowed_repeat_limit = 100;
+  mem.allowed_repeat_limit = 100;
+  mem.flag.lower_boundary = 0;
+  mem.flag.upper_boundary = 0x1ff;
+  mem.name.allowed_string_length = 255;
+  mem.chksm_print.allowed_strings = "Y", "N", "n", "y";
+  mem.chksm_type.lower_boundary = 0;
+  mem.chksm_type.upper_boundary = 4;
+}
+
+
+
+#**************************************************#
+#            Revision Control       		   #
+#**************************************************#
+
+#*****************************************************************#
+#   8/13/99  Version 04.00 was released                           #
+#   7/24/01  Version 05.00 was created                            #
+#        Following was added:                                     #        
+#          1.  EDAM parameters                                    #
+#          2.  Linearization tables                               #
+#  8/29/01 ETAS QP_BLOB was updated and ETAS TP_BLOB was created. #
+#                                                                 #
+#   9/17/01  Version 06.00 was created				      #
+#	 Following was added:					            #
+#	   1.  Parameter_es3d_class				            #
+#        2.  Parameter_enum_template and associated classes       #
+#          							                  #
+#   9/21/01  Version 07.00 was created                            #
+#      Following was added:                                       #
+#        1.  Reserve memeory fields in etas tp_blob               #
+#        2.  ATI Vision template                                  #	
+#  10/04/01  Version 07a.00 was created                           #
+#      Following was added:                                       #
+#        1.  Added chksm_print to ATI Vision template             #
+#                                                                 #	
+#  10/24/01  Version 07b.00 was created                           #
+#      Following was added:                                       #
+#        1.  Added etas slew template and class				#
+#                                                                 #	
+#  11/14/01  Version 8.00 was released                            #	
+#        1.  Memory_map_class change to memory_map_class          #
+#        2.  etas_slew was added                                  #	
+#                                                                 #	
+#  12/03/01  Version 9.00 was released                            #	
+#        Following was changed:                                   #	
+#        1.  parameter_enum changed to parameter_enum_class       #	
+#        2.  parameter_enum_1d changed to parameter_enum_1d_class #	
+#        3.  etas_slew changed to etas_slew_class                 #	
+#        4.  parameter_enum_2d changed to parameter_enum_2d_class #	
+#        5.  parameter_struct_enum changed to                     #
+#                     parameter_struct_enum_class                 #	
+#        6.  parameter_struct_enum_1d changed to                  #
+#                  parameter_struct_enum_id_class                 #	
+#        7.  parameter_struct_enum_2d changed to                  # 
+#                      parameter_struct_enum_2d_class             #	
+#                                                                 #	
+#  12/10/01  Version 9.1 was released                             #	
+#        Following was changed:                                   #	
+#        1.  deleted qualifier_access_type = "write" as the       # 
+#            default in trigger_access_template                   #	
+#                                                                 #	
+#  1/9/02  Version 9.2 was created                                #	
+#        Following was changed:                                   #	
+#        1.  deleted instrumentation_type from misc_setup.        # 
+#        2.  Added characterization_template                      #	
+#        3.  Added ITS_mem_map_template                           #	
+#                                                                 #	
+#  2/1/02 Version 9.3 was created                                 #	
+#        Following was changed:                                   #	
+#        1.  Deleted bit_mask from parameter_es_class             #	
+#        2.  Added status_bit_template                            #	
+#                                                                 #	
+#  2/25/02 Version 9.4 was created                                #	
+#        Following was changed:                                   #	
+#        1.  Updated template version                             #	
+#                                                                 #	
+#                                                                 #	
+#  2/26/02 Version 9.5 was created                                #	
+#        Following was changed:                                   #	
+#        1.  Changed parameter_es template and class so that      #
+#             bit mask information can be added.  It was changed  #
+#             to the same format it was in v09.anc                #	
+#                                                                 #	
+#                                                                 #	
+#  3/01/02 Version 9.6 was created                                #	
+#        Following was changed:                                   #	
+#        1.  Added index1 and index2 to parameter_es_template.    #
+#        2.  Set lower and upper boudaries to zero for index1 and #
+#            index2 in parameter_es_class.                        #	
+#        3.  Set lower and upper boudaries in parameter_es_class. #
+#        4.  Added index1 and index2 to parameter_enum_template.  #
+#            parameter_es_class.                                  #	
+#        5.  Set lower and upper boudaries to zero for index1 and #
+#            index2 in parameter_enum_class.                      #	
+#        6.  Set lower and upper boudaries to zero for index1 and #
+#            index2 in parameter_enum_2d_class.                   #	
+#        7.  Set lower and upper boudaries to zero for index1 and #
+#            index2 in parameter_struct_enum_class.               #	
+#        8.  Set lower and upper boudaries to zero for index1 and #
+#            index2 in parameter_struct_enum_1d_class.            #	
+#                                                                 #	
+#  4/01/02 Version 9.7 was created                                #	
+#        Following was changed:                                   #	
+#        1.  Added symbol_name field in parameter_es_template     #
+#                                                                 #	
+#                                                                 #	
+#  5/30/02 Version 9.8 was created                                #	
+#        Following was changed:                                   #	
+#        1.  Added enum field in parameter_es_template            #
+#        2.  Deleted the following templates and classes:         #	
+#            parameter_enum_template, parameter_es1d_class,       #	
+#            parameter_es2d_class, parameter_enum_class,          #	
+#            parameter_enum_1d_class, parameter_enum_2d_class,    #	
+#            parameter_enum_2d_class, parameter_struct_enum_class #
+#            parameter_struct_enum_1d_class,                      #
+#            parameter_struct_enum_2d_class.                      #	
+#                                                                 #	
+#  6/6/02  Version 10 was created                                 #	
+#         Following was changed:                                  #	
+#         1.  The field symbol_name was added to slew_es_template #
+#         2.  The field symbol_name was added to status_bit_tem-  #
+#             plate.                                              #	
+#         3.  The etk_cfg.allowed_repeat_limit was set to 50.     #	
+#                                                                 #	
+#  10/11/05 Modfied to support more than 8-Char Instrumentation   #
+#           Name                                                  #
+#*****************************************************************#
+
