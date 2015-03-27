@@ -309,39 +309,39 @@ void Test_PO_Function(void)
 {
       LLD_pwm_out_table[LLD_PWM_O2_HEATER_1].B_enable=KT_PO_O2_heater_1.B_enable;
 	  LLD_pwm_out_table[LLD_PWM_O2_HEATER_1].duty   =(KT_PO_O2_heater_1.duty);
-	  //LLD_pwm_out_table[LLD_PWM_O2_HEATER_1].period = KT_PO_O2_heater_1.period;
+	  LLD_pwm_out_table[LLD_PWM_O2_HEATER_1].period = KT_PO_O2_heater_1.period;
 
 	  LLD_pwm_out_table[LLD_PWM_O2_HEATER_2].B_enable=KT_PO_O2_heater_2.B_enable;
 	  LLD_pwm_out_table[LLD_PWM_O2_HEATER_2].duty =(KT_PO_O2_heater_2.duty);
-	  //LLD_pwm_out_table[LLD_PWM_O2_HEATER_2].period = KT_PO_O2_heater_2.period;
+	  LLD_pwm_out_table[LLD_PWM_O2_HEATER_2].period = KT_PO_O2_heater_2.period;
 	  
 	  LLD_pwm_out_table[LLD_PWM_PURGE].B_enable=KT_PO_PURGE.B_enable;
 	  LLD_pwm_out_table[LLD_PWM_PURGE].duty =(KT_PO_PURGE.duty);
-	  //LLD_pwm_out_table[LLD_PWM_PURGE].period = PO_PURGE_T.period;
+	  LLD_pwm_out_table[LLD_PWM_PURGE].period = KT_PO_PURGE.period;
 	  
 	  LLD_pwm_out_table[LLD_PWM_ECT].B_enable=KT_PO_ECT.B_enable;
 	  LLD_pwm_out_table[LLD_PWM_ECT].duty =(KT_PO_ECT.duty);
-	  //LLD_pwm_out_table[LLD_PWM_ECT].period = PO_ECT_T.period;
+	  LLD_pwm_out_table[LLD_PWM_ECT].period = KT_PO_ECT.period;
 	  
 	  LLD_pwm_out_table[LLD_PWM_EGR].B_enable=KT_PO_EGR.B_enable;
 	  LLD_pwm_out_table[LLD_PWM_EGR].duty = (KT_PO_EGR.duty);
-	  //LLD_pwm_out_table[LLD_PWM_EGR].period = PO_EGR_T.period;
+	  LLD_pwm_out_table[LLD_PWM_EGR].period = KT_PO_EGR.period;
 	  
 	  LLD_pwm_out_table[LLD_PWM_TACHO].B_enable=KT_PO_TACHO.B_enable;
 	  LLD_pwm_out_table[LLD_PWM_TACHO].duty = (KT_PO_TACHO.duty);
-	  //LLD_pwm_out_table[LLD_PWM_TACHO].period = PO_TACHO_T.period;
+	  LLD_pwm_out_table[LLD_PWM_TACHO].period = KT_PO_TACHO.period;
 	  
 	  LLD_pwm_out_table[LLD_PWM_FUEL_CONSUMPTION].B_enable=KT_PO_FUEL_CSP.B_enable;
 	  LLD_pwm_out_table[LLD_PWM_FUEL_CONSUMPTION].duty = (KT_PO_FUEL_CSP.duty);
-	  //LLD_pwm_out_table[LLD_PWM_FUEL_CONSUMPTION].period = PO_FUEL_CSP_T.period;
+	  LLD_pwm_out_table[LLD_PWM_FUEL_CONSUMPTION].period = KT_PO_FUEL_CSP.period;
 	  
 	  LLD_pwm_out_table[LLD_PWM_VVT1].B_enable=KT_PO_VVT1.B_enable;
 	  LLD_pwm_out_table[LLD_PWM_VVT1].duty =(KT_PO_VVT1.duty);
-	  //LLD_pwm_out_table[LLD_PWM_VVT1].period = PO_VVT1_T.period;
+	  LLD_pwm_out_table[LLD_PWM_VVT1].period = KT_PO_VVT1.period;
 	  
 	  LLD_pwm_out_table[LLD_PWM_VVT2].B_enable=KT_PO_VVT2.B_enable;
       LLD_pwm_out_table[LLD_PWM_VVT2].duty = (KT_PO_VVT2.duty);
-	  //LLD_pwm_out_table[LLD_PWM_VVT2].period = PO_VVT2_T.period;
+	  LLD_pwm_out_table[LLD_PWM_VVT2].period = KT_PO_VVT2.period;
 
 }
 

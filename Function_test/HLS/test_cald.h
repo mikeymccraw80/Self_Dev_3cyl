@@ -29,7 +29,7 @@ typedef struct {
 
 typedef struct {
 
-	//uint8_t  period;
+	uint8_t  period;
 	uint8_t  B_enable;  /*enable the PWM channel   */
 	uint8_t  duty;      /*PWM duty*/
     

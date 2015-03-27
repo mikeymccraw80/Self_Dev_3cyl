@@ -94,6 +94,12 @@ const DO_test_type KT_DO={
 *|   KT_PO_O2_heater_1 {
 *|     : is_calconst;
 *|     : description = "O2 heater_1 output period, enable and PWM duty for test ";
+*|   .period
+*|    {
+*|        :type = uint8;
+*|        :description = "O2 heater_1 period for test";
+*|        :units = "ms";
+*|    }
 *|   .B_enable
 *|    {
 *|        :type = uint8;
@@ -111,7 +117,7 @@ const DO_test_type KT_DO={
 */
 const PO_test_type KT_PO_O2_heater_1={
 
-    1,   25
+    10, 1,   25
 
 };
 
@@ -120,6 +126,12 @@ const PO_test_type KT_PO_O2_heater_1={
 *|   KT_PO_O2_heater_2 {
 *|     : is_calconst;
 *|     : description = "O2 heater_2 output period, enable and PWM duty for test ";
+*|   .period
+*|    {
+*|        :type = uint8;
+*|        :description = "O2 heater_2 period for test";
+*|        :units = "ms";
+*|    }
 *|   .B_enable
 *|    {
 *|        :type = uint8;
@@ -137,7 +149,7 @@ const PO_test_type KT_PO_O2_heater_1={
 */
 const PO_test_type KT_PO_O2_heater_2={
 
-    1,   25
+    10, 1,   25
 
 };
 
@@ -146,6 +158,12 @@ const PO_test_type KT_PO_O2_heater_2={
 *|   KT_PO_PURGE {
 *|     : is_calconst;
 *|     : description = "PURGE output period, enable and PWM duty for test ";
+*|   .period
+*|    {
+*|        :type = uint8;
+*|        :description = "PURGE period for test";
+*|        :units = "ms";
+*|    }
 *|   .B_enable
 *|    {
 *|        :type = uint8;
@@ -163,7 +181,7 @@ const PO_test_type KT_PO_O2_heater_2={
 */
 const PO_test_type KT_PO_PURGE={
 
-   1,   25
+  10,  1,   25
 
 };
 
@@ -172,6 +190,12 @@ const PO_test_type KT_PO_PURGE={
 *|   KT_PO_ECT {
 *|     : is_calconst;
 *|     : description = "ECT output period, enable and PWM duty for test ";
+*|   .period
+*|    {
+*|        :type = uint8;
+*|        :description = "ECT period for test";
+*|        :units = "ms";
+*|    }
 *|   .B_enable
 *|    {
 *|        :type = uint8;
@@ -189,7 +213,7 @@ const PO_test_type KT_PO_PURGE={
 */
 const PO_test_type KT_PO_ECT={
 
-     1,   25
+     10, 1,   25
 
 };
 
@@ -198,6 +222,12 @@ const PO_test_type KT_PO_ECT={
 *|   KT_PO_EGR {
 *|     : is_calconst;
 *|     : description = "EGR output period, enable and PWM duty for test, not implemented";
+*|   .period
+*|    {
+*|        :type = uint8;
+*|        :description = "EGR period for test";
+*|        :units = "ms";
+*|    }
 *|   .B_enable
 *|    {
 *|        :type = uint8;
@@ -215,7 +245,7 @@ const PO_test_type KT_PO_ECT={
 */
 const PO_test_type KT_PO_EGR={
 
-   1,   25
+   10, 1,   25
 
 };
 
@@ -224,6 +254,12 @@ const PO_test_type KT_PO_EGR={
 *|   KT_PO_TACHO {
 *|     : is_calconst;
 *|     : description = "TACHO output period, enable and PWM duty for test, not implemented";
+*|   .period
+*|    {
+*|        :type = uint8;
+*|        :description = "TACHO period for test";
+*|        :units = "ms";
+*|    }
 *|   .B_enable
 *|    {
 *|        :type = uint8;
@@ -241,7 +277,7 @@ const PO_test_type KT_PO_EGR={
 */
 const PO_test_type KT_PO_TACHO={
 
-     1,   25
+     10, 1,   25
 
 };
 
@@ -250,6 +286,12 @@ const PO_test_type KT_PO_TACHO={
 *|   KT_PO_FUEL_CSP {
 *|     : is_calconst;
 *|     : description = "FUEL_COMSUPTION output period, enable and PWM duty for test, not implemented";
+*|   .period
+*|    {
+*|        :type = uint8;
+*|        :description = "FUEL_COMSUPTION period for test";
+*|        :units = "ms";
+*|    }
 *|   .B_enable
 *|    {
 *|        :type = uint8;
@@ -267,7 +309,7 @@ const PO_test_type KT_PO_TACHO={
 */
 const PO_test_type KT_PO_FUEL_CSP={
 
-    1,   25
+   10, 1,   25
 
 };
 
@@ -276,6 +318,12 @@ const PO_test_type KT_PO_FUEL_CSP={
 *|   KT_PO_VVT1 {
 *|     : is_calconst;
 *|     : description = "VVT1 output period, enable and PWM duty for test ";
+*|   .period
+*|    {
+*|        :type = uint8;
+*|        :description = "VVT1 period for test";
+*|        :units = "ms";
+*|    }
 *|   .B_enable
 *|    {
 *|        :type = uint8;
@@ -293,7 +341,7 @@ const PO_test_type KT_PO_FUEL_CSP={
 */
 const PO_test_type KT_PO_VVT1 ={
 
-    1,   25
+    10, 1,   25
 
 };
 /*
@@ -301,6 +349,12 @@ const PO_test_type KT_PO_VVT1 ={
 *|   KT_PO_VVT2 {
 *|     : is_calconst;
 *|     : description = "VVT2 output period, enable and PWM duty for test ";
+*|   .period
+*|    {
+*|        :type = uint8;
+*|        :description = "VVT2 period for test";
+*|        :units = "ms";
+*|    }
 *|   .B_enable
 *|    {
 *|        :type = uint8;
@@ -318,7 +372,7 @@ const PO_test_type KT_PO_VVT1 ={
 */
 const PO_test_type KT_PO_VVT2 ={
 
-    1,   25
+   10, 1,   25
 
 };
 /*
