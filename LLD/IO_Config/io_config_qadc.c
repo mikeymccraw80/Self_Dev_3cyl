@@ -663,7 +663,7 @@ const ADC_CCMF_T  QADC_CMD_Timebase[AD_ANALOG_MAX_SIGNAL_NAMES]=
    0
 },
 
-AD_Reserved_1_Channel 
+// AD_Reserved_1_Channel 
 {
   1,    //EOQ      
   0,    //PAUSE 
@@ -679,7 +679,7 @@ AD_Reserved_1_Channel
   0
 },
 
-AD_Reserved_2_Channel 
+// AD_Reserved_2_Channel 
 {
   1,    //EOQ      
   0,    //PAUSE 
@@ -695,7 +695,7 @@ AD_Reserved_2_Channel
   0
 },
 
-AD_Reserved_3_Channel 
+// AD_Reserved_3_Channel 
 {
   1,    //EOQ      
    0,    //PAUSE 

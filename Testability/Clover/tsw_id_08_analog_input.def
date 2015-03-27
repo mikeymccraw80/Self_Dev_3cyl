@@ -17,8 +17,8 @@
 #define AD3_H (ACPREVI)
 #define AD3_L (ACPREVI)
 #define AD4 (LEGRFBVI) (LEGRFBVI)
-#define AD5 (TPS1VI)
-#define AD6 (TPS2VI)
+#define AD5 (TPS1VI) (TPS1VI)
+#define AD6 (TPS2VI) (TPS2VI)
 #define AD7_H (PPS1VI)
 #define AD7_L (PPS1VI)
 #define AD8 xx xx
