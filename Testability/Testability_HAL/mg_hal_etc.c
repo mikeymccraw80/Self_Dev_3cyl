@@ -22,7 +22,9 @@
  *===========================================================================*/
 void mg_HAL_ETC_Set_Freq_And_Duty(void)
 {
-    MIOS_PWM_Set_Frequency_And_DutyCycle( MG_HAL_ETC_GROUP.io[MG_ETC_PWM], MG_HAL_ETC_GROUP.freq, MG_HAL_ETC_GROUP.duty);
+    uint32_t temp;
+    temp = (MG_HAL_ETC_GROUP.duty * 1000)/255;
+    MIOS_PWM_Set_Frequency_And_DutyCycle( MG_HAL_ETC_GROUP.io[MG_ETC_PWM], MG_HAL_ETC_GROUP.freq, (uint16_t)temp);
 }
 
 /*=============================================================================

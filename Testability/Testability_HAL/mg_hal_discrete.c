@@ -26,6 +26,7 @@
 #ifdef __MG_VSEP_USED
 #include "io_config_vsep.h"
 #include "dd_vsep_discrete.h"
+#include "dd_vsep_led.h"
 #include "dd_vsep_discrete_interface.h"
 #endif
 #include "hal_gpio.h"
