@@ -56,8 +56,10 @@ TsFILE_EE_ManufactData NsFILE_NVM_EE_ManufactData;
 
 #pragma section DATA " " ".bss"
 
-uint8_t * const p_eeprom = &NsFILE_NVM_EE_ManufactData.VaFILE_EE_ReservedForCustomer[0];
-
+/* just used to record the address of sk and sc */
+uint8_t * const p_mfg_eeprom = &NsFILE_NVM_EE_ManufactData.VaFILE_EE_ReservedForCustomer[0];
+uint8_t * const p_mfg_sc     = NsFILE_NVM_EE_ManufactData.VaFILE_EE_SecurityCode;
+uint8_t * const p_mfg_sk     = NsFILE_NVM_EE_ManufactData.VaFILE_EE_SecretKey;
 /******************************************************************************
 *
 * Revision History:
