@@ -99,6 +99,7 @@ void InitEMSD_FileROMRstToKeyOn(void)
 void MngEMSD_FileROM10msTasks (void)
 {
 	uint16_t cksum_portion;
+	uint16_t cksum_cal_calculation;
 
 	if (!Sb_AppCksum_Calc_Complete) {
 		if (SpFILE_AppROM_ChecksumLocation == 0) {
@@ -129,9 +130,10 @@ void MngEMSD_FileROM10msTasks (void)
 			Sb_CalCksum_Calc_Complete = CbTRUE;
 			/*calculate the app cksum */
 			Vc_CalCksum = Vc_CalCksum - *(uint16_t*)(CAL_CKSUM_ADDRESS);
-			Vc_CalCksum = ~Vc_CalCksum;
+			cksum_cal_calculation = Vc_CalCksum;
+			Vc_CalCksum = (uint16_t)(~Vc_CalCksum + 0X01);
 			/* validate the cksum, this should be palce behind siu init */
-			if ((Vc_CalCksum + *((uint16_t*)CAL_CKSUM_ADDRESS)) == 0) {
+			if ((uint16_t)(cksum_cal_calculation + *((uint16_t*)CAL_CKSUM_ADDRESS)) == 0) {
 				Sb_CalCksum_Test_Failed = CbFALSE;
 			} else {
 				Sb_CalCksum_Test_Failed = CbTRUE;
