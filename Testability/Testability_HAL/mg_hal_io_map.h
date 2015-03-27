@@ -112,8 +112,7 @@
 #define   MG_HIODEVICE_DO_DFB20                  VSEP_DO_VGIS2_CH
 #define   MG_HIODEVICE_DO_DFB21                  VSEP_PO_O2AHTR_CH
 #define   MG_HIODEVICE_DO_DFB22                  VSEP_PO_O2BHTR_CH
-// #define   MG_HIODEVICE_DO_DFB23                  (void *)&MTSA_PWM_CLTPUMPCTL
-#define   MG_HIODEVICE_DO_DFB23                  MG_HIODEVICE_DO_NULL
+#define   MG_HIODEVICE_DO_DFB23                  MIOS_CLTPUMPCTL_CH
 #define   MG_HIODEVICE_DO_DFB24                  VSEP_PO_ALTCTL_CH
 #define   MG_HIODEVICE_DO_DFB25                  VSEP_DO_MIL_CH
 #define   MG_HIODEVICE_DO_DFB26                  VSEP_DO_SVS_CH
