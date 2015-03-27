@@ -37,8 +37,8 @@ void main(void)
     InitializeHardwareRegisters();
     InitializeHardwareLast();
 
-    // if (InitializeIllegalConditionCheck() == false) {
-    if (app_selection == 0) {
+    if (InitializeIllegalConditionCheck() == false) {
+    // if (app_selection == 1) {
         Mode = AM_normal;
     } else {
         Mode = AM_ManufacturingTest;
