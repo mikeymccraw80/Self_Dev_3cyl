@@ -289,11 +289,15 @@ bool mg_HAL_Discrete_Get_ELOAD2(void)
     return HAL_GPIO_GET_ELOAD2_Status();
 }
 
-#if 0
 void mg_HAL_Discrete_Reconfigure_CAL(void)
 {
-    MTSA_D_IN_J1_33.Configuration = SIU_GPIO_Set_Polarity(MTSA_CONFIG_D_IN_J1_33, IO_ACTIVE_HIGH);
-    MTSA_D_IN_J1_34.Configuration = SIU_GPIO_Set_Polarity(MTSA_CONFIG_D_IN_J1_34, IO_ACTIVE_HIGH);
-    MTSA_D_IN_J1_35.Configuration = SIU_GPIO_Set_Polarity(MTSA_CONFIG_D_IN_J1_35, IO_ACTIVE_HIGH);
+    /* reconfig eload and vsep mpio */
+    HAL_GPIO_SET_ELOAD1DICTL_Enable(!IO_ACTIVE_HIGH);
+    HAL_GPIO_SET_ELOAD2DICTL_Enable(!IO_ACTIVE_HIGH);
+    HAL_GPIO_SET_BRKLMPDICTL_Enable(!IO_ACTIVE_HIGH);
+    
+    
+    VSEP_MPIO_Set_MODE_Immediate(VSEP_MPIO_ACRequest_CH, VSEP_MPIO_INPUT_MODE_ACTIVE_LOW_SWITCH_DETECT);
+    VSEP_MPIO_Set_MODE_Immediate(VSEP_MPIO_PSPS_CH, VSEP_MPIO_INPUT_MODE_ACTIVE_HIGH_SWITCH_DETECT);
+    VSEP_MPIO_Set_MODE_Immediate(VSEP_MPIO_MIDAC_CH, VSEP_MPIO_INPUT_MODE_ACTIVE_HIGH_SWITCH_DETECT);
 }
-#endif
