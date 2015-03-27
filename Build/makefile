@@ -124,14 +124,22 @@ export LISTING_DIR  = $(HOME_DIR)/Listing
 # Section 2.6
 ###############################################################################
 BUILD_DIR = $(HOME_DIR)/Build
+ifeq ($(TARGET),HWIO_Test)
+INSTRUMT_DIR = $(HOME_DIR)/Function_test/Instrumentation
+else
+ifeq ($(TARGET),HWIO_HLS_INTEGRATION_TEST)
+INSTRUMT_DIR = $(HOME_DIR)/Function_test/Instrumentation
+else
 INSTRUMT_DIR = $(HOME_DIR)/Instrumentation
-
+endif
+endif
 
 ###############################################################################
 # Include sub-project directories here
 # Section 3
 ###############################################################################
 ifneq ($(TARGET),HWIO_HLS_INTEGRATION)
+ifneq ($(TARGET),HWIO_HLS_INTEGRATION_TEST)
 ifneq ($(TARGET),HWIO_LIB)
 SUBDIRS += LLD/IO_Config
 SUBDIRS += LLD/DeviceDriver/SWT
@@ -214,9 +222,17 @@ SUBDIRS += Testability/Testability_OS
 endif
 
 ifneq ($(TARGET),INTEGRATION)
+
+ifneq ($(TARGET),HWIO_Test)
 SUBDIRS += HLS
+else
+SUBDIRS += Function_test/HLS
 endif
 
+endif
+
+
+endif
 endif
 
 
@@ -225,6 +241,7 @@ endif
 # Section 4
 ###############################################################################
 ifneq ($(TARGET),HWIO_HLS_INTEGRATION)
+ifneq ($(TARGET),HWIO_HLS_INTEGRATION_TEST)
 INCDIRS += LLD/IO_Config
 INCDIRS += LLD/DeviceDriver/SWT
 INCDIRS += LLD/DeviceDriver/FMPLL
@@ -306,9 +323,14 @@ INCDIRS += Testability/Testability_Application
 INCDIRS += Testability/Testability_HAL
 INCDIRS += Testability/Testability_OS
 # ifneq ($(TARGET),INTEGRATION)
+ifneq ($(TARGET),HWIO_Test)
 INCDIRS += HLS
+else
+INCDIRS += Function_test/HLS
+endif
 # endif
 
+endif
 endif
 
 export INCLUDE_DIR += $(patsubst %,-I$(HOME_DIR)/%,$(INCDIRS))
@@ -402,6 +424,12 @@ DIAB_PPC_LINKER_LIB +=\
                      -L$(DIABLIBS_DIR)\
                      -lc
 endif
+ifeq ($(TARGET),HWIO_Test)
+DIAB_PPC_LINKER_LIB +=\
+                     -L$(OBJ_DIR)\
+                     -L$(DIABLIBS_DIR)\
+                     -lc
+endif
 ifeq ($(TARGET),HWIO_LIB)
 DIAB_PPC_LINKER_LIB +=\
                      -L$(OBJ_DIR)\
@@ -423,7 +451,13 @@ DIAB_PPC_LINKER_LIB +=\
                      -A $(DELPHI_LIB_DIR)/$(DELPHI_HWIO_LIB_NAME).a\
                      -A $(CHERY_LIB_DIR)/$(CHERY_HLS_LIB_NAME).a
 endif
-
+ifeq ($(TARGET),HWIO_HLS_INTEGRATION_TEST)
+DIAB_PPC_LINKER_LIB +=\
+                     -L$(DIABLIBS_DIR)\
+                     -lc\
+                     -A $(DELPHI_LIB_DIR)/$(DELPHI_HWIO_LIB_NAME).a\
+                     -A $(CHERY_LIB_DIR)/$(CHERY_HLS_LIB_NAME).a
+endif
 DIAB_PPC_LINKER_COMMANDLINE =\
 		$(PPC_DIAB_TARGET) \
 		$(DIAB_PPC_LINKER_FLAGS)\
@@ -435,13 +469,25 @@ DIAB_PPC_LINKER_COMMANDLINE =\
 ifeq ($(TARGET),HWIO_HLS_INTEGRATION)
 LINK = $(COMP_DIR)\dld $(DIAB_PPC_LINKER_COMMANDLINE)
 else
+ifeq ($(TARGET),HWIO_HLS_INTEGRATION_TEST)
+LINK = $(COMP_DIR)\dld $(DIAB_PPC_LINKER_COMMANDLINE)
+else
 LINK = $(COMP_DIR)\dld $(DIAB_PPC_LINKER_COMMANDLINE) $(BUILD_DIR)/obj_list.txt 
+endif
 endif
 
 ifeq ($(TARGET),HWIO_HLS_INTEGRATION)
 LINK_COMMAND = $(LINK) $(HOME_DIR)/Build/$(LINKFILE).dld
 else
+ifeq ($(TARGET),HWIO_Test)
+LINK_COMMAND = cd ../objs && $(LINK) $(HOME_DIR)/Function_test/$(LINKFILE).dld
+else
+ifeq ($(TARGET),HWIO_HLS_INTEGRATION_TEST)
+LINK_COMMAND = $(LINK) $(HOME_DIR)/Function_test/$(LINKFILE).dld
+else
 LINK_COMMAND = cd ../objs && $(LINK) $(HOME_DIR)/Build/$(LINKFILE).dld
+endif
+endif
 endif
 
 ###############################################################################
@@ -530,9 +576,13 @@ export ANC_FILE =\
 				$(subst \,/,$(OUTPUT_DIR)\pre.$(PROG_NAME).anc)\
 				> $(subst \,/,$(OUTPUT_DIR)\$(PROG_NAME).anc)"
 
+ifeq ($(TARGET),HWIO_Test)
+export I6L_CMD_PREPROCESSOR_FILE ?=\
+            $(subst /,\,$(HOME_DIR)/Function_test/$(PROG_NAME).cmd)
+else
 export I6L_CMD_PREPROCESSOR_FILE ?=\
             $(subst /,\,$(HOME_DIR)/build/$(PROG_NAME).cmd)
-
+endif
             	
 export	EXMAP_FILE =\
    $(MAP2SYM) $(OUTPUT_DIR)/$(PROG_NAME).map $(OUTPUT_DIR)/$(PROG_NAME).exmap 40000000 400177FF
@@ -643,10 +693,11 @@ build_target:	;
 	@$(ECHO) Generating PTP file, And do necessary adjustment
 	@cd ..\bin && $(DDUMP) && $(PTP_FILL) && $(PTP_CONV) && $(PTP_CKSUM)
 ifneq ($(TARGET),HWIO_HLS_INTEGRATION)
+ifneq ($(TARGET),HWIO_HLS_INTEGRATION_TEST)
 	@cd ..\objs && @if exist *.lst $(COPY) *.lst	$(subst /,\,$(LISTING_DIR))\. >nul
 	@cd ..\objs && @if exist *.lst $(DEL) *.lst
 endif
-
+endif
 ###############################################################################
 # Build EXMAP file from elf file target
 ###############################################################################
