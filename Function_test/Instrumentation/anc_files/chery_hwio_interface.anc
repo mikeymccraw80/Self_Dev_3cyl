@@ -312,7 +312,7 @@
 *-  ds_const_b               = "0.000000000000";
 *-  description              = "Crank sync error in progress";
 *-}
-*-cam1_sig{
+*-cam1_sig_plus_0x00{
 *-  OBJECTS_CLASS: parameter_es_class;
 *-  label                    = "CAM1_SF";
 *-  variable_location.symbol = cam1_sig.status.B_cam_failed;
@@ -323,10 +323,32 @@
 *-  ds_const_b               = "0.000000000000";
 *-  description              = "cam1_sig.status";
 *-}
-*-cam2_sig{
+*-cam1_sig_plus_0x01{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CAM1_SLH";
+*-  variable_location.symbol = cam1_sig.status.B_cam_limp_home;
+*-  ds_scaling_unit          = "";
+*-  ds_precision             = "1.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "cam1_sig.status";
+*-}
+*-cam2_sig_plus_0x00{
 *-  OBJECTS_CLASS: parameter_es_class;
 *-  label                    = "CAM2_SF";
 *-  variable_location.symbol = cam2_sig.status.B_cam_failed;
+*-  ds_scaling_unit          = "";
+*-  ds_precision             = "1.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "cam2_sig.status";
+*-}
+*-cam2_sig_plus_0x01{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CAM2_SLH";
+*-  variable_location.symbol = cam2_sig.status.B_cam_limp_home;
 *-  ds_scaling_unit          = "";
 *-  ds_precision             = "1.0";
 *-  ds_scaling_mode          = "Ax + B";
