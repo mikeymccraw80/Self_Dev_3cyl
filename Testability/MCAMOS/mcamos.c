@@ -43,7 +43,7 @@ typedef struct MCAMOS_Command_Tag
 static MCAMOS_Command_T     MCAMOS_command;
 static uint16_t             MCAMOS_size;
 static uint8_t *            pmemloc;
-bool MCAMOS_enable = true;
+bool MCAMOS_enable = false;
 
 /* declare reference, this API from canobd module */
 extern bool Transmit_Message( uint16_t can_id, uint8_t *message_address );
