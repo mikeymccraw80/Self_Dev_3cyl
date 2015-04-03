@@ -290,7 +290,7 @@
 *-  ds_const_b               = "0.000000000000";
 *-  description              = "CRANK_Error_Count_More_Max";
 *-}
-*-crank_sig_plus_0x0A{
+*-dd_crank.crank_sig_plus_0x0A{
 *-  OBJECTS_CLASS: parameter_es_class;
 *-  label                    = "CRANK_ECLM";
 *-  variable_location.symbol = CRANK_Error_Count_Less_Max;
@@ -301,7 +301,7 @@
 *-  ds_const_b               = "0.000000000000";
 *-  description              = "CRANK_Error_Count_Less_Max";
 *-}
-*-crank_sig_plus_0x0B{
+*-dd_crank.CRANK_Internal_State_plus_0x00{
 *-  OBJECTS_CLASS: parameter_es_class;
 *-  label                    = "CRANK_ECF";
 *-  variable_location.symbol = CRANK_Internal_State.F.sync_error_in_progress;
@@ -311,6 +311,39 @@
 *-  ds_const_a               = "1.000000000000";
 *-  ds_const_b               = "0.000000000000";
 *-  description              = "Crank sync error in progress";
+*-}
+*-dd_crank.CRANK_Internal_State_plus_0x01{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CRANK_SyEC";
+*-  variable_location.symbol = CRANK_Internal_State.F.sync_error_counter;
+*-  ds_scaling_unit          = "";
+*-  ds_precision             = "1.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "Crank sync error counter";
+*-}
+*-dd_crank.CRANK_Internal_State_plus_0x02{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "CRANK_Bkup";
+*-  variable_location.symbol = CRANK_Internal_State.F.cam_backup;
+*-  ds_scaling_unit          = "";
+*-  ds_precision             = "1.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "Crank cam backup mode flag";
+*-}
+*-dd_crank.Crank_Sync_error_counter{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "Sync_EC";
+*-  variable_location.symbol = Sync_error_counter;
+*-  ds_scaling_unit          = "";
+*-  ds_precision             = "1.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "Crank sync error counter";
 *-}
 *-cam1_sig_plus_0x00{
 *-  OBJECTS_CLASS: parameter_es_class;
