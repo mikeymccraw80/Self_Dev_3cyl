@@ -86,6 +86,7 @@ void Init_InitThroughputData(void)
 	VbOSTK_ThruPutData_FirstTime[CeOSTK_SEG_5msTIMEBASE] = true;
 	VbOSTK_ThruPutData_FirstTime[CeOSTK_SEG_10msTIMEBASE] = true;
 	VbOSTK_ThruPutData_FirstTime[CeOSTK_SEG_CYLINDER_EVENT] = true;
+	VbOSTK_ThruPutData_FirstTime[CeOSTK_SEG_COPUPDATE] = true;
 }
 
 
@@ -97,6 +98,8 @@ void Enter_OSThroughputMeasure(OSTK_SEG_T index)
 void Leave_OSThroughputMeasure(OSTK_SEG_T index)
 {
 	VaOSTK_ThruPutData[index].t_LeaveTime = (uint32_t)(STM.CNT);
+	if(VaOSTK_ThruPutData[index].t_EnterTime ==0)
+		return;
 	VaOSTK_ThruPutData[index].t_CurrExecTime = \
 		VaOSTK_ThruPutData[index].t_LeaveTime - VaOSTK_ThruPutData[index].t_EnterTime;
 	if ( VbOSTK_ThruPutData_FirstTime[index] ) {

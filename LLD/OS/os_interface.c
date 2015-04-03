@@ -24,6 +24,7 @@
 #include "immo_exec.h"
 #include "obdspapi.h"
 #include "obdspapi.h"
+#include "os_type.h"
 
 //=============================================================================
 // OS_Startup_Hook
@@ -87,12 +88,14 @@ void MngOSTK_5msTasks(void)
 static int soh_service_cnt_30ms;
 void MngOSTK_10msTasks(void)
 {
+    Leave_OSThroughputMeasure(CeOSTK_SEG_COPUPDATE);
 	/* feed tle4471 watchdog */
 	ToggleHWIO_WatchDog();
 
 	/* feed e200z3 core watch dog */
 	hwi_kick_wdg_local();
-
+    Enter_OSThroughputMeasure(CeOSTK_SEG_COPUPDATE);
+	
 	/* call the soh loop sequence instance */
 	HAL_SOH_Update_Loop_Sequence_10MS();
 
