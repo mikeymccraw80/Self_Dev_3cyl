@@ -31,7 +31,7 @@ typedef struct
    bitfield8_t  sync_first_revolution         :  1; // bit 30,  @emem 
    bitfield8_t                                :  6; // bits
    bitfield8_t  fast_sync_occurred            :  1; // bit 23
-   bitfield8_t  sync_error_counter            :  7; // bits
+   bitfield8_t                                :  7; // bits
    bitfield8_t  transition_to_cam_backup      :  1; // bit 15,  @emem 
    bitfield8_t  cam_backup                    :  1; // bit 14,  @emem 
    bitfield8_t  stall_detected                :  1; // bit 13,  @emem 
