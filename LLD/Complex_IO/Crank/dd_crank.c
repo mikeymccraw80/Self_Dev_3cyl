@@ -31,7 +31,7 @@ typedef struct
    bitfield8_t  sync_first_revolution         :  1; // bit 30,  @emem 
    bitfield8_t                                :  6; // bits
    bitfield8_t  fast_sync_occurred            :  1; // bit 23
-   bitfield8_t                                :  7; // bits
+   bitfield8_t  sync_error_counter            :  7; // bits
    bitfield8_t  transition_to_cam_backup      :  1; // bit 15,  @emem 
    bitfield8_t  cam_backup                    :  1; // bit 14,  @emem 
    bitfield8_t  stall_detected                :  1; // bit 13,  @emem 
@@ -162,6 +162,8 @@ static CRANK_FS_State_T CRANK_FS_State;
 static uCrank_Count_T   CRANK_FS_Pulse_Count;
 static uint8_t          CRANK_FS_Last_CAM_Edge_Count;
 
+
+uint8_t Sync_error_counter;
 //=============================================================================
 // /------------------------------------------------------------------------
 // | Local Function declarations
@@ -231,6 +233,7 @@ void CRANK_Initialize(
    CRANK_Parameters.F.filter_value = 200;
    CRANK_Parameters.F.initial_virtual_teeth_per_cylinder_event = CRANK_VIRTUAL_TEETH_PER_REVOLUTION / CRANK_Initialization_Parameters->number_of_cylinders;
    CRANK_Parameters.F.angle_from_cylinder_event_to_tdc         = CRANK_Initialization_Parameters->degrees_top_dead_center;
+   Sync_error_counter =0;
 
    // False selects the Angle Mode, True selects Edge Mode - May need to make selectable.
    MCD5408_Set_Angle_Clock_Mode( EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT, EPPWMT_ANGLE_MODE_PLL );
@@ -404,13 +407,13 @@ void CRANK_Recover_From_Synch_Error( void )
 	// Indicate that the synchronization has been missed
 	CRANK_Internal_State.U32 = CRANK_Set_Sync_Error_In_Progress( CRANK_Internal_State.U32, true );
 	CRANK_Internal_State.U32 = CRANK_Set_Resync_Attempt_In_Prog( CRANK_Internal_State.U32, true );
-
 	CRANK_Reset_Parameters();
 
 	// CRANK_Internal_State.U32 = CRANK_Set_Run_Reset_Bypass_Filter( CRANK_Internal_State.U32, true );
 	CRANK_Set_Flag( CRANK_FLAG_STALL_DETECTED, true );
 
 	CRANK_Enable_Synchronization();
+	Sync_error_counter ++;
 }
 
 //=============================================================================
