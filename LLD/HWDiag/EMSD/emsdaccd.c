@@ -20,7 +20,7 @@
 #include "mall_lib.h"
 #include "intr_ems.h"
 #include "v_power.h"
-
+#include "immo_cal.h"
 
 /*****************************************************************************
 *   Local Function Declarations
@@ -88,27 +88,30 @@ void InitEMSD_AcClutchRstToKeyOff(void)
 void MngEMSD_AcClutch200msTasks (void)
 {
 
- /* Evaluate_FrontACEVT_Enable_Criteria */
-  EvaluateEMSD_ACCDEnblCriteria ( KfEMSD_t_IgnitionOnDelay, 
-                                  &SbEMSD_ACCDEnblCriteriaMet) ;
+    /* Evaluate_FrontACEVT_Enable_Criteria */
+    EvaluateEMSD_ACCDEnblCriteria ( KfEMSD_t_IgnitionOnDelay, &SbEMSD_ACCDEnblCriteriaMet) ;
 
-  
-
-  SbEMSD_ACCDShortHiFailCriteriaMet =
-         ChkEMSD_GetPSVIorTPICFault (SbEMSD_ACCDEnblCriteriaMet,
-                                     GetVIOS_ACCD_FaultShortHi()
-                                        ) ;
-  if ( GetVIOS_ACCLUTCH_PowerOK() )
-  {
-  SbEMSD_ACCDShortLoFailCriteriaMet =
-         ChkEMSD_GetPSVIorTPICFault (SbEMSD_ACCDEnblCriteriaMet,
-                                     GetVIOS_ACCD_FaultShortLo()
-                                        ) ;
-  }
-  else
-  {
-  /*  do nothing  */
-  }
+    if (K_Immo_FuelPump_channel == CeFuelPumpPin) {
+        SbEMSD_ACCDShortHiFailCriteriaMet =
+            ChkEMSD_GetPSVIorTPICFault (SbEMSD_ACCDEnblCriteriaMet, GetVIOS_ACCD_FaultShortHi()) ;
+        if ( GetVIOS_ACCLUTCH_PowerOK() ) {
+            SbEMSD_ACCDShortLoFailCriteriaMet = ChkEMSD_GetPSVIorTPICFault (SbEMSD_ACCDEnblCriteriaMet,
+                                                                     GetVIOS_ACCD_FaultShortLo()) ;
+        } else {
+            /*  do nothing  */
+        }
+    } else if (K_Immo_FuelPump_channel == CeAcClutch) {
+        SbEMSD_ACCDShortHiFailCriteriaMet =
+            ChkEMSD_GetPSVIorTPICFault (SbEMSD_ACCDEnblCriteriaMet, GetVIOS_FPRD_FaultShortHi()) ;
+        if ( GetVIOS_ACCLUTCH_PowerOK() ) {
+            SbEMSD_ACCDShortLoFailCriteriaMet = ChkEMSD_GetPSVIorTPICFault (SbEMSD_ACCDEnblCriteriaMet,
+                                                                     GetVIOS_FPRD_FaultShortLo()) ;
+        } else {
+            /*  do nothing  */
+        }
+    } else {
+    /*  do nothing  */
+    }
 
 
   /*    Update_ACCD_Test_Counters

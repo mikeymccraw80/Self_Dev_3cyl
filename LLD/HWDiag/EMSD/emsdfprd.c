@@ -22,6 +22,7 @@
 #include "mall_lib.h"
 #include "intr_ems.h"
 #include "v_power.h"
+#include "immo_cal.h"
 
 /*****************************************************************************
  *  Local Include Files
@@ -93,12 +94,26 @@ void MngEMSD_FuelPump200msTasks (void)
 	/* Evaluate_FrontACEVT_Enable_Criteria */
 	EvaluateEMSD_FPRDEnblCriteria(KfEMSD_t_IgnitionOnDelay, &SbEMSD_FPRDEnblCriteriaMet);
 
-	SbEMSD_FPRDShortHiFailCriteriaMet =\
-		ChkEMSD_GetPSVIorTPICFault(SbEMSD_FPRDEnblCriteriaMet, GetVIOS_FPRD_FaultShortHi());
+	if (K_Immo_FuelPump_channel == CeFuelPumpPin) {
+		SbEMSD_FPRDShortHiFailCriteriaMet =\
+			ChkEMSD_GetPSVIorTPICFault(SbEMSD_FPRDEnblCriteriaMet, GetVIOS_FPRD_FaultShortHi());
 
-	if (GetVIOS_FPR_PowerOK()) {
-		SbEMSD_FPRDShortLoFailCriteriaMet =\
-			ChkEMSD_GetPSVIorTPICFault (SbEMSD_FPRDEnblCriteriaMet, GetVIOS_FPRD_FaultShortLo());
+		if (GetVIOS_FPR_PowerOK()) {
+			SbEMSD_FPRDShortLoFailCriteriaMet =\
+				ChkEMSD_GetPSVIorTPICFault (SbEMSD_FPRDEnblCriteriaMet, GetVIOS_FPRD_FaultShortLo());
+		} else {
+			/*  do nothing  */
+		}
+	} else if (K_Immo_FuelPump_channel == CeAcClutch) {
+		SbEMSD_FPRDShortHiFailCriteriaMet =\
+			ChkEMSD_GetPSVIorTPICFault(SbEMSD_FPRDEnblCriteriaMet, GetVIOS_ACCD_FaultShortHi());
+
+		if (GetVIOS_FPR_PowerOK()) {
+			SbEMSD_FPRDShortLoFailCriteriaMet =\
+				ChkEMSD_GetPSVIorTPICFault (SbEMSD_FPRDEnblCriteriaMet, GetVIOS_ACCD_FaultShortLo());
+		} else {
+			/*  do nothing  */
+		}
 	} else {
 		/*  do nothing  */
 	}
