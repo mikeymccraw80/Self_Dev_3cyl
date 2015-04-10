@@ -302,6 +302,8 @@ void Test_DO_Function(void)
 	  LLD_do_table[LLD_DO_R_LINE].value = KT_DO.R_LINE;
 	  LLD_do_table[LLD_DO_START_MOTR_RLY].value = KT_DO.START_MOTR_RLY;
 	  LLD_do_table[LLD_DO_VIS_SWITCH].value = KT_DO.VIS_SWITCH;
+
+	  HAL_GPIO_SET_IMMOREQ_Enable((bool) LLD_do_table[LLD_DO_R_LINE].value);
 }
 
 /*HWIO PO test code*/
