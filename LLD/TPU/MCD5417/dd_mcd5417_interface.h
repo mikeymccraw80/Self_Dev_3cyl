@@ -13,8 +13,7 @@
 void MCD5417_Initialize_Channel(
    TPU_Index_T index,
    TPU_T         *p_tpu,
-   TPU_CHANNEL_Configuration_T   configure,
-   const void             *in_init);
+   TPU_CHANNEL_Configuration_T   configure);
 
 //=============================================================================
 // MCD5417_Update_Boundary
