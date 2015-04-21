@@ -132,9 +132,9 @@ void J1979Mode1Handler (void)
 				/*support PID(09~10) 0B, 0C,0D, 0E,0F*/
 				WrtServiceData( 0x3E , Li1979_DataIdx++ ) ;
 				/*support PID(11~18) 11, 13,14, 15*/
-				WrtServiceData( 0xB8, Li1979_DataIdx++ ) ;
+				WrtServiceData( 0x18, Li1979_DataIdx++ ) ;
 				/*support PID(19~20) 1C, 1F,20*/
-				WrtServiceData( 0x13 , Li1979_DataIdx++ ) ;
+				WrtServiceData( 0x1B , Li1979_DataIdx++ ) ;
 				break;
 
 			case Cy1979_PID01: /*PID 01*/
