@@ -234,7 +234,7 @@ static  void InitializeReadDataByPacketIdentifier (void)
 TbBOOLEAN IsSecurityAccessActivated (void)
 {
    // return ((GetVIOS_ManufactEnableCounter () == 0));
-   return 1;
+   return 0;
 } /*** End of IsSecurityAccessActivated ***/
 
 /***********************************************************************/
