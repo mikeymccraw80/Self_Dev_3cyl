@@ -656,7 +656,7 @@ extern bool knock_flag_c;
 extern bool knock_flag_d;
 
 /* knock part, define in LLD */
-extern uint16_t IntegratorAverage[LLD_MAX_IGN_CHANNEL];      /* filtered value */
+extern uint16_t ADESC[LLD_MAX_IGN_CHANNEL] ;                             /* knock data of  fir */
 extern uint16_t KnockThreshold[LLD_MAX_IGN_CHANNEL];         /* knock threshold */
 
 /* running reset interface, define in LLD */
