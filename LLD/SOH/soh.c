@@ -55,6 +55,7 @@
 #include "hal_soh.h"
 #include "dd_siu.h"
 #include "dd_stm.h"
+#include "hal_eng.h"
 
 /*===========================================================================*\
  * Cofingrable Marcos
@@ -140,6 +141,18 @@ static Soh_Fault_Log_T Soh_FaultLogNVM;
 void RequestIO_Software_Reset( void )
 {
    INTC_EXCEPTION_Halt();
+}
+
+void SOH_Request_Recovery(void)
+{
+    uint32_t cs;
+
+    cs = Enter_Critical_Section();
+    /* engine should be in stall state */
+    if (GetEngineTurning() == false) {
+        Soh_RecoverMode = true;
+    }
+    Leave_Critical_Section(cs);
 }
 
 /*=============================================================================
@@ -771,12 +784,7 @@ static void EtcSohRecovery(void)
         if (IsOdd(Soh_LoopCnt)) {
             /* odd loop - do nothing */
         } else {
-            /* even loop */
-            /* re-initialize generic variables */
-            Soh_LoopCnt = 0;
-            Soh_SchdLoopSeqIdx = 0;
-            Soh_IrqLoopSeqIdx = 0;
-            Soh_IdTagExpect = 0;
+            Soh_RecoverMode = false;
 
             /* clear Soh_FaultLog when any reset occurs; Soh_FaultLogNVM will record history */
             Soh_FaultLog.Word = 0;
@@ -810,11 +818,16 @@ static void EtcSohRecovery(void)
                 HAL_SOH_CnR_Clear_Timeout_Fault(true);
             }
 
-            Soh_CnRValue.Word = 0;
-
-            /* SOH C&R SPI exchange */
-            /* receive next challenge value */
+            /* SOH CnR SPI exchange */
+            /* send two two (2) good responses while FSE_DISREQ is "0" and within the proper time will re-enable FSE_Enable. */
+            Soh_CnRValue.Bits.FSE_DisReq = false;
             Soh_CnRValue.Bits.Challenge = HAL_SOH_CnR_Get_Challenge();
+            Soh_CnRValue.Bits.Response = VSEP_SOH_Calculate_Response( Soh_CnRValue.Bits.Challenge );
+            HAL_SOH_CnR_Set_Response(Soh_CnRValue.Bits.FSE_DisReq, Soh_CnRValue.Bits.Response);
+
+            Soh_CnRValue.Bits.Challenge = HAL_SOH_CnR_Get_Challenge();
+            Soh_CnRValue.Bits.Response = VSEP_SOH_Calculate_Response( Soh_CnRValue.Bits.Challenge );
+            HAL_SOH_CnR_Set_Response(Soh_CnRValue.Bits.FSE_DisReq, Soh_CnRValue.Bits.Response);
 
             /* do not clear SOH C&R timeout fault bit (buffered output) */
             HAL_SOH_CnR_Clear_Timeout_Fault(false);
@@ -974,12 +987,10 @@ void SOH_ETC_ISR(void)
 			/* odd loop */
 			ValidateCpuLoopSeq();
 			ValidateCpuOperation();
-			// SIU.GPDO[129].F.PDO =0; //test code, VGIS output
 		} else {
 			/* even loop */
 			ValidateSysClkFreq();
 			ValidateEtcSohIrqFreq();
-			// SIU.GPDO[129].F.PDO =1; //test code, VGIS output
 			ValidateRtiFreq();
 			CpuOperatingErrHandler();
 		}
@@ -1096,7 +1107,6 @@ void SOH_ETC_Initialize(bool power_on_reset_status)
     HAL_SOH_CnR_Clear_Timeout_Fault(false);
     Soh_CnRValue.Bits.Challenge = HAL_SOH_CnR_Get_Challenge();
     Soh_CnRStatus.Word = HAL_SOH_CnR_Get_Status(false);
-    //SIU.GPDO[129].F.PDO =1; //VGIS, for test code
 
 #if 0
     /* disable fuel, spark and ETC if fault is present */
