@@ -268,7 +268,7 @@ void  HAL_OS_10ms_Task(void)
 	MngEPSD_Crank7p81msTasks();
 	MngCOND_AD_InputResp15p6msTasksA();
 	MngCAND_31p2msTCU_Tasks();
-	MngEMSD_FileROM10msTasks();
+	// MngEMSD_FileROM10msTasks();
 }
 
 //=============================================================================

@@ -161,6 +161,7 @@ void MngOSTK_100msTasks(void)
 void OS_Free_Time_Tasks_Hook(void)
 {
 	CCP_Periodic_Task();
+	MngEMSD_FileROM10msTasks();
 }
 
 //=============================================================================

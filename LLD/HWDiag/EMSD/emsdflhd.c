@@ -43,7 +43,7 @@ static uint16_t    Vc_CalCksum;
 static uint16_t *  SpFILE_AppROM_ChecksumLocation;
 static uint16_t *  SpFILE_CalROM_ChecksumLocation;
 
-#define        CcFILE_ROM_NumOfWordsToSumAtOnce        (64)
+#define        CcFILE_ROM_NumOfWordsToSumAtOnce        (16)
 
 #define GetEMSD_FileROM_ChecksumState() (Sb_AppCksum_Test_Failed || Sb_CalCksum_Test_Failed)
 /*****************************************************************************
