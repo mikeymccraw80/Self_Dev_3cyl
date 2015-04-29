@@ -219,7 +219,7 @@ void J1979Mode1Handler (void)
 				/*support PID(21~28) 21*/
 				WrtServiceData( 0x80,Li1979_DataIdx++);
 				/*support PID(29~30) 2E, 2F*/
-				WrtServiceData( 0x07,Li1979_DataIdx++);
+				WrtServiceData( 0x05,Li1979_DataIdx++);
 				/*support PID(31~38) 30,33*/
 				WrtServiceData( 0x20,Li1979_DataIdx++);
 				/*support PID(31~40) */
@@ -251,13 +251,13 @@ void J1979Mode1Handler (void)
 			case Cy1979_PID40:
 				//      WrtServiceData( Cy1979_PID40 , Li1979_DataIdx++ ) ;
 				/*support PID(41~48) 42, 46*/
-				WrtServiceData( 0x44,Li1979_DataIdx++);
+				WrtServiceData( 0x4C,Li1979_DataIdx++);
 				/*support PID(49~50) */
 				WrtServiceData( 0x00,Li1979_DataIdx++);
 				/*support PID(51~58) 30,33*/
-				WrtServiceData( 0x00,Li1979_DataIdx++);
+				WrtServiceData( 0x80,Li1979_DataIdx++);
 				/*support PID(59~60) */
-				WrtServiceData( 0x00,Li1979_DataIdx++);
+				WrtServiceData( 0x40,Li1979_DataIdx++);
 				break;
 
 			case Cy1979_PID42:
@@ -349,7 +349,7 @@ void J1979Mode2Handler (void)
 				/*support PID(09~10) 0B, 0C,0D, 0E,0F*/
 				WrtServiceData( 0x3E , Li1979_DataIdx++ ) ;
 				/*support PID(11~18) 11, 13,14, 15*/
-				WrtServiceData( 0x80, Li1979_DataIdx++ ) ;
+				WrtServiceData( 0x00, Li1979_DataIdx++ ) ;
 				/*support PID(19~20) 1C, 1F,20*/
 				WrtServiceData( 0x01 , Li1979_DataIdx++ ) ;
 				break;
@@ -454,13 +454,13 @@ void J1979Mode2Handler (void)
 				/*Freezeframe number*/
 				WrtServiceData( frame_index , Li1979_DataIdx++ ) ;
 				/*support PID(41~48) 42*/
-				WrtServiceData( 0x40 , Li1979_DataIdx++ ) ;
+				WrtServiceData( 0x48 , Li1979_DataIdx++ ) ;
 				/*support PID(49~50) */
 				WrtServiceData( 0x00 , Li1979_DataIdx++ ) ;
 				/*support PID(51~58) */
 				WrtServiceData( 0x00, Li1979_DataIdx++ ) ;
 				/*support PID(59~50) 00*/
-				WrtServiceData( 0x00 , Li1979_DataIdx++ ) ;
+				WrtServiceData( 0x40 , Li1979_DataIdx++ ) ;
 				break;
 
 			case Cy1979_PID42:
