@@ -210,15 +210,15 @@ void mg_HAL_Fault_ETC_Over_Current_Test_Configure(uint8_t slew_rate)
  * @parm  none
  * @rdesc none 
  *===========================================================================*/
+extern void VSEP_EST_Fault_Get_Interface(void);
 void mg_HAL_ComplexIO_Fault_Read(void)
 {
 #ifdef __MG_C2MIO_USED
     C2MIO_SPI_Immediate_Transfer( C2MIO_Set_Device_Index( 0, C2MIO_INDEX_0 ), C2MIO_MESSAGE_PCH_FAULTS_STATUS_READ);
 #endif
 #ifdef __MG_VSEP_USED
-    /* read the est channel fault status */
-    // SPIPort_Transfer_Immediate( VSEP_EST_FAULT_SYNC_MESSAGE[VSEP_INDEX_0].port, &VSEP_EST_FAULT_SYNC_MESSAGE[VSEP_INDEX_0] );
-    // SPIPort_Transfer_Immediate( VSEP_SDOA06_MESSAGE[VSEP_INDEX_0].port, &VSEP_SDOA06_MESSAGE[VSEP_INDEX_0] );
+    /* read the est channel fault status, update VSEP_EST_Fault_SYNC_Rxd[2]*/
+    VSEP_EST_Fault_Get_Interface();
     /* read pch discrete or pwm or compare channel fault status */
     VSEP_SPI_Immediate_Transfer(0, VSEP_MESSAGE_FAULT);
 #endif
@@ -359,7 +359,7 @@ uint8_t mg_HAL_ComplexIO_Fault_Get(uint8_t index)
     fault_map_position = diagnostic_bit_position[index];
     if ( index >= VSEP_CHANNEL_PCH_01_FLT_LVL_1 && index <= VSEP_CHANNEL_PCH_04_FLT_LVL_1_2)
     {
-      fault_result = (uint8_t)Extract_Bits( VSEP_EST_Fault_SYNC_Rxd[fault_map_index],fault_map_position, BIT_2 );
+      fault_result = (uint8_t)Extract_Bits(VSEP_EST_Fault_SYNC_Rxd[2], fault_map_position, BIT_2);
     }
     // else if ( index >= VSEP_CHANNEL_PCH_05_FLT_LVL_1_2 && index <= VSEP_CHANNEL_PCH_08_FLT_LVL_1_2)
     // {
@@ -367,7 +367,7 @@ uint8_t mg_HAL_ComplexIO_Fault_Get(uint8_t index)
     // }
     else//for PCH05~PCH30
     {
-      fault_result = (uint8_t)Extract_Bits( VSEP_Fault_Rxd[fault_map_index],fault_map_position, BIT_2 );
+      fault_result = (uint8_t)Extract_Bits( VSEP_Fault_Rxd[fault_map_index],fault_map_position, BIT_2);
     }
 #endif
     return fault_result;

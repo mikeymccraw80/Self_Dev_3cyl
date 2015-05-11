@@ -593,6 +593,42 @@ void VSEP_EST_Fault_SYNC_Interface(EST_Select_Cylinder_T curent_spark_cylinder)
 	}
 }
 
+//=============================================================
+// VSEP_EST_Fault_Get_Interface, Note this api is only used for MG
+//=============================================================
+void VSEP_EST_Fault_Get_Interface(void)
+{
+	//****************************************
+	interrupt_state_t     irq_state;
+	uint8_t               index, index_transmint, index_receive, x;
+
+	/* don't write the cylinder id, just dummy read the est fault */
+	VSEP_EST_Fault_SYNC_Txd[VSEP_EST_FAULT_SYNC_TXD_MESSAGE_SYNC_BYTE2] = \
+			VSEP_Msg_EST_Set_EST1CEN_BYTE_FORMAT(VSEP_EST_Fault_SYNC_Txd[VSEP_EST_FAULT_SYNC_TXD_MESSAGE_SYNC_BYTE2],false);
+	VSEP_EST_Fault_SYNC_Txd[VSEP_EST_FAULT_SYNC_TXD_MESSAGE_SYNC_BYTE2] = \
+			VSEP_Msg_EST_Set_EST1C_BYTE_FORMAT(VSEP_EST_Fault_SYNC_Txd[VSEP_EST_FAULT_SYNC_TXD_MESSAGE_SYNC_BYTE2], 0);
+
+	irq_state = Get_Interrupt_State();
+	Disable_Interrupts();
+
+	/*SPI Clock Phase Bit ¡ª This bit is used to select the SPI clock format. In master mode, a change of this bit will
+	abort a transmission in progress and force the SPI system into idle state.
+	0 Sampling of data occurs at odd edges (1,3,5,...) of the SCK clock.
+	1 Sampling of data occurs at even edges (2,4,6,...) of the SCK clock.*/
+	for ( index_transmint = 0,index_receive =0; index_transmint <VSEP_EST_FAULT_SYNC_TXD_MESSAGE_MAX_BYTE; index_transmint++,index_receive++)
+	{
+		// for byte transfer algorithem       
+		VSEP_EST_Fault_SYNC_Rxd[index_receive] =  \
+						(uint8_t)DSPI_B_Exchange_Data1(VSEP_CHIP_SELECT,
+												VSEP_CTAR_SELECT,
+												DSPI_CTAR_FMSZ_8,
+												&VSEP_EST_Fault_SYNC_Txd[index_transmint],
+												(index_transmint == (VSEP_EST_FAULT_SYNC_TXD_MESSAGE_MAX_BYTE-1)? true:false));
+	}
+
+	Set_Interrupt_State(irq_state);
+}
+
 void VSEP_Fault_Log_Clear(void)
 {
 	uint8_t channel;
