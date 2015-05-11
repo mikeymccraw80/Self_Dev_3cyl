@@ -28,7 +28,7 @@
 /*----------------------------------------------------------------------------*/
 /*   Definition of local macros                                               */
 /*----------------------------------------------------------------------------*/
-#define COUNTS_2MSEC                   (2 * (SYSTEM_FREQUENCY_HZ / 1000))        /* 2 ms */
+#define COUNTS_2MSEC                   (2 * 1000)        /* 2 ms */
 #define WAVE_SMOOTH                    (0)
 #define WAVE_UP                             (1)
 #define WAVE_DOWN                       (2)

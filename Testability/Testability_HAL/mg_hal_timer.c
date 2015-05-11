@@ -101,7 +101,7 @@ uint32_t mg_HAL_Timer_Get_STM_Diff_In_CNT(uint32_t current_time,uint32_t start_t
  * mg_hal_get_STM_diff_in_CNT
  * @func  Get system timer diff 
  * @parm  current time count/start time count
- * @rdesc time diff, unit: 1/80 us 
+ * @rdesc time diff, unit: 1 us 
  *===========================================================================*/
 uint32_t mg_HAL_Timer_Get_STM_Diff_In_us_By_CNT(uint32_t current_time,uint32_t start_time)
 {
@@ -114,7 +114,6 @@ uint32_t mg_HAL_Timer_Get_STM_Diff_In_us_By_CNT(uint32_t current_time,uint32_t s
     {
        time_diff = current_time + (MG_STM_OVERFLOW_VALUE - start_time);
     }
-    time_diff /= (SYSTEM_FREQUENCY_HZ / 1000000);
     return time_diff;
 }
 
