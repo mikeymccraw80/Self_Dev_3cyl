@@ -102,10 +102,12 @@ void mg_HAL_Discrete_Set_TACH(bool state)
     if (state) {
        VSEP_PWM_PWMSetPeriod(VSEP_PO_TACH_CH, 100*64);
        VSEP_PWM_PWMSetDuty(VSEP_PO_TACH_CH, 32768);
+    // VSEP_DiscreteSetImmediate(VSEP_PO_TACH_CH, state);
     } else {
        VSEP_PWM_PWMSetPeriod(VSEP_PO_TACH_CH, 100*64);
        VSEP_PWM_PWMSetDuty(VSEP_PO_TACH_CH, 0);
     }
+    VSEP_SPI_Immediate_Transfer(VSEP_PO_TACH_CH, VSEP_MESSAGE_PWM );
 }
 
 void mg_HAL_Discrete_Set_ACREQDI(bool state)

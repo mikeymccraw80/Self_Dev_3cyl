@@ -355,6 +355,10 @@ void VSEP_Initialize_Device(void)
 	VSEP_SPI_Immediate_Transfer(VSEP_Set_Device_Index(0, VSEP_INDEX_0 ), VSEP_MESSAGE_INIT );
 	// Need to check why redundant operation is needed, without it, no spark injection
 	VSEP_SPI_Immediate_Transfer(VSEP_Set_Device_Index(0, VSEP_INDEX_0 ), VSEP_MESSAGE_INIT );
+
+	// init vsep pwm channel
+	VSEP_SPI_Immediate_Transfer(VSEP_PO_TACH_CH, VSEP_MESSAGE_PWM );
+
 #ifndef ENABLE_ETC_SOH_MODULE
 	VSEP_Disable_SOH();
 #endif
