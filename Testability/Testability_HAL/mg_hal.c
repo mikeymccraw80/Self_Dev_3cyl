@@ -369,6 +369,7 @@ void mg_HAL_Disable_CAN_10ms_Task_Timer(void)
 }
 #endif
 
+extern void MG_QADC_Knock_SIU_Init(void);
 void mg_HAL_Internal_Device_Init(void)
 {
     uint32_t counter;
@@ -384,6 +385,7 @@ void mg_HAL_Internal_Device_Init(void)
     }
 
     mg_HAL_Timer_Set_STM_Enable(true);
+    MG_QADC_Knock_SIU_Init();
 
     // mg_HAL_LIN_Set_DMA_Enable(false);
     

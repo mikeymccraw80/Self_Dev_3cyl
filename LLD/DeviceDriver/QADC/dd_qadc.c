@@ -613,6 +613,86 @@ void QADC_Knock_SIU_Init(void )
    QADC_Knock_ADConvert();
 
 }
+
+//=============================================================================
+// MG_QADC_Knock_SIU_Init, Called in TSW
+//=============================================================================
+void MG_QADC_Knock_SIU_Init(void)
+{
+   ADC_CMF_T   cmf;
+   QADC_CFCR_T cfcr;
+   ADC_ACR_T   acr1;
+   ADC_PUDCR_T PUDCR;
+
+
+   QADC.CFCR[0].U16  = QADC_CFCR_RESET.U16;
+   QADC.IDCR[0].U16 = 0x03;  
+   QADC.CFTCR[0].U16 = (uint16_t)0;
+
+   // set both AN0 and AN1 pull up and down
+   // set pull up and pull down resistor 100K
+   PUDCR.U16 = 0;
+   PUDCR.F.CH_PULL = 0b11;
+   PUDCR.F.PULL_STR= 0b10;
+   ///0x70 is address for PUDCR_0 
+   QADC.CFPR[QADC_FIFO_2] =  ((PUDCR.U16<<8)& 0x00FFFF00)|0x70;
+   //0x80000000 == end of quence /0x71 is address for PUDCR_1  
+   QADC.CFPR[QADC_FIFO_2] = 0x80000000| ((PUDCR.U16<<8)& 0x00FFFF00)|0x71;
+
+
+   //Set FIFO 0 to software triggered mode
+   QADC.CFCR[QADC_FIFO_2].F.MODE = QADC_TRIGGER_MODE_SOFTWARE_TRIGGER_Single_Scan;
+   //Set to single scan enabled ( when this value is written FISRn.SSS is set until EOQF if processed
+   QADC.CFCR[QADC_FIFO_2].F.SSE = 1;
+
+   // now wait for the Command Queue to reach End-Of-Queue status, where
+   // we need to disable the CFIFO so that it can be reset for conversion
+   // queues (CFIFO MODE must be disabled before resetting to another mode
+   // according to eQADC specifications)
+   while( QADC.FISR[QADC_FIFO_2].F.EOQF != 1 )
+   {
+      // wait till End-Of-Queue reached
+   }
+
+   QADC.FISR[QADC_FIFO_2].F.EOQF = 1 ;
+
+   QADC.CFCR[QADC_FIFO_2].F.MODE = QADC_TRIGGER_MODE_DISABLED;
+
+   while ( QADC_COMMAND_FIFO_STATUS_IDLE != Extract_Bits( QADC.CFSR.U32, BIT_26 ,BIT_2 ) )
+      //while(qadc->CFSR.F.CFS1)
+   {
+      // Certify that CFS has changed to IDLE before setting CFINVn.
+   }
+
+   QADC.CFCR[QADC_FIFO_2].F.CFINV = 1;
+
+   // Put QADC to WTF state
+   cmf.U32              =  0;
+   cmf.CF.MESSAGE_TAG   =  QADC_MESSAGE_TAG_NULL;
+   cmf.CF.EOQ           =  0;
+   cmf.CF.PAUSE         =  1;
+   cmf.CF.REP           =  0;
+   cmf.CF.EB            =  false;
+   cmf.CF.BN            =  ADC_CONVERTER_0;
+   cmf.CF.CAL           =   false;
+   cmf.CF.LST           =  QADC_SAMPLE_CYCLES_2;
+   cmf.CF.TSR           =  false;
+   cmf.CF.FFMT           =  QADC_CHANNEL_CONVERSION_FORMAT_RIGHT_JUSTIFIED_SIGNED;
+   cmf.CF.CHANNEL       =  QADC_CHANNEL_DAN_0;
+
+   QADC.CFPR[0] = cmf.U32;
+
+   cfcr.U16 = 0;
+   cfcr.F.AMODE0 = QADC_TRIGGER_MODE_FALLING_EDGE_EXTERNAL_TRIGGER_Single_Scan;//QADC_TRIGGER_MODE_FALLING_EDGE_EXTERNAL_TRIGGER;
+   cfcr.F.MODE = QADC_TRIGGER_MODE_FALLING_EDGE_EXTERNAL_TRIGGER_Single_Scan;//|0x08;
+   cfcr.F.CFINV = 0;
+   cfcr.F.SSE = 1;
+   cfcr.F.STRME0 = true;
+   cfcr.F.CFEEE0 = true;
+
+   QADC.CFCR[0].U16  = cfcr.U16;
+}
+
 //=============================================================================
 // QADC_Analog_Get_Value
 //=============================================================================
