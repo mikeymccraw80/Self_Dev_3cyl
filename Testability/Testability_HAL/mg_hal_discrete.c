@@ -184,6 +184,7 @@ void mg_HAL_Discrete_Set_FAN2(bool state)
 #endif
 #ifdef  __MG_VSEP_USED
     HAL_GPIO_SET_FAN2_Enable(state);
+    VSEP_SPI_Immediate_Transfer(0, VSEP_MESSAGE_PCH_MPIO);
 #endif
 }
 
