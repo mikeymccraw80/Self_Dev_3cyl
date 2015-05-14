@@ -87,6 +87,8 @@ static void Initialize_Testability(void)
     {
         mg_HAL_Discrete_Set_Discrete_Out_Group_Value(idx, false);
     }
+    mg_HAL_Discrete_Set_ACCClutch(false);
+    mg_HAL_Discrete_Set_FAN2(false);
     if (!mg_HAL_Discrete_Get_ELOAD1())
     {
         Mg_Mode = MG_FUNCTION_TEST;

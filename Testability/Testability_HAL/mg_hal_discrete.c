@@ -174,6 +174,7 @@ void mg_HAL_Discrete_Set_FAN1(bool state)
 #endif
 #ifdef  __MG_VSEP_USED
     HAL_GPIO_SET_FAN1_Enable(state);
+    VSEP_SPI_Immediate_Transfer(0, VSEP_MESSAGE_PCH_MPIO);
 #endif
 }
 
@@ -185,6 +186,16 @@ void mg_HAL_Discrete_Set_FAN2(bool state)
 #ifdef  __MG_VSEP_USED
     HAL_GPIO_SET_FAN2_Enable(state);
     VSEP_SPI_Immediate_Transfer(0, VSEP_MESSAGE_PCH_MPIO);
+#endif
+}
+
+void mg_HAL_Discrete_Set_ACCClutch(bool state)
+{
+#ifdef  __MG_C2MIO_USED
+
+#endif
+#ifdef  __MG_VSEP_USED
+        VSEP_DiscreteSetImmediate(VSEP_DO_ACCLUTCH_CH, state);
 #endif
 }
 
@@ -300,13 +311,13 @@ void mg_HAL_Discrete_Reconfigure_CAL(void)
 {
 
     /* reconfig eload and vsep mpio */
-    HAL_GPIO_SET_ELOAD1DICTL_Enable(!IO_ACTIVE_HIGH);
-    HAL_GPIO_SET_ELOAD2DICTL_Enable(!IO_ACTIVE_HIGH);
+    HAL_GPIO_SET_ELOAD1DICTL_Enable(IO_ACTIVE_HIGH);
+    HAL_GPIO_SET_ELOAD2DICTL_Enable(IO_ACTIVE_HIGH);
     HAL_GPIO_SET_BRKLMPDICTL_Enable(!IO_ACTIVE_HIGH);
     
     
-    VSEP_MPIO_Set_MODE_Immediate(VSEP_MPIO_ACRequest_CH, VSEP_MPIO_INPUT_MODE_ACTIVE_LOW_SWITCH_DETECT);
-    VSEP_MPIO_Set_MODE_Immediate(VSEP_MPIO_PSPS_CH, VSEP_MPIO_INPUT_MODE_ACTIVE_HIGH_SWITCH_DETECT);
+    VSEP_MPIO_Set_MODE_Immediate(VSEP_MPIO_ACRequest_CH, VSEP_MPIO_INPUT_MODE_ACTIVE_HIGH_SWITCH_DETECT);
+    VSEP_MPIO_Set_MODE_Immediate(VSEP_MPIO_PSPS_CH, VSEP_MPIO_INPUT_MODE_ACTIVE_LOW_SWITCH_DETECT);
     VSEP_MPIO_Set_MODE_Immediate(VSEP_MPIO_MIDAC_CH, VSEP_MPIO_INPUT_MODE_ACTIVE_HIGH_SWITCH_DETECT);
 
     /* disable three led channel led mode */
