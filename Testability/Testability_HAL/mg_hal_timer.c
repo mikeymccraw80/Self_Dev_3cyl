@@ -125,7 +125,15 @@ uint32_t mg_HAL_Timer_Get_STM_Diff_In_us_By_CNT(uint32_t current_time,uint32_t s
  *===========================================================================*/
 void mg_HAL_Time_Hard_Delay_us(uint32_t wait_time)
 {
-    time_udelay(wait_time);
+    uint32_t start_timer;
+    uint32_t current_timer;
+    uint32_t diff;
+    start_timer = mg_HAL_Timer_Get_STM_In_us();
+    do {
+        current_timer = mg_HAL_Timer_Get_STM_In_us();
+        diff = mg_HAL_Timer_Get_STM_Diff_In_us(current_timer, start_timer);
+        mg_HAL_Service_WatchDog();
+    } while (diff < wait_time);
 }
 
 /*=============================================================================
