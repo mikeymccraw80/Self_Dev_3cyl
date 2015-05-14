@@ -268,24 +268,6 @@ const TPU_CHANNEL_Configuration_T MG_TPU_CONFIG_IC_PWMIE[MG_PWMIE_INDEX_MAX] =
         EDGE_FALLING,                 //   Host Service Request Type
         PWMIE_FUNCTION_NUM          //   TPU Primitives or Channel function Select
     },
-
-    // ETPUA26 - SPFI
-    {
-        TPU_EVENT_ABSOLUTE,   //   Set the desired value for TPU configuration
-        0,                                   //      PWM Update Mode 1- Coherent,0- synchronus
-        0,                                   //     Refernce channel number
-        TPU_CHANNEL_26,            //     Channel
-        0,                                   //    Channel Function Mode1
-        TPU_TCR1_TIME_BASE,                                     //   Channel Function Mode0
-        0,                                      //  Entry Table Condition Select
-        TPU_CHANNEL_INTERRUPT_DISABLE,  //1  //Interrupt Request Enable
-        TPU_TRANSFER_REQUEST_DISABLE,   //Transfer Request Enable
-        TPU_CHANNEL_PRIORITY_MEDIUM,  // Channel Priority Index
-        ACTIVE_HIGH,  //    Active state of channel
-        TPU_OFF_OUTPUT_DISABLE,            //       8   Output Disable
-        EDGE_FALLING,                 //   Host Service Request Type
-        PWMIE_FUNCTION_NUM          //   TPU Primitives or Channel function Select
-    }
 };
 
 #if 0
@@ -373,24 +355,14 @@ extern void MG_QADC_Knock_SIU_Init(void);
 void mg_HAL_Internal_Device_Init(void)
 {
     uint32_t counter;
-    // IO_PULSE_IC_Initialize_Channel(&MG_MTSA_IC_58XPOS);
-    // IO_PULSE_IC_Initialize_Channel(&MG_MTSA_IC_CAM1);
-    // IO_PULSE_IC_Initialize_Channel(&MG_MTSA_IC_CAM2);
-    // IO_PULSE_IC_Initialize_Channel(&MG_MTSA_IC_VSS);
-    // IO_PULSE_IC_Initialize_Channel(&MG_MTSA_IC_ENS);
 
-    for( counter = 0; counter < MG_PWMIE_INDEX_SPFI; counter++ )
+    for( counter = 0; counter < MG_PWMIE_INDEX_MAX; counter++ )
     {
         MCD5402_Initialize_Channel(PWMIE_TPU_INDEX, &TPU, MG_TPU_CONFIG_IC_PWMIE[counter]);
     }
 
     mg_HAL_Timer_Set_STM_Enable(true);
     MG_QADC_Knock_SIU_Init();
-
-    // mg_HAL_LIN_Set_DMA_Enable(false);
-    
-    // MG_Reset_SCI(&SCI_PORT_0);
-    // MG_Init_SCI(&SCI_PORT_0);
     MG_Init_SCI(SCI_DEVICE_1);
 }
 

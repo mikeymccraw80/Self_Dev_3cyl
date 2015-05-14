@@ -110,10 +110,9 @@ uint32_t mg_HAL_PWM_Get_Frequency_In_Group_Period(uint8_t index)
     PWM_Data_T PWM_Data;
     if (MG_HIODEVICE_FI_NULL != MG_HAL_FREQUENCY_IN_GROUP[index].io)
     {
-        // IO_PULSE_IC_Get_Period_And_Duty_Cycle(MG_HAL_FREQUENCY_IN_GROUP[index].io, &PWM_Data, 100, 0, MICROSECOND_RESOLUTION);
          PWM_Data.Period = MCD5402_Get_Period(PWMIE_TPU_INDEX, MG_TPU_CONFIG_IC_PWMIE[MG_HAL_FREQUENCY_IN_GROUP[index].io]);
     } else {
-        PWM_Data.Period = 0;
+         PWM_Data.Period = 0;
     }
     return (PWM_Data.Period >> 2);
 }
