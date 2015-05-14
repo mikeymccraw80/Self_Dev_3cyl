@@ -379,7 +379,7 @@ void mg_HAL_Internal_Device_Init(void)
     // IO_PULSE_IC_Initialize_Channel(&MG_MTSA_IC_VSS);
     // IO_PULSE_IC_Initialize_Channel(&MG_MTSA_IC_ENS);
 
-    for( counter = 0; counter < MG_PWMIE_INDEX_MAX; counter++ )
+    for( counter = 0; counter < MG_PWMIE_INDEX_SPFI; counter++ )
     {
         MCD5402_Initialize_Channel(PWMIE_TPU_INDEX, &TPU, MG_TPU_CONFIG_IC_PWMIE[counter]);
     }
