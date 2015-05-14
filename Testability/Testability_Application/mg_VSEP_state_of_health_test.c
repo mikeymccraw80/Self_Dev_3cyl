@@ -89,7 +89,7 @@ void mg_VSEP_state_of_health_test(void)
         dir = true;
         MG_HAL_ETC_GROUP.duty = 32;
         MG_HAL_ETC_GROUP.freq = 0xFA0;
-        MG_HAL_ETC_GROUP.reverse_time_ms = (1 * SYSTEM_FREQUENCY_HZ);
+        MG_HAL_ETC_GROUP.reverse_time_ms = (1 * SYSTEM_FREQUENCY_HZ/80);
         MG_HAL_ETC_GROUP.timer.start_time = mg_HAL_Timer_Get_STM_In_CNT();
         mg_HAL_ETC_Set_Freq_And_Duty();
         while ((state_of_health & 0x03) != 0x00)
