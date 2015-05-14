@@ -298,6 +298,7 @@ bool mg_HAL_Discrete_Get_ELOAD2(void)
 
 void mg_HAL_Discrete_Reconfigure_CAL(void)
 {
+
     /* reconfig eload and vsep mpio */
     HAL_GPIO_SET_ELOAD1DICTL_Enable(!IO_ACTIVE_HIGH);
     HAL_GPIO_SET_ELOAD2DICTL_Enable(!IO_ACTIVE_HIGH);
@@ -309,5 +310,5 @@ void mg_HAL_Discrete_Reconfigure_CAL(void)
     VSEP_MPIO_Set_MODE_Immediate(VSEP_MPIO_MIDAC_CH, VSEP_MPIO_INPUT_MODE_ACTIVE_HIGH_SWITCH_DETECT);
 
     /* disable three led channel led mode */
-    VSEP_LEDMODE_Set_Channel(VSEP_PO_CRUISI_CH, VSEP_LEDMODE_ALL_CHANNEL, 0);
+    VSEP_LEDMODE_Set_Channel(VSEP_PO_CRUISI_CH, VSEP_LEDMODE_30, 0);
 }

@@ -76,14 +76,12 @@ static void Initialize_Testability(void)
 
     MG_SIU_GPIO_DISCRETE_Initialize_Device_Override();
 
-    mg_HAL_Discrete_Reconfigure_CAL();
-
     mg_HAL_Internal_Device_Init();
 
     mg_HAL_External_Device_Init();
     
     // mg_HAL_SPI_Timer_Enable( false );
-
+    mg_HAL_Discrete_Reconfigure_CAL();
 
     for (idx = 0; idx < MG_Number_of_Discrete_Out_Device; idx++)
     {
