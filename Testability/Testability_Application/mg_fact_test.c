@@ -38,8 +38,8 @@
  |  d   | 0x64 | for development         |
  -----------------------------------------
 */
-#define MG_TESTABILITY_MAJOR_VERSION         0x64
-#define MG_TESTABILITY_MINOR_VERSION         0x08
+#define MG_TESTABILITY_MAJOR_VERSION         0x70
+#define MG_TESTABILITY_MINOR_VERSION         0x12
 
 #define NUMBER_EST                                              4
 #define NUMBER_INJ                                              4
