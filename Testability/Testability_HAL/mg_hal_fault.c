@@ -148,7 +148,7 @@ void mg_HAL_Fault_ETC_Open_Test_Configure(void)
     L9958_VSR_Set(L9958_VSR_LO);
     L9958_ISR_Set(L9958_ISR_LO);
     L9958_ISR_Disable_Set(L9958_ISR_DISABLE_FALSE);
-    L9958_SPI_Immediate_Transfer();
+    // L9958_SPI_Immediate_Transfer();
 #endif
 }
 
@@ -174,7 +174,7 @@ void mg_HAL_Fault_ETC_STB_STG_Test_Configure(void)
     L9958_VSR_Set(L9958_VSR_LO);
     L9958_ISR_Set(L9958_ISR_LO);
     L9958_ISR_Disable_Set(L9958_ISR_DISABLE_TRUE);
-    L9958_SPI_Immediate_Transfer();
+    // L9958_SPI_Immediate_Transfer();
 #endif
 }
 
@@ -200,7 +200,7 @@ void mg_HAL_Fault_ETC_Over_Current_Test_Configure(uint8_t slew_rate)
     L9958_VSR_Set(L9958_VSR_LO);
     L9958_ISR_Set(L9958_ISR_LO);
     L9958_ISR_Disable_Set(L9958_ISR_DISABLE_FALSE);
-    L9958_SPI_Immediate_Transfer();
+    // L9958_SPI_Immediate_Transfer();
 #endif
 }
 
@@ -277,6 +277,7 @@ void mg_HAL_BARO_Fault_Read(void)
  * @parm  none
  * @rdesc none 
  *===========================================================================*/
+
 void mg_HAL_ComplexIO_Fault_Clear(void)
 {
 #ifdef __MG_C2MIO_USED
