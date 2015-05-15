@@ -279,7 +279,7 @@ bool mg_HAL_Discrete_Get_Discrete_In_Group(uint8_t index)
 {
     bool state;
     if ((index >= 0) && (index <= 2)) {
-        state = VSEP_DiscreteGet(MG_HAL_DISCRETE_IN_GROUP[index]);
+        state = VSEP_DiscreteGetImmediate(MG_HAL_DISCRETE_IN_GROUP[index]);
     }
     else if (MG_HIODEVICE_DI_NULL != MG_HAL_DISCRETE_IN_GROUP[index])
     {
@@ -316,9 +316,9 @@ void mg_HAL_Discrete_Reconfigure_CAL(void)
     HAL_GPIO_SET_BRKLMPDICTL_Enable(!IO_ACTIVE_HIGH);
     
     
-    VSEP_MPIO_Set_MODE_Immediate(VSEP_MPIO_ACRequest_CH, VSEP_MPIO_INPUT_MODE_ACTIVE_LOW_SWITCH_DETECT);
+    VSEP_MPIO_Set_MODE_Immediate(VSEP_MPIO_ACRequest_CH, VSEP_MPIO_INPUT_MODE_ACTIVE_HIGH_SWITCH_DETECT);
     VSEP_MPIO_Set_MODE_Immediate(VSEP_MPIO_PSPS_CH, VSEP_MPIO_INPUT_MODE_ACTIVE_HIGH_SWITCH_DETECT);
-    VSEP_MPIO_Set_MODE_Immediate(VSEP_MPIO_MIDAC_CH, VSEP_MPIO_INPUT_MODE_ACTIVE_LOW_SWITCH_DETECT);
+    VSEP_MPIO_Set_MODE_Immediate(VSEP_MPIO_MIDAC_CH, VSEP_MPIO_INPUT_MODE_ACTIVE_HIGH_SWITCH_DETECT);
 
     /* disable three led channel led mode */
     VSEP_LEDMODE_Set_Channel(VSEP_PO_CRUISI_CH, VSEP_LEDMODE_30, 0);
