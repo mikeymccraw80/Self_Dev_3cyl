@@ -70,7 +70,7 @@ void mg_L9958_fault_diagnostic_test(void)
   
     /* Clear the device fault by sending Bit 8 of Txd as '1' */
     mg_HAL_ETC_Discrete_Enable(true);
-    mg_HAL_PWM_Set_ETCCTLPWM_Frequency_And_Duty(10000, 0);
+    mg_HAL_PWM_Set_ETCCTLPWM_Frequency_And_Duty(10000, 100);
     mg_HAL_ETC_Discrete_Direction( true);
     mg_HAL_Time_Hard_Delay_us(DELAY_500_US);
     mg_HAL_ETC_Discrete_Direction( false);
@@ -99,7 +99,7 @@ void mg_L9958_fault_diagnostic_test(void)
         mg_HAL_ETC_Discrete_Enable(true);
         /* Low Side Current Limit Set 0x00 */
         mg_HAL_Fault_ETC_Over_Current_Test_Configure(test_slew_rate);
-        mg_HAL_PWM_Set_ETCCTLPWM_Frequency_And_Duty(10000, 0);
+        mg_HAL_PWM_Set_ETCCTLPWM_Frequency_And_Duty(10000, 100);
         mg_HAL_ETC_Discrete_Direction( true);
         mg_HAL_Time_Hard_Delay_us(DELAY_500_US);
         mg_HAL_ETC_Discrete_Direction( false);
