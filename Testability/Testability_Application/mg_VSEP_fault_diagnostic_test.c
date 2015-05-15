@@ -96,7 +96,8 @@ void mg_VSEP_fault_diagnostic_test(void)
     if (SHORT_BATTERY == test_mode)
     {
         /* clear fault buffer before read */
-        mg_HAL_ComplexIO_Fault_Clear();
+        // mg_HAL_ComplexIO_Fault_Clear();
+        mg_HAL_ComplexIO_Fault_Read();
         mg_HAL_Time_Hard_Delay_us(DIAG_WAIT_SPI_US);
         mg_HAL_EST_Toggle();
 
@@ -130,7 +131,8 @@ void mg_VSEP_fault_diagnostic_test(void)
     else if (SHORT_GROUND == test_mode)
     {
         /* clear fault buffer before read */
-        mg_HAL_ComplexIO_Fault_Clear();
+        // mg_HAL_ComplexIO_Fault_Clear();
+        mg_HAL_ComplexIO_Fault_Read();
         mg_HAL_Time_Hard_Delay_us(DIAG_WAIT_SPI_US);
         mg_HAL_EST_Toggle();
 
