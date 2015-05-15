@@ -95,9 +95,9 @@ void mg_IGBT_over_current_test(void)
         MG_HAL_EST_GROUP.on_time_us, MG_HAL_EST_GROUP.on_time_us, MG_HAL_EST_GROUP.delay_time_us, 0);
     
     /* clear fault buffer before read */
-    mg_HAL_ComplexIO_Fault_Clear();
+    // mg_HAL_ComplexIO_Fault_Clear();
+    mg_HAL_ComplexIO_Fault_Read();
 
-    
     start_time = mg_HAL_Timer_Get_STM_In_us();
     current_time = start_time;
 
@@ -121,4 +121,6 @@ void mg_IGBT_over_current_test(void)
         }
     }
     MG_MAILBOX_OUT(parameter[1]) = PCH;
+    /* clear fault */
+    mg_HAL_ComplexIO_Fault_Read();
 }
