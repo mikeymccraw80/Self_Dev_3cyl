@@ -13,6 +13,7 @@
 \* ============================================================================ */
 #include "hal_memory.h"
 #include "hal.h"
+#include "inst_config.h"
 
 //=============================================================================
 // IO_MEM_ROM_Block_Checksum_Program
@@ -24,7 +25,7 @@ const TsMEMORY_SEGMENT_POINTERS const IO_MEM_ROM_Block_Checksum[] =
 		(uint16_t *)(0x00013FFF)
 	},
 	{
-		(uint16_t *)(0x00020000),
+		(uint16_t *)(INST_REFERENCE_PAGE_START_ADDRESS + INST_CAL_DATA_START_OFFSET),
 		(uint16_t *)(0x0003FFFF)
 	},
 	{
