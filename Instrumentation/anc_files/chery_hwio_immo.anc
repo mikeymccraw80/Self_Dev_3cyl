@@ -1,0 +1,185 @@
+/*============================================================================*/
+/*                                                                            */
+/* INST Subsystem APPLICATION ANCILLARY FILE                                  */
+/*                                                                            */
+/*============================================================================*/
+
+*-immo.ImmoInhibitEngine{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "IMMOINHIBF";
+*-  variable_location.symbol = immo.ImmoInhibitEngine;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "immo inhibit engine flag, if this bit set, the fuel will be cut off";
+*-}
+
+*-immo_exec.ImmoStallModeTimer{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "IMMOSTLTMR";
+*-  variable_location.symbol = immo_exec.ImmoStallModeTimer;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "0.01";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "immo stall mode check time, the timeout value is 500";
+*-}
+
+*-siemens_immomsrv.SbSiemens_RLineTriggerEnbl{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "IMMORLTREN";
+*-  variable_location.symbol = siemens_immomsrv.SbSiemens_RLineTriggerEnbl;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "immo R_Line trigger enable flag";
+*-}
+
+*-immo_exec.SySiemens_RLineTimerCntr{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "IMMORLTMR";
+*-  variable_location.symbol = immo_exec.SySiemens_RLineTimerCntr;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.0";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "immo R_Line trigger timer counter";
+*-}
+
+*-immo_exec.AuthenticationResultState{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "IMMOATHRS";
+*-  variable_location.symbol = immo_exec.AuthenticationResultState;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "immo authentication result state flag";
+*-}
+
+*-immo_exec.ImmoPassThisKeyon{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "IMMOPSSTKO";
+*-  variable_location.symbol = immo_exec.ImmoPassThisKeyon;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "immo pass this key on, when in mfg mode or authentication pass";
+*-}
+
+*-immo_exec.AuthenticationResult{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "IMMOATHRLT";
+*-  variable_location.symbol = immo_exec.AuthenticationResult;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "immo authentication result";
+*-}
+
+*-immo_comu.ImmoNoResponseDetected{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "IMMONRPSDT";
+*-  variable_location.symbol = immo_comu.ImmoNoResponseDetected;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "immo no response detected";
+*-}
+
+*-immo_comu.SyIMMO_SingleAuthCntr{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "IMMOSAUCNT";
+*-  variable_location.symbol = immo_comu.SyIMMO_SingleAuthCntr;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.0";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "immo single authentication counter, wait the immo icu request timer";
+*-}
+
+*-immo_exec.SbImmo_NoResponseTestFailed{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "IMMONREPTF";
+*-  variable_location.symbol = immo_exec.SbImmo_NoResponseTestFailed;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "immo NO response test fail flag";
+*-}
+
+*-immo_exec.SbImmo_NoResponseTestComplete{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "IMMONREPTC";
+*-  variable_location.symbol = immo_exec.SbImmo_NoResponseTestComplete;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "immo NO response test complete";
+*-}
+
+*-immo_exec.SbImmo_AuthenErrorTestFailed{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "IMMOATHETF";
+*-  variable_location.symbol = immo_exec.SbImmo_AuthenErrorTestFailed;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "immo authentication error test fail flag";
+*-}
+
+*-immo_exec.SbImmo_AuthenErrorTestComplete{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "IMMOATHETC";
+*-  variable_location.symbol = immo_exec.SbImmo_AuthenErrorTestComplete;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "immo authentication error test complete flag";
+*-}
+
+*-immo_exec.SbImmo_KeyCodeNotPgmdTestFailed{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "IMMONPGMTF";
+*-  variable_location.symbol = immo_exec.SbImmo_KeyCodeNotPgmdTestFailed;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "immo sc and skey not program test fail flag";
+*-}
+
+*-immo_exec.SbImmo_KeyCodeNotPgmdTestComplete{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "IMMONPGMTC";
+*-  variable_location.symbol = immo_exec.SbImmo_KeyCodeNotPgmdTestComplete;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "immo sc and skey not program test complete flag";
+*-}
