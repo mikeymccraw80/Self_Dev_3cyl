@@ -291,10 +291,14 @@ void KwJ14230ReadDataByLocalIdentifier( void )
 			WrtKw2000ServiceData( GetKw2000ServiceData(IdxLocalIdentifier), TrByteCount++);
 
 			/*--- Fill table with mileage accumulation ---*/
-			WrtKw2000ServiceData(NsFILE_NVM_EE_ManufactData.VaFILE_EE_Odometer[0], TrByteCount++);
-			WrtKw2000ServiceData(NsFILE_NVM_EE_ManufactData.VaFILE_EE_Odometer[1], TrByteCount++);
-			WrtKw2000ServiceData(NsFILE_NVM_EE_ManufactData.VaFILE_EE_Odometer[2], TrByteCount++);
-			WrtKw2000ServiceData(NsFILE_NVM_EE_ManufactData.VaFILE_EE_Odometer[3], TrByteCount++);
+			// WrtKw2000ServiceData(NsFILE_NVM_EE_ManufactData.VaFILE_EE_Odometer[0], TrByteCount++);
+			// WrtKw2000ServiceData(NsFILE_NVM_EE_ManufactData.VaFILE_EE_Odometer[1], TrByteCount++);
+			// WrtKw2000ServiceData(NsFILE_NVM_EE_ManufactData.VaFILE_EE_Odometer[2], TrByteCount++);
+			// WrtKw2000ServiceData(NsFILE_NVM_EE_ManufactData.VaFILE_EE_Odometer[3], TrByteCount++);
+			WrtKw2000ServiceData((uint8_t)((odometer>>24)&0x000000ff), TrByteCount++);
+			WrtKw2000ServiceData((uint8_t)((odometer>>16)&0x000000ff), TrByteCount++);
+			WrtKw2000ServiceData((uint8_t)((odometer>>8) &0x000000ff), TrByteCount++);
+			WrtKw2000ServiceData((uint8_t)((odometer>>0) &0x000000ff), TrByteCount++);
 			SendStandardPositiveAnswer( TrByteCount ) ;
 			break ;
 
