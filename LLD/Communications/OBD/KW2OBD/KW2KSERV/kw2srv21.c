@@ -247,8 +247,8 @@ void KwJ14230ReadDataByLocalIdentifier( void )
 				// 	TempData = ( (TempDataForWrite >> ((3-Idx)*8)) & 0xff);
 				// 	WrtKw2000ServiceData( TempData, TrByteCount++);
 				// }
-				for(Idx = 0 ; Idx < CcCustomerEndModelPN_Size ; Idx++ ) {
-					WrtKw2000ServiceData((uint8_t)(KgSYST_DELPHI_END_MODEL_NR >> (8*Idx)), TrByteCount++);
+				for(Idx = CcCustomerEndModelPN_Size ; Idx > 0 ; Idx-- ) {
+					WrtKw2000ServiceData((uint8_t)(KgSYST_DELPHI_END_MODEL_NR >> (8*(Idx-1))), TrByteCount++);
 				}
 				SendStandardPositiveAnswer( TrByteCount ) ;
 			break ;
