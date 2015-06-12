@@ -59,7 +59,7 @@
 #define VehicleManu_HW_Number_Size   (11)
 #define SS_ECU_HW_Number_Size        (20)
 #define SS_ECU_SW_Number_Size        (10)
-#define SS_ECU_SW_Version_Number_Size (8)
+//#define SS_ECU_SW_Version_Number_Size (8)
 #define SystemName_EngineType_Size    (6)
 #define RepairShopCode_Size          (10)
 #define ProgrammingDate_Size          (4)
