@@ -64,6 +64,7 @@
 * CANOBD Service Include Files
 ******************************************************************************/
 #include "dcancomm.h"
+#include "obdlcald.h"
 /***********************************************************************
 * Functions in this file:                                              *
 ***********************************************************************/
@@ -74,7 +75,7 @@
 /*********************************************************************/
 /*           CONSTANT and ENUMERATION DECLARATIONS                   */
 /*********************************************************************/
-
+#define CcCustomerEndModelPN_Size       (4)
 #define Cy14230_MODE_21_MSG_LENGTH      (2)
 
 #define IdxLocalIdentifier              (1)
@@ -197,7 +198,7 @@
 #define rdli_PIDF125                      (0xF125)
 #define rdli_PIDF126                      (0xF126)
 #define rdli_PIDF190                      (0xF190)
-
+#define rdli_PIDF1b0                      (0xF1b0)
 
 
 #define RESEVEDBYTE			  (0x00)
@@ -1075,6 +1076,18 @@ void LnReadDataByCommonIdentifier (void)
 			for(Idx = 0; Idx < VIN_Size; Idx++)
 
 			   WrtDCAN_ServiceData( scnVehInfo.VIN[Idx], msglength++);
+			
+			SendLnStandardPositiveAnswer( msglength );
+			break;
+
+		case rdli_PIDF1b0:
+			
+			WrtDCAN_ServiceData(Hi8Of16(ParamID), msglength++);
+			WrtDCAN_ServiceData(Lo8Of16(ParamID), msglength++);
+
+			for(Idx = CcCustomerEndModelPN_Size; Idx >0; Idx--)
+
+			   WrtDCAN_ServiceData( (uint8_t)(KgSYST_DELPHI_END_MODEL_NR >> (8*(Idx-1))), msglength++);
 			
 			SendLnStandardPositiveAnswer( msglength );
 			break;
