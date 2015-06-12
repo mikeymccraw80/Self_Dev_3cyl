@@ -143,11 +143,11 @@ extern bool Pb_FuelAdjustOnlyonetime_enable;
 uint8_t SetCopyAndExecuteKernel(void)
 {
    if((( GetLnVulnerabilityState() ))
-     && (GetVIOS_n_EngSpd() < V_RPM(200)))
+     && (GetVIOS_n_EngSpd() < V_RPM(200))
  /* in AT vehicle, VKPH will be set a default value when CAN is disabled, 
     because the default value is not equal to 0, we can't reflash the ECU with bench,
     it need to delete the condition that VKPH==0 */  
-//     &&  (GetVIOS_v_VehSpd()== V_KPH(0)))
+     &&  (GetVIOS_v_VehSpd()== V_KPH(0)))
    {
       
       SetCopyAndExecuteKernelPending(CbTRUE);

@@ -278,8 +278,8 @@ void KW2KCAN_Received_Message( void )
    // Engine Speed < 200 RPM
    // Brain Dead Recovery Enabled
 
-   if ( CRANK_Get_Engine_Speed() < V_RPMa( 200 ) //&&
-      //  ((0xAA == KySYST_BrainDeadBOOT_RecovEnbld)||(CPU_Info == CPU_LCI) )
+   if ( CRANK_Get_Engine_Speed() < V_RPMa( 200 ) && 
+       ((0xAA == KySYST_BrainDeadBOOT_RecovEnbld)||(CPU_Info == CPU_LCI) )
       )
    {
 
