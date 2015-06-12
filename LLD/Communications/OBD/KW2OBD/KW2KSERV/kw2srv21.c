@@ -32,6 +32,7 @@
 #include "id_cald.h"
 // #include "hal_esc.h"
 #include "filenvmd.h"
+#include "obdlcald.h"
 
 
 
@@ -246,8 +247,8 @@ void KwJ14230ReadDataByLocalIdentifier( void )
 				// 	TempData = ( (TempDataForWrite >> ((3-Idx)*8)) & 0xff);
 				// 	WrtKw2000ServiceData( TempData, TrByteCount++);
 				// }
-				for(Idx = 0 ; Idx < (EndModelSize/2) ; Idx++ ) {
-					WrtKw2000ServiceData(NsFILE_NVM_EE_ManufactData.VaFILE_EE_HexEndModelNumber[Idx], TrByteCount++);
+				for(Idx = 0 ; Idx < CcCustomerEndModelPN_Size ; Idx++ ) {
+					WrtKw2000ServiceData((uint8_t)(KgSYST_DELPHI_END_MODEL_NR >> (8*Idx)), TrByteCount++);
 				}
 				SendStandardPositiveAnswer( TrByteCount ) ;
 			break ;
