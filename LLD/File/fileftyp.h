@@ -620,6 +620,9 @@ typedef __packed__ struct
   BYTE PROCALGN VaFILE_EE_ReservedForCustomer[CcFILE_EE_ReservedForCustomer_Size];
 #endif
 
+#if CcFILE_EE_Calibration_Size > 0
+  BYTE PROCALGN VaFILE_EE_CalibrationData[CcFILE_EE_Calibration_Size];
+#endif
   volatile WORD VaFILE_EE_Checksum;
 } TsFILE_EE_ManufactData_Pre;
 
@@ -1030,13 +1033,16 @@ typedef __packed__ struct
   BYTE PROCALGN VaFILE_EE_Odometer[CcFILE_EE_Odometer_Size];
 #endif
 
+ /* calculate the reserved size, 0x17a - sizeof(TsFILE_EE_ManufactData_Pre)*/
+  BYTE PROCALGN VaFILE_EE_Reserved1Data[0x17a - sizeof(TsFILE_EE_ManufactData_Pre)];
+
 #if CcFILE_EE_ReservedForCustomer_Size > 0
   BYTE PROCALGN VaFILE_EE_ReservedForCustomer[CcFILE_EE_ReservedForCustomer_Size];
 #endif
 
-  /* calculate the reserved size, 0x17a - sizeof(TsFILE_EE_ManufactData_Pre)*/
-  BYTE PROCALGN VaFILE_EE_Reserved1Data[0x17a - sizeof(TsFILE_EE_ManufactData_Pre)];
-
+#if CcFILE_EE_Calibration_Size > 0
+  BYTE PROCALGN VaFILE_EE_CalibrationData[CcFILE_EE_Calibration_Size];
+#endif
   volatile WORD VaFILE_EE_Checksum;
 } TsFILE_EE_ManufactData;
 

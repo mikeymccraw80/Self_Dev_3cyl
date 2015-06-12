@@ -147,7 +147,7 @@
 #define CcFILE_EE_GMTargetVehicle_Size              (0)
 #define CcFILE_EE_DynamTireCirc_Size                (0)
 #define CcFILE_EE_OctSelSwitch_Size                 (0)
-#define CcFILE_EE_EngPerfIdent_Size                 (14)
+#define CcFILE_EE_EngPerfIdent_Size                 (0)
 #define CcFILE_EE_FuelConsCalcCorrFctr_Size         (0)
 #define CcFILE_EE_VehCANConfig_Size                 (0)
 #define CcFILE_EE_XMLDataFilePN_Size                (0)
@@ -164,18 +164,18 @@
 #define CcFILE_EE_ImmoSecureCode_Size               (0)
 #define CcFILE_EE_ImmoSecureCodeCtr_Size            (0)
 #define CcFILE_EE_ImmoSecureCodeRstCtr_Size         (0)
-#define CcFILE_EE_OdoVINvalue_Size                  (17)
-#define CcFILE_EE_OdoVINwritten_Size                (1)
+#define CcFILE_EE_OdoVINvalue_Size                  (0)
+#define CcFILE_EE_OdoVINwritten_Size                (0)
 #define CcFILE_EE_VINWrittenCount_Size              (0)
 #define CcFILE_EE_PrevRepairShopCode_Size           (0)
 #define CcFILE_EE_GreenEngCompComplete_Size         (0)
 #define CcFILE_EE_CalibrationData_Size              (64)
 #define CcFILE_EE_TDC_CrankShaftAdaptive_Size       (0)
-#define CcFILE_EE_Odometer_Size                     (4)
+#define CcFILE_EE_Odometer_Size                     (0)
 #define CcFILE_EE_ReservedForCustomer_Size          (40)
 #define CcFILE_EE_Reserved1_Size                    (181)  //Mfg Reserved Data
 #define CcFILE_EE_Reserved2_Size                    (0)  //Mfg Reserved Data
-
+#define CcFILE_EE_Calibration_Size                  (64)
 #endif /* FILEPCFG_H */
 
 /******************************************************************************
