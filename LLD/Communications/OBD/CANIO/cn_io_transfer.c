@@ -38,6 +38,7 @@
 #include "dd_flexcan_common.h"
 #include "io_dcan_config.h"
 #include "dd_flexcan.h"
+#include "obdlcald.h"
 
 CAN_Message_Parameter_T *CAN_Message_Parameter_Table_Ptr;
 //============================================================================
@@ -89,6 +90,9 @@ void CAN_Reset_Init( void )
    IO_Configuration_T in_configuration;
    FlexCAN_MSGOBJ_INDEX_T msgobj_r = FLEXCAN_MSG_OBJ_32;
    FlexCAN_MSGOBJ_INDEX_T msgobj_t = FLEXCAN_MSG_OBJ_48;
+
+   /* init the can obd cald id by KwDCANOBD_CANID */
+   Initial_CANOBD_CAL_ID(KwDCANOBD_CANID);
 
    InitCANH_Message_Parameter_Table();
    // Initialize CAN transmit/receive buffer control parameters

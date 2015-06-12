@@ -90,7 +90,7 @@ typedef uint8_t Can8DataBytesArrayType [8];
 typedef uint8_t LnTrspTimeOutErrorType;
 
 #define DataLengthInBytes         (8)
-#define RX_MSG_BUFFER_NUMBER      (2) /* effective number of Rx msg allocated */
+#define RX_MSG_BUFFER_NUMBER      (3) /* effective number of Rx msg allocated */
                                        /* Don't forget the ccp can msg 4 Tx + 2 Rx */
 /*--- the ISO spec concerning frame data length indicates 4095 bytes
       as the maximum data bytes that can be transmitted (of course segmented) ---*/ 
