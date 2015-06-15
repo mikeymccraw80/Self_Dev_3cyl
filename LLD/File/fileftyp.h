@@ -626,6 +626,10 @@ typedef __packed__ struct
   volatile WORD VaFILE_EE_Checksum;
 } TsFILE_EE_ManufactData_Pre;
 
+typedef __packed__ struct
+{
+ BYTE PROCALGN VaFILE_EE_Reserved1Data[(0x17a - sizeof(TsFILE_EE_ManufactData_Pre))/2];
+} TsFILE_EE_Reserver1Data_Pre;
 
 typedef __packed__ struct
 {
@@ -1034,11 +1038,13 @@ typedef __packed__ struct
 #endif
 
  /* calculate the reserved size, 0x17a - sizeof(TsFILE_EE_ManufactData_Pre)*/
-  BYTE PROCALGN VaFILE_EE_Reserved1Data[0x17a - sizeof(TsFILE_EE_ManufactData_Pre)];
+  BYTE PROCALGN VaFILE_EE_Reserved1Data[sizeof(TsFILE_EE_Reserver1Data_Pre)];
 
 #if CcFILE_EE_ReservedForCustomer_Size > 0
   BYTE PROCALGN VaFILE_EE_ReservedForCustomer[CcFILE_EE_ReservedForCustomer_Size];
 #endif
+
+  BYTE PROCALGN VaFILE_EE_Reserved2Data[0x17a - sizeof(TsFILE_EE_ManufactData_Pre)-sizeof(TsFILE_EE_Reserver1Data_Pre)];
 
 #if CcFILE_EE_Calibration_Size > 0
   BYTE PROCALGN VaFILE_EE_CalibrationData[CcFILE_EE_Calibration_Size];
