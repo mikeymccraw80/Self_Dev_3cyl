@@ -183,3 +183,27 @@
 *-  ds_const_b               = "0.000000000000";
 *-  description              = "immo sc and skey not program test complete flag";
 *-}
+
+*-immo_comu.ImmoAuthenErrorDetected{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "IMMOAUERRD";
+*-  variable_location.symbol = immo_comu.ImmoAuthenErrorDetected;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "immo error detected flag";
+*-}
+
+*-immo_comu.VeSiemens_ActReason{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "IMMOAUERRD";
+*-  variable_location.symbol = immo_comu.VeSiemens_ActReason;
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "immo last act reason";
+*-}
+
