@@ -100,6 +100,8 @@ extern const bool                   KbCAN_CHERY_Fuel_Adjust_Enable;
 extern const bool                   KbVIOS_O2APumpingCurrentEnabled;
 extern const bool                   KbVIOS_O2BPumpingCurrentEnabled;
 
+extern const bool                   KbHWIO_EraseMFGafterMFGCorrupted;
+
 extern const uint16_t               KwFILE_COND_ROM_CalbrtnChecksum;
 extern const T_COUNT_BYTE           KySYST_BrainDeadBOOT_RecovEnbld;
 #endif

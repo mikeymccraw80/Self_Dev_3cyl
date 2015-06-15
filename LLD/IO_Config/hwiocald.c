@@ -1015,6 +1015,17 @@ const bool    KbVIOS_O2APumpingCurrentEnabled = false ;
 */
 const bool    KbVIOS_O2BPumpingCurrentEnabled = false ;
 
+/*
+*| hwiocald.{
+*|   KbHWIO_EraseMFGafterMFGCorrupted {
+*|     : is_calconst;
+*|     : description = "When all MFG pages in NVM are corrupted, APP will erase all MFG section depending on this calibration.";
+*|     : units = "BOOLEAN";
+*|   }
+*| }
+*/
+const bool       KbHWIO_EraseMFGafterMFGCorrupted  =  false;
+
 /******************************************************************************
 *  Calibration definition for ROM filesystem
 ******************************************************************************/

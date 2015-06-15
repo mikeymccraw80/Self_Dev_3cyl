@@ -30,6 +30,7 @@
 #include "cn_io_transfer.h"
 #include "hal_analog.h"
 #include "hal_gpio.h"
+#include "hwiocald.h"
 
 /* private variable define */
 static bool BatteryRemoved;
@@ -330,7 +331,7 @@ void exit(void)
 	hwi_kick_watchdog_position(SSWT_EXPIRATION_TIME_419MS);
 	hwi_kick_wdg_local();
 
-	EEPROM_Backup_MFG_NVM_Block( false );
+	EEPROM_Backup_MFG_NVM_Block( KbHWIO_EraseMFGafterMFGCorrupted );
 	EEPROM_Backup_Vehicle_NVRAM_Block();
 
 	// only LCI will do the instrumentation operation, backup cal 
