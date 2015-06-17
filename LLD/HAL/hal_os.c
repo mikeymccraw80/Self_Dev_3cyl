@@ -340,7 +340,7 @@ void HAL_OS_100ms_Task(void)
 void HAL_OS_Init_Task(void)
 {
 	InitialiseMileage();
-	ImmobilizerIgnitionOn();
+	// ImmobilizerIgnitionOn();
 	IO_OS_Power_Status_Init();
 	Initialize_HiRes_Engine_Speed();
 	//chery init
