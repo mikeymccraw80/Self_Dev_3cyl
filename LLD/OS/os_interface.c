@@ -95,9 +95,15 @@ void MngOSTK_10msTasks(void)
 	/* feed e200z3 core watch dog */
 	hwi_kick_wdg_local();
     Enter_OSThroughputMeasure(CeOSTK_SEG_COPUPDATE);
-	
+
 	/* call the soh loop sequence instance */
 	HAL_SOH_Update_Loop_Sequence_10MS();
+
+	/* update ignition status */
+	UpdateIgnitionState_10MS();
+
+	/* update power source status */
+	PowerSourceStatus_EveryLoop();
 
 	/* call device driver layer functions */
 	VSEP_SPI_SCHEDULER_10MS();
@@ -127,12 +133,6 @@ void MngOSTK_10msTasks(void)
 		KeywordExecutive(CwKW2000_RunMode);
 	}
 	MngDCAN_TasksExecutive();
-
-	/* update ignition status */
-	UpdateIgnitionState_10MS();
-
-	/* update power source status */
-	PowerSourceStatus_EveryLoop();
 }
 
 //=============================================================================
