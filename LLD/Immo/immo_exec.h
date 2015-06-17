@@ -307,7 +307,7 @@ extern bool                       GetSCIRespReceived;
 extern TeSiemens_ECM_Relation     VeSiemens_ECMImmoRelation;
 extern TeIMMO_DLL_STATUS          VeSiemens_DLL_State;
 extern TeIMMO_ActReason           VeSiemens_ActReason;
-extern IMMO_WarningState          ImmoCodeWarningSts;
+// extern IMMO_WarningState          ImmoCodeWarningSts;
 
 extern bool                       IGNOffModeTimeOut;
 extern const T_COUNT_WORD     CaSiemens_L2WrongAttemptDelay[];

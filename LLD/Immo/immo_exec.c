@@ -109,17 +109,16 @@ ECM_Immo_Relation_T        ECMImmoRelation;
 Authentication_Request_T   Authentication_Request_ID;
 // #pragma section []
 
-
+TbBOOLEAN                  AuthenticationResultState;
 
 // #pragma section [nvram]
 #pragma section DATA " " ".nc_nvram"
 //uint8_t                    ECMKEY[JiChengImmoKey_Length];
-WORD                       TotalAuthenticationCounter;
 TbBOOLEAN                  AuthenticationResult;
-TbBOOLEAN                  AuthenticationResultState;
+// WORD                       TotalAuthenticationCounter;
 TbBOOLEAN                  ImmoPassThisKeyon;
 Every_Loop_Sec_W           NoAuthenticationTimer;
-IMMO_WarningState          ImmoCodeWarningSts = AuthenticationResultFail;
+// IMMO_WarningState          ImmoCodeWarningSts = AuthenticationResultFail;
 // #pragma section []
 #pragma section DATA " " ".bss"              /* normal volatile variables */
 
