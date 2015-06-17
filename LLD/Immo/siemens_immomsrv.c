@@ -50,6 +50,7 @@
 #include "hal_analog.h"
 #include "hal_eng.h"
 #include "hal_gpio.h"
+#include "hal_os.h"
 
 #define CySiemens_ChallengeRspLength            (0x07)
 #define CySiemens_CodeRspLength                 (0x01)
@@ -464,14 +465,12 @@ static void SiemensImmo_CntrlIMMOKWTime(void)
  *****************************************************************************/
 static void ImmoECMRunningResetCheck(void)
 {
-	if (//Running_Reset_Occurred()&&
-	(!GetFILE_NVM_Failure() ) 
-	&& (AuthenticationResultLost() ) )
+	if (HAL_OS_Get_RunningReset_Flag() && (!GetFILE_NVM_Failure()) && (AuthenticationResultLost()))
 	{
 		if (AuthenticationResult == CbTRUE) {
 			ImmoEnableEngine();
 			SetImmoAuthenticationResult(CbTRUE);
-			ValidateAuthenticationResult();      
+			ValidateAuthenticationResult();
 		}
 	}
 }
