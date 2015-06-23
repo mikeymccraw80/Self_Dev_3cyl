@@ -213,18 +213,20 @@ void HAL_GPIO_SET_INJECTION_GPIO_Mode_Enable(bool in_enable)
 //=============================================================================
 // HAL_GPIO_SET_IMMOREQ_Enable
 //=============================================================================
-  void HAL_GPIO_SET_IMMOREQ_Enable(bool in_enable) 
- {
-     VSEP_DiscreteSetImmediate(VSEP_DO_IMMOREQ_CH  ,in_enable);
- }
+void HAL_GPIO_SET_IMMOREQ_Enable(bool in_enable) 
+{
+	// VSEP_DiscreteSetImmediate(VSEP_DO_IMMOREQ_CH  ,in_enable);
+	SIU_GPIO_DISCRETE_Set_State(HAL_GPIO_IMMOREQCTL_CHANNEL, in_enable);
+}
 
 //=============================================================================
 //HAL_GPIO_GET_IMMOREQ_Status
 //=============================================================================			
-   bool HAL_GPIO_GET_IMMOREQ_Status(void) 
- {
- return   VSEP_DiscreteGet(VSEP_DO_IMMOREQ_CH);
- }   
+bool HAL_GPIO_GET_IMMOREQ_Status(void) 
+{
+	// return   VSEP_DiscreteGet(VSEP_DO_IMMOREQ_CH);
+	return SIU_GPIO_DISCRETE_Get_State(HAL_GPIO_IMMOREQCTL_CHANNEL);
+}
 
 //=============================================================================
 // HAL_GPIO_SET_MIL_Enable
