@@ -95,25 +95,28 @@ static void PerformCOND_CPU_SOH_DataProcessing(void)
   }
   else if ( GetHWIO_ETC_SOH_FltActnTaken(LwCOND_ETC_SOH_FltLog) )
   {
-    if ( GetHWIO_ETC_SOH_Comm_FltPrsnt(LwCOND_ETC_SOH_FltLog)
-      && (! SbCOND_SOH_MainCPU_Flt) )
-    {
-      SbCOND_SOH_CommFlt = CbTRUE;
-    }
-    else if ( GetHWIO_ETC_SOH_ChkngCPU_FltPrsnt(LwCOND_ETC_SOH_FltLog) )
-    {
-      if ( (! SbCOND_SOH_MainCPU_Flt) 
-        && (! SbCOND_SOH_CommFlt) )
-      {
-        SbCOND_SOH_CheckingCPU_Flt = CbTRUE;
-      }
-      /* else do nothing - keep previous values */
-    }
-    else if ( GetHWIO_ETC_SOH_MainCPU_FltPrsnt(LwCOND_ETC_SOH_FltLog) )
+    if ( GetHWIO_ETC_SOH_MainCPU_FltPrsnt(LwCOND_ETC_SOH_FltLog) )
     {
       SbCOND_SOH_MainCPU_Flt = CbTRUE;
     }
     /* else do nothing - keep previous values */
+  }
+  else if ( GetHWIO_ETC_SOH_Comm_FltPrsnt(LwCOND_ETC_SOH_FltLog)
+      && (! SbCOND_SOH_MainCPU_Flt) )
+  {
+    SbCOND_SOH_CommFlt = CbTRUE;
+  }
+  else if ( GetHWIO_ETC_SOH_ChkngCPU_FltPrsnt(LwCOND_ETC_SOH_FltLog) )
+  {
+    if ( (! SbCOND_SOH_MainCPU_Flt) 
+      && (! SbCOND_SOH_CommFlt) )
+    {
+      SbCOND_SOH_CheckingCPU_Flt = CbTRUE;
+    }
+      /* else do nothing - keep previous values */
+  }
+  else 
+  {
   }
   /* else do nothing - keep previous values */
 
