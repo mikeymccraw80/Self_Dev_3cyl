@@ -334,7 +334,7 @@ static bool IsLoopTestComp(bool even)
     bool return_code;
     if (even) 
     {
-        return_code = (Soh_TestComp.Bits.SysClk && Soh_TestComp.Bits.SohIrq && Soh_TestComp.Bits.RtiFreq)?true:false;
+        return_code = (Soh_TestComp.Bits.SysClk && Soh_TestComp.Bits.SohIrq && Soh_TestComp.Bits.RtiFreq && Soh_TestComp.Bits.CpuOpsResult)?true:false;
     }
     else 
     {
@@ -356,6 +356,7 @@ INLINE void SetLoopTestComp(bool even)
         Soh_TestComp.Bits.SysClk = 1;
         Soh_TestComp.Bits.SohIrq = 1;
         Soh_TestComp.Bits.RtiFreq = 1;
+        Soh_TestComp.Bits.CpuOpsResult = 1;
     }
     else 
     {
