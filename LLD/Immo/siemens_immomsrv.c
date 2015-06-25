@@ -59,6 +59,7 @@
 #define CySiemens_RLineTimerCnt7p8ms            ( V_COUNT_BYTE(16) )  /* 16*7p8125ms = 125ms */
 
 #define PowerUpDelayTiniTime                 (20)
+#define PowerUpDelayTiniTimeNormal           (5)
 /*****************************************************************************
  * Volatile RAM Variable Declarations
  *****************************************************************************/
@@ -287,6 +288,8 @@ void SiemensImmo_Initializing(void)
 		/* If fast ignition off/on happened, leave 150ms delay per immo spec */
 		PowerUpDelayTiniCntr = PowerUpDelayTiniTime;
 		IGNOffModeTimeOut = false;
+	}else{
+	    PowerUpDelayTiniCntr = PowerUpDelayTiniTimeNormal;
 	}
 
 	SbSiemens_RLineTriggerEnbl = CbTRUE;
