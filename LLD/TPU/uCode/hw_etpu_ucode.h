@@ -626,7 +626,7 @@ extern const unsigned long etpu_ucode_image [( 0x1000 )];
 #define PWMIE_SPRAM_FRAME_SIZE  ( 0x0018 )
 #define SPWME_SPRAM_FRAME_SIZE  ( 0x0030 )
 #define PWMOE_SPRAM_FRAME_SIZE  ( 0x0010 )
-#define FIE_SPRAM_FRAME_SIZE    ( 0x0010 )
+#define FIE_SPRAM_FRAME_SIZE    ( 0x0018 )
 #define ECE_SPRAM_FRAME_SIZE    ( 0x0018 )
 /* ECE SPRAM Frame size is a function of its array size, consult the MCD */
 #define VSSBE_SPRAM_FRAME_SIZE  ( 0x0058 )
