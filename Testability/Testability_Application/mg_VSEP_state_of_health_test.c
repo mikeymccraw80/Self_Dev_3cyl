@@ -84,7 +84,7 @@ void mg_VSEP_state_of_health_test(void)
         state_of_health = MG_MAILBOX_IN(parameter[0]);
         
         mg_HAL_Discrete_Set_FSE(true);
-        // mg_HAL_Injector_Set_Group_Value(0, true);
+        mg_HAL_Injector_Set_Group_Value(0, true);
         mg_HAL_ETC_Discrete_Enable(true);
         dir = true;
         MG_HAL_ETC_GROUP.duty = 32;
