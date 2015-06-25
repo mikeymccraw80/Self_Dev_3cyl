@@ -120,18 +120,18 @@ void MngOSTK_10msTasks(void)
 	}
 #endif
 
-	/* call hal layer callback functions */
-	HAL_OS_10ms_Task();
-
-	/* CCP 10ms Trigger */
-	CCP_Trigger_Event_Channel( 10 );
-
 	Immo_Executive();
 	/* update kw2000 state machine */
 	if (GetNormalKeywordMode()) {
 		KW2000CommuState = KW2000_Responder;
 		KeywordExecutive(CwKW2000_RunMode);
 	}
+	/* call hal layer callback functions */
+	HAL_OS_10ms_Task();
+
+	/* CCP 10ms Trigger */
+	CCP_Trigger_Event_Channel( 10 );
+
 	MngDCAN_TasksExecutive();
 }
 
