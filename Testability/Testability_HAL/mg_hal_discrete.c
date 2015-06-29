@@ -113,7 +113,9 @@ void mg_HAL_Discrete_Set_TACH(bool state)
 void mg_HAL_Discrete_Set_ACREQDI(bool state)
 {
 #ifdef __MG_VSEP_USED
-//    IO_DISCRETE_Set_Immediate_State(&MTSA_D_IN_ACREQDI, state);
+    bool temp;
+    temp = HAL_GPIO_GET_GEN_Status();
+    HAL_GPIO_SET_GEN_Enable(false);
     if (state)
     {
         VSEP_MPIO_Set_MODE_Immediate(VSEP_MPIO_ACRequest_CH, VSEP_MPIO_INPUT_MODE_ACTIVE_HIGH_SWITCH_DETECT);
@@ -122,13 +124,16 @@ void mg_HAL_Discrete_Set_ACREQDI(bool state)
     {
         VSEP_MPIO_Set_MODE_Immediate(VSEP_MPIO_ACRequest_CH, VSEP_MPIO_INPUT_MODE_ACTIVE_LOW_SWITCH_DETECT);
     }
+    HAL_GPIO_SET_GEN_Enable(temp);
 #endif
 }
 
 void mg_HAL_Discrete_Set_PSPSDI(bool state)
 {
 #ifdef __MG_VSEP_USED
-//    IO_DISCRETE_Set_Immediate_State(&MTSA_D_IN_PSPSDI, state);
+    bool temp;
+    temp = HAL_GPIO_GET_GEN_Status();
+    HAL_GPIO_SET_GEN_Enable(false);
     if (state)
     {
         VSEP_MPIO_Set_MODE_Immediate(VSEP_MPIO_PSPS_CH, VSEP_MPIO_INPUT_MODE_ACTIVE_HIGH_SWITCH_DETECT);
@@ -137,13 +142,16 @@ void mg_HAL_Discrete_Set_PSPSDI(bool state)
     {
         VSEP_MPIO_Set_MODE_Immediate(VSEP_MPIO_PSPS_CH, VSEP_MPIO_INPUT_MODE_ACTIVE_LOW_SWITCH_DETECT);
     }
+    HAL_GPIO_SET_GEN_Enable(temp);
 #endif
 }
 
 void mg_HAL_Discrete_Set_MIDACDI(bool state)
 {
 #ifdef __MG_VSEP_USED
-//    IO_DISCRETE_Set_Immediate_State(&MTSA_D_IN_MIDACDI, state);
+    bool temp;
+    temp = HAL_GPIO_GET_GEN_Status();
+    HAL_GPIO_SET_GEN_Enable(false);
     if (state)
     {
         VSEP_MPIO_Set_MODE_Immediate(VSEP_MPIO_MIDAC_CH, VSEP_MPIO_INPUT_MODE_ACTIVE_HIGH_SWITCH_DETECT);
@@ -152,6 +160,7 @@ void mg_HAL_Discrete_Set_MIDACDI(bool state)
     {
         VSEP_MPIO_Set_MODE_Immediate(VSEP_MPIO_MIDAC_CH, VSEP_MPIO_INPUT_MODE_ACTIVE_LOW_SWITCH_DETECT);
     }
+    HAL_GPIO_SET_GEN_Enable(temp);
 #endif
 }
 
