@@ -55,11 +55,11 @@ void mg_etc_test(void)
 
     if (MG_MAILBOX_IN(parameter[3]) == 0x01)
     {
-        mg_HAL_ETC_Discrete_Direction(false);
+        mg_HAL_ETC_Discrete_Direction(true);
     }
     else if(MG_MAILBOX_IN(parameter[3]) == 0x02)
     {
-        mg_HAL_ETC_Discrete_Direction(true);
+        mg_HAL_ETC_Discrete_Direction(false);
     }
     else
     {
