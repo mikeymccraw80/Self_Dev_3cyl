@@ -84,7 +84,7 @@ void mg_VSEP_state_of_health_test(void)
         state_of_health = MG_MAILBOX_IN(parameter[0]);
         
         mg_HAL_Discrete_Set_FSE(true);
-        mg_HAL_Injector_Set_Group_Value(0, true);
+        mg_HAL_Injector_Set_Group_Value(2, true);
         mg_HAL_ETC_Discrete_Enable(true);
         dir = true;
         MG_HAL_ETC_GROUP.duty = 32;
@@ -132,7 +132,7 @@ void mg_VSEP_state_of_health_test(void)
 
         /* Clear SOH test flag & reset for other test */
         mg_HAL_Set_SOH_Test_Flag(0);
-        mg_HAL_SWT_Enable_WatchDog( true );            
+        mg_HAL_SWT_Enable_WatchDog( true );
     }
 }
 
