@@ -410,10 +410,10 @@ uint8_t mg_HAL_ETC_Fault_Get(uint8_t index)
     switch (index)
     {
         case 0:
-            fault_result = (uint8_t)L9958_HWDIAG_STATUS;
+            fault_result = fault_log.byte_access.lobyte;;
             break;
         case 1:
-            fault_result = (uint8_t)(L9958_HWDIAG_STATUS>>8);
+            fault_result = fault_log.byte_access.hibyte;
             break;
         default:
             fault_result = 0;
