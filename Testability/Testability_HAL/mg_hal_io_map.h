@@ -41,14 +41,18 @@
                   KP254_Set_Message( 0,KP254_MESSAGE_ACQ_ID) )
 #endif
 
+enum {
+	MG_KNOCK_CHANNEL_ESCHiVI,
+	MG_KNOCK_CHANNEL_ESCLoVI
+};
 
 // analog input map
 //remap null to 0xff, for NULL(0x00) is conflicted with AD_Analog_T
 #define   MG_HIODEVICE_NULL                      0XFF 
 // #define   MG_HIODEVICE_AN00                      (void *)&ESCHiVI
 // #define   MG_HIODEVICE_AN01                      (void *)&ESCLoVI
-#define   MG_HIODEVICE_AN00                      MG_HIODEVICE_NULL
-#define   MG_HIODEVICE_AN01                      MG_HIODEVICE_NULL
+#define   MG_HIODEVICE_AN00                      MG_KNOCK_CHANNEL_ESCHiVI
+#define   MG_HIODEVICE_AN01                      MG_KNOCK_CHANNEL_ESCLoVI
 #define   MG_HIODEVICE_AN02                      AD_MAPVI_Channel
 #define   MG_HIODEVICE_AN03                      AD_ACPREVI_Channel
 #define   MG_HIODEVICE_AN04                      AD_LEGRFBVI_Channel
