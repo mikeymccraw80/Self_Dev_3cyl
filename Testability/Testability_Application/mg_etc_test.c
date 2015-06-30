@@ -66,7 +66,7 @@ void mg_etc_test(void)
         /* error command */
     }
 
-    MG_HAL_ETC_GROUP.duty = MG_MAILBOX_IN(parameter[0]);
+    MG_HAL_ETC_GROUP.duty = 100 - MG_MAILBOX_IN(parameter[0]);
     MG_HAL_ETC_GROUP.freq = MG_MAILBOX_IN(parameter[1])*256 + MG_MAILBOX_IN(parameter[2]);
     mg_HAL_ETC_Set_Freq_And_Duty();
 
