@@ -33,7 +33,6 @@
 //=============================================================================
 #include "reuse.h"
 
-#define HW_SOH_DISABLE
 #define VSEP_CALIBRATION_ENABLE  1
 //
 // @enum IO_TOS_T | Defines the different SRC selection modes

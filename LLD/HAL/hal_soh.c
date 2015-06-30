@@ -342,9 +342,7 @@ uint16_t HAL_SOH_CnR_Get_Status(bool unbuffered)
 
 void UpdateHWIO_ETC_SOH_Loop_Sequence_Array( const uint8_t arr_index )
 {
-//#ifndef HW_SOH_DISABLE
      SOH_ETC_Update_Loop_Sequence_Array( (const uint8_t )arr_index );//mz38cg
-//#endif
 }
 
 //loop sequence validation for chery applicaiton

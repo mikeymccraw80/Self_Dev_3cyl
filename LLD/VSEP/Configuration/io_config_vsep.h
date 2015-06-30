@@ -134,15 +134,9 @@
       (        VSEP_Set_Device_Index( 0, VSEP_INDEX_0 )        |\
                VSEP_SOH_Set_SOHRSTEN( 0, VSEP_SOH_NORMAL_MODE ) )
             
- #ifdef  HW_SOH_DISABLE             
- #define VSEP_0_SOH_ENABLE_INIT \
-	 (        VSEP_Set_Device_Index( 0, VSEP_INDEX_0 )        |\
-                VSEP_SOH_Set_ENABLE( 0, VSEP_SOH_DISABLE ) )
-#else
 #define VSEP_0_SOH_ENABLE_INIT \
       (        VSEP_Set_Device_Index( 0, VSEP_INDEX_0 )        |\
 	   VSEP_SOH_Set_ENABLE( 0, VSEP_SOH_ENABLE) )
-#endif
 
 
 
