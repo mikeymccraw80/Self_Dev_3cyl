@@ -213,8 +213,6 @@ void InitializeHardwareRegisters(void)
 
 	//Prepare Vsep clock
 	IO_Pulse_VSEP_CLK_Enable();
-	HAL_GPIO_SET_GEN_Enable(false);  // Enable FSE pin
-	HAL_GPIO_SET_FSE_Enable(false);  // Enable the IOEN line to enable the IO pins
 	VSEP_Initialize_Device();
 
 	/* feed tle4471 watchdog */
