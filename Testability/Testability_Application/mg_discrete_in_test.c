@@ -56,7 +56,7 @@ void mg_discrete_in_test(void)
         {
             MG_Bitmap_Clr(idx);
         }
-        // mg_HAL_Service_WatchDog();
+        mg_HAL_Service_WatchDog();
     }
     MG_MAILBOX_OUT(parameter[1]) = mg_bitmap[0];
     MG_MAILBOX_OUT(parameter[2]) = mg_bitmap[1];
