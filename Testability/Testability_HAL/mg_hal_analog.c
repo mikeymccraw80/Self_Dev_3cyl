@@ -5,6 +5,7 @@
 uint16_t mg_HAL_Analog_Get_Analog_Value(uint8_t index)
 {
     uint16_t value;
+
     if (MG_HIODEVICE_NULL != MG_HAL_ANALOG_GROUP[index]) {
         if ((index == 5) || (index == 6)) {
             value = QADC_Analog_FIFO1_Get_Value(MG_HAL_ANALOG_GROUP[index]) << 2;
@@ -13,6 +14,11 @@ uint16_t mg_HAL_Analog_Get_Analog_Value(uint8_t index)
         }
     } else {
         value = 0;
+
+        /* hander the knock channel, for the knock is registered as HIODEVICE_NULL */
+        if ((index == 0) || (index == 1)) {
+            value = mg_HAL_Analog_Get_Knock(index);
+        }
     }
     return value;
 }
