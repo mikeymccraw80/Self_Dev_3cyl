@@ -112,7 +112,7 @@ void mg_HAL_SOH_Init(bool Is_Disarmed)
         C2MIO_Set_SOH_Disable_Request_Value(C2MIO_Set_Device_Index( 0, C2MIO_INDEX_0 ), C2MIO_SELECT_SOH_DISABLE_NO_REQUEST);
 #endif
 #ifdef __MG_VSEP_STATE_OF_HEALTH_TEST
-        VSEP_Disable_SOH();
+        // VSEP_Disable_SOH();
 #endif
     }
 
