@@ -35,7 +35,8 @@ void mg_HAL_Discrete_Set_Discrete_Out_Group_Value(uint8_t index, bool state)
 {
     if (MG_HIODEVICE_DO_NULL != MG_HAL_DISCRETE_OUT_GROUP[index].io)
     {
-        VSEP_DiscreteSetImmediate(MG_HAL_DISCRETE_OUT_GROUP[index].io, state);
+        if (MG_HAL_DISCRETE_OUT_GROUP[index].type == DISCRETE)
+            VSEP_DiscreteSetImmediate(MG_HAL_DISCRETE_OUT_GROUP[index].io, state);
     }
 }
 
@@ -205,6 +206,16 @@ void mg_HAL_Discrete_Set_ACCClutch(bool state)
 #endif
 #ifdef  __MG_VSEP_USED
         VSEP_DiscreteSetImmediate(VSEP_DO_ACCLUTCH_CH, state);
+#endif
+}
+
+void mg_HAL_Discrete_Set_MPR(bool state)
+{
+#ifdef  __MG_C2MIO_USED
+
+#endif
+#ifdef  __MG_VSEP_USED
+        VSEP_DiscreteSetImmediate(VSEP_DO_MPR_CH, state);
 #endif
 }
 

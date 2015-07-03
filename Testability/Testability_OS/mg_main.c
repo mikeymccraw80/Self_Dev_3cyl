@@ -87,8 +87,7 @@ static void Initialize_Testability(void)
     {
         mg_HAL_Discrete_Set_Discrete_Out_Group_Value(idx, false);
     }
-    mg_HAL_Discrete_Set_ACCClutch(false);
-    mg_HAL_Discrete_Set_FAN2(false);
+
     mg_HAL_ETC_Discrete_Enable(false);
     if (!mg_HAL_Discrete_Get_ELOAD1())
     {
