@@ -376,7 +376,7 @@ void IO_GPIO_DO_Task(void)
 {
 	HAL_GPIO_SET_MPR_Enable((bool) LLD_do_table[LLD_DO_MAIN_RELAY].value);
 
-	if(Chk_SiemensImmo_Disabled()||(K_Immo_FuelPump_channel==CeFuelPumpPin)) {
+	if(K_Immo_FuelPump_channel==CeFuelPumpPin) {
 		if (ImmoStopEngine()) {
 			if (KW31_EndofLine_FuelAdjustMode == false)
 				HAL_GPIO_SET_FPR_Enable((bool) false);
