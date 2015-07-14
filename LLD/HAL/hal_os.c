@@ -235,6 +235,7 @@ void  HAL_OS_10ms_Task(void)
 	}
 	OS_10ms_Cnt1++;
 	if(OS_10ms_Cnt0 ==5) {
+		MngChery_Can_50ms();
 		/* schedule hls task, insure its' sequence */
 		if ((hls_task_state == HLS_TASK_NORMAL) || (hls_task_state & HLS_TASK_50MS_PATTERN)) {
 			HLS_Task_50ms();

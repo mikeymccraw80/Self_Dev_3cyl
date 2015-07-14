@@ -14,9 +14,9 @@
 #define CHERY_CANR_1AE_ID                          0x1ae
 #define CHERY_CANR_2E9_ID                          0x2e9
 #define CHERY_CANR_310_ID                          0x310
-#define CHERY_CANR_391_ID                          0x391
 #define CHERY_CANR_3C0_ID                          0x3c0
 #define CHERY_CANR_430_ID                          0x430
+#define CHERY_CANR_51A_ID                          0x51A
 
 // Transmit CAN Messages ID
 #define CHERY_CANT_0FA_ID                          0x0FA
@@ -46,11 +46,11 @@ uint8_t  VsCAN_CHERY_ID7C1[6];
 /* Data for receive */
 uint8_t  VsCAN_CHERY_ID2E9[8];
 uint8_t  VsCAN_CHERY_ID310[8];
-uint8_t  VsCAN_CHERY_ID391[8];
 uint8_t  VsCAN_CHERY_ID3C0[8];
 uint8_t  VsCAN_CHERY_ID430[8];
 uint8_t  VsCAN_CHERY_ID1AE[8];
 uint8_t  VsCAN_CHERY_ID300[8];
+uint8_t  VsCAN_CHERY_ID51A[8];
 
 void MngChery_Can_10ms(void)
 {
@@ -60,8 +60,6 @@ void MngChery_Can_10ms(void)
 		HAL_CAN_Transmit_Message(CHERY_CANT_101_ID, 8, VsCAN_CHERY_ID101);
 	if (KbHwio_CheryCanID270_Enable)
 		HAL_CAN_Transmit_Message(CHERY_CANT_270_ID, 8, VsCAN_CHERY_ID270);
-	if (KbHwio_CheryCanID278_Enable)
-		HAL_CAN_Transmit_Message(CHERY_CANT_278_ID, 8, VsCAN_CHERY_ID278);
 	if (KbHwio_CheryCanID2C1_Enable)
 		HAL_CAN_Transmit_Message(CHERY_CANT_2C1_ID, 8, VsCAN_CHERY_ID2C1);
 	if (KbHwio_CheryCanID370_Enable)
@@ -69,7 +67,11 @@ void MngChery_Can_10ms(void)
 	if (KbHwio_CheryCanID378_Enable)
 		HAL_CAN_Transmit_Message(CHERY_CANT_378_ID, 8, VsCAN_CHERY_ID378);
 }
-
+void MngChery_Can_50ms(void)
+{
+    if (KbHwio_CheryCanID278_Enable)
+		HAL_CAN_Transmit_Message(CHERY_CANT_278_ID, 8, VsCAN_CHERY_ID278);
+}
 void MngChery_Can_100ms(void)
 {
 	if (KbHwio_CheryCanID501_Enable)
