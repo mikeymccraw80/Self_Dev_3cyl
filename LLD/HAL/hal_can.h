@@ -143,16 +143,16 @@ typedef struct
   bitfield16_t CAN_ID1AE_ERR :1;
   bitfield16_t CAN_ID2E9_ERR :1;
   bitfield16_t CAN_ID310_ERR :1;
-  bitfield16_t CAN_ID391_ERR :1;
   bitfield16_t CAN_ID3C0_ERR :1;
   bitfield16_t CAN_ID430_ERR :1;
+  bitfield16_t CAN_ID51A_ERR :1;
   bitfield16_t UNUSED_ERR :2;
   bitfield16_t CAN_ID1AE_RXF :1;
   bitfield16_t CAN_ID2E9_RXF :1;
   bitfield16_t CAN_ID310_RXF :1;
-  bitfield16_t CAN_ID391_RXF :1;
   bitfield16_t CAN_ID3C0_RXF :1;
   bitfield16_t CAN_ID430_RXF :1;
+  bitfield16_t CAN_ID51A_RXF :1;
   bitfield16_t UNUSED_RXF :2;
 }CAN_RECEIVE_ERR_TYPE;
 /* Used to diagnostic can meter */

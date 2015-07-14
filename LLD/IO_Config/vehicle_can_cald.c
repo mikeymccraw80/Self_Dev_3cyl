@@ -204,15 +204,15 @@ const bool    KbHwio_CheryCanID310_Enable = false ;
 
 /*
 *| vehicle_can_cald.{
-*|    KbHwio_CheryCanID391_Enable {
+*|    KbHwio_CheryCanID51A_Enable {
 *|       :is_calconst;
 *|       :units = "BOOLEAN";
-*|       :description = "enable receive can ID 0x391";
+*|       :description = "enable receive can ID 0x51A";
 *|    }
 *|   }
 */
 
-const bool    KbHwio_CheryCanID391_Enable = false ;
+const bool    KbHwio_CheryCanID51A_Enable = false ;
 
 /*
 *| vehicle_can_cald.{

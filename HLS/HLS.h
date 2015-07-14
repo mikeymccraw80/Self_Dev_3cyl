@@ -682,7 +682,7 @@ extern uint8_t  VsCAN_CHERY_ID7C1[6];
 /* Data for receive */
 extern uint8_t  VsCAN_CHERY_ID2E9[8];
 extern uint8_t  VsCAN_CHERY_ID310[8];
-extern uint8_t  VsCAN_CHERY_ID391[8];
+extern uint8_t  VsCAN_CHERY_ID51A[8];
 extern uint8_t  VsCAN_CHERY_ID3C0[8];
 extern uint8_t  VsCAN_CHERY_ID430[8];
 extern uint8_t  VsCAN_CHERY_ID1AE[8];

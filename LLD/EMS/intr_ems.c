@@ -105,7 +105,7 @@ void Intr_16msTasks(void)
     EOBD_CANH_Msg_NotReceived = ((KbHwio_CheryCanID1AE_Enable&&(bool)VsCAN_Receive_Err.CAN_ID1AE_ERR) ||
                                  (KbHwio_CheryCanID2E9_Enable&&(bool)VsCAN_Receive_Err.CAN_ID2E9_ERR) ||
                                  (KbHwio_CheryCanID310_Enable&&(bool)VsCAN_Receive_Err.CAN_ID310_ERR) ||
-                                 (KbHwio_CheryCanID391_Enable&&(bool)VsCAN_Receive_Err.CAN_ID391_ERR) ||
+                                 (KbHwio_CheryCanID51A_Enable&&(bool)VsCAN_Receive_Err.CAN_ID51A_ERR) ||
                                  (KbHwio_CheryCanID3C0_Enable&&(bool)VsCAN_Receive_Err.CAN_ID3C0_ERR) ||
                                  (KbHwio_CheryCanID430_Enable&&(bool)VsCAN_Receive_Err.CAN_ID430_ERR) );
 }

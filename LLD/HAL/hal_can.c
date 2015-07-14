@@ -239,7 +239,7 @@ void HAL_CAN_Transmit_Message(uint32_t id, uint8_t len, uint8_t *pdata)
 
 extern uint8_t	VsCAN_CHERY_ID2E9[8];
 extern uint8_t	VsCAN_CHERY_ID310[8];
-extern uint8_t	VsCAN_CHERY_ID391[8];
+extern uint8_t	VsCAN_CHERY_ID51A[8];
 extern uint8_t	VsCAN_CHERY_ID3C0[8];
 extern uint8_t	VsCAN_CHERY_ID430[8];
 extern uint8_t	VsCAN_CHERY_ID1AE[8];
@@ -287,7 +287,7 @@ void HAL_CAN_RX_B10_Config(void)
 	FlexCAN_Receive_Configure(
 			&FlexCAN_A,
 			FLEXCAN_MSG_OBJ_10,
-			0x391
+			0x51A
 	);
 	FLEXCAN_MSGOBJ_INTERRUPT_Set_Enable(
 			&FlexCAN_A,
@@ -297,7 +297,7 @@ void HAL_CAN_RX_B10_Config(void)
 
 void HAL_CAN_RX_B10_INT(void)
 {
-	FlexCAN_Receive_Interrupt(FLEXCAN_DEVICE_A, VsCAN_CHERY_ID391);
+	FlexCAN_Receive_Interrupt(FLEXCAN_DEVICE_A, VsCAN_CHERY_ID51A);
 }
 
 void HAL_CAN_RX_B11_Config(void)
@@ -408,7 +408,7 @@ void HAL_CAN_Initialize(void)
 
 	    HAL_CAN_RX_B09_Config();
 	
-	if(KbHwio_CheryCanID391_Enable)
+	if(KbHwio_CheryCanID51A_Enable)
 		
 	    HAL_CAN_RX_B10_Config();
 	
