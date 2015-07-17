@@ -165,10 +165,11 @@ static void InitESTD_Common(void)
 		
 		//SaESTD_FaultTestComplete[LcESTD_EST_Count] = CbFALSE;
 		SaESTD_ShortFaultTestComplete_Internal[LcESTD_EST_Count] = CbFALSE;
-		SaESTD_ShortFaultTestFailed[LcESTD_EST_Count] = CbFALSE;
+		//SaESTD_ShortFaultTestFailed[LcESTD_EST_Count] = CbFALSE;
 			
 		SaESTD_OpenFaultTestComplete_Internal[LcESTD_EST_Count] = CbFALSE;
-		SaESTD_OpenFaultTestFailed[LcESTD_EST_Count] = CbFALSE;
+		//SaESTD_OpenFaultTestFailed[LcESTD_EST_Count] = CbFALSE;
+		SaESTD_FaultTestComplete[LcESTD_EST_Count] = CbFALSE;
 		
 	}
 }
