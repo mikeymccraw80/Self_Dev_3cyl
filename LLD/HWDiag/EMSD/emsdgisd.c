@@ -56,7 +56,7 @@ TbBOOLEAN        SbEMSD_GISDShortLoTestFailed ;
 /*****************************************************************************
  *  Function definition
  ******************************************************************************/
-#if 0
+#if 1
 /*****************************************************************************
  *
  * Function:     InitEMSD_GISRstToKeyOff
@@ -66,13 +66,13 @@ TbBOOLEAN        SbEMSD_GISDShortLoTestFailed ;
  * Parameters:   None
  * Return:       None
  *****************************************************************************/
-FAR_COS void InitEMSD_GISRstToKeyOff(void)
+ void InitEMSD_GISRstToKeyOn(void)
 {
 
   SbEMSD_GISDEnblCriteriaMet = CbFALSE ;
   SbEMSD_GISDShortHiFailCriteriaMet = CbFALSE ;
   SbEMSD_GISDShortLoFailCriteriaMet = CbFALSE ;
-  //SbEMSD_GISDTestComplete = CbFALSE ;
+  SbEMSD_GISDTestComplete = CbFALSE ;
   SbEMSD_GISDTestComplete_Internal = CbFALSE;
   //SbEMSD_GISDShortHiTestFailed = CbFALSE ;
   //SbEMSD_GISDShortLoTestFailed = CbFALSE ;
