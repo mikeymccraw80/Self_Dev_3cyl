@@ -101,16 +101,18 @@ static TbBOOLEAN EvalKNKD_SensorProcessing(void);
    VcKNKD_SystemSampleCounter = V_COUNT_WORD(0);
    VcKNKD_SystemFailLoCounter = V_COUNT_WORD(0);
    VcKNKD_SystemFailHiCounter = V_COUNT_WORD(0);
-   SbKNKD_SystemTestFailed = CbFALSE;
+  // SbKNKD_SystemTestFailed = CbFALSE;
    SbKNKD_SystemTestComplete_Internal = CbFALSE;
    ScKNKD_SensorFailCounter = V_COUNT_WORD(0);
    VcKNKD_SensorSampleCounter = V_COUNT_WORD(0);
    SbKNKD_SensorTestComplete_Internal = CbFALSE;
-   SbKNKD_SensorTestFailed = CbFALSE;
-   SbKNKD_SystemTestLoFailed  = CbFALSE;
-   SbKNKD_SystemTestHiFailed  = CbFALSE;
+   //SbKNKD_SensorTestFailed = CbFALSE;
+   //SbKNKD_SystemTestLoFailed  = CbFALSE;
+   //SbKNKD_SystemTestHiFailed  = CbFALSE;
+   SbKNKD_SensorTestComplete = CbFALSE;
+   SbKNKD_SystemTestComplete = CbFALSE;
 }
-#if 0
+#if 1
 /********************************************************************
 *
 * Function:      InitKNKD_RstToKeyOn
@@ -121,7 +123,7 @@ static TbBOOLEAN EvalKNKD_SensorProcessing(void);
 * Parameters:    None
 * Returns:       None
 *********************************************************************/
-FAR_COS void InitKNKD_RstToKeyOff(void)
+ void InitKNKD_RstToKeyOn(void)
 {
 
    InitKNKD_CommonParameters ();

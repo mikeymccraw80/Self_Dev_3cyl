@@ -42,7 +42,7 @@ Include Files
 **********************************************************************/
 void MngKNKD_125msTasks(void);
 void MngKNKD_CylEventTasks(void);
-//FAR_COS void InitKNKD_RstToKeyOff(void);
+ void InitKNKD_RstToKeyOn(void);
 
 /*********************************************************************
 * Exports
