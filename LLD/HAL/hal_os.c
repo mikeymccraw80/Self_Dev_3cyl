@@ -710,6 +710,25 @@ void Sinit_PowerOffDelayToKeyOn(void)
 {
     InitEPSD_CrankRstToKeyOn();
     InitCOND_AD_InputRespRstKeyOn();
+	InitEOSD_O2_11_HtrRstToKeyOn();
+	InitEOSD_O2_12_HtrRstToKeyOn();
+	InitEMSD_FanxRstToKeyOn();
+	InitEMSD_FanxRstToKeyOn();
+	InitEMSD_MainRelayRstToKeyOn();
+	InitEMSD_FuelPumpRstToKeyOn();
+	InitEMSD_AcClutchRstToKeyOn();
+	InitEMSD_MILRstToKeyOn();
+	InitEMSD_SVSRstToKeyOn();
+	InitPRGD_Purge_RstToKeyOn();
+	InitVVTD_RstToKeyOn();
+	InitETCD_RstToKeyOn();
+	InitCAND_RstToKeyOn();
+	InitEMSD_GISRstToKeyOn();
+	InitINJD_RstToKeyOn();
+	InitESTD_ShutdownInProgToKeyOn();
+	InitKNKD_RstToKeyOn();
+	PerformCOND_CheckCPU_SOH_PwrdnDlyToKeyOn();
+	InitCOND_Device_OFVC_RstKeyOn();
 }
 
 /*****************************************************************************
@@ -752,6 +771,26 @@ void Sinit_ShutdownInProcessToKeyOff(void)
 void Sinit_ShutdownInProcessToKeyOn(void)
 {
     InitEPSD_CrankRstToKeyOn();
+	InitCOND_AD_InputRespRstKeyOn();
+	InitEOSD_O2_11_HtrRstToKeyOn();
+	InitEOSD_O2_12_HtrRstToKeyOn();
+	InitEMSD_FanxRstToKeyOn();
+	InitEMSD_FanxRstToKeyOn();
+	InitEMSD_MainRelayRstToKeyOn();
+	InitEMSD_FuelPumpRstToKeyOn();
+	InitEMSD_AcClutchRstToKeyOn();
+	InitEMSD_MILRstToKeyOn();
+	InitEMSD_SVSRstToKeyOn();
+	InitPRGD_Purge_RstToKeyOn();
+	InitVVTD_RstToKeyOn();
+	InitETCD_RstToKeyOn();
+	InitCAND_RstToKeyOn();
+	InitEMSD_GISRstToKeyOn();
+	InitINJD_RstToKeyOn();
+	InitESTD_ShutdownInProgToKeyOn();
+	InitKNKD_RstToKeyOn();
+	PerformCOND_CheckCPU_SOH_ShutDnToKeyOn();
+	InitCOND_Device_OFVC_RstKeyOn();
 }
 
 /*****************************************************************************
