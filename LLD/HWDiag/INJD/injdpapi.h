@@ -40,7 +40,7 @@ Include Files
  *  Diagnostic Execution ID Definitions (used by DDMS)
  *****************************************************************************/
 void MngINJD_125msTasks(void);
-//void InitINJD_RstToKeyOff(void);
+void InitINJD_RstToKeyOn(void);
 
 
 /*****************************************************************************

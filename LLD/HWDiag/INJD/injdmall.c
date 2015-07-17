@@ -82,7 +82,7 @@ static void PerfmINJD_CircuitsTimerEval (void);
 static void DtrmnINJD_IfAllCircuitsAreFltd (void);
 static void ReportINJD_CircuitsTestResults (void);
 /*****************************************************************************/
-#if 0
+#if 1
 /*****************************************************************************
  *
  * Function:            InitINJD_RstToKeyOn
@@ -93,7 +93,7 @@ static void ReportINJD_CircuitsTestResults (void);
  * Parameters:          None
  * Return:              None
  *****************************************************************************/
-FAR_COS void InitINJD_RstToKeyOff(void)
+ void InitINJD_RstToKeyOn(void)
 {
   BYTE LcINJD_InjectorCount;
 
@@ -108,8 +108,9 @@ FAR_COS void InitINJD_RstToKeyOff(void)
     HaltTIMC_StopWatch(VaINJD_125TimerEnbl, LcINJD_InjectorCount);
     SetTIMC_StopWatch8(VaINJD_t_125TimerArray, LcINJD_InjectorCount, 0);
     VaINJD_FailCriteriaMet[LcINJD_InjectorCount] = CbFALSE;
-    SaINJD_CktTestFailed[LcINJD_InjectorCount] = CbFALSE;
+    //SaINJD_CktTestFailed[LcINJD_InjectorCount] = CbFALSE;
     SaINJD_CktTestComplete_Internal[LcINJD_InjectorCount] = CbFALSE;
+	SaINJD_CktTestComplete[LcINJD_InjectorCount] = CbFALSE;
   }
   VbINJD_InjectorsAllFaulted = CbFALSE;
 
