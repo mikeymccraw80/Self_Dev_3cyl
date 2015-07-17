@@ -70,8 +70,8 @@
  * Parameters:         None
  * Return:             None
  *****************************************************************************/
-#if 0
-void InitVVTD_RstToKeyOff(void)
+#if 1
+void InitVVTD_RstToKeyOn(void)
 {
   SbVVTD_DisableFltPresent = CbFALSE;
   SbVVTD_EnblCritMet = CbFALSE;
@@ -83,7 +83,8 @@ void InitVVTD_RstToKeyOff(void)
   ScVVTD_VVT1_SampleCntr = V_COUNT_WORD(0);
  // SbVVTD_VVT1_TestFailed = CbFALSE;
   SbVVTD_VVT1_TestComplete_Internal = CbFALSE;
-
+  SbVVTD_VVT1_TestComplete = CbFALSE;
+  
   SbVVTD_VVT2_FailCritMet = CbFALSE;
   SbVVTD_VVT2_ShortLoCritMet = CbFALSE;
   SbVVTD_VVT2_ShortHiCritMet= CbFALSE;
@@ -91,6 +92,7 @@ void InitVVTD_RstToKeyOff(void)
   ScVVTD_VVT2_SampleCntr = V_COUNT_WORD(0);
  // SbVVTD_VVT2_TestFailed = CbFALSE;
   SbVVTD_VVT2_TestComplete_Internal = CbFALSE;
+ SbVVTD_VVT2_TestComplete = CbFALSE;
 }
 
 #endif

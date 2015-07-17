@@ -43,7 +43,7 @@ Include Files
 **********************************************************************/
 
 void MngVVTD_125msTasks(void);
-void InitVVTD_RstToKeyOff(void);
+void InitVVTD_RstToKeyOn(void);
 
 
 #endif /*PRGDPAPI_H*/
