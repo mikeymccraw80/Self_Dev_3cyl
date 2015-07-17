@@ -62,7 +62,7 @@ void MngCOND_AD_InputResp15p6msTasksA(void);
 void MngCOND_AD_InputResp15p6msTasksB(void);
 TbBOOLEAN  GetCOND_AD_RespETC_DoNotUseAPS_Data(void);
 TbBOOLEAN  GetCOND_AD_RespETC_LrnDwnDsblCritMet(void);
-
+void InitCOND_Device_OFVC_RstKeyOn();
 #endif /* CONDPAPI_H */
 
 /******************************************************************************

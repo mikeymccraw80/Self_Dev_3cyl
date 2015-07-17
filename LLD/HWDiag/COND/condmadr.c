@@ -152,6 +152,7 @@ static void InitCOND_ADR_CommonZero(void)
 
   VbCOND_AD_RespEnblCritMet = CbFALSE;
   VbCOND_AD_RespFailCritMet = CbFALSE;
+  VbCOND_AD_RespTstComplete = CbFALSE;
 }
 
 /******************************************************************************
@@ -187,6 +188,7 @@ static void InitCOND_ADR_CommonNonZero(void)
 void InitCOND_AD_InputRespRstKeyOn(void)
 {
   InitCOND_ADR_CommonNonZero();
+  InitCOND_ADR_CommonZero();
 }
 
 /******************************************************************************

@@ -165,7 +165,7 @@ static void EvalCOND_COP_FailCritMet(void);
  *****************************************************************************/
 void InitCOND_Variables(void)
 {
-  VbCOND_HWIO_ADC0Failed      = CbFALSE;
+  //VbCOND_HWIO_ADC0Failed      = CbFALSE;
   VbCOND_HWIO_ADC0Tested      = CbFALSE;
   VbCOND_HWIO_ADC0EnblCritMet = CbFALSE;
   VbCOND_HWIO_ADC0FailCritMet = CbFALSE;
@@ -173,7 +173,7 @@ void InitCOND_Variables(void)
   SeCOND_ADC0_EnblStatus      = CeCOND_ADC_InitialState;
   SfCOND_t_ADC0EnblDlyTmr     = C_R125ms16(0);
 
-  VbCOND_HWIO_ClockFailed     = CbFALSE;
+  //VbCOND_HWIO_ClockFailed     = CbFALSE;
   VbCOND_HWIO_ClockTstComplete= CbFALSE;
   VbCOND_HWIO_ClockTested     = CbFALSE;
   VbCOND_HWIO_ClockEnblCritMet= CbFALSE;
@@ -226,6 +226,18 @@ void InitCOND_Device_OFVC_Clear(void)
     InitCOND_Variables_NVMdepend();
 }
 
+/******************************************************************************
+ *
+ * Function:    InitCOND_Device_OFVC_RstKeyOn
+ * Description: 
+ *
+ * Parameters:  None
+ * Return:      None
+ *****************************************************************************/
+void InitCOND_Device_OFVC_RstKeyOn(void)
+{
+    InitCOND_Variables();
+}
 /*****************************************************************************
  * Function:        MngCOND_ADC0
  * Description:     This function is called at 125ms rate for ADC0 diagnostics.
@@ -334,6 +346,7 @@ void MngCOND_MainCPUClock(void)
        Clear_IO_Discrete_Diag_CPU_Clock(OUTPUT_GEN_FLT_TESTED);
     }
 }
+
 
 #if 0
 /*****************************************************************************
