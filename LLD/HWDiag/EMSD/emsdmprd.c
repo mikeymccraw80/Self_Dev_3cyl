@@ -53,7 +53,7 @@ TbBOOLEAN        SbEMSD_MPRDShortLoTestFailed ;
 /*****************************************************************************
  *  Function definition
  ******************************************************************************/
-#if 0
+#if 1
 /*****************************************************************************
  *
  * Function:     InitEMSD_MainRelayRstToKeyOn
@@ -63,13 +63,13 @@ TbBOOLEAN        SbEMSD_MPRDShortLoTestFailed ;
  * Parameters:   None
  * Return:       None
  *****************************************************************************/
-FAR_COS void InitEMSD_MainRelayRstToKeyOff(void)
+ void InitEMSD_MainRelayRstToKeyOn(void)
 {
 
   SbEMSD_MPRDEnblCriteriaMet = CbFALSE ;
   SbEMSD_MPRDShortHiFailCriteriaMet = CbFALSE ;
   SbEMSD_MPRDShortLoFailCriteriaMet = CbFALSE ;
-  //SbEMSD_MPRDTestComplete = CbFALSE ;
+  SbEMSD_MPRDTestComplete = CbFALSE ;
   SbEMSD_MPRDTestComplete_Internal = CbFALSE;
   //SbEMSD_MPRDShortHiTestFailed = CbFALSE ;
   //SbEMSD_MPRDShortLoTestFailed = CbFALSE ;
