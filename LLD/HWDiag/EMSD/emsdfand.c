@@ -81,7 +81,7 @@ TbBOOLEAN        SbEMSD_FANBShortLoTestFailed ;
 /*****************************************************************************
  *  Function definition
  ******************************************************************************/
-#if 0
+#if 1
 /*****************************************************************************
  *
  * Function:     InitEMSD_FanxRstToKeyOn
@@ -91,13 +91,13 @@ TbBOOLEAN        SbEMSD_FANBShortLoTestFailed ;
  * Parameters:   None
  * Return:       None
  *****************************************************************************/
-void InitEMSD_FanxRstToKeyOff(void)
+void InitEMSD_FanxRstToKeyOn(void)
 {  
   
   SbEMSD_FANAEnblCriteriaMet = CbFALSE ;
   SbEMSD_FANAShortHiFailCriteriaMet = CbFALSE ;
   SbEMSD_FANAShortLoFailCriteriaMet = CbFALSE ;
-  //SbEMSD_FANATestComplete = CbFALSE ;
+  SbEMSD_FANATestComplete = CbFALSE ;
   SbEMSD_FANATestComplete_Internal = CbFALSE;
  // SbEMSD_FANAShortHiTestFailed = CbFALSE ;
  // SbEMSD_FANAShortLoTestFailed = CbFALSE ;
@@ -107,7 +107,7 @@ void InitEMSD_FanxRstToKeyOff(void)
   SbEMSD_FANBEnblCriteriaMet = CbFALSE ;
   SbEMSD_FANBShortHiFailCriteriaMet = CbFALSE ;
   SbEMSD_FANBShortLoFailCriteriaMet = CbFALSE ;
-  //SbEMSD_FANBTestComplete = CbFALSE ;
+  SbEMSD_FANBTestComplete = CbFALSE ;
   SbEMSD_FANBTestComplete_Internal = CbFALSE;
  // SbEMSD_FANBShortHiTestFailed = CbFALSE ;
   //SbEMSD_FANBShortLoTestFailed = CbFALSE ;
