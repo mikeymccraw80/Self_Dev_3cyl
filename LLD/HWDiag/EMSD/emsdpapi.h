@@ -88,14 +88,14 @@ void MngEMSD_FileROM10msTasks (void);
 
 
 
-//void InitEMSD_AcClutchRstToKeyOff(void);
-//void InitEMSD_FanxRstToKeyOff(void);
+void InitEMSD_AcClutchRstToKeyOn(void);
+void InitEMSD_FanxRstToKeyOn(void);
 //void InitEMSD_FileROMRstToKeyOn(void);
-//void InitEMSD_FuelPumpRstToKeyOff(void);
-//void InitEMSD_MILRstToKeyOff(void);
-//void InitEMSD_MainRelayRstToKeyOff(void);
-
-
+void InitEMSD_FuelPumpRstToKeyOn(void);
+void InitEMSD_MILRstToKeyOn(void);
+void InitEMSD_MainRelayRstToKeyOn(void);
+void InitEMSD_SVSRstToKeyOn(void);
+void InitEMSD_GISRstToKeyOn();
 #endif    /* #define EMSDPAPI_H                       */
 
 /* ============================================================================ *\
