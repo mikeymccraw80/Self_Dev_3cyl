@@ -56,7 +56,7 @@ TbBOOLEAN        SbEMSD_MILDShortLoTestFailed ;
 /*****************************************************************************
  *  Function definition
  ******************************************************************************/
-#if 0
+#if 1
 /*****************************************************************************
  *
  * Function:     InitEMSD_MILRstToKeyOn
@@ -66,13 +66,13 @@ TbBOOLEAN        SbEMSD_MILDShortLoTestFailed ;
  * Parameters:   None
  * Return:       None
  *****************************************************************************/
-FAR_COS void InitEMSD_MILRstToKeyOff(void)
+ void InitEMSD_MILRstToKeyOn(void)
 {
 
   SbEMSD_MILDEnblCriteriaMet = CbFALSE ;
   SbEMSD_MILDShortHiFailCriteriaMet = CbFALSE ;
   SbEMSD_MILDShortLoFailCriteriaMet = CbFALSE ;
-  //SbEMSD_MILDTestComplete = CbFALSE ;
+  SbEMSD_MILDTestComplete = CbFALSE ;
   SbEMSD_MILDTestComplete_Internal = CbFALSE;
   //SbEMSD_MILDShortHiTestFailed = CbFALSE ;
   //SbEMSD_MILDShortLoTestFailed = CbFALSE ;
