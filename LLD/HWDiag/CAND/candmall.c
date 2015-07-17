@@ -72,6 +72,7 @@ void InitCAND_RstToKeyOn(void)
 {
   SbCAND_GCU_CommEnblCritMet = CbFALSE;  
   SbCAND_GCU_CommTestComplete_Internal = CbFALSE; 
+  SbCAND_GCU_CommTestComplete = CbFALSE; 
   ScCAND_GCU_CommFailCntr = V_COUNT_WORD(0); 
   ScCAND_GCU_CommSampleCntr = V_COUNT_WORD(0);
 }
