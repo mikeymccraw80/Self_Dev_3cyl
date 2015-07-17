@@ -54,8 +54,8 @@ void MngEOSD_O2_11_Htr125msTasks (void);
 void MngEOSD_O2_12_Htr10msTasks (void);
 void MngEOSD_O2_12_Htr125msTasks (void);
 
-void InitEOSD_O2_11_HtrRstToKeyOff (void);
-void InitEOSD_O2_12_HtrRstToKeyOff (void);
+void InitEOSD_O2_11_HtrRstToKeyOn (void);
+void InitEOSD_O2_12_HtrRstToKeyOn (void);
 
 
 #endif    /* #define EOSDPAPI_H                       */

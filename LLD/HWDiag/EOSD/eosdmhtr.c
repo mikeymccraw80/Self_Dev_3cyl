@@ -63,7 +63,7 @@ T_AMPSa          SfEOSD_O2_12_FltdHtrCurrent;
 /******************************************************************************
 *  Local Functions definitions
 ******************************************************************************/
-#if 0
+#if 1
 
 /*****************************************************************************
  *
@@ -74,7 +74,7 @@ T_AMPSa          SfEOSD_O2_12_FltdHtrCurrent;
  * Parameters:   None
  * Return:       None
  *****************************************************************************/
-FAR_COS void InitEOSD_O2_11_HtrRstToKeyOff (void)
+ void InitEOSD_O2_11_HtrRstToKeyOn (void)
 {
 
 
@@ -82,7 +82,7 @@ FAR_COS void InitEOSD_O2_11_HtrRstToKeyOff (void)
   SbEOSD_O2_11_HtrShortLowFailCriteriaMet = CbFALSE;
   SbEOSD_O2_11_HtrShortHiFailCriteriaMet = CbFALSE;
 
- // SbEOSD_O2_11_HtrTestComplete = CbFALSE ;
+  SbEOSD_O2_11_HtrTestComplete = CbFALSE ;
   SbEOSD_O2_11_HtrTestComplete_Internal = CbFALSE;
 
  // SbEOSD_O2_11_HtrShortLowTestFailed = CbFALSE ;
@@ -105,7 +105,7 @@ FAR_COS void InitEOSD_O2_11_HtrRstToKeyOff (void)
  * Parameters:   None
  * Return:       None
  *****************************************************************************/
-FAR_COS void InitEOSD_O2_12_HtrRstToKeyOff(void)
+ void InitEOSD_O2_12_HtrRstToKeyOn(void)
 {
 
 
@@ -116,7 +116,7 @@ FAR_COS void InitEOSD_O2_12_HtrRstToKeyOff(void)
   SbEOSD_O2_12_HtrShortHiFailCriteriaMet = CbFALSE ;
 
 
-  //SbEOSD_O2_12_HtrTestComplete = CbFALSE ;
+  SbEOSD_O2_12_HtrTestComplete = CbFALSE ;
   SbEOSD_O2_12_HtrTestComplete_Internal = CbFALSE;
 
 //  SbEOSD_O2_12_HtrShortLowTestFailed = CbFALSE ;
