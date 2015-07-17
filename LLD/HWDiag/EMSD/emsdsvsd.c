@@ -56,7 +56,7 @@ TbBOOLEAN        SbEMSD_SVSDShortLoTestFailed ;
 /*****************************************************************************
  *  Function definition
  ******************************************************************************/
-#if 0
+#if 1
 /*****************************************************************************
  *
  * Function:     InitEMSD_SVSRstToKeyOn
@@ -66,13 +66,13 @@ TbBOOLEAN        SbEMSD_SVSDShortLoTestFailed ;
  * Parameters:   None
  * Return:       None
  *****************************************************************************/
-FAR_COS void InitEMSD_SVSRstToKeyOff(void)
+ void InitEMSD_SVSRstToKeyOn(void)
 {
 
   SbEMSD_SVSDEnblCriteriaMet = CbFALSE ;
   SbEMSD_SVSDShortHiFailCriteriaMet = CbFALSE ;
   SbEMSD_SVSDShortLoFailCriteriaMet = CbFALSE ;
-  //SbEMSD_SVSDTestComplete = CbFALSE ;
+  SbEMSD_SVSDTestComplete = CbFALSE ;
   SbEMSD_SVSDTestComplete_Internal = CbFALSE;
   //SbEMSD_SVSDShortHiTestFailed = CbFALSE ;
   //SbEMSD_SVSDShortLoTestFailed = CbFALSE ;
