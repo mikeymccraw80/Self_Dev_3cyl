@@ -51,7 +51,7 @@ TbBOOLEAN        SbEMSD_FPRDTestComplete_Internal;
 TbBOOLEAN        SbEMSD_FPRDShortHiTestFailed ;
 TbBOOLEAN        SbEMSD_FPRDShortLoTestFailed ;
 #pragma section DATA " " ".bss"
-#if 0
+#if 1
 /*****************************************************************************
  *
  * Function:     InitEMSD_FuelPumpRstToKeyOn
@@ -61,13 +61,13 @@ TbBOOLEAN        SbEMSD_FPRDShortLoTestFailed ;
  * Parameters:   None
  * Return:       None
  *****************************************************************************/
-void InitEMSD_FuelPumpRstToKeyOff(void)
+void InitEMSD_FuelPumpRstToKeyOn(void)
 {
 
   SbEMSD_FPRDEnblCriteriaMet = CbFALSE ;
   SbEMSD_FPRDShortHiFailCriteriaMet = CbFALSE ;
   SbEMSD_FPRDShortLoFailCriteriaMet = CbFALSE ;
- // SbEMSD_FPRDTestComplete = CbFALSE ;
+  SbEMSD_FPRDTestComplete = CbFALSE ;
   SbEMSD_FPRDTestComplete_Internal = CbFALSE;
  // SbEMSD_FPRDShortHiTestFailed = CbFALSE ;
  // SbEMSD_FPRDShortLoTestFailed = CbFALSE ;
