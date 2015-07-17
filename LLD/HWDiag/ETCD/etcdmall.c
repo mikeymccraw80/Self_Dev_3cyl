@@ -57,8 +57,8 @@
  * Parameters:         None
  * Return:             None
  *****************************************************************************/
-#if 0
-void InitETCD_RstToKeyOff(void)
+#if 1
+void InitETCD_RstToKeyOn(void)
 {
   SbETCD_DisableFltPresent = CbFALSE;
   SbETCD_EnblCritMet       = CbFALSE;
@@ -70,6 +70,7 @@ void InitETCD_RstToKeyOff(void)
   ScETCD_SampleCntr        = V_COUNT_WORD(0);
  // SbETCD_TestFailed = CbFALSE;
   SbETCD_TestComplete_Internal = CbFALSE;
+  SbETCD_TestComplete = CbFALSE;
 }
 #endif
 

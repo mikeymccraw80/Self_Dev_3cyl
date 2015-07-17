@@ -43,7 +43,7 @@ Include Files
 **********************************************************************/
 
 void MngETCD_125msTasks(void);
-void InitETCD_RstToKeyOff(void);
+void InitETCD_RstToKeyOn(void);
 
 
 #endif /*ETCDPAPI_H*/
