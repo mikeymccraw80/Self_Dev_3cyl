@@ -57,15 +57,15 @@ TbBOOLEAN        SbEMSD_ACCDShortLoTestFailed ;
  * Return:       None
  *****************************************************************************/
 
-#if 0
-void InitEMSD_AcClutchRstToKeyOff(void)
+#if 1
+void InitEMSD_AcClutchRstToKeyOn(void)
 {
 
   SbEMSD_ACCDEnblCriteriaMet = CbFALSE ;
   SbEMSD_ACCDShortHiFailCriteriaMet = CbFALSE ;
   SbEMSD_ACCDShortLoFailCriteriaMet = CbFALSE ;
   SbEMSD_ACCDTestComplete_Internal = CbFALSE ;
-  //SbEMSD_ACCDTestComplete = CbFALSE;
+  SbEMSD_ACCDTestComplete = CbFALSE;
  // SbEMSD_ACCDShortHiTestFailed = CbFALSE ;
  // SbEMSD_ACCDShortLoTestFailed = CbFALSE ;
   ScEMSD_ACCDShortHiFailCntr = V_COUNT_WORD (0) ;
