@@ -55,8 +55,8 @@
  * Parameters:         None
  * Return:             None
  *****************************************************************************/
-#if 0
-FAR_COS  void InitPRGD_Purge_RstToKeyOff(void)
+#if 1
+  void InitPRGD_Purge_RstToKeyOn(void)
 {
 
   SbPRGD_Purge_DisableFltPresent = CbFALSE;
@@ -70,7 +70,7 @@ FAR_COS  void InitPRGD_Purge_RstToKeyOff(void)
   ScPRGD_Purge_SampleCntr = V_COUNT_WORD(0);
  // SbPRGD_Purge_TestFailed = CbFALSE;
   SbPRGD_Purge_TestComplete_Internal = CbFALSE;
-
+  SbPRGD_Purge_TestComplete = CbFALSE;
 }
 
 #endif

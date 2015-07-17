@@ -43,7 +43,7 @@ Include Files
 **********************************************************************/
 
 void MngPRGD_Purge_125msTasks(void);
-void InitPRGD_Purge_RstToKeyOff(void);
+void InitPRGD_Purge_RstToKeyOn(void);
 
 
 #endif /*PRGDPAPI_H*/
