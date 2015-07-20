@@ -200,7 +200,7 @@ void mg_HAL_Fault_ETC_Over_Current_Test_Configure(uint8_t slew_rate)
     L9958_VSR_Set(L9958_VSR_LO);
     L9958_ISR_Set(L9958_ISR_LO);
     L9958_ISR_Disable_Set(L9958_ISR_DISABLE_FALSE);
-    // L9958_SPI_Immediate_Transfer();
+    L9958_SPI_Immediate_Transfer();
 #endif
 }
 

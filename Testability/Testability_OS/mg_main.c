@@ -88,7 +88,7 @@ static void Initialize_Testability(void)
         mg_HAL_Discrete_Set_Discrete_Out_Group_Value(idx, false);
     }
 
-    mg_HAL_ETC_Discrete_Enable(false);
+    // mg_HAL_ETC_Discrete_Enable(false);
     if (!mg_HAL_Discrete_Get_ELOAD1())
     {
         Mg_Mode = MG_FUNCTION_TEST;

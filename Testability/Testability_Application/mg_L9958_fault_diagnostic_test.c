@@ -26,6 +26,7 @@
 #include "mg_hal_etc.h"
 #include "mg_hal_fault.h"
 #include "mg_hal_timer.h"
+#include "dd_stm_interface.h"
 
 /*----------------------------------------------------------------------------*/
 /*   Definition of local macros                                               */
@@ -34,8 +35,11 @@
 #define STB_STG_TEST                1
 #define OVER_CURRENT_TEST       2
 
-#define DELAY_2_S                   2000000
-#define DELAY_200_MS           200000
+#define DELAY_2_S               2000000
+#define DELAY_200_MS            200000
+#define DELAY_150_MS            150000
+#define DELAY_100_MS            100000
+#define DELAY_50_MS             50000
 #define DELAY_1000_US           1000
 #define DELAY_500_US            500
 /*----------------------------------------------------------------------------*/
@@ -63,17 +67,21 @@ void mg_L9958_fault_diagnostic_test(void)
 {
     uint8_t test_mode;
     uint8_t test_slew_rate;
-    
-    MG_MAILBOX_OUT(parameter[0]) = MG_MAILBOX_IN(testid);
+    uint8_t fault_temp0, fault_temp1;
+
+    fault_temp0 = 0;
+    fault_temp1 = 0;
+
+    // MG_MAILBOX_OUT(parameter[0]) = MG_MAILBOX_IN(testid);
     test_mode = MG_MAILBOX_IN(parameter[0]);
     test_slew_rate = MG_MAILBOX_IN(parameter[1]);
   
     /* Clear the device fault by sending Bit 8 of Txd as '1' */
     mg_HAL_ETC_Discrete_Enable(true);
-    mg_HAL_PWM_Set_ETCCTLPWM_Frequency_And_Duty(10000, 100);
-    mg_HAL_ETC_Discrete_Direction( true);
+    mg_HAL_PWM_Set_ETCCTLPWM_Frequency_And_Duty(10000, 0);
+    mg_HAL_ETC_Discrete_Direction(true);
     mg_HAL_Time_Hard_Delay_us(DELAY_500_US);
-    mg_HAL_ETC_Discrete_Direction( false);
+    mg_HAL_ETC_Discrete_Direction(false);
     mg_HAL_Time_Hard_Delay_us(DELAY_500_US);
     mg_HAL_ETC_Fault_Clear();
     
@@ -99,7 +107,7 @@ void mg_L9958_fault_diagnostic_test(void)
         mg_HAL_ETC_Discrete_Enable(true);
         /* Low Side Current Limit Set 0x00 */
         mg_HAL_Fault_ETC_Over_Current_Test_Configure(test_slew_rate);
-        mg_HAL_PWM_Set_ETCCTLPWM_Frequency_And_Duty(10000, 100);
+        mg_HAL_PWM_Set_ETCCTLPWM_Frequency_And_Duty(10000, 50);
         mg_HAL_ETC_Discrete_Direction( true);
         mg_HAL_Time_Hard_Delay_us(DELAY_500_US);
         mg_HAL_ETC_Discrete_Direction( false);
@@ -111,8 +119,18 @@ void mg_L9958_fault_diagnostic_test(void)
 
     /* Read Fault State */
     mg_HAL_ETC_Fault_Read();
-    MG_MAILBOX_OUT(parameter[1]) = mg_HAL_ETC_Fault_Get(0);
-    MG_MAILBOX_OUT(parameter[2]) = mg_HAL_ETC_Fault_Get(1);
+    fault_temp0 |= mg_HAL_ETC_Fault_Get(0);
+    fault_temp1 |= mg_HAL_ETC_Fault_Get(1);
+    mg_HAL_Time_Hard_Delay_us(DELAY_500_US);
+    mg_HAL_ETC_Fault_Read();
+    fault_temp0 |= mg_HAL_ETC_Fault_Get(0);
+    fault_temp1 |= mg_HAL_ETC_Fault_Get(1);
+
+    MG_MAILBOX_OUT(parameter[1]) = fault_temp0;
+    MG_MAILBOX_OUT(parameter[2]) = fault_temp1;
+
+    /* when the diagnose complete, we set the Test ID to outbox */
+    MG_MAILBOX_OUT(parameter[0]) = MG_MAILBOX_IN(testid);
     mg_HAL_Time_Hard_Delay_us(DELAY_500_US);
     // Clear fault after over current
     mg_HAL_ETC_Fault_Clear();
