@@ -53,7 +53,7 @@ void InitEPSD_CrankCrankToStall(void);
 void InitEPSD_CrankRunToPowerOffDelay(void);
 void MngEPSD_CrankEventTasks(void);
 void MngEPSD_Crank7p81msTasks(void);
-
+void InitEPSD_CamRstToKeyOn(void);
 // void InitEPSD_CamRstTo_Keyoff(void);
 // void InitEPSD_CrankRstTo_Keyoff(void);
 #endif

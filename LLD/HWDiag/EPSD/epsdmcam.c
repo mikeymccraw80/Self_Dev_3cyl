@@ -109,10 +109,10 @@ static void ProcessEPSD_CamRatnlyCntrEval(void);
  * Parameters:          None
  * Return:              None
  *****************************************************************************/
-//FAR_COS void InitEPSD_CamRstToKeyOn(void)
-//{
-  //  InitEPSD_CamComParms();
-//}
+ void InitEPSD_CamRstToKeyOn(void)
+{
+    InitEPSD_CamComParms();
+}
 
 /*****************************************************************************
  *

@@ -114,6 +114,16 @@ void InitEPSD_CrankRstToKeyOn(void)
 {
 	SeEPSD_CamPrevState = HAL_Get_CAM_Level(CAM1);
 	SfEPSD_MnfdPresAtKeyOn = GetVIOS_p_MnfdPresFiltd();
+	InitEPSD_CrankComParms();
+	
+	SbEPSD_CrankNoSigTestComplete = CbFALSE; //changed by daowei
+	SbEPSD_CrankNoSigTestComplete_Internal = CbFALSE;
+	HaltTIMC_StopWatch(VaEPSD_7p8TimerEnbl,CeEPSD_CrankNoSigTimer);
+	SetTIMC_StopWatch16(VaEPSD_t_7p8TimerArray,
+						CeEPSD_CrankNoSigTimer,C_R7p8125ms16(0));
+	HaltTIMC_StopWatch(VaEPSD_7p8TimerEnbl,CeEPSD_CrankNoSigResetTimer);
+	SetTIMC_StopWatch16(VaEPSD_t_7p8TimerArray,
+						CeEPSD_CrankNoSigResetTimer,C_R7p8125ms16(0));
 }
 
 /*****************************************************************************
