@@ -729,6 +729,7 @@ void Sinit_PowerOffDelayToKeyOn(void)
 	InitKNKD_RstToKeyOn();
 	PerformCOND_CheckCPU_SOH_PwrdnDlyToKeyOn();
 	InitCOND_Device_OFVC_RstKeyOn();
+	InitEPSD_CamRstToKeyOn();
 }
 
 /*****************************************************************************
@@ -791,6 +792,7 @@ void Sinit_ShutdownInProcessToKeyOn(void)
 	InitKNKD_RstToKeyOn();
 	PerformCOND_CheckCPU_SOH_ShutDnToKeyOn();
 	InitCOND_Device_OFVC_RstKeyOn();
+	InitEPSD_CamRstToKeyOn();
 }
 
 /*****************************************************************************
