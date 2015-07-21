@@ -48,7 +48,7 @@
 *|   }
 *| }
 */
-const T_COUNT_WORD  KcEPSD_CrankToothErrFailThrsh = V_COUNT_WORD (10);
+const T_COUNT_WORD  KcEPSD_CrankToothErrFailThrsh = V_COUNT_WORD (3);
 
 /*
 *| epsdcald.{
