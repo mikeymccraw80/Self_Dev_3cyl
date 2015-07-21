@@ -105,4 +105,6 @@ uint32_t IO_PULSE_Convert_Counts_To_Time(
    uint8_t     in_time_precision,
    uint8_t     in_time_resolution );
 
+uint8_t CRANK_Get_Diag58x_Error_Cnt(void);
+void    CRANK_Set_Diag58x_Error_Cnt(uint8_t cnt);
 #endif // DD_CRANK_INTERFACE_H

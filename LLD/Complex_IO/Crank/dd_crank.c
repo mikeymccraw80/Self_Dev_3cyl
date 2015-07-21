@@ -110,7 +110,7 @@ uCrank_Count_T    CRANK_Error_Count_Less;
 uCrank_Count_T    CRANK_Error_Count_More_Max;
 uCrank_Count_T    CRANK_Error_Count_Less_Max;
 uCrank_Count_T    CRANK_GAP_REAL_COUNT;       //not including synthetic
-
+uint8_t           CRANK_Error_Count;
 //=============================================================================
 // Local Variable Definitions
 //=============================================================================
@@ -612,7 +612,8 @@ bool CRANK_Validate_Synchronization( void )
 			if (CRANK_Error_Count_Less > CRANK_Error_Count_Less_Max)
 				CRANK_Error_Count_Less_Max = CRANK_Error_Count_Less;
 		}
-
+		/* used for diagnose crank noisy       */
+        CRANK_Error_Count = CRANK_Error_Count_Less + CRANK_Error_Count_More;
 		/* check whether need to recover from synch error */
 		if (KbHWIO_MoreOrLess_Logic_Enable == true) {
 			if (CRANK_FS_State == FS_CRANK_CYLINDER_ID_COMPLETE) {
@@ -1613,3 +1614,20 @@ void CRANK_Set_Diag_Tooth_Cnt(uint8_t cnt)
 {
 	crank_diag_tooth_cnt = cnt;
 }
+
+//=============================================================================
+// CRANK_Get_Diag58x_Error_Cnt, for crank noisy signal diagnose
+//=============================================================================
+uint8_t CRANK_Get_Diag58x_Error_Cnt(void)
+{
+    return CRANK_Error_Count;
+}
+
+//=============================================================================
+// CRANK_Set_Diag58x_Error_Cnt, for crank noisy signal diagnose
+//=============================================================================
+void CRANK_Set_Diag58x_Error_Cnt(uint8_t cnt)
+{
+    CRANK_Error_Count = cnt;
+}
+
