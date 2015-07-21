@@ -210,7 +210,7 @@ static void InitEPSD_CrankComParms(void)
 	ScEPSD_CrankCylEventEnblCntr   = V_COUNT_BYTE(0);
 }
 
-#if 0
+#if 1
 /*****************************************************************************
  *
  * Function:            MngEPSD_CrankEventTasks
@@ -397,7 +397,7 @@ static void ProcessEPSD_CrankNoSigFaultTmrEval(void)
  * Parameters:          None
  * Return:              None
  *****************************************************************************/
- #if 0
+ #if 1
 static void ProcessEPSD_CrankNoisySigEnblCriteria(void)
 {
 	if ( (GetVIOS_EngSt() == CeENG_RUN)
@@ -449,6 +449,45 @@ static void ProcessEPSD_CrankNoisySigFaultCntrEval(void)
 	{
 		VbEPSD_CrankNoisySigFailCriteriaMet = CbFALSE;
 	}
+/*      Process_Crank_Noisy_Signal_Counter_Evaluation
+ *      =============================================
+ *      This process determines if the Crank_Noisy_Signal
+ *      Diagnostic has met either the pass or fail criteria
+ *      and outputs the appropriate results. The pass criteria
+ *      will be met when a calibrated number of good samples
+ *      have occurred. The fail criteria will be met when one
+ *      sample falls outside the error band. This process will
+ *      run every revolution or every other cylinder event. */
+	if ( SbEPSD_CrankNoisySigTestComplete_Internal )
+
+  {
+
+    ScEPSD_CrankNoisySigFailCntr   = V_COUNT_WORD(0);
+
+    ScEPSD_CrankNoisySigSampleCntr = V_COUNT_WORD(0);
+
+  }
+
+  /* update appropriate counters */
+
+  if ( SbEPSD_CrankNoisySigEnblCriteriaMet )
+
+  {
+
+    /* update sample counter */
+
+    ScEPSD_CrankNoisySigSampleCntr++;
+
+    if ( VbEPSD_CrankNoisySigFailCriteriaMet )
+
+    {
+
+      ScEPSD_CrankNoisySigFailCntr++;
+
+    }
+
+  }
+
 }
 
 /*****************************************************************************

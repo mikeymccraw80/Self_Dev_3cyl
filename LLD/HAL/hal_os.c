@@ -395,6 +395,7 @@ void HAL_OS_SYN_Task(void)
 	MngESTD_RefEventTasks();
 	MngEPSD_CamEventTasks();
 	MngKNKD_CylEventTasks();
+	MngEPSD_CrankEventTasks();
 }
 
 //=============================================================================

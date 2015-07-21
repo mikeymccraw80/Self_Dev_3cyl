@@ -38,7 +38,7 @@
 #include "hal_analog.h"
 #include "dd_cam_interface.h"
 #include "hal_emulated_eeprom.h"
-
+#include "dd_crank_interface.h"
 /* ============================================================================ *\
  * Other header files.
 \* ============================================================================ */
@@ -934,9 +934,11 @@ INLINE void ClrVIOS_CrankRefToothErrCnt( void )
 {
 	// TooFewTeeth = FixDefConst( 0.0, Fixed_Shortcard );
 	// TooManyTeeth = FixDefConst( 0.0, Fixed_Shortcard );
-	// ToothErrCnt = FixDefConst( 0.0, Fixed_Shortcard );
+	 CRANK_Set_Diag58x_Error_Cnt(FixDefConst( 0.0, Fixed_Shortcard ));
 }
 
+#define GetVIOS_CAM_CrankBackupActive() (CbFALSE)
+#define GetVIOS_CrankRefToothErrCnt()  (CRANK_Get_Diag58x_Error_Cnt())
 #define GetKNKD_Disable_Fault()   \
 	(LLD_atd_input_table[LLD_ATD_MAP].LLD_atd_status.B_max||\
 	LLD_atd_input_table[LLD_ATD_MAP].LLD_atd_status.B_min)
