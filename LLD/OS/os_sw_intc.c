@@ -181,8 +181,8 @@ void Service_ECSM_Error(void)
    {
       HAL_Last_ECC_Address = ECSM.REAR;
       // Fix RAM ECC error
-	  HAL_Last_ECC_Address - = HAL_Last_ECC_Address%4;
       address = (uint32_t *)HAL_Last_ECC_Address;
+	  address -= address%4;
       *address = 0;
       ECSM.ESR.F.RNCE = 1;
    }
