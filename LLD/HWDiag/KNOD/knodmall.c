@@ -238,7 +238,7 @@ void MngKNKD_125msTasks(void)
        VcKNKD_SystemSampleCounter = V_COUNT_WORD (0);
    }
 
-  SbKNKD_SensorTestComplete |=SbKNKD_SensorTestComplete_Internal;
+  SbKNKD_SystemTestComplete |=SbKNKD_SystemTestComplete_Internal;
         /*  Sensorpass/fail logic */
 
    if (SbKNKD_SensorEnableCriteriaMet != CbFALSE)
