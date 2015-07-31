@@ -501,6 +501,60 @@ const T_COUNT_WORD      KcEMSD_FANBShortLoFailThrsh  = V_COUNT_WORD (10) ;
 const T_COUNT_WORD      KcEMSD_FANBShortSmplThrsh  = V_COUNT_WORD (20) ;
 
 
+/*===============================================================================
+ *  SMR diagnostic
+ *===============================================================================*/
+/*===========================================================================*/
+
+/* SMR fault determination counter
+ * threshhold equal to or above which a failure is
+ * reported to the Data Manager */
+/*
+*| emsdcald.{
+*|   KcEMSD_SMRShortHiFailThrsh {
+*|     : is_calconst ;
+*|     : description = "SMR TPIC ShortHi Fault determination "
+*| "counter threshhold equal to or above which a ShortHi failure is"
+*| "reported to the Data Manager.";
+*|     : type = fixed.emsd_t_count_word ;
+*|     : units = "count" ;
+*|   }
+*| }
+*/
+const T_COUNT_WORD      KcEMSD_SMRShortHiFailThrsh  = V_COUNT_WORD (10) ;
+/*============================================================================*/
+/* SMR fault determination counter
+ * threshhold equal to or above which a failure is
+ * reported to the Data Manager */
+/*
+*| emsdcald.{
+*|   KcEMSD_SMRShortLoFailThrsh {
+*|     : is_calconst ;
+*|     : description = "SMR TPIC ShortLo Fault determination "
+*| "counter threshhold equal to or below which a ShortLo failure is"
+*| "reported to the Data Manager.";
+*|     : type = fixed.emsd_t_count_word ;
+*|     : units = "count" ;
+*|   }
+*| }
+*/
+const T_COUNT_WORD      KcEMSD_SMRShortLoFailThrsh  = V_COUNT_WORD (10) ;
+/*===========================================================================*/
+/* SMR fault sample counter threshhold equal to
+ * or above which a pass is reported to the Data Manager */
+/*
+*| emsdcald.{
+*|   KcEMSD_SMRShortSmplThrsh  {
+*|     : is_calconst ;
+*|     : description = "SMR TPIC pass counter threshold "
+*| "equal to or above which a pass is reported to the Data Manager.";
+*|     : type = fixed.emsd_t_count_word ;
+*|     : units = "count" ;
+*|   }
+*| }
+*/
+const T_COUNT_WORD      KcEMSD_SMRShortSmplThrsh  = V_COUNT_WORD (20) ;
+
 
 /*===============================================================================
  *  Flash Checksum  diagnostic calibration structure

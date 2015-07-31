@@ -112,6 +112,13 @@ extern const T_COUNT_WORD         KcEMSD_FANBShortLoFailThrsh;
 
 extern const T_COUNT_WORD         KcEMSD_FANBShortSmplThrsh;
 
+/* ===========================================================================
+ * SMR sub-subsystem calibrations export 
+ * ==========================================================================*/
+extern const T_COUNT_WORD         KcEMSD_SMRShortHiFailThrsh;
+extern const T_COUNT_WORD         KcEMSD_SMRShortLoFailThrsh;
+
+extern const T_COUNT_WORD         KcEMSD_SMRShortSmplThrsh;
 /*****************************************************************************
  *  Function Exports
  *****************************************************************************/
