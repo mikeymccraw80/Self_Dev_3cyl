@@ -42,7 +42,6 @@ static Every_Loop_Sec_B   MPRPowerSrc_DelayTimer;
 static const Every_Loop_Sec_B CcFPRPowerSrc_Delay = FixDefConst(1.2, Every_Loop_Sec_B);
 static const Every_Loop_Sec_B CcMPRPowerSrc_Delay = FixDefConst(1.2, Every_Loop_Sec_B);
 
-
 /*********************************************************************/
 /*  Local Function                                                   */
 /*********************************************************************/
@@ -86,6 +85,7 @@ static void UpdatePowerSrcStatus( void )
 	} else {
 		FPRPowerSrc_DelayTimer++;
 	}
+
 }
 
 

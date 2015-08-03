@@ -301,6 +301,43 @@
 
 }
 
+/*  =========================================================================
+ *  Functions for SMR Diagnostic
+ *  =========================================================================*/
+/******************************************************************************
+ *
+ * Function:     EvaluateEMSD_SMREnblCriteria
+ * Description:  (Evaluate_SMR_Enable_Criteria)
+ *               This process will enable the  SMR Hardware diagnostic
+ *               if the enable conditions are met.
+ *
+ * Parameters:
+ *    T_COUNT_WORD              KfEMSD_t_IgnitionOnDelay               (input)
+ *    TbBOOLEAN                 *LbEMSD_SMREnblCriteriaMet      (output)
+ * Return:
+ *    Nil
+ *
+ *****************************************************************************/
+ void EvaluateEMSD_SMREnblCriteria (
+            T_SECONDS        KfEMSD_t_IgnitionOnDelay,
+            TbBOOLEAN        *LbEMSD_SMREnblCriteriaMet)
+{
+
+
+  if ( (GetVIOS_IgnSt() == CeIGN_ON)
+       && (GetVIOS_t_IgnOnTime() >= KfEMSD_t_IgnitionOnDelay)
+       && (GetVIOS_FANA_Presnt())
+      )                           /* some relevant conditions can be added here for enable criteria */
+    {
+      *LbEMSD_SMREnblCriteriaMet = CbTRUE ;
+    }
+  else
+    {
+      *LbEMSD_SMREnblCriteriaMet = CbFALSE ;
+    }
+
+
+} 
 ///*  =========================================================================
 // *  Functions for Oxygen Sensor Heater Diagnostic
 // *  =========================================================================*/

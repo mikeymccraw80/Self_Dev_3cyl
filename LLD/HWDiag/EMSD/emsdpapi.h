@@ -79,6 +79,10 @@ void MngEMSD_GIS200msTasks (void);
 void MngEMSD_FanA200msTasks (void);
 void MngEMSD_FanB200msTasks (void);
 
+/******************************************************************************
+ *  SMR Function Prototype
+ *****************************************************************************/
+void MngEMSD_SMR200msTasks (void);
 
 /******************************************************************************
  *  FileROM Function Prototype
@@ -96,6 +100,7 @@ void InitEMSD_MILRstToKeyOn(void);
 void InitEMSD_MainRelayRstToKeyOn(void);
 void InitEMSD_SVSRstToKeyOn(void);
 void InitEMSD_GISRstToKeyOn();
+void InitEMSD_SmrRstToKeyOn();
 #endif    /* #define EMSDPAPI_H                       */
 
 /* ============================================================================ *\

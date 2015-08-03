@@ -54,7 +54,7 @@ typedef union {
 		bitfield16_t SparkCoil       : 1 ;
 		bitfield16_t O2Heater        : 1 ;
 		bitfield16_t Injector        : 1 ;
-		bitfield16_t ETC        : 1 ;
+		bitfield16_t ETC             : 1 ;
 		bitfield16_t NotUsed         : 7 ;
 	} Bits;
 	uint16_t Word ;

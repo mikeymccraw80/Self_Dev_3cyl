@@ -308,6 +308,7 @@ void HAL_OS_100ms_Task(void)
 		MngEMSD_FanA200msTasks();
 		MngEMSD_FanB200msTasks();
 		MngCOND_CheckCPU_31p2Tasks();
+		MngEMSD_SMR200msTasks();
 	}
 
 	if(OS_100ms_Cnt ==5) {
@@ -731,6 +732,7 @@ void Sinit_PowerOffDelayToKeyOn(void)
 	PerformCOND_CheckCPU_SOH_PwrdnDlyToKeyOn();
 	InitCOND_Device_OFVC_RstKeyOn();
 	InitEPSD_CamRstToKeyOn();
+	InitEMSD_SmrRstToKeyOn();
 }
 
 /*****************************************************************************
@@ -794,6 +796,7 @@ void Sinit_ShutdownInProcessToKeyOn(void)
 	PerformCOND_CheckCPU_SOH_ShutDnToKeyOn();
 	InitCOND_Device_OFVC_RstKeyOn();
 	InitEPSD_CamRstToKeyOn();
+	InitEMSD_SmrRstToKeyOn();
 }
 
 /*****************************************************************************

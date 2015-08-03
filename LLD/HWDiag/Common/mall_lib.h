@@ -69,6 +69,13 @@ void EvaluateEMSD_FANBEnblCriteria (
               TbBOOLEAN        *LbEMSD_FANBEnblCriteriaMet);
 
 /*==========================================================================
+ *           SMR  Diagnostic
+ *=========================================================================*/
+void EvaluateEMSD_SMREnblCriteria (
+              T_SECONDS        KfEMSD_t_IgnitionOnDelay,
+              TbBOOLEAN        *LbEMSD_SMREnblCriteriaMet);
+
+/*==========================================================================
  *           Fuel Pump Relay
  *=========================================================================*/
 void EvaluateEMSD_FPRDEnblCriteria (

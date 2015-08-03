@@ -9,6 +9,8 @@
 #include "hwiocald.h"
 #include "io_config_tpu.h"
 
+uint8_t SMR_Enable_State;
+
 void HAL_GPIO_SET_INJECTION_Enable(bool in_enable)
 {
 	SIU_GPIO_DISCRETE_Set_State(HAL_GPIO_INJECTION1_CHANNEL,in_enable);
@@ -297,6 +299,7 @@ bool HAL_GPIO_GET_IMMOREQ_Status(void)
 void HAL_GPIO_SET_CRUISI_Enable(bool in_enable) 
 {
    VSEP_DiscreteSet(VSEP_PO_CRUISI_CH,in_enable);
+   SMR_Enable_State = in_enable;
 }
 
 //=============================================================================

@@ -147,6 +147,13 @@ extern HAL_Diag_T HAL_Diag;
 #define GetVIOS_FANB_FaultAny()        (GetAnyFault(DISCRETE_OUT_FAN_2))
 #define GetVIOS_FANB_Presnt()              (true)//(FanPresentFlags.bf.Fan2Present)
 
+/******************************************************************************
+ * TPIC Fault reading for SMR diagnostic 
+ ******************************************************************************/
+#define GetVIOS_SMR_FaultShortHi()    (GetShortFault(DISCRETE_OUT_CRUISE))
+#define GetVIOS_SMR_FaultShortLo()    (GetOpenFault(DISCRETE_OUT_CRUISE))
+#define GetVIOS_SMR_FaultAny()        (GetAnyFault(DISCRETE_OUT_CRUISE))
+#define GetVIOS_SMR_Presnt()              (true)
 
 /******************************************************************************
  * PSVI Fault reading for MIL Lamp diagnostic 
