@@ -1,0 +1,92 @@
+/*============================================================================*/
+/*                                                                            */
+/* KNOD Subsystem APPLICATION ANCILLARY FILE                                  */
+/*                                                                            */
+/*============================================================================*/
+
+*-emsdmprd.VcEMSD_SMRSampleCntr{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "SMRSMPLCNT";
+*-  variable_location.symbol = emsdmprd.VcEMSD_SMRSampleCntr;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "EMSD SMR Output diag sample counter";
+*-}
+
+*-emsdmprd.ScEMSD_SMRShortHiFailCntr{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "SMRFAHICNT";
+*-  variable_location.symbol = emsdmprd.ScEMSD_SMRShortHiFailCntr;
+*-  ds_scaling_unit          = "count";
+*-  ds_precision             = "4.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "EMSD SMR Output diag short high fail counter";
+*-}
+
+
+*-emsdmprd.SbEMSD_SMREnblCriteriaMet{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "SMRENLCRMT";
+*-  variable_location.symbol = emsdmprd.SbEMSD_SMREnblCriteriaMet;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "EMSD SMR Output diag system enable criteria met";
+*-}
+
+*-emsdmprd.SbEMSD_SMRTestComplete{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "SMRTSTCMPL";
+*-  variable_location.symbol = emsdmprd.SbEMSD_SMRTestComplete;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "EMSD SMR Output diag system test complete";
+*-}
+
+*-emsdmprd.SbEMSD_SMRShortHiTestFailed{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "SMRTSTFAHI";
+*-  variable_location.symbol = emsdmprd.SbEMSD_SMRShortHiTestFailed;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "EMSD SMR Output diag system short high test fail";
+*-}
+
+
+*-emsdmprd.SbEMSD_SMRShortHiFailCriteriaMet{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "SMRSHHIMET";
+*-  variable_location.symbol = emsdmprd.SbEMSD_SMRShortHiFailCriteriaMet;
+*-  ds_scaling_unit          = "Boolean";
+*-  ds_precision             = "2.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-  description              = "EMSD SMR Output diag system test High fail condition meet";
+*-}
+
+
+
+/*============================================================================*/
+/* CHANGE LOG                                                                 */
+/*                                                                            */
+/*                                                                            */
+/* REV.   DATE     USER  RSM    DESCRIPTION                                   */
+/*                               */
+/*                                                                            */
+/* end of module                                                              */
+/*                                                                            */
+/*============================================================================*/
