@@ -118,6 +118,15 @@ extern uint32_t     VSEP_Channel_Enabled;
 #define DISCRETE_OUT_MAINRLY_Flag                                   VSEP_Channel_Enabled//this will be revised again
 #define DISCRETE_OUT_MAINRLY_DiagMask                               ((Mask32(VSEP_Get_Channel(MTSA_CONFIG_VSEP_PCH_05),1)))//this will be revised again
 
+//DISCRETE_OUT_CRUISE
+#define DISCRETE_OUT_CRUISE_Type                                  VSEP_SPIDISCRETE// for output control
+#define DISCRETE_OUT_CRUISE_Fault                                  VSEP_SPIDISCRETE//for diagnostic imformation
+#define DISCRETE_OUT_CRUISE_Pin                                     MTSA_CONFIG_VSEP_PCH_30// for output control 
+#define DISCRETE_OUT_CRUISE_Channel                              MTSA_CONFIG_VSEP_PCH_30//will be used in DD_GetDiscreteDiagStatus & DD_ClearDiscreteDiagStatus
+#define DISCRETE_OUT_CRUISE_Inverted                            VSEP_PCH_Get_Inverte_State(MTSA_CONFIG_VSEP_PCH_30)//for vsep control channel, that information is not needed, but you still can remain it for the common format
+#define DISCRETE_OUT_CRUISE_Flag                                   VSEP_Channel_Enabled//this will be revised again
+#define DISCRETE_OUT_CRUISE_DiagMask                               ((Mask32(VSEP_Get_Channel(MTSA_CONFIG_VSEP_PCH_30),1)))//this will be revised again
+
 //DISCRETE_OUT_FUEL_PUMP
 #define DISCRETE_OUT_FUEL_PUMP_Type                                  VSEP_SPIDISCRETE
 #define DISCRETE_OUT_FUEL_PUMP_Fault                                  VSEP_SPIDISCRETE
