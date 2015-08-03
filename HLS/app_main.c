@@ -367,7 +367,7 @@ void HLS_Task_200ms(void)
 static int b_toggle_function = 1;
 void HLS_Task_1000ms(void)
 {
-    if (b_toggle_function)
+    if (true)
         Test_DO_Toggle_Function();
 	// HAL_GPIO_SET_INJECTION_Enable(b_toggle_function);
 	// b_toggle_function = !b_toggle_function;
