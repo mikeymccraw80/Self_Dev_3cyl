@@ -63,8 +63,10 @@ void mg_TLE4471_watchdog_reset_test(void)
     start_timer = mg_HAL_Timer_Get_STM_In_us();
     /* Clear COP for new timer during */
     mg_HAL_Service_WatchDog();
-    mg_HAL_Time_Hard_Delay_us(HARD_DELAY_US);
-    mg_HAL_Service_WatchDog();
+    TLE4471_WD_Feeding();
+    // mg_HAL_Time_Hard_Delay_us(HARD_DELAY_US);
+    // mg_HAL_Service_WatchDog();
+    TLE4471_WD_Feeding();
     while (diff < COP_OVER_DURING_US)
     {
         current_timer = mg_HAL_Timer_Get_STM_In_us();
