@@ -13,6 +13,7 @@ static void INST_Operation_CALLBACK(void)
 
      ToggleHWIO_WatchDog();
      SWT_Service_WatchDog(); 
+     hwi_kick_wdg_local();
 }
 
 
