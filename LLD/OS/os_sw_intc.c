@@ -176,15 +176,12 @@ uint32_t HAL_Last_ECC_Address;
 void Service_ECSM_Error(void)
 {
    uint32_t *address;
-   uint32_t address_temp;
 
    if ( (bitfield8_t)1 == ECSM.ESR.F.RNCE )
    {
       HAL_Last_ECC_Address = ECSM.REAR;
-	  address_temp = HAL_Last_ECC_Address;
-	  address_temp -=address_temp%4;
       // Fix RAM ECC error
-      address = (uint32_t *)address_temp;
+      address = (uint32_t *)(HAL_Last_ECC_Address&0xFFFFFFFC);
       *address = 0;
       ECSM.ESR.F.RNCE = 1;
    }
