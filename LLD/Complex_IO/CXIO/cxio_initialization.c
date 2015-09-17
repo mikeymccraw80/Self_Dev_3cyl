@@ -22,7 +22,8 @@ static void CRANK_Scheduler_Initialize( void )
 {
 	uint32_t cylinders                  = IO_Init_Crank_Initialization_Parameters.number_of_cylinders;
 	uCrank_Angle_T cylinder_offset      = CRANK_Convert_Angle_To_uCrank_Angle( ( CRANK_NUMBER_OF_DEGREES_PER_REVOLUTION / cylinders ), 0 );
-	uCrank_Angle_T crank_offset         = CRANK_Convert_Angle_To_uCrank_Angle( ( CRANK_NUMBER_OF_DEGREES_PER_REVOLUTION / 2 ), 0 );
+//	uCrank_Angle_T crank_offset         = CRANK_Convert_Angle_To_uCrank_Angle( ( CRANK_NUMBER_OF_DEGREES_PER_REVOLUTION / 2 ), 0 );
+	uCrank_Angle_T crank_offset         = CRANK_Convert_Angle_To_uCrank_Angle(  CRANK_NUMBER_OF_DEGREES_PER_REVOLUTION , 0 );
 	uCrank_Angle_T sync_event           = IO_Init_Crank_Initialization_Parameters.synchronization_start_angle;
 	uCrank_Angle_T cam_event            = IO_Init_Cam_Initialization_Parameters.cam_read_angle;
 	uCrank_Angle_T first_cylinder_event = IO_Init_Crank_Initialization_Parameters.first_cylinder_event_angle;
