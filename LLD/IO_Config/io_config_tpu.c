@@ -180,7 +180,9 @@ const TPU_CHANNEL_Configuration_T PFI_Desfi[PFI_MAX_CYLINDERS] =
    EDGE_FALLING,                 //   Host Service Request Type
    DESFIE_FUNCTION_NUM          //   TPU Primitives or Channel function Select
   
-  },
+  }
+   #if 0
+  
   {
    TPU_EVENT_ABSOLUTE,   //   Set the desired value for TPU configuration
    0,                                   //      PWM Update Mode 1- Coherent,0- synchronus
@@ -198,7 +200,7 @@ const TPU_CHANNEL_Configuration_T PFI_Desfi[PFI_MAX_CYLINDERS] =
    DESFIE_FUNCTION_NUM          //   TPU Primitives or Channel function Select
   
   }
-
+#endif
 };
 
 
