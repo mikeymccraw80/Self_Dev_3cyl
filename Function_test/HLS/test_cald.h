@@ -8,7 +8,7 @@
 #if 1
 
 
-#define CcSYST_NUM_OF_CYLINDERS 4
+#define CcSYST_NUM_OF_CYLINDERS 3
 
 
 typedef struct {

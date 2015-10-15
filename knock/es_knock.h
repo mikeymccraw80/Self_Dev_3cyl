@@ -20,7 +20,8 @@
 #define cyl_3        2
 #define cyl_4        3
 #define cyl_global   0
-#define num_cyl      4
+//#define num_cyl      4
+#define num_cyl      3
 #endif
 
 

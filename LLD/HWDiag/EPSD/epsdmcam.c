@@ -45,7 +45,7 @@
 #include "v_power.h"
 #include "dd_cam_interface.h"
 
-#define CcSYST_NUM_OF_CYLINDERS 4
+#define CcSYST_NUM_OF_CYLINDERS 3
 /******************************************************************************
  *  Global Data Define
  *****************************************************************************/

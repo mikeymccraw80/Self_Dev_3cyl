@@ -36,8 +36,8 @@
 #include "vsepcald.h"
 
 //#ifdef HW_TEST_SW
-#define GetSPRK_SparkDeliveryMode() CeWasteEST // 2IGBT
-//#define GetSPRK_SparkDeliveryMode() CeSequentialEST // 4IGBT
+//#define GetSPRK_SparkDeliveryMode() CeWasteEST // 2IGBT
+#define GetSPRK_SparkDeliveryMode() CeSequentialEST // 4IGBT
 //#endif
 
 #define MICROSECOND_RESOLUTION (6)//need consider again

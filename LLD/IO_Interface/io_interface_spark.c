@@ -24,8 +24,8 @@ void  IO_Spark_Syn_Init(void)
     SetHWIO_MaxDwell(KfSPRK_t_CrankMaxDwellInit);
     for (i=0; i < 4; i ++)
         SetHWIO_MainPulse_DwellTime(i, V_MILLISECONDSb(4));
-    VSEP_EST_Set_PF_Mode(VSEP_INDEX_0,VSEP_EST_SELECT_PAIRED_FIRE_MODE_ENABLED);
-    // VSEP_EST_Set_PF_Mode(VSEP_INDEX_0,VSEP_EST_SELECT_PAIRED_FIRE_MODE_DISABLED);
+   // VSEP_EST_Set_PF_Mode(VSEP_INDEX_0,VSEP_EST_SELECT_PAIRED_FIRE_MODE_ENABLED);
+    VSEP_EST_Set_PF_Mode(VSEP_INDEX_0,VSEP_EST_SELECT_PAIRED_FIRE_MODE_DISABLED);
     SPARK_Set_Enable( true);
 
 }
@@ -84,6 +84,7 @@ void IO_Spark_Syn_Update(void)
 	SetHWIO_MainPulse_DwellTime(LLD_IGN_CHANNEL_C, dwell_time);
 
     // set spark channel D
+    #if 0
     SetHWIO_Spark_State(LLD_IGN_CHANNEL_D, ign_enable.B_ign_D);
     SetHWIO_Spark_ExtraPulse_Count(LLD_IGN_CHANNEL_D, ign_sig[LLD_IGN_CHANNEL_D].follow_up_sparks);
     spark_angle =(( ign_sig[LLD_IGN_CHANNEL_D].ign_angle<<S_ANGLEa)*3)/4;
@@ -97,4 +98,5 @@ void IO_Spark_Syn_Update(void)
     }
 	dwell_time = Convert_Chery_Ign_Width(ign_sig[LLD_IGN_CHANNEL_D].dwell_time,S_MILLISECONDSb);
 	SetHWIO_MainPulse_DwellTime(LLD_IGN_CHANNEL_D, dwell_time);
+	#endif
 }
