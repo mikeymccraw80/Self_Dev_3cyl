@@ -47,14 +47,16 @@
 #define Diag_EST_A_Status   *((uint8_t *)&(ign_sig[LLD_IGN_CHANNEL_A].status))
 #define Diag_EST_B_Status   *((uint8_t *)&(ign_sig[LLD_IGN_CHANNEL_B].status))
 #define Diag_EST_C_Status   *((uint8_t *)&(ign_sig[LLD_IGN_CHANNEL_C].status))
+#if CcSYST_NUM_OF_CYLINDERS == 4 
 #define Diag_EST_D_Status   *((uint8_t *)&(ign_sig[LLD_IGN_CHANNEL_D].status))
-
+#endif
 /* Injection */
 #define Diag_INJ_A_Status   *((uint8_t *)&(inj_sig[INJ_CHANNEL_A].status))
 #define Diag_INJ_B_Status   *((uint8_t *)&(inj_sig[INJ_CHANNEL_B].status))
 #define Diag_INJ_C_Status   *((uint8_t *)&(inj_sig[INJ_CHANNEL_C].status))
+#if CcSYST_NUM_OF_CYLINDERS == 4 
 #define Diag_INJ_D_Status   *((uint8_t *)&(inj_sig[INJ_CHANNEL_D].status))
-
+#endif
 /* Digital Output */
 #define Diag_MIL_Status      *((uint8_t *)&(LLD_do_table[LLD_DO_MIL_LAMP].status))
 #define Diag_SVS_Status      *((uint8_t *)&(LLD_do_table[LLD_DO_SVS_LAMP].status))

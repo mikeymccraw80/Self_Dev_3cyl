@@ -572,9 +572,6 @@ const  KsVSEP_GRAD_Cals  KsVSEP_GRAD_Initialization= {
 
 const  KsVSEP_Spark_Mode_Cals  KsVSEP_Spark_Mode_Initialization= {
 #if CcSYST_NUM_OF_CYLINDERS == 3
-//	   2,1,1,0,
-//	   1,1,0,0
-/*inorder to set the spark cylinder*/
    	   2,1,1,0,
 	   1,0,0,0
 #else

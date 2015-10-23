@@ -13,7 +13,12 @@ extern const MCD5408_Channel_Init_T  EPPWMT_INIT;
 //=============================================================================
 
 // for dynamic crank scheduling
+#if CcSYST_NUM_OF_CYLINDERS == 3
 #define CRANK_CONFIG_NUMBER_OF_CYLINDERS     (3)
+#else 
+#define CRANK_CONFIG_NUMBER_OF_CYLINDERS     (4)
+#endif
+
 #define CRANK_MAX_CYLINDERS  CRANK_CONFIG_NUMBER_OF_CYLINDERS
 #define CRANK_SCHEDULE_CONFIG_VIRTUAL_TEETH_PER_REVOLUTION (120U)
 

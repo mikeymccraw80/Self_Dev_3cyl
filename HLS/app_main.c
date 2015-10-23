@@ -440,13 +440,16 @@ void HLS_ini(void)
 	inj_sig[INJ_CHANNEL_A].inj_time = 80000;
 	inj_sig[INJ_CHANNEL_B].inj_time = 80000;
 	inj_sig[INJ_CHANNEL_C].inj_time = 80000;
+#if CcSYST_NUM_OF_CYLINDERS == 4 
 	inj_sig[INJ_CHANNEL_D].inj_time = 80000;
+#endif
 
 	inj_sig[INJ_CHANNEL_A].inj_end_angle = 180;
 	inj_sig[INJ_CHANNEL_B].inj_end_angle = 180;
 	inj_sig[INJ_CHANNEL_C].inj_end_angle = 180;
+#if CcSYST_NUM_OF_CYLINDERS == 4 
 	inj_sig[INJ_CHANNEL_D].inj_end_angle = 180;
-
+#endif
 
 	ign_enable.B_ign_A = (uint8_t)true;     
 	ign_enable.B_ign_B = (uint8_t)true;
@@ -456,13 +459,15 @@ void HLS_ini(void)
 	ign_sig[LLD_IGN_CHANNEL_A].dwell_time = 4000;
 	ign_sig[LLD_IGN_CHANNEL_B].dwell_time = 4000;
 	ign_sig[LLD_IGN_CHANNEL_C].dwell_time = 4000;
+#if CcSYST_NUM_OF_CYLINDERS == 4  	
 	ign_sig[LLD_IGN_CHANNEL_D].dwell_time = 4000;
-
+#endif
 	ign_sig[LLD_IGN_CHANNEL_A].ign_angle = -16;
 	ign_sig[LLD_IGN_CHANNEL_B].ign_angle = -16;
 	ign_sig[LLD_IGN_CHANNEL_C].ign_angle = -16;
+#if CcSYST_NUM_OF_CYLINDERS == 4  	
 	ign_sig[LLD_IGN_CHANNEL_D].ign_angle = -16;
-
+#endif
 	ign_sig[LLD_IGN_CHANNEL_A].follow_up_sparks = 2;
 	ign_sig[LLD_IGN_CHANNEL_A].dwell_time_of_follow_up_sparks = 1000;
 	ign_sig[LLD_IGN_CHANNEL_A].break_time_of_follow_up_sparks = 500;
@@ -543,10 +548,12 @@ void HLS_syn(void)
 		inj_sig[INJ_CHANNEL_A].inj_time = 40000;
 		inj_sig[INJ_CHANNEL_B].inj_time = 40000;
 		inj_sig[INJ_CHANNEL_C].inj_time = 40000;
+#if CcSYST_NUM_OF_CYLINDERS == 4 
 		inj_sig[INJ_CHANNEL_D].inj_time = 40000;
+#endif
 	} else {
 		if(LLD_cyl_num==INJ_CHANNEL_A) {
-			inj_sig[INJ_CHANNEL_A].inj_time = 10000;
+			inj_sig[INJ_CHANNEL_A].inj_time = 15000;
 		}
 		if(LLD_cyl_num==INJ_CHANNEL_B) {
 			inj_sig[INJ_CHANNEL_B].inj_time = 10000;

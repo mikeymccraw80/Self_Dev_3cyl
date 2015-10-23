@@ -89,7 +89,7 @@ static void Diag_Digital_Output_Faults(void)
 	} else {
 		Diag_INJ_C_Status = OUT_FAULT_CLEAR;
 	}
-
+#if CcSYST_NUM_OF_CYLINDERS == 4
 	/* Injector D */
 	if (InjectorDShortHi()) {
 		Diag_INJ_D_Status = Diag_INJ_D_Status | OUT_SHORT_HIGH;
@@ -108,7 +108,7 @@ static void Diag_Digital_Output_Faults(void)
 	} else {
 		Diag_INJ_D_Status = OUT_FAULT_CLEAR;
 	}
-
+#endif
 
 	/* MIL */
 	if (!K_Can_Meter_MIL_Disable) {

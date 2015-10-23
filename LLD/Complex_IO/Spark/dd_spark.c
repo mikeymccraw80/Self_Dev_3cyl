@@ -185,8 +185,11 @@ void SPARK_Initialize(IO_Spark_Initialization_Parameters_T  * const in_initializ
     // EST_Select_Initialize_Device( &MTSA_EST_SELECT_DEVICE );
     VSEP_EST_Select_Initialize_Device();
     SPARK_Set_Mode( SPARK_Initial_Est_Mode );
- //   VSEP_EST_Set_PF_Mode(VSEP_INDEX_0,VSEP_EST_SELECT_PAIRED_FIRE_MODE_ENABLED);
-    VSEP_EST_Set_PF_Mode(VSEP_INDEX_0,VSEP_EST_SELECT_PAIRED_FIRE_MODE_DISABLED);
+#if CcSYST_NUM_OF_CYLINDERS == 3
+     VSEP_EST_Set_PF_Mode(VSEP_INDEX_0,VSEP_EST_SELECT_PAIRED_FIRE_MODE_DISABLED);
+#else
+     VSEP_EST_Set_PF_Mode(VSEP_INDEX_0,VSEP_EST_SELECT_PAIRED_FIRE_MODE_ENABLED);
+#endif
     //JPE Enable all spark channels at init.  This functionality should be handled by the algorithm
     // in a later release.  This is part of the temporary HWIO disabling of shorted EST channels.
     for (counter = 0; counter < SPARK_Number_Of_Cylinders; counter++ ) {

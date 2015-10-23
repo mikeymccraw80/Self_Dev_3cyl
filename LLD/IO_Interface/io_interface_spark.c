@@ -84,7 +84,7 @@ void IO_Spark_Syn_Update(void)
 	SetHWIO_MainPulse_DwellTime(LLD_IGN_CHANNEL_C, dwell_time);
 
     // set spark channel D
-    #if 0
+#if CcSYST_NUM_OF_CYLINDERS == 4
     SetHWIO_Spark_State(LLD_IGN_CHANNEL_D, ign_enable.B_ign_D);
     SetHWIO_Spark_ExtraPulse_Count(LLD_IGN_CHANNEL_D, ign_sig[LLD_IGN_CHANNEL_D].follow_up_sparks);
     spark_angle =(( ign_sig[LLD_IGN_CHANNEL_D].ign_angle<<S_ANGLEa)*3)/4;
@@ -98,5 +98,5 @@ void IO_Spark_Syn_Update(void)
     }
 	dwell_time = Convert_Chery_Ign_Width(ign_sig[LLD_IGN_CHANNEL_D].dwell_time,S_MILLISECONDSb);
 	SetHWIO_MainPulse_DwellTime(LLD_IGN_CHANNEL_D, dwell_time);
-	#endif
+#endif
 }

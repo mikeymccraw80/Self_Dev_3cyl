@@ -473,13 +473,13 @@ extern bool     B_CpgVStp;       /* 0xE8  KDS stop canister purge valve test  */
 #define LLD_IGN_CHANNEL_C 2
 #define LLD_IGN_CHANNEL_D 3
 //#define LLD_MAX_IGN_CHANNEL 4
-#define LLD_MAX_IGN_CHANNEL 3
+#define LLD_MAX_IGN_CHANNEL CcSYST_NUM_OF_CYLINDERS
 
 #define INJ_CHANNEL_A 0
 #define INJ_CHANNEL_B 1
 #define INJ_CHANNEL_C 2
 #define INJ_CHANNEL_D 3
-#define MAX_INJ_CHANNEL 4
+#define MAX_INJ_CHANNEL CcSYST_NUM_OF_CYLINDERS
 
 /*===========================================================================*/
 /* Exported global variable                               */
