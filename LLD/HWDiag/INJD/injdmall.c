@@ -42,7 +42,7 @@ typedef enum {
 };
 
 #define CcSYST_NUM_OF_INJECTORS 3
-#define CcSYST_NUM_OF_CYLINDERS 3
+//#define CcSYST_NUM_OF_CYLINDERS 3
 
 /*****************************************************************************
  *  Global Data Define

@@ -22,7 +22,7 @@
 // None
 //=============================================================================
 
-#define CcSYST_NUM_OF_CYLINDERS 3
+//#define CcSYST_NUM_OF_CYLINDERS 3
 
 // DEPS Delay = [(DEPS[5:0] * 8) + 4]
 // total 11 bits: DEPS[5:0] and last 5 bits fixed at 01111 (will be done by VSEP)

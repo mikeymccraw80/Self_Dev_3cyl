@@ -575,7 +575,7 @@ const  KsVSEP_Spark_Mode_Cals  KsVSEP_Spark_Mode_Initialization= {
 //	   2,1,1,0,
 //	   1,1,0,0
 /*inorder to set the spark cylinder*/
-   	   3,0,1,0,
+   	   2,1,1,0,
 	   1,0,0,0
 #else
 	   3,1,1,0,

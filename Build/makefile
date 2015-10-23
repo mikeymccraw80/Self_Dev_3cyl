@@ -359,7 +359,9 @@ ifeq ($(ETCSOH),ENABLE)
     PPC_DIAB_OPTS += -DENABLE_ETC_SOH_MODULE
 endif
 
-export CC= $(COMP_DIR)\$(COMPILER) $(PPC_DIAB_OPTS) $(CDEBUG) $(PPC_DIAB_TARGET) $(INCLUDE_DIR) 
+DEFINES += -DCcSYST_NUM_OF_CYLINDERS=3
+
+export CC= $(COMP_DIR)\$(COMPILER) $(PPC_DIAB_OPTS) $(CDEBUG) $(PPC_DIAB_TARGET) $(INCLUDE_DIR) $(DEFINES)
 
 ###############################################################################
 # Compiler option for building dependency file

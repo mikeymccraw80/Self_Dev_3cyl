@@ -539,7 +539,7 @@ INLINE void ConvertIntrParam_VSS(void)
 /***********************************************************************
  ********************   Knock Parameter           **********************
  ***********************************************************************/
-#define CcSYST_NUM_OF_CYLINDERS 3
+//#define CcSYST_NUM_OF_CYLINDERS 3
 extern Volt0to5Volts_W   ADESC[CcSYST_NUM_OF_CYLINDERS] ; 
 extern Volt0to5Volts_W   ADESC_Average_Wingateoff[CcSYST_NUM_OF_CYLINDERS] ; 
 

@@ -723,9 +723,14 @@ static void CalculateKnockMultiplier( void )
 	}
 
 #if CcSYST_NUM_OF_CYLINDERS == 3
-	for ( cylinder = cyl_1 ; cylinder <= cyl_3 ; cylinder++ ) {
-		base_mult = Lookup_3D_B( cylinder, Fixed_Shortcard, 0.0, cyl_1, cyl_3, 1.0,
-		                         HAL_Eng_Get_Engine_Speed(), RPM_W, 0.0, 0.0, 6400.0, 400.0,
+//	for ( cylinder = cyl_1 ; cylinder <= cyl_3 ; cylinder++ ) {
+//		base_mult = Lookup_3D_B( cylinder, Fixed_Shortcard, 0.0, cyl_1, cyl_3, 1.0,
+//		                         HAL_Eng_Get_Engine_Speed(), RPM_W, 0.0, 0.0, 6400.0, 400.0,
+//		                         RPM_0to6400by400_Steps,
+//		                         F_MADMultiplier[0] ) ;
+		for ( cylinder = cyl_1 ; cylinder <= cyl_3 ; cylinder++ ) {
+		base_mult = Lookup_3D_B( cylinder, Prec_Fixed_Shortcard, 0.0, cyl_1, cyl_3, 1.0,
+		                         HAL_Eng_Get_Engine_Speed(), Prec_RPM_W, 0.0, 0.0, 6400.0, 400.0,
 		                         RPM_0to6400by400_Steps,
 		                         F_MADMultiplier[0] ) ;
 #else
