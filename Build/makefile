@@ -359,8 +359,11 @@ ifeq ($(ETCSOH),ENABLE)
     PPC_DIAB_OPTS += -DENABLE_ETC_SOH_MODULE
 endif
 
+ifeq ($(CYLINDER_APP), 3)
+DEFINES += -DCcSYST_NUM_OF_CYLINDERS=3
+else
 DEFINES += -DCcSYST_NUM_OF_CYLINDERS=4
-
+endif
 export CC= $(COMP_DIR)\$(COMPILER) $(PPC_DIAB_OPTS) $(CDEBUG) $(PPC_DIAB_TARGET) $(INCLUDE_DIR) $(DEFINES)
 
 ###############################################################################

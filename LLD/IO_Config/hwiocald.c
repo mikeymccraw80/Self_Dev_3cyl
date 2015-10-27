@@ -134,8 +134,11 @@ const   uint8_t     KyHWIO_Num58xGapsBeforeSeqn = 3;
 *|   }
 *| }
 */
+#if CcSYST_NUM_OF_CYLINDERS == 4
 const   T_CRANK_ANGLE    KfHWIO_phi_TopDeadCenter = V_CRANK_ANGLE(102);
-
+#elif CcSYST_NUM_OF_CYLINDERS == 3
+const   T_CRANK_ANGLE    KfHWIO_phi_TopDeadCenter = V_CRANK_ANGLE(72);
+#endif
 
 /*===========================================================================*\
  * Calibration parameters related to PFI fuel output logic

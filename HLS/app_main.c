@@ -553,7 +553,8 @@ void HLS_syn(void)
 #endif
 	} else {
 		if(LLD_cyl_num==INJ_CHANNEL_A) {
-			inj_sig[INJ_CHANNEL_A].inj_time = 15000;
+//inorder to slow the inj_time 
+//inj_sig[INJ_CHANNEL_A].inj_time = 15000;
 		}
 		if(LLD_cyl_num==INJ_CHANNEL_B) {
 			inj_sig[INJ_CHANNEL_B].inj_time = 10000;

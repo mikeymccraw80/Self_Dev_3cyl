@@ -134,7 +134,12 @@ void IO_Fuel_Syn_Update(void)
 		}
 
 		/*Convert the engineer value of Chery Injection end angle to Delphi engineer value */
+		/*900(960)=720+cylinder offset */
+#if CcSYST_NUM_OF_CYLINDERS == 4		
 		chery_inj_end_angle = (900 - Convert_Chery_Inj_angle(inj_sig[INJ_CHANNEL_A].inj_end_angle,Prec_Inj_end_angle_chery))<<S_CRANK_ANGLE;
+#elif CcSYST_NUM_OF_CYLINDERS == 3
+		chery_inj_end_angle = (960 - Convert_Chery_Inj_angle(inj_sig[INJ_CHANNEL_A].inj_end_angle,Prec_Inj_end_angle_chery))<<S_CRANK_ANGLE;
+#endif		
 		chery_inj_end_angle = chery_inj_end_angle - KfHWIO_phi_BoundaryFraction;
 		SetHWIO_FuelInjectorEOIT(chery_inj_end_angle);
 		SetHWIO_FuelInjectorTrimEOIT(chery_inj_end_angle);
@@ -181,7 +186,12 @@ void IO_Fuel_Syn_Update(void)
 		SetHWIO_SequentialFuelMode(true);
 
 		/*Convert the engineer value of Chery Injection end angle to Delphi engineer value */
+	      /*900(960)=720+cylinder offset */
+#if CcSYST_NUM_OF_CYLINDERS == 4		
 		chery_inj_end_angle = (900 - Convert_Chery_Inj_angle(inj_sig[INJ_CHANNEL_A].inj_end_angle,Prec_Inj_end_angle_chery))<<S_CRANK_ANGLE;
+#elif CcSYST_NUM_OF_CYLINDERS == 3
+		chery_inj_end_angle = (960 - Convert_Chery_Inj_angle(inj_sig[INJ_CHANNEL_A].inj_end_angle,Prec_Inj_end_angle_chery))<<S_CRANK_ANGLE;
+#endif		
 		chery_inj_end_angle = chery_inj_end_angle - KfHWIO_phi_BoundaryFraction;
 		SetHWIO_FuelInjectorEOIT(chery_inj_end_angle);
 		SetHWIO_FuelInjectorTrimEOIT(chery_inj_end_angle);
