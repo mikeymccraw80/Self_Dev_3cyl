@@ -876,6 +876,7 @@ void CRANK_Process_Crank_Event( void )
 VsCAN_Monitor_ID666[0]=CRANK_Current_Event_Tooth;
 VsCAN_Monitor_ID666[1]=CRANK_Cylinder_ID;
 VsCAN_Monitor_ID666[2]=Ref_event_counter;
+VsCAN_Monitor_ID666[3]=cam1_sig.level;
 			HAL_CAN_Transmit_Message(0x666, 8, VsCAN_Monitor_ID666);
 
 	// Clear the interrupt flag: false == clear
@@ -1434,10 +1435,10 @@ uint32_t CRANK_Get_Parameter(
    case   CRANK_PARAMETER_CURRENT_EDGE_TIME:
 	  {
 		 EPPwMT_Coherent_Edge_Time_And_Count_T edgeTimeAndCount;
+EPPWMT_TPU_INDEX, TPU_CONFIG_IC_EPPWMT, &edgeTimeAndCount );
 
-		 MCD5408_Get_Coherent_Edge_Time_And_Count( EPPWMT_TPU_INDEX, TPU_CONFIG_IC_EPPWMT, &edgeTimeAndCount );
-
-		 CRANK_Parameters.F.current_edge_time = edgeTimeAndCount.Time;
+		 CRANK_Parameters.F.current_edge_time = edgeTimeA
+		 MCD5408_Get_Coherent_Edge_Time_And_Count( ndCount.Time;
 	  }
 	  break;
    case   CRANK_PARAMETER_TIMER_VALUE_RAW:

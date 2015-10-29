@@ -295,7 +295,7 @@ void CAM_Update_State( void )
 
 	//Get CAM state at current tooth
 	CAM_Sensor_State = (bool)( cam_history & 0x01);
-	CAM2_Sensor_State = (bool)HAL_Get_CAM_Level(CAM2);;
+	CAM2_Sensor_State = (bool)HAL_Get_CAM_Level(CAM2);
 	cam_active_state  = CAM_Initialization_Parameters->CAM_Active_State[CAM_Sensor_In_Use];
 
 	CAM_Crank_Number_Gaps_Detected = CRANK_Get_Parameter( CRANK_PARAMETER_NUMBER_OF_GAPS_DETECTED, 0, 0);
