@@ -290,6 +290,7 @@ void CAM_Update_State( void )
 	bool              use_cam_toggle = CAM_Initialization_Parameters->use_cam_toggle;
 	uint32_t          cam_history;
 	Crank_Cylinder_T  pattern_cylinder_id;
+	uCrank_Angle_T    cam_event_angle;
 
 	cam_history  = CRANK_Get_Parameter( CRANK_PARAMETER_CAM_HISTORY, 0, 0);
 
@@ -386,6 +387,7 @@ void CAM_Update_State( void )
 
 			/* Determine if in backup mode and cam occurred: */
 			if (CRANK_Get_Flag(CRANK_FLAG_CAM_BACKUP) == false) {
+				cam_event_angle = CRANK_Convert_Angle_To_uCrank_Angle(KyHWIO_phi_ToothAngleForCamRead, S_CRANK_ANGLE);
 				if( CAM_Sensor_State == cam_active_state ) {
 					/* Indicate correct cylinder event: */
 					cylinderID = CAM_Number_Of_Cylinders - 1;
@@ -395,10 +397,21 @@ void CAM_Update_State( void )
 					for (counter = 0; counter < CAM_NUMBER_OF_SENSORS; counter++ ) {
 						CAM_Current_Edge[counter] = CAM_Initialization_Parameters->cam_edge_before_gap;
 					}
+
+					/* set crank tooth to tooth 3, this is double check, another check in gap validation */
+					CRANK_Set_Current_Event_Tooth(CRANK_Convert_uCrank_Angle_To_Teeth(cam_event_angle));
+					CRANK_Set_Flag(CRANK_FLAG_SYNC_FIRST_REVOLUTION, true);
+					CRANK_Set_Flag(CRANK_FLAG_SYNC_SECOND_REVOLUTION, false);
 				} else {
-					cylinderID = ( CAM_Number_Of_Cylinders / 2 ) - 1;
+					cylinderID = (CAM_Number_Of_Cylinders/2) + (CAM_Number_Of_Cylinders%2) - 1;
+
 					CAM_State_Change_Occurred          = Insert_Bits( CAM_State_Change_Occurred,          false, CAM_Sensor_In_Use, 1 );
 					CAM_State_Change_Occurred_This_Rev = Insert_Bits( CAM_State_Change_Occurred_This_Rev, false, CAM_Sensor_In_Use, 1 );
+
+					/* set crank tooth to tooth 63, this is double check, another check in gap validation */
+					CRANK_Set_Current_Event_Tooth(CRANK_Convert_uCrank_Angle_To_Teeth(cam_event_angle) + CRANK_VIRTUAL_TEETH_PER_CRANK);
+					CRANK_Set_Flag(CRANK_FLAG_SYNC_FIRST_REVOLUTION, false);
+					CRANK_Set_Flag(CRANK_FLAG_SYNC_SECOND_REVOLUTION, true);
 				}
 			} else {
 				pattern_cylinder_id = CAM_Backup_Edge_Cylinder_ID;
