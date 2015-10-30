@@ -1237,10 +1237,18 @@ static uint32_t CRANK_Convert_Ref_Period_To_RPM( void )
 								   / CRANK_Initialization_Parameters->number_of_cylinders;
 
    //The conversion factor is applied to support other crank profiles like 24x,30x etc
+#if CcSYST_NUM_OF_CYLINDERS == 4
+   //actual factor=1.5 for 3 cylinder. uint8-t 1.5 will be changed to 1
    rpm_conv_factor = (CRANK_VIRTUAL_TEETH_PER_CRANK)/tooth_per_lores;
 
   engine_speed = (CRANK_SECONDS_PER_MINUTE*CRANK_Parameters.F.time_base
 	*CRANK_DEFAULT_RPM_PRECSION)/( CRANK_Parameters.F.lo_res_reference_period*rpm_conv_factor);
+
+#elif CcSYST_NUM_OF_CYLINDERS == 3
+  engine_speed =( (CRANK_SECONDS_PER_MINUTE*CRANK_Parameters.F.time_base
+	*CRANK_DEFAULT_RPM_PRECSION)/ CRANK_Parameters.F.lo_res_reference_period)
+	*tooth_per_lores/CRANK_VIRTUAL_TEETH_PER_CRANK;
+#endif
 
    return ( engine_speed );
 }
@@ -1437,6 +1445,7 @@ uint32_t CRANK_Get_Parameter(
 		 EPPwMT_Coherent_Edge_Time_And_Count_T edgeTimeAndCount;
 
 		 MCD5408_Get_Coherent_Edge_Time_And_Count( EPPWMT_TPU_INDEX, TPU_CONFIG_IC_EPPWMT, &edgeTimeAndCount );
+
 		 CRANK_Parameters.F.current_edge_time = edgeTimeAndCount.Time;
 	  }
 	  break;

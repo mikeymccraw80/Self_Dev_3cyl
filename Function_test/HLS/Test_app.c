@@ -454,6 +454,7 @@ void HLS_firstsyn(void)
 }
 /*will be called for every segment (at Software reference mark)*/
 
+#if CcSYST_NUM_OF_CYLINDERS == 4
 void HLS_syn(void)
 {   
     
@@ -524,6 +525,60 @@ void HLS_syn(void)
 	ign_sig[LLD_IGN_CHANNEL_D].break_time_of_follow_up_sparks = KT_IgnD.break_time_of_follow_up_sparks;
 
 }
+#elif CcSYST_NUM_OF_CYLINDERS == 3
+void HLS_syn(void)
+{   
+    
+ 	inj_enable.B_inj_A = KT_InjA.enable;
+	inj_enable.B_inj_B = KT_InjB.enable;
+	inj_enable.B_inj_C = KT_InjC.enable;
+	
+	inj_sig[INJ_CHANNEL_A].inj_time = KT_InjA.inj_time;
+	inj_sig[INJ_CHANNEL_B].inj_time = KT_InjB.inj_time;
+	inj_sig[INJ_CHANNEL_C].inj_time = KT_InjC.inj_time;
+
+	inj_sig[INJ_CHANNEL_A].inj_end_angle = (uint8_t)(KT_InjA.inj_end_angle + 0);
+	inj_sig[INJ_CHANNEL_B].inj_end_angle = (uint8_t)(KT_InjB.inj_end_angle + 0);
+	inj_sig[INJ_CHANNEL_C].inj_end_angle = (uint8_t)(KT_InjC.inj_end_angle + 0);
+
+	inj_sig[INJ_CHANNEL_A].B_post_inj = KT_InjA.B_post_inj;
+	inj_sig[INJ_CHANNEL_B].B_post_inj = KT_InjB.B_post_inj;
+	inj_sig[INJ_CHANNEL_C].B_post_inj = KT_InjC.B_post_inj;
+
+	inj_sig[INJ_CHANNEL_A].post_inj_time = KT_InjA.post_inj_time;
+	inj_sig[INJ_CHANNEL_B].post_inj_time = KT_InjB.post_inj_time;
+	inj_sig[INJ_CHANNEL_C].post_inj_time = KT_InjC.post_inj_time;
+
+	inj_sig[INJ_CHANNEL_A].abort_angle = KT_InjA.abort_angle;
+	inj_sig[INJ_CHANNEL_B].abort_angle = KT_InjB.abort_angle;
+	inj_sig[INJ_CHANNEL_C].abort_angle = KT_InjC.abort_angle;
+
+    ign_enable.B_ign_A = KT_IgnA.enable;
+    ign_enable.B_ign_B = KT_IgnB.enable;
+    ign_enable.B_ign_C = KT_IgnC.enable;
+
+	ign_sig[LLD_IGN_CHANNEL_A].dwell_time = KT_IgnA.dwell_time;
+	ign_sig[LLD_IGN_CHANNEL_B].dwell_time = KT_IgnB.dwell_time;
+	ign_sig[LLD_IGN_CHANNEL_C].dwell_time = KT_IgnC.dwell_time;
+
+	ign_sig[LLD_IGN_CHANNEL_A].ign_angle = (int8_t)(KT_IgnA.ign_angle - 128);
+	ign_sig[LLD_IGN_CHANNEL_B].ign_angle = (int8_t)(KT_IgnB.ign_angle - 128);
+	ign_sig[LLD_IGN_CHANNEL_C].ign_angle = (int8_t)(KT_IgnC.ign_angle - 128);
+
+	ign_sig[LLD_IGN_CHANNEL_A].follow_up_sparks = KT_IgnA.follow_up_sparks;
+	ign_sig[LLD_IGN_CHANNEL_A].dwell_time_of_follow_up_sparks = KT_IgnA.dwell_time_of_follow_up_sparks;
+	ign_sig[LLD_IGN_CHANNEL_A].break_time_of_follow_up_sparks = KT_IgnA.break_time_of_follow_up_sparks;
+
+	ign_sig[LLD_IGN_CHANNEL_B].follow_up_sparks = KT_IgnB.follow_up_sparks;
+	ign_sig[LLD_IGN_CHANNEL_B].dwell_time_of_follow_up_sparks = KT_IgnB.dwell_time_of_follow_up_sparks;
+	ign_sig[LLD_IGN_CHANNEL_B].break_time_of_follow_up_sparks = KT_IgnB.break_time_of_follow_up_sparks;
+
+       ign_sig[LLD_IGN_CHANNEL_C].follow_up_sparks = KT_IgnC.follow_up_sparks;
+	ign_sig[LLD_IGN_CHANNEL_C].dwell_time_of_follow_up_sparks = KT_IgnC.dwell_time_of_follow_up_sparks;
+	ign_sig[LLD_IGN_CHANNEL_C].break_time_of_follow_up_sparks = KT_IgnC.break_time_of_follow_up_sparks;
+
+}
+#endif
 /*will be called on each falling edge of the CAM signal*/
 void HLS_ph1(void)
 {

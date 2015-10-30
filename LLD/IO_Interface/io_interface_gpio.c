@@ -348,7 +348,8 @@ void LLD_DI_INTR(void)
     else if (LLD_di_samplecnt[LLD_DI_IGN_ON_OFF_SW] == 0){
 		
       LLD_di_table[LLD_DI_IGN_ON_OFF_SW].value = false;
-	  Ign_off = true;
+//ign_off keeps false, in order to keep the ECM running, so that the ECM wont shut down on IGNOFF
+//	  Ign_off = true;
 	  
     }
    }  
@@ -363,7 +364,8 @@ void LLD_DI_INTR(void)
 	else if((HAL_Analog_Get_IGNVI_Value() << 2) < K_VOLT_KeyoffThreshold){
 
 	   LLD_di_table[LLD_DI_IGN_ON_OFF_SW].value = false;
-	   Ign_off = true;
+//ign_off keeps false, in order to keep the ECM running, so that the ECM wont shut down on IGNOFF
+//	  Ign_off = true;
 	   
 	}
   }
