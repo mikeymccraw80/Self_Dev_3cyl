@@ -1435,10 +1435,9 @@ uint32_t CRANK_Get_Parameter(
    case   CRANK_PARAMETER_CURRENT_EDGE_TIME:
 	  {
 		 EPPwMT_Coherent_Edge_Time_And_Count_T edgeTimeAndCount;
-EPPWMT_TPU_INDEX, TPU_CONFIG_IC_EPPWMT, &edgeTimeAndCount );
 
-		 CRANK_Parameters.F.current_edge_time = edgeTimeA
-		 MCD5408_Get_Coherent_Edge_Time_And_Count( ndCount.Time;
+		 MCD5408_Get_Coherent_Edge_Time_And_Count( EPPWMT_TPU_INDEX, TPU_CONFIG_IC_EPPWMT, &edgeTimeAndCount );
+		 CRANK_Parameters.F.current_edge_time = edgeTimeAndCount.Time;
 	  }
 	  break;
    case   CRANK_PARAMETER_TIMER_VALUE_RAW:
