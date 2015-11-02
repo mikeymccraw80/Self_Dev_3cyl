@@ -823,6 +823,7 @@ void CAM_Edge_Process( uint32_t in_cam_sensor )
 	switch(CRANK_Get_Cylinder_ID()) {
 	case CRANK_CYLINDER_A:
 		CAM_Set_Current_Edge(in_cam_sensor);
+#if CcSYST_NUM_OF_CYLINDERS == 4
 	case CRANK_CYLINDER_B:
 		whole_angle_in_teeth = (whole_angle_in_teeth > 60) ? (whole_angle_in_teeth - 60) : (whole_angle_in_teeth);
 		break;
@@ -830,6 +831,7 @@ void CAM_Edge_Process( uint32_t in_cam_sensor )
 	case CRANK_CYLINDER_D:
 		whole_angle_in_teeth = (whole_angle_in_teeth < 60) ? (whole_angle_in_teeth + 60) : (whole_angle_in_teeth);
 		break;
+#endif
 	default:
 		break;
 	}
@@ -839,6 +841,19 @@ void CAM_Edge_Process( uint32_t in_cam_sensor )
 	cam_event_angle_fraction = IO_Convert_uTime_To_uAngle(delta_time, uCRANK_ANGLE_PRECISION, tooth_period, 1);
 	cam_event_angle_teeth    = CRANK_Convert_Teeth_To_uCrank_Angle(whole_angle_in_teeth);
 	CAM_Edge_Data[( cam_sensor * CAM_Number_Of_Pulses ) + current_edge_index].Count = cam_event_angle_teeth + cam_event_angle_fraction;
+#if CcSYST_NUM_OF_CYLINDERS == 3
+	switch(current_edge_index) {
+		case 0:
+		case 1:
+			break;
+		case 2:
+		case 3:
+			CAM_Edge_Data[( cam_sensor * CAM_Number_Of_Pulses ) + current_edge_index].Count=
+				CRANK_Convert_Angle_To_uCrank_Angle( ( CRANK_NUMBER_OF_DEGREES_PER_REVOLUTION / 2 ), 0 )
+				+CAM_Edge_Data[( cam_sensor * CAM_Number_Of_Pulses ) + current_edge_index].Count;
+			break;
+	}
+#endif
 	CAM_Edge_Data[( cam_sensor * CAM_Number_Of_Pulses ) + current_edge_index].Time = cam_event_time;
 	CAM_Edge_Data[( cam_sensor * CAM_Number_Of_Pulses ) + current_edge_index].Edge_Period = tooth_period;
 	if (current_edge_index == 0) {
