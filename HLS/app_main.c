@@ -562,9 +562,11 @@ void HLS_syn(void)
 		if(LLD_cyl_num==INJ_CHANNEL_C) {
 			inj_sig[INJ_CHANNEL_C].inj_time = 10000;
 		}
+#if CcSYST_NUM_OF_CYLINDERS == 4
 		if(LLD_cyl_num==INJ_CHANNEL_D) {
 			inj_sig[INJ_CHANNEL_D].inj_time = 10000;
 		}
+#endif
 	}
 #if 0
     inj_sig[INJ_CHANNEL_A].B_post_inj = true;

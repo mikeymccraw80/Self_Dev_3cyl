@@ -70,8 +70,9 @@ void IO_Fuel_Syn_Update(void)
 			//enable post injection
 			PFI_Enable_Trim_Pulses(INJ_CHANNEL_B);
 			PFI_Enable_Trim_Pulses(INJ_CHANNEL_C);
+#if CcSYST_NUM_OF_CYLINDERS == 4			
 			PFI_Enable_Trim_Pulses(INJ_CHANNEL_D);
-
+#endif
 			if (ImmoInhibitEngine == false) {
 				chery_inj_width = inj_sig[INJ_CHANNEL_A].inj_time;
 			} else {
@@ -81,13 +82,16 @@ void IO_Fuel_Syn_Update(void)
 			PFI_Set_Pulse_Width(INJ_CHANNEL_A, 0,              S_MILLISECONDSb, MILLISECOND_RESOLUTION );
 			PFI_Set_Pulse_Width(INJ_CHANNEL_B, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
 			PFI_Set_Pulse_Width(INJ_CHANNEL_C, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
+#if CcSYST_NUM_OF_CYLINDERS == 4			
 			PFI_Set_Pulse_Width(INJ_CHANNEL_D, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
+#endif
 		} else if (current_cylinder_id == IO_FUEL_CYLINDER_B) {
 			//enable post injection
 			PFI_Enable_Trim_Pulses(INJ_CHANNEL_A);
 			PFI_Enable_Trim_Pulses(INJ_CHANNEL_C);
+#if CcSYST_NUM_OF_CYLINDERS == 4			
 			PFI_Enable_Trim_Pulses(INJ_CHANNEL_D);
-
+#endif
 			if (ImmoInhibitEngine == false) {
 				chery_inj_width = inj_sig[INJ_CHANNEL_B].inj_time;
 			} else {
@@ -97,14 +101,17 @@ void IO_Fuel_Syn_Update(void)
 			PFI_Set_Pulse_Width(INJ_CHANNEL_B, 0,              S_MILLISECONDSb, MILLISECOND_RESOLUTION );
 			PFI_Set_Pulse_Width(INJ_CHANNEL_A, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
 			PFI_Set_Pulse_Width(INJ_CHANNEL_C, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
+#if CcSYST_NUM_OF_CYLINDERS == 4			
 			PFI_Set_Pulse_Width(INJ_CHANNEL_D, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
+#endif
 		} else if (current_cylinder_id == IO_FUEL_CYLINDER_C){
 			//cylinder C,simultaneous inject cylA,cylB,cylD
 			//enable post injection
 			PFI_Enable_Trim_Pulses(INJ_CHANNEL_A);
 			PFI_Enable_Trim_Pulses(INJ_CHANNEL_B);
+#if CcSYST_NUM_OF_CYLINDERS == 4			
 			PFI_Enable_Trim_Pulses(INJ_CHANNEL_D);
-
+#endif
 			if (ImmoInhibitEngine == false) {
 				chery_inj_width = inj_sig[INJ_CHANNEL_C].inj_time;
 			} else {
@@ -114,7 +121,9 @@ void IO_Fuel_Syn_Update(void)
 			PFI_Set_Pulse_Width(INJ_CHANNEL_A, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
 			PFI_Set_Pulse_Width(INJ_CHANNEL_B, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
 			PFI_Set_Pulse_Width(INJ_CHANNEL_C, 0,              S_MILLISECONDSb, MILLISECOND_RESOLUTION );
+#if CcSYST_NUM_OF_CYLINDERS == 4			
 			PFI_Set_Pulse_Width(INJ_CHANNEL_D, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
+
 		} else if (current_cylinder_id == IO_FUEL_CYLINDER_D) {
 			//enable post injection
 			PFI_Enable_Trim_Pulses(INJ_CHANNEL_A);
@@ -131,6 +140,7 @@ void IO_Fuel_Syn_Update(void)
 			PFI_Set_Pulse_Width(INJ_CHANNEL_A, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
 			PFI_Set_Pulse_Width(INJ_CHANNEL_B, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
 			PFI_Set_Pulse_Width(INJ_CHANNEL_C, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
+#endif			
 		}
 
 		/*Convert the engineer value of Chery Injection end angle to Delphi engineer value */
@@ -168,6 +178,7 @@ void IO_Fuel_Syn_Update(void)
 			}
 			PFI_PulseWidth =Convert_Chery_Inj_Width(chery_inj_width,S_MILLISECONDSb);
 			PFI_Set_Pulse_Width(INJ_CHANNEL_C, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
+#if CcSYST_NUM_OF_CYLINDERS == 4			
 		} else if (current_cylinder_id == IO_FUEL_CYLINDER_D)  {
 			if (ImmoInhibitEngine == false) {
 				chery_inj_width =  inj_sig[INJ_CHANNEL_D].inj_time;
@@ -176,6 +187,7 @@ void IO_Fuel_Syn_Update(void)
 			}
 			PFI_PulseWidth =Convert_Chery_Inj_Width(chery_inj_width,S_MILLISECONDSb);
 			PFI_Set_Pulse_Width(INJ_CHANNEL_D, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
+#endif
 		}
 
 		PFI_Set_Channel_Update_Enable(current_cylinder_id, true);
@@ -255,7 +267,8 @@ void IO_Fuel_Syn_Update(void)
 		PFI_PulseWidth =Convert_Chery_Inj_Width(chery_inj_width,S_MILLISECONDSb);
 		PFI_Set_Pulse_Width(INJ_CHANNEL_C, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
 		PFI_Set_Channel_Update_Enable(INJ_CHANNEL_C, true);
-
+		
+#if CcSYST_NUM_OF_CYLINDERS == 4
 		if(current_cylinder_id != INJ_CHANNEL_D) {
 			if(inj_sig[INJ_CHANNEL_D].B_post_inj) {
 				Chery_Post_Injection[INJ_CHANNEL_D]+=inj_sig[INJ_CHANNEL_D].post_inj_time;
@@ -275,6 +288,7 @@ void IO_Fuel_Syn_Update(void)
 		PFI_PulseWidth =Convert_Chery_Inj_Width(chery_inj_width,S_MILLISECONDSb);
 		PFI_Set_Pulse_Width(INJ_CHANNEL_D, PFI_PulseWidth, S_MILLISECONDSb, MILLISECOND_RESOLUTION );
 		PFI_Set_Channel_Update_Enable(INJ_CHANNEL_D, true);
+#endif	
 	}
 	//Clear the flag to tell the HLS that LLD get the parameters
 	B_syn_update = false;
@@ -289,12 +303,15 @@ void IO_Fuel_Engine_Stall_Reset(void)
 	Chery_Post_Injection[INJ_CHANNEL_A]=0;
 	Chery_Post_Injection[INJ_CHANNEL_B]=0;
 	Chery_Post_Injection[INJ_CHANNEL_C]=0;
+#if CcSYST_NUM_OF_CYLINDERS == 4
 	Chery_Post_Injection[INJ_CHANNEL_D]=0;
-
+#endif
 	 //enable post injection
 	PFI_Disable_Trim_Pulses(INJ_CHANNEL_A);
 	PFI_Disable_Trim_Pulses(INJ_CHANNEL_B);
 	PFI_Disable_Trim_Pulses(INJ_CHANNEL_C);
+#if CcSYST_NUM_OF_CYLINDERS == 4
 	PFI_Disable_Trim_Pulses(INJ_CHANNEL_D);
+#endif
 }
 

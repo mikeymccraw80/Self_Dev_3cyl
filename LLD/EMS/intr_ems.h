@@ -780,12 +780,16 @@ INLINE void ConvertIntrParam_ETCDC(void)
 #define InjectorDShortLo()          (GetOpenFault(PULSE_OUT_INJ_CYL_D))
 
 
-
+#if CcSYST_NUM_OF_CYLINDERS == 4
 #define GetAPI_InjCktState(x)       ((((x == INJ_CHANNEL_A)&&(InjectorAFault()))||\
                                      ((x == INJ_CHANNEL_B)&&(InjectorBFault()))||\
                                      ((x == INJ_CHANNEL_C)&&(InjectorCFault()))||\
                                      ((x == INJ_CHANNEL_D)&&(InjectorDFault())))?CeINJ_FAILED:CeINJ_NORMAL)
-
+#elif CcSYST_NUM_OF_CYLINDERS == 3
+#define GetAPI_InjCktState(x)       ((((x == INJ_CHANNEL_A)&&(InjectorAFault()))||\
+                                     ((x == INJ_CHANNEL_B)&&(InjectorBFault()))||\
+                                     ((x == INJ_CHANNEL_C)&&(InjectorCFault())))?CeINJ_FAILED:CeINJ_NORMAL)
+#endif
 // /******************************************************************************
  // * To test EST A,B 
  // ******************************************************************************/

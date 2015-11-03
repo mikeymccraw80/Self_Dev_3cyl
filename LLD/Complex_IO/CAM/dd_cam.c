@@ -407,6 +407,10 @@ void CAM_Update_State( void )
 
 					CAM_State_Change_Occurred          = Insert_Bits( CAM_State_Change_Occurred,          false, CAM_Sensor_In_Use, 1 );
 					CAM_State_Change_Occurred_This_Rev = Insert_Bits( CAM_State_Change_Occurred_This_Rev, false, CAM_Sensor_In_Use, 1 );
+					/*CAM_Current_Edge will be transfered to the current_edge_index in the CAM_Edge_Process, which was used to calculate the CAMPH */
+					for (counter = 0; counter < CAM_NUMBER_OF_SENSORS; counter++ ) {
+						CAM_Current_Edge[counter] = CAM_Initialization_Parameters->cam_edge_before_gap+2;
+					}
 
 					/* set crank tooth to tooth 63, this is double check, another check in gap validation */
 					CRANK_Set_Current_Event_Tooth(CRANK_Convert_uCrank_Angle_To_Teeth(cam_event_angle) + CRANK_VIRTUAL_TEETH_PER_CRANK);
@@ -820,10 +824,10 @@ void CAM_Edge_Process( uint32_t in_cam_sensor )
 
 	// calculate the whole tooth
 	whole_angle_in_teeth = pa_tooth_count - CRANK_GAP_COUNT + 2;
+#if CcSYST_NUM_OF_CYLINDERS == 4
 	switch(CRANK_Get_Cylinder_ID()) {
 	case CRANK_CYLINDER_A:
 		CAM_Set_Current_Edge(in_cam_sensor);
-#if CcSYST_NUM_OF_CYLINDERS == 4
 	case CRANK_CYLINDER_B:
 		whole_angle_in_teeth = (whole_angle_in_teeth > 60) ? (whole_angle_in_teeth - 60) : (whole_angle_in_teeth);
 		break;
@@ -831,11 +835,10 @@ void CAM_Edge_Process( uint32_t in_cam_sensor )
 	case CRANK_CYLINDER_D:
 		whole_angle_in_teeth = (whole_angle_in_teeth < 60) ? (whole_angle_in_teeth + 60) : (whole_angle_in_teeth);
 		break;
-#endif
 	default:
 		break;
 	}
-
+#endif
 	// convert to delta angle from time
 	haha_cam_event_angle_fraction = IO_Convert_uTime_To_uAngle(haha_delta_time, uCRANK_ANGLE_PRECISION, haha_tooth_period, 1);
 	cam_event_angle_fraction = IO_Convert_uTime_To_uAngle(delta_time, uCRANK_ANGLE_PRECISION, tooth_period, 1);

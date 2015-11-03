@@ -148,13 +148,17 @@ const   T_CRANK_ANGLE    KfHWIO_phi_TopDeadCenter = V_CRANK_ANGLE(72);
 *|   KfHWIO_phi_BoundaryFraction {
 *|     : is_calconst;
 *|     : description = "Crank angle between the fuel reference event and the "
-*| "closing of intake valve";
+*| "closing of intake valve of next cylinder";
 *|     : type = types.t_crank_angle;
 *|     : units = "degree";
 *|   }
 *| }
 */
+#if CcSYST_NUM_OF_CYLINDERS == 4
 const   T_CRANK_ANGLE    KfHWIO_phi_BoundaryFraction = V_CRANK_ANGLE(90);
+#elif CcSYST_NUM_OF_CYLINDERS == 3
+const   T_CRANK_ANGLE    KfHWIO_phi_BoundaryFraction = V_CRANK_ANGLE(132);
+#endif
 
 /*===========================================================================*\
  * Number of Cylinders Calibration
