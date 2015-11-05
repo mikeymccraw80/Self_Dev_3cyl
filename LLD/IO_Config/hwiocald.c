@@ -199,7 +199,7 @@ const uint8_t KyHWIO_NumValidPeriodsBeforeSyncStart = 7;
 *|    }
 *| }
 */
-const bool    KbHWIO_Fast_Sync_Enable = true ;
+const bool    KbHWIO_Fast_Sync_Enable = false;
 
 /*
 *| hwiocald.{
