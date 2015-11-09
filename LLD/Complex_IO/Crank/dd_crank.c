@@ -13,13 +13,8 @@
 #include "dd_siu_interface.h"
 #include "v_ignit.h"
 
-#include "Hal_can.h"
-#include "io_interface_can.h"
-
 uint8_t crank_b_syn;
 uint16_t crank_rpm;
-
-uint16_t Ref_event_counter=0;
 
 
 //=============================================================================
@@ -871,14 +866,6 @@ void CRANK_Process_Crank_Event( void )
 		CRANK_Current_Event_Edge_Content = edgeTimeAndCount.Count;
 	} while (CRANK_Current_Event_Edge_Content !=temp_count);
 
-
-//Transmit CAN message to monitor the current teeth and current cylinder ID
-VsCAN_Monitor_ID666[0]=CRANK_Current_Event_Tooth;
-VsCAN_Monitor_ID666[1]=CRANK_Cylinder_ID;
-VsCAN_Monitor_ID666[2]=Ref_event_counter;
-VsCAN_Monitor_ID666[3]=cam1_sig.level;
-			HAL_CAN_Transmit_Message(0x666, 8, VsCAN_Monitor_ID666);
-
 	// Clear the interrupt flag: false == clear
 	MCD5408_Set_Host_Interrupt_Status(EPPWMT_TPU_INDEX, &TPU,TPU_CONFIG_IC_EPPWMT, false);
 	// We would not miss any tooth since there are a time buffer in etpu
@@ -947,9 +934,6 @@ void CRANK_High_Priority_Cylinder_Event( void )
 
 	  // Clear fist cylinder event
 	  CRANK_Internal_State.U32 = CRANK_Set_First_Cylinder_Event_Occured( CRANK_Internal_State.U32, false );
-
-	  //record reference event counter
-	  Ref_event_counter++;
 
 
 }

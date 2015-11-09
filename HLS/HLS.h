@@ -680,10 +680,6 @@ extern uint8_t  VsCAN_CHERY_ID501[8];
 extern uint8_t  VsCAN_CHERY_ID623[8];
 extern uint8_t  VsCAN_CHERY_ID7C1[6];
 
-//Data for transmit to monitor variables
-extern uint8_t  VsCAN_Monitor_ID666[8];
-
-
 /* Data for receive */
 extern uint8_t  VsCAN_CHERY_ID2E9[8];
 extern uint8_t  VsCAN_CHERY_ID310[8];

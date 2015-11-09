@@ -30,9 +30,6 @@
 #define CHERY_CANT_623_ID                          0x623
 #define CHERY_CANT_7C1_ID                          0x7c1
 
-//Transmit CAN Message ID to monitor the current tooth number and cylinder number
-#define Monitor_CANT_666_ID                          0x666
-
 
 /* Data for transmit */
 uint8_t  VsCAN_CHERY_ID0FA[8];
