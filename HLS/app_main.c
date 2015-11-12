@@ -545,9 +545,9 @@ void HLS_firstsyn(void)
 void HLS_syn(void)
 {
 	if(First_Syn_Flag==0) {
-		inj_sig[INJ_CHANNEL_A].inj_time = 40000;
-		inj_sig[INJ_CHANNEL_B].inj_time = 40000;
-		inj_sig[INJ_CHANNEL_C].inj_time = 40000;
+		inj_sig[INJ_CHANNEL_A].inj_time = 35000;
+		inj_sig[INJ_CHANNEL_B].inj_time = 25000;
+		inj_sig[INJ_CHANNEL_C].inj_time = 15000;
 #if CcSYST_NUM_OF_CYLINDERS == 4 
 		inj_sig[INJ_CHANNEL_D].inj_time = 40000;
 #endif

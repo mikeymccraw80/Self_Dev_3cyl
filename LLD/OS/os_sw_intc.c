@@ -36,11 +36,11 @@ extern uCrank_Count_T   CRANK_Current_Event_Tooth;
 void OS_SCHEDULER_Cylinder_Event(void)
 { 
 //Reconfirm the current tooth number. If the current tooth number is 63, bypass the cylinder event.
-if(CRANK_Current_Event_Tooth!=63){
-	 APPLICATION_CYLINDER_EVENT_TASK = true;
-	 CRANK_High_Priority_Cylinder_Event();  
-	 INTC_INTERRUPT_Set_Enable(INTC_CHANNEL_SOFTWARE_CH0_CH, true);  
-}
+	if(CRANK_Current_Event_Tooth!=63){
+		 APPLICATION_CYLINDER_EVENT_TASK = true;
+		 CRANK_High_Priority_Cylinder_Event();  
+		 INTC_INTERRUPT_Set_Enable(INTC_CHANNEL_SOFTWARE_CH0_CH, true);  
+	}
 }
 
 //=============================================================================
