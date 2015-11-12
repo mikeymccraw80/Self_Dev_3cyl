@@ -46,7 +46,6 @@ void  IO_Fuel_Syn_Init(void)
 //=============================================================================
 // IO_Fuel_Syn_Update
 //=============================================================================
-static Crank_Cylinder_T first_cylinder_id;
 void IO_Fuel_Syn_Update(void)
 {
 	Crank_Cylinder_T current_cylinder_id;
@@ -72,9 +71,6 @@ void IO_Fuel_Syn_Update(void)
 		SetHWIO_FuelInjectorTrimEOIT(chery_inj_end_angle);
 
 	if (First_Syn_Flag == false) {
-		first_cylinder_id = current_cylinder_id;
-		/*Convert the engineer value of Chery Injection end angle to Delphi engineer value */
-		//chery_inj_end_angle = (900 - 720)<<S_CRANK_ANGLE;
 		SetHWIO_SequentialFuelMode(false);
 
 		for(INJ_CHANNEL=INJ_CHANNEL_A;INJ_CHANNEL<CcSYST_NUM_OF_CYLINDERS;INJ_CHANNEL++){
