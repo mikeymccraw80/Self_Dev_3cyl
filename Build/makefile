@@ -10,16 +10,20 @@ DDUMP = ddump
 SUBPROJECT_MAK= submake
 PTP = ptp
 
-
+ifeq ($(CYLINDER_APP), 3)
+OUTFILE= mt22p3_chery_3cyl
+PROG_NAME = mt22p3_chery_3cyl
+CHERY_HLS_LIB_NAME = chery_hls_lib
+DELPHI_HWIO_LIB_NAME = mt22p3_chery_3cyl
+LINKFILE= mt22p3_chery_3cyl
+else
 OUTFILE= mt22p3_chery_4cyl
 PROG_NAME = mt22p3_chery_4cyl
 CHERY_HLS_LIB_NAME = chery_hls_lib
 DELPHI_HWIO_LIB_NAME = mt22p3_chery_4cyl
-ifeq ($(TARGET),HWIO)
-LINKFILE= mt22p3_chery_4cyl
-else
 LINKFILE= mt22p3_chery_4cyl
 endif
+
 
 export HOME_DIR = $(CURDIR)/..
 export BUILD_DIR = $(CURDIR)

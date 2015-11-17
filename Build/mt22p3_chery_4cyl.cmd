@@ -1,4 +1,4 @@
--D CcSYST_NUM_OF_CYLINDERS=3
+-D CcSYST_NUM_OF_CYLINDERS=4
 ..\Instrumentation\cdf_files\cal_type.cdf
 ..\LLD\HWDiag\EMSD\emsd_type.cdf
 ..\LLD\HWDiag\EOSD\eosd_type.cdf
