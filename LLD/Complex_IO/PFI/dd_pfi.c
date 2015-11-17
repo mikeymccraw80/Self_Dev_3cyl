@@ -8,7 +8,9 @@
 #include "io_config_tpu.h"
 #include "io_interface_eng.h"
 #include "t_custom.h"
-
+// for function test
+#include "Io_config_vsep.h"
+#include "Dd_vsep_discrete.h"
 //=============================================================================
 //  local micra definitions
 //=============================================================================
@@ -348,7 +350,8 @@ void PFI_Update_Boundary(void)
 void PFI_Perform_Injection_Tasks( void )
 {
 	uint8_t counter;
-
+//function test
+VSEP_DISCRETE_Toggle_Immediate_State(VSEP_PO_VVT1_CH);
 	/* abort the simultaneous injection pulse */
 	PFI_Calculate_Boundary( PFI_IX_Boundary );
 	PFI_Perform_Boundary_Logic(PFI_IX_Boundary);
@@ -361,6 +364,8 @@ void PFI_Process_Cylinder_Event(void)
 {
 	Crank_Cylinder_T  next_cylinder_id;
 	Crank_Cylinder_T  current_cylinder_id;
+//function test code
+//VSEP_DISCRETE_Toggle_Immediate_State(VSEP_PO_VVT2_CH);
 
 	if (PFI_Flags.F.PFI_DELIVERY_MODE == PFI_FUEL_DELIVERY_SIMULTANEOUS) {
 		/* update current cylinder channel boundary */

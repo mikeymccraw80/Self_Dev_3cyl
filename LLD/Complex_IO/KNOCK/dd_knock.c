@@ -14,6 +14,13 @@
 #include "io_conversion.h"
 #include "hal_analog.h"
 
+// for function test
+#include "Io_config_vsep.h"
+#include "Dd_vsep_discrete.h"
+#include "Dd_vsep_pwm.h"
+
+
+
 typedef enum KNOCK_Status_Tag {
 	KNOCK_Status_Default,
 	KNOCK_Status_Stable,
@@ -213,6 +220,8 @@ void KNOCK_Cylinder_Event_MultiKnock(void)
 {
 	Crank_Coherent_Edge_Time_And_Count_T   coherent_count_time;
 	uint32_t                               previous_tooth_time;
+//function test code
+VSEP_DISCRETE_Toggle_Immediate_State(VSEP_PO_VVT2_CH);
 
 	if(KNOCK_Window_Begin2>=0) {
 		KNOCK_REF_To_WindowBegin2 =  KNOCK_Angle_From_Cylinder_Event_To_TDC + KNOCK_Window_Begin2;

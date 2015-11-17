@@ -52,7 +52,7 @@ void SIU_GPIO_Initialize_Device( void )
 	/* init gpio default GPDO register */
 	SIU.GPDO[SIU_GPIO_CHANNEL_181].F.PDO = false; //disable VSEP GEN
 	SIU.GPDO[SIU_GPIO_CHANNEL_190].F.PDO = false; //disable VSEP FSE
-	SIU.GPDO[SIU_GPIO_CHANNEL_123].F.PDO = false; //set ETC/L9958 Output
+	SIU.GPDO[SIU_GPIO_CHANNEL_123].F.PDO = true; //set ETC/L9958 Output
 
 	// GPIO Pin 83 CAN_A_TX
 	SIU.PCR[SIU_GPIO_CHANNEL_83] =SIU_INITIAL_PCR_83 ;
