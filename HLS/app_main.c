@@ -12,9 +12,7 @@
 #include "hal_knock.h"
 #include "intr_ems.h"
 //#include "hal_di.h"
-// for function test
-#include "Io_config_vsep.h"
-#include "Dd_vsep_discrete.h"
+
 
 /* ============================================================================ *\
  * Local preprocessor #define commands.
@@ -546,8 +544,6 @@ void HLS_firstsyn(void)
 
 void HLS_syn(void)
 {
-//function test
-VSEP_DISCRETE_Toggle_Immediate_State(VSEP_DO_FUELCON_CH);
 	if(First_Syn_Flag==0) {
 		inj_sig[INJ_CHANNEL_A].inj_time = 35000;
 		inj_sig[INJ_CHANNEL_B].inj_time = 25000;

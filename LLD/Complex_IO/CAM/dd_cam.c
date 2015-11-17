@@ -13,9 +13,7 @@
 #include "io_config_siu.h"
 #include "dd_siu_interface.h"
 #include "dd_cam_interface.h"
-// for function test
-#include "Io_config_vsep.h"
-#include "Dd_vsep_discrete.h"
+
 //=============================================================================
 //   Type declaration
 //=============================================================================
@@ -293,8 +291,6 @@ void CAM_Update_State( void )
 	uint32_t          cam_history;
 	Crank_Cylinder_T  pattern_cylinder_id;
 	uCrank_Angle_T    cam_event_angle;
-//Function test code
-//VSEP_DISCRETE_Toggle_Immediate_State(VSEP_DO_FUELCON_CH);
 
 	cam_history  = CRANK_Get_Parameter( CRANK_PARAMETER_CAM_HISTORY, 0, 0);
 

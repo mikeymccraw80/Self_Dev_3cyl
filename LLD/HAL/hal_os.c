@@ -39,15 +39,6 @@
 #include "kw2srv31.h"
 #include "hal_eeprom_mfg.h"
 
-
-//function test
-// for function test
-#include "Io_config_vsep.h"
-#include "Dd_vsep_discrete.h"
-#include "Dd_siu_interface.h"
-#include "Dd_siu.h"
-
-
 #define HLS_TASK_2MS_PATTERN (HLS_TASK_5MS   | HLS_TASK_10MS  | \
 							  HLS_TASK_20MS  | HLS_TASK_50MS  | \
 							  HLS_TASK_100MS | HLS_TASK_200MS | \

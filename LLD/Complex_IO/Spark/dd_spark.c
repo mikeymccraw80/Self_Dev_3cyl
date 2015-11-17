@@ -14,10 +14,6 @@
 #include "dd_stm_interface.h"
 #include "dd_siu_interface.h"
 #include "io_config_siu.h"
-// for function test
-#include "Io_config_vsep.h"
-#include "Dd_vsep_discrete.h"
-
 
 
 typedef enum {
@@ -837,8 +833,6 @@ void SPARK_Process_Cylinder_Event( void )
     uint32_t          counter;
     Crank_Cylinder_T  channel;
     uCrank_Angle_T    end_angle;
-//function test code
-VSEP_DISCRETE_Toggle_Immediate_State(VSEP_DO_IMMOREQ_CH);
 
     cs = Enter_Critical_Section();
     SPARK_Cylinder_Event_ID       = CRANK_Get_Cylinder_ID();

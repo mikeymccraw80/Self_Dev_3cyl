@@ -10,11 +10,6 @@
 #include "dd_ecsm.h"
 #include "hal_emulated_eeprom.h"
 #include "os_type.h"
-// for function test
-#include "Io_config_vsep.h"
-#include "Dd_vsep_discrete.h"
-#include "Dd_siu_interface.h"
-#include "Dd_siu.h"
 
 void OS_LoResTasks_Hook(void);
 void OS_KnockEvntTasks_Hook(void);
@@ -40,8 +35,6 @@ extern uCrank_Count_T   CRANK_Current_Event_Tooth;
 //=============================================================================
 void OS_SCHEDULER_Cylinder_Event(void)
 { 
-//Function test code
-//VSEP_DISCRETE_Toggle_Immediate_State(VSEP_DO_IMMOREQ_CH);    
 //Reconfirm the current tooth number. If the current tooth number is 63, bypass the cylinder event.
 	if(CRANK_Current_Event_Tooth!=63){
 		 APPLICATION_CYLINDER_EVENT_TASK = true;
@@ -148,9 +141,6 @@ void OS_SW_INTC_Control( void)
 		CAM_Application_Event_Tasks();
 		APPLICATION_CYLINDER_EVENT_TASK = false;
 		Leave_OSThroughputMeasure(CeOSTK_SEG_CYLINDER_EVENT); //measuring cylinder event time
-//function test code
- SIU_GPIO_DISCRETE_Toggle_State(SIU_GPIO_CHANNEL_129);
-
 	}
 
 	if (CAM_CYLINDER_EVENT_TASK) {
