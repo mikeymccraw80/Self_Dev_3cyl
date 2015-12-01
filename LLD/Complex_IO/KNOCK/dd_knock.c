@@ -53,7 +53,7 @@ uint32_t       KNOCK_Last_Intensity_Value2[MULTIKNOCK_NUM_FILTERS];
 uint32_t       KNOCK_Last_Analog_Conversion2;
 IO_Callback_T  KNOCK_OS_End_Of_Window_CallBack1;
 IO_Callback_T  KNOCK_OS_End_Of_Window_CallBack2;
-uint16_t       KNOCK_DSP_Process_Count_Wingate_Stauts;
+uint16_t       KNOCK_DSP_Process_Count_Wingate_Status;
 uint16_t       KNOCK_DSP_Process_Count_Winagte_PostStatus;
 bool           KNOCK_VGA_Gain_High;
 uint32_t       KNOCK_Window_Length;
@@ -64,7 +64,7 @@ uint32_t       KNOCK_Window_Length;
 volatile KNOCK_Status_T  KNOCK_Status;
 volatile KNOCK_PostStatus_T  KNOCK_PostStatus;
 volatile uint32_t       KNOCK_Stable_Time;
-volatile uint32_t       KNOCK_Stable_Time_Winagte_PostStatus;
+volatile uint32_t       KNOCK_Stable_Time_Wingate_PostStatus;
 volatile uint32_t       KNOCK_Ref_to_WindowBegin1_time;
 volatile uint32_t       KNOCK_Ref_to_WindowBegin2_time;
 volatile uint32_t       KNOCK_WindowBegin1_to_WindowEnd1_time;
@@ -296,9 +296,8 @@ void KNOCK_Cylinder_Event_MultiKnock(void)
 			MCD5406_Set_Array_Flag(RQOME_TPU_INDEX, WINGATE_RQOME,NULL,0,RQOM_ARRAY_FLAG_STORE_TIMER,false);
 			// array 0 request interrupt
 			MCD5406_Set_Array_Flag(RQOME_TPU_INDEX, WINGATE_RQOME,NULL,0,RQOM_ARRAY_FLAG_REQUEST_INTERRUPT,true);
-
 			//==================Set array 1====================
-			// set array 0 time
+			// set array 1 time
 			MCD5406_Set_Array_Data(RQOME_TPU_INDEX, WINGATE_RQOME,NULL,1,(((tcr2_current&0xFFFF00) + KNOCK_REF_To_WindowBegin2)&UINT24_MAX));
 			// array 1 use TCR2
 			MCD5406_Set_Array_Flag(RQOME_TPU_INDEX, WINGATE_RQOME,NULL,1,RQOM_ARRAY_FLAG_MATCH_ALTERNATE_TIMER,true);
@@ -306,25 +305,24 @@ void KNOCK_Cylinder_Event_MultiKnock(void)
 			MCD5406_Set_Array_Flag(RQOME_TPU_INDEX, WINGATE_RQOME,NULL,1,RQOM_ARRAY_FLAG_ABSOLUTE_MATCH_EVENT,true);
 			// array 1 pin state 0
 			MCD5406_Set_Array_Flag(RQOME_TPU_INDEX, WINGATE_RQOME,NULL,1,RQOM_ARRAY_FLAG_ACTIVE_STATE,true);
-
+			// array 1 request interrupt
 			MCD5406_Set_Array_Flag(RQOME_TPU_INDEX, WINGATE_RQOME,NULL,1,RQOM_ARRAY_FLAG_REQUEST_INTERRUPT,false);
 			// array 1 store time
 			MCD5406_Set_Array_Flag(RQOME_TPU_INDEX, WINGATE_RQOME,NULL,1,RQOM_ARRAY_FLAG_STORE_TIMER,true);
 
 			//==================Set array 2====================
-			// set array 0 time
+			// set array 2 time
 			MCD5406_Set_Array_Data(RQOME_TPU_INDEX, WINGATE_RQOME,NULL,2,(((tcr2_current&0xFFFF00) + KNOCK_REF_To_WindowEnd2)&UINT24_MAX));
-			// array 1 use TCR2
+			// array 2 use TCR2
 			MCD5406_Set_Array_Flag(RQOME_TPU_INDEX, WINGATE_RQOME,NULL,2,RQOM_ARRAY_FLAG_MATCH_ALTERNATE_TIMER,true);
-			// array 1 use abs time
+			// array 2 use abs time
 			MCD5406_Set_Array_Flag(RQOME_TPU_INDEX, WINGATE_RQOME,NULL,2,RQOM_ARRAY_FLAG_ABSOLUTE_MATCH_EVENT,true);
-			// array 1 pin state 0
+			// array 2 pin state 0
 			MCD5406_Set_Array_Flag(RQOME_TPU_INDEX, WINGATE_RQOME,NULL,2,RQOM_ARRAY_FLAG_ACTIVE_STATE,false);
 
 			MCD5406_Set_Array_Flag(RQOME_TPU_INDEX, WINGATE_RQOME,NULL,2,RQOM_ARRAY_FLAG_END_SEQUENCE,true);
 			// array 2 request interrupt
 			MCD5406_Set_Array_Flag(RQOME_TPU_INDEX, WINGATE_RQOME,NULL,2,RQOM_ARRAY_FLAG_REQUEST_INTERRUPT,true);
-
 			MCD5406_Request(RQOME_TPU_INDEX, WINGATE_RQOME);
 
 			//============================================================RQOM=====================================
@@ -350,41 +348,41 @@ void KNOCK_ETPU_Interrupt_Service(void)
 		KNOCK_Status = KNOCK_Status_Default;
 		knk_test_cnt1++;
 		if (!DMA_Get_Channel_Running_Status(DMA_CHANNEL_QADC_FISR0_RFDF_0)) {
-			KNOCK_DSP_Process_Count_Wingate_Stauts = DEC_FILT_A_DMA_RESULT_BUFF_SIZE;
+			KNOCK_DSP_Process_Count_Wingate_Status = DEC_FILT_A_DMA_RESULT_BUFF_SIZE;
 		} else {
 			// dsp process count                              BITER                              CITER
-			KNOCK_DSP_Process_Count_Wingate_Stauts =
+			KNOCK_DSP_Process_Count_Wingate_Status =
 			        DMA_Get_Channel_Biter(DMA_CHANNEL_QADC_FISR0_RFDF_0) - DMA_Get_Channel_Citer(DMA_CHANNEL_QADC_FISR0_RFDF_0) ;
 
-			if (KNOCK_DSP_Process_Count_Wingate_Stauts > DEC_FILT_A_DMA_RESULT_BUFF_SIZE) {
-				KNOCK_DSP_Process_Count_Wingate_Stauts = DEC_FILT_A_DMA_RESULT_BUFF_SIZE;
+			if (KNOCK_DSP_Process_Count_Wingate_Status > DEC_FILT_A_DMA_RESULT_BUFF_SIZE) {
+				KNOCK_DSP_Process_Count_Wingate_Status = DEC_FILT_A_DMA_RESULT_BUFF_SIZE;
 			}
 		}
 
-		KNOCK_DSP_Process_Count_Wingate_Stauts =   (KNOCK_Stable_Time +  KNOCK_WindowBegin2_to_WindowEnd2_time)/(Knock_IIR_ADC_Sample_Time*Knock_Time_Scale);
+		KNOCK_DSP_Process_Count_Wingate_Status =   (KNOCK_Stable_Time +  KNOCK_WindowBegin2_to_WindowEnd2_time)/(Knock_IIR_ADC_Sample_Time*Knock_Time_Scale);
 		DMA_Clear_Request(DMA_CHANNEL_QADC_FISR0_RFDF_0);
 
 
-		KNOCK_Last_Analog_Conversion2 = abs(DEC_FILT_A_Result_Buffer_A[KNOCK_DSP_Process_Count_Wingate_Stauts-1]);
+		KNOCK_Last_Analog_Conversion2 = abs(DEC_FILT_A_Result_Buffer_A[KNOCK_DSP_Process_Count_Wingate_Status-1]);
 
 
 		/*stable_start = RQOM_Get_Array_Data(&MTSA_PWM_WINGATE,NULL,0);*/
 		stable_end = MCD5406_Get_Array_Data(RQOME_TPU_INDEX, WINGATE_RQOME, NULL,1);
 
 		if (stable_start < stable_end ) {
-			KNOCK_Stable_Time_Winagte_PostStatus = stable_end - stable_start;
+			KNOCK_Stable_Time_Wingate_PostStatus = stable_end - stable_start;
 		} else {
-			KNOCK_Stable_Time_Winagte_PostStatus = 0xFFFFFF - stable_start + stable_end ;
+			KNOCK_Stable_Time_Wingate_PostStatus = 0xFFFFFF - stable_start + stable_end ;
 		}
 
-		if (KNOCK_Stable_Time_Winagte_PostStatus > KNOCK_Stable_Time) {
-			KNOCK_Stable_Time_Winagte_PostStatus = KNOCK_Stable_Time;
+		if (KNOCK_Stable_Time_Wingate_PostStatus > KNOCK_Stable_Time) {
+			KNOCK_Stable_Time_Wingate_PostStatus = KNOCK_Stable_Time;
 		}
 
 
-		// if((KNOCK_PostStatus == KNOCK_PostStatus_Default)&&KNOCK_DSP_Process_Count_Wingate_Stauts >= DEC_FILT_A_DMA_PREFILL_SIZE)
-		if(KNOCK_DSP_Process_Count_Wingate_Stauts >= DEC_FILT_A_DMA_PREFILL_SIZE) {
-			KNOCK_DSP_Process_Count_Winagte_PostStatus = KNOCK_DSP_Process_Count_Wingate_Stauts ;
+		// if((KNOCK_PostStatus == KNOCK_PostStatus_Default)&&KNOCK_DSP_Process_Count_Wingate_Status >= DEC_FILT_A_DMA_PREFILL_SIZE)
+		if(KNOCK_DSP_Process_Count_Wingate_Status >= DEC_FILT_A_DMA_PREFILL_SIZE) {
+			KNOCK_DSP_Process_Count_Winagte_PostStatus = KNOCK_DSP_Process_Count_Wingate_Status ;
 			KNOCK_PostStatus = KNOCK_PostStatus_LowPass;
 
 			DEC_FILTER_MCR_SETUP(DSP_LOW_PASS_FILTER_IIR_COEFF,
@@ -470,10 +468,10 @@ void SWI_Knock_INT( void )
 	INTC_INTERRUPT_Clear_Pending(INTC_CHANNEL_SOFTWARE_CH1_CH);
 
 	if ( (KNOCK_DSP_Process_Count_Winagte_PostStatus/DEC_FILT_A_DMA_LOWPASS_DECRATE- DEC_FILT_A_DMA_PREFILL_SIZE-1) >
-	     (KNOCK_Stable_Time_Winagte_PostStatus/(DEC_FILT_A_DMA_LOWPASS_DECRATE*20))
+	     (KNOCK_Stable_Time_Wingate_PostStatus/(DEC_FILT_A_DMA_LOWPASS_DECRATE*20))
 	   ) {
 		test_count = ((KNOCK_DSP_Process_Count_Winagte_PostStatus/DEC_FILT_A_DMA_LOWPASS_DECRATE- DEC_FILT_A_DMA_PREFILL_SIZE-1)
-		              -KNOCK_Stable_Time_Winagte_PostStatus/(DEC_FILT_A_DMA_LOWPASS_DECRATE*20))*2;//  75 = KNOCK_Stable_Time/4
+		              -KNOCK_Stable_Time_Wingate_PostStatus/(DEC_FILT_A_DMA_LOWPASS_DECRATE*20))*2;//  75 = KNOCK_Stable_Time/4
 	} else {
 		// exception handle, prevent reset from asm_knock_ABS_INT, this function can't take big test_count as para or it will reset uP
 		test_count = 0;
@@ -483,21 +481,21 @@ void SWI_Knock_INT( void )
 
 	KNOCK_Last_Intensity_Value2[0]  =  asm_knock_ABS_INT( &DEC_FILT_A_Result_Buffer_B[
 	                DEC_FILT_A_DMA_RESULT_BUFF_SIZE/DEC_FILT_A_DMA_LOWPASS_DECRATE
-	                +KNOCK_Stable_Time_Winagte_PostStatus/(DEC_FILT_A_DMA_LOWPASS_DECRATE
+	                +KNOCK_Stable_Time_Wingate_PostStatus/(DEC_FILT_A_DMA_LOWPASS_DECRATE
 	                                *Knock_Time_Scale*Knock_IIR_ADC_Sample_Time) +1],test_count);
 	//76 = KNOCK_Stable_Time/4 +1
 
 	KNOCK_PostStatus = KNOCK_PostStatus_INT2;
 	KNOCK_Last_Intensity_Value2[1]  =  asm_knock_ABS_INT( &DEC_FILT_A_Result_Buffer_B[
 	                DEC_FILT_A_DMA_RESULT_BUFF_SIZE/DEC_FILT_A_DMA_LOWPASS_DECRATE*2
-	                +KNOCK_Stable_Time_Winagte_PostStatus/(DEC_FILT_A_DMA_LOWPASS_DECRATE
+	                +KNOCK_Stable_Time_Wingate_PostStatus/(DEC_FILT_A_DMA_LOWPASS_DECRATE
 	                                *Knock_Time_Scale*Knock_IIR_ADC_Sample_Time) +1],test_count);
 	//76 = KNOCK_Stable_Time/4 +1
 
 	KNOCK_PostStatus = KNOCK_PostStatus_INT3;
 	KNOCK_Last_Intensity_Value2[2]  =  asm_knock_ABS_INT( &DEC_FILT_A_Result_Buffer_B[
 	                DEC_FILT_A_DMA_RESULT_BUFF_SIZE/DEC_FILT_A_DMA_LOWPASS_DECRATE*3
-	                +KNOCK_Stable_Time_Winagte_PostStatus/(DEC_FILT_A_DMA_LOWPASS_DECRATE
+	                +KNOCK_Stable_Time_Wingate_PostStatus/(DEC_FILT_A_DMA_LOWPASS_DECRATE
 	                                *Knock_Time_Scale*Knock_IIR_ADC_Sample_Time) +1],test_count);
 	//76 = KNOCK_Stable_Time/4 +1
 

@@ -31,7 +31,7 @@ Wait(100)
 #Set(SIMULATOR, 0, "Key Switch State", 1)
 Wait(2000)
 Set(SIMULATOR, 0, "Key Switch State", 3)
-Set(SIMULATOR, 0, "Dateset", 1)
+Set(SIMULATOR, 0, "Dataset", 1)
 Set(SIMULATOR, 0, "RPM", 0)
 Wait(2000)
 Set(SIMULATOR, 0, "RPM", 800)
@@ -47,7 +47,7 @@ Table = (
            ("KT_IgnA.dwell_time", "KT_IgnA.ign_angle", "KT_IgnA.follow_up_sparks", ), \
            ("KT_IgnB.dwell_time", "KT_IgnB.ign_angle", "KT_IgnB.follow_up_sparks", ), \
            ("KT_IgnC.dwell_time", "KT_IgnC.ign_angle", "KT_IgnC.follow_up_sparks", ), \
-           ("KT_IgnD.dwell_time", "KT_IgnD.ign_angle", "KT_IgnD.follow_up_sparks", ), \
+#           ("KT_IgnD.dwell_time", "KT_IgnD.ign_angle", "KT_IgnD.follow_up_sparks", ), \
 
          )
 ###Inital the spark relavant parameter
@@ -59,15 +59,14 @@ for symbol_name1, symbol_name2, symbol_name3 in Table:
 ####################Spark enable#########################
 TTB_Results("Test case 1", 0, "Spark enable test; enable or disable the spark channel, and read the actual state.", " ") 
 Table = (
-           ("EST1 PW", "KT_IgnA.enable", "KT_IgnC.enable", (0,1), "Spark_A"), \
-           ("EST2 PW", "KT_IgnB.enable", "KT_IgnD.enable", (0,1), "Spark_B"), \
-
+           ("EST1 PW", "KT_IgnA.enable", (0,1), "Spark_A"), \
+           ("EST2 PW", "KT_IgnB.enable", (0,1), "Spark_B"), \
+           ("EST3 PW", "KT_IgnC.enable", (0,1), "Spark_C"), \
          )
 
-for AliasName, symbol_name1, symbol_name2, Set_State, Spark_chanel in Table:
+for AliasName, symbol_name1, Set_State, Spark_chanel in Table:
     for i in range(0,2):
         WriteMemValue(PROCESSOR, 0, symbol_name1, Set_State[i])
-        WriteMemValue(PROCESSOR, 0, symbol_name2, Set_State[i])
         Wait(3000)
         for times in range(1, Test_times+1):
             SimOut = Get(SIMULATOR, 0, AliasName)# get the relavant port's frequency whether is zero
@@ -141,13 +140,13 @@ for AliasName,symbol_name1, symbol_name2, symbol_name3, spark_chanel in Table:
     WriteMemValue(PROCESSOR, 0, symbol_name2, 4000) #reset the dwell time is 4000us after finish test
 """
 
-####################Spark dwell time and advanct angle test #########################
+####################Spark dwell time and advance angle test #########################
 TTB_Results("Test case 2", 0, "Spark dwell time and advance angle test; test condition: spark dwell time=2, 5, 10ms; advance angle=-60, -30, -10, 10, 30, 60CrA; rpm =1000, 3000, 5000; ", " ") 
 Table = (
            ("EST1 A", "EST1 D","KT_IgnA.enable", "KT_IgnA.dwell_time", "KT_IgnA.ign_angle", "Spark_A" ), \
            ("EST2 A", "EST2 D","KT_IgnB.enable", "KT_IgnB.dwell_time", "KT_IgnB.ign_angle", "Spark_B" ), \
-           ("EST1 A", "EST1 D","KT_IgnC.enable", "KT_IgnC.dwell_time", "KT_IgnC.ign_angle", "Spark_C" ), \
-           ("EST2 A", "EST2 D","KT_IgnD.enable", "KT_IgnD.dwell_time", "KT_IgnD.ign_angle", "Spark_D" ), \
+           ("EST3 A", "EST3 D","KT_IgnC.enable", "KT_IgnC.dwell_time", "KT_IgnC.ign_angle", "Spark_C" ), \
+#           ("EST2 A", "EST2 D","KT_IgnD.enable", "KT_IgnD.dwell_time", "KT_IgnD.ign_angle", "Spark_D" ), \
 
          )###the AliasName should be renamed
 
@@ -162,20 +161,13 @@ for i in range(0,3):
     for AliasName1,AliasName2,symbol_name1, symbol_name2, symbol_name3, Spark_chanel in Table:
         if symbol_name1 == "KT_IgnA.enable":
             WriteMemValue(PROCESSOR, 0, "KT_IgnA.enable", 1)#enable the sparkA
-            WriteMemValue(PROCESSOR, 0, "KT_IgnC.enable", 0)#disenable the sparkC
-            TDC_angle = 361 + 20*6
+            TDC_angle = 361 + 15*6#inorder to match the signal of opal-rt
         elif symbol_name1 == "KT_IgnB.enable":
             WriteMemValue(PROCESSOR, 0, "KT_IgnB.enable", 1)#enable the sparkB
-            WriteMemValue(PROCESSOR, 0, "KT_IgnD.enable", 0)#disenable the sparkD
-            TDC_angle = 361 + 50*6
+            TDC_angle = 361 + 55*6
         elif symbol_name1 == "KT_IgnC.enable":
-            WriteMemValue(PROCESSOR, 0, "KT_IgnA.enable", 0)#disenable the sparkA
-            WriteMemValue(PROCESSOR, 0, "KT_IgnC.enable", 1)#enable the sparkC
-            TDC_angle = 20*6+1
-        elif symbol_name1 == "KT_IgnD.enable":
-            WriteMemValue(PROCESSOR, 0, "KT_IgnB.enable", 0)#enable the sparkD
-            WriteMemValue(PROCESSOR, 0, "KT_IgnD.enable", 1)#disenable the sparkB
-            TDC_angle = 50*6+1
+            WriteMemValue(PROCESSOR, 0, "KT_IgnB.enable", 1)#enable the sparkC
+            TDC_angle = 35*6
         m =0
         for j in range(0,5): ##The spark advance angle is from -60degree to 60degree
             
@@ -231,12 +223,12 @@ for i in range(0,3):
     WriteMemValue(PROCESSOR, 0, symbol_name2, 1000)
 
 
-
+"""
 Set(SIMULATOR, 0, "RPM", 1000)
 Wait(2000)
 TTB_Results("Test case 3", 0, "Inject time and end angle test at cam backup mode in different rpm(1000, 2000, 3000rpm);", " ")
 WriteMemValue(PROCESSOR, 0, "KyHWIO_Delta_Angle_From_Edge_To_Tooth_1", 48)
-Set(SIMULATOR, 0, "Dateset", 10)
+Set(SIMULATOR, 0, "Dataset", 10)
 error_max = 1.1
 error_min = 0.9
 Wait(5000)
@@ -280,11 +272,12 @@ for i in range(0,3):
                     SimOut_width = convert_angle_to_time(SimOut_width, speed_set)
 
                     #dwell_time_max_set =dwell_time_max(speed_set)
-                    """if dwell_time_set >= dwell_time_max_set:
+                    
+                    if dwell_time_set >= dwell_time_max_set:
 
                         Set_time_low = dwell_time_max_set * error_min
                         Set_time_up  = dwell_time_max_set * error_max
-                    else:"""
+                    else:
                     Set_time_low = dwell_time_set * error_min
                     Set_time_up  = dwell_time_set * error_max
 
@@ -314,8 +307,8 @@ for i in range(0,3):
              
     WriteMemValue(PROCESSOR, 0, symbol_name3, 128) #reset the spark advance angle 0 degree
     WriteMemValue(PROCESSOR, 0, symbol_name2, 1000)
-Set(SIMULATOR, 0, "Dateset", 1)
+Set(SIMULATOR, 0, "Dataset", 1)
 Set(SIMULATOR, 0, "RPM", 0)
 
-
+"""
 

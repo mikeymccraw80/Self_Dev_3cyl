@@ -1,8 +1,8 @@
 from PyDevice import *
 
 def Get_InjectAngle(end_ang):
-    if end_ang*2.8125 <=90:
-        j = 90
+    if end_ang*2.8125 <=108:
+        j = 108
     else:
         j = end_ang*2.8125
     #if (j +  width) >=720+refen_ang-refen_start:
@@ -30,7 +30,7 @@ Wait(100)
 #Set(SIMULATOR, 0, "Key Switch State", 1)
 Wait(2000)
 Set(SIMULATOR, 0, "Key Switch State", 3)
-Set(SIMULATOR, 0, "Dateset", 1)
+Set(SIMULATOR, 0, "Dataset", 1)
 Set(SIMULATOR, 0, "RPM", 800)
 error_min =0.95
 error_max =1.05
@@ -44,7 +44,7 @@ Table = (
            ("INJ1 PW", "KT_InjA.enable", (0,1), "Injector_A"), \
            ("INJ3 PW", "KT_InjB.enable", (0,1), "Injector_B"), \
            ("INJ4 PW", "KT_InjC.enable", (0,1), "Injector_C"), \
-           ("INJ2 PW", "KT_InjD.enable", (0,1), "Injector_D"), \
+##           ("INJ2 PW", "KT_InjD.enable", (0,1), "Injector_D"), \
 
          )
 Set(SIMULATOR, 0, "RPM", 800)
@@ -75,10 +75,10 @@ Table = (
            #("INJ3 D","INJ3 A", "KT_InjB.enable", "KT_InjB.B_post_inj", "KT_InjB.inj_time", "KT_InjB.inj_end_angle", 468,550 ), \
            #("INJ4 D","INJ4 A", "KT_InjC.enable", "KT_InjC.B_post_inj", "KT_InjC.inj_time", "KT_InjC.inj_end_angle", 648,700 ), \
            #("INJ2 D","INJ2 A", "KT_InjD.enable", "KT_InjD.B_post_inj", "KT_InjD.inj_time", "KT_InjD.inj_end_angle", 108,150 ), \
-           ("INJ1 D","INJ1 A", "KT_InjA.enable", "KT_InjA.B_post_inj", "KT_InjA.inj_time", "KT_InjA.inj_end_angle", 402,378, "Injector_A"), \
-           ("INJ3 D","INJ3 A", "KT_InjB.enable", "KT_InjB.B_post_inj", "KT_InjB.inj_time", "KT_InjA.inj_end_angle", 582,558, "Injector_B"), \
-           ("INJ4 D","INJ4 A", "KT_InjC.enable", "KT_InjC.B_post_inj", "KT_InjC.inj_time", "KT_InjA.inj_end_angle", 42,18, "Injector_C"), \
-           ("INJ2 D","INJ2 A", "KT_InjD.enable", "KT_InjD.B_post_inj", "KT_InjD.inj_time", "KT_InjA.inj_end_angle", 222,198 , "Injector_D"), \
+           ("INJ1 D","INJ1 A", "KT_InjA.enable", "KT_InjA.B_post_inj", "KT_InjA.inj_time", "KT_InjA.inj_end_angle", 258,378, "Injector_A"), \
+           ("INJ3 D","INJ3 A", "KT_InjB.enable", "KT_InjB.B_post_inj", "KT_InjB.inj_time", "KT_InjA.inj_end_angle", 498,618, "Injector_B"), \
+           ("INJ4 D","INJ4 A", "KT_InjC.enable", "KT_InjC.B_post_inj", "KT_InjC.inj_time", "KT_InjA.inj_end_angle", 18,138, "Injector_C"), \
+##           ("INJ2 D","INJ2 A", "KT_InjD.enable", "KT_InjD.B_post_inj", "KT_InjD.inj_time", "KT_InjA.inj_end_angle", 222,198 , "Injector_D"), \
 
          )
 Set(SIMULATOR, 0, "RPM", 0)
@@ -193,7 +193,7 @@ Inject_angle_Table=(30, 50, 100, 150)
 Inject_time_Table=(2000, 5000, 10000)
 WriteMemValue(PROCESSOR, 0, "KyHWIO_Delta_Angle_From_Edge_To_Tooth_1", 48)
 Wait(2000)
-Set(SIMULATOR, 0, "Dateset", 10)
+Set(SIMULATOR, 0, "Dataset", 10)
 error_max =1.1
 error_min =0.9
 Wait(5000)
@@ -237,7 +237,7 @@ for i in range(0,3): #1000, 2000, 3000
                     caseid = "%s_Inject_time=%dms_end_angle=%3.1f_%drpm_backup_%dth" % (Injector, dwell_time_set/1000, Set_ang, speed_set, m)
                     TTB_Results(caseid, 0, msg)
 
-Set(SIMULATOR, 0, "Dateset", 1)
+Set(SIMULATOR, 0, "Dataset", 1)
 Set(SIMULATOR, 0, "RPM", 0)
 Wait(5000)
 Set(SIMULATOR, 0, "RPM", 1000)

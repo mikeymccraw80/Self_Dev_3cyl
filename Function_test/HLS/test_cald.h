@@ -13,19 +13,17 @@
 
 typedef struct {
 				
-	uint16_t  VIS_SWITCH: 1;
-    uint16_t  START_MOTR_RLY: 1;
-	uint16_t  R_LINE: 1;						
-	uint16_t  AC_CLUTCH: 1;
-    uint16_t  SVS_LAMP: 1;
-	uint16_t  MIL_LAMP: 1;						
-	uint16_t  MAIN_RELAY: 1;
-    uint16_t  FUEL_PUMP: 1;
-	uint16_t  FAN2: 1;						
-	uint16_t  FAN1: 1;						
-
+	uint8_t  VIS_SWITCH;
+    uint8_t  START_MOTR_RLY;
+	uint8_t  R_LINE;						
+	uint8_t  AC_CLUTCH;
+    uint8_t  SVS_LAMP;
+	uint8_t  MIL_LAMP;						
+	uint8_t  MAIN_RELAY;
+    uint8_t  FUEL_PUMP;
+	uint8_t  FAN2;						
+	uint8_t  FAN1;						
 }DO_test_type;
-
 
 typedef struct {
 

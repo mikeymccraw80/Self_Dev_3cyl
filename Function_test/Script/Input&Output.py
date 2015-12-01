@@ -13,7 +13,7 @@ Test_times =1
 
 TTB_Results("Test case 1", 0, "Analog input signal test; change the output of analog channel from 0v to 5v, read the actual value acquired by ECU and compare it with expected value ", " ")  
 #define test varible
-                        #Alias Name,   Symbolic Name, normal,        k,      b
+                        #Alias Name,   Symbolic Name, normal,        k,      b,      Scal
 Analog_Inputs_Table = (
                         ("MAP",        "VMAP",        0.2,           5,      0), \
                         ("O2A",        "OXYGEN_1",    0.2,           5,      0), \
@@ -147,10 +147,10 @@ Table=(
          ("O2AHTR PW","O2AHTR PE", "KT_PO_O2_heater_1.duty", "KT_PO_O2_heater_1.period", "KT_PO_O2_heater_1.B_enable", "O2A_HEATER"),\
          ("O2BHTR PW", "O2BHTR PE", "KT_PO_O2_heater_2.duty", "KT_PO_O2_heater_2.period", "KT_PO_O2_heater_2.B_enable", "O2B_HEATER"),\
          ("CCP PW", "CCP PE", "KT_PO_PURGE.duty", "KT_PO_PURGE.period", "KT_PO_PURGE.B_enable", "CCP"),\
-         ("CLTOUT PW", "CLTOUT PE", "KT_PO_ECT.duty", "KT_PO_ECT.period", "KT_PO_ECT.B_enable", "TUAWG"),\
-         ("VVT1 PW", "VVT1 PE", "KT_PO_VVT1.duty", "KT_PO_VVT1.period", "KT_PO_VVT1.B_enable", "VVT1"),\
-         ("VVT2 PW", "VVT2 PE", "KT_PO_VVT2.duty", "KT_PO_VVT2.period", "KT_PO_VVT2.B_enable", "VVT2"),\
-         ("LEGR PW", "LEGR PE", "KT_PO_FUEL_CSP.duty", "KT_PO_FUEL_CSP.period", "KT_PO_FUEL_CSP.B_enable", "FUEL_CSP"),\
+         ("TUAWG PW", "TUAWG PE", "KT_PO_ECT.duty", "KT_PO_ECT.period", "KT_PO_ECT.B_enable", "TUAWG"),\
+         ("CLTOUT PW", "CLTOUT PE", "KT_PO_VVT1.duty", "KT_PO_VVT1.period", "KT_PO_VVT1.B_enable", "VVT1"),\
+         ("LEGR PW", "LEGR PE", "KT_PO_VVT2.duty", "KT_PO_VVT2.period", "KT_PO_VVT2.B_enable", "VVT2"),\
+         ("FLVPWM PW", "FLVPWM PE", "KT_PO_FUEL_CSP.duty", "KT_PO_FUEL_CSP.period", "KT_PO_FUEL_CSP.B_enable", "FUEL_CSP"),\
 
        )
 n =0
@@ -190,8 +190,8 @@ for AliasName_duty, AliasName_period, symbol_duty, symbol_period, set_enable, se
 #######################etc output####
 TTB_Results("Test case 5", 0, "ETC output signal frequency and direction test;", " ")
 Table=(
-         ("PWTT PE","BANK_A", (2000, 0)),\
-         ("BIP1 PE", "BANK_B", (0, 2000)),\
+         ("ETCA PE","BANK_A", (2000, 0)),\
+         ("ETCB PE", "BANK_B", (0, 2000)),\
 
        )
 duty_set =50*65535/100
@@ -218,7 +218,7 @@ for i in range(0,6):
     WriteMemValue(PROCESSOR, 0, "KT_etc.duty", Duty_set*65535/100)# set the etc PWM duty from 0% to 100%
     for times in range(1,Test_times+1):
         Wait(2000)
-        SimOut = Get(SIMULATOR, 0, "PWTT PW")*100 ###should be renamed
+        SimOut = Get(SIMULATOR, 0, "ETCA PW")*100 ###should be renamed
         ULimit = Duty_set*error_max
         LLimit = Duty_set*error_min
         msg = ("Desc: \"Set the target etc duty is %d precent, read the actual etc output signal duty\" Actual: %2.2f  Low: %d High: %d " % (Duty_set, SimOut, LLimit, ULimit)) #duty test

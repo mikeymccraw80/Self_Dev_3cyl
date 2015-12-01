@@ -5,11 +5,12 @@ Wait(100)
 Wait(2000)
 Set(SIMULATOR, 0, "Key Switch State", 3)
 Set(SIMULATOR, 0, "RPM", 800)
-Set(SIMULATOR, 0, "Dateset", 1)
+Set(SIMULATOR, 0, "Dataset", 1)
 Test_times =1
 error_max =1.1
 error_min =0.9
-
+phase =0
+(retc,phase) = ReadMemValue(PROCESSOR, 0, "CAMPHIN0")
 ###CAM_IN
 TTB_Results("Test case 1", 0, "CAM1 phase test; change cam1 signal angle output of OPAL-RT and read the actual cam angle captured by ECU, and compare it with the expected phase angle.", " ")
 for i in range(1,7):
@@ -18,9 +19,9 @@ for i in range(1,7):
     TTB_Results("Test case 1.%d"%(i), 0, "Test condition: rpm =%d"%(speed_set), " ")  
     Wait(3000)
     
-    for j in range(-18,11):
+    for j in range(-12,1):
         phase_set = j*(-5)
-        Set(SIMULATOR, 0, "CAMINB2AT", phase_set*(-1)) ##the axiasname should be distributed
+        Set(SIMULATOR, 0, "CAM B", phase_set*(-1)) ##the axiasname should be distributed
         for times in range(1, Test_times+1):
             Wait(2000)
             (retc,phase) = ReadMemValue(PROCESSOR, 0, "CAMPHIN0")
@@ -36,7 +37,7 @@ for i in range(1,7):
             TTB_Results(caseid, 0, msg)
         
 TTB_Results("Test case 2", 0, "CAM2 phase test; change cam2 signal angle output of OPAL-RT and read the actual cam angle, and compare it with the expected phase angle.", " ")
-Set(SIMULATOR, 0, "CAMINB2AT", 0)            
+Set(SIMULATOR, 0, "CAM B", 0)            
 Set(SIMULATOR, 0, "RPM", 0)
 
 ###CAM_OUT
@@ -46,9 +47,9 @@ for i in range(1,7):
     TTB_Results("Test case 2.%d"%(i), 0, "Test condition: rpm =%d"%(speed_set), " ")  
     Wait(3000)
     
-    for j in range(-10,19):
+    for j in range(0,13):
         phase_set = j*(-5)
-        Set(SIMULATOR, 0, "CAMEXB1", phase_set*(-1)) ##the axiasname should be distributed
+        Set(SIMULATOR, 0, "CAM C", phase_set*(-1)) ##the axiasname should be distributed
         for times in range(1, Test_times+1):
             Wait(2000)
             (retc,phase) = ReadMemValue(PROCESSOR, 0, "CAMPHOUT0")
@@ -63,5 +64,5 @@ for i in range(1,7):
             caseid = "%s_%dCrA_%drpm" % ("CAM2",phase_set, speed_set )
             TTB_Results(caseid, 0, msg)
     
-Set(SIMULATOR, 0, "CAMEXB1", 0)
+Set(SIMULATOR, 0, "CAM C", 0)
 Set(SIMULATOR, 0, "RPM", 0)
