@@ -305,6 +305,8 @@ void InitializeHardwareLast(void)
 
 	/* init the canobd schedule table */
 	CAN_Reset_Init();
+	/*init the J1939 schedule table*/
+	J1939_Handler_Cold_Init();
 }
 
 

@@ -373,6 +373,11 @@ void HAL_CAN_RX_B14_INT(void)
 	FlexCAN_Receive_Interrupt(FLEXCAN_DEVICE_A, VsCAN_CHERY_ID300);
 }
 
+void HAL_CAN_RX_B31_16_INT(void)
+{
+	FlexCAN_Receive_Interrupt(FLEXCAN_DEVICE_A, CAN_Message_RX_DATA);
+}
+
 void HAL_CAN_RX_B63_32_INT(void)
 {
 	FlexCAN_Receive_Interrupt(FLEXCAN_DEVICE_A, CAN_Message_RX_DATA);

@@ -7,6 +7,7 @@
  *
  * Global Functions Defined:
  *                    CAN_Reset_Init()
+ *                    J1939_Handler_Cold_Init()
  *                    Get_Transmit_Message_Number_From_Message_ID()
  *                    Get_Receive_Message_Number_From_Message_ID()
  *                    Get_Message()
@@ -41,6 +42,7 @@
 #include "obdlcald.h"
 
 CAN_Message_Parameter_T *CAN_Message_Parameter_Table_Ptr;
+J1939_Message_Parameter_T *J1939_Message_Parameter_Table_Ptr;
 //============================================================================
 // Name:  InitCANH_Message_Parameter_Table
 //
@@ -67,6 +69,31 @@ void InitCANH_Message_Parameter_Table(void)
 
    CAN_Message_Parameter_Table_Ptr = CAN_Message_Parameter_Table;
 }
+//============================================================================
+// Name:  InitJ1939_Message_Parameter_Table
+//
+// Description: according to the calibration, initialize current CAN message
+//              parameter table.
+//
+// Shared Variables: none
+//
+// Parameters: none
+//
+// Return Value: none
+//
+//============================================================================
+void InitJ1939_Message_Parameter_Table(void)
+{
+   static J1939_Message_Parameter_T J1939_Message_Parameter_Table[MESSAGE_NUM_OF_J1939];
+   uint8_t LyJ1939_index;
+
+   for(LyJ1939_index=0; LyJ1939_index<MESSAGE_NUM_OF_J1939; LyJ1939_index++)
+   {
+      J1939_Message_Parameter_Table[LyJ1939_index] = Get_J1939_Message_Parameter_Table(LyJ1939_index);
+   }
+
+   J1939_Message_Parameter_Table_Ptr = J1939_Message_Parameter_Table;
+}
 //=============================================================================
 // Name: CAN_Reset_Init
 //
@@ -88,8 +115,8 @@ void CAN_Reset_Init( void )
 {
    uint8_t message_objet;
    IO_Configuration_T in_configuration;
-   FlexCAN_MSGOBJ_INDEX_T msgobj_r = FLEXCAN_MSG_OBJ_32;
-   FlexCAN_MSGOBJ_INDEX_T msgobj_t = FLEXCAN_MSG_OBJ_48;
+   FlexCAN_MSGOBJ_INDEX_T msgobj_r = FLEXCAN_MSG_OBJ_16;
+   FlexCAN_MSGOBJ_INDEX_T msgobj_t = FLEXCAN_MSG_OBJ_24;
 
    /* init the can obd cald id by KwDCANOBD_CANID */
    Initial_CANOBD_CAL_ID(KwDCANOBD_CANID);
@@ -127,6 +154,57 @@ void CAN_Reset_Init( void )
    }
 }
 
+//=============================================================================
+// Name: J1939_Handler_Cold_Init
+//
+// Description:
+//     Initializes J1939 message objects and enables the Vehicle [J1939] CAN Node
+//
+// Parameters: none.
+//
+// Return Value: none.
+//
+//=============================================================================
+void J1939_Handler_Cold_Init (void)
+{
+   uint8_t message_objet;
+   IO_Configuration_T in_configuration;
+   FlexCAN_MSGOBJ_INDEX_T msgobj_r = FLEXCAN_MSG_OBJ_32;
+   FlexCAN_MSGOBJ_INDEX_T msgobj_t = FLEXCAN_MSG_OBJ_48;
+
+
+   InitJ1939_Message_Parameter_Table();
+   // Initialize J1939 transmit/receive buffer control parameters
+   for ( message_objet = 0; message_objet < MESSAGE_NUM_OF_J1939; message_objet++ )
+   {
+      in_configuration = 0;
+
+      in_configuration |= FlexCAN_Set_Index( 0, FLEXCAN_DEVICE_A)| FlexCAN_MSGOBJ_Set_ID_Length( 0, FLEXCAN_MSGOBJ_ID_EXT)|
+                          FlexCAN_MSGOBJ_Set_SRR( 0, true) |
+                          FlexCAN_MSGOBJ_Set_RTR( 0, false) |
+                          FlexCAN_MSGOBJ_Set_Interrupt( 0, true);
+
+      if (CANH_MESSAGE_DIRECTION_RECEIVE == (J1939_Message_Parameter_Table_Ptr+message_objet)->message_dir) 
+      {
+         in_configuration |= FlexCAN_MSGOBJ_Set_Direction( 0, FLEXCAN_MSGOBJ_DIR_RX  );
+         in_configuration |= FlexCAN_MSGOBJ_Set_Index( 0, msgobj_r);
+         msgobj_r ++;
+      }
+      else if (CANH_MESSAGE_DIRECTION_TRANSMIT == (J1939_Message_Parameter_Table_Ptr+message_objet)->message_dir) 
+      {
+         in_configuration |= FlexCAN_MSGOBJ_Set_Direction( 0, FLEXCAN_MSGOBJ_DIR_TX  );
+         in_configuration |= FlexCAN_MSGOBJ_Set_Index( 0, msgobj_t);
+         msgobj_t ++;
+      }
+      else
+      {
+      }
+
+	  (J1939_Message_Parameter_Table_Ptr+message_objet)->in_configuration = in_configuration;
+
+      FlexCAN_Initialize_Message_Object(in_configuration, (uint32_t)(J1939_Message_Parameter_Table_Ptr+message_objet)->CAN_message_ID);
+   }
+}
 //=============================================================================
 // Name:Get_Transmit_Message_Number_From_Message_ID
 //
