@@ -71,7 +71,7 @@ J1939_Message_Parameter_T   J1939_Message_Parameter_Table[MESSAGE_NUM_OF_CANOBD]
   ,{0x18EAAA00,   8, 1, &J1939_tx_rx_buffer[1][0], Callback_Application_CANOBD,HAL_CAN_DEVICE_A,HAL_CAN_MESSAGE_DIRECTION_TRANSMIT }
   ,{0x18EABB00,   8, 1, &J1939_tx_rx_buffer[2][0], Notify_Application_CANOBD, HAL_CAN_DEVICE_A,HAL_CAN_MESSAGE_DIRECTION_RECEIVE}
   ,{0x18EACC00,   8, 1, &J1939_tx_rx_buffer[3][0], Notify_Application_CANOBD, HAL_CAN_DEVICE_A,HAL_CAN_MESSAGE_DIRECTION_RECEIVE}
-   {J1939_PGN_59904_BASE_ID,      J1939_PGN_59904_LENGTH,  Notify_Application_J1939, FIFO_CAN_MESSAGE,  1, Rx_Index_Method_PDU1_Match},
+//   {J1939_PGN_59904_BASE_ID,      J1939_PGN_59904_LENGTH,  Notify_Application_J1939, FIFO_CAN_MESSAGE,  1, Rx_Index_Method_PDU1_Match},
  };
 /****************************************************************/
 /***                     RECEPTION TASKS                      ***/

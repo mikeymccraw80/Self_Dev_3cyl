@@ -87,6 +87,7 @@ typedef struct
 #define MESSAGE_NUM_OF_J1939    (TX_MESSAGE_NUM_OF_J1939 + RX_MESSAGE_NUM_OF_J1939)
 
 extern CAN_Message_Parameter_T CANOBD_Message_Parameter_Table[MESSAGE_NUM_OF_CANOBD];
+extern J1939_Message_Parameter_T J1939_Message_Parameter_Table[MESSAGE_NUM_OF_CANOBD];
 extern CAN_Message_Parameter_T Get_CANOBD_Message_Parameter_Table(uint8_t index);
 extern J1939_Message_Parameter_T Get_J1939_Message_Parameter_Table(uint8_t index);
 

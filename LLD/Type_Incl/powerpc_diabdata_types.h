@@ -39,6 +39,12 @@ typedef uint8_t            sig_atomic_t;
 //=============================================================================
 //   Standard Type Specifiers:
 //=============================================================================
+typedef enum
+{
+   CAN_PORT_ERROR_NONE,
+   CAN_PORT_ERROR_BUSOFF,
+   CAN_PORT_ERROR_BUSERROR
+} CAN_Port_Error_T;
 
 //=============================================================================
 //   Interrupt Handling:
