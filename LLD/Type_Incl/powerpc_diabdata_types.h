@@ -26,6 +26,26 @@ typedef uint8_t         bitfield8_t;
 typedef uint16_t        bitfield16_t;
 typedef uint32_t        bitfield32_t;
 
+typedef volatile signed char vint8_t;
+typedef volatile unsigned char vuint8_t;
+typedef volatile signed short vint16_t;
+typedef volatile unsigned short vuint16_t;
+typedef volatile signed int vint32_t;
+typedef volatile unsigned int vuint32_t;
+
+/*********************************************************************
+* Boolean definitions                                                
+*********************************************************************/
+                                                                     
+typedef enum BOOL_TYPE_                                              
+{                                                                    
+    DISABLED ,                                                       
+    ENABLED                                                             
+} BOOL_TYPE;                                                         
+
+//typedef BOOL_TYPE BOOL;
+//typedef BOOL_TYPE TbBOOLEAN;
+
 typedef uint8_t bool;
 #define false (0)
 #define true  (1)

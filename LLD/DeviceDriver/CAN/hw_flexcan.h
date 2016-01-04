@@ -480,5 +480,470 @@ typedef volatile struct FLEXCAN_Tag
 
 }  FLEXCAN_T;
 
+
+
+/***==========================================================***/
+
+/****************************/
+/* CAN                      */
+/*carried over from Diesel project*/
+/****************************/
+
+/* REM: the values of P_L_CANx must be from 0 to n-1,*/
+/*      n being the number of CAN buses used.        */
+#define  P_L_CAN0      ((int16_t)0)
+#define  P_L_CAN1      ((int16_t)1)
+#define  P_L_CAN2      ((int16_t)2)
+#define  P_L_CAN3      ((int16_t)3)
+
+#define  MAX_CAN_DEVICES (4U)
+
+#define  HWI_CAN_BUSOFF  (0x0001)
+#define  HWI_CAN_ERROR   (0x0002)
+
+                               
+#define  P_L_CAN_MSG0  ((int16_t)0)
+#define  P_L_CAN_MSG1  ((int16_t)1)
+#define  P_L_CAN_MSG2  ((int16_t)2)
+#define  P_L_CAN_MSG3  ((int16_t)3)
+#define  P_L_CAN_MSG4  ((int16_t)4)
+#define  P_L_CAN_MSG5  ((int16_t)5)
+#define  P_L_CAN_MSG6  ((int16_t)6)
+#define  P_L_CAN_MSG7  ((int16_t)7)
+#define  P_L_CAN_MSG8  ((int16_t)8)
+#define  P_L_CAN_MSG9  ((int16_t)9)
+#define  P_L_CAN_MSG10 ((int16_t)10)
+#define  P_L_CAN_MSG11 ((int16_t)11)
+#define  P_L_CAN_MSG12 ((int16_t)12)
+#define  P_L_CAN_MSG13 ((int16_t)13)
+#define  P_L_CAN_MSG14 ((int16_t)14)
+#define  P_L_CAN_MSG15 ((int16_t)15)
+#define  P_L_CAN_MSG16 ((int16_t)16)
+#define  P_L_CAN_MSG17 ((int16_t)17)
+#define  P_L_CAN_MSG18 ((int16_t)18)
+#define  P_L_CAN_MSG19 ((int16_t)19)
+#define  P_L_CAN_MSG20 ((int16_t)20)
+#define  P_L_CAN_MSG21 ((int16_t)21)
+#define  P_L_CAN_MSG22 ((int16_t)22)
+#define  P_L_CAN_MSG23 ((int16_t)23)
+#define  P_L_CAN_MSG24 ((int16_t)24)
+#define  P_L_CAN_MSG25 ((int16_t)25)
+#define  P_L_CAN_MSG26 ((int16_t)26)
+#define  P_L_CAN_MSG27 ((int16_t)27)
+#define  P_L_CAN_MSG28 ((int16_t)28)
+#define  P_L_CAN_MSG29 ((int16_t)29)
+#define  P_L_CAN_MSG30 ((int16_t)30)
+#define  P_L_CAN_MSG31 ((int16_t)31)
+#define  P_L_CAN_MSG32 ((int16_t)32)
+#define  P_L_CAN_MSG33 ((int16_t)33)
+#define  P_L_CAN_MSG34 ((int16_t)34)
+#define  P_L_CAN_MSG35 ((int16_t)35)
+#define  P_L_CAN_MSG36 ((int16_t)36)
+#define  P_L_CAN_MSG37 ((int16_t)37)
+#define  P_L_CAN_MSG38 ((int16_t)38)
+#define  P_L_CAN_MSG39 ((int16_t)39)
+#define  P_L_CAN_MSG40 ((int16_t)40)
+#define  P_L_CAN_MSG41 ((int16_t)41)
+#define  P_L_CAN_MSG42 ((int16_t)42)
+#define  P_L_CAN_MSG43 ((int16_t)43)
+#define  P_L_CAN_MSG44 ((int16_t)44)
+#define  P_L_CAN_MSG45 ((int16_t)45)
+#define  P_L_CAN_MSG46 ((int16_t)46)
+#define  P_L_CAN_MSG47 ((int16_t)47)
+#define  P_L_CAN_MSG48 ((int16_t)48)
+#define  P_L_CAN_MSG49 ((int16_t)49)
+#define  P_L_CAN_MSG50 ((int16_t)50)
+#define  P_L_CAN_MSG51 ((int16_t)51)
+#define  P_L_CAN_MSG52 ((int16_t)52)
+#define  P_L_CAN_MSG53 ((int16_t)53)
+#define  P_L_CAN_MSG54 ((int16_t)54)
+#define  P_L_CAN_MSG55 ((int16_t)55)
+#define  P_L_CAN_MSG56 ((int16_t)56)
+#define  P_L_CAN_MSG57 ((int16_t)57)
+#define  P_L_CAN_MSG58 ((int16_t)58)
+#define  P_L_CAN_MSG59 ((int16_t)59)
+#define  P_L_CAN_MSG60 ((int16_t)60)
+#define  P_L_CAN_MSG61 ((int16_t)61)
+#define  P_L_CAN_MSG62 ((int16_t)62)
+#define  P_L_CAN_MSG63 ((int16_t)63)
+                                
+#define  P_L_CAN_STD   ((int16_t)0)
+#define  P_L_CAN_XTD   ((int16_t)1)
+
+#define  P_L_CAN_MASK_STD   (0x0U)
+#define  P_L_CAN_MASK_XTD   (0x80000000U)
+
+#define  P_L_CAN_RX         ((int16_t)0)
+#define  P_L_CAN_TX         ((int16_t)1)
+
+#define  P_L_NON_MSG_ERROR  ((int16_t)1)
+
+#define P_L_CBR125000  (125000)
+#define P_L_CBR250000  (250000)
+#define P_L_CBR500000  (500000)
+#define P_L_CBR1000000 (1000000)
+
+#if 0
+/* This defines the interval since between the detection of CAN error */
+/* and the reenable of the CAN error interrupt.                       */ 
+#define HWI_CAN0_BUS_RECOVERY_TIMEOUT (20/4)
+#define HWI_CAN1_BUS_RECOVERY_TIMEOUT (20/4)
+#define HWI_CAN2_BUS_RECOVERY_TIMEOUT (20/4)
+#define HWI_CAN3_BUS_RECOVERY_TIMEOUT (20/4)
+
+/*------------------------------------------------------------------*/
+/* CAN interface */
+HWI_ERROR hwi_can_init(const P_L_CAN_DEVICE_TYPE*, const S32);
+HWI_ERROR hwi_can_configure_object(const P_L_CAN_OBJECT_TYPE*);
+HWI_ERROR hwi_can_receive_message(const P_L_CAN_OBJECT_TYPE*);
+HWI_ERROR hwi_can_send_message(const P_L_CAN_OBJECT_TYPE*, U8* const);
+/* CAN Gateway interface */
+BOOL_TYPE hwi_cangw_initialise(S16, S16, U32, U32, U32, U32, U32, U32);
+BOOL_TYPE hwi_cangw_status(void);
+void      hwi_cangw_terminate(void);
+
+#endif
+
+//=============================================================================
+// P_L_CAN_OBJECT_TYPE - The structure of the Can Message Object.
+//
+// This structure will support both Standard and Extended formats.
+// This structure was recovered from the Diesel app (hwi.h)
+//=============================================================================
+typedef struct
+{
+  int16_t P_L_CAN_DEVICE_NUMBER;
+  int16_t P_L_CAN_MSG_NUMBER;
+  uint32_t P_L_CAN_MSG_ID;
+  uint32_t P_L_CAN_MSG_MASK;
+  int16_t P_L_CAN_LENGTH;
+  int16_t P_L_CAN_TYPE;
+  int16_t P_L_CAN_DIRECTION;
+  int16_t P_L_CAN_CALLBACK_ENABLED;
+}P_L_CAN_OBJECT_TYPE;
+
+
+/*************************** buffer type **************************/
+  typedef struct canbuf_t_tag {
+            union {
+                vuint32_t R;
+                struct {
+                    vuint32_t:4;
+                    vuint32_t CODE:4;
+                      vuint32_t:1;
+                    vuint32_t SRR:1;
+                    vuint32_t IDE:1;
+                    vuint32_t RTR:1;
+                    vuint32_t LENGTH:4;
+                    vuint32_t TIMESTAMP:16;
+                } B;
+            } CS_; /*####*/
+
+            union {
+                vuint32_t R;
+                struct {
+                    vuint32_t:3;
+                    vuint32_t STD_ID:11;
+                    vuint32_t EXT_ID:18;
+                } B;
+            } ID;
+
+            union {
+                vuint8_t B[8];  /* Data buffer in Bytes (8 bits) */
+                vuint16_t H[4]; /* Data buffer in Half-words (16 bits) */
+                vuint32_t W[2]; /* Data buffer in words (32 bits) */
+                vuint32_t R_[2]; /* Data buffer in words (32 bits) */ /*####*/
+            } DATA;
+
+        } canbuf_t;
+
+/***************************Configuration Registers**************************/
+/*FLEXCAN2_tag was carried over from Diesel project Mpc5566.h, which was used to match the MT22.3 values*/
+    struct FLEXCAN2_tag{
+        union {
+            vuint32_t R;
+            struct {
+                vuint32_t MDIS:1;
+                vuint32_t FRZ:1;
+                  vuint32_t:1;
+                vuint32_t HALT:1;
+                vuint32_t NOTRDY:1;
+                  vuint32_t:1;
+                vuint32_t SOFTRST:1;
+                vuint32_t FRZACK:1;
+                  vuint32_t:1;
+                  vuint32_t:1;
+
+                vuint32_t WRNEN:1;
+
+                vuint32_t MDISACK:1;
+                  vuint32_t:1;
+                  vuint32_t:1;
+
+                vuint32_t SRXDIS:1;
+                vuint32_t MBFEN:1;
+                  vuint32_t:10;
+
+                vuint32_t MAXMB:6;
+            } B;
+        } MCR;                  /* Module Configuration Register */
+
+        union {
+            vuint32_t R;
+            struct {
+                vuint32_t PRESDIV:8;
+                vuint32_t RJW:2;
+                vuint32_t PSEG1:3;
+                vuint32_t PSEG2:3;
+                vuint32_t BOFFMSK:1;
+                vuint32_t ERRMSK:1;
+                vuint32_t CLKSRC:1;
+                vuint32_t LPB:1;
+
+                vuint32_t TWRNMSK:1;
+                vuint32_t RWRNMSK:1;
+                  vuint32_t:2;
+
+                vuint32_t SMP:1;
+                vuint32_t BOFFREC:1;
+                vuint32_t TSYN:1;
+                vuint32_t LBUF:1;
+                vuint32_t LOM:1;
+                vuint32_t PROPSEG:3;
+            } B;
+        } CR;                   /* Control Register */
+
+        union {
+            vuint32_t R;
+        } TIMER;                /* Free Running Timer */
+        int32_t FLEXCAN_reserved00;
+
+        union {
+            vuint32_t R;
+            struct {
+                vuint32_t:3;
+                vuint32_t MI:29;
+            } B;
+        } RXGMASK;              /* RX Global Mask */
+
+        union {
+            vuint32_t R;
+            struct {
+                vuint32_t:3;
+                vuint32_t MI:29;
+            } B;
+        } RX14MASK;             /* RX 14 Mask */
+
+        union {
+            vuint32_t R;
+            struct {
+                vuint32_t:3;
+                vuint32_t MI:29;
+            } B;
+        } RX15MASK;             /* RX 15 Mask */
+
+        union {
+            vuint32_t R;
+            struct {
+                vuint32_t:16;
+                vuint32_t RXECNT:8;
+                vuint32_t TXECNT:8;
+            } B;
+        } ECR;                  /* Error Counter Register */
+
+        union {
+            vuint32_t R;
+            struct {
+                vuint32_t:14;
+
+                vuint32_t TWRNINT:1;
+                vuint32_t RWRNINT:1;
+
+                vuint32_t BIT1ERR:1;
+                vuint32_t BIT0ERR:1;
+                vuint32_t ACKERR:1;
+                vuint32_t CRCERR:1;
+                vuint32_t FRMERR:1;
+                vuint32_t STFERR:1;
+                vuint32_t TXWRN:1;
+                vuint32_t RXWRN:1;
+                vuint32_t IDLE:1;
+                vuint32_t TXRX:1;
+                vuint32_t FLTCONF:2;
+                  vuint32_t:1;
+                vuint32_t BOFFINT:1;
+                vuint32_t ERRINT:1;
+                  vuint32_t:1;
+            } B;
+        } ESR_;  /*####*/                /* Error and Status Register */
+
+        union {
+            vuint32_t R;
+            struct {
+                vuint32_t BUF63M:1;
+                vuint32_t BUF62M:1;
+                vuint32_t BUF61M:1;
+                vuint32_t BUF60M:1;
+                vuint32_t BUF59M:1;
+                vuint32_t BUF58M:1;
+                vuint32_t BUF57M:1;
+                vuint32_t BUF56M:1;
+                vuint32_t BUF55M:1;
+                vuint32_t BUF54M:1;
+                vuint32_t BUF53M:1;
+                vuint32_t BUF52M:1;
+                vuint32_t BUF51M:1;
+                vuint32_t BUF50M:1;
+                vuint32_t BUF49M:1;
+                vuint32_t BUF48M:1;
+                vuint32_t BUF47M:1;
+                vuint32_t BUF46M:1;
+                vuint32_t BUF45M:1;
+                vuint32_t BUF44M:1;
+                vuint32_t BUF43M:1;
+                vuint32_t BUF42M:1;
+                vuint32_t BUF41M:1;
+                vuint32_t BUF40M:1;
+                vuint32_t BUF39M:1;
+                vuint32_t BUF38M:1;
+                vuint32_t BUF37M:1;
+                vuint32_t BUF36M:1;
+                vuint32_t BUF35M:1;
+                vuint32_t BUF34M:1;
+                vuint32_t BUF33M:1;
+                vuint32_t BUF32M:1;
+            } B;
+        } IMRH;                 /* Interruput Masks Register */
+
+        union {
+            vuint32_t R;
+            struct {
+                vuint32_t BUF31M:1;
+                vuint32_t BUF30M:1;
+                vuint32_t BUF29M:1;
+                vuint32_t BUF28M:1;
+                vuint32_t BUF27M:1;
+                vuint32_t BUF26M:1;
+                vuint32_t BUF25M:1;
+                vuint32_t BUF24M:1;
+                vuint32_t BUF23M:1;
+                vuint32_t BUF22M:1;
+                vuint32_t BUF21M:1;
+                vuint32_t BUF20M:1;
+                vuint32_t BUF19M:1;
+                vuint32_t BUF18M:1;
+                vuint32_t BUF17M:1;
+                vuint32_t BUF16M:1;
+                vuint32_t BUF15M:1;
+                vuint32_t BUF14M:1;
+                vuint32_t BUF13M:1;
+                vuint32_t BUF12M:1;
+                vuint32_t BUF11M:1;
+                vuint32_t BUF10M:1;
+                vuint32_t BUF09M:1;
+                vuint32_t BUF08M:1;
+                vuint32_t BUF07M:1;
+                vuint32_t BUF06M:1;
+                vuint32_t BUF05M:1;
+                vuint32_t BUF04M:1;
+                vuint32_t BUF03M:1;
+                vuint32_t BUF02M:1;
+                vuint32_t BUF01M:1;
+                vuint32_t BUF00M:1;
+            } B;
+        } IMRL;                 /* Interruput Masks Register */
+
+        union {
+            vuint32_t R;
+            struct {
+                vuint32_t BUF63I:1;
+                vuint32_t BUF62I:1;
+                vuint32_t BUF61I:1;
+                vuint32_t BUF60I:1;
+                vuint32_t BUF59I:1;
+                vuint32_t BUF58I:1;
+                vuint32_t BUF57I:1;
+                vuint32_t BUF56I:1;
+                vuint32_t BUF55I:1;
+                vuint32_t BUF54I:1;
+                vuint32_t BUF53I:1;
+                vuint32_t BUF52I:1;
+                vuint32_t BUF51I:1;
+                vuint32_t BUF50I:1;
+                vuint32_t BUF49I:1;
+                vuint32_t BUF48I:1;
+                vuint32_t BUF47I:1;
+                vuint32_t BUF46I:1;
+                vuint32_t BUF45I:1;
+                vuint32_t BUF44I:1;
+                vuint32_t BUF43I:1;
+                vuint32_t BUF42I:1;
+                vuint32_t BUF41I:1;
+                vuint32_t BUF40I:1;
+                vuint32_t BUF39I:1;
+                vuint32_t BUF38I:1;
+                vuint32_t BUF37I:1;
+                vuint32_t BUF36I:1;
+                vuint32_t BUF35I:1;
+                vuint32_t BUF34I:1;
+                vuint32_t BUF33I:1;
+                vuint32_t BUF32I:1;
+            } B;
+        } IFRH;                 /* Interruput Flag Register */
+
+        union {
+            vuint32_t R;
+            struct {
+                vuint32_t BUF31I:1;
+                vuint32_t BUF30I:1;
+                vuint32_t BUF29I:1;
+                vuint32_t BUF28I:1;
+                vuint32_t BUF27I:1;
+                vuint32_t BUF26I:1;
+                vuint32_t BUF25I:1;
+                vuint32_t BUF24I:1;
+                vuint32_t BUF23I:1;
+                vuint32_t BUF22I:1;
+                vuint32_t BUF21I:1;
+                vuint32_t BUF20I:1;
+                vuint32_t BUF19I:1;
+                vuint32_t BUF18I:1;
+                vuint32_t BUF17I:1;
+                vuint32_t BUF16I:1;
+                vuint32_t BUF15I:1;
+                vuint32_t BUF14I:1;
+                vuint32_t BUF13I:1;
+                vuint32_t BUF12I:1;
+                vuint32_t BUF11I:1;
+                vuint32_t BUF10I:1;
+                vuint32_t BUF09I:1;
+                vuint32_t BUF08I:1;
+                vuint32_t BUF07I:1;
+                vuint32_t BUF06I:1;
+                vuint32_t BUF05I:1;
+                vuint32_t BUF04I:1;
+                vuint32_t BUF03I:1;
+                vuint32_t BUF02I:1;
+                vuint32_t BUF01I:1;
+                vuint32_t BUF00I:1;
+            } B;
+        } IFRL;                 /* Interruput Flag Register */
+
+        uint32_t flexcan2_reserved2[19];
+
+      canbuf_t BUF[64];
+
+        uint32_t flexcan2_reserved3[256];
+
+        union {
+            vuint32_t R;
+            struct {
+                vuint32_t:3;
+                vuint32_t MI:29;
+            } B;
+        } RXIMR[64];            /* RX Individual Mask Registers */
+
+    };
+
 #endif // HW_FLEXCAN_H
 

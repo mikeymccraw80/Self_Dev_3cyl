@@ -380,7 +380,8 @@ void HAL_CAN_RX_B31_16_INT(void)
 
 void HAL_CAN_RX_B63_32_INT(void)
 {
-	FlexCAN_Receive_Interrupt(FLEXCAN_DEVICE_A, CAN_Message_RX_DATA);
+	//FlexCAN_Receive_Interrupt(FLEXCAN_DEVICE_A, CAN_Message_RX_DATA);
+	//J1939_Message_Receive_Callback((U8)can_msg_number, p_l_can_data_ptr, 8);
 }
 
 void HAL_CAN_Diag_Network_10ms(void)

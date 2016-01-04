@@ -39,6 +39,8 @@ extern FLEXCAN_T FlexCAN_C;
 #define SECTION_END
 #include "section.h"
 
+#define CAN_A     (*( struct FLEXCAN2_tag *)  0xFFFC0000)
+#define CAN_C     (*( struct FLEXCAN2_tag *)  0xFFFC8000)
 
 // Though Monaco contains only FlexCaN A and C, to use the array indexing feature, 
 // No of Flexcan devices is kept at 3.
@@ -48,6 +50,69 @@ extern FLEXCAN_T FlexCAN_C;
 #define THIRTYONE (31)
 #define THIRTYTWO (32)
 
+
+  
+/* Hardware layer function return values */
+/*Carried over from Diesel APP hw.h*/
+typedef enum
+{
+    HWI_NO_ERROR,                              /* 00 */
+    HWI_CAN_DEVICE_NOT_IMPLEMENTED,            /* 01 */
+    HWI_CAN_INVALID_MESSAGE_NUMBER,            /* 02 */
+    HWI_CAN_MESSAGE_BUFFER_EMPTY,              /* 03 */
+    HWI_CAN_BLANK_MESSAGE_MASK,                /* 04 */
+    HWI_CAN_BUFFER_FULL,                       /* 05 */
+    HWI_CAN_ERROR_SEEN,                        /* 06 */
+    HWI_SCI_BUFFERED_READ_IN_PROGRESS,         /* 07 */
+    HWI_SCI_BUFFERED_TRANSMIT_IN_PROGRESS,     /* 08 */
+    HWI_SCI_DEVICE_NOT_IMPLEMENTED,            /* 09 */
+    HWI_SPI_BUFFERED_TRANSMIT_IN_PROGRESS,     /* 10 */
+    HWI_SPI_DEVICE_UNIMPLEMENTED,              /* 11 */
+    HWI_PWM_NOT_IMPLEMENTED,                   /* 12 */
+    HWI_PWM_RANGE_EXCEEDED,                    /* 13 */
+    HWI_DI_NOT_IMPLEMENTED,                    /* 14 */
+    HWI_DO_NOT_IMPLEMENTED,                    /* 15 */
+    HWI_EO_CHANNEL_NOT_IMPLEMENTED,            /* 16 */
+    HWI_EO_CHANNEL_NOT_INITIALISED,            /* 17 */
+    HWI_EO_CHANNEL_BUFFER_FULL,                /* 18 */
+    HWI_EO_UPDATE_NOT_DONE,                    /* 19 */
+    HWI_EI_CHANNEL_NOT_IMPLEMENTED,            /* 20 */
+    HWI_EI_CHANNEL_NOT_INITIALISED,            /* 21 */
+    HWI_ADC_CHANNEL_NOT_IMPLEMENTED,           /* 22 */
+    HWI_INVALID_INTERRUPT_LEVEL,               /* 23 */
+    HWI_NVM_DEVICE_NOT_IMPLEMENTED,            /* 24 */
+    HWI_NVM_TIMEOUT,                           /* 25 */
+    HWI_NVM_DEVICE_BUSY,                       /* 26 */
+    HWI_NVM_GENERAL_FAILURE,                   /* 27 */
+    HWI_NVM_USER_ABORT,                        /* 28 */
+    HWI_PAGE_NOT_DETECTED,                     /* 29 */
+    HWI_PAGE_INVALID,                          /* 30 */
+    HWI_PAGE_SRC_INVALID,                      /* 31 */
+    HWI_PAGE_DEST_INVALID,                     /* 32 */
+    HWI_DIAG_CHANNEL_NOT_IMPLEMENTED,          /* 33 */
+    HWI_DIAG_SC,                               /* 34 */
+    HWI_DIAG_OC,                               /* 35 */
+    HWI_DIAG_SC2G,                             /* 36 */
+    HWI_DIAG_SC2VBATT,                         /* 37 */
+    HWI_DIAG_HS_SC2G,                          /* 38 */
+    HWI_DIAG_LS_SC2G,                          /* 39 */
+    HWI_DIAG_HS_SC2VBATT,                      /* 40 */
+    HWI_DIAG_LS_SC2VBATT,                      /* 41 */
+    HWI_DIAG_OVER_TEMP,                        /* 42 */
+    HWI_DIAG_UNDERVOLTAGE,                     /* 43 */
+    HWI_DIAG_SUPPLY_FAILURE,                   /* 44 */
+    HWI_DIAG_GENERAL_FAILURE,                  /* 45 */
+    HWI_SENSOR_CONFIG_NOT_DEFINED,             /* 46 */
+    HWI_LIN_CHECKSUM_ERROR,                    /* 47 */
+    HWI_LIN_STOP_BIT_ERROR,                    /* 48 */
+    HWI_LIN_BIT_ERROR,                         /* 49 */
+    HWI_LIN_PHYSICAL_BUS_ERROR,                /* 50 */
+    HWI_LIN_TIMEOUT_ERROR,                     /* 51 */
+    HWI_ADC_SYNC_SAMPL_BUSY,                   /* 52 */
+    HWI_EOI_SCHEDULED_INJECT_TOO_OLD,          /* 53 */
+    HWI_CAN_BUS_OFF,                           /* 54 */
+    HWI_EOI_CHANNEL_NOT_IMPLEMENTED            /* 55 */
+} HWI_ERROR;
 typedef enum FlexCAN_ID_Acc_Mask_Tag
 {
    FLEXCAN_ONE_FULL_ID,

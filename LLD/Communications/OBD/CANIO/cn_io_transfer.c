@@ -68,31 +68,7 @@ void InitCANH_Message_Parameter_Table(void)
 
    CAN_Message_Parameter_Table_Ptr = CAN_Message_Parameter_Table;
 }
-//============================================================================
-// Name:  InitJ1939_Message_Parameter_Table
-//
-// Description: according to the calibration, initialize current CAN message
-//              parameter table.
-//
-// Shared Variables: none
-//
-// Parameters: none
-//
-// Return Value: none
-//
-//============================================================================
-void InitJ1939_Message_Parameter_Table(void)
-{
-   static J1939_Message_Parameter_T J1939_Message_Parameter_Table[MESSAGE_NUM_OF_J1939];
-   uint8_t LyJ1939_index;
 
-   for(LyJ1939_index=0; LyJ1939_index<MESSAGE_NUM_OF_J1939; LyJ1939_index++)
-   {
-      J1939_Message_Parameter_Table[LyJ1939_index] = Get_J1939_Message_Parameter_Table(LyJ1939_index);
-   }
-
-   J1939_Message_Parameter_Table_Ptr = J1939_Message_Parameter_Table;
-}
 //=============================================================================
 // Name: CAN_Reset_Init
 //
