@@ -51,15 +51,15 @@ uint8_t  J1939_MESSAGE_RX_OFFSET;
 uint8_t  J1939_MESSAGE_TX_OFFSET;
 
 static void J1939_Initialize_Receive_Manager (J1939_Channel_T  channel_num);
-static void J1939_Initialize_Transmit_Manager (J1939_Channel_T  channel_num);
-static void J1939_Manager (J1939_Channel_T  channel_num);
-static void J1939_Update_Receive_Timers (J1939_Channel_T  channel_num);
-static void J1939_Update_Transmit_Timers (J1939_Channel_T  channel_num);
-static void J1939_Schedule_Transmit_Messages (J1939_Channel_T  channel_num);
-static void J1939_Process_Receive_Messages (J1939_Channel_T  channel_num);
-J1939_New_Message_Status_T J1939_Is_New_Message_Received (uint8_t in_msg_obj,
-                                                          J1939_Receive_Message_Info_T    *rx_msg);
-bool J1939_Transmit_Message (uint8_t n_msg_obj, J1939_Transmit_Message_Info_T     *tx_msg);
+//static void J1939_Initialize_Transmit_Manager (J1939_Channel_T  channel_num);
+//static void J1939_Manager (J1939_Channel_T  channel_num);
+//static void J1939_Update_Receive_Timers (J1939_Channel_T  channel_num);
+//static void J1939_Update_Transmit_Timers (J1939_Channel_T  channel_num);
+//static void J1939_Schedule_Transmit_Messages (J1939_Channel_T  channel_num);
+//static void J1939_Process_Receive_Messages (J1939_Channel_T  channel_num);
+//J1939_New_Message_Status_T J1939_Is_New_Message_Received (uint8_t in_msg_obj,
+//                                                          J1939_Receive_Message_Info_T    *rx_msg);
+//bool J1939_Transmit_Message (uint8_t n_msg_obj, J1939_Transmit_Message_Info_T     *tx_msg);
 //=============================================================================
 // Name: J1939_Initialize_Communication_Manager
 //
@@ -82,7 +82,7 @@ void J1939_Initialize_Communication_Manager (J1939_Channel_T  channel_num)
    J1939_No_Of_Transmit_Messages[0]= J1939_NO_OF_TRANSMIT_MESSAGES_CHANNEL_0;
    J1939_No_Of_Transmit_Messages[1]= J1939_NO_OF_TRANSMIT_MESSAGES_CHANNEL_1;
    
-   J1939_Initialize_Transmit_Manager (channel_num);
+//   J1939_Initialize_Transmit_Manager (channel_num);
    J1939_Initialize_Receive_Manager (channel_num);
 }
 
@@ -111,6 +111,38 @@ void J1939_Initialize_Communication_Manager (J1939_Channel_T  channel_num)
 // Return Value: none.
 //
 //=============================================================================
+static void J1939_Initialize_Receive_Manager (J1939_Channel_T  channel_num)
+{
+   uint8_t index;
+
+   switch (channel_num)
+   {
+#ifdef J1939_CH0_SELECTED
+
+      case J1939_CHANNEL_0:
+         for (index = 0; index < J1939_NO_OF_RECEIVE_MESSAGES_CHANNEL_0; index++)
+         {
+            //Specific routines for each RX message
+            (*J1939_Receive_Initialize_Channel_0[index]) (&J1939_Receive_Message_Control[channel_num][index]);
+         }
+
+         break;
+#endif
+#ifdef J1939_CH1_SELECTED
+
+      case J1939_CHANNEL_1:
+         for (index = 0; index < J1939_NO_OF_RECEIVE_MESSAGES_CHANNEL_1; index++)
+         {
+            (*J1939_Receive_Initialize_Channel_1[index]) (&J1939_Receive_Message_Control[channel_num][index]);
+         }
+
+         break;
+#endif
+
+      default:
+         break;
+   }
+}
 
 
 //=============================================================================

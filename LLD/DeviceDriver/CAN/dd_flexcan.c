@@ -400,4 +400,3 @@ void FlexCAN_Transmit_Interrupt(FLEXCAN_T * in_pFlexCAN, FlexCAN_MSGOBJ_INDEX_T 
 	}
 	FlexCAN_TX_CallBack(msg_id);
 }
-

@@ -480,7 +480,7 @@ typedef volatile struct FLEXCAN_Tag
 
 }  FLEXCAN_T;
 
-
+void hwi_can_device_a_isr(void);
 
 /***==========================================================***/
 
@@ -500,7 +500,6 @@ typedef volatile struct FLEXCAN_Tag
 
 #define  HWI_CAN_BUSOFF  (0x0001)
 #define  HWI_CAN_ERROR   (0x0002)
-
                                
 #define  P_L_CAN_MSG0  ((int16_t)0)
 #define  P_L_CAN_MSG1  ((int16_t)1)

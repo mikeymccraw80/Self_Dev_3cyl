@@ -30,6 +30,7 @@ extern 	const J1939_Message_Table_T   J1939_Message_Table[];
 /************************************************************************/
 
 extern void J1939_Initialize_Communication_Manager(J1939_Channel_T channel_num);
+#if 0
 extern void J1939_Handler_Periodic_Task(void);
 
 /*****************************************************************************/
@@ -58,11 +59,11 @@ extern void J1939_Enable_Receive_Message_Process (J1939_Channel_T channel_num);
 extern uint8_t J1939_Get_Tx_Start_Index(void);
 extern uint8_t J1939_Get_Tx_End_Index(void);
 
+#endif
 void J1939_Transmit_Message_Confirmation(uint8_t index);
 
 
 void J1939_Handler_Cold_Init(void);
-void J1939_Receive_Message_Buffer_Init(void);
 
 void J1939_Message_Receive_Callback(
    uint8_t     in_msg_obj,

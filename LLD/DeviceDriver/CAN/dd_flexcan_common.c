@@ -496,7 +496,7 @@ HWI_ERROR hwi_can_configure_object(const P_L_CAN_OBJECT_TYPE *p_l_can_object_ptr
   volatile uint32_t tempU32;
   uint32_t msg_mask;
   HWI_ERROR  error_status = HWI_NO_ERROR;
-  //HWI_INTERRUPTSTATE_TYPE int_state;
+  HWI_INTERRUPTSTATE_TYPE int_state;
 
   /* Select the appropriate CAN object set */
   switch (can_device)
@@ -555,10 +555,10 @@ HWI_ERROR hwi_can_configure_object(const P_L_CAN_OBJECT_TYPE *p_l_can_object_ptr
           /* Indicate that the object has been configured */
           first_time_object_init[can_object_U16][can_device] =true;
           /* Force CAN transmit inactive also load number of data bytes  */ 
-         // int_state = hwi_disable_interrupts_savestate();
+          int_state = hwi_disable_interrupts_savestate();
           can_register_ptr->BUF[can_object_U16].CS_.B.LENGTH = msg_length;
           can_register_ptr->BUF[can_object_U16].CS_.B.CODE = CAN_TRANSMIT_EMPTY;
-          //hwi_restore_interrupts(int_state);
+          hwi_restore_interrupts(int_state);
         }
       else
         {
@@ -591,9 +591,9 @@ HWI_ERROR hwi_can_configure_object(const P_L_CAN_OBJECT_TYPE *p_l_can_object_ptr
       /* Set first time flag to false - Not used for receive type */
       first_time_object_init[can_object_U16][can_device] = false;
       /* Receive CAN object - set receive inactive  */
-      //int_state = hwi_disable_interrupts_savestate();
+      int_state = hwi_disable_interrupts_savestate();
       can_register_ptr->BUF[can_object_U16].CS_.B.CODE = CAN_RECEIVE_NOT_ACTIVE;
-      //hwi_restore_interrupts(int_state);
+      hwi_restore_interrupts(int_state);
     }
   
 
@@ -608,12 +608,12 @@ HWI_ERROR hwi_can_configure_object(const P_L_CAN_OBJECT_TYPE *p_l_can_object_ptr
           /*===  P_L_CAN_XTD : 29 BITS  ===*/
           /*===============================*/
           /* Load extended identifier  */
-         // int_state = hwi_disable_interrupts_savestate();
+          int_state = hwi_disable_interrupts_savestate();
           can_register_ptr->BUF[can_object_U16].ID.R = msgid;
           can_register_ptr->BUF[can_object_U16].CS_.B.SRR = 1;
           can_register_ptr->BUF[can_object_U16].CS_.B.IDE = 1;
           can_register_ptr->BUF[can_object_U16].CS_.B.RTR = 0;
-          //hwi_restore_interrupts(int_state);
+          hwi_restore_interrupts(int_state);
         }
       else
         {
@@ -621,12 +621,12 @@ HWI_ERROR hwi_can_configure_object(const P_L_CAN_OBJECT_TYPE *p_l_can_object_ptr
           /*===  P_L_CAN_STD : 11 BITS  ===*/
           /*===============================*/
           /* Load standard identifier  */
-         // int_state = hwi_disable_interrupts_savestate();
+          int_state = hwi_disable_interrupts_savestate();
           can_register_ptr->BUF[can_object_U16].ID.R = msgid << 18;
           can_register_ptr->BUF[can_object_U16].CS_.B.SRR = 0;
           can_register_ptr->BUF[can_object_U16].CS_.B.IDE = 0;
           can_register_ptr->BUF[can_object_U16].CS_.B.RTR = 0;
-          //hwi_restore_interrupts(int_state);
+          hwi_restore_interrupts(int_state);
         }
       
       /* Configure Receive Message mask */
@@ -658,7 +658,7 @@ HWI_ERROR hwi_can_configure_object(const P_L_CAN_OBJECT_TYPE *p_l_can_object_ptr
         }         
 
       /* Set up callback interrupt mechanism if required */
-      //int_state = hwi_disable_interrupts_savestate();
+      int_state = hwi_disable_interrupts_savestate();
 
       /* the buffer control registers are organized in pairs of 32 bit registers */
       /* Reformat the buffer number to access the correct bit                    */
@@ -697,16 +697,16 @@ HWI_ERROR hwi_can_configure_object(const P_L_CAN_OBJECT_TYPE *p_l_can_object_ptr
               can_register_ptr->IFRL.R = (uint32_t)(1 << can_object_mask);
             }
         }
-      //hwi_restore_interrupts(int_state);
+      hwi_restore_interrupts(int_state);
       
       /* Make a receive CAN object active */
       if(direction != P_L_CAN_TX)
         {
-          //int_state = hwi_disable_interrupts_savestate();
+          int_state = hwi_disable_interrupts_savestate();
           can_register_ptr->BUF[can_object_U16].CS_.B.CODE = CAN_RECEIVE_EMPTY;
           /* Ensure that the CAN object is unlocked by reading the free running timer. */
           tempU32 = can_register_ptr->TIMER.R;
-          //hwi_restore_interrupts(int_state);
+          hwi_restore_interrupts(int_state);
         }
     }
   else

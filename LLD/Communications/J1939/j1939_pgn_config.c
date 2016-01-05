@@ -17,10 +17,10 @@
 // Pointers to Init Routines
 // Must Match the Index in VBM Transmit Parameter Table
 //=============================================================================
-
+#if 0
 const void (*const J1939_Transmit_Initialize[]) (J1939_Transmit_Message_Control_T *) =
 {
-#if 0
+
    J1939_TxInit_TransportOut_0, /* Tx Transport out management connection 0 */
    J1939_TxInit_TransportOut_1, /* Tx Transport out management connection 1 */
    J1939_TxInit_TransportOut_2, /* Tx Transport out management connection 2 */
@@ -46,9 +46,9 @@ const void (*const J1939_Transmit_Initialize[]) (J1939_Transmit_Message_Control_
    J1939_Transmit_Initialize_PGN_65288,
    J1939_Transmit_Initialize_PGN_65289,
    J1939_TxInit_SendUnmanagedAcknowledgement
-#endif
-};
 
+};
+#endif
 
 #ifdef J1939_CH0_SELECTED
 
@@ -75,7 +75,7 @@ const void (*const J1939_Receive_Initialize_Channel_0[]) (J1939_Receive_Message_
    J1939_Receive_Initialize_PGN_65296
    #endif
 };
-#endif
+
 const J1939_Message_Table_T  J1939_Message_Table[J1939_MESSAGES_NUMBER] =
 {
 // RECEIVE_MESSAGE

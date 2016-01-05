@@ -283,6 +283,15 @@ typedef void (*IO_Callback_T)(void);
 #define Cast_int32(x)           ((int32_t)(x))
 
 #define NULL            0
+
+/*-----------------------------------------*/
+/* Application definitions                 */
+/* Needed for HWIO integrity when built    */
+/* in the Functional Test Scope            */
+/*-----------------------------------------*/
+#define APPLICATION
+#define BOOTSTRAP
+
 #if 0
 #define Extract_Bits(value,position,width) (((value) & Mask32((position), (width))) >> (position))
 #define Insert_Bits(old_value,value,position,width)  (Zero_Bits_Macro((old_value),(position),(width)) | (((value) << (position)) & Mask32((position),(width))) )

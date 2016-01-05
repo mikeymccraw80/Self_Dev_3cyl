@@ -10,6 +10,7 @@
 /***************************************************************************/
 static void Parse_PGN_59904 (J1939_Receive_Message_Info_T *RxMsg)
 {
+#if 0
    bool           PgnFound;
    TxMsgIndexType Index;
    uint32_t       RequestedPgn;
@@ -45,6 +46,7 @@ static void Parse_PGN_59904 (J1939_Receive_Message_Info_T *RxMsg)
    {
       J1939_SendUnmanagedAcknowledgement (NegAck, RequestedPgn);
    }
+#endif
 }
 
 

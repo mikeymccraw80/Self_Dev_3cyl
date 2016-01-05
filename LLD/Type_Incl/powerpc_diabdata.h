@@ -254,6 +254,38 @@ INLINE void Set_Interrupt_State( interrupt_state_t interrupt_state )
 }
 
 //=============================================================================
+// Interrupt state restore functions
+//=============================================================================
+/* Function to retrieve current stack pointer */
+/*Carried over from Hwi.h Diesel project*/
+
+typedef uint32_t HWI_INTERRUPTSTATE_TYPE;
+
+HWI_INTERRUPTSTATE_TYPE hwi_disable_interrupts_savestate (void);
+void hwi_restore_interrupts(HWI_INTERRUPTSTATE_TYPE);
+
+asm HWI_INTERRUPTSTATE_TYPE hwi_disable_interrupts_savestate (void)
+{
+! "r3"
+    .set noreorder /* needed to prevent DIAB to reorder the asm instructions */
+    mfmsr r3  /* backup MSR to restore EE status later */
+    wrteei 0  /* force MSR[EE] to 0 */
+    .set reorder /* allow reordering of asm instruction from now on */
+}
+
+
+asm void hwi_restore_interrupts (HWI_INTERRUPTSTATE_TYPE state)
+{
+% reg state
+!
+    .set noreorder /* needed to prevent DIAB to reorder the asm instructions */
+    wrtee state  /*restore  EE without altering other MSR bits */
+    .set reorder /* allow reordering of asm instruction from now on */
+}
+
+
+
+//=============================================================================
 // Stack Pointer
 //=============================================================================
 /* Function to retrieve current stack pointer */
