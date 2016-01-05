@@ -120,7 +120,8 @@ static void J1939_Initialize_Receive_Manager (J1939_Channel_T  channel_num)
 #ifdef J1939_CH0_SELECTED
 
       case J1939_CHANNEL_0:
-         for (index = 0; index < J1939_NO_OF_RECEIVE_MESSAGES_CHANNEL_0; index++)
+//         for (index = 0; index < J1939_NO_OF_RECEIVE_MESSAGES_CHANNEL_0; index++)
+         for (index = 0; index < 1; index++)		 	
          {
             //Specific routines for each RX message
             (*J1939_Receive_Initialize_Channel_0[index]) (&J1939_Receive_Message_Control[channel_num][index]);
@@ -128,17 +129,6 @@ static void J1939_Initialize_Receive_Manager (J1939_Channel_T  channel_num)
 
          break;
 #endif
-#ifdef J1939_CH1_SELECTED
-
-      case J1939_CHANNEL_1:
-         for (index = 0; index < J1939_NO_OF_RECEIVE_MESSAGES_CHANNEL_1; index++)
-         {
-            (*J1939_Receive_Initialize_Channel_1[index]) (&J1939_Receive_Message_Control[channel_num][index]);
-         }
-
-         break;
-#endif
-
       default:
          break;
    }
@@ -358,7 +348,7 @@ void J1939_Handler_Cold_Init (void)
    int16_t                            msg_call_back;
    uint8_t                        msg_obj_offset;
 
-   J1939_MESSAGE_RX_OFFSET = 0;
+   J1939_MESSAGE_RX_OFFSET = 32;
    J1939_MESSAGE_TX_OFFSET = (24 - J1939_NO_OF_RECEIVE_MESSAGES_CHANNEL_0);
 
    for (msg_obj = 0; msg_obj < J1939_NO_OF_MESSAGES; msg_obj++)

@@ -51,7 +51,7 @@ typedef union {
 } CAN_ESR_T;
 
 /*  Local Definitions */
-#if 0
+
 #define NUMBER_OF_MESSAGE_OBJECTS  64U
 #define NUMBER_OF_DATA_BYTES        8U
 
@@ -78,7 +78,7 @@ typedef union {
 #define CAN_PSEG1_TQ (5-1)
 #define CAN_PSEG2_TQ (5-1)
 
-
+#if 0
 #define CAN_PRESDIV_1MHz (((HWI_SYSTEM_FREQ_IN_HZ/CAN_TQUANTA_PER_BIT)/ \
                             1000000) - 1)
 #define CAN_PRESDIV_500kHz (((HWI_SYSTEM_FREQ_IN_HZ/CAN_TQUANTA_PER_BIT)/ \
@@ -139,46 +139,35 @@ typedef union {
 /* The CAN registers and message objects, for both CAN devices, need */
 /* to be mapped onto physical registers                              */
 
-
+#endif
 #define EXTEND_ID               0x1U
-#define CAN_TRANSMIT_MESSAGE    (U16)0x8
-#define CAN_TRANSMIT_EMPTY      (U32)0x8
-#define TRANSMIT_CAN_MESSAGE    (U32)0xC
-#define CAN_RECEIVE_NOT_ACTIVE  (U32)0x00
-#define CAN_RECEIVE_EMPTY       (U16)0x4
-#define CAN_RECEIVE_BUSY        (U16)0x10
-#define CAN_RX_BUFFER_BUSY      (U32)1
+#define CAN_TRANSMIT_MESSAGE    (uint16_t)0x8
+#define CAN_TRANSMIT_EMPTY      (uint32_t)0x8
+#define TRANSMIT_CAN_MESSAGE    (uint32_t)0xC
+#define CAN_RECEIVE_NOT_ACTIVE  (uint32_t)0x00
+#define CAN_RECEIVE_EMPTY       (uint16_t)0x4
+#define CAN_RECEIVE_BUSY        (uint16_t)0x10
+#define CAN_RX_BUFFER_BUSY      (uint32_t)1
 
 
-static U16 first_time_init[MAX_CAN_DEVICES] = {(U16)TRUE,
-                                               (U16)TRUE,
-#ifdef P_L_CAN2
-                                               (U16)TRUE,
-#endif
-#ifdef P_L_CAN3
-                                               (U16)TRUE,
-#endif
-                                               };
-static U16 first_time_object_init[NUMBER_OF_MESSAGE_OBJECTS][MAX_CAN_DEVICES];
-static U8  can_error_int_init_done[MAX_CAN_DEVICES] = {0};
-static U8  can_error_reenable_cntr[MAX_CAN_DEVICES] = {0};
-static U64 can_buffer_direction[MAX_CAN_DEVICES] = {0};
-static BOOL_TYPE hwi_can_a_error_seen;
-static BOOL_TYPE hwi_can_b_error_seen;
+static uint16_t first_time_object_init[NUMBER_OF_MESSAGE_OBJECTS][MAX_CAN_DEVICES];
+static uint8_t  can_error_int_init_done[MAX_CAN_DEVICES] = {0};
+static uint8_t  can_error_reenable_cntr[MAX_CAN_DEVICES] = {0};
+static uint64_t can_buffer_direction[MAX_CAN_DEVICES] = {0};
+static BOOL_TYPE hwi_can_a_error_seen=false;
 
 static CAN_ESR_T hwi_can_stferror[4];
+
 /*  Local Function Declarations  */
 
-static void hwi_action_can_a_rcvd_callback(S16 can_object,
-                                           U32 p_l_can_msg_id, U8 *p_l_can_data_ptr,
-                                           U32 p_l_can_msg_timestamp,
-                                           U8  p_l_can_msg_dlc);
+static void hwi_action_can_a_rcvd_callback(int16_t can_object,
+                                           uint32_t p_l_can_msg_id, uint8_t *p_l_can_data_ptr,
+                                           uint32_t p_l_can_msg_timestamp,
+                                           uint8_t  p_l_can_msg_dlc);
 
-static void hwi_action_can_a_xmit_callback(S16 can_object,
-                                           U32 p_l_can_msg_id,
-                                           U32 p_l_can_msg_timestamp);
-
-#endif
+static void hwi_action_can_a_xmit_callback(int16_t can_object,
+                                           uint32_t p_l_can_msg_id,
+                                           uint32_t p_l_can_msg_timestamp);
 
 /********************************************************************
 Function   : hwi_can_init
@@ -192,6 +181,209 @@ Function   : hwi_can_configure_object
 Description: This function is used to initialise a can object. 
 
 *********************************************************************/
+HWI_ERROR hwi_can_configure_object(const P_L_CAN_OBJECT_TYPE *p_l_can_object_ptr)
+{
+  int16_t can_device = p_l_can_object_ptr->P_L_CAN_DEVICE_NUMBER;
+  uint16_t can_object_U16, can_object_mask;
+  struct FLEXCAN2_tag *can_register_ptr=&CAN_A;
+  uint32_t msgid;
+  int16_t msg_length, direction;
+  volatile uint32_t tempU32;
+  uint32_t msg_mask;
+  HWI_ERROR  error_status = HWI_NO_ERROR;
+  HWI_INTERRUPTSTATE_TYPE int_state;
+
+  /* Select the appropriate CAN object set */
+  switch (can_device)
+    {
+    case FLEXCAN_DEVICE_A:
+      /* Point at CAN A register set and message object set */
+      can_register_ptr = &CAN_A;
+      break;
+
+    }
+
+  can_object_U16 = (int16_t)p_l_can_object_ptr->P_L_CAN_MSG_NUMBER;
+  
+  /* Check for valid object length */
+  msg_length = p_l_can_object_ptr->P_L_CAN_LENGTH;
+  
+  if((msg_length > (int16_t)8 ) || (msg_length < (int16_t)0 ))
+    {
+      msg_length=(int16_t)8;
+    }
+  
+  /* Check for valid message identifier */
+  msgid = p_l_can_object_ptr->P_L_CAN_MSG_ID; 
+  
+  /* Valid identifier - set up object   */
+  /* Test to see if object is transmit or receive */
+  direction = p_l_can_object_ptr->P_L_CAN_DIRECTION;
+  
+  
+  if(P_L_CAN_TX == direction)
+    {
+      /* Memorize the buffer direction configuration */
+      can_buffer_direction[can_device] |= (uint64_t)((uint64_t)1<<(uint64_t)(p_l_can_object_ptr->P_L_CAN_MSG_NUMBER));
+
+      if ((first_time_object_init[can_object_U16][can_device] == false) ||
+         ((uint32_t)can_register_ptr->BUF[can_object_U16].CS_.B.CODE == CAN_TRANSMIT_EMPTY))
+        {
+          /* Indicate that the object has been configured */
+          first_time_object_init[can_object_U16][can_device] =true;
+          /* Force CAN transmit inactive also load number of data bytes  */ 
+          int_state = hwi_disable_interrupts_savestate();
+          can_register_ptr->BUF[can_object_U16].CS_.B.LENGTH = msg_length;
+          can_register_ptr->BUF[can_object_U16].CS_.B.CODE = CAN_TRANSMIT_EMPTY;
+          hwi_restore_interrupts(int_state);
+        }
+      else
+        {
+          /* Was initialised before and the buffer is not empty */
+          if ((P_L_CAN0 == can_device) && (hwi_can_a_error_seen == true))
+            {
+              error_status = HWI_CAN_ERROR_SEEN;
+            }
+          else
+            {
+              error_status = HWI_CAN_BUFFER_FULL;
+            }
+        }
+    }
+  else
+    {
+      /* Memorize the buffer direction configuration */
+      can_buffer_direction[can_device] &= (uint64_t)(~((uint64_t)1<<(uint64_t)(p_l_can_object_ptr->P_L_CAN_MSG_NUMBER)));
+
+      /* Set first time flag to false - Not used for receive type */
+      first_time_object_init[can_object_U16][can_device] = false;
+      /* Receive CAN object - set receive inactive  */
+      int_state = hwi_disable_interrupts_savestate();
+      can_register_ptr->BUF[can_object_U16].CS_.B.CODE = CAN_RECEIVE_NOT_ACTIVE;
+      hwi_restore_interrupts(int_state);
+    }
+  
+
+  /* Make sure there's no error so far - ie buffer is not full!*/
+  if(error_status == HWI_NO_ERROR)
+    {
+      /* No error - go ahead with object configuration */
+      /* Configure message ID*/
+      if(P_L_CAN_XTD == p_l_can_object_ptr->P_L_CAN_TYPE)
+        {
+          /*===============================*/
+          /*===  P_L_CAN_XTD : 29 BITS  ===*/
+          /*===============================*/
+          /* Load extended identifier  */
+          int_state = hwi_disable_interrupts_savestate();
+          can_register_ptr->BUF[can_object_U16].ID.R = msgid;
+          can_register_ptr->BUF[can_object_U16].CS_.B.SRR = 1;
+          can_register_ptr->BUF[can_object_U16].CS_.B.IDE = 1;
+          can_register_ptr->BUF[can_object_U16].CS_.B.RTR = 0;
+          hwi_restore_interrupts(int_state);
+        }
+      else
+        {
+          /*===============================*/
+          /*===  P_L_CAN_STD : 11 BITS  ===*/
+          /*===============================*/
+          /* Load standard identifier  */
+          int_state = hwi_disable_interrupts_savestate();
+          can_register_ptr->BUF[can_object_U16].ID.R = msgid << 18;
+          can_register_ptr->BUF[can_object_U16].CS_.B.SRR = 0;
+          can_register_ptr->BUF[can_object_U16].CS_.B.IDE = 0;
+          can_register_ptr->BUF[can_object_U16].CS_.B.RTR = 0;
+          hwi_restore_interrupts(int_state);
+        }
+      
+      /* Configure Receive Message mask */
+      if(direction != P_L_CAN_TX)
+        {
+          /* Configure message mask */
+          msg_mask = p_l_can_object_ptr->P_L_CAN_MSG_MASK;
+          if(P_L_CAN_XTD != p_l_can_object_ptr->P_L_CAN_TYPE)
+            {
+              /* Reformat standard identifier mask */
+              msg_mask = msg_mask << 18;
+            }
+
+          if (p_l_can_object_ptr->P_L_CAN_MSG_NUMBER == 14)
+            {
+              can_register_ptr->RX14MASK.R = msg_mask;
+            }
+          else
+            {
+              if (p_l_can_object_ptr->P_L_CAN_MSG_NUMBER == 15)
+                {
+                  can_register_ptr->RX15MASK.R = msg_mask;
+                }
+              else
+                {
+                  can_register_ptr->RXGMASK.R = msg_mask;
+                }
+            }
+        }         
+
+      /* Set up callback interrupt mechanism if required */
+      int_state = hwi_disable_interrupts_savestate();
+
+      /* the buffer control registers are organized in pairs of 32 bit registers */
+      /* Reformat the buffer number to access the correct bit                    */
+      can_object_mask = can_object_U16 % 32;
+      if ((int16_t)true== p_l_can_object_ptr->P_L_CAN_CALLBACK_ENABLED)
+        {
+          if (can_object_U16 >= 32)
+            {
+              /* Clear any pending interrupt */
+              can_register_ptr->IFRH.R = (uint32_t)(1 << can_object_mask);
+              /* Enable interrupt for this CAN object  */
+              can_register_ptr->IMRH.R |=  (uint32_t)(1 << can_object_mask);
+            }
+          else
+            {
+              /* Clear any pending interrupt */
+              can_register_ptr->IFRL.R = (uint32_t)(1 << can_object_mask);
+              /* Enable interrupt for this CAN object  */
+              can_register_ptr->IMRL.R |=  (uint32_t)(1 << can_object_mask);
+            }
+        }
+      else
+        {
+          if (can_object_U16 >= 32)
+            {
+              /* Disable interrupt for this CAN object  */
+              can_register_ptr->IMRH.R &= (uint32_t)~(1 << can_object_mask);
+              /* Clear any pending interrupt */
+              can_register_ptr->IFRH.R = (uint32_t)(1 << can_object_mask);
+            }
+          else
+            {
+              /* Disable interrupt for this CAN object  */
+              can_register_ptr->IMRL.R &= (uint32_t)~(1 << can_object_mask);
+              /* Clear any pending interrupt */
+              can_register_ptr->IFRL.R = (uint32_t)(1 << can_object_mask);
+            }
+        }
+      hwi_restore_interrupts(int_state);
+      
+      /* Make a receive CAN object active */
+      if(direction != P_L_CAN_TX)
+        {
+          int_state = hwi_disable_interrupts_savestate();
+          can_register_ptr->BUF[can_object_U16].CS_.B.CODE = CAN_RECEIVE_EMPTY;
+          /* Ensure that the CAN object is unlocked by reading the free running timer. */
+          tempU32 = can_register_ptr->TIMER.R;
+          hwi_restore_interrupts(int_state);
+        }
+    }
+  else
+    {
+      /* An error occured - Do not configure the object */
+    }
+
+  return(error_status);
+}  /* End of hwi_can_configure_object */  
+
 
 /********************************************************************
 Function   : hwi_can_enble_gateway_open_ack
@@ -246,7 +438,6 @@ Description: This function processes the CAN device 0 interrupts.
 *********************************************************************/
 void hwi_can_device_a_isr(void)
 {
-#if 0
   uint64_t can_interrupt_status;
   uint64_t callback_mask = 1;
   uint64_t temp_int_flag;
@@ -334,7 +525,6 @@ void hwi_can_device_a_isr(void)
       callback_mask = callback_mask << 1;
       delay_count = 0;
     }
-#endif
 }
 
 
@@ -737,22 +927,21 @@ Description: This function calls the callback function associated with
              received message. 
 
 *********************************************************************/
-#if 0
-static void hwi_action_can_a_rcvd_callback(S16 can_msg_number,
-                                           U32 p_l_can_msg_id,
-                                           U8 *p_l_can_data_ptr,
-                                           U32 p_l_can_msg_timestamp,
-                                           U8  p_l_can_msg_dlc)
+static void hwi_action_can_a_rcvd_callback(int16_t can_msg_number,
+                                           uint32_t p_l_can_msg_id,
+                                           uint8_t *p_l_can_data_ptr,
+                                           uint32_t p_l_can_msg_timestamp,
+                                           uint8_t  p_l_can_msg_dlc)
 {
-    hwi_handle_msg_type(P_L_CAN0,
+#if 0
+	hwi_handle_msg_type(P_L_CAN0,
                         can_msg_number, 
                         p_l_can_msg_id,
                         p_l_can_data_ptr,
                         p_l_can_msg_timestamp,
                         p_l_can_msg_dlc);
-
-}
 #endif
+}
 
 /********************************************************************
 Function   : hwi_transmit_msg_type
@@ -1098,18 +1287,20 @@ Description: This function calls the callback function associated with
              transmit message. 
 
 *********************************************************************/
-#if 0
-static void hwi_action_can_a_xmit_callback(S16 can_msg_number,
-                                           U32 p_l_can_msg_id,
-                                           U32 p_l_can_msg_timestamp)
+
+static void hwi_action_can_a_xmit_callback(int16_t can_msg_number,
+                                           uint32_t p_l_can_msg_id,
+                                           uint32_t p_l_can_msg_timestamp)
 {
-    hwi_transmit_msg_type (P_L_CAN0,
+ #if 0
+ hwi_transmit_msg_type (P_L_CAN0,
                            can_msg_number,
                            p_l_can_msg_id,
                            p_l_can_msg_timestamp);
     hwi_can_stferror[0].R = 0;
-}
 #endif
+}
+
 
 /*-------------------------------------------------------------------*/
 /* LEVEL BLOCK                                                       */
