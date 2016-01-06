@@ -463,7 +463,29 @@ void J1939_Message_Receive_Callback (
    uint8_t     *in_data_buff,
    uint8_t     in_data_length)
 {
-   
+   uint8_t  j1939_rx_msg_obj, counter;
+   uint8_t  *data_ptr;
+   //in_msg_obj is the msg obj number in CAN hardware
+   //(in_msg_obj - J1939_MESSAGE_OFFSET) gives the starting index
+   //of receive message objects in the J1939 table
+   j1939_rx_msg_obj = in_msg_obj - J1939_MESSAGE_RX_OFFSET;
+
+   if (J1939_Message_Table[j1939_rx_msg_obj].message_length == in_data_length)
+   {
+      //The address of message data @ message buffer is stored in a temp pointer
+      data_ptr = (uint8_t *) &J1939_Receive_Message_Buffer[j1939_rx_msg_obj].msg_data[0];
+
+      for (counter = 0; counter < J1939_Message_Table[j1939_rx_msg_obj].message_length; counter++)
+      {
+         //Received data is copied in to the data buffer in the table
+         *data_ptr++ = *in_data_buff++;
+      }
+
+      //New message flag is updated to 'AVAILABLE' status
+      J1939_Receive_Message_Buffer[j1939_rx_msg_obj].new_msg = J1939_NEW_MESSAGE_AVAILABLE;
+   }
+
+   HAL_CAN_Err_Status[0] = CAN_PORT_ERROR_NONE;
 }
 
 CAN_Port_Error_T J1939_Get_BusOffState (void)

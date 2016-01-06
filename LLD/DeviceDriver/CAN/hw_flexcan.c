@@ -25,6 +25,7 @@
 #include "dd_flexcan.h"
 #include "dd_flexcan_common.h"
 #include "io_config_flexcan.h"
+#include "j1939_communication_manager.h"
 
 typedef union {
    volatile unsigned int R;
@@ -584,343 +585,19 @@ Description: This function calls the callback function associated with
              received message and can port. 
 
 *********************************************************************/
-#if 0
-static void hwi_handle_msg_type (U8  can,
-                                 S16 can_msg_number,
-                                 U32 p_l_can_msg_id,
-                                 U8 *p_l_can_data_ptr,
-                                 U32 p_l_can_msg_timestamp,
-                                 U8  p_l_can_msg_dlc)
+static void hwi_handle_msg_type (uint8_t can,
+                                 int16_t can_msg_number,
+                                 uint32_t p_l_can_msg_id,
+                                 uint8_t *p_l_can_data_ptr,
+                                 uint32_t p_l_can_msg_timestamp,
+                                 uint8_t  p_l_can_msg_dlc)
 {
-    switch(can_msg_number)
+    if((can_msg_number>P_L_CAN_MSG31)&&(can_msg_number<=P_L_CAN_MSG63))
     {
-        case(P_L_CAN_MSG0):
-        {
-            P_L_CAN_MSG0_RECEIVED_CALLBACK(can, p_l_can_data_ptr, p_l_can_msg_id, p_l_can_msg_timestamp, p_l_can_msg_dlc);
-            break;
-        }
-        case(P_L_CAN_MSG1):
-        {
-            P_L_CAN_MSG1_RECEIVED_CALLBACK(can, p_l_can_data_ptr, p_l_can_msg_id, p_l_can_msg_timestamp, p_l_can_msg_dlc);
-            break;
-        }
-        case(P_L_CAN_MSG2):
-        {
-            P_L_CAN_MSG2_RECEIVED_CALLBACK(can, p_l_can_data_ptr, p_l_can_msg_id, p_l_can_msg_timestamp, p_l_can_msg_dlc);
-            break;
-        }
-        case(P_L_CAN_MSG3):
-        {
-            P_L_CAN_MSG3_RECEIVED_CALLBACK(can, p_l_can_data_ptr, p_l_can_msg_id, p_l_can_msg_timestamp, p_l_can_msg_dlc);
-            break;
-        }
-        case(P_L_CAN_MSG4):
-        {
-            P_L_CAN_MSG4_RECEIVED_CALLBACK(can, p_l_can_data_ptr, p_l_can_msg_id, p_l_can_msg_timestamp, p_l_can_msg_dlc);
-            break;
-        }
-        case(P_L_CAN_MSG5):
-        {
-            P_L_CAN_MSG5_RECEIVED_CALLBACK(can, p_l_can_data_ptr, p_l_can_msg_id, p_l_can_msg_timestamp, p_l_can_msg_dlc);
-            break;
-        }
-        case(P_L_CAN_MSG6):
-        {
-            P_L_CAN_MSG6_RECEIVED_CALLBACK(can, p_l_can_data_ptr, p_l_can_msg_id, p_l_can_msg_timestamp, p_l_can_msg_dlc);
-            break;
-        }
-        case(P_L_CAN_MSG7):
-        {
-            P_L_CAN_MSG7_RECEIVED_CALLBACK(can, p_l_can_data_ptr, p_l_can_msg_id, p_l_can_msg_timestamp, p_l_can_msg_dlc);
-            break;
-        }
-        case(P_L_CAN_MSG8):
-        {                     
-            P_L_CAN_MSG8_RECEIVED_CALLBACK(can, p_l_can_data_ptr, p_l_can_msg_id, p_l_can_msg_timestamp, p_l_can_msg_dlc);
-            break;
-        }
-        case(P_L_CAN_MSG9):
-        {
-            P_L_CAN_MSG9_RECEIVED_CALLBACK(can, p_l_can_data_ptr, p_l_can_msg_id, p_l_can_msg_timestamp, p_l_can_msg_dlc);
-            break;
-        }
-        case(P_L_CAN_MSG10):
-        {
-            P_L_CAN_MSG10_RECEIVED_CALLBACK(can, p_l_can_data_ptr, p_l_can_msg_id, p_l_can_msg_timestamp, p_l_can_msg_dlc);
-            break;
-        }
-        case(P_L_CAN_MSG11):
-        {
-            P_L_CAN_MSG11_RECEIVED_CALLBACK(can, p_l_can_data_ptr, p_l_can_msg_id, p_l_can_msg_timestamp, p_l_can_msg_dlc);
-            break;
-        }
-        case(P_L_CAN_MSG12):
-        {
-            P_L_CAN_MSG12_RECEIVED_CALLBACK(can, p_l_can_data_ptr, p_l_can_msg_id, p_l_can_msg_timestamp, p_l_can_msg_dlc);
-            break;
-        }
-        case(P_L_CAN_MSG13):
-        {
-            P_L_CAN_MSG13_RECEIVED_CALLBACK(can, p_l_can_data_ptr, p_l_can_msg_id, p_l_can_msg_timestamp, p_l_can_msg_dlc);
-            break;
-        }
-        case(P_L_CAN_MSG14):
-        {
-            P_L_CAN_MSG14_RECEIVED_CALLBACK(can, p_l_can_data_ptr, p_l_can_msg_id, p_l_can_msg_timestamp, p_l_can_msg_dlc);
-            break;
-        }
-        case(P_L_CAN_MSG15):
-        {
-            P_L_CAN_MSG15_RECEIVED_CALLBACK(can, p_l_can_data_ptr, p_l_can_msg_id, p_l_can_msg_timestamp, p_l_can_msg_dlc);
-            break;
-        }
-        case(P_L_CAN_MSG16):
-        {
-            P_L_CAN_MSG16_RECEIVED_CALLBACK(can, p_l_can_data_ptr, p_l_can_msg_id, p_l_can_msg_timestamp, p_l_can_msg_dlc);
-            break;
-        }
-        case(P_L_CAN_MSG17):
-        {
-            P_L_CAN_MSG17_RECEIVED_CALLBACK(can, p_l_can_data_ptr, p_l_can_msg_id, p_l_can_msg_timestamp, p_l_can_msg_dlc);
-            break;
-        }
-        case(P_L_CAN_MSG18):
-        {
-            P_L_CAN_MSG18_RECEIVED_CALLBACK(can, p_l_can_data_ptr, p_l_can_msg_id, p_l_can_msg_timestamp, p_l_can_msg_dlc);
-            break;
-        }
-        case(P_L_CAN_MSG19):
-        {
-            P_L_CAN_MSG19_RECEIVED_CALLBACK(can, p_l_can_data_ptr, p_l_can_msg_id, p_l_can_msg_timestamp, p_l_can_msg_dlc);
-            break;
-        }
-        case(P_L_CAN_MSG20):
-        {
-            P_L_CAN_MSG20_RECEIVED_CALLBACK(can, p_l_can_data_ptr, p_l_can_msg_id, p_l_can_msg_timestamp, p_l_can_msg_dlc);
-            break;
-        }
-        case(P_L_CAN_MSG21):
-        {
-            P_L_CAN_MSG21_RECEIVED_CALLBACK(can, p_l_can_data_ptr, p_l_can_msg_id, p_l_can_msg_timestamp, p_l_can_msg_dlc);
-            break;
-        }
-        case(P_L_CAN_MSG22):
-        {
-            P_L_CAN_MSG22_RECEIVED_CALLBACK(can, p_l_can_data_ptr, p_l_can_msg_id, p_l_can_msg_timestamp, p_l_can_msg_dlc);
-            break;
-        }
-        case(P_L_CAN_MSG23):
-        {
-            P_L_CAN_MSG23_RECEIVED_CALLBACK(can, p_l_can_data_ptr, p_l_can_msg_id, p_l_can_msg_timestamp, p_l_can_msg_dlc);
-            break;
-        }
-        case(P_L_CAN_MSG24):
-        {
-            P_L_CAN_MSG24_RECEIVED_CALLBACK(can, p_l_can_data_ptr, p_l_can_msg_id, p_l_can_msg_timestamp, p_l_can_msg_dlc);
-            break;
-        }
-        case(P_L_CAN_MSG25):
-        {
-            P_L_CAN_MSG25_RECEIVED_CALLBACK(can, p_l_can_data_ptr, p_l_can_msg_id, p_l_can_msg_timestamp, p_l_can_msg_dlc);
-            break;
-        }
-        case(P_L_CAN_MSG26):
-        {
-            P_L_CAN_MSG26_RECEIVED_CALLBACK(can, p_l_can_data_ptr, p_l_can_msg_id, p_l_can_msg_timestamp, p_l_can_msg_dlc);
-            break;
-        }
-        case(P_L_CAN_MSG27):
-        {
-            P_L_CAN_MSG27_RECEIVED_CALLBACK(can, p_l_can_data_ptr, p_l_can_msg_id, p_l_can_msg_timestamp, p_l_can_msg_dlc);
-            break;
-        }
-        case(P_L_CAN_MSG28):
-        {
-            P_L_CAN_MSG28_RECEIVED_CALLBACK(can, p_l_can_data_ptr, p_l_can_msg_id, p_l_can_msg_timestamp, p_l_can_msg_dlc);
-            break;
-        }
-        case(P_L_CAN_MSG29):
-        {
-            P_L_CAN_MSG29_RECEIVED_CALLBACK(can, p_l_can_data_ptr, p_l_can_msg_id, p_l_can_msg_timestamp, p_l_can_msg_dlc);
-            break;
-        }
-        case(P_L_CAN_MSG30):
-        {
-            P_L_CAN_MSG30_RECEIVED_CALLBACK(can, p_l_can_data_ptr, p_l_can_msg_id, p_l_can_msg_timestamp, p_l_can_msg_dlc);
-            break;
-        }
-        case(P_L_CAN_MSG31):
-        {
-            P_L_CAN_MSG31_RECEIVED_CALLBACK(can, p_l_can_data_ptr, p_l_can_msg_id, p_l_can_msg_timestamp, p_l_can_msg_dlc);
-            break;
-        }
-        case(P_L_CAN_MSG32):
-        {
-            P_L_CAN_MSG32_RECEIVED_CALLBACK(can, p_l_can_data_ptr, p_l_can_msg_id, p_l_can_msg_timestamp, p_l_can_msg_dlc);
-            break;
-        }
-        case(P_L_CAN_MSG33):
-        {
-            P_L_CAN_MSG33_RECEIVED_CALLBACK(can, p_l_can_data_ptr, p_l_can_msg_id, p_l_can_msg_timestamp, p_l_can_msg_dlc);
-            break;
-        }
-        case(P_L_CAN_MSG34):
-        {
-            P_L_CAN_MSG34_RECEIVED_CALLBACK(can, p_l_can_data_ptr, p_l_can_msg_id, p_l_can_msg_timestamp, p_l_can_msg_dlc);
-            break;
-        }
-        case(P_L_CAN_MSG35):
-        {
-            P_L_CAN_MSG35_RECEIVED_CALLBACK(can, p_l_can_data_ptr, p_l_can_msg_id, p_l_can_msg_timestamp, p_l_can_msg_dlc);
-            break;
-        }
-        case(P_L_CAN_MSG36):
-        {
-            P_L_CAN_MSG36_RECEIVED_CALLBACK(can, p_l_can_data_ptr, p_l_can_msg_id, p_l_can_msg_timestamp, p_l_can_msg_dlc);
-            break;
-        }
-        case(P_L_CAN_MSG37):
-        {
-            P_L_CAN_MSG37_RECEIVED_CALLBACK(can, p_l_can_data_ptr, p_l_can_msg_id, p_l_can_msg_timestamp, p_l_can_msg_dlc);
-            break;
-        }
-        case(P_L_CAN_MSG38):
-        {
-            P_L_CAN_MSG38_RECEIVED_CALLBACK(can, p_l_can_data_ptr, p_l_can_msg_id, p_l_can_msg_timestamp, p_l_can_msg_dlc);
-            break;
-        }
-        case(P_L_CAN_MSG39):
-        {
-            P_L_CAN_MSG39_RECEIVED_CALLBACK(can, p_l_can_data_ptr, p_l_can_msg_id, p_l_can_msg_timestamp, p_l_can_msg_dlc);
-            break;
-        }
-        case(P_L_CAN_MSG40):
-        {
-            P_L_CAN_MSG40_RECEIVED_CALLBACK(can, p_l_can_data_ptr, p_l_can_msg_id, p_l_can_msg_timestamp, p_l_can_msg_dlc);
-            break;
-        }
-        case(P_L_CAN_MSG41):
-        {
-            P_L_CAN_MSG41_RECEIVED_CALLBACK(can, p_l_can_data_ptr, p_l_can_msg_id, p_l_can_msg_timestamp, p_l_can_msg_dlc);
-            break;
-        }
-        case(P_L_CAN_MSG42):
-        {
-            P_L_CAN_MSG42_RECEIVED_CALLBACK(can, p_l_can_data_ptr, p_l_can_msg_id, p_l_can_msg_timestamp, p_l_can_msg_dlc);
-            break;
-        }
-        case(P_L_CAN_MSG43):
-        {
-            P_L_CAN_MSG43_RECEIVED_CALLBACK(can, p_l_can_data_ptr, p_l_can_msg_id, p_l_can_msg_timestamp, p_l_can_msg_dlc);
-            break;
-        }
-        case(P_L_CAN_MSG44):
-        {
-            P_L_CAN_MSG44_RECEIVED_CALLBACK(can, p_l_can_data_ptr, p_l_can_msg_id, p_l_can_msg_timestamp, p_l_can_msg_dlc);
-            break;
-        }
-        case(P_L_CAN_MSG45):
-        {
-            P_L_CAN_MSG45_RECEIVED_CALLBACK(can, p_l_can_data_ptr, p_l_can_msg_id, p_l_can_msg_timestamp, p_l_can_msg_dlc);
-            break;
-        }
-        case(P_L_CAN_MSG46):
-        {
-            P_L_CAN_MSG46_RECEIVED_CALLBACK(can, p_l_can_data_ptr, p_l_can_msg_id, p_l_can_msg_timestamp, p_l_can_msg_dlc);
-            break;
-        }
-        case(P_L_CAN_MSG47):
-        {
-            P_L_CAN_MSG47_RECEIVED_CALLBACK(can, p_l_can_data_ptr, p_l_can_msg_id, p_l_can_msg_timestamp, p_l_can_msg_dlc);
-            break;
-        }
-        case(P_L_CAN_MSG48):
-        {
-            P_L_CAN_MSG48_RECEIVED_CALLBACK(can, p_l_can_data_ptr, p_l_can_msg_id, p_l_can_msg_timestamp, p_l_can_msg_dlc);
-            break;
-        }
-        case(P_L_CAN_MSG49):
-        {
-            P_L_CAN_MSG49_RECEIVED_CALLBACK(can, p_l_can_data_ptr, p_l_can_msg_id, p_l_can_msg_timestamp, p_l_can_msg_dlc);
-            break;
-        }
-        case(P_L_CAN_MSG50):
-        {
-            P_L_CAN_MSG50_RECEIVED_CALLBACK(can, p_l_can_data_ptr, p_l_can_msg_id, p_l_can_msg_timestamp, p_l_can_msg_dlc);
-            break;
-        }
-        case(P_L_CAN_MSG51):
-        {
-            P_L_CAN_MSG51_RECEIVED_CALLBACK(can, p_l_can_data_ptr, p_l_can_msg_id, p_l_can_msg_timestamp, p_l_can_msg_dlc);
-            break;
-        }
-        case(P_L_CAN_MSG52):
-        {
-            P_L_CAN_MSG52_RECEIVED_CALLBACK(can, p_l_can_data_ptr, p_l_can_msg_id, p_l_can_msg_timestamp, p_l_can_msg_dlc);
-            break;
-        }
-        case(P_L_CAN_MSG53):
-        {
-            P_L_CAN_MSG53_RECEIVED_CALLBACK(can, p_l_can_data_ptr, p_l_can_msg_id, p_l_can_msg_timestamp, p_l_can_msg_dlc);
-            break;
-        }
-        case(P_L_CAN_MSG54):
-        {
-            P_L_CAN_MSG54_RECEIVED_CALLBACK(can, p_l_can_data_ptr, p_l_can_msg_id, p_l_can_msg_timestamp, p_l_can_msg_dlc);
-            break;
-        }
-        case(P_L_CAN_MSG55):
-        {
-            P_L_CAN_MSG55_RECEIVED_CALLBACK(can, p_l_can_data_ptr, p_l_can_msg_id, p_l_can_msg_timestamp, p_l_can_msg_dlc);
-            break;
-        }
-        case(P_L_CAN_MSG56):
-        {
-            P_L_CAN_MSG56_RECEIVED_CALLBACK(can, p_l_can_data_ptr, p_l_can_msg_id, p_l_can_msg_timestamp, p_l_can_msg_dlc);
-            break;
-        }
-        case(P_L_CAN_MSG57):
-        {
-            P_L_CAN_MSG57_RECEIVED_CALLBACK(can, p_l_can_data_ptr, p_l_can_msg_id, p_l_can_msg_timestamp, p_l_can_msg_dlc);
-            break;
-        }
-        case(P_L_CAN_MSG58):
-        {
-            P_L_CAN_MSG58_RECEIVED_CALLBACK(can, p_l_can_data_ptr, p_l_can_msg_id, p_l_can_msg_timestamp, p_l_can_msg_dlc);
-            break;
-        }
-        case(P_L_CAN_MSG59):
-        {
-            P_L_CAN_MSG59_RECEIVED_CALLBACK(can, p_l_can_data_ptr, p_l_can_msg_id, p_l_can_msg_timestamp, p_l_can_msg_dlc);
-            break;
-        }
-        case(P_L_CAN_MSG60):
-        {
-            P_L_CAN_MSG60_RECEIVED_CALLBACK(can, p_l_can_data_ptr, p_l_can_msg_id, p_l_can_msg_timestamp, p_l_can_msg_dlc);
-            break;
-        }
-        case(P_L_CAN_MSG61):
-        {
-            P_L_CAN_MSG61_RECEIVED_CALLBACK(can, p_l_can_data_ptr, p_l_can_msg_id, p_l_can_msg_timestamp, p_l_can_msg_dlc);
-            break;
-        }
-        case(P_L_CAN_MSG62):
-        {
-            P_L_CAN_MSG62_RECEIVED_CALLBACK(can, p_l_can_data_ptr, p_l_can_msg_id, p_l_can_msg_timestamp, p_l_can_msg_dlc);
-            break;
-        }
-        case(P_L_CAN_MSG63):
-        {
-            P_L_CAN_MSG63_RECEIVED_CALLBACK(can, p_l_can_data_ptr, p_l_can_msg_id, p_l_can_msg_timestamp, p_l_can_msg_dlc);
-            break;
-        }
-        default:
-        {
-            break;
-        }
-    }/* End of case statement */              
+      J1939_Message_Receive_Callback((uint8_t)can_msg_number, p_l_can_data_ptr, 8);
+    }
+    /* End of case statement */              
 }
-#endif
 /********************************************************************
 Function   : hwi_action_can_a_rcvd_callback
 Description: This function calls the callback function associated with 
@@ -933,14 +610,12 @@ static void hwi_action_can_a_rcvd_callback(int16_t can_msg_number,
                                            uint32_t p_l_can_msg_timestamp,
                                            uint8_t  p_l_can_msg_dlc)
 {
-#if 0
 	hwi_handle_msg_type(P_L_CAN0,
                         can_msg_number, 
                         p_l_can_msg_id,
                         p_l_can_data_ptr,
                         p_l_can_msg_timestamp,
                         p_l_can_msg_dlc);
-#endif
 }
 
 /********************************************************************
