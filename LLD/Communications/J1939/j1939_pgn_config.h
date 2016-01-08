@@ -266,7 +266,7 @@ extern void J1939_SendUnmanagedAcknowledgement (AckModeType Mode, uint32_t Reque
 extern void J1939_RequestTxMsgService (TxMsgIndexType index, uint8_t requester);
 extern void J1939_Trigger_Transmit_Message_Service (uint8_t Index);
 extern void J1939_Event_Trigger_Transmit(uint8_t index);
-extern bool J1939_Transmit_Unmanaged_Message (J1939_Transmit_Message_Info_T *Tx_Message);
+//extern bool J1939_Transmit_Unmanaged_Message (J1939_Transmit_Message_Info_T *Tx_Message);
 
 /***********************************************************************/
 /* 59392 Acknowledgment of command                                     */

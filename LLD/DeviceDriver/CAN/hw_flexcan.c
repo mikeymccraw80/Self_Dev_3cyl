@@ -418,7 +418,118 @@ Description: This function transmits a message from the specified CAN
              object. 
 
 *********************************************************************/
+HWI_ERROR hwi_can_send_message(const P_L_CAN_OBJECT_TYPE *p_l_can_object_ptr,
+                               uint8_t * const p_l_can_data_ptr)
+ {
+  int16_t can_device = p_l_can_object_ptr->P_L_CAN_DEVICE_NUMBER;
+  int16_t can_object_U16;
+  struct FLEXCAN2_tag *can_register_ptr=&CAN_A;
+  volatile uint32_t tempU32;
+  uint32_t length;
+  HWI_ERROR  error_status = HWI_NO_ERROR;
+  BOOL_TYPE  *point_to_error_seen_flag=&hwi_can_a_error_seen;
+  HWI_INTERRUPTSTATE_TYPE int_state;
 
+  /* Select the appropriate CAN object set */
+  switch (can_device)
+    {
+    case P_L_CAN0:
+      /* Point at CAN A register set and message object set */
+      can_register_ptr = &CAN_A;
+      point_to_error_seen_flag = &hwi_can_a_error_seen;
+      break;
+    }
+    
+  /* Test for valid transmit message object number */
+  can_object_U16 = (uint16_t)p_l_can_object_ptr->P_L_CAN_MSG_NUMBER;
+  //Load the CANID 
+  if(P_L_CAN_XTD == p_l_can_object_ptr->P_L_CAN_TYPE)
+  {
+     /*===============================*/
+     /*===  P_L_CAN_XTD : 29 BITS  ===*/
+     /*===============================*/
+     can_register_ptr->BUF[can_object_U16].ID.R = p_l_can_object_ptr->P_L_CAN_MSG_ID;
+  }
+  else
+  {
+     /*===============================*/
+     /*===  P_L_CAN_STD : 11 BITS  ===*/
+     /*===============================*/
+     /* Load standard identifier  */
+     can_register_ptr->BUF[can_object_U16].ID.R = (p_l_can_object_ptr->P_L_CAN_MSG_ID) << 18;
+  }
+  
+  if ((can_register_ptr->BUF[can_object_U16].CS_.B.CODE & CAN_TRANSMIT_MESSAGE) != CAN_TRANSMIT_MESSAGE)
+    {
+      /* Unlock a potentially locked receive object by reading the timer register */
+      tempU32 = can_register_ptr->TIMER.R;
+    }
+  else
+    {
+      /* Update message buffer with new message. If previous message has not been */
+      /* transmitted, then overwite old message with new one.                     */ 
+      
+      /* Check that the buffer is empty - ie. the previous message has been transmitted. */
+      if((can_register_ptr->BUF[can_object_U16].CS_.B.CODE != CAN_TRANSMIT_EMPTY)
+         &&(hwi_can_stferror[can_device].B.STFERR != true))
+        {
+          if (*point_to_error_seen_flag == true)
+            {
+              error_status = HWI_CAN_ERROR_SEEN;
+            }
+          else
+            {
+              error_status = HWI_CAN_BUFFER_FULL;
+            }
+        }
+      else
+        {
+          /* clear error seen flag */
+          *point_to_error_seen_flag = false;
+          
+          /* Disable the transmitter */
+          int_state = hwi_disable_interrupts_savestate();
+          can_register_ptr->BUF[can_object_U16].CS_.B.CODE = CAN_TRANSMIT_EMPTY;
+          hwi_restore_interrupts(int_state);
+          
+          /* Check that the length of the message is valid */
+          if ((uint32_t)p_l_can_object_ptr->P_L_CAN_LENGTH > NUMBER_OF_DATA_BYTES)
+            {
+              length = NUMBER_OF_DATA_BYTES;  
+            }
+          else
+            {
+              length = (uint32_t)p_l_can_object_ptr->P_L_CAN_LENGTH;
+            }
+          
+          /* Fill the CAN object data bytes */
+          
+          for(tempU32 = (uint32_t)0; tempU32 < length; tempU32++)
+            {
+              can_register_ptr->BUF[can_object_U16].DATA.B[tempU32] =  p_l_can_data_ptr[tempU32];
+            }
+
+          /* Fill unused bytes with zero */
+          for(tempU32 = length; tempU32 < (uint32_t)8; tempU32++ )
+            {
+              can_register_ptr->BUF[can_object_U16].DATA.B[tempU32] = (uint8_t)0;
+            }
+          
+          /* Transmit the message */
+          int_state = hwi_disable_interrupts_savestate();
+          can_register_ptr->BUF[can_object_U16].CS_.B.CODE = TRANSMIT_CAN_MESSAGE;
+
+          hwi_restore_interrupts(int_state);
+          
+          if(hwi_can_stferror[can_device].B.STFERR == true)
+          {
+            error_status = HWI_CAN_ERROR_SEEN;
+          }
+        }
+    }
+  return(error_status);
+    
+} /* End of hwi_can_send_message */                              
 
 /********************************************************************
 Function   : hwi_can_a_bus_off_isr

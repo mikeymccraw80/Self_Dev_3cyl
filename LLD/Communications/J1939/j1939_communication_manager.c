@@ -51,15 +51,15 @@ uint8_t  J1939_MESSAGE_RX_OFFSET;
 uint8_t  J1939_MESSAGE_TX_OFFSET;
 
 static void J1939_Initialize_Receive_Manager (J1939_Channel_T  channel_num);
-//static void J1939_Initialize_Transmit_Manager (J1939_Channel_T  channel_num);
-//static void J1939_Manager (J1939_Channel_T  channel_num);
-//static void J1939_Update_Receive_Timers (J1939_Channel_T  channel_num);
-//static void J1939_Update_Transmit_Timers (J1939_Channel_T  channel_num);
-//static void J1939_Schedule_Transmit_Messages (J1939_Channel_T  channel_num);
-//static void J1939_Process_Receive_Messages (J1939_Channel_T  channel_num);
-//J1939_New_Message_Status_T J1939_Is_New_Message_Received (uint8_t in_msg_obj,
-//                                                          J1939_Receive_Message_Info_T    *rx_msg);
-//bool J1939_Transmit_Message (uint8_t n_msg_obj, J1939_Transmit_Message_Info_T     *tx_msg);
+static void J1939_Initialize_Transmit_Manager (J1939_Channel_T  channel_num);
+static void J1939_Manager (J1939_Channel_T  channel_num);
+static void J1939_Update_Receive_Timers (J1939_Channel_T  channel_num);
+static void J1939_Update_Transmit_Timers (J1939_Channel_T  channel_num);
+static void J1939_Schedule_Transmit_Messages (J1939_Channel_T  channel_num);
+static void J1939_Process_Receive_Messages (J1939_Channel_T  channel_num);
+J1939_New_Message_Status_T J1939_Is_New_Message_Received (uint8_t in_msg_obj,
+                                                          J1939_Receive_Message_Info_T    *rx_msg);
+bool J1939_Transmit_Message (uint8_t n_msg_obj, J1939_Transmit_Message_Info_T     *tx_msg);
 //=============================================================================
 // Name: J1939_Initialize_Communication_Manager
 //
@@ -82,7 +82,7 @@ void J1939_Initialize_Communication_Manager (J1939_Channel_T  channel_num)
    J1939_No_Of_Transmit_Messages[0]= J1939_NO_OF_TRANSMIT_MESSAGES_CHANNEL_0;
    J1939_No_Of_Transmit_Messages[1]= J1939_NO_OF_TRANSMIT_MESSAGES_CHANNEL_1;
    
-//   J1939_Initialize_Transmit_Manager (channel_num);
+   J1939_Initialize_Transmit_Manager (channel_num);
    J1939_Initialize_Receive_Manager (channel_num);
 }
 
@@ -98,7 +98,16 @@ void J1939_Initialize_Communication_Manager (J1939_Channel_T  channel_num)
 // Return Value: none.
 //
 //=============================================================================
+static void J1939_Initialize_Transmit_Manager (J1939_Channel_T  channel_num)
+{
+   uint8_t index;
 
+   for (index = 0; index < J1939_No_Of_Transmit_Messages[channel_num]; index++)
+   {
+      //Specific routines for each transmit message
+      (*J1939_Transmit_Initialize[index]) (&J1939_Transmit_Message_Control[index]);
+   }
+}
 
 //=============================================================================
 // Name: J1939_Initialize_Receive_Manager
@@ -146,8 +155,52 @@ static void J1939_Initialize_Receive_Manager (J1939_Channel_T  channel_num)
 // Return Value: none.
 //
 //=============================================================================
+static void J1939_Update_Receive_Timers (J1939_Channel_T  channel_num)
+{
 
+}
 
+//=============================================================================
+// Name: J1939_Process_Receive_Messages
+//
+// Description:
+//     Processes received J1939 messages
+//
+// Parameters: J1939_Channel_T | channel_num
+//
+// Return Value: none.
+//
+//=============================================================================
+static void J1939_Process_Receive_Messages (J1939_Channel_T  channel_num)
+{
+   uint8_t                                        index;
+   J1939_New_Message_Status_T        new_message_status;
+   J1939_Receive_Message_Info_T             rx_msg_info;
+   J1939_Receive_Message_Control_T     *rx_msg_ctrl_ptr;
+
+   for (index = 0; index < J1939_No_Of_Receive_Messages[channel_num]; index++)
+   {
+      rx_msg_ctrl_ptr    = &J1939_Receive_Message_Control[channel_num][index];
+      new_message_status = J1939_Is_New_Message_Received (index, &rx_msg_info);
+
+      if (J1939_NEW_MESSAGE_AVAILABLE == new_message_status)
+      {
+         //Indicate message is not lost and reset timer
+         rx_msg_ctrl_ptr->Message_Lost              = false;
+         rx_msg_ctrl_ptr->Message_Lost_Action_Taken = false;
+         rx_msg_ctrl_ptr->Message_Lost_Timer_W      = rx_msg_ctrl_ptr->Message_Lost_Timeout_W;
+         //Call the parse routine
+         (*rx_msg_ctrl_ptr->Parse_Routine) (&rx_msg_info);
+      }
+      else if ( (true  == rx_msg_ctrl_ptr->Message_Lost) &&
+                (false == rx_msg_ctrl_ptr->Message_Lost_Action_Taken))
+      {
+         //Message not received
+         rx_msg_ctrl_ptr->Message_Lost_Action_Taken = true;
+         rx_msg_ctrl_ptr->Message_Lost_Routine();
+      }
+   }
+}
 
 //=============================================================================
 // Name: J1939_Update_Transmit_Timers
@@ -160,6 +213,82 @@ static void J1939_Initialize_Receive_Manager (J1939_Channel_T  channel_num)
 // Return Value: none.
 //
 //=============================================================================
+static void J1939_Update_Transmit_Timers (J1939_Channel_T  channel_num)
+{
+
+}
+
+//=============================================================================
+// Name: J1939_Schedule_Transmit_Messages
+//
+// Description:
+//    Checks to see if a J1939 TX message is ready to be sent and
+//    sends it if it is ready
+//
+// Parameters: J1939_Channel_T | channel_num
+//
+// Return Value: none.
+//
+//=============================================================================
+static void J1939_Schedule_Transmit_Messages (J1939_Channel_T  channel_num)
+{
+{
+   bool                                  tx_msg_status = false;
+   bool                                  tx_msg_status_send = false;
+   uint8_t                                       index;
+   J1939_Transmit_Message_Info_T           tx_msg_info;
+   J1939_Transmit_Message_Control_T   *tx_msg_ctrl_ptr;
+
+   for (index = 0; index < J1939_NO_OF_TRANSMIT_MESSAGES; index++)
+   {
+      tx_msg_ctrl_ptr = &J1939_Transmit_Message_Control[index];
+
+      if (true == tx_msg_ctrl_ptr->Time_To_Service)
+      {
+         tx_msg_info.Requested = tx_msg_ctrl_ptr->Requested;
+         tx_msg_info.Requester = tx_msg_ctrl_ptr->Requester;
+         
+         tx_msg_status_send = (*tx_msg_ctrl_ptr->Service_Routine) (&tx_msg_info);
+
+         if (tx_msg_status_send)
+         {
+            tx_msg_status = J1939_Transmit_Message (index, &tx_msg_info);
+         }
+
+         if (tx_msg_ctrl_ptr->Time_To_Next_Service_W == 0)
+         {
+             if(true==tx_msg_ctrl_ptr->Event_Trigger_Flag)
+		    {
+		     /*Clear Trigger Flag*/
+		     tx_msg_ctrl_ptr->Event_Trigger_Flag=false;
+             tx_msg_ctrl_ptr->Time_To_Next_Service_W =tx_msg_ctrl_ptr->Event_Trigger_Service_Buffer-1;
+			 
+			}
+			 else
+			 {
+			  tx_msg_ctrl_ptr->Time_To_Next_Service_W = tx_msg_info.Callback_Time_W;
+			 }
+            
+         }
+
+         //if TX fail then service again next loop, else update service time
+         if (false == tx_msg_status)
+         {
+            //Update time to next service/transmit of this message
+            tx_msg_ctrl_ptr->Tx_Timeout_Timer_W     = tx_msg_info.Callback_Timeout_W;
+            tx_msg_ctrl_ptr->Time_To_Service        = false;
+            tx_msg_ctrl_ptr->Requested              = false;
+         }
+      }
+
+      if ( (true == tx_msg_ctrl_ptr->Tx_Timeout) && (false == tx_msg_status))
+      {
+         //Call the message timeout routine if one exists
+         tx_msg_ctrl_ptr->Tx_Timeout = false;
+      }
+   }
+}
+}
 
 //=============================================================================
 // Name: J1939_Manager
@@ -172,7 +301,19 @@ static void J1939_Initialize_Receive_Manager (J1939_Channel_T  channel_num)
 // Return Value: none
 //
 //=============================================================================
+static void J1939_Manager (J1939_Channel_T  channel_num)
+{
+      //Call these functions regardless, important info must be updated
+   if (true == J1939_Receive_Enable[channel_num])
+   {
+      J1939_Process_Receive_Messages (channel_num);
+   }
 
+   if (true == J1939_Transmit_Enable[channel_num])
+   {
+      J1939_Schedule_Transmit_Messages (channel_num);
+   }
+}
 //=============================================================================
 // Name: J1939_Handler_Timer_Task
 //
@@ -185,7 +326,10 @@ static void J1939_Initialize_Receive_Manager (J1939_Channel_T  channel_num)
 // Return Value: none
 //
 //=============================================================================
+void J1939_Handler_Timer_Task (void)
+{
 
+}
 
 //=============================================================================
 // Name: J1939_Handler_Periodic_Task
@@ -199,7 +343,28 @@ static void J1939_Initialize_Receive_Manager (J1939_Channel_T  channel_num)
 // Return Value: none
 //
 //=============================================================================
+void J1939_Handler_Periodic_Task (void)
+{
+#ifndef J1939_HANDLER_TIMER_TASK_SUPPORTED
+   J1939_Handler_Timer_Task();
+#endif
 
+   #ifdef J1939_TEST_STUB
+//   J1939_Transmit_Test_Task();
+   #endif
+
+   #ifdef J1939_CH0_SELECTED
+   J1939_Manager(J1939_CHANNEL_0);
+   #endif
+
+   #ifdef J1939_CH1_SELECTED
+   J1939_Manager(J1939_CHANNEL_1);
+   #endif
+
+   #ifdef J1939_TEST_STUB
+//   J1939_Receive_Test_Task();
+   #endif
+}
 
 //=============================================================================
 // Name: J1939_Transmit_Unmanaged_Message
@@ -212,6 +377,11 @@ static void J1939_Initialize_Receive_Manager (J1939_Channel_T  channel_num)
 // Return Value: none
 //
 //=============================================================================
+can_boolean_t J1939_Transmit_Unmanaged_Message (J1939_Transmit_Message_Info_T *tx_message)
+{
+   // Last index is reserved for Unmanaged response);
+   return ( (can_boolean_t) J1939_Transmit_Message (J1939_TX_PGN_Denny_INDEX, tx_message));
+}
 
 //=============================================================================
 // Name: J1939_RequestTxMsgService
@@ -224,7 +394,11 @@ static void J1939_Initialize_Receive_Manager (J1939_Channel_T  channel_num)
 // Return Value: none
 //
 //=============================================================================
-
+void J1939_RequestTxMsgService (TxMsgIndexType index, uint8_t requester)
+{
+   J1939_Transmit_Message_Control[index].Requested = true;
+   J1939_Transmit_Message_Control[index].Requester = requester;
+}
 //=============================================================================
 // Name: J1939_Trigger_Transmit_Message_Service
 //
@@ -236,7 +410,11 @@ static void J1939_Initialize_Receive_Manager (J1939_Channel_T  channel_num)
 // Return Value: none
 //
 //=============================================================================
-
+void J1939_Trigger_Transmit_Message_Service (uint8_t index)
+{
+   J1939_Transmit_Message_Control[index].Time_To_Next_Service_W = 0;
+   J1939_Transmit_Message_Control[index].Time_To_Service        = true;
+}
 //=============================================================================
 // Name: J1939_Event_Trigger_Transmit
 //
@@ -327,7 +505,39 @@ static void J1939_Initialize_Receive_Manager (J1939_Channel_T  channel_num)
 // Return Value: J1939_New_Message_Status_T | new_message_status
 //
 //=============================================================================
+J1939_New_Message_Status_T J1939_Is_New_Message_Received (
+   uint8_t                       in_msg_obj,
+   J1939_Receive_Message_Info_T    *rx_msg)
+{
+   uint8_t                      counter, msg_length;
+   uint8_t                      *data_ptr;
+   J1939_New_Message_Status_T   new_message_status = J1939_NEW_MESSAGE_UNAVAILABLE;
 
+   if (in_msg_obj < J1939_NO_OF_RECEIVE_MESSAGES)
+   {
+      new_message_status = J1939_Receive_Message_Buffer[in_msg_obj].new_msg;
+      msg_length         = J1939_Message_Table[in_msg_obj].message_length;
+
+      if (J1939_NEW_MESSAGE_AVAILABLE == new_message_status)
+      {
+         rx_msg->ID     = J1939_Message_Table[in_msg_obj].message_ID;
+         rx_msg->Length = msg_length;
+         //The address of message data @ message buffer is stored in a temp pointer
+         data_ptr       = (uint8_t *) &J1939_Receive_Message_Buffer[in_msg_obj].msg_data[0];
+
+         for (counter = 0; counter < msg_length; counter++)
+         {
+            //Data from table is copied in to the APPL buffer
+            rx_msg->Data[counter] = *data_ptr++;
+         }
+
+         //After data is copied, new message flag is updated to 'UNAVAILABLE' status
+         J1939_Receive_Message_Buffer[in_msg_obj].new_msg = J1939_NEW_MESSAGE_UNAVAILABLE;
+      }
+   }
+
+   return (new_message_status);
+}
 //=============================================================================
 // Name: J1939_Handler_Cold_Init
 //
@@ -409,8 +619,32 @@ void J1939_Handler_Cold_Init (void)
 // Return Value: bool   | true if transmit started.
 //
 //=============================================================================
+bool J1939_Transmit_Message (
+   uint8_t                         in_msg_obj,
+   J1939_Transmit_Message_Info_T     *tx_msg)
+{
+   bool    tx_status;
+   //J1939 TX messages start after RX messages in the table, therefore offset is added
+   uint8_t j1939_msg_obj = in_msg_obj + J1939_NO_OF_RECEIVE_MESSAGES;
+   //J1939 messages start after the offset in CAN HW message objects allocation
+   uint8_t io_msg_obj    = j1939_msg_obj + J1939_MESSAGE_TX_OFFSET;
+   P_L_CAN_OBJECT_TYPE            msg_obj_cmd;
+   msg_obj_cmd.P_L_CAN_DEVICE_NUMBER = P_L_CAN0;
+   msg_obj_cmd.P_L_CAN_MSG_NUMBER = io_msg_obj;
+   msg_obj_cmd.P_L_CAN_MSG_ID = tx_msg->ID; //   J1939_Message_Table[j1939_msg_obj].message_ID;
+   msg_obj_cmd.P_L_CAN_MSG_MASK = 0xFFFFUL;
+   msg_obj_cmd.P_L_CAN_LENGTH = J1939_Message_Table[j1939_msg_obj].message_length;
+   msg_obj_cmd.P_L_CAN_TYPE = P_L_CAN_XTD;
+   msg_obj_cmd.P_L_CAN_DIRECTION = P_L_CAN_TX;
+   msg_obj_cmd.P_L_CAN_CALLBACK_ENABLED = FALSE;
+   tx_status = (hwi_can_send_message (&msg_obj_cmd, &tx_msg->Data[0]) != HWI_NO_ERROR);
+   if(tx_status == HWI_NO_ERROR)
+   {
+      HAL_CAN_Err_Status[0] = CAN_PORT_ERROR_NONE;
+   }
 
-
+   return (tx_status);
+}
 
 //=============================================================================
 // Name: Appl_Transmit_Message

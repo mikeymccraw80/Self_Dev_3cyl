@@ -10,7 +10,6 @@
 /***************************************************************************/
 static void Parse_PGN_59904 (J1939_Receive_Message_Info_T *RxMsg)
 {
-#if 0
    bool           PgnFound;
    TxMsgIndexType Index;
    uint32_t       RequestedPgn;
@@ -44,9 +43,10 @@ static void Parse_PGN_59904 (J1939_Receive_Message_Info_T *RxMsg)
    if ( (! PgnFound) &&
         (J1939_GET_DEST_ADDR (RxMsg->ID) != J1939_GLOBAL_DEST_ADDR))
    {
-      J1939_SendUnmanagedAcknowledgement (NegAck, RequestedPgn);
-   }
+#if 0
+J1939_SendUnmanagedAcknowledgement (NegAck, RequestedPgn);
 #endif
+   }
 }
 
 

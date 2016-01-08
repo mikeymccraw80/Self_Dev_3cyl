@@ -16,12 +16,17 @@
 
 /*=======================        TYPE DEFINITIONS      =======================*/
 
-
+#if 0
  typedef enum
 {
    CAN_cbFALSE,
    CAN_cbTRUE
 } can_boolean_t;    //  boolean_t
+#endif
+
+#define can_boolean_t bool
+#define CAN_cbFALSE false
+#define CAN_cbTRUE true
 
 typedef enum {
   PosAck,

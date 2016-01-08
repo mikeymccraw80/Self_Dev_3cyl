@@ -30,9 +30,8 @@ extern 	const J1939_Message_Table_T   J1939_Message_Table[];
 /************************************************************************/
 
 extern void J1939_Initialize_Communication_Manager(J1939_Channel_T channel_num);
-#if 0
 extern void J1939_Handler_Periodic_Task(void);
-
+#if 0
 /*****************************************************************************/
 /* J1939_Disable_Transmit_Message_Service                                                   */
 /*****************************************************************************/

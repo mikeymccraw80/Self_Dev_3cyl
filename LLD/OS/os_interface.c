@@ -25,6 +25,7 @@
 #include "obdspapi.h"
 #include "obdspapi.h"
 #include "os_type.h"
+#include "j1939_communication_manager.h"
 
 //=============================================================================
 // OS_Startup_Hook
@@ -133,6 +134,9 @@ void MngOSTK_10msTasks(void)
 	CCP_Trigger_Event_Channel( 10 );
 
 	MngDCAN_TasksExecutive();
+
+       J1939_Handler_Periodic_Task();
+	
 }
 
 //=============================================================================

@@ -1076,4 +1076,29 @@ const uint16_t         KwFILE_COND_ROM_CalbrtnChecksum = 0;
 const T_COUNT_BYTE KySYST_BrainDeadBOOT_RecovEnbld = 0xAA;
 #pragma section
 
+const uint8_t KfHWIO_J193973_SA = 0;
+/*
+*| hwiocald.{
+*|   KfHWIO_J193973_PGN_65251_FREQ {
+*|     : is_calconst;
+*|     : description = "J1939 PGN 65251 transmit frequency.";
+*|     : type = hwiocald.t_J1939_PGN_FREQ;
+*|     : units = "ms";
+*|   }
+*| }
+*/
+const uint16_t KfHWIO_J193973_PGN_65251_FREQ = 5000;
+/*
+*| hwiocald.{
+*| KfHWIO_PGN65249_Message_Table {
+*| : is_calconst;
+*| : description = "PGN65249 message content.";
+*| : elements:type = fixed.t_count_byte;
+*| : annotation = hwiocald.hwio_19_brkpts;
+*| : elements:units = "count";
+*| }
+*| }
+*/
+
+
 
