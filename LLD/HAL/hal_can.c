@@ -375,7 +375,7 @@ void HAL_CAN_RX_B14_INT(void)
 
 void HAL_CAN_RX_B31_16_INT(void)
 {
-	FlexCAN_Receive_Interrupt(FLEXCAN_DEVICE_A, CAN_Message_RX_DATA);
+	hwi_can_device_a_isr();
 }
 
 void HAL_CAN_RX_B63_32_INT(void)

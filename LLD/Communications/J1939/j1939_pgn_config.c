@@ -46,8 +46,8 @@ const void (*const J1939_Transmit_Initialize[]) (J1939_Transmit_Message_Control_
    J1939_Transmit_Initialize_PGN_65287,
    J1939_Transmit_Initialize_PGN_65288,
    J1939_Transmit_Initialize_PGN_65289,
-   J1939_TxInit_SendUnmanagedAcknowledgement
 #endif
+   J1939_TxInit_SendUnmanagedAcknowledgement
 };
 
 
@@ -152,9 +152,9 @@ const J1939_Message_Table_T  J1939_Message_Table[J1939_MESSAGES_NUMBER] =
    , { J1939_PGN_65288_BASE_ID,    J1939_PGN_65288_LENGTH }
 
    , { J1939_PGN_65289_BASE_ID,    J1939_PGN_65289_LENGTH }
-
-   , { J1939_DENY_REQUEST_PGN, 8} /* Unmanaged Acknowledgement */
 #endif
+   , { J1939_DENY_REQUEST_PGN, 8} /* Unmanaged Acknowledgement */
+
 };
 
 #endif

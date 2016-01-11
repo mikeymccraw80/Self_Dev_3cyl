@@ -43,9 +43,7 @@ static void Parse_PGN_59904 (J1939_Receive_Message_Info_T *RxMsg)
    if ( (! PgnFound) &&
         (J1939_GET_DEST_ADDR (RxMsg->ID) != J1939_GLOBAL_DEST_ADDR))
    {
-#if 0
-J1939_SendUnmanagedAcknowledgement (NegAck, RequestedPgn);
-#endif
+      J1939_SendUnmanagedAcknowledgement (NegAck, RequestedPgn);
    }
 }
 

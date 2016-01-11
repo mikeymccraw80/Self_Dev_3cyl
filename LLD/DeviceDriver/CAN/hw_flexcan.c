@@ -422,6 +422,7 @@ HWI_ERROR hwi_can_send_message(const P_L_CAN_OBJECT_TYPE *p_l_can_object_ptr,
                                uint8_t * const p_l_can_data_ptr)
  {
   int16_t can_device = p_l_can_object_ptr->P_L_CAN_DEVICE_NUMBER;
+  //int32_t can_object_U16;
   int16_t can_object_U16;
   struct FLEXCAN2_tag *can_register_ptr=&CAN_A;
   volatile uint32_t tempU32;
@@ -703,7 +704,7 @@ static void hwi_handle_msg_type (uint8_t can,
                                  uint32_t p_l_can_msg_timestamp,
                                  uint8_t  p_l_can_msg_dlc)
 {
-    if((can_msg_number>P_L_CAN_MSG31)&&(can_msg_number<=P_L_CAN_MSG63))
+    if((can_msg_number>P_L_CAN_MSG15)&&(can_msg_number<=P_L_CAN_MSG32))
     {
       J1939_Message_Receive_Callback((uint8_t)can_msg_number, p_l_can_data_ptr, 8);
     }

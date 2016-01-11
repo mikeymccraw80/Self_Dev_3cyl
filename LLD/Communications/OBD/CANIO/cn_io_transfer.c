@@ -90,8 +90,8 @@ void CAN_Reset_Init( void )
 {
    uint8_t message_objet;
    IO_Configuration_T in_configuration;
-   FlexCAN_MSGOBJ_INDEX_T msgobj_r = FLEXCAN_MSG_OBJ_16;
-   FlexCAN_MSGOBJ_INDEX_T msgobj_t = FLEXCAN_MSG_OBJ_24;
+   FlexCAN_MSGOBJ_INDEX_T msgobj_r = FLEXCAN_MSG_OBJ_8;
+   FlexCAN_MSGOBJ_INDEX_T msgobj_t = FLEXCAN_MSG_OBJ_14;
 
    /* init the can obd cald id by KwDCANOBD_CANID */
    Initial_CANOBD_CAL_ID(KwDCANOBD_CANID);
