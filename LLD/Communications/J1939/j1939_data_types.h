@@ -16,6 +16,10 @@
 
 /*=======================        TYPE DEFINITIONS      =======================*/
 
+typedef signed char         sint8_t;
+typedef signed short        sint16_t;
+typedef signed int          sint32_t;
+
 #if 0
  typedef enum
 {

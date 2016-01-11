@@ -60,8 +60,7 @@ const void (*const J1939_Transmit_Initialize[]) (J1939_Transmit_Message_Control_
 
 const void (*const J1939_Receive_Initialize_Channel_0[]) (J1939_Receive_Message_Control_T *) =
 {
-   J1939_RxInit_PGN_59904
-   	#if 0
+   J1939_RxInit_PGN_59904,
    J1939_RxInit_PGN_60160,
    J1939_RxInit_PGN_60416,
    J1939_Receive_Initialize_PGN_65271,
@@ -74,7 +73,6 @@ const void (*const J1939_Receive_Initialize_Channel_0[]) (J1939_Receive_Message_
    J1939_Receive_Initialize_PGN_65278,
    J1939_Receive_Initialize_PGN_65279,
    J1939_Receive_Initialize_PGN_65296
-   #endif
 };
 
 const J1939_Message_Table_T  J1939_Message_Table[J1939_MESSAGES_NUMBER] =
@@ -82,13 +80,10 @@ const J1939_Message_Table_T  J1939_Message_Table[J1939_MESSAGES_NUMBER] =
 // RECEIVE_MESSAGE
    { J1939_PGN_59904_BASE_ID,    J1939_PGN_59904_LENGTH }
 
-//below two were defined in J1939_tp.h
-  // , { J1939_PGN_60160_BASE_ID,    J1939_PGN_60160_LENGTH }
+   , { J1939_PGN_60160_BASE_ID,    J1939_PGN_60160_LENGTH }
 
-   //, { J1939_PGN_60416_BASE_ID,    J1939_PGN_60416_LENGTH }
-#if 0
-, { 0x18EC0000,    8 }
-, { 0x18EC0000,    8 }
+   , { J1939_PGN_60416_BASE_ID,    J1939_PGN_60416_LENGTH }
+
    , { J1939_PGN_65271_BASE_ID,    J1939_PGN_65271_LENGTH }
 
    , { J1939_PGN_65272_BASE_ID,    J1939_PGN_65272_LENGTH }
@@ -108,7 +103,7 @@ const J1939_Message_Table_T  J1939_Message_Table[J1939_MESSAGES_NUMBER] =
    , { J1939_PGN_65279_BASE_ID,    J1939_PGN_65279_LENGTH }
 
    , { J1939_PGN_65296_BASE_ID,    J1939_PGN_65296_LENGTH }
-#endif
+
 // TRANSMIT_MESSAGE
    , { J1939_DENY_REQUEST_PGN, 8} /* Tx Transport out management connection 0 */
 #if 0

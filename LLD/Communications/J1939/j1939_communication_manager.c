@@ -129,8 +129,7 @@ static void J1939_Initialize_Receive_Manager (J1939_Channel_T  channel_num)
 #ifdef J1939_CH0_SELECTED
 
       case J1939_CHANNEL_0:
-//         for (index = 0; index < J1939_NO_OF_RECEIVE_MESSAGES_CHANNEL_0; index++)
-         for (index = 0; index < 1; index++)		 	
+         for (index = 0; index < J1939_NO_OF_RECEIVE_MESSAGES_CHANNEL_0; index++)
          {
             //Specific routines for each RX message
             (*J1939_Receive_Initialize_Channel_0[index]) (&J1939_Receive_Message_Control[channel_num][index]);
