@@ -22,7 +22,6 @@ const void (*const J1939_Transmit_Initialize[]) (J1939_Transmit_Message_Control_
 {
 
    J1939_TxInit_TransportOut_0, /* Tx Transport out management connection 0 */
-#if 0
    J1939_TxInit_TransportOut_1, /* Tx Transport out management connection 1 */
    J1939_TxInit_TransportOut_2, /* Tx Transport out management connection 2 */
    J1939_TxInit_TransportIn_0,  /* Tx Transport in management connection 0 */
@@ -46,7 +45,6 @@ const void (*const J1939_Transmit_Initialize[]) (J1939_Transmit_Message_Control_
    J1939_Transmit_Initialize_PGN_65287,
    J1939_Transmit_Initialize_PGN_65288,
    J1939_Transmit_Initialize_PGN_65289,
-#endif
    J1939_TxInit_SendUnmanagedAcknowledgement
 };
 
@@ -106,7 +104,7 @@ const J1939_Message_Table_T  J1939_Message_Table[J1939_MESSAGES_NUMBER] =
 
 // TRANSMIT_MESSAGE
    , { J1939_DENY_REQUEST_PGN, 8} /* Tx Transport out management connection 0 */
-#if 0
+
    , { J1939_DENY_REQUEST_PGN, 8} /* Tx Transport out management connection 1 */
 
    , { J1939_DENY_REQUEST_PGN, 8} /* Tx Transport out management connection 2 */
@@ -152,9 +150,8 @@ const J1939_Message_Table_T  J1939_Message_Table[J1939_MESSAGES_NUMBER] =
    , { J1939_PGN_65288_BASE_ID,    J1939_PGN_65288_LENGTH }
 
    , { J1939_PGN_65289_BASE_ID,    J1939_PGN_65289_LENGTH }
-#endif
-   , { J1939_DENY_REQUEST_PGN, 8} /* Unmanaged Acknowledgement */
 
+   , { J1939_DENY_REQUEST_PGN, 8} /* Unmanaged Acknowledgement */
 };
 
 #endif
