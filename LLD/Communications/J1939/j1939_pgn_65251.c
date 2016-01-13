@@ -9,6 +9,7 @@
 #include "j1939_tp.h"
 #include "j1939_tp_out.h"
 #include "j1939_73.h"
+#include "j1939_app.h"
 
 static void BuildPgn65251OnePacket (J1939_Transmit_Message_Info_T *TxMsg);
 static can_boolean_t Service_PGN_65251_TransportOut (TpOutStateType State,
@@ -103,7 +104,6 @@ static can_boolean_t Service_PGN_65251 (J1939_Transmit_Message_Info_T *TxMsg)
    }
    else
    {
-#if 0
       NumOfBytes_PGN_65251 = GetJ1939_PGN_65251_BYTE_NUMBER();
       J1939_Message_SnapShot (GetJ1939_PGN_65251_MsgPtr(), J1939_PGN_65251_Msg_Snapshot, NumOfBytes_PGN_65251);
 
@@ -143,7 +143,6 @@ static can_boolean_t Service_PGN_65251 (J1939_Transmit_Message_Info_T *TxMsg)
             }
          }
       }
-   #endif
    }
 
    return (DataToSendWithoutTransport);

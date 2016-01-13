@@ -10,6 +10,7 @@
 #include "j1939_tp.h"
 #include "j1939_tp_out.h"
 #include "j1939_73.h"
+#include "j1939_app.h"
 
 static void BuildPgn65227OnePacket (J1939_Transmit_Message_Info_T *TxMsg);
 static can_boolean_t ServiceDm2TransportOut (TpOutStateType State,
@@ -127,7 +128,6 @@ static can_boolean_t Service_PGN_65227 (J1939_Transmit_Message_Info_T *TxMsg)
    ProcessingError = CAN_cbTRUE; /* Assume some reason msg could not be sent */
    MsgToSend = CAN_cbFALSE; /* Assume no message to send */
    TxMsg->Callback_Time_W = J193973_PGN_65227_FREQ;
-#if 0
    /* If previous DM2 still being transported then ignore this req */
    if (! J1939_CkPgnCurrentlyInTransportOut (J193973_PGN_65227))
    {
@@ -153,7 +153,6 @@ static can_boolean_t Service_PGN_65227 (J1939_Transmit_Message_Info_T *TxMsg)
          }
       }
    }
-#endif
    /* If DM2 transmission already in progress or */
    /* if Transport to destination already in use or if TP buffers full */
    /* then send Busy ACK (assumes this msg by request only) */

@@ -7,6 +7,7 @@
 #include "j1939_tp.h"
 #include "j1939_tp_out.h"
 #include "j1939_73.h"
+#include "j1939_app.h"
 
 
 /***************************************************************************/
@@ -21,7 +22,6 @@
 /***************************************************************************/
 static bool Service_PGN_65228_Ack (J1939_Transmit_Message_Info_T *TxMsg)
 {
-#if 0
    TxMsg->Callback_Time_W = CAN_NO_PERIODIC_SERVICE;
    
    if (TRUE == ClrJ1939_DM3_PreActive_Dtcs())
@@ -32,7 +32,6 @@ static bool Service_PGN_65228_Ack (J1939_Transmit_Message_Info_T *TxMsg)
    {
       J1939_SendUnmanagedAcknowledgement (NegAck, J193973_PGN_65228);
    }
-#endif
    return (false);
 }
 

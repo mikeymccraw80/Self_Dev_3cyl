@@ -10,6 +10,7 @@
 #include "j1939_tp.h"
 #include "j1939_tp_out.h"
 #include "j1939_73.h"
+#include "j1939_app.h"
 
 
 #define NUM_ALL_CLEAR_TO_SEND (3)
@@ -130,7 +131,6 @@ static can_boolean_t Service_PGN_65226 (J1939_Transmit_Message_Info_T *TxMsg)
    //DataToSend = CAN_cbFALSE;
    DataToSendWithoutTransport = CAN_cbFALSE;
    TxMsg->Callback_Time_W = J193973_PGN_65226_FREQ;
-#if 0
    /* If previous DM1 still being transported then do not send another */
    if (J1939_CkPgnCurrentlyInTransportOut (J193973_PGN_65226))
    {
@@ -184,7 +184,6 @@ static can_boolean_t Service_PGN_65226 (J1939_Transmit_Message_Info_T *TxMsg)
          }
       }
    }
-#endif
    return (DataToSendWithoutTransport);
 }
 

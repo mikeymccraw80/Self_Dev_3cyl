@@ -6,6 +6,7 @@
  * File Description:                                                          *
 ******************************************************************************/
 #include "j1939_stub.h"
+#include "j1939_app.h"
 #include "j1939_pgn_65271.h"
 #include "j1939_pgn_65272.h"
 #include "j1939_pgn_65273.h"
