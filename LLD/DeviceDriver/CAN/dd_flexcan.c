@@ -81,7 +81,7 @@ void FlexCAN_A_Initialize_Device(void )
   pFlexCAN = (FLEXCAN_T *)&FlexCAN_A;
 
    //Keep the module in disabled mode only untill all registers are configured
-   pFlexCAN->MCR.U32   = (FLEXCAN_A_MCR_INIT.U32 | CAN_MCR_MDIS_MASK);
+   pFlexCAN->MCR.U32   = (FLEXCAN_A_MCR_INIT.U32 | CAN_MCR_MDIS_MASK |CAN_MCR_FRZ_MASK );
 
    pFlexCAN->IFRL.U32  = FLEXCAN_A_IFRL_INIT.U32;
    pFlexCAN->IMRL.U32 = FLEXCAN_A_IMRL_INIT.U32;;
@@ -93,7 +93,8 @@ void FlexCAN_A_Initialize_Device(void )
    msg_obj_max = (uint8_t)(pFlexCAN->MCR.F.MAXMB + 1);
 
    //if MBFEN is set then initialise each individual Buff Mask
-   if(pFlexCAN->MCR.F.MBFEN)
+   //RXIMR is unable to be set if FRZ equals false
+   if((pFlexCAN->MCR.F.FRZ) && (pFlexCAN->MCR.F.MBFEN))
    {
       for(msg_obj = 0; msg_obj < msg_obj_max; msg_obj++)
       {
@@ -102,6 +103,7 @@ void FlexCAN_A_Initialize_Device(void )
    }
 
 
+      pFlexCAN->MCR.F.FRZ = false;
       pFlexCAN->RXGMASK.U32  = FLEXCAN_A_RXGMASK_INIT.U32;
       pFlexCAN->RX14MASK.U32 = FLEXCAN_A_RX14MASK_INIT.U32;
       pFlexCAN->RX15MASK.U32 = FLEXCAN_A_RX15MASK_INIT.U32;

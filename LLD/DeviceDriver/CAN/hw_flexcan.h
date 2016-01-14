@@ -28,6 +28,7 @@
 #define CAN_ESR_BOFF_CLEAR_MASK   (0xFFFCFFFC)
 #define CAN_ESR_ERR_CLEAR_MASK    (0xFFFCFFFA)
 #define CAN_MCR_MDIS_MASK         (0x80000000)
+#define CAN_MCR_FRZ_MASK          (0x40000000)
 //=============================================================================
 // MCR - Module Configuration Register
 //

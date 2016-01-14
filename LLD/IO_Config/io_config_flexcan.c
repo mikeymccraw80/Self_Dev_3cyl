@@ -34,7 +34,7 @@ const FLEXCAN_MCR_T  FLEXCAN_A_MCR_INIT =
       false,    //WAK_SRC: Wakeup Source, 1=Filtered input, 0=Nonfiltered input source
       false,    //DOZE: Doze Mode, 0=Not Enabled, 1=Enabled
       false,    //SRXDIS: Self Reception Disable, 1=Self Rx disabled, 0=Self Rx Enabled
-      false,   //MBFEN: Message buffer filter enable, 1=Individual Rx Mask & queue enabled, 0=Disabled
+      true,   //MBFEN: Message buffer filter enable, 1=Individual Rx Mask & queue enabled, 0=Disabled
       false,   //LPRIO_EN: Local Priority Enable, 1= Enabled, 0=Disabled
       false,    //AEN: Abort Enable, 0=Abort Disabled,1=Abort Enabled
       false,   //IDAM: ID Acceptance Mode, 00=format-A, 01=format-B,10=format-C,11=format-D
@@ -189,22 +189,22 @@ const FLEXCAN_MSK_T  FLEXCAN_A_RXIMR_INIT [FLEXCAN_MSG_OBJ_MAX]=
       {0x7FF, 0x3FFFF}, //MB13
       {0x7FF, 0x3FFFF}, //MB14
       {0x7FF, 0x3FFFF}, //MB15
-      {0x7FF, 0x3FFFF}, //MB16
-      {0x7FF, 0x3FFFF}, //MB17
-      {0x7FF, 0x3FFFF}, //MB18
-      {0x7FF, 0x3FFFF}, //MB19
-      {0x7FF, 0x3FFFF}, //MB20
-      {0x7FF, 0x3FFFF}, //MB21
-      {0x7FF, 0x3FFFF}, //MB22
-      {0x7FF, 0x3FFFF}, //MB23
-      {0x7FF, 0x3FFFF}, //MB24
-      {0x7FF, 0x3FFFF}, //MB25
-      {0x7FF, 0x3FFFF}, //MB26
-      {0x7FF, 0x3FFFF}, //MB27
-      {0x7FF, 0x3FFFF}, //MB28
-      {0x7FF, 0x3FFFF}, //MB29
-      {0x7FF, 0x3FFFF}, //MB30
-      {0x7FF, 0x3FFFF}, //MB31
+      {0x7FF, 0x30000}, //MB16
+      {0x7FF, 0x30000}, //MB17
+      {0x7FF, 0x30000}, //MB18
+      {0x7FF, 0x30000}, //MB19
+      {0x7FF, 0x30000}, //MB20
+      {0x7FF, 0x30000}, //MB21
+      {0x7FF, 0x30000}, //MB22
+      {0x7FF, 0x30000}, //MB23
+      {0x7FF, 0x30000}, //MB24
+      {0x7FF, 0x30000}, //MB25
+      {0x7FF, 0x30000}, //MB26
+      {0x7FF, 0x30000}, //MB27
+      {0x7FF, 0x30000}, //MB28
+      {0x7FF, 0x30000}, //MB29
+      {0x7FF, 0x30000}, //MB30
+      {0x7FF, 0x30000}, //MB31
       {0x7FF, 0x3FFFF}, //MB32
       {0x7FF, 0x3FFFF}, //MB33
       {0x7FF, 0x3FFFF}, //MB34
