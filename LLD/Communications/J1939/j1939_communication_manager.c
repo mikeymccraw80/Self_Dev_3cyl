@@ -156,7 +156,19 @@ static void J1939_Initialize_Receive_Manager (J1939_Channel_T  channel_num)
 //=============================================================================
 static void J1939_Update_Receive_Timers (J1939_Channel_T  channel_num)
 {
+   uint8_t                                      index;
+   J1939_Receive_Message_Control_T   *rx_msg_ctrl_ptr;
 
+   for (index = 0; index < J1939_No_Of_Receive_Messages[channel_num]; index++)
+   {
+      rx_msg_ctrl_ptr = &J1939_Receive_Message_Control[channel_num][index];
+
+      if (rx_msg_ctrl_ptr->Message_Lost_Timer_W > 0)
+      {
+         rx_msg_ctrl_ptr->Message_Lost_Timer_W--;
+         rx_msg_ctrl_ptr->Message_Lost = ( (0 == rx_msg_ctrl_ptr->Message_Lost_Timer_W) ? true : false);
+      }
+   }
 }
 
 //=============================================================================
@@ -214,6 +226,25 @@ static void J1939_Process_Receive_Messages (J1939_Channel_T  channel_num)
 //=============================================================================
 static void J1939_Update_Transmit_Timers (J1939_Channel_T  channel_num)
 {
+   uint8_t                                       index;
+   J1939_Transmit_Message_Control_T   *tx_msg_ctrl_ptr;
+
+   for (index = 0; index < J1939_No_Of_Transmit_Messages[channel_num]; index++)
+   {
+      tx_msg_ctrl_ptr = &J1939_Transmit_Message_Control[index];
+
+      if (tx_msg_ctrl_ptr->Time_To_Next_Service_W > 0)
+      {
+         tx_msg_ctrl_ptr->Time_To_Next_Service_W--;
+         tx_msg_ctrl_ptr->Time_To_Service = ( (0 == tx_msg_ctrl_ptr->Time_To_Next_Service_W) ? true : false);
+      }
+
+      if (tx_msg_ctrl_ptr->Tx_Timeout_Timer_W > 0)
+      {
+         tx_msg_ctrl_ptr->Tx_Timeout_Timer_W--;
+         tx_msg_ctrl_ptr->Tx_Timeout = ( (0 == tx_msg_ctrl_ptr->Tx_Timeout_Timer_W) ? true : false);
+      }
+   }
 
 }
 
@@ -327,7 +358,14 @@ static void J1939_Manager (J1939_Channel_T  channel_num)
 //=============================================================================
 void J1939_Handler_Timer_Task (void)
 {
-
+#ifdef J1939_CH0_SELECTED
+   J1939_Update_Receive_Timers (J1939_CHANNEL_0);
+   J1939_Update_Transmit_Timers (J1939_CHANNEL_0);
+#endif
+#ifdef J1939_CH1_SELECTED
+   J1939_Update_Receive_Timers (J1939_CHANNEL_1);
+   J1939_Update_Transmit_Timers (J1939_CHANNEL_1);
+#endif
 }
 
 //=============================================================================
