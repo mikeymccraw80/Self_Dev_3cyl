@@ -36,16 +36,37 @@ const void (*const J1939_Transmit_Initialize[]) (J1939_Transmit_Message_Control_
    J193973_TxInit_PGN_65236,    /*DM12*/
    J193973_TxInit_PGN_65249,    /*PGN_65249*/
    J193973_TxInit_PGN_65251,    /*PGN_65251*/  
-   J1939_Transmit_Initialize_PGN_65280,
-   J1939_Transmit_Initialize_PGN_65281,
-   J1939_Transmit_Initialize_PGN_65282,
-   J1939_Transmit_Initialize_PGN_65283,
-   J1939_Transmit_Initialize_PGN_65284,
-   J1939_Transmit_Initialize_PGN_65285,
-   J1939_Transmit_Initialize_PGN_65286,
-   J1939_Transmit_Initialize_PGN_65287,
-   J1939_Transmit_Initialize_PGN_65288,
-   J1939_Transmit_Initialize_PGN_65289,
+
+   J1939_TxInit_PGN_64965,            /* john deere ecuid */
+
+   J1939_TxInit_PGN_65242,            /* john deere soft */
+
+   J1939_Transmit_Initialize_PGN_61444, /* john deere EEC1 */
+
+   J1939_Transmit_Initialize_PGN_61443, /* john deere EEC2 */
+
+   J1939_Transmit_Initialize_PGN_64997, /* john deere MVS */
+
+   J1939_Transmit_Initialize_PGN_65266, /* john deere LFE */
+
+   J1939_Transmit_Initialize_PGN_65262, /* john deere ET1 */
+
+   J1939_Transmit_Initialize_PGN_65263, /* john deere EFL/P1 */
+
+   J1939_Transmit_Initialize_PGN_65270, /* john deere IC1 */
+
+   J1939_Transmit_Initialize_PGN_65271, /* john deere VEP1 */
+
+   J1939_Transmit_Initialize_PGN_65213, /* john deere FD */
+
+   J1939_Transmit_Initialize_PGN_65253, /* john deere Hours */
+
+   J193973_TxInit_PGN_65232, /* j1939 73 dm8 */
+
+   J1939_TxInit_PGN_65289, /* john deere TLA */
+
+   J1939_TxInit_PGN_65154, /* john deere IT1 */
+ 
    J1939_TxInit_SendUnmanagedAcknowledgement
 };
 
@@ -65,7 +86,7 @@ const void (*const J1939_Receive_Initialize_Channel_0[]) (J1939_Receive_Message_
    J1939_Receive_Initialize_PGN_57344,
    J1939_Receive_Initialize_PGN_00000,
    J1939_Receive_Initialize_PGN_65265,
-   J1939_Receive_Initialize_PGN_65271,
+   J1939_Receive_Initialize_PGN_64971,
    J1939_Receive_Initialize_PGN_65276,
    J1939_Receive_Initialize_PGN_65277,
    J1939_Receive_Initialize_PGN_65278,
@@ -137,25 +158,35 @@ const J1939_Message_Table_T  J1939_Message_Table[J1939_MESSAGES_NUMBER] =
 
    , { J193973_PGN_65251_BASE_ID, J193973_PGN_65251_LENGTH }
    
-   , { J1939_PGN_65280_BASE_ID,    J1939_PGN_65280_LENGTH }
+   , {J1939_PGN_64965_BASE_ID,         J1939_PGN_64965_LENGTH }
 
-   , { J1939_PGN_65281_BASE_ID,    J1939_PGN_65281_LENGTH }
+   , {J1939_PGN_65242_BASE_ID,         J1939_PGN_65242_LENGTH}
 
-   , { J1939_PGN_65282_BASE_ID,    J1939_PGN_65282_LENGTH }
+  ,  {J1939_PGN_61444_BASE_ID,         J1939_PGN_61444_LENGTH}
 
-   , { J1939_PGN_65283_BASE_ID,    J1939_PGN_65283_LENGTH }
+   , {J1939_PGN_61443_BASE_ID,         J1939_PGN_61443_LENGTH}
 
-   , { J1939_PGN_65284_BASE_ID,    J1939_PGN_65284_LENGTH }
+   , {J1939_PGN_64997_BASE_ID,         J1939_PGN_64997_LENGTH}
 
-   , { J1939_PGN_65285_BASE_ID,    J1939_PGN_65285_LENGTH }
+   , {J1939_PGN_65266_BASE_ID,         J1939_PGN_65266_LENGTH}
 
-   , { J1939_PGN_65286_BASE_ID,    J1939_PGN_65286_LENGTH }
+   , {J1939_PGN_65262_BASE_ID,         J1939_PGN_65262_LENGTH}
 
-   , { J1939_PGN_65287_BASE_ID,    J1939_PGN_65287_LENGTH }
+   , {J1939_PGN_65263_BASE_ID,         J1939_PGN_65263_LENGTH}
 
-   , { J1939_PGN_65288_BASE_ID,    J1939_PGN_65288_LENGTH }
+   , {J1939_PGN_65270_BASE_ID,         J1939_PGN_65270_LENGTH}
 
-   , { J1939_PGN_65289_BASE_ID,    J1939_PGN_65289_LENGTH }
+   , {J1939_PGN_65271_BASE_ID,         J1939_PGN_65271_LENGTH}
+
+   , {J1939_PGN_65213_BASE_ID,         J1939_PGN_65213_LENGTH}
+
+   , {J1939_PGN_65253_BASE_ID,         J1939_PGN_65253_LENGTH}
+
+   , {J193973_PGN_65232_BASE_ID,       J193973_PGN_65232_LENGTH}
+
+   , {J1939_PGN_65289_BASE_ID,       J1939_PGN_65289_LENGTH}
+
+   , {J1939_PGN_65154_BASE_ID,       J1939_PGN_65154_LENGTH}
 
    , { J1939_DENY_REQUEST_PGN, 8} /* Unmanaged Acknowledgement */
 };

@@ -26,6 +26,14 @@ extern  bool B_Ign0Req;
 extern  bool B_Ign1Req;
 extern  bool B_Ign2Req;
 
+#define J1939_ECUID_BUFFER_SIZE (16)
+uint16_t GetJ939_ECUID_Size(void);
+uint8_t * GetJ1939_ECUID_MsgPtr(void);
+
+#define J1939_SOFT_BUFFER_SIZE (16)
+uint16_t GetJ1939_SoftID_Size(void);
+uint8_t * GetJ1939_SoftID_MsgPtr(void);
+
 uint8_t*GetJ1939_DM1_MsgPtr (void);
 uint16_t GetJ1939_DM1_ActiveDTC_NUMBER (void);
 
@@ -248,6 +256,283 @@ typedef struct {
 	}byte8;
 }J1939_PGN_ECC2_61443_T;
 extern J1939_PGN_ECC2_61443_T pgn_ecc2_61443;
+
+/* j1939 pgn MVS (0x00FDE5) parameters structure define */
+typedef struct {
+	struct {
+		uint8_t spn_2588    :8;
+	}byte1;
+	struct {
+		uint8_t spn_2589    :8;
+	}byte2;
+	struct {
+		uint8_t spn_2590    :8;
+	}byte3;
+	struct {
+		uint8_t spn_2591    :8;
+	}byte4;
+	struct {
+		uint8_t spn_2592    :8;
+	}byte5;
+	struct {
+		uint8_t spn_2593    :8;
+	}byte6;
+	struct {
+		uint8_t spn_2594    :8;
+	}byte7;
+	struct {
+		uint8_t spn_2595    :8;
+	}byte8;
+}J1939_PGN_MVS_64997_T;
+extern J1939_PGN_MVS_64997_T pgn_mvs_64997;
+
+/* j1939 pgn Engine Cylinder #1 Ignition Timing (0x00FE82) parameters structure define */
+typedef struct {
+	struct {
+		uint16_t spn_1413   :16;
+	}byte12;
+	
+	struct {
+		uint16_t spn_1414   :16;
+	}byte34;
+
+	struct {
+		uint16_t spn_1415   :16;
+	}byte56;
+	
+	struct {
+		uint16_t spn_1416   :16;
+	}byte78;
+}J1939_PGN_IT1_65154_T;
+extern J1939_PGN_IT1_65154_T pgn_IT1_65154;
+
+/* j1939 pgn LFE (0x00FEF2) parameters structure define */
+typedef struct {
+	struct {
+		uint16_t spn_183	:16;
+	}byte12;
+	struct {
+		uint16_t spn_184	:16;
+	}byte34;
+	struct {
+		uint16_t spn_186	:16;
+	}byte56;
+	struct {
+		uint8_t spn_51		:8;
+	}byte7;
+	struct {
+		uint8_t spn_3673	:8;
+	}byte8;
+}J1939_PGN_LFE_65266_T;
+extern J1939_PGN_LFE_65266_T pgn_lfe_65266;
+
+/* j1939 pgn ET1 (0x00FEEE) parameters structure define */
+typedef struct {
+	struct {
+		uint8_t spn_110		:8;
+	}byte1;
+	struct {
+		uint8_t spn_174		:8;
+	}byte2;
+	struct {
+		uint16_t spn_175	:16;
+	}byte34;
+	struct {
+		uint16_t spn_176	:16;
+	}byte56;
+	struct {
+		uint8_t spn_52		:8;
+	}byte7;
+	struct {
+		uint8_t spn_1134	:8;
+	}byte8;
+}J1939_PGN_ET1_65262_T;
+extern J1939_PGN_ET1_65262_T pgn_et1_65262;
+
+/* j1939 pgn EFL/P1 (0x00FEEF) parameters structure define */
+typedef struct {
+	struct {
+		uint8_t spn_94		:8;
+	}byte1;
+	struct {
+		uint8_t spn_22		:8;
+	}byte2;
+	struct {
+		uint8_t spn_98		:8;
+	}byte3;
+	struct {
+		uint8_t spn_100		:8;
+	}byte4;
+	struct {
+		uint16_t spn_101	:16;
+	}byte56;
+	struct {
+		uint8_t spn_109		:8;
+	}byte7;
+	struct {
+		uint8_t spn_111		:8;
+	}byte8;
+}J1939_PGN_EFL_P1_65263_T;
+extern J1939_PGN_EFL_P1_65263_T pgn_efl_p1_65263;
+
+/* j1939 pgn IC1 (0x00FEF6) parameters structure define */
+typedef struct {
+	struct {
+		uint8_t spn_81      :8;
+	}byte1;
+	struct {
+		uint8_t spn_102     :8;
+	}byte2;
+	struct {
+		uint8_t spn_105     :8;
+	}byte3;
+	struct {
+		uint8_t spn_106     :8;
+	}byte4;
+	struct {
+		uint8_t spn_107     :8;
+	}byte5;
+	struct {
+		uint16_t spn_173    :16;
+	}byte67;
+	struct {
+		uint8_t spn_112     :8;
+	}byte8;
+}J1939_PGN_IC1_65270_T;
+extern J1939_PGN_IC1_65270_T pgn_ic1_65270;
+
+/* j1939 pgn VEP1 (0x00FEF7) parameters structure define */
+typedef struct {
+	struct {
+		uint8_t spn_114     :8;
+	}byte1;
+	struct {
+		uint8_t spn_115     :8;
+	}byte2;
+	struct {
+		uint16_t spn_167    :16;
+	}byte34;
+	struct {
+		uint16_t spn_168    :16;
+	}byte56;
+	struct {
+		uint16_t spn_158    :16;
+	}byte78;
+}J1939_PGN_VEP1_65271_T;
+extern J1939_PGN_VEP1_65271_T pgn_vep1_65271;
+
+/* j1939 pgn FD (0x00FEBD) parameters structure define */
+typedef struct {
+	struct {
+		uint8_t spn_975     :8;
+	}byte1;
+	struct {
+		uint8_t spn_res     :4;
+		uint8_t spn_977     :4;
+	}byte2;
+	struct {
+		uint16_t spn_1639   :16;
+	}byte34;
+	struct {
+		uint16_t spn_4211   :16;
+	}byte56;
+	struct {
+		uint8_t spn_4212    :8;
+	}byte7;
+	struct {
+		uint8_t spn_res     :8;
+	}byte8;
+}J1939_PGN_FD_65213_T;
+extern J1939_PGN_FD_65213_T pgn_fd_65213;
+
+/* j1939 pgn HOURS (0x00FEE5) parameters structure define */
+typedef union {
+	struct {
+		uint32_t spn_247       :32;
+		uint32_t spn_249       :32;
+    }udword;
+	struct{
+		uint16_t spn_247_H     :16;
+		uint16_t spn_247_L     :16;
+		uint16_t spn_249_H     :16;
+		uint16_t spn_249_L     :16;
+	}uword;
+}J1939_PGN_HOURS_65253_T;
+extern J1939_PGN_HOURS_65253_T pgn_hours_65253;
+
+/* j1939 PGN 65289 (0x00FF09) parameters structure define */
+typedef struct {
+	struct {
+		uint8_t TLA1    :8;
+	}byte1;
+	struct {
+		uint8_t TLA2    :8;
+	}byte2;
+	struct {
+		uint8_t TLA3   :8;
+	}byte3;
+	struct {
+		uint8_t  RES1   :8;
+	}byte4;
+	struct {
+		uint16_t RES2   :16;
+	}byte56;
+	struct {
+		uint16_t RES3   :16;
+	}byte78;
+}J1939_pgn_65289_T;
+extern J1939_pgn_65289_T     J1939_pgn_65289;
+
+/* j1939 73 dm4 (0x00FECD) parameters structures define */ 
+#define Max_Freeze_Frame_Num   3
+typedef struct{
+	uint8_t spn_1217         :8; //freeze frame length
+	uint8_t spn_1214_l       :8; //low 8 bits of spn1214
+	uint8_t spn_1214_m       :8; //middle 8 bits of spn1214
+	uint8_t spn_1214_h       :3; //high 3 bits of spn1214
+	uint8_t spn_1215         :5;
+	uint8_t spn_1706         :1;
+	uint8_t spn_1216         :7;  
+	uint8_t spn_899          :8;
+	uint8_t spn_102          :8;
+ 
+	struct{
+		uint8_t spn_190_l    :8;
+		uint8_t spn_190_h    :8;
+ 
+	}spn_190;
+
+	uint8_t spn_92           :8;
+	uint8_t spn_110          :8; 
+
+	struct{
+		uint8_t spn_86_l     :8;
+		uint8_t spn_86_h     :8; 
+	}spn_86;
+	
+	/********manufacturer specific information****/
+	uint8_t spn_105          :8;
+
+	uint8_t spn_51           :8;
+	 
+	struct{
+		uint8_t spn_158_l    :8;
+		uint8_t spn_158_h    :8;
+ 
+	}spn_158;
+	 
+	struct{
+		uint8_t spn_1413_l   :8;
+		uint8_t spn_1413_h   :8;
+ 
+	}spn_1413;
+ 
+}J1939_DM4_FreezeFrame_T;
+
+typedef struct{ 
+	J1939_DM4_FreezeFrame_T Freeze_Frame[Max_Freeze_Frame_Num];
+}J1939_73_DM4_T;
+extern J1939_73_DM4_T J1939_73_dm4;
 
 /* j1939 73 dm7 (0x00E300) parameters structure define */
 typedef union {

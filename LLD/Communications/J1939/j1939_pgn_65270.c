@@ -1,7 +1,7 @@
 /******************************************************************************
 *  Project       : J1939 - PGN Specific Configuration
 *  Module        : Message Configurations
-*  File          : j1939_pgn_65271.c
+*  File          : j1939_pgn_65270.c
 *  Creation date :
 *  Description   :Alarm Message Implementation
 *  History       :
@@ -11,15 +11,15 @@
 #include "j1939_app.h"
 
 /******************************************************************************
-* Function : Service_PGN_65271
+* Function : Service_PGN_65270
 * Description : Service PGN
 ******************************************************************************/
-static bool Service_PGN_65271(J1939_Transmit_Message_Info_T *tx_msg_ptr)
+static bool Service_PGN_65270(J1939_Transmit_Message_Info_T *tx_msg_ptr)
 {
-    J1939_DATA_T *jd = (J1939_DATA_T *)&pgn_vep1_65271;
+    J1939_DATA_T *jd = (J1939_DATA_T *)&pgn_ic1_65270;
 
-    tx_msg_ptr->ID                 = J1939_ADD_THIS_SRC_ADDR(J1939_PGN_65271_BASE_ID);
-    tx_msg_ptr->Length             = J1939_PGN_65271_LENGTH;
+    tx_msg_ptr->ID                 = J1939_ADD_THIS_SRC_ADDR(J1939_PGN_65270_BASE_ID);
+    tx_msg_ptr->Length             = J1939_PGN_65270_LENGTH;
     tx_msg_ptr->Data[0]            = jd->data[0];
     tx_msg_ptr->Data[1]            = jd->data[1];
     tx_msg_ptr->Data[2]            = jd->data[2];
@@ -28,22 +28,22 @@ static bool Service_PGN_65271(J1939_Transmit_Message_Info_T *tx_msg_ptr)
     tx_msg_ptr->Data[5]            = jd->data[5];
     tx_msg_ptr->Data[6]            = jd->data[6];
     tx_msg_ptr->Data[7]            = jd->data[7];
-    tx_msg_ptr->Callback_Time_W    = J1939_PGN_65271_FREQ;
-    tx_msg_ptr->Callback_Timeout_W = J1939_PGN_65271_TIMEOUT;
+    tx_msg_ptr->Callback_Time_W    = J1939_PGN_65270_FREQ;
+    tx_msg_ptr->Callback_Timeout_W = J1939_PGN_65270_TIMEOUT;
     return(true);
 }
 
 /******************************************************************************
-* Function : J1939_Transmit_Initialize_PGN_65271
+* Function : J1939_Transmit_Initialize_PGN_65270
 * Description : Initialize hooks to can manager
 ******************************************************************************/
-void J1939_Transmit_Initialize_PGN_65271(J1939_Transmit_Message_Control_T * tx_msg_ctrl_ptr) 
+void J1939_Transmit_Initialize_PGN_65270(J1939_Transmit_Message_Control_T * tx_msg_ctrl_ptr) 
 {
-    tx_msg_ctrl_ptr->Service_Routine        = Service_PGN_65271 ;
+    tx_msg_ctrl_ptr->Service_Routine        = Service_PGN_65270 ;
     tx_msg_ctrl_ptr->Time_To_Service        = 0x00;
-    tx_msg_ctrl_ptr->Time_To_Next_Service_W = J1939_PGN_65271_FREQ;
+    tx_msg_ctrl_ptr->Time_To_Next_Service_W = J1939_PGN_65270_FREQ;
     tx_msg_ctrl_ptr->Tx_Timeout             = 0x00;
-    tx_msg_ctrl_ptr->Tx_Timeout_Timer_W     = J1939_PGN_65271_TIMEOUT;
+    tx_msg_ctrl_ptr->Tx_Timeout_Timer_W     = J1939_PGN_65270_TIMEOUT;
 }
 
 /******************************************************************************

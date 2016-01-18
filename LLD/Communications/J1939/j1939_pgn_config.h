@@ -45,7 +45,7 @@
 #define J1939_RECEIVE_MESSAGES_NUMBER_CHANNEL_0     ( 14 )
 #define J1939_RECEIVE_MESSAGES_NUMBER_CHANNEL_1     ( 0 )
 
-#define J1939_TRANSMIT_MESSAGES_NUMBER_CHANNEL_0    ( 26 )
+#define J1939_TRANSMIT_MESSAGES_NUMBER_CHANNEL_0    ( 31 )
 #define J1939_TRANSMIT_MESSAGES_NUMBER_CHANNEL_1    ( 0 )
 
 #define J1939_RECEIVE_MESSAGES_NUMBER    ( J1939_RECEIVE_MESSAGES_NUMBER_CHANNEL_0 +\
@@ -146,25 +146,6 @@ extern const void(*const J1939_Receive_Initialize_Channel_0[]) (J1939_Receive_Me
 /******************************************************************************/
 /* PGN: Receive                                                               */
 /******************************************************************************/
-
-/***********************************************************************/
-/* 65271 Electrical Power                                              */
-/* Always 0                                                            */
-/*  |  Priority = 6                                                    */
-/*  |  |   R1 = 0                                                      */
-/*  |  |   | Data Page = 0 (PGN = 65271)                               */
-/*  |  |   | | PGN (PF = 254, PS = 247 => PGN = 65271)                 */
-/*  |  |   | | |                   src address (ie 00 master 01 slave) */
-/*  |  |   | | |                   |                                   */
-/* 000,110,0,0,1111 1110 1111 0111,xxxx xxxx                           */
-/* 0001/1000/1111/1110/1111/0111/xxxx/xxxx                             */
-/***********************************************************************/
-#define J1939_PGN_65271_BASE_ID               0x18FEF7D5
-#define J1939_PGN_65271_LENGTH                8
-#define J1939_PGN_65271_FREQ                  (10/J1939_BASE_LOOP)
-#define J1939_PGN_65271_TIMEOUT               (30/J1939_BASE_LOOP)
-extern void J1939_Receive_Initialize_PGN_65271(J1939_Receive_Message_Control_T *rx_msg_ctrl_ptr);
-
 #define J1939_PGN_59904_BASE_ID               0x18EA0000
 #define J1939_PGN_59904_LENGTH                8
 #define J1939_PGN_59904_FREQ                  (10/J1939_BASE_LOOP)
@@ -188,6 +169,12 @@ extern void J1939_Receive_Initialize_PGN_00000(J1939_Receive_Message_Control_T *
 #define J1939_PGN_65265_FREQ                  (KfHWIO_J1939_PGN_65265_FREQ/J1939_BASE_LOOP)
 #define J1939_PGN_65265_TIMEOUT               (KfHWIO_J1939_PGN_65265_FREQ*10/J1939_BASE_LOOP)
 extern void J1939_Receive_Initialize_PGN_65265(J1939_Receive_Message_Control_T *rx_msg_ctrl_ptr);
+
+#define J1939_PGN_64971_BASE_ID               0x18FDCB17
+#define J1939_PGN_64971_LENGTH                8
+#define J1939_PGN_64971_FREQ                  (KfHWIO_J1939_PGN_64971_FREQ/J1939_BASE_LOOP)
+#define J1939_PGN_64971_TIMEOUT               (KfHWIO_J1939_PGN_64971_FREQ*10/J1939_BASE_LOOP)
+extern void J1939_Receive_Initialize_PGN_64971(J1939_Receive_Message_Control_T *rx_msg_ctrl_ptr);
 
 #define J1939_PGN_65272_BASE_ID               0x18FEF8D5
 #define J1939_PGN_65272_LENGTH                8
@@ -274,11 +261,231 @@ extern void J193973_TxInit_PGN_65235_Ack (J1939_Transmit_Message_Control_T *MsgC
 extern void J193973_TxInit_PGN_65236(J1939_Transmit_Message_Control_T *MsgCtrl);
 extern void J193973_TxInit_PGN_65249(J1939_Transmit_Message_Control_T *MsgCtrl);
 extern void J193973_TxInit_PGN_65251(J1939_Transmit_Message_Control_T *MsgCtrl);
+extern void J193973_TxInit_PGN_65232(J1939_Transmit_Message_Control_T * MsgCtrl);
+extern void J1939_TxInit_PGN_65289(J1939_Transmit_Message_Control_T * MsgCtrl);
+extern void J1939_TxInit_PGN_65154(J1939_Transmit_Message_Control_T * MsgCtrl);
 extern void J1939_SendUnmanagedAcknowledgement (AckModeType Mode, uint32_t RequestedPgn);
 extern void J1939_RequestTxMsgService (TxMsgIndexType index, uint8_t requester);
 extern void J1939_Trigger_Transmit_Message_Service (uint8_t Index);
 extern void J1939_Event_Trigger_Transmit(uint8_t index);
-//extern bool J1939_Transmit_Unmanaged_Message (J1939_Transmit_Message_Info_T *Tx_Message);
+extern bool J1939_Transmit_Unmanaged_Message (J1939_Transmit_Message_Info_T *Tx_Message);
+
+/***********************************************************************/
+/* 65262 ET1                                                           */
+/* Always 0                                                            */
+/*  |  Priority = 6                                                    */
+/*  |  |   R1 = 0                                                      */
+/*  |  |   | Data Page = 0 (PGN = 65262)                               */
+/*  |  |   | | PGN (PF = 254, PS= 238 )                                */
+/*  |  |   | | |                   src address (ie 00 master 01 slave) */
+/*  |  |   | | |                   |                                   */
+/* 000,110,0,0,1110 1000 yyyy yyyy,xxxx xxxx y = DA = 255              */
+/* 0001/1000/1110/1000/yyyy/yyyy/xxxx/xxxx                             */
+/***********************************************************************/
+#define J1939_PGN_65262_BASE_ID               0x18FEEED5
+#define J1939_PGN_65262_LENGTH                8
+#define J1939_PGN_65262_FREQ                  (KfHWIO_J1939_PGN_65262_FREQ/J1939_BASE_LOOP)
+#define J1939_PGN_65262_TIMEOUT               (KfHWIO_J1939_PGN_65262_FREQ*10/J1939_BASE_LOOP)
+extern void J1939_Transmit_Initialize_PGN_65262(J1939_Transmit_Message_Control_T * tx_msg_ctrl_ptr);
+/***********************************************************************/
+/* 65263 EFL/P1                                                        */
+/* Always 0                                                            */
+/*  |  Priority = 6                                                    */
+/*  |  |   R1 = 0                                                      */
+/*  |  |   | Data Page = 0 (PGN = 65263)                               */
+/*  |  |   | | PGN (PF = 254, PS= 239 )                                */
+/*  |  |   | | |                   src address (ie 00 master 01 slave) */
+/*  |  |   | | |                   |                                   */
+/* 000,110,0,0,1110 1000 yyyy yyyy,xxxx xxxx y = DA = 255              */
+/* 0001/1000/1110/1000/yyyy/yyyy/xxxx/xxxx                             */
+/***********************************************************************/
+#define J1939_PGN_65263_BASE_ID               0x18FEEFD5
+#define J1939_PGN_65263_LENGTH                8
+#define J1939_PGN_65263_FREQ                  (KfHWIO_J1939_PGN_65263_FREQ/J1939_BASE_LOOP)
+#define J1939_PGN_65263_TIMEOUT               (KfHWIO_J1939_PGN_65263_FREQ*10/J1939_BASE_LOOP)
+extern void J1939_Transmit_Initialize_PGN_65263(J1939_Transmit_Message_Control_T * tx_msg_ctrl_ptr);
+
+/***********************************************************************/
+/* 65266 LFE                                                           */
+/* Always 0                                                            */
+/*  |  Priority = 6                                                    */
+/*  |  |   R1 = 0                                                      */
+/*  |  |   | Data Page = 0 (PGN = 65266)                               */
+/*  |  |   | | PGN (PF = 254, PS= 242 )                                */
+/*  |  |   | | |                   src address (ie 00 master 01 slave) */
+/*  |  |   | | |                   |                                   */
+/* 000,110,0,0,1110 1000 yyyy yyyy,xxxx xxxx y = DA = 255              */
+/* 0001/1000/1110/1000/yyyy/yyyy/xxxx/xxxx                             */
+/***********************************************************************/
+#define J1939_PGN_65266_BASE_ID               0x18FEF2D5
+#define J1939_PGN_65266_LENGTH                8
+#define J1939_PGN_65266_FREQ                  (KfHWIO_J1939_PGN_65266_FREQ/J1939_BASE_LOOP)
+#define J1939_PGN_65266_TIMEOUT               (KfHWIO_J1939_PGN_65266_FREQ*10/J1939_BASE_LOOP)
+extern void J1939_Transmit_Initialize_PGN_65266(J1939_Transmit_Message_Control_T * tx_msg_ctrl_ptr);
+
+/***********************************************************************/
+/* 61444 EEC1                                                          */
+/* Always 0                                                            */
+/*  |  Priority = 6                                                    */
+/*  |  |   R1 = 0                                                      */
+/*  |  |   | Data Page = 0 (PGN = 61444)                               */
+/*  |  |   | | PGN (PF = F0, PS=04 )                                */
+/*  |  |   | | |                   src address (ie 00 master 01 slave) */
+/*  |  |   | | |                   |                                   */
+/* 000,110,0,0,1110 1000 yyyy yyyy,xxxx xxxx y = DA = 255              */
+/* 0001/1000/1110/1000/yyyy/yyyy/xxxx/xxxx                             */
+/***********************************************************************/
+#define J1939_PGN_61444_BASE_ID               0x18F004D5
+#define J1939_PGN_61444_LENGTH                8
+#define J1939_PGN_61444_FREQ                  (KfHWIO_J1939_PGN_61444_FREQ/J1939_BASE_LOOP)
+#define J1939_PGN_61444_TIMEOUT               (KfHWIO_J1939_PGN_61444_FREQ*10/J1939_BASE_LOOP)
+extern void J1939_Transmit_Initialize_PGN_61444(J1939_Transmit_Message_Control_T * tx_msg_ctrl_ptr);
+
+/***********************************************************************/
+/* 61443 EEC2                                                          */
+/* Always 0                                                            */
+/*  |  Priority = 6                                                    */
+/*  |  |   R1 = 0                                                      */
+/*  |  |   | Data Page = 0 (PGN = 61443)                               */
+/*  |  |   | | PGN (PF = F0, PS= 03 )                                  */
+/*  |  |   | | |                   src address (ie 00 master 01 slave) */
+/*  |  |   | | |                   |                                   */
+/* 000,110,0,0,1110 1000 yyyy yyyy,xxxx xxxx y = DA = 255              */
+/* 0001/1000/1110/1000/yyyy/yyyy/xxxx/xxxx                             */
+/***********************************************************************/
+#define J1939_PGN_61443_BASE_ID               0x18F003D5
+#define J1939_PGN_61443_LENGTH                8
+#define J1939_PGN_61443_FREQ                  (KfHWIO_J1939_PGN_61443_FREQ/J1939_BASE_LOOP)
+#define J1939_PGN_61443_TIMEOUT               (KfHWIO_J1939_PGN_61443_FREQ*10/J1939_BASE_LOOP)
+extern void J1939_Transmit_Initialize_PGN_61443(J1939_Transmit_Message_Control_T * tx_msg_ctrl_ptr);
+
+/***********************************************************************/
+/* 64997 mvs                                                           */
+/* Always 0                                                            */
+/*  |  Priority = 6                                                    */
+/*  |  |   R1 = 0                                                      */
+/*  |  |   | Data Page = 0 (PGN = 64997)                               */
+/*  |  |   | | PGN (PF = FD, PS=E5 )                                   */
+/*  |  |   | | |                   src address (ie 00 master 01 slave) */
+/*  |  |   | | |                   |                                   */
+/* 000,110,0,0,1110 1000 yyyy yyyy,xxxx xxxx y = DA = 255              */
+/* 0001/1000/1110/1000/yyyy/yyyy/xxxx/xxxx                             */
+/***********************************************************************/
+#define J1939_PGN_64997_BASE_ID               0x18FDE500
+#define J1939_PGN_64997_LENGTH                8
+#define J1939_PGN_64997_FREQ                  (KfHWIO_J1939_PGN_64997_FREQ/J1939_BASE_LOOP)
+#define J1939_PGN_64997_TIMEOUT               (KfHWIO_J1939_PGN_64997_FREQ*10/J1939_BASE_LOOP)
+extern void J1939_Transmit_Initialize_PGN_64997(J1939_Transmit_Message_Control_T * tx_msg_ctrl_ptr);
+
+/***********************************************************************/
+/* 65270 Electrical Power                                              */
+/* Always 0                                                            */
+/*  |  Priority = 6                                                    */
+/*  |  |   R1 = 0                                                      */
+/*  |  |   | Data Page = 0 (PGN = 65270)                               */
+/*  |  |   | | PGN (PF = 254, PS = 247 => PGN = 65271)                 */
+/*  |  |   | | |                   src address (ie 00 master 01 slave) */
+/*  |  |   | | |                   |                                   */
+/* 000,110,0,0,1111 1110 1111 0111,xxxx xxxx                           */
+/* 0001/1000/1111/1110/1111/0111/xxxx/xxxx                             */
+/***********************************************************************/
+#define J1939_PGN_65270_BASE_ID               0x18FEF6D5
+#define J1939_PGN_65270_LENGTH                8
+#define J1939_PGN_65270_FREQ                  (KfHWIO_J1939_PGN_65270_FREQ/J1939_BASE_LOOP)
+#define J1939_PGN_65270_TIMEOUT               (KfHWIO_J1939_PGN_65270_FREQ*10/J1939_BASE_LOOP)
+extern void J1939_Transmit_Initialize_PGN_65270(J1939_Transmit_Message_Control_T *tx_msg_ctrl_ptr);
+
+/***********************************************************************/
+/* 65271 Electrical Power                                              */
+/* Always 0                                                            */
+/*  |  Priority = 6                                                    */
+/*  |  |   R1 = 0                                                      */
+/*  |  |   | Data Page = 0 (PGN = 65271)                               */
+/*  |  |   | | PGN (PF = 254, PS = 247 => PGN = 65271)                 */
+/*  |  |   | | |                   src address (ie 00 master 01 slave) */
+/*  |  |   | | |                   |                                   */
+/* 000,110,0,0,1111 1110 1111 0111,xxxx xxxx                           */
+/* 0001/1000/1111/1110/1111/0111/xxxx/xxxx                             */
+/***********************************************************************/
+#define J1939_PGN_65271_BASE_ID               0x18FEF7D5
+#define J1939_PGN_65271_LENGTH                8
+#define J1939_PGN_65271_FREQ                  (KfHWIO_J1939_PGN_65271_FREQ/J1939_BASE_LOOP)
+#define J1939_PGN_65271_TIMEOUT               (KfHWIO_J1939_PGN_65271_FREQ*10/J1939_BASE_LOOP)
+extern void J1939_Transmit_Initialize_PGN_65271(J1939_Transmit_Message_Control_T *tx_msg_ctrl_ptr);
+
+/***********************************************************************/
+/* 65213 FD                                                          */
+/* Always 0                                                            */
+/*  |  Priority = 6                                                    */
+/*  |  |   R1 = 0                                                      */
+/*  |  |   | Data Page = 0 (PGN = 65213)                               */
+/*  |  |   | | PGN (PF = F0, PS= 03 )                                  */
+/*  |  |   | | |                   src address (ie 00 master 01 slave) */
+/*  |  |   | | |                   |                                   */
+/* 000,110,0,0,1110 1000 yyyy yyyy,xxxx xxxx y = DA = 255              */
+/* 0001/1000/1110/1000/yyyy/yyyy/xxxx/xxxx                             */
+/***********************************************************************/
+#define J1939_PGN_65213_BASE_ID               0x18FEBDD5
+#define J1939_PGN_65213_LENGTH                8
+#define J1939_PGN_65213_FREQ                  (KfHWIO_J1939_PGN_65213_FREQ/J1939_BASE_LOOP)
+#define J1939_PGN_65213_TIMEOUT               (KfHWIO_J1939_PGN_65213_FREQ*10/J1939_BASE_LOOP)
+extern void J1939_Transmit_Initialize_PGN_65213(J1939_Transmit_Message_Control_T * tx_msg_ctrl_ptr);
+
+/***********************************************************************/
+/* 65253 Hours                                                          */
+/* Always 0                                                            */
+/*  |  Priority = 6                                                    */
+/*  |  |   R1 = 0                                                      */
+/*  |  |   | Data Page = 0 (PGN = 65253)                               */
+/*  |  |   | | PGN (PF = F0, PS= 03 )                                  */
+/*  |  |   | | |                   src address (ie 00 master 01 slave) */
+/*  |  |   | | |                   |                                   */
+/* 000,110,0,0,1110 1000 yyyy yyyy,xxxx xxxx y = DA = 255              */
+/* 0001/1000/1110/1000/yyyy/yyyy/xxxx/xxxx                             */
+/***********************************************************************/
+#define J1939_PGN_65253_BASE_ID               0x18FEE5D5
+#define J1939_PGN_65253_LENGTH                8
+#define J1939_PGN_65253_FREQ                  (0)
+#define J1939_PGN_65253_TIMEOUT               (0)
+extern void J1939_Transmit_Initialize_PGN_65253(J1939_Transmit_Message_Control_T * tx_msg_ctrl_ptr);
+
+/***********************************************************************/
+/* 64965 ECUID                                                         */
+/* Always 0                                                            */
+/*  |  Priority = 6                                                    */
+/*  |  |   R1 = 0                                                      */
+/*  |  |   | Data Page = 0 (PGN = 65253)                               */
+/*  |  |   | | PGN (PF = F0, PS= 03 )                                  */
+/*  |  |   | | |                   src address (ie 00 master 01 slave) */
+/*  |  |   | | |                   |                                   */
+/* 000,110,0,0,1110 1000 yyyy yyyy,xxxx xxxx y = DA = 255              */
+/* 0001/1000/1110/1000/yyyy/yyyy/xxxx/xxxx                             */
+/***********************************************************************/
+#define J1939_PGN_64965_BASE_ID               0x18FDC500
+#define J1939_PGN_64965_LENGTH                8
+#define J1939_PGN_64965                       (0x0000FDC5UL)
+#define J1939_PGN_64965_FREQ                  (0)
+#define J1939_PGN_64965_TIMEOUT               (0)
+extern void J1939_TxInit_PGN_64965(J1939_Transmit_Message_Control_T * tx_msg_ctrl_ptr);
+
+/***********************************************************************/
+/* 65242 SOFT                                                          */
+/* Always 0                                                            */
+/*  |  Priority = 6                                                    */
+/*  |  |   R1 = 0                                                      */
+/*  |  |   | Data Page = 0 (PGN = 65242)                               */
+/*  |  |   | | PGN (PF = F0, PS= 03 )                                  */
+/*  |  |   | | |                   src address (ie 00 master 01 slave) */
+/*  |  |   | | |                   |                                   */
+/* 000,110,0,0,1110 1000 yyyy yyyy,xxxx xxxx y = DA = 255              */
+/* 0001/1000/1110/1000/yyyy/yyyy/xxxx/xxxx                             */
+/***********************************************************************/
+#define J1939_PGN_65242_BASE_ID               0x18FEDA00
+#define J1939_PGN_65242_LENGTH                8
+#define J1939_PGN_65242                       (0x0000FEDAUL)
+#define J1939_PGN_65242_FREQ                  (0)
+#define J1939_PGN_65242_TIMEOUT               (0)
+extern void J1939_TxInit_PGN_65242(J1939_Transmit_Message_Control_T * tx_msg_ctrl_ptr);
 
 /***********************************************************************/
 /* 59392 Acknowledgment of command                                     */
@@ -407,6 +614,16 @@ extern const J1939_Message_Table_T   J1939_Message_Table[];
 #define J193973_PGN_65249                      (0x0000FEE1UL)
 #define J193973_PGN_65249_FREQ                 (5000/ J1939_BASE_LOOP)
 #define J1939_PGN_65249_TIMEOUT                (15000/ J1939_BASE_LOOP) 
+
+/******************************************************************************/
+/* PGN: 65154                                                             */
+/******************************************************************************/
+#define J1939_PGN_65154_BASE_ID                (0x1CFE8200UL) /*FFCA=65154,Prio=7,src=0*/
+#define J1939_PGN_65154_LENGTH                 (8)
+#define J1939_PGN_65154                        (0x0000FE82UL)
+#define J1939_PGN_65154_FREQ                   (0)
+#define J1939_PGN_65154_TIMEOUT                (0) 
+
 /******************************************************************************/
 /* PGN: 65251                                                             */
 /******************************************************************************/
@@ -427,86 +644,13 @@ extern const J1939_Message_Table_T   J1939_Message_Table[];
 extern void J1939_Transmit_Initialize_PGN_65280(J1939_Transmit_Message_Control_T *tx_msg_ctrl_ptr);
 
 /******************************************************************************/
-/* PGN: 65281                                                                */
-/******************************************************************************/
-#define J1939_PGN_65281_BASE_ID                0x04FF01D2
-#define J1939_PGN_65281_LENGTH                 2
-#define J1939_PGN_65281_FREQ                   (50/J1939_BASE_LOOP)
-#define J1939_PGN_65281_TIMEOUT                (150/J1939_BASE_LOOP)
-extern void J1939_Transmit_Initialize_PGN_65281(J1939_Transmit_Message_Control_T *tx_msg_ctrl_ptr);
-
-/******************************************************************************/
-/* PGN: 65282                                                                */
-/******************************************************************************/
-#define J1939_PGN_65282_BASE_ID                0x04FF02D2
-#define J1939_PGN_65282_LENGTH                 3
-#define J1939_PGN_65282_FREQ                   (10/J1939_BASE_LOOP)
-#define J1939_PGN_65282_TIMEOUT                (30/J1939_BASE_LOOP)
-extern void J1939_Transmit_Initialize_PGN_65282(J1939_Transmit_Message_Control_T *tx_msg_ctrl_ptr);
-
-/******************************************************************************/
-/* PGN: 65283                                                                */
-/******************************************************************************/
-#define J1939_PGN_65283_BASE_ID                0x04FF03D2
-#define J1939_PGN_65283_LENGTH                 4
-#define J1939_PGN_65283_FREQ                   (20/J1939_BASE_LOOP)
-#define J1939_PGN_65283_TIMEOUT                (60/J1939_BASE_LOOP)
-extern void J1939_Transmit_Initialize_PGN_65283(J1939_Transmit_Message_Control_T *tx_msg_ctrl_ptr);
-
-/******************************************************************************/
-/* PGN: 65284                                                                */
-/******************************************************************************/
-#define J1939_PGN_65284_BASE_ID                0x04FF04D2
-#define J1939_PGN_65284_LENGTH                 5
-#define J1939_PGN_65284_FREQ                   (50/J1939_BASE_LOOP)
-#define J1939_PGN_65284_TIMEOUT                (150/J1939_BASE_LOOP)
-extern void J1939_Transmit_Initialize_PGN_65284(J1939_Transmit_Message_Control_T *tx_msg_ctrl_ptr);
-
-/******************************************************************************/
-/* PGN: 65285                                                                */
-/******************************************************************************/
-#define J1939_PGN_65285_BASE_ID                0x04FF05D2
-#define J1939_PGN_65285_LENGTH                 6
-#define J1939_PGN_65285_FREQ                   (50/J1939_BASE_LOOP)
-#define J1939_PGN_65285_TIMEOUT                (150/J1939_BASE_LOOP)
-extern void J1939_Transmit_Initialize_PGN_65285(J1939_Transmit_Message_Control_T *tx_msg_ctrl_ptr);
-
-/******************************************************************************/
-/* PGN: 65286                                                              */
-/******************************************************************************/
-#define J1939_PGN_65286_BASE_ID                0x04FF06D2
-#define J1939_PGN_65286_LENGTH                 7
-#define J1939_PGN_65286_FREQ                   (50/J1939_BASE_LOOP)
-#define J1939_PGN_65286_TIMEOUT                (150/J1939_BASE_LOOP)
-extern void J1939_Transmit_Initialize_PGN_65286(J1939_Transmit_Message_Control_T *tx_msg_ctrl_ptr);
-
-/******************************************************************************/
-/* PGN: 65287                                                                */
-/******************************************************************************/
-#define J1939_PGN_65287_BASE_ID                0x04FF07D2
-#define J1939_PGN_65287_LENGTH                 8
-#define J1939_PGN_65287_FREQ                   (50/J1939_BASE_LOOP)
-#define J1939_PGN_65287_TIMEOUT                (150/J1939_BASE_LOOP)
-extern void J1939_Transmit_Initialize_PGN_65287(J1939_Transmit_Message_Control_T *tx_msg_ctrl_ptr);
-
-
-/******************************************************************************/
-/* PGN: 65288                                                                */
-/******************************************************************************/
-#define J1939_PGN_65288_BASE_ID                0x04FF08D2
-#define J1939_PGN_65288_LENGTH                 8
-#define J1939_PGN_65288_FREQ                   (50/J1939_BASE_LOOP)
-#define J1939_PGN_65288_TIMEOUT                (150/J1939_BASE_LOOP)
-extern void J1939_Transmit_Initialize_PGN_65288(J1939_Transmit_Message_Control_T *tx_msg_ctrl_ptr);
-
-/******************************************************************************/
 /* PGN: 65289                                                                */
 /******************************************************************************/
-#define J1939_PGN_65289_BASE_ID                0x04FF09D2
-#define J1939_PGN_65289_LENGTH                 8
-#define J1939_PGN_65289_FREQ                   (50/J1939_BASE_LOOP)
-#define J1939_PGN_65289_TIMEOUT                (150/J1939_BASE_LOOP)
-extern void J1939_Transmit_Initialize_PGN_65289(J1939_Transmit_Message_Control_T *tx_msg_ctrl_ptr);
+#define J1939_PGN_65289_BASE_ID              (0x18FF0900UL)
+#define J1939_PGN_65289_LENGTH               (8)
+#define J1939_PGN_65289                      (0x0000FF09UL)
+#define J1939_PGN_65289_FREQ                 (0)
+#define J1939_PGN_65289_TIMEOUT              (0) 
 
 /******************************************************************************/
 /* PGN: 59392                                                               */

@@ -7,58 +7,48 @@
 *  History       :
 * Copyright 2010 Delphi Technologies, Inc., All rights reserved
 ******************************************************************************/
-
 #include "j1939_pgn_config.h"
-
-
-/******************************************************************************
-* Function : J1939_PGN_65289
-* Description : Alarm Message
-* Start Posn      Length       Parameter Name
-* 1               3              Unit_Alarm_Fault
-* 1               5              Unused1
-* 2               5              Fault_Code
-
-* 2               3              Unused2
-* 3               4              Alarm_Code
-* 3               4              Unused3
-* 4               4              Service_Request
-* 4               4              Unused4
-******************************************************************************/
-UINT8 PGN_65289_Message[8] = {1,2,3,4,5,6,7,8};
+#include "j1939_app.h"
 
 /******************************************************************************
-* Function : J1939_Service_PGN_65289
+* Function : Service_PGN_65289
 * Description : Service PGN
 ******************************************************************************/
 static bool Service_PGN_65289(J1939_Transmit_Message_Info_T *tx_msg_ptr)
 {
+    J1939_DATA_T *jd = (J1939_DATA_T *)&J1939_pgn_65289;
+
     tx_msg_ptr->ID                 = J1939_ADD_THIS_SRC_ADDR(J1939_PGN_65289_BASE_ID);
     tx_msg_ptr->Length             = J1939_PGN_65289_LENGTH;
-        tx_msg_ptr->Data[0]        = PGN_65289_Message[0];
-        tx_msg_ptr->Data[1]        = PGN_65289_Message[1];
-        tx_msg_ptr->Data[2]        = PGN_65289_Message[2];
-        tx_msg_ptr->Data[3]        = PGN_65289_Message[3];
-        tx_msg_ptr->Data[4]        = PGN_65289_Message[4];
-        tx_msg_ptr->Data[5]        = PGN_65289_Message[5];
-        tx_msg_ptr->Data[6]        = PGN_65289_Message[6];
-        tx_msg_ptr->Data[7]        = PGN_65289_Message[7];
+    tx_msg_ptr->Data[0]            = jd->data[0];
+    tx_msg_ptr->Data[1]            = jd->data[1];
+    tx_msg_ptr->Data[2]            = jd->data[2];
+    tx_msg_ptr->Data[3]            = jd->data[3];
+    tx_msg_ptr->Data[4]            = jd->data[4];
+    tx_msg_ptr->Data[5]            = jd->data[5];
+    tx_msg_ptr->Data[6]            = jd->data[6];
+    tx_msg_ptr->Data[7]            = jd->data[7];
     tx_msg_ptr->Callback_Time_W    = J1939_PGN_65289_FREQ;
     tx_msg_ptr->Callback_Timeout_W = J1939_PGN_65289_TIMEOUT;
     return(true);
 }
-
 /******************************************************************************
-* Function : J1939_Transmit_Initialize_PGN_65289
+* Function : J1939_Transmit_Initialize_PGN_65232
 * Description : Initialize hooks to can manager
 ******************************************************************************/
-void J1939_Transmit_Initialize_PGN_65289(J1939_Transmit_Message_Control_T * tx_msg_ctrl_ptr) 
+void J1939_TxInit_PGN_65289(J1939_Transmit_Message_Control_T * MsgCtrl) 
 {
-    tx_msg_ctrl_ptr->Service_Routine        = Service_PGN_65289 ;
-    tx_msg_ctrl_ptr->Time_To_Service        = 0x00;
-    tx_msg_ctrl_ptr->Time_To_Next_Service_W = J1939_PGN_65289_FREQ;
-    tx_msg_ctrl_ptr->Tx_Timeout             = 0x00;
-    tx_msg_ctrl_ptr->Tx_Timeout_Timer_W     = J1939_PGN_65289_TIMEOUT;
+    MsgCtrl->Service_Routine        = Service_PGN_65289;
+    MsgCtrl->Time_To_Service        = 0x00;
+    MsgCtrl->Time_To_Next_Service_W = J1939_PGN_65289_FREQ;
+    MsgCtrl->Tx_Timeout             = 0x00;
+    MsgCtrl->Tx_Timeout_Timer_W     = J1939_PGN_65289_TIMEOUT;
+	J1939_pgn_65289.byte1.TLA1      = 0X45;//"E"
+	J1939_pgn_65289.byte2.TLA2      = 0X43;//"C"
+	J1939_pgn_65289.byte3.TLA3      = 0X55;//"U"
+	J1939_pgn_65289.byte4.RES1      = 0XFF;
+	J1939_pgn_65289.byte56.RES2     = 0XFFFF;
+	J1939_pgn_65289.byte78.RES3     = 0XFFFF;
 }
 
 /******************************************************************************
