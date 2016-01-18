@@ -7,11 +7,10 @@
 ******************************************************************************/
 #include "j1939_stub.h"
 #include "j1939_app.h"
+#include "j1939_pgn_57344.h"
+#include "j1939_pgn_00000.h"
+#include "j1939_pgn_65265.h"
 #include "j1939_pgn_65271.h"
-#include "j1939_pgn_65272.h"
-#include "j1939_pgn_65273.h"
-#include "j1939_pgn_65274.h"
-#include "j1939_pgn_65275.h"
 #include "j1939_pgn_65276.h"
 #include "j1939_pgn_65277.h"
 #include "j1939_pgn_65278.h"
@@ -78,7 +77,29 @@ static void Rx_PGN_65271(void);
 static void Rx_PGN_65276(void);
 static void Rx_PGN_65296(void);
 
+static void Rx_PGN_57344(void)
+{
+ if(true == J1939_Get_PGN_57344_Message_Indicator())
+ {
+   J1939_Clear_PGN_57344_Message_Indicator();
+ }
+}
 
+static void Rx_PGN_00000(void)
+{
+ if(true == J1939_Get_PGN_00000_Message_Indicator())
+ {
+   J1939_Clear_PGN_00000_Message_Indicator();
+ }
+}
+
+static void Rx_PGN_65265(void)
+{
+ if(true == J1939_Get_PGN_65265_Message_Indicator())
+ {
+   J1939_Clear_PGN_65265_Message_Indicator();
+ }
+}
 static void Rx_PGN_65271(void)
 {
  if(true == J1939_Get_PGN_65271_Message_Indicator())
@@ -89,38 +110,6 @@ static void Rx_PGN_65271(void)
    stub_SVEPM_ChargingSystemPotential = AIFGetCharging_System_Potential();    
    stub_SVEPM_KeyswitchBatteryPotential = AIFGetKeyswitch_Battery_Potential();    
    J1939_Clear_PGN_65271_Message_Indicator();
- }
-}
-
-static void Rx_PGN_65272(void)
-{
- if(true == J1939_Get_PGN_65272_Message_Indicator())
- {
-   J1939_Clear_PGN_65272_Message_Indicator();
- }
-}
-
-static void Rx_PGN_65273(void)
-{
- if(true == J1939_Get_PGN_65273_Message_Indicator())
- {
-   J1939_Clear_PGN_65273_Message_Indicator();
- }
-}
-
-static void Rx_PGN_65274(void)
-{
- if(true == J1939_Get_PGN_65274_Message_Indicator())
- {
-   J1939_Clear_PGN_65274_Message_Indicator();
- }
-}
-
-static void Rx_PGN_65275(void)
-{
- if(true == J1939_Get_PGN_65275_Message_Indicator())
- {
-   J1939_Clear_PGN_65275_Message_Indicator();
  }
 }
 
@@ -205,11 +194,10 @@ void J1939_Transmit_Test_Task(void)
 void J1939_Receive_Test_Task(void)
 {
    VfJ1939_BusError = J1939_Get_BusOffState();
+   Rx_PGN_57344();
+   Rx_PGN_00000();
+   Rx_PGN_65265();
    Rx_PGN_65271();
-   Rx_PGN_65272();
-   Rx_PGN_65273();
-   Rx_PGN_65274();
-   Rx_PGN_65275();
    Rx_PGN_65276();
    Rx_PGN_65277();
    Rx_PGN_65278();

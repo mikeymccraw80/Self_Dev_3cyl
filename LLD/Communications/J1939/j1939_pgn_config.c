@@ -31,6 +31,7 @@ const void (*const J1939_Transmit_Initialize[]) (J1939_Transmit_Message_Control_
    J193973_TxInit_PGN_65227,    /*DM2*/
    J193973_TxInit_PGN_65228_Ack,/*DM3*/
    J193973_TxInit_PGN_65229,    /*DM4*/
+   J193973_TxInit_PGN_65230,    /*DM5*/
    J193973_TxInit_PGN_65235_Ack,/*DM11*/
    J193973_TxInit_PGN_65236,    /*DM12*/
    J193973_TxInit_PGN_65249,    /*PGN_65249*/
@@ -61,16 +62,17 @@ const void (*const J1939_Receive_Initialize_Channel_0[]) (J1939_Receive_Message_
    J1939_RxInit_PGN_59904,
    J1939_RxInit_PGN_60160,
    J1939_RxInit_PGN_60416,
+   J1939_Receive_Initialize_PGN_57344,
+   J1939_Receive_Initialize_PGN_00000,
+   J1939_Receive_Initialize_PGN_65265,
    J1939_Receive_Initialize_PGN_65271,
-   J1939_Receive_Initialize_PGN_65272,
-   J1939_Receive_Initialize_PGN_65273,
-   J1939_Receive_Initialize_PGN_65274,
-   J1939_Receive_Initialize_PGN_65275,
    J1939_Receive_Initialize_PGN_65276,
    J1939_Receive_Initialize_PGN_65277,
    J1939_Receive_Initialize_PGN_65278,
    J1939_Receive_Initialize_PGN_65279,
-   J1939_Receive_Initialize_PGN_65296
+   J1939_Receive_Initialize_PGN_65296,
+   J1939_Receive_Initialize_73_dm7,
+   J1939_Receive_Initialize_73_dm13
 };
 
 const J1939_Message_Table_T  J1939_Message_Table[J1939_MESSAGES_NUMBER] =
@@ -82,15 +84,13 @@ const J1939_Message_Table_T  J1939_Message_Table[J1939_MESSAGES_NUMBER] =
 
    , { J1939_PGN_60416_BASE_ID,    J1939_PGN_60416_LENGTH }
 
+   , { J1939_PGN_57344_BASE_ID,    J1939_PGN_57344_LENGTH }
+
+  , { J1939_PGN_00000_BASE_ID,    J1939_PGN_00000_LENGTH }
+
+  , { J1939_PGN_65265_BASE_ID,    J1939_PGN_65265_LENGTH }
+
    , { J1939_PGN_65271_BASE_ID,    J1939_PGN_65271_LENGTH }
-
-   , { J1939_PGN_65272_BASE_ID,    J1939_PGN_65272_LENGTH }
-
-   , { J1939_PGN_65273_BASE_ID,    J1939_PGN_65273_LENGTH }
-
-   , { J1939_PGN_65274_BASE_ID,    J1939_PGN_65274_LENGTH }
-
-   , { J1939_PGN_65275_BASE_ID,    J1939_PGN_65275_LENGTH }
 
    , { J1939_PGN_65276_BASE_ID,    J1939_PGN_65276_LENGTH }
 
@@ -101,6 +101,10 @@ const J1939_Message_Table_T  J1939_Message_Table[J1939_MESSAGES_NUMBER] =
    , { J1939_PGN_65279_BASE_ID,    J1939_PGN_65279_LENGTH }
 
    , { J1939_PGN_65296_BASE_ID,    J1939_PGN_65296_LENGTH }
+
+    , { J1939_73_dm7_BASE_ID,    J1939_73_dm7_LENGTH }
+   
+   , { J193973_PGN_57088_BASE_ID,    J1939_PGN_65296_LENGTH }
 
 // TRANSMIT_MESSAGE
    , { J1939_DENY_REQUEST_PGN, 8} /* Tx Transport out management connection 0 */
@@ -122,6 +126,8 @@ const J1939_Message_Table_T  J1939_Message_Table[J1939_MESSAGES_NUMBER] =
    , { J193973_PGN_65228_BASE_ID, J193973_PGN_65228_LENGTH }
 
    , { J193973_PGN_65229_BASE_ID, J193973_PGN_65229_LENGTH }
+
+   , { J193973_PGN_65230_BASE_ID, J193973_PGN_65230_LENGTH }  
 
    , { J193973_PGN_65235_BASE_ID, J193973_PGN_65235_LENGTH }
 

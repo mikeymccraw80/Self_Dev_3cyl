@@ -1,7 +1,7 @@
 /******************************************************************************
 *  Project       : J1939 - PGN Specific Configuration
 *  Module        : Message Configurations
-*  File          : j1939_pgn_65272.h
+*  File          : j1939_pgn_00000.h
 *  Creation date :
 *  Description   :Vehicle Electrical Power 1 Implementation
 *  History       :
@@ -11,17 +11,17 @@
 /*-------------------------------------------------------------------
 * to avoid multiple definition if the file is included several times
 *-------------------------------------------------------------------*/
-#ifndef J1939_PGN_65272_DEF
-#define J1939_PGN_65272_DEF
+#ifndef J1939_PGN_00000_DEF
+#define J1939_PGN_00000_DEF
 
 #include "j1939_pgn_config.h"
 #include "j1939_bit_fields.h"
 
 
 
-extern bool J1939_Get_PGN_65272_Message_Indicator(void);
-extern bool J1939_Get_PGN_65272_Message_Lost_Indicator(void);
-extern void J1939_Clear_PGN_65272_Message_Indicator(void);
+extern bool J1939_Get_PGN_00000_Message_Indicator(void);
+extern bool J1939_Get_PGN_00000_Message_Lost_Indicator(void);
+extern void J1939_Clear_PGN_00000_Message_Indicator(void);
 
 
 #endif

@@ -1617,6 +1617,44 @@ typedef CARDINAL                                     KPH_Per_Sec_Unsigned_Type;
 #define RFactor_RPM_To_Speed_Ratio_RPM_To_Speed_Ratio_Base \
                                                  (Prec_KPH / Prec_RPM_Hi_Res_W)
 
+/*---------------------------------------*/
+/*---                                 ---*/
+/*---   Rotational Speed Fixed Types  ---*/
+/*---                                 ---*/
+/*---------------------------------------*/
+
+/*---------------------------------------------------------------------------*/
+/*--- Rotational speed types are sparated INTEGER to several different    ---*/
+/*--- ranges and scalings due to the limitiations of an 8-bit processor   ---*/
+/*---                                                                     ---*/
+/*--- Type            Range (RPM)      Precision      Based on            ---*/
+/*--- --------------  --------------   ------------   ------------------  ---*/
+/*--- RPM_W           0 .. 12799.8     0.195313 RPM   Table lookups       ---*/
+/*--- RPM_B           0 .. 12750.0     50.00 RPM                          ---*/
+/*--- RPM_Med_Res_W   0 .. 3199.95     0.048828 RPM                       ---*/
+/*--- RPM_Med_Res_B   0 .. 3187.5      12.5  RPM                          ---*/
+/*--- RPM_Hi_Res_W    0 .. 65535.0     1 RPM                              ---*/
+/*---------------------------------------------------------------------------*/
+
+typedef CARDINAL                                                         RPM_W;
+#define Prec_RPM_W                                                    (1.0 / 8)
+#define Min_RPM_W                                                         (0.0)
+#define Max_RPM_W                                          (65535 * Prec_RPM_W)
+
+typedef CARDINAL                                                   RPM_W_Chery;
+#define Prec_RPM_W_Chery                                              (1.0 / 4)
+#define Min_RPM_W_Chery                                                   (0.0)
+#define Max_RPM_W_Chery                              (65535 * Prec_RPM_W_Chery)
+
+typedef SHORTCARD                                                        RPM_B;
+#define Prec_RPM_B                                                       (50.0)
+#define Min_RPM_B                                                         (0.0)
+#define Max_RPM_B                                            (255 * Prec_RPM_B)
+
+typedef CARDINAL                                                 RPM_Med_Res_W;
+#define Prec_RPM_Med_Res_W                                         (12.5 / 256)
+#define Min_RPM_Med_Res_W                                                 (0.0)
+#define Max_RPM_Med_Res_W                                  (65535 * 12.5 / 256)
 /*----------------------------*/
 /*---                      ---*/
 /*---   Time Fixed Types   ---*/

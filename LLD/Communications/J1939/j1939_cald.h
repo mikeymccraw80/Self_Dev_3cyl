@@ -30,8 +30,6 @@ typedef enum
   TX_PGN_65251_INDEX=13
   } HWI_J1939_Trigger_TYPE;
 
-extern const uint8_t   KfHWIO_J193973_SA;
-extern const uint16_t  KfHWIO_J193973_PGN_65251_FREQ;
 extern const HWI_J1939_Trigger_TYPE KeHWIO_J1939_Trigger_TYPE;
 extern const  uint8_t  KbHWIO_J1939_Event_Trigger;
 extern const uint16_t  KfHWIO_J193973_PGN_65226_FREQ;

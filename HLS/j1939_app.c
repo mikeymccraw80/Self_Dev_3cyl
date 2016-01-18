@@ -37,7 +37,22 @@
  *****************************************************************************/
 #include "j1939_app.h"
 #include "j1939_pgn_config.h"
+/* j1939 receive pgn variables define */
+J1939_PGN_TSC1_00000_T  pgn_tsc1_00000;    //peer-to-peer mode
+J1939_PGN_CM1_57344_T   pgn_cm1_57344;
+J1939_PGN_CCVS_65265_T  pgn_ccvs_65265;
+J1939_PGN_OHECS_64971_T pgn_ohecs_64971;
 
+J1939_PGN_CM1_57344_T   pgn_cm1_57344;
+J1939_PGN_DM1_T          pgn_dm1, pgn_dm2;
+J1939_73_dm7_58112_T     J1939_73_dm7;
+J1939_73_dm8_65232_T     J1939_73_dm8;
+J1939_73_dm13_57088_T    J1939_73_dm13;
+J1939_73_dm5_65230_T     J1939_73_dm5;
+
+bool B_Ign0Req;
+bool B_Ign1Req;
+bool B_Ign2Req;
 
 uint8_t J1939_DM1_Message[J1939_DM1_BUFFER_SIZE] =
 {

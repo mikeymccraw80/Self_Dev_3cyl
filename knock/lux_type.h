@@ -1397,11 +1397,6 @@ typedef CARDINAL                                                         RPM_W;
 #define Min_RPM_W                                                         (0.0)
 #define Max_RPM_W                                          (65535 * Prec_RPM_W)
 
-typedef CARDINAL                                                   RPM_W_Chery;
-#define Prec_RPM_W_Chery                                              (1.0 / 4)
-#define Min_RPM_W_Chery                                                   (0.0)
-#define Max_RPM_W_Chery                              (65535 * Prec_RPM_W_Chery)
-
 typedef SHORTCARD                                                        RPM_B;
 #define Prec_RPM_B                                                       (50.0)
 #define Min_RPM_B                                                         (0.0)

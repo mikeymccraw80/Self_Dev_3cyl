@@ -10,6 +10,7 @@
 #include "timepcvc.h"
 #include "v_power.h"
 #include "lux_type.h"
+#include "j1939_cald.h"
 
 //=============================================================================
 // type define

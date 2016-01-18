@@ -157,7 +157,7 @@ typedef struct
 }CAN_RECEIVE_ERR_TYPE;
 /* Used to diagnostic can meter */
 extern CAN_RECEIVE_ERR_TYPE VsCAN_Receive_Err;
-CAN_Port_Error_T HAL_CAN_Err_Status[4];
+extern CAN_Port_Error_T HAL_CAN_Err_Status[4];
 
 void HAL_CAN_Initialize(void);
 void HAL_CAN_Transmit_Message(uint32_t id, uint8_t len, uint8_t *pdata);

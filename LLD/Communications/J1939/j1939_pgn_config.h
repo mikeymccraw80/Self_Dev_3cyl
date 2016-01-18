@@ -42,10 +42,10 @@
 #define J1939_RECEIVE_MESSAGES_NUMBER_SUPPORTED     ( 24 )
 #define J1939_TRANSMIT_MESSAGES_NUMBER_SUPPORTED    ( 40 )
 
-#define J1939_RECEIVE_MESSAGES_NUMBER_CHANNEL_0     ( 13 )
+#define J1939_RECEIVE_MESSAGES_NUMBER_CHANNEL_0     ( 14 )
 #define J1939_RECEIVE_MESSAGES_NUMBER_CHANNEL_1     ( 0 )
 
-#define J1939_TRANSMIT_MESSAGES_NUMBER_CHANNEL_0    ( 25 )
+#define J1939_TRANSMIT_MESSAGES_NUMBER_CHANNEL_0    ( 26 )
 #define J1939_TRANSMIT_MESSAGES_NUMBER_CHANNEL_1    ( 0 )
 
 #define J1939_RECEIVE_MESSAGES_NUMBER    ( J1939_RECEIVE_MESSAGES_NUMBER_CHANNEL_0 +\
@@ -171,6 +171,24 @@ extern void J1939_Receive_Initialize_PGN_65271(J1939_Receive_Message_Control_T *
 #define J1939_PGN_59904_TIMEOUT               (30/J1939_BASE_LOOP)
 extern void J1939_Receive_Initialize_PGN_59904(J1939_Receive_Message_Control_T *rx_msg_ctrl_ptr);
 
+#define J1939_PGN_57344_BASE_ID               0x18E00017
+#define J1939_PGN_57344_LENGTH                8
+#define J1939_PGN_57344_FREQ                  (KfHWIO_J1939_PGN_57344_FREQ/J1939_BASE_LOOP)
+#define J1939_PGN_57344_TIMEOUT               (KfHWIO_J1939_PGN_57344_FREQ*10/J1939_BASE_LOOP)
+extern void J1939_Receive_Initialize_PGN_57344(J1939_Receive_Message_Control_T *rx_msg_ctrl_ptr);
+
+#define J1939_PGN_00000_BASE_ID               0x0C000017
+#define J1939_PGN_00000_LENGTH                8
+#define J1939_PGN_00000_FREQ                  (KfHWIO_J1939_PGN_00000_FREQ/J1939_BASE_LOOP)
+#define J1939_PGN_00000_TIMEOUT               (KfHWIO_J1939_PGN_00000_FREQ*10/J1939_BASE_LOOP)
+extern void J1939_Receive_Initialize_PGN_00000(J1939_Receive_Message_Control_T *rx_msg_ctrl_ptr);
+
+#define J1939_PGN_65265_BASE_ID               0x18FEF117
+#define J1939_PGN_65265_LENGTH                8
+#define J1939_PGN_65265_FREQ                  (KfHWIO_J1939_PGN_65265_FREQ/J1939_BASE_LOOP)
+#define J1939_PGN_65265_TIMEOUT               (KfHWIO_J1939_PGN_65265_FREQ*10/J1939_BASE_LOOP)
+extern void J1939_Receive_Initialize_PGN_65265(J1939_Receive_Message_Control_T *rx_msg_ctrl_ptr);
+
 #define J1939_PGN_65272_BASE_ID               0x18FEF8D5
 #define J1939_PGN_65272_LENGTH                8
 #define J1939_PGN_65272_FREQ                  (10/J1939_BASE_LOOP)
@@ -188,12 +206,6 @@ extern void J1939_Receive_Initialize_PGN_65273(J1939_Receive_Message_Control_T *
 #define J1939_PGN_65274_FREQ                  (10/J1939_BASE_LOOP)
 #define J1939_PGN_65274_TIMEOUT               (30/J1939_BASE_LOOP)
 extern void J1939_Receive_Initialize_PGN_65274(J1939_Receive_Message_Control_T *rx_msg_ctrl_ptr);
-
-#define J1939_PGN_65275_BASE_ID               0x18FEFBD5
-#define J1939_PGN_65275_LENGTH                8
-#define J1939_PGN_65275_FREQ                  (10/J1939_BASE_LOOP)
-#define J1939_PGN_65275_TIMEOUT               (30/J1939_BASE_LOOP)
-extern void J1939_Receive_Initialize_PGN_65275(J1939_Receive_Message_Control_T *rx_msg_ctrl_ptr);
 
 /***********************************************************************/
 /* 65276 Dash Display Fuel Level                                       */
@@ -256,6 +268,7 @@ extern void J1939_TxInit_TransportIn_2(J1939_Transmit_Message_Control_T *MsgCtrl
 extern void J193973_TxInit_PGN_65226(J1939_Transmit_Message_Control_T *MsgCtrl);
 extern void J193973_TxInit_PGN_65227(J1939_Transmit_Message_Control_T *MsgCtrl);
 extern void J193973_TxInit_PGN_65229(J1939_Transmit_Message_Control_T *MsgCtrl);
+extern void J193973_TxInit_PGN_65230(J1939_Transmit_Message_Control_T *MsgCtrl);
 extern void J193973_TxInit_PGN_65228_Ack (J1939_Transmit_Message_Control_T *MsgCtrl);
 extern void J193973_TxInit_PGN_65235_Ack (J1939_Transmit_Message_Control_T *MsgCtrl);
 extern void J193973_TxInit_PGN_65236(J1939_Transmit_Message_Control_T *MsgCtrl);
@@ -331,6 +344,35 @@ extern void J1939_Event_Trigger_Transmit(uint8_t index);
 #define J1939_PGN_65229_TIMEOUT                (0) 
 
 /******************************************************************************/
+/* PGN: 65230 DM5                                                             */
+/******************************************************************************/
+#define J193973_PGN_65230_BASE_ID              (0x18FECE00UL) /*FFCD=65230,Prio=6,src=0*/
+#define J193973_PGN_65230_LENGTH               (8)
+#define J193973_PGN_65230                      (0x0000FECEUL)
+#define J193973_PGN_65230_FREQ                 (0)
+#define J1939_PGN_65230_TIMEOUT                (0) 
+
+/******************************************************************************/
+/* PGN: dm7                                                               */
+/******************************************************************************/
+#define J1939_73_dm7_BASE_ID               0x18E30017
+#define J1939_73_dm7_LENGTH                8
+#define J1939_73_dm7_FREQ                  (0)
+#define J1939_73_dm7_TIMEOUT               (0)
+extern void J1939_Receive_Initialize_73_dm7(J1939_Receive_Message_Control_T *rx_msg_ctrl_ptr);
+
+extern void J1939_RxInit_73_dm7 (J1939_Receive_Message_Control_T *MsgCtrl);
+
+/******************************************************************************/
+/* PGN: 65232 DM8                                                             */
+/******************************************************************************/
+#define J193973_PGN_65232_BASE_ID              (0x18FED000UL) /*FFCD=65232,Prio=6,src=0*/
+#define J193973_PGN_65232_LENGTH               (8)
+#define J193973_PGN_65223                      (0x0000FED0UL)
+#define J193973_PGN_65232_FREQ                 (0)
+#define J1939_PGN_65232_TIMEOUT                (0) 
+
+/******************************************************************************/
 /* PGN: 65235 DM11                                                             */
 /******************************************************************************/
 #define J193973_PGN_65235_BASE_ID              (0x18FED300UL) /*FFD3=65235,Prio=6,src=0*/
@@ -347,6 +389,16 @@ extern void J1939_Event_Trigger_Transmit(uint8_t index);
 #define J193973_PGN_65236                      (0x0000FED4UL)
 #define J193973_PGN_65236_FREQ                 (0)
 #define J1939_PGN_65236_TIMEOUT                (0) 
+/******************************************************************************/
+/* PGN: 57088 DM13                                                            */
+/******************************************************************************/
+#define J193973_PGN_57088_BASE_ID              (0x18DF0000UL) /*DF00=57088,Prio=6,src=0*/
+#define J193973_PGN_57088_LENGTH               (8)
+#define J193973_PGN_57088                      (0x0000DF00UL)
+#define J193973_PGN_57088_FREQ                 (0)
+#define J1939_PGN_57088_TIMEOUT                (0) 
+extern void J1939_Receive_Initialize_73_dm13(J1939_Receive_Message_Control_T * rx_msg_ctrl_ptr); 
+extern const J1939_Message_Table_T   J1939_Message_Table[];
 /******************************************************************************/
 /* PGN: 65249                                                             */
 /******************************************************************************/

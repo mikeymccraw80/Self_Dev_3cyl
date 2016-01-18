@@ -24,6 +24,9 @@ uint32_t CAN_Message_RX_ID;
 /* Used to diagnostic can meter */
 CAN_RECEIVE_ERR_TYPE VsCAN_Receive_Err;
 
+CAN_Port_Error_T HAL_CAN_Err_Status[4];
+
+
 //=============================================================================
 // HAL_CAN_RX_B00_Config
 //=============================================================================

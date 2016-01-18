@@ -39,6 +39,18 @@ typedef enum {
   BusyAck
   } AckModeType;
 
+typedef enum {
+  STOP_BROADCAST,
+  START_BROADCAST,
+  Res,
+  Ignore
+  } BROADCASTSTATE;
+
+typedef enum {
+  Normally,
+  Indefinite,
+  Temporary
+  } Suspend_t;
 
 /************************************************************************/
 /* STRUCTURE: J1939_Transmit_Messages_Index_Tag                                              */
@@ -173,6 +185,20 @@ typedef struct J1939_Receive_Message_Buffer_Tag
    J1939_New_Message_Status_T     new_msg;
 } J1939_Receive_Message_Buffer_T;
 
+typedef struct {
+
+	struct {
+		uint8_t Suspend      :2;
+		uint8_t Hold         :1;
+		uint8_t State_modified         :1;
+		uint8_t Setup        :1;
+		uint8_t Broadcast_state        :1;
+		uint8_t res          :2;
+	}Broadcast_State;
+
+   uint32_t Timer;
+   uint16_t Suspend_t;
+}J1939_DM13_Message_Control_T;
 #endif
 
 

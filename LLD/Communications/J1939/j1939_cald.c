@@ -32,26 +32,6 @@
 */
 
 /*
-*|   KfHWIO_J193973_SA {
-*|     : is_calconst;
-*|     : description = "J1939 source address.";
-*|     : type = types.t_count_byte;
-*|     : units = "";
-*|   }
-*/
-const uint8_t KfHWIO_J193973_SA = 0x00;
-
-/*
-*|   KfHWIO_J193973_PGN_65251_FREQ {
-*|     : is_calconst;
-*|     : description = "J1939 PGN 65251 transmit frequency.";
-*|     : type = types.t_count_word;
-*|     : units = "ms";
-*|   }
-*/
-const uint16_t KfHWIO_J193973_PGN_65251_FREQ = V_COUNT_WORD(5000);
-
-/*
 *|   KeHWIO_J1939_Trigger_TYPE {
 *|     : is_calconst;
 *|     : description = "Event trigger sent PGN type.";

@@ -27,6 +27,8 @@
 #include "j1939_communication_manager.h"
 #include "j1939_PGN_config.h"
 
+#define second_to_10ms  100
+extern J1939_DM13_Message_Control_T J1939_dm13_Control;
 static J1939_Transmit_Message_Control_T  J1939_Transmit_Message_Control[40];
 static J1939_Receive_Message_Buffer_T    J1939_Receive_Message_Buffer [24];
 static J1939_Receive_Message_Control_T   J1939_Receive_Message_Control_Channel_0[24];
@@ -49,6 +51,7 @@ uint8_t  J1939_MESSAGE_TX_OFFSET;
 
 uint8_t  J1939_MESSAGE_RX_OFFSET;
 uint8_t  J1939_MESSAGE_TX_OFFSET;
+uint32_t J1939_Update_Timer;
 
 static void J1939_Initialize_Receive_Manager (J1939_Channel_T  channel_num);
 static void J1939_Initialize_Transmit_Manager (J1939_Channel_T  channel_num);
@@ -75,6 +78,7 @@ void J1939_Initialize_Communication_Manager (J1939_Channel_T  channel_num)
 {
    J1939_Receive_Enable[channel_num]  = true;
    J1939_Transmit_Enable[channel_num] = true;
+   J1939_Update_Timer =0;
 
    J1939_No_Of_Receive_Messages[0] = J1939_NO_OF_RECEIVE_MESSAGES_CHANNEL_0;
    J1939_No_Of_Receive_Messages[1] = J1939_NO_OF_RECEIVE_MESSAGES_CHANNEL_1;
@@ -233,6 +237,56 @@ static void J1939_Update_Transmit_Timers (J1939_Channel_T  channel_num)
    {
       tx_msg_ctrl_ptr = &J1939_Transmit_Message_Control[index];
 
+	 /*******************************************************/
+		  /*****update the j1939 broadcast state******************/
+		  if((J1939_dm13_Control.Broadcast_State.Suspend ==Normally)&&
+		  	 (J1939_dm13_Control.Broadcast_State.Hold ==false)&&
+		  	 (J1939_dm13_Control.Broadcast_State.State_modified==true))
+		  {
+			if((J1939_Update_Timer - J1939_dm13_Control.Timer)>=(6*second_to_10ms))
+			{	
+				J1939_dm13_Control.Broadcast_State.State_modified =false;
+				J1939_dm13_Control.Broadcast_State.Setup =false;
+			    J1939_dm13_Control.Broadcast_State.Broadcast_state =\
+					      (!J1939_dm13_Control.Broadcast_State.Broadcast_state);
+			}
+		  }
+		  else
+		  {
+			  if(J1939_dm13_Control.Broadcast_State.Suspend!=Normally)
+		      {
+		          //at suspend temporary mode
+	              if(J1939_dm13_Control.Broadcast_State.Suspend == Temporary)
+	              {
+					//if suspend time exceeded the experied time then the suspend state will be recovered to normal mode
+					if((J1939_Update_Timer - J1939_dm13_Control.Timer)>=(J1939_dm13_Control.Suspend_t*second_to_10ms))
+					{
+						J1939_dm13_Control.Broadcast_State.Suspend = Normally;
+						J1939_dm13_Control.Broadcast_State.State_modified =false;
+						J1939_dm13_Control.Broadcast_State.Broadcast_state =START_BROADCAST;
+					}
+				  }
+			  }
+			  else
+			  {
+		          if(J1939_dm13_Control.Broadcast_State.Hold)
+		          {   
+		            //if the hold time exceeded 6 second then the hold state will be recovered normal mode
+					if((J1939_Update_Timer - J1939_dm13_Control.Timer)>=(6*second_to_10ms))
+					{
+					  J1939_dm13_Control.Broadcast_State.Hold  =false;
+					  J1939_dm13_Control.Broadcast_State.Setup =false;
+					  J1939_dm13_Control.Broadcast_State.State_modified =false;
+					  J1939_dm13_Control.Broadcast_State.Broadcast_state =\
+					      (!J1939_dm13_Control.Broadcast_State.Broadcast_state);
+					}
+				  }
+			  }
+		  }
+	      /*******************************************************/
+		  /*****update the j1939 broadcast transmit timer*********/  
+ if(J1939_dm13_Control.Broadcast_State.Broadcast_state ==START_BROADCAST)
+  {
       if (tx_msg_ctrl_ptr->Time_To_Next_Service_W > 0)
       {
          tx_msg_ctrl_ptr->Time_To_Next_Service_W--;
@@ -244,10 +298,25 @@ static void J1939_Update_Transmit_Timers (J1939_Channel_T  channel_num)
          tx_msg_ctrl_ptr->Tx_Timeout_Timer_W--;
          tx_msg_ctrl_ptr->Tx_Timeout = ( (0 == tx_msg_ctrl_ptr->Tx_Timeout_Timer_W) ? true : false);
       }
+ }
    }
 
 }
-
+//=============================================================================
+// Name: J1939_Update_timer
+//
+// Description:
+//     Updates J1939 timer
+//
+// Parameters: none
+//
+// Return Value: none.
+//
+//=============================================================================
+static void J1939_Update_timer(void)
+{
+  J1939_Update_Timer ++; 
+}
 //=============================================================================
 // Name: J1939_Schedule_Transmit_Messages
 //
@@ -358,6 +427,7 @@ static void J1939_Manager (J1939_Channel_T  channel_num)
 //=============================================================================
 void J1939_Handler_Timer_Task (void)
 {
+   J1939_Update_timer();
 #ifdef J1939_CH0_SELECTED
    J1939_Update_Receive_Timers (J1939_CHANNEL_0);
    J1939_Update_Transmit_Timers (J1939_CHANNEL_0);
@@ -387,7 +457,7 @@ void J1939_Handler_Periodic_Task (void)
 #endif
 
    #ifdef J1939_TEST_STUB
-//   J1939_Transmit_Test_Task();
+   J1939_Transmit_Test_Task();
    #endif
 
    #ifdef J1939_CH0_SELECTED
@@ -399,7 +469,7 @@ void J1939_Handler_Periodic_Task (void)
    #endif
 
    #ifdef J1939_TEST_STUB
-//   J1939_Receive_Test_Task();
+   J1939_Receive_Test_Task();
    #endif
 }
 
@@ -463,6 +533,18 @@ void J1939_Trigger_Transmit_Message_Service (uint8_t index)
 // Return Value: none
 //
 //=============================================================================
+void J1939_Event_Trigger_Transmit(uint8_t index)
+{
+  if((true!=J1939_Transmit_Message_Control[index].Time_To_Service)&& 
+ 	(J1939_Transmit_Message_Control[index].Time_To_Next_Service_W>1))
+   	{
+       J1939_Transmit_Message_Control[index].Event_Trigger_Flag=true;   
+	   J1939_Transmit_Message_Control[index].Event_Trigger_Service_Buffer= J1939_Transmit_Message_Control[index].Time_To_Next_Service_W;
+       J1939_Transmit_Message_Control[index].Time_To_Next_Service_W = 0;	   
+       J1939_Transmit_Message_Control[index].Time_To_Service = true;
+       
+    }
+}
 
 //=============================================================================
 // Name: J1939_Disable_Transmit_Message_Service

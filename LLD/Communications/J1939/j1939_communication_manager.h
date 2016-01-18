@@ -19,7 +19,7 @@ typedef enum
 }J1939_Channel_T;
 
 extern 	const J1939_Message_Table_T   J1939_Message_Table[];
-
+extern uint32_t J1939_Update_Timer;
 
 /************************************************************************/
 /* Copyright Delphi-Delco Electronics 2004                              */
