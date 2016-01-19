@@ -64,11 +64,11 @@ void J1939_Transmit_Message_Confirmation(uint8_t index);
 
 void J1939_Handler_Cold_Init(void);
 
-void J1939_Message_Receive_Callback(
+void J1939_Message_Receive_Callback (
    uint8_t     in_msg_obj,
+   uint32_t   in_msg_id,
    uint8_t     *in_data_buff,
-   uint8_t     in_data_length );
-
+   uint8_t     in_data_length);
 
 #endif
 

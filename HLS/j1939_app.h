@@ -26,11 +26,11 @@ extern  bool B_Ign0Req;
 extern  bool B_Ign1Req;
 extern  bool B_Ign2Req;
 
-#define J1939_ECUID_BUFFER_SIZE (16)
+#define J1939_ECUID_BUFFER_SIZE (50)
 uint16_t GetJ939_ECUID_Size(void);
 uint8_t * GetJ1939_ECUID_MsgPtr(void);
 
-#define J1939_SOFT_BUFFER_SIZE (16)
+#define J1939_SOFT_BUFFER_SIZE (50)
 uint16_t GetJ1939_SoftID_Size(void);
 uint8_t * GetJ1939_SoftID_MsgPtr(void);
 

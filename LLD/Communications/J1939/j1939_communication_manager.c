@@ -29,7 +29,7 @@
 
 #define second_to_10ms  100
 extern J1939_DM13_Message_Control_T J1939_dm13_Control;
-static J1939_Transmit_Message_Control_T  J1939_Transmit_Message_Control[40];
+static J1939_Transmit_Message_Control_T  J1939_Transmit_Message_Control[32];
 static J1939_Receive_Message_Buffer_T    J1939_Receive_Message_Buffer [24];
 static J1939_Receive_Message_Control_T   J1939_Receive_Message_Control_Channel_0[24];
 static J1939_Receive_Message_Control_T   J1939_Receive_Message_Control_Channel_1[24];
@@ -45,9 +45,6 @@ static J1939_Receive_Message_Control_T *J1939_Receive_Message_Control[2] =
    J1939_Receive_Message_Control_Channel_1,
 };
 
-
-uint8_t  J1939_MESSAGE_RX_OFFSET;
-uint8_t  J1939_MESSAGE_TX_OFFSET;
 
 uint8_t  J1939_MESSAGE_RX_OFFSET;
 uint8_t  J1939_MESSAGE_TX_OFFSET;
@@ -629,6 +626,7 @@ J1939_New_Message_Status_T J1939_Is_New_Message_Received (
    J1939_Receive_Message_Info_T    *rx_msg)
 {
    uint8_t                      counter, msg_length;
+   uint32_t                     msg_id;
    uint8_t                      *data_ptr;
    J1939_New_Message_Status_T   new_message_status = J1939_NEW_MESSAGE_UNAVAILABLE;
 
@@ -636,10 +634,12 @@ J1939_New_Message_Status_T J1939_Is_New_Message_Received (
    {
       new_message_status = J1939_Receive_Message_Buffer[in_msg_obj].new_msg;
       msg_length         = J1939_Message_Table[in_msg_obj].message_length;
+      msg_id               = J1939_Receive_Message_Buffer[in_msg_obj].msg_id;
 
       if (J1939_NEW_MESSAGE_AVAILABLE == new_message_status)
       {
-         rx_msg->ID     = J1939_Message_Table[in_msg_obj].message_ID;
+         //rx_msg->ID     = J1939_Message_Table[in_msg_obj].message_ID;
+         rx_msg->ID     = msg_id;		//msg-id is different from J1939_Message_Table.message_ID
          rx_msg->Length = msg_length;
          //The address of message data @ message buffer is stored in a temp pointer
          data_ptr       = (uint8_t *) &J1939_Receive_Message_Buffer[in_msg_obj].msg_data[0];
@@ -813,6 +813,7 @@ bool J1939_Transmit_Message (
 //=============================================================================
 void J1939_Message_Receive_Callback (
    uint8_t     in_msg_obj,
+   uint32_t   in_msg_id,
    uint8_t     *in_data_buff,
    uint8_t     in_data_length)
 {
@@ -836,6 +837,7 @@ void J1939_Message_Receive_Callback (
 
       //New message flag is updated to 'AVAILABLE' status
       J1939_Receive_Message_Buffer[j1939_rx_msg_obj].new_msg = J1939_NEW_MESSAGE_AVAILABLE;
+      J1939_Receive_Message_Buffer[j1939_rx_msg_obj].msg_id = in_msg_id;
    }
 
    HAL_CAN_Err_Status[0] = CAN_PORT_ERROR_NONE;

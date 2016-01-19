@@ -706,7 +706,7 @@ static void hwi_handle_msg_type (uint8_t can,
 {
     if((can_msg_number>P_L_CAN_MSG15)&&(can_msg_number<=P_L_CAN_MSG32))
     {
-      J1939_Message_Receive_Callback((uint8_t)can_msg_number, p_l_can_data_ptr, 8);
+      J1939_Message_Receive_Callback((uint8_t)can_msg_number, p_l_can_msg_id, p_l_can_data_ptr, 8);
     }
     /* End of case statement */              
 }

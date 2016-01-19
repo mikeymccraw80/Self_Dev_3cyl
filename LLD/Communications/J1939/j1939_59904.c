@@ -8,12 +8,19 @@
 /***************************************************************************/
 /* FUNCTION: Parse_PGN_59904 Request a PGN                                 */
 /***************************************************************************/
+J1939_Receive_Message_Info_T Receive_Message;
 static void Parse_PGN_59904 (J1939_Receive_Message_Info_T *RxMsg)
 {
    bool           PgnFound;
    TxMsgIndexType Index;
    uint32_t       RequestedPgn;
    uint32_t       checkPgn;
+
+
+
+Receive_Message.ID=RxMsg->ID;
+Receive_Message.Length=RxMsg->Length;
+   
    /* Byte 1 - Parameter Group Number Bits 23-16 */
    /* Byte 2 - Parameter Group Number Bits 15-8 */
    /* Byte 3 - Parameter Group Number Bits 7-0 */
@@ -24,7 +31,7 @@ static void Parse_PGN_59904 (J1939_Receive_Message_Info_T *RxMsg)
    /* Search for matching Tx message that is availble upon request */
    PgnFound = false;
 
-   for (Index = J1939_TX_PGN_65226_INDEX; (! PgnFound) && (Index < J1939_TX_PGN_65280_INDEX); Index++)
+   for (Index = J1939_TX_PGN_65226_INDEX; (! PgnFound) && (Index < J1939_TX_PGN_Denny_INDEX); Index++)
    {
       /* Check if message PGN matches the requested PGN and also check if */
       /* the message has a valid service function (CCP2 entries may not)    */

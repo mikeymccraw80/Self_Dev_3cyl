@@ -181,6 +181,7 @@ typedef enum
 
 typedef struct J1939_Receive_Message_Buffer_Tag
 {
+   uint32_t                       msg_id;
    uint8_t                        msg_data[8];
    J1939_New_Message_Status_T     new_msg;
 } J1939_Receive_Message_Buffer_T;
