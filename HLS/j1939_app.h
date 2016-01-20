@@ -25,12 +25,18 @@
 extern  bool B_Ign0Req;
 extern  bool B_Ign1Req;
 extern  bool B_Ign2Req;
+//extern uint8_t SOFTID_Buffer[];
+//extern uint8_t ECUID_Buffer[];
 
-#define J1939_ECUID_BUFFER_SIZE (50)
+//#define J1939_ECUID_BUFFER_SIZE sizeof(SOFTID_Buffer)
+//#define J1939_SOFT_BUFFER_SIZE sizeof(SOFTID_Buffer)
+
+#define J1939_ECUID_BUFFER_SIZE (63)
+#define J1939_SOFT_BUFFER_SIZE (91)
+
 uint16_t GetJ939_ECUID_Size(void);
 uint8_t * GetJ1939_ECUID_MsgPtr(void);
 
-#define J1939_SOFT_BUFFER_SIZE (50)
 uint16_t GetJ1939_SoftID_Size(void);
 uint8_t * GetJ1939_SoftID_MsgPtr(void);
 

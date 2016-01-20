@@ -127,7 +127,6 @@ uint16_t J1939_DM12_EmissionsRelated_ActiveDTCs;
 
 uint16_t GetJ939_ECUID_Size(void)
 {
-    
     return sizeof(ECUID_Buffer);
 }
 
@@ -138,7 +137,7 @@ uint8_t * GetJ1939_ECUID_MsgPtr(void)
 
 uint16_t GetJ1939_SoftID_Size(void)
 {
-    return sizeof(SOFTID_Buffer);
+   return sizeof(SOFTID_Buffer);
 }
 
 uint8_t * GetJ1939_SoftID_MsgPtr(void)

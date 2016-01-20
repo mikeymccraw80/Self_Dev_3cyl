@@ -8,7 +8,6 @@
 /***************************************************************************/
 /* FUNCTION: Parse_PGN_59904 Request a PGN                                 */
 /***************************************************************************/
-J1939_Receive_Message_Info_T Receive_Message;
 static void Parse_PGN_59904 (J1939_Receive_Message_Info_T *RxMsg)
 {
    bool           PgnFound;
@@ -16,11 +15,6 @@ static void Parse_PGN_59904 (J1939_Receive_Message_Info_T *RxMsg)
    uint32_t       RequestedPgn;
    uint32_t       checkPgn;
 
-
-
-Receive_Message.ID=RxMsg->ID;
-Receive_Message.Length=RxMsg->Length;
-   
    /* Byte 1 - Parameter Group Number Bits 23-16 */
    /* Byte 2 - Parameter Group Number Bits 15-8 */
    /* Byte 3 - Parameter Group Number Bits 7-0 */

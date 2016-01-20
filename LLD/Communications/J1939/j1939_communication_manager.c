@@ -233,6 +233,20 @@ static void J1939_Update_Transmit_Timers (J1939_Channel_T  channel_num)
    for (index = 0; index < J1939_No_Of_Transmit_Messages[channel_num]; index++)
    {
       tx_msg_ctrl_ptr = &J1939_Transmit_Message_Control[index];
+      if(index<5){
+	      if (tx_msg_ctrl_ptr->Time_To_Next_Service_W > 0)
+	      {
+	         tx_msg_ctrl_ptr->Time_To_Next_Service_W--;
+	         tx_msg_ctrl_ptr->Time_To_Service = ( (0 == tx_msg_ctrl_ptr->Time_To_Next_Service_W) ? true : false);
+	      }
+
+	      if (tx_msg_ctrl_ptr->Tx_Timeout_Timer_W > 0)
+	      {
+	         tx_msg_ctrl_ptr->Tx_Timeout_Timer_W--;
+	         tx_msg_ctrl_ptr->Tx_Timeout = ( (0 == tx_msg_ctrl_ptr->Tx_Timeout_Timer_W) ? true : false);
+	      }
+
+	  }else{
 
 	 /*******************************************************/
 		  /*****update the j1939 broadcast state******************/
@@ -282,21 +296,22 @@ static void J1939_Update_Transmit_Timers (J1939_Channel_T  channel_num)
 		  }
 	      /*******************************************************/
 		  /*****update the j1939 broadcast transmit timer*********/  
- if(J1939_dm13_Control.Broadcast_State.Broadcast_state ==START_BROADCAST)
-  {
-      if (tx_msg_ctrl_ptr->Time_To_Next_Service_W > 0)
-      {
-         tx_msg_ctrl_ptr->Time_To_Next_Service_W--;
-         tx_msg_ctrl_ptr->Time_To_Service = ( (0 == tx_msg_ctrl_ptr->Time_To_Next_Service_W) ? true : false);
-      }
+		 if(J1939_dm13_Control.Broadcast_State.Broadcast_state ==START_BROADCAST)
+		  {
+		      if (tx_msg_ctrl_ptr->Time_To_Next_Service_W > 0)
+		      {
+		         tx_msg_ctrl_ptr->Time_To_Next_Service_W--;
+		         tx_msg_ctrl_ptr->Time_To_Service = ( (0 == tx_msg_ctrl_ptr->Time_To_Next_Service_W) ? true : false);
+		      }
 
-      if (tx_msg_ctrl_ptr->Tx_Timeout_Timer_W > 0)
-      {
-         tx_msg_ctrl_ptr->Tx_Timeout_Timer_W--;
-         tx_msg_ctrl_ptr->Tx_Timeout = ( (0 == tx_msg_ctrl_ptr->Tx_Timeout_Timer_W) ? true : false);
-      }
- }
+		      if (tx_msg_ctrl_ptr->Tx_Timeout_Timer_W > 0)
+		      {
+		         tx_msg_ctrl_ptr->Tx_Timeout_Timer_W--;
+		         tx_msg_ctrl_ptr->Tx_Timeout = ( (0 == tx_msg_ctrl_ptr->Tx_Timeout_Timer_W) ? true : false);
+		      }
+		 }
    }
+}
 
 }
 //=============================================================================
