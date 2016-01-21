@@ -37,15 +37,97 @@
 #undef J1939_CH2_SELECTED
 
 /******************************************************************************
+*                                          J1939 PGN Supported Config
+******************************************************************************/
+//for rx pgns
+#define J1939_PGN_59904_SUPPORTED             1   //tp pgn
+#define J1939_PGN_60160_SUPPORTED             1   //tp pgn
+#define J1939_PGN_60416_SUPPORTED             1   //tp pgn
+#define J1939_PGN_57344_SUPPORTED             1   //jd rx pgn
+#define J1939_PGN_00000_SUPPORTED             1   //jd rx pgn
+#define J1939_PGN_65265_SUPPORTED             1   //jd rx pgn
+#define J1939_PGN_64971_SUPPORTED             1   //jd rx pgn
+#define J1939_PGN_65276_SUPPORTED             1
+#define J1939_PGN_65277_SUPPORTED             1
+#define J1939_PGN_65278_SUPPORTED             1
+#define J1939_PGN_65279_SUPPORTED             1
+#define J1939_PGN_65296_SUPPORTED             1
+#define J1939_73_dm7_SUPPORTED                1
+#define J1939_73_dm13_SUPPORTED                1
+
+//for tx pgns
+#define J1939_DENY_REQUEST_SUPPORTED          1
+#define J193973_PGN_65226_SUPPORTED           1
+#define J193973_PGN_65227_SUPPORTED           1
+#define J193973_PGN_65228_SUPPORTED           1
+#define J193973_PGN_65229_SUPPORTED           1
+#define J193973_PGN_65230_SUPPORTED           1
+#define J193973_PGN_65235_SUPPORTED           1
+#define J193973_PGN_65236_SUPPORTED           1
+#define J193973_PGN_65249_SUPPORTED           1
+#define J193973_PGN_65251_SUPPORTED           1
+#define J1939_PGN_64965_SUPPORTED             1
+#define J1939_PGN_65242_SUPPORTED             1
+#define J1939_PGN_61444_SUPPORTED             1
+#define J1939_PGN_61443_SUPPORTED             1
+#define J1939_PGN_64997_SUPPORTED             1
+#define J1939_PGN_65154_SUPPORTED             1
+#define J1939_PGN_65266_SUPPORTED             1
+#define J1939_PGN_65262_SUPPORTED             1
+#define J1939_PGN_65263_SUPPORTED             1
+#define J1939_PGN_65270_SUPPORTED             1
+#define J1939_PGN_65271_SUPPORTED             1
+#define J1939_PGN_65213_SUPPORTED             1
+#define J1939_PGN_65253_SUPPORTED             1
+#define J1939_PGN_65232_SUPPORTED             1
+#define J1939_PGN_65289_SUPPORTED             1
+/******************************************************************************
 *                                          CONFIGURATION FOR J1939 Messages
 ******************************************************************************/
-#define J1939_RECEIVE_MESSAGES_NUMBER_SUPPORTED     ( 24 )
+#define J1939_RECEIVE_MESSAGES_NUMBER_SUPPORTED       ( 24 )
 #define J1939_TRANSMIT_MESSAGES_NUMBER_SUPPORTED    ( 40 )
 
-#define J1939_RECEIVE_MESSAGES_NUMBER_CHANNEL_0     ( 14 )
+#define  J1939_RECEIVE_MESSAGES_NUMBER_CHANNEL_0 ( J1939_PGN_59904_SUPPORTED 	+\
+														J1939_PGN_60160_SUPPORTED	+\
+														J1939_PGN_60416_SUPPORTED	+\
+														J1939_PGN_57344_SUPPORTED 	+\
+														 J1939_PGN_00000_SUPPORTED	+\
+														 J1939_PGN_65265_SUPPORTED	+\
+														 J1939_PGN_64971_SUPPORTED	+\
+														 J1939_PGN_65276_SUPPORTED	+\
+														 J1939_PGN_65277_SUPPORTED	+\
+														  J1939_PGN_65278_SUPPORTED	+\
+														  J1939_PGN_65279_SUPPORTED	+\
+														   J1939_PGN_65296_SUPPORTED+\
+														    J1939_73_dm7_SUPPORTED	+\
+														     J1939_73_dm13_SUPPORTED    )
 #define J1939_RECEIVE_MESSAGES_NUMBER_CHANNEL_1     ( 0 )
 
-#define J1939_TRANSMIT_MESSAGES_NUMBER_CHANNEL_0    ( 31 )
+#define  J1939_TRANSMIT_MESSAGES_NUMBER_CHANNEL_0 (6 + J1939_DENY_REQUEST_SUPPORTED        +\
+															  J193973_PGN_65226_SUPPORTED           +\
+															  J193973_PGN_65227_SUPPORTED           +\
+															  J193973_PGN_65228_SUPPORTED           +\
+															  J193973_PGN_65229_SUPPORTED           +\
+															  J193973_PGN_65230_SUPPORTED           +\
+															  J193973_PGN_65235_SUPPORTED           +\
+															  J193973_PGN_65236_SUPPORTED           +\
+															  J193973_PGN_65249_SUPPORTED           +\
+															  J193973_PGN_65251_SUPPORTED           +\
+															  J1939_PGN_64965_SUPPORTED             +\
+															  J1939_PGN_65242_SUPPORTED             +\
+															  J1939_PGN_61444_SUPPORTED             +\
+															  J1939_PGN_61443_SUPPORTED             +\
+															  J1939_PGN_64997_SUPPORTED             +\
+															  J1939_PGN_65154_SUPPORTED             +\
+															  J1939_PGN_65266_SUPPORTED             +\
+															  J1939_PGN_65262_SUPPORTED             +\
+															  J1939_PGN_65263_SUPPORTED             +\
+															  J1939_PGN_65270_SUPPORTED             +\
+															  J1939_PGN_65271_SUPPORTED             +\
+															  J1939_PGN_65213_SUPPORTED             +\
+															  J1939_PGN_65253_SUPPORTED             +\
+															  J1939_PGN_65232_SUPPORTED             +\
+															  J1939_PGN_65289_SUPPORTED )                 
 #define J1939_TRANSMIT_MESSAGES_NUMBER_CHANNEL_1    ( 0 )
 
 #define J1939_RECEIVE_MESSAGES_NUMBER    ( J1939_RECEIVE_MESSAGES_NUMBER_CHANNEL_0 +\
@@ -56,7 +138,7 @@
 
 #define J1939_MESSAGES_NUMBER   ( J1939_RECEIVE_MESSAGES_NUMBER + \
                                  J1939_TRANSMIT_MESSAGES_NUMBER    )
-
+                                 
 /******************************************************************************
  *  Sanity Check: will cause compiler error
  *                if incompatible options are selected.
@@ -84,6 +166,7 @@ extern const uint8_t J1939_NO_OF_MESSAGES;
 /************************************************************************/
 
 typedef enum {
+#if J1939_DENY_REQUEST_SUPPORTED
   J1939_TX_TRANSPORT_OUT_0,
   J1939_TX_TRANSPORT_OUT_1,
   J1939_TX_TRANSPORT_OUT_2,
@@ -91,35 +174,84 @@ typedef enum {
   J1939_TX_TRANSPORT_IN_0,
   J1939_TX_TRANSPORT_IN_1,
   J1939_TX_TRANSPORT_IN_2,
-  
+#endif                       
+#if J193973_PGN_65226_SUPPORTED  
   J1939_TX_PGN_65226_INDEX, 
+#endif
+#if J193973_PGN_65227_SUPPORTED
   J1939_TX_PGN_65227_INDEX,
+#endif
+#if J193973_PGN_65228_SUPPORTED 
   J1939_TX_PGN_65228_INDEX, 
+ #endif
+#if J193973_PGN_65229_SUPPORTED 
   J1939_TX_PGN_65229_INDEX,
+#endif
+#if J193973_PGN_65230_SUPPORTED  
   J1939_TX_PGN_65230_INDEX,
+ #endif
+#if J193973_PGN_65235_SUPPORTED 
   J1939_TX_PGN_65235_INDEX,
+#endif
+#if J193973_PGN_65236_SUPPORTED
   J1939_TX_PGN_65236_INDEX,
-
+#endif
+#if J193973_PGN_65249_SUPPORTED
   J1939_TX_PGN_65249_INDEX,
+#endif
+#if J193973_PGN_65251_SUPPORTED
   J1939_TX_PGN_65251_INDEX,
-   
+#endif
+#if J1939_PGN_64965_SUPPORTED   
   J1939_TX_PGN_64965_INDEX,
+#endif
+#if J1939_PGN_65242_SUPPORTED
   J1939_TX_PGN_65242_INDEX,
+#endif
+#if J1939_PGN_61444_SUPPORTED
   J1939_TX_PGN_61444_INDEX,
+#endif
+#if J1939_PGN_61443_SUPPORTED
   J1939_TX_PGN_61443_INDEX,
+#endif
+#if J1939_PGN_64997_SUPPORTED
   J1939_TX_PGN_64997_INDEX,
+#endif
+#if J1939_PGN_65266_SUPPORTED
   J1939_TX_PGN_65266_INDEX,
+#endif
+#if J1939_PGN_65262_SUPPORTED
   J1939_TX_PGN_65262_INDEX,
+#endif
+#if J1939_PGN_65263_SUPPORTED
   J1939_TX_PGN_65263_INDEX,
+#endif
+#if J1939_PGN_65270_SUPPORTED
   J1939_TX_PGN_65270_INDEX,
+#endif
+#if J1939_PGN_65271_SUPPORTED
   J1939_TX_PGN_65271_INDEX,
+#endif
+#if J1939_PGN_65213_SUPPORTED
   J1939_TX_PGN_65213_INDEX,
+#endif
+#if J1939_PGN_65253_SUPPORTED
   J1939_TX_PGN_65253_INDEX,
+#endif
+#if J1939_PGN_65232_SUPPORTED
   J1939_TX_PGN_65232_INDEX,
+#endif
+#if J1939_PGN_65289_SUPPORTED
   J1939_TX_PGN_65289_INDEX,
+#endif
+#if J1939_PGN_65154_SUPPORTED
   J1939_TX_PGN_65154_INDEX,
+#endif
+#if J1939_DENY_REQUEST_SUPPORTED  
   J1939_TX_PGN_Denny_INDEX,
+#endif  
   CAN_NUM_TX_MSGS,
+  
   INVALID_TX_INDEX
   } TxMsgIndexType;
 

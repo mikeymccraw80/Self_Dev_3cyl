@@ -25,7 +25,7 @@ static void Parse_PGN_59904 (J1939_Receive_Message_Info_T *RxMsg)
    /* Search for matching Tx message that is availble upon request */
    PgnFound = false;
 
-   for (Index = J1939_TX_PGN_65226_INDEX; (! PgnFound) && (Index < J1939_TX_PGN_Denny_INDEX); Index++)
+   for (Index = J1939_TX_PGN_65226_INDEX; (! PgnFound) && (Index < CAN_NUM_TX_MSGS-1); Index++)
    {
       /* Check if message PGN matches the requested PGN and also check if */
       /* the message has a valid service function (CCP2 entries may not)    */
