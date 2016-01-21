@@ -31,36 +31,6 @@ extern  bool B_Ign2Req;
 //#define J1939_ECUID_BUFFER_SIZE sizeof(SOFTID_Buffer)
 //#define J1939_SOFT_BUFFER_SIZE sizeof(SOFTID_Buffer)
 
-#define J1939_ECUID_BUFFER_SIZE (63)
-#define J1939_SOFT_BUFFER_SIZE (91)
-
-uint16_t GetJ939_ECUID_Size(void);
-uint8_t * GetJ1939_ECUID_MsgPtr(void);
-
-uint16_t GetJ1939_SoftID_Size(void);
-uint8_t * GetJ1939_SoftID_MsgPtr(void);
-
-uint8_t*GetJ1939_DM1_MsgPtr (void);
-uint16_t GetJ1939_DM1_ActiveDTC_NUMBER (void);
-
-uint8_t *GetJ1939_PGN_65251_MsgPtr (void);
-uint8_t *GetJ1939_PGN_65249_MsgPtr (void);
-
-uint16_t GetJ1939_PGN_65251_BYTE_NUMBER (void);
-uint16_t GetJ1939_PGN_65249_BYTE_NUMBER (void);
-
-
-uint8_t *GetJ1939_DM2_MsgPtr (void);
-uint16_t GetJ1939_DM2_PreActiveDTC_NUMBER (void);
-
-bool ClrJ1939_DM3_PreActive_Dtcs(void);
-
-uint8_t *GetJ1939_DM4_MsgPtr (void);
-
-bool ClrJ1939_DM11_Active_Dtcs (void);
-
-uint8_t *GetJ1939_DM12_MsgPtr (void);
-uint16_t GetJ1939_DM12_EmissionsRelated_ActiveDTCs_Number (void);
 
 typedef struct {
 	uint8_t data[8];
@@ -712,4 +682,34 @@ typedef union {
 extern J1939_73_dm13_57088_T     J1939_73_dm13;
 
 
+#define J1939_ECUID_BUFFER_SIZE (63)
+#define J1939_SOFT_BUFFER_SIZE (91)
+
+uint16_t GetJ939_ECUID_Size(void);
+uint8_t * GetJ1939_ECUID_MsgPtr(void);
+
+uint16_t GetJ1939_SoftID_Size(void);
+uint8_t * GetJ1939_SoftID_MsgPtr(void);
+
+uint8_t*GetJ1939_DM1_MsgPtr (void);
+uint16_t GetJ1939_DM1_ActiveDTC_NUMBER (void);
+
+uint8_t *GetJ1939_PGN_65251_MsgPtr (void);
+uint8_t *GetJ1939_PGN_65249_MsgPtr (void);
+
+uint16_t GetJ1939_PGN_65251_BYTE_NUMBER (void);
+uint16_t GetJ1939_PGN_65249_BYTE_NUMBER (void);
+
+
+uint8_t *GetJ1939_DM2_MsgPtr (void);
+uint16_t GetJ1939_DM2_PreActiveDTC_NUMBER (void);
+
+bool ClrJ1939_DM3_PreActive_Dtcs(void);
+
+uint8_t GetJ1939_DM4_ActiveDTC_NUMBER (void);
+J1939_73_DM4_T * GetJ1939_DM4_MsgPtr (void);
+bool ClrJ1939_DM11_Active_Dtcs (void);
+
+uint8_t *GetJ1939_DM12_MsgPtr (void);
+uint16_t GetJ1939_DM12_EmissionsRelated_ActiveDTCs_Number (void);
 #endif /* End of J1939_APP_H */

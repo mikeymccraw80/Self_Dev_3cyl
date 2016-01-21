@@ -130,6 +130,12 @@ const void (*const J1939_Receive_Initialize_Channel_0[]) (J1939_Receive_Message_
 #if J1939_PGN_00000_SUPPORTED
    J1939_Receive_Initialize_PGN_00000,
 #endif
+#if J1939_73_dm7_SUPPORTED
+   J1939_Receive_Initialize_73_dm7,
+#endif
+#if J1939_73_dm13_SUPPORTED
+   J1939_Receive_Initialize_73_dm13,
+#endif
 #if J1939_PGN_65265_SUPPORTED
    J1939_Receive_Initialize_PGN_65265,
 #endif
@@ -149,13 +155,7 @@ const void (*const J1939_Receive_Initialize_Channel_0[]) (J1939_Receive_Message_
    J1939_Receive_Initialize_PGN_65279,
 #endif
 #if J1939_PGN_65296_SUPPORTED
-   J1939_Receive_Initialize_PGN_65296,
-#endif
-#if J1939_73_dm7_SUPPORTED
-   J1939_Receive_Initialize_73_dm7,
-#endif
-#if J1939_73_dm13_SUPPORTED
-   J1939_Receive_Initialize_73_dm13
+   J1939_Receive_Initialize_PGN_65296
 #endif
 };
 
@@ -176,6 +176,12 @@ const J1939_Message_Table_T  J1939_Message_Table[J1939_MESSAGES_NUMBER] =
 #endif
 #if J1939_PGN_00000_SUPPORTED
   , { J1939_PGN_00000_BASE_ID,    J1939_PGN_00000_LENGTH }
+#endif
+#if J1939_73_dm7_SUPPORTED
+    , { J1939_73_dm7_BASE_ID,    J1939_73_dm7_LENGTH }
+ #endif
+#if J1939_73_dm13_SUPPORTED
+   , { J193973_PGN_57088_BASE_ID,    J1939_PGN_65296_LENGTH }
 #endif
 #if J1939_PGN_65265_SUPPORTED
   , { J1939_PGN_65265_BASE_ID,    J1939_PGN_65265_LENGTH }
@@ -198,12 +204,7 @@ const J1939_Message_Table_T  J1939_Message_Table[J1939_MESSAGES_NUMBER] =
 #if J1939_PGN_65296_SUPPORTED
    , { J1939_PGN_65296_BASE_ID,    J1939_PGN_65296_LENGTH }
 #endif
-#if J1939_73_dm7_SUPPORTED
-    , { J1939_73_dm7_BASE_ID,    J1939_73_dm7_LENGTH }
- #endif
-#if J1939_73_dm13_SUPPORTED
-   , { J193973_PGN_57088_BASE_ID,    J1939_PGN_65296_LENGTH }
-#endif
+
 // TRANSMIT_MESSAGE
 #if J1939_DENY_REQUEST_SUPPORTED
    , { J1939_DENY_REQUEST_PGN, 8} /* Tx Transport out management connection 0 */

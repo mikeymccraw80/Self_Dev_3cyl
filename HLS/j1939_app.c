@@ -184,9 +184,17 @@ uint16_t GetJ1939_DM2_PreActiveDTC_NUMBER (void)
    return J1939_DM2_PreActiveDTCs;
 }
 
-uint8_t *GetJ1939_DM4_MsgPtr (void)
+uint8_t GetJ1939_DM4_ActiveDTC_NUMBER (void)
 {
-   return J1939_DM4_Message;
+    return DTC_Number_DM4;
+}
+
+J1939_73_DM4_T * GetJ1939_DM4_MsgPtr (void)
+{
+   J1939_73_dm4.Freeze_Frame[0].spn_1217 = sizeof(J1939_DM4_FreezeFrame_T)-1;  
+   J1939_73_dm4.Freeze_Frame[1].spn_1217 = sizeof(J1939_DM4_FreezeFrame_T)-1;   
+   J1939_73_dm4.Freeze_Frame[2].spn_1217 = sizeof(J1939_DM4_FreezeFrame_T)-1;  
+   return &J1939_73_dm4;
 }
 
 uint8_t *GetJ1939_DM12_MsgPtr (void)

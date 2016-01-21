@@ -45,15 +45,16 @@
 #define J1939_PGN_60416_SUPPORTED             1   //tp pgn
 #define J1939_PGN_57344_SUPPORTED             1   //jd rx pgn
 #define J1939_PGN_00000_SUPPORTED             1   //jd rx pgn
+#define J1939_73_dm7_SUPPORTED                   1
+#define J1939_73_dm13_SUPPORTED                 1
 #define J1939_PGN_65265_SUPPORTED             1   //jd rx pgn
 #define J1939_PGN_64971_SUPPORTED             1   //jd rx pgn
-#define J1939_PGN_65276_SUPPORTED             1
-#define J1939_PGN_65277_SUPPORTED             1
-#define J1939_PGN_65278_SUPPORTED             1
-#define J1939_PGN_65279_SUPPORTED             1
-#define J1939_PGN_65296_SUPPORTED             1
-#define J1939_73_dm7_SUPPORTED                1
-#define J1939_73_dm13_SUPPORTED                1
+#define J1939_PGN_65276_SUPPORTED             0
+#define J1939_PGN_65277_SUPPORTED             0
+#define J1939_PGN_65278_SUPPORTED             0
+#define J1939_PGN_65279_SUPPORTED             0
+#define J1939_PGN_65296_SUPPORTED             0
+
 
 //for tx pgns
 #define J1939_DENY_REQUEST_SUPPORTED          1
@@ -63,9 +64,9 @@
 #define J193973_PGN_65229_SUPPORTED           1
 #define J193973_PGN_65230_SUPPORTED           1
 #define J193973_PGN_65235_SUPPORTED           1
-#define J193973_PGN_65236_SUPPORTED           1
-#define J193973_PGN_65249_SUPPORTED           1
-#define J193973_PGN_65251_SUPPORTED           1
+#define J193973_PGN_65236_SUPPORTED           0
+#define J193973_PGN_65249_SUPPORTED           0
+#define J193973_PGN_65251_SUPPORTED           0
 #define J1939_PGN_64965_SUPPORTED             1
 #define J1939_PGN_65242_SUPPORTED             1
 #define J1939_PGN_61444_SUPPORTED             1
@@ -78,7 +79,7 @@
 #define J1939_PGN_65270_SUPPORTED             1
 #define J1939_PGN_65271_SUPPORTED             1
 #define J1939_PGN_65213_SUPPORTED             1
-#define J1939_PGN_65253_SUPPORTED             1
+#define J1939_PGN_65253_SUPPORTED             0
 #define J1939_PGN_65232_SUPPORTED             1
 #define J1939_PGN_65289_SUPPORTED             1
 /******************************************************************************
@@ -852,7 +853,7 @@ extern void J1939_TxInit_SendUnmanagedAcknowledgement(J1939_Transmit_Message_Con
 /* DEFINE: J1939_DM4_BUFFER_SIZE                                        */
 /* Description: Buffer size to store the freeze frame                   */
 /************************************************************************/
-#define J1939_DM4_BUFFER_SIZE  (14)
+#define J1939_DM4_BUFFER_SIZE  (sizeof(J1939_73_dm4))
 
 /************************************************************************/
 /* DEFINE: J1939_DM12_BUFFER_SIZE                                       */

@@ -65,7 +65,7 @@ static can_boolean_t ServiceDm4TransportOut (TpOutStateType State,
 
       while (NumPacked < 8)
       {
-         if (DataByteLocation <= NumOfFreezeFrameBytes)
+         if (DataByteLocation < NumOfFreezeFrameBytes)
          {
             TxMsg->Data[NumPacked++] = J1939_DM4_Msg_Snapshot[DataByteLocation++];
          }
@@ -90,14 +90,20 @@ static can_boolean_t Service_PGN_65229 (J1939_Transmit_Message_Info_T *TxMsg)
 {
    can_boolean_t MsgToSend, ProcessingError;
    uint8_t *DM4_Msg;
+   uint8_t NumofFreezeFrame;
+   uint8_t NumofDtcs;
+     
    ProcessingError = CAN_cbTRUE; /* Assume some reason msg could not be sent */
    MsgToSend = CAN_cbFALSE; /* Assume no message to send */
    TxMsg->Callback_Time_W = J193973_PGN_65229_FREQ;
    /* If previous DM2 still being transported then ignore this req */
    if (! J1939_CkPgnCurrentlyInTransportOut (J193973_PGN_65229))
    {
-      DM4_Msg = GetJ1939_DM4_MsgPtr();
-      NumOfFreezeFrameBytes = DM4_Msg[0];
+      DM4_Msg = (uint8_t *)GetJ1939_DM4_MsgPtr();
+      NumofDtcs = GetJ1939_DM4_ActiveDTC_NUMBER(); 
+	  NumOfFreezeFrameBytes = NumofDtcs*sizeof(J1939_DM4_FreezeFrame_T);
+	  if(NumOfFreezeFrameBytes	> J1939_DM4_BUFFER_SIZE)
+	  	 NumOfFreezeFrameBytes =J1939_DM4_BUFFER_SIZE;	  
       J1939_Message_SnapShot (DM4_Msg, J1939_DM4_Msg_Snapshot, NumOfFreezeFrameBytes+1);
 
       /* If one packet will do then send the packet */
