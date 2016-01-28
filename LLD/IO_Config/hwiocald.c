@@ -1,6 +1,39 @@
 
 #include "hwiocald.h"
-
+/*
+*| hwiocald{
+*| .t_current{
+*|              :kind = fixed;
+*|              :precision = 3/512; #0.005859375;
+*|              :range = 0 TO <384;
+*|  }
+*| .t_angle_N768_768{
+*|              :kind = fixed;
+*|              :precision = 6/256; #0.0234375;
+*|              :range = -768 TO <768;
+*|  }
+*| .t_time_100ms{
+*|              :kind = fixed;
+*|              :precision = 1/10; #0.1;
+*|              :range = 0 TO <6553;
+*|  }
+*| .t_J1939_PGN_FREQ {
+*|              :kind = fixed;
+*|              :precision = 1; #1;
+*|              :range = 5 TO <65536;
+*|  }
+*| .hwio_19_brkpts{
+*|              :kind = define_annotation;
+*|              :units = "Cell#";
+*|              :table = ( 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19);
+*|  }
+*| .hwio_34_brkpts{
+*|              :kind = define_annotation;
+*|              :units = "Cell#";
+*|              :table = ( 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34);
+*|  }
+*| }
+*/
 /*===========================================================================*\
  * /-----------------------------------------------------------------------\
  * Description: Calibration file for 58x section of hardware input output
@@ -1088,17 +1121,3 @@ const uint8_t KfHWIO_J193973_SA = 0;
 *| }
 */
 const uint16_t KfHWIO_J193973_PGN_65251_FREQ = 5000;
-/*
-*| hwiocald.{
-*| KfHWIO_PGN65249_Message_Table {
-*| : is_calconst;
-*| : description = "PGN65249 message content.";
-*| : elements:type = fixed.t_count_byte;
-*| : annotation = hwiocald.hwio_19_brkpts;
-*| : elements:units = "count";
-*| }
-*| }
-*/
-
-
-

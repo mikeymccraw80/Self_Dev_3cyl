@@ -30,7 +30,6 @@
  *  Global Variables
  *****************************************************************************/
 uint8_t           canobd_tx_rx_buffer[MESSAGE_NUM_OF_CANOBD][8];
-uint8_t           J1939_tx_rx_buffer[MESSAGE_NUM_OF_CANOBD][8];
 VioCanRxBufferStructType VioCanRxBuffer[RX_MSG_BUFFER_NUMBER];
 /******************************************************************************
  *  Global Variable Declarations

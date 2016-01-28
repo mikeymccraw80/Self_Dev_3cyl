@@ -855,6 +855,8 @@ void CAM_Edge_Process( uint32_t in_cam_sensor )
 				CRANK_Convert_Angle_To_uCrank_Angle( ( CRANK_NUMBER_OF_DEGREES_PER_REVOLUTION / 2 ), 0 )
 				+CAM_Edge_Data[( cam_sensor * CAM_Number_Of_Pulses ) + current_edge_index].Count;
 			break;
+		default:
+			break;
 	}
 #endif
 	CAM_Edge_Data[( cam_sensor * CAM_Number_Of_Pulses ) + current_edge_index].Time = cam_event_time;
