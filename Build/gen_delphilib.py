@@ -12,6 +12,8 @@ def gen_objs_lib():
 			continue
 		if "intr_var.o" in line:
 			continue
+		if "j1939_app.o" in line:
+			continue		
 		if len(line) <= 2:
 			break
 		# print line

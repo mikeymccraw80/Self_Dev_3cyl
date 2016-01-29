@@ -40,7 +40,9 @@ del get_lib.bat
 del ..\objs\get_lib.bat
 
 copy ..\HLS\HLS.h ..\tools\delphilib\outputlib\HLS.h
-copy ..\HLS\App_main.c ..\tools\delphilib\outputlib\App_main.c
+copy ..\HLS\app_main.c ..\tools\delphilib\outputlib\app_main.c
+copy ..\HLS\j1939_app.c ..\tools\delphilib\outputlib\j1939_app.c
+copy ..\HLS\j1939_app.h ..\tools\delphilib\outputlib\j1939_app.h
 copy ..\bin\Engine.mt22p3_chery_3cyl.a2l ..\tools\delphilib\outputlib\Engine.mt22p3_chery_3cyl.a2l
 copy mt22p3_chery_3cyl.dld ..\tools\delphilib\outputlib\mt22p3_chery_3cyl.dld
 copy ..\bin\mt22p3_chery_3cyl.exmap ..\tools\delphilib\outputlib\mt22p3_chery_3cyl.exmap
