@@ -54,6 +54,7 @@
 #define J1939_PGN_65278_SUPPORTED             0
 #define J1939_PGN_65279_SUPPORTED             0
 #define J1939_PGN_65296_SUPPORTED             0
+#define J1939_PGN_55808_SUPPORTED             1
 
 
 //for tx pgns
@@ -88,47 +89,49 @@
 #define J1939_RECEIVE_MESSAGES_NUMBER_SUPPORTED       ( 24 )
 #define J1939_TRANSMIT_MESSAGES_NUMBER_SUPPORTED    ( 40 )
 
-#define  J1939_RECEIVE_MESSAGES_NUMBER_CHANNEL_0 ( J1939_PGN_59904_SUPPORTED 	+\
+#define  J1939_RECEIVE_MESSAGES_NUMBER_CHANNEL_0 ( 	J1939_PGN_59904_SUPPORTED 	+\
 														J1939_PGN_60160_SUPPORTED	+\
 														J1939_PGN_60416_SUPPORTED	+\
 														J1939_PGN_57344_SUPPORTED 	+\
-														 J1939_PGN_00000_SUPPORTED	+\
-														 J1939_PGN_65265_SUPPORTED	+\
-														 J1939_PGN_64971_SUPPORTED	+\
-														 J1939_PGN_65276_SUPPORTED	+\
-														 J1939_PGN_65277_SUPPORTED	+\
-														  J1939_PGN_65278_SUPPORTED	+\
-														  J1939_PGN_65279_SUPPORTED	+\
-														   J1939_PGN_65296_SUPPORTED+\
-														    J1939_73_dm7_SUPPORTED	+\
-														     J1939_73_dm13_SUPPORTED    )
+														J1939_PGN_00000_SUPPORTED	+\
+														J1939_PGN_65265_SUPPORTED	+\
+														J1939_PGN_64971_SUPPORTED	+\
+														J1939_PGN_65276_SUPPORTED	+\
+														J1939_PGN_65277_SUPPORTED	+\
+														J1939_PGN_65278_SUPPORTED	+\
+														J1939_PGN_65279_SUPPORTED	+\
+														J1939_PGN_65296_SUPPORTED+\
+														J1939_73_dm7_SUPPORTED	+\
+														J1939_73_dm13_SUPPORTED    +\
+														J1939_PGN_55808_SUPPORTED)
 #define J1939_RECEIVE_MESSAGES_NUMBER_CHANNEL_1     ( 0 )
 
-#define  J1939_TRANSMIT_MESSAGES_NUMBER_CHANNEL_0 (6 + J1939_DENY_REQUEST_SUPPORTED        +\
-															  J193973_PGN_65226_SUPPORTED           +\
-															  J193973_PGN_65227_SUPPORTED           +\
-															  J193973_PGN_65228_SUPPORTED           +\
-															  J193973_PGN_65229_SUPPORTED           +\
-															  J193973_PGN_65230_SUPPORTED           +\
-															  J193973_PGN_65235_SUPPORTED           +\
-															  J193973_PGN_65236_SUPPORTED           +\
-															  J193973_PGN_65249_SUPPORTED           +\
-															  J193973_PGN_65251_SUPPORTED           +\
-															  J1939_PGN_64965_SUPPORTED             +\
-															  J1939_PGN_65242_SUPPORTED             +\
-															  J1939_PGN_61444_SUPPORTED             +\
-															  J1939_PGN_61443_SUPPORTED             +\
-															  J1939_PGN_64997_SUPPORTED             +\
-															  J1939_PGN_65154_SUPPORTED             +\
-															  J1939_PGN_65266_SUPPORTED             +\
-															  J1939_PGN_65262_SUPPORTED             +\
-															  J1939_PGN_65263_SUPPORTED             +\
-															  J1939_PGN_65270_SUPPORTED             +\
-															  J1939_PGN_65271_SUPPORTED             +\
-															  J1939_PGN_65213_SUPPORTED             +\
-															  J1939_PGN_65253_SUPPORTED             +\
-															  J1939_PGN_65232_SUPPORTED             +\
-															  J1939_PGN_65289_SUPPORTED )                 
+#define  J1939_TRANSMIT_MESSAGES_NUMBER_CHANNEL_0 (6 + J1939_DENY_REQUEST_SUPPORTED	+\
+															  J193973_PGN_65226_SUPPORTED	+\
+															  J193973_PGN_65227_SUPPORTED	+\
+															  J193973_PGN_65228_SUPPORTED	+\
+															  J193973_PGN_65229_SUPPORTED	+\
+															  J193973_PGN_65230_SUPPORTED	+\
+															  J193973_PGN_65235_SUPPORTED	+\
+															  J193973_PGN_65236_SUPPORTED	+\
+															  J193973_PGN_65249_SUPPORTED	+\
+															  J193973_PGN_65251_SUPPORTED	+\
+															  J1939_PGN_64965_SUPPORTED		+\
+															  J1939_PGN_65242_SUPPORTED		+\
+															  J1939_PGN_61444_SUPPORTED		+\
+															  J1939_PGN_61443_SUPPORTED		+\
+															  J1939_PGN_64997_SUPPORTED		+\
+															  J1939_PGN_65154_SUPPORTED		+\
+															  J1939_PGN_65266_SUPPORTED		+\
+															  J1939_PGN_65262_SUPPORTED		+\
+															  J1939_PGN_65263_SUPPORTED		+\
+															  J1939_PGN_65270_SUPPORTED		+\
+															  J1939_PGN_65271_SUPPORTED		+\
+															  J1939_PGN_65213_SUPPORTED		+\
+															  J1939_PGN_65253_SUPPORTED		+\
+															  J1939_PGN_65232_SUPPORTED		+\
+															  J1939_PGN_65289_SUPPORTED		+\
+															  J1939_PGN_55808_SUPPORTED		)                 
 #define J1939_TRANSMIT_MESSAGES_NUMBER_CHANNEL_1    ( 0 )
 
 #define J1939_RECEIVE_MESSAGES_NUMBER    ( J1939_RECEIVE_MESSAGES_NUMBER_CHANNEL_0 +\
@@ -247,6 +250,9 @@ typedef enum {
 #endif
 #if J1939_PGN_65154_SUPPORTED
   J1939_TX_PGN_65154_INDEX,
+#endif
+#if J1939_PGN_55808_SUPPORTED
+   J1939_TX_PGN_55808_INDEX,
 #endif
 #if J1939_DENY_REQUEST_SUPPORTED  
   J1939_TX_PGN_Denny_INDEX,
@@ -377,10 +383,19 @@ extern void J1939_Receive_Initialize_PGN_65279(J1939_Receive_Message_Control_T *
 #define J1939_PGN_65296_FREQ                  (50/J1939_BASE_LOOP)
 #define J1939_PGN_65296_TIMEOUT               (150/J1939_BASE_LOOP)
 extern void J1939_Receive_Initialize_PGN_65296(J1939_Receive_Message_Control_T *rx_msg_ctrl_ptr);
-
 extern void J1939_RxInit_PGN_59904 (J1939_Receive_Message_Control_T *MsgCtrl);
-
 extern const J1939_Message_Table_T   J1939_Message_Table[J1939_MESSAGES_NUMBER];
+
+/******************************************************************************/
+/* PGN: DA00                                                               */
+/******************************************************************************/
+#define J1939_PGN_55808_BASE_ID               0x18DA0000
+#define J1939_PGN_55808_LENGTH                8
+#define J1939_PGN_55808_FREQ                  (0)
+#define J1939_PGN_55808_TIMEOUT               (0)
+extern void J1939_RxInit_PGN_55808(J1939_Receive_Message_Control_T *rx_msg_ctrl_ptr);
+extern void J1939_TxInit_PGN_55808(J1939_Transmit_Message_Control_T *tx_msg_ctrl_ptr);
+
 /******************************************************************************/
 /* PGN: Transmit                                                              */
 /******************************************************************************/

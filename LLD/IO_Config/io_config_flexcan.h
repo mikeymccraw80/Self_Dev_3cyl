@@ -55,6 +55,7 @@
 //      Time Quanta         = [8...25]
 //=========================================================================
 //during development, send the sw with 500kbps to customer 
+#if 0
 #ifndef FLEXCAN_A_DEVICE_BITRATE_INIT 
 #define FLEXCAN_A_DEVICE_BITRATE_INIT\
    (         FlexCAN_Set_Index( 0, FLEXCAN_DEVICE_A    ) |\
@@ -65,7 +66,7 @@
                FlexCAN_Set_RJW( 0, 0                   ) |\
        FlexCAN_Set_Time_Quanta( 0, 16                  ) )
 #endif
-#if 0
+
 #ifndef FLEXCAN_C_DEVICE_BITRATE_INIT 
 #define FLEXCAN_C_DEVICE_BITRATE_INIT\
    (         FlexCAN_Set_Index( 0, FLEXCAN_DEVICE_C    ) |\
@@ -76,7 +77,7 @@
                FlexCAN_Set_RJW( 0, 0                   ) |\
        FlexCAN_Set_Time_Quanta( 0, 16                  ) )
 #endif
-
+#endif
 #ifndef FLEXCAN_A_DEVICE_BITRATE_INIT 
 #define FLEXCAN_A_DEVICE_BITRATE_INIT\
    (         FlexCAN_Set_Index( 0, FLEXCAN_DEVICE_A    ) |\
@@ -87,7 +88,7 @@
                FlexCAN_Set_RJW( 0, 0                   ) |\
        FlexCAN_Set_Time_Quanta( 0, 16                  ) )
 #endif
-#endif
+
 #ifndef FLEXCAN_C_DEVICE_BITRATE_INIT 
 #define FLEXCAN_C_DEVICE_BITRATE_INIT\
    (         FlexCAN_Set_Index( 0, FLEXCAN_DEVICE_C    ) |\

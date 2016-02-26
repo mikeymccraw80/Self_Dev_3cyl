@@ -100,6 +100,9 @@ const void (*const J1939_Transmit_Initialize[]) (J1939_Transmit_Message_Control_
 #if J1939_PGN_65154_SUPPORTED
    J1939_TxInit_PGN_65154, /* john deere IT1 */
 #endif
+#if J1939_PGN_55808_SUPPORTED
+   J1939_TxInit_PGN_55808,
+#endif
 #if J1939_DENY_REQUEST_SUPPORTED
    J1939_TxInit_SendUnmanagedAcknowledgement
 #endif
@@ -155,7 +158,10 @@ const void (*const J1939_Receive_Initialize_Channel_0[]) (J1939_Receive_Message_
    J1939_Receive_Initialize_PGN_65279,
 #endif
 #if J1939_PGN_65296_SUPPORTED
-   J1939_Receive_Initialize_PGN_65296
+   J1939_Receive_Initialize_PGN_65296,
+#endif
+#if J1939_PGN_55808_SUPPORTED
+   J1939_RxInit_PGN_55808
 #endif
 };
 
@@ -200,6 +206,9 @@ const J1939_Message_Table_T  J1939_Message_Table[J1939_MESSAGES_NUMBER] =
 #endif
 #if J1939_PGN_65279_SUPPORTED
    , { J1939_PGN_65279_BASE_ID,    J1939_PGN_65279_LENGTH }
+#endif
+#if J1939_PGN_55808_SUPPORTED
+   , {J1939_PGN_55808_BASE_ID,    J1939_PGN_55808_LENGTH}
 #endif
 #if J1939_PGN_65296_SUPPORTED
    , { J1939_PGN_65296_BASE_ID,    J1939_PGN_65296_LENGTH }
@@ -290,6 +299,9 @@ const J1939_Message_Table_T  J1939_Message_Table[J1939_MESSAGES_NUMBER] =
 #endif
 #if J1939_PGN_65154_SUPPORTED
    , {J1939_PGN_65154_BASE_ID,       J1939_PGN_65154_LENGTH}
+#endif
+#if J1939_PGN_55808_SUPPORTED
+   , {J1939_PGN_55808_BASE_ID,       J1939_PGN_55808_LENGTH}
 #endif
 #if J1939_DENY_REQUEST_SUPPORTED
    , { J1939_DENY_REQUEST_PGN, 8} /* Unmanaged Acknowledgement */

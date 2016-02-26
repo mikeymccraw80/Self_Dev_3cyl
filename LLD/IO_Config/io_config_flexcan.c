@@ -198,7 +198,7 @@ const FLEXCAN_MSK_T  FLEXCAN_A_RXIMR_INIT [FLEXCAN_MSG_OBJ_MAX]=
       {0x7FF, 0x3FF00}, //MB22, MASK
       {0x7FF, 0x3FFFF}, //MB23
       {0x7FF, 0x3FFFF}, //MB24
-      {0x7FF, 0x3FFFF}, //MB25
+      {0x7FF, 0x3FF00}, //MB25, MASK
       {0x7FF, 0x3FFFF}, //MB26
       {0x7FF, 0x3FFFF}, //MB27
       {0x7FF, 0x3FFFF}, //MB28
