@@ -47,13 +47,13 @@ static void Build_PositiveResponse(void)
 
 }
 
-static void Build_NegativeResponse(uint8_t fail)
+static void Build_NegativeResponse(uint8_t Sid, uint8_t fail)
 {
 
 	J1939_pgn_55808.data[0]=0x03;
 	J1939_pgn_55808.data[1]=NegativeResponseServiceIdentifier;
 	J1939_pgn_55808.data[2]=0x31;
-	J1939_pgn_55808.data[3]=fail;
+	J1939_pgn_55808.data[3]=Sid;
 
 }
 /******************************************************************************
@@ -65,37 +65,85 @@ void J1939_Parse_pgn_55808(J1939_Receive_Message_Info_T *RxMsg)
 {
 	uint8_t index, return_b;
 	bool    PgnFound;
+	uint8_t SubFunction;
 
-	
-	if((RxMsg->Data[0]==Command_length))
+	SubFunction= RxMsg->Data[1];
+	switch(SubFunction)
 	{
-		if((RxMsg->Data[1]==0x31)&&(RxMsg->Data[2]==0x01)\
-			&&(RxMsg->Data[3]==0xf0)&&(RxMsg->Data[4]==0x00))
-		{
-			return_b = StartRoutineByIdentifier();
-			//return_b =0;
-			if(return_b !=0)
+	
+		case SidInitiateDiagnosticOperation:
+			
+			if((RxMsg->Data[0]==SidInitiateDiagnostic_length))
 			{
-				Build_NegativeResponse(ConditionsNotCorrectOrRequestSequenceError);
-				Jumptokernel =false;
+				J1939_pgn_55808.data[0]=0x06;
+				J1939_pgn_55808.data[1]=0x50;
+				J1939_pgn_55808.data[2]=RxMsg->Data[2];
+				J1939_pgn_55808.data[3]=0x00;
+				J1939_pgn_55808.data[4]=0x32;
+				J1939_pgn_55808.data[5]=0x13;
+				J1939_pgn_55808.data[6]=0x88;
 			}
 			else
 			{
-				Build_PositiveResponse();
-				Jumptokernel =true;//to make sure jump to kernel was after response the service
+				Build_NegativeResponse(SidInitiateDiagnosticOperation,IncorrectMessageLength);
 			}
+			break;
+			
+		case SidSecurityAccess:
+			
+			if((RxMsg->Data[0]==SidSecurityAccess_length))
+			{
+				J1939_pgn_55808.data[0]=0x04;
+				J1939_pgn_55808.data[1]=0x67;
+				J1939_pgn_55808.data[2]=RxMsg->Data[2];
+				J1939_pgn_55808.data[3]=0x00;
+				J1939_pgn_55808.data[4]=0x00;
+
+			}
+			else
+			{
+				Build_NegativeResponse(SidSecurityAccess,IncorrectMessageLength);
+			}
+			break;
+			
+		case SidRoutineControl :
+			
+			if((RxMsg->Data[0]==SidRoutineControl_length))
+			{
+				if((RxMsg->Data[2]==0x01)\
+					&&(RxMsg->Data[3]==0xf0)&&(RxMsg->Data[4]==0x00))
+				{
+					return_b = StartRoutineByIdentifier();
+					//return_b =0;
+					if(return_b !=0)
+					{
+						Build_NegativeResponse(SidRoutineControl,ConditionsNotCorrectOrRequestSequenceError);
+						Jumptokernel =false;
+					}
+					else
+					{
+						Build_PositiveResponse();
+						Jumptokernel =true;//to make sure jump to kernel was after response the service
+					}
+				}
+				else
+				{
+					Build_NegativeResponse(SidRoutineControl,SubFunctionNotSupported_InvalidFormat);
+					Jumptokernel =false;
+				}
+			}
+			else
+			{
+				Build_NegativeResponse(SidRoutineControl,IncorrectMessageLength);
+				Jumptokernel =false;
+			}
+
+			break;
+
+		default:
+			break;
+
 		}
-		else
-		{
-			Build_NegativeResponse(SubFunctionNotSupported_InvalidFormat);
-			Jumptokernel =false;
-		}
-	}
-	else
-	{
-		Build_NegativeResponse(IncorrectMessageLength);
-		Jumptokernel =false;
-	}
 
 
 	for (index = 0; index < J1939_NO_OF_TRANSMIT_MESSAGES; index++)
@@ -105,12 +153,12 @@ void J1939_Parse_pgn_55808(J1939_Receive_Message_Info_T *RxMsg)
 		if ( J1939_PGN_55808_BASE_ID == 
 		  (J1939_Message_Table[J1939_NO_OF_RECEIVE_MESSAGES + index].message_ID ) )
 		   // && (CAN_CkValidTxMsgServiceRoutine (Bus, Index))) 
-		  {
+		{
 		     PgnFound = true;
 		     J1939_RequestTxMsgService (index, J1939_GET_SRC_ADDR(RxMsg->ID));
 		     J1939_Trigger_Transmit_Message_Service ( (uint8_t) index);
 		     break;
-		  }
+		}
 	}
 	/* If requested PGN not supported then return NEG ACK */
 	if ( (! PgnFound) &&

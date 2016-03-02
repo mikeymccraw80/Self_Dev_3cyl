@@ -33,7 +33,7 @@ const FLEXCAN_MCR_T  FLEXCAN_A_MCR_INIT =
       false,    //MDISACK: Low Power Mode acknowledgement 1=FlexCAN2 disabled
       false,    //WAK_SRC: Wakeup Source, 1=Filtered input, 0=Nonfiltered input source
       false,    //DOZE: Doze Mode, 0=Not Enabled, 1=Enabled
-      false,    //SRXDIS: Self Reception Disable, 1=Self Rx disabled, 0=Self Rx Enabled
+      true,    //SRXDIS: Self Reception Disable, 1=Self Rx disabled, 0=Self Rx Enabled
       true,   //MBFEN: Message buffer filter enable, 1=Individual Rx Mask & queue enabled, 0=Disabled
       false,   //LPRIO_EN: Local Priority Enable, 1= Enabled, 0=Disabled
       false,    //AEN: Abort Enable, 0=Abort Disabled,1=Abort Enabled
@@ -64,7 +64,7 @@ const FLEXCAN_MCR_T  FLEXCAN_C_MCR_INIT =
       false,    //MDISACK: Low Power Mode acknowledgement 1=FlexCAN2 disabled
       false,    //WAK_SRC: Wakeup Source, 1=Filtered input, 0=Nonfiltered input source
       false,    //DOZE: Doze Mode, 0=Not Enabled, 1=Enabled
-      false,    //SRXDIS: Self Reception Disable, 1=Self Rx disabled, 0=Self Rx Enabled
+      true,    //SRXDIS: Self Reception Disable, 1=Self Rx disabled, 0=Self Rx Enabled
       false,   //MBFEN: Message buffer filter enable, 1=Individual Rx Mask & queue enabled, 0=Disabled
       false,   //LPRIO_EN: Local Priority Enable, 1= Enabled, 0=Disabled
       false,    //AEN: Abort Enable, 0=Abort Disabled,1=Abort Enabled

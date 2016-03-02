@@ -17,7 +17,31 @@
 #include "j1939_pgn_config.h"
 #include "j1939_bit_fields.h"
 
-#define Command_length (4)
+#define SidInitiateDiagnostic_length             (2)
+#define SidSecurityAccess_length                 (2)
+#define SidRoutineControl_length                 (4)
+#define SidInitiateDiagnosticOperation           (0x10)   /*--- YES ---*/
+#define SidEcuReset                                         (0x11)   /*--- YES ---*/
+#define SidReadFailureRecordData                 (0x12)   /*--- NO ---*/
+#define SidClearDiagInformation                  (0x14)   /*--- YES ---*/
+#define SidReadDataByIdentifier                  (0x1A)   /*--- NO ---*/
+#define SidReturnToNormalMode                    (0x20)   /*--- NO ---*/
+#define SidReadDataByCommonIdentifier            (0x22)   /*--- YES ---*/
+#define SidReadMemoryByAddress                   (0x23)   /*--- YES ---*/
+#define SidSecurityAccess                        (0x27)   /*--- YES ---*/
+#define SidDisableNormalCommunication            (0x28)   /*--- YES ---*/
+#define SidDynamicallyDefineMessage              (0x2C)   /*---NO ---*/
+#define SidRoutineControl                        (0x31)   /*--- YES ---*/
+#define SidRequestDownload                       (0x34)   /*--- NO ---*/
+#define SidTransferData                          (0x36)   /*--- NO ---*/
+#define SidWriteDataByIdentifier                 (0x2E)   /*--- YES ---*/
+#define SidWriteMemoryByAddress                  (0x3D)   /*--- NO ---*/
+#define SidTesterPresent                         (0x3E)   /*--- YES ---*/
+#define SidReportProgrammedState                 (0xA2)   /*--- YES ---*/
+#define SidProgrammingMode                       (0xA5)   /*--- NO ---*/
+#define SidReadDiagnosticInformation             (0x19)   /*--- YES ---*/
+#define SidReadDataByPacketIdentifier            (0x2A)   /*--- YES ---*/
+#define SidInputOutputControlByIdentifier        (0x2F)   /*--- YES ---*/
 
 #define NegativeResponseServiceIdentifier           (0x7F)
 #define ServiceIdNotSupported                       (0x11)
