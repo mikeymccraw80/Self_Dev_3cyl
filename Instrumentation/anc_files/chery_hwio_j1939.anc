@@ -1,0 +1,62 @@
+/*============================================================================*/
+/*                                                                            */
+/* INST Subsystem APPLICATION ANCILLARY FILE                                  */
+/*                                                                            */
+/*============================================================================*/
+
+*-j1939_pgn_57344.J1939_PGN_57344_Message_Lost_Ind_Flag{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "MLFID57344";
+*-  variable_location.symbol = j1939_pgn_57344.J1939_PGN_57344_Message_Lost_Ind_Flag;
+*-  ds_precision             = "1.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-}
+
+*-j1939_pgn_00000.J1939_PGN_00000_Message_Lost_Ind_Flag{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "MLFID00000";
+*-  variable_location.symbol = j1939_pgn_00000.J1939_PGN_00000_Message_Lost_Ind_Flag;
+*-  ds_precision             = "1.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-}
+
+*-j1939_pgn_65265.J1939_PGN_65265_Message_Lost_Ind_Flag{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "MLFID65265";
+*-  variable_location.symbol = j1939_pgn_65265.J1939_PGN_65265_Message_Lost_Ind_Flag;
+*-  ds_precision             = "1.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-}
+
+*-j1939_pgn_64971.J1939_PGN_64971_Message_Lost_Ind_Flag{
+*-  OBJECTS_CLASS: parameter_es_class;
+*-  label                    = "MLFID64971";
+*-  variable_location.symbol = j1939_pgn_65265.J1939_PGN_64971_Message_Lost_Ind_Flag;
+*-  ds_precision             = "1.0";
+*-  ds_scaling_mode          = "Ax + B";
+*-  ds_const_a               = "1.000000000000";
+*-  ds_const_b               = "0.000000000000";
+*-}
+
+
+/*============================================================================*/
+/* CHANGE LOG                                                                 */
+/*                                                                            */
+/*                                                                            */
+/* REV.   DATE     USER  RSM    DESCRIPTION                                   */
+/* 1.0    031017   pd   3152    Created Module                                */
+/* tcb_pt1#2                                                                  */
+/*        031212   wei  3389    Added DDTFLKO, DDTF,    DDTFSCC, DDTNPSCC,    */
+/*                                    DDTPTKO, DDTFTKO, DDRMNIC, DDINTHST,    */
+/*                                    DDHIST,  DDLRQNE, DDLRQE,  DDTF2PT      */
+/*                                    for DGDM/INST.                          */ 
+/*                                                                            */
+/* end of module                                                              */
+/*                                                                            */
+/*============================================================================*/
