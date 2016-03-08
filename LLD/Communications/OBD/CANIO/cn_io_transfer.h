@@ -45,7 +45,7 @@ typedef enum
 
 typedef struct CAN_Message_Parameter_Tag
 {
-    uint16_t                      CAN_message_ID;
+    uint32_t                      CAN_message_ID;
     uint8_t                       CAN_message_length;
     uint8_t                       CAN_buffer_depth;
     uint8_t                       *CAN_buffer_ptr;

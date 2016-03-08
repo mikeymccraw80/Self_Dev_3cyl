@@ -59,6 +59,8 @@ CAN_Message_Parameter_T   CANOBD_Message_Parameter_Table[MESSAGE_NUM_OF_CANOBD] 
   ,{CanIdCAL,   8, 1, &canobd_tx_rx_buffer[4][0], Notify_Application_CANOBD, HAL_CAN_DEVICE_A,HAL_CAN_MESSAGE_DIRECTION_RECEIVE}
   ,{MCAMOS_CANID_7EF,   8, 1, &canobd_tx_rx_buffer[5][0], Notify_Application_CANTSW, HAL_CAN_DEVICE_A,HAL_CAN_MESSAGE_DIRECTION_RECEIVE}
   ,{MCAMOS_CANID_7EE,   8, 1, &canobd_tx_rx_buffer[6][0], Notify_Application_CANTSW, HAL_CAN_DEVICE_A,HAL_CAN_MESSAGE_DIRECTION_RECEIVE}
+//test code, build a extened frame
+  ,{PGNDA00,   8, 1, &canobd_tx_rx_buffer[7][0], Notify_Application_CANOBD, HAL_CAN_DEVICE_A,HAL_CAN_MESSAGE_DIRECTION_RECEIVE}
 };
 
 /****************************************************************/

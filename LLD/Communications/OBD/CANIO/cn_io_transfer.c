@@ -106,6 +106,13 @@ void CAN_Reset_Init( void )
                           FlexCAN_MSGOBJ_Set_SRR( 0, false) |
                           FlexCAN_MSGOBJ_Set_RTR( 0, false) |
                           FlexCAN_MSGOBJ_Set_Interrupt( 0, true);
+      if(CANOBD_Message_Parameter_Table[message_objet].CAN_message_ID>0xFFF)
+      {
+         in_configuration |= FlexCAN_Set_Index( 0, FLEXCAN_DEVICE_A)| FlexCAN_MSGOBJ_Set_ID_Length( 0, FLEXCAN_MSGOBJ_ID_EXT)|
+                             FlexCAN_MSGOBJ_Set_SRR( 0, true) |
+                             FlexCAN_MSGOBJ_Set_RTR( 0, false) |
+                             FlexCAN_MSGOBJ_Set_Interrupt( 0, true);
+      }
 
       if (CANH_MESSAGE_DIRECTION_RECEIVE == (CAN_Message_Parameter_Table_Ptr+message_objet)->message_dir) 
       {

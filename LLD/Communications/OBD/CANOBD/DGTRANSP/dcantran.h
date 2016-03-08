@@ -85,7 +85,7 @@
 /*********************************/
 /* GENERIC CAN TYPES DEFINITION  */
 /*********************************/
-typedef uint16_t  CanIdType;
+typedef uint32_t  CanIdType;
 typedef uint8_t Can8DataBytesArrayType [8];
 typedef uint8_t LnTrspTimeOutErrorType;
 
@@ -184,7 +184,7 @@ VioCanRxBufferStructType;
 #define CanIdCAL                  (0x000)
 #define CanId7e0                  (0x7e0)
 #define CanId7e8                  (0x7e8) /*--- Transmitted but must also be Received ---*/
-
+#define PGNDA00                  (0x18DAAA00) /*--- PGN DA00 was built for regramming ---*/
 
 #define TXIndxCanIdCAL   (2)
 #define IndxCanIdCAL     (4)
