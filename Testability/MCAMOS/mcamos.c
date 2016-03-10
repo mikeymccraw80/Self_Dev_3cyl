@@ -46,7 +46,7 @@ static uint8_t *            pmemloc;
 bool MCAMOS_enable = false;
 
 /* declare reference, this API from canobd module */
-extern bool Transmit_Message( uint16_t can_id, uint8_t *message_address );
+extern bool Transmit_Message( uint32_t can_id, uint8_t *message_address );
 
 /*=============================================================================
  * MCAMOS_Process_7EE_Message

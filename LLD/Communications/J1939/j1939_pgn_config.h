@@ -54,7 +54,7 @@
 #define J1939_PGN_65278_SUPPORTED             0
 #define J1939_PGN_65279_SUPPORTED             0
 #define J1939_PGN_65296_SUPPORTED             0
-#define J1939_PGN_55808_SUPPORTED             1
+#define J1939_PGN_55808_SUPPORTED             0
 
 
 //for tx pgns

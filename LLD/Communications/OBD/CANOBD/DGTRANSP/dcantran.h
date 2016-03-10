@@ -184,7 +184,7 @@ VioCanRxBufferStructType;
 #define CanIdCAL                  (0x000)
 #define CanId7e0                  (0x7e0)
 #define CanId7e8                  (0x7e8) /*--- Transmitted but must also be Received ---*/
-#define PGNDA00                  (0x18DAAA00) /*--- PGN DA00 was built for regramming ---*/
+#define PGNDA00                  (0x18DA0000) /*--- PGN DA00 was built for regramming ---*/
 
 #define TXIndxCanIdCAL   (2)
 #define IndxCanIdCAL     (4)
@@ -296,6 +296,7 @@ void LnGoToWaitingForRxFirstOrSingleFrame (void);
 void CanId5e8RcvdEvent (Can8DataBytesArrayType *Can8DataBytesArrayPtr);
 void CanId7dfRcvdEvent (Can8DataBytesArrayType *Can8DataBytesArrayPtr);
 void CanId7e0RcvdEvent (Can8DataBytesArrayType *Can8DataBytesArrayPtr);
+void PGNDA00RcvdEvent (Can8DataBytesArrayType *Can8DataBytesArrayPtr);
 void CanIdCALRcvdEvent (Can8DataBytesArrayType *Can8DataBytesArrayPtr);
 void CanId7e8RcvdEvent (Can8DataBytesArrayType *Can8DataBytesArrayPtr);
 void RequestCanToTransmit (CanIdType CanId,

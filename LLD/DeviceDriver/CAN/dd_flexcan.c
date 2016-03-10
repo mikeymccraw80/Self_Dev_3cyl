@@ -194,7 +194,16 @@ bool FlexCAN_Transmit_Message(
 
       //Write ID
       //tempoary for Standard ID only
-      in_pFlexCAN->MSGBUF[msg_obj].F.CTRSTS.F.IDE  = FLEXCAN_MSGOBJ_ID_STD;
+      if(in_message_id<0xFFF)
+      {
+        in_pFlexCAN->MSGBUF[msg_obj].F.CTRSTS.F.IDE  = FLEXCAN_MSGOBJ_ID_STD;
+      }
+      else
+      {
+        in_pFlexCAN->MSGBUF[msg_obj].F.CTRSTS.F.IDE  = FLEXCAN_MSGOBJ_ID_EXT;
+        in_message_id = Tx_PGN_55808_ID;
+      }
+
       FLEXCAN_Set_Msg_ID(in_pFlexCAN, msg_obj, in_message_id);
 
       in_pFlexCAN->MSGBUF[msg_obj].F.CTRSTS.F.LENGTH = in_data_length;
@@ -277,7 +286,8 @@ void FlexCAN_Receive_Configure(
 //// Constants
 #define THIRTYONE (31)
 #define THIRTYTWO (32)
-
+uint32_t Rx_PGN_55808_ID;
+uint32_t Tx_PGN_55808_ID;
 void FlexCAN_Receive_Interrupt(FlexCAN_Index_T in_FlexCAN, uint8_t *in_data_buffer)
 {
 	FLEXCAN_T *pFlexCAN;

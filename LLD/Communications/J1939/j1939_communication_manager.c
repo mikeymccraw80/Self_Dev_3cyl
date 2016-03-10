@@ -692,7 +692,7 @@ void J1939_Handler_Cold_Init (void)
    int16_t                            msg_call_back;
    uint8_t                        msg_obj_offset;
 
-   J1939_MESSAGE_RX_OFFSET = 16;
+   J1939_MESSAGE_RX_OFFSET = 18;
    J1939_MESSAGE_TX_OFFSET = (32 - J1939_NO_OF_RECEIVE_MESSAGES_CHANNEL_0);
 
    for (msg_obj = 0; msg_obj < J1939_NO_OF_MESSAGES; msg_obj++)

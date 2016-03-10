@@ -1200,6 +1200,16 @@ void CanId7e0RcvdEvent (Can8DataBytesArrayType *Can8DataBytesArrayPtr)
 } /*** End of CanId7e0RcvdEvent ***/
 
 /*********************/
+/* CanId7e0RcvdEvent */
+/*********************/
+void PGNDA00RcvdEvent (Can8DataBytesArrayType *Can8DataBytesArrayPtr)
+{
+   LnServiceDataFrame.SourceCanId = PGNDA00;
+   LnTranspRespUsdtFrameCanId = PGNDA00;
+   LnTrspUsdtRcvdFromDistantEvent (*Can8DataBytesArrayPtr);   
+} /*** End of CanId7e0RcvdEvent ***/
+
+/*********************/
 /*CanIdCALRcvdEvent */
 void CanIdCALRcvdEvent (Can8DataBytesArrayType *Can8DataBytesArrayPtr)
 {

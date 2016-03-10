@@ -46,6 +46,7 @@ typedef struct
 #define Buffer0        (0x0)
 #define Buffer1        (0x1)
 #define Buffer2        (0x2)
+#define Buffer3        (0x3)
 /*--------------------------------------------------------------------*/
 /*--- AFFECTATION OF CAN MESSAGES TO THE DIFFERENT RECEIVE BUFFERS ---*/
 /*--------------------------------------------------------------------*/
@@ -60,6 +61,7 @@ typedef struct
 #define BufferCanId7df                (Buffer0)
 #define BufferCanId7e0                (Buffer1)
 #define BufferCanIdCAL                (Buffer2)
+#define BufferCanPGNDA00           (Buffer3)
 
 /*** WARNING : Buffer can not be allocated beyond 24 as 8 buffers are used for Transmit msgs ***/
 /*-----------------------------------------------------------------*/
@@ -76,7 +78,7 @@ typedef struct
 /*            CAN OBD config             */
 /*****************************************/
 /*****************************************/
-#define TX_MESSAGE_NUM_OF_CANOBD (2)
+#define TX_MESSAGE_NUM_OF_CANOBD (3)
 #define RX_MESSAGE_NUM_OF_CANOBD (4)
 #define TX_MESSAGE_NUM_OF_CANTSW (0)	//note, tsw can config and callback share canobd can config structure.
 #define RX_MESSAGE_NUM_OF_CANTSW (2)	//note, tsw can config and callback share canobd can config structure.
