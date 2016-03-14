@@ -20,6 +20,7 @@
 //=============================================================================
 #include "dd_flexcan.h"
 #include "dd_flexcan_interrupt.h"
+#include "hwiocald.h"
 
 //=============================================================================
 // FlexCAN_Initialize_Message_Buffer
@@ -39,6 +40,12 @@ void FlexCAN_Initialize_Message_Object(
    //Clear Message Buffer
    pFlexCAN->MSGBUF[msg_obj].F.DATA.U32[0] = 0;
    pFlexCAN->MSGBUF[msg_obj].F.DATA.U32[1] = 0;
+
+   if (FLEXCAN_MSGOBJ_ID_EXT ==   pFlexCAN->MSGBUF[msg_obj].F.CTRSTS.F.IDE)
+   {
+      message_id |= (KfHWIO_J193973_SA<<8);
+   }
+
    FLEXCAN_Set_Msg_ID(pFlexCAN, msg_obj, message_id);
    
    if(FlexCAN_MSGOBJ_Get_Direction(in_configuration) == FLEXCAN_MSGOBJ_DIR_TX)
@@ -189,7 +196,7 @@ void FLEXCAN_Set_Msg_ID(
    }
    else
    {
-	  in_pFlexCAN->MSGBUF[in_msg_obj].F.ID.U32 = in_message_id;
+      in_pFlexCAN->MSGBUF[in_msg_obj].F.ID.U32 = in_message_id;
    }
 }
 //=============================================================================

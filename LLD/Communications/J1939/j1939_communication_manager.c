@@ -725,6 +725,10 @@ void J1939_Handler_Cold_Init (void)
       msg_obj_cmd.P_L_CAN_DEVICE_NUMBER = FLEXCAN_DEVICE_A;
       msg_obj_cmd.P_L_CAN_MSG_NUMBER = msg_obj + msg_obj_offset;
       msg_obj_cmd.P_L_CAN_MSG_ID = J1939_Message_Table[msg_obj].message_ID;
+      //if(PDU1), Receice_PGN was masked by cal KfHWIO_J193973_SA
+      if(msg_obj_cmd.P_L_CAN_MSG_ID<=0x18F00000){
+         msg_obj_cmd.P_L_CAN_MSG_ID |= (KfHWIO_J193973_SA<<8);
+      }
       msg_obj_cmd.P_L_CAN_MSG_MASK = 0xFFFFFFFFUL;
       msg_obj_cmd.P_L_CAN_LENGTH = msg_length;
       msg_obj_cmd.P_L_CAN_TYPE = FLEXCAN_MSGOBJ_ID_EXT;
