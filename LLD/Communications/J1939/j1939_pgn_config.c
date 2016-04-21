@@ -97,6 +97,9 @@ const void (*const J1939_Transmit_Initialize[]) (J1939_Transmit_Message_Control_
 #if J1939_PGN_65289_SUPPORTED
    J1939_TxInit_PGN_65289, /* john deere TLA */
 #endif
+#if J1939_PGN_60928_SUPPORTED
+   J1939_TxInit_PGN_60928, /* john deere Address Claim */
+#endif
 #if J1939_PGN_65154_SUPPORTED
    J1939_TxInit_PGN_65154, /* john deere IT1 */
 #endif
@@ -302,6 +305,9 @@ const J1939_Message_Table_T  J1939_Message_Table[J1939_MESSAGES_NUMBER] =
 #endif
 #if J1939_PGN_55808_SUPPORTED
    , {J1939_PGN_55808_BASE_ID,       J1939_PGN_55808_LENGTH}
+#endif
+#if 	J1939_PGN_60928_SUPPORTED
+   , {J1939_PGN_60928_BASE_ID,       J1939_PGN_60928_LENGTH}
 #endif
 #if J1939_DENY_REQUEST_SUPPORTED
    , { J1939_DENY_REQUEST_PGN, 8} /* Unmanaged Acknowledgement */

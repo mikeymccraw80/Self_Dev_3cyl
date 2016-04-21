@@ -57,6 +57,7 @@
 #define J1939_PGN_55808_SUPPORTED             0
 
 
+
 //for tx pgns
 #define J1939_DENY_REQUEST_SUPPORTED          1
 #define J193973_PGN_65226_SUPPORTED           1
@@ -83,6 +84,7 @@
 #define J1939_PGN_65253_SUPPORTED             0
 #define J1939_PGN_65232_SUPPORTED             1
 #define J1939_PGN_65289_SUPPORTED             1
+#define J1939_PGN_60928_SUPPORTED             1
 /******************************************************************************
 *                                          CONFIGURATION FOR J1939 Messages
 ******************************************************************************/
@@ -131,7 +133,8 @@
 															  J1939_PGN_65253_SUPPORTED		+\
 															  J1939_PGN_65232_SUPPORTED		+\
 															  J1939_PGN_65289_SUPPORTED		+\
-															  J1939_PGN_55808_SUPPORTED		)                 
+															  J1939_PGN_55808_SUPPORTED			+\
+															  J1939_PGN_60928_SUPPORTED)                 
 #define J1939_TRANSMIT_MESSAGES_NUMBER_CHANNEL_1    ( 0 )
 
 #define J1939_RECEIVE_MESSAGES_NUMBER    ( J1939_RECEIVE_MESSAGES_NUMBER_CHANNEL_0 +\
@@ -417,6 +420,7 @@ extern void J193973_TxInit_PGN_65249(J1939_Transmit_Message_Control_T *MsgCtrl);
 extern void J193973_TxInit_PGN_65251(J1939_Transmit_Message_Control_T *MsgCtrl);
 extern void J193973_TxInit_PGN_65232(J1939_Transmit_Message_Control_T * MsgCtrl);
 extern void J1939_TxInit_PGN_65289(J1939_Transmit_Message_Control_T * MsgCtrl);
+extern void J1939_TxInit_PGN_60928(J1939_Transmit_Message_Control_T * MsgCtrl);
 extern void J1939_TxInit_PGN_65154(J1939_Transmit_Message_Control_T * MsgCtrl);
 extern void J1939_SendUnmanagedAcknowledgement (AckModeType Mode, uint32_t RequestedPgn);
 extern void J1939_RequestTxMsgService (TxMsgIndexType index, uint8_t requester);
@@ -805,6 +809,14 @@ extern void J1939_Transmit_Initialize_PGN_65280(J1939_Transmit_Message_Control_T
 #define J1939_PGN_65289                      (0x0000FF09UL)
 #define J1939_PGN_65289_FREQ                 (0)
 #define J1939_PGN_65289_TIMEOUT              (0) 
+/******************************************************************************/
+/* PGN: 60928 EE00                                                               */
+/******************************************************************************/
+#define J1939_PGN_60928_BASE_ID               0x18EE0000
+#define J1939_PGN_60928_LENGTH                8
+#define J1939_PGN_60928                      (0x0000EE00UL)
+#define J1939_PGN_60928_FREQ                  (0)
+#define J1939_PGN_60928_TIMEOUT               (0)
 
 /******************************************************************************/
 /* PGN: 59392                                                               */
