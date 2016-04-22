@@ -16,9 +16,9 @@
 ******************************************************************************/
 static bool Service_PGN_60928(J1939_Transmit_Message_Info_T *tx_msg_ptr)
 {
-    J1939_DATA_T *jd = (J1939_DATA_T *)&J1939_pgn_60928;
+    J1939_DATA_T *jd = (J1939_DATA_T *)GetJ1939_PGN_60928_MsgPtr();
 
-    tx_msg_ptr->ID                 = J1939_ADD_THIS_SRC_ADDR(J1939_PGN_65289_BASE_ID);
+    tx_msg_ptr->ID                 = J1939_ADD_THIS_SRC_ADDR(J1939_PGN_60928_BASE_ID);
     tx_msg_ptr->Length             = J1939_PGN_60928_LENGTH;
     tx_msg_ptr->Data[0]            = jd->data[0];
     tx_msg_ptr->Data[1]            = jd->data[1];

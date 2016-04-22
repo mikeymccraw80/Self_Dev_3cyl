@@ -86,7 +86,7 @@ uint8_t ECUID_Buffer[]={
    'C','h','i','n','a','*',
    'E','n','g','i','n','e',' ','C','o','n','t','r','o','l','l','e','r','*',
    'd','e','l','p','h','i','*'};
-uint8_t J1939_pgn_60928[8]={0x11,0x22,0x33,0x44,0x55,0x66,0x77,0x88};
+
 uint8_t J1939_DM1_Message[J1939_DM1_BUFFER_SIZE] =
 {
    0x00, 0xFF, 0x00, 0xFE, 0xCA, 0x00, 0x00, 0x97, 0x03, 0x8a, 0x00,
@@ -94,7 +94,11 @@ uint8_t J1939_DM1_Message[J1939_DM1_BUFFER_SIZE] =
 };
 
 uint16_t J1939_DM1_DTCs;
-
+uint8_t J1939_pgn_60928[8]={0x11,0x22,0x33,0x44,0x55,0x66,0x77,0x88};
+uint8_t *GetJ1939_PGN_60928_MsgPtr(void) 
+{
+   return J1939_pgn_60928;
+}
 uint8_t J1939_PGN_65251_Message[J1939_PGN_65251_BUFFER_SIZE];
 
 uint8_t J1939_PGN_65249_Message[J1939_PGN_65249_BUFFER_SIZE];

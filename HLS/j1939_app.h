@@ -458,8 +458,6 @@ typedef struct {
 	}byte78;
 }J1939_pgn_65289_T;
 extern J1939_pgn_65289_T     J1939_pgn_65289;
-extern uint8_t     J1939_pgn_60928;
-
 
 /* j1939 73 dm4 (0x00FECD) parameters structures define */ 
 #define Max_Freeze_Frame_Num   3
@@ -697,6 +695,8 @@ uint8_t*GetJ1939_DM1_MsgPtr (void);
 uint16_t GetJ1939_DM1_ActiveDTC_NUMBER (void);
 
 uint8_t *GetJ1939_PGN_65251_MsgPtr (void);
+uint8_t *GetJ1939_PGN_60928_MsgPtr (void);
+
 uint8_t *GetJ1939_PGN_65249_MsgPtr (void);
 
 uint16_t GetJ1939_PGN_65251_BYTE_NUMBER (void);
