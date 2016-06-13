@@ -719,8 +719,8 @@ static void SPARK_Update_Duration_Values(Spark_Control_Select_T in_spark_select,
 
 
     SPARK_Set_Max_Fall_Angle_InToothCount = (uint8_t)SPARK_DWELL_MPTAC_MAX_FALL_ANGLE_IN_TOOTHCOUNT;
-    SPARK_Set_Min_Angle_For_Rise_InToothCount = Min_Angle_For_Rise_InToothCount\
-            * base_frequency / CRANK_Get_Parameter( CRANK_PARAMETER_HI_RES_REFERENCE_PERIOD, 0, 0 ) ;
+    SPARK_Set_Min_Angle_For_Rise_InToothCount = (SPARK_DWELL_ABSOLUTE_MAXVALUE_IN_SEC * Min_Angle_For_Rise_InToothCount\
+            * base_frequency / CRANK_Get_Parameter( CRANK_PARAMETER_HI_RES_REFERENCE_PERIOD, 0, 0 ) );
     if ( SPARK_Set_Min_Angle_For_Rise_InToothCount > Min_Angle_For_Rise_InToothCount) {
         SPARK_Set_Min_Angle_For_Rise_InToothCount = Min_Angle_For_Rise_InToothCount;
     } else {

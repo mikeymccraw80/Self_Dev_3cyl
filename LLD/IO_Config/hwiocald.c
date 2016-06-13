@@ -564,7 +564,7 @@ const T_MILLISECONDSb  KfSPRK_t_DwellInit = V_MILLISECONDSb(4);
 *|   }
 *| }
 */
-const T_MILLISECONDSb  KfSPRK_t_CrankMinDwellInit = V_MILLISECONDSb(0);
+const T_MILLISECONDSb  KfSPRK_t_CrankMinDwellInit = V_MILLISECONDSb(0.5);
 
 /*
 *| hwiocald.{
@@ -578,7 +578,7 @@ const T_MILLISECONDSb  KfSPRK_t_CrankMinDwellInit = V_MILLISECONDSb(0);
 *|   }
 *| }
 */
-const T_MILLISECONDSb KfSPRK_t_CrankMaxDwellInit = V_MILLISECONDSb(30);
+const T_MILLISECONDSb KfSPRK_t_CrankMaxDwellInit = V_MILLISECONDSb(10);
 
 /*
 *| hwiocald.{
