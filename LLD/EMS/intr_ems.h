@@ -808,6 +808,14 @@ INLINE void ConvertIntrParam_ETCDC(void)
 #define GetESTBOpenFaultStatus()    (GetOpenFault(PULSE_OUT_EST_B))
 #define ClearESTBShortFaultStatus()   (ClearShortFault(PULSE_OUT_EST_B))
 #define ClearESTBOpenFaultStatus()   (ClearOpenFault(PULSE_OUT_EST_B))
+
+#if CcSYST_NUM_OF_CYLINDERS ==3
+#define GetESTCShortFaultStatus()   (GetShortFault(PULSE_OUT_EST_C))
+#define GetESTCOpenFaultStatus()    (GetOpenFault(PULSE_OUT_EST_C))
+#define ClearESTCShortFaultStatus()   (ClearShortFault(PULSE_OUT_EST_C))
+#define ClearESTCOpenFaultStatus()   (ClearOpenFault(PULSE_OUT_EST_C))			
+#endif
+
 /*
 INLINE TeEST_CIRCUIT_STATE GetAPI_EST_CircuitState(uint8_t active_estline)
 {
@@ -861,6 +869,17 @@ INLINE TeEST_CIRCUIT_STATE GetAPI_EST_CircuitState(uint8_t active_estline, TeEST
 			ClearESTBOpenFaultStatus();
 			// ClearEstLine2HighCurrentFlag();
 		}
+		#if CcSYST_NUM_OF_CYLINDERS ==3
+		else if ( (active_estline == 2) &&
+			GetESTCShortFaultStatus() )
+		{
+			est_line_fault = CeEST_FAULTED;
+			ClearESTCShortFaultStatus();
+			ClearESTCOpenFaultStatus();
+			
+		}
+		#endif
+
 		else
 		{
 			est_line_fault = CeEST_NOMINAL;
@@ -886,6 +905,16 @@ INLINE TeEST_CIRCUIT_STATE GetAPI_EST_CircuitState(uint8_t active_estline, TeEST
 			ClearESTBOpenFaultStatus();
 			// ClearEstLine2HighCurrentFlag();
 		}
+		#if CcSYST_NUM_OF_CYLINDERS ==3
+		else if ( (active_estline == 2) &&
+			(GetESTCOpenFaultStatus()) )
+		{
+			est_line_fault = CeEST_FAULTED;
+			ClearESTCShortFaultStatus();
+			ClearESTCOpenFaultStatus();
+			
+		}
+		#endif
 		else
 		{
 			est_line_fault = CeEST_NOMINAL;
