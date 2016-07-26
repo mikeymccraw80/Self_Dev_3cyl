@@ -1,8 +1,10 @@
 SourceInsight/
 tools/delphilib/outputlib/
 objs/
+tools/
 Listing/
 bin/
+Bin_record/
 Build/build.log
 *.txt
 *.mak
