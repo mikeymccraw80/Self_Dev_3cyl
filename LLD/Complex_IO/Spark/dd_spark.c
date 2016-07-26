@@ -794,6 +794,7 @@ void SPARK_Process_Interrupt(void)
     // Calculate the next EST channel, and output the
     // EST control signals and the SEL1/0 signals:
     if( SPARK_Enable ) {
+        SPARK_Cylinder_Event_ID       = CRANK_Get_Cylinder_ID();
         // For the diagnostic routine
         cylinder = CRANK_Increment_Cylinder_ID(SPARK_Cylinder_Event_ID, 1);
 
@@ -827,6 +828,7 @@ void SPARK_Process_Interrupt(void)
 //=============================================================================
 // SPARK_Process_Cylinder_Event
 //=============================================================================
+bool Isr_status;
 void SPARK_Process_Cylinder_Event( void )
 {
     uint32_t          cs;
@@ -863,6 +865,14 @@ void SPARK_Process_Cylinder_Event( void )
                     /* set est1 gpio outopen as OD type, so there is no pulse output */
                     SIU_GPIO_OpenDrain_Confige(HAL_GPIO_EST1_CHANNEL, true);
                 }
+               if (MCD5412_Get_Host_Interrupt_Status(MPTAC_TPU_INDEX, &TPU, SPARK_Mptac[0], false))
+               {
+                    SIU_GPIO_OpenDrain_Confige(HAL_GPIO_EST1_CHANNEL, true);
+              Isr_status=1;
+               }else{
+
+              Isr_status=0;
+			   }
                 SPARK_Update_Duration_Values(SPARK_CONTROL_0, SPARK_Cylinder_Event_ID);
                 end_angle = SPARK_Calculate_End_Angle_In_Counts( SPARK_Cylinder_Event_ID, (uint8_t)0, SPARK_CALC_POSITION_Ref );
                 SPARK_Schedule_Next_Event(SPARK_Cylinder_Event_ID, end_angle);
@@ -873,8 +883,6 @@ void SPARK_Process_Cylinder_Event( void )
                 /* increase the syncontrol var, if syncontrol==2, multipulse pass next event tooth */
                 SPARK_Scheduled_SynControl ++;
         }
-        MCD5412_Set_Host_Interrupt_Status(MPTAC_TPU_INDEX, &TPU, SPARK_Mptac[0], false);
-        MCD5412_Set_Host_Interrupt_Enable(MPTAC_TPU_INDEX, &TPU, SPARK_Mptac[0], true );
     }
 }
 
@@ -896,5 +904,12 @@ void SPARK_Set_Next_Interrupt_EST1( void )
     }
 }
 
-
+//=============================================================================
+// SPARK_ReSet_Host_Interrupt
+//=============================================================================
+void SPARK_ReSet_Host_Interrupt( void )
+{
+        MCD5412_Set_Host_Interrupt_Status(MPTAC_TPU_INDEX, &TPU, SPARK_Mptac[0], false);
+        MCD5412_Set_Host_Interrupt_Enable(MPTAC_TPU_INDEX, &TPU, SPARK_Mptac[0], true );
+}
 

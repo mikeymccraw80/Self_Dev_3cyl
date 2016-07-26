@@ -143,6 +143,9 @@ void SPARK_Reset_Parameters( void );
 // SPARK_Process_Cylinder_Event
 //=============================================================================
 void SPARK_Process_Cylinder_Event( void );
-
+//=============================================================================
+// void SPARK_ReSet_Host_Interrupt
+//=============================================================================
+void SPARK_ReSet_Host_Interrupt( void );
 
 #endif // DD_SPARK_INTERFACE_H
