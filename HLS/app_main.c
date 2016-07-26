@@ -541,7 +541,8 @@ void HLS_firstsyn(void)
 
 }
 /*will be called for every segment (at Software reference mark)*/
-
+uint32_t testfor,testcount,testm;
+uint32_t testiga;
 void HLS_syn(void)
 {
 	if(First_Syn_Flag==0) {
@@ -578,6 +579,13 @@ void HLS_syn(void)
     inj_sig[INJ_CHANNEL_D].B_post_inj = true;
     inj_sig[INJ_CHANNEL_D].post_inj_time =1000;
 #endif	
+for(testfor=0;testfor<testcount;testfor++)
+	{
+for(testm=0;testm<10;testm++){}
+}
+         ign_sig[0].ign_angle = testiga;
+         ign_sig[1].ign_angle = testiga;
+         ign_sig[2].ign_angle = testiga;
     /* ignition test interface */
     // if(LLD_cyl_num == 0) {
         // ign_sig[0].ign_angle = 40;
