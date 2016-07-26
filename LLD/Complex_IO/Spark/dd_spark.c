@@ -784,6 +784,7 @@ static void SPARK_Update_Duration_Values(Spark_Control_Select_T in_spark_select,
 
 void SPARK_Process_Interrupt(void)
 {
+    uint32_t          cs;
     Crank_Cylinder_T        cylinder = 0;
     Spark_Control_Select_T  control_select;
     uCrank_Angle_T          end_angle;
@@ -792,9 +793,13 @@ void SPARK_Process_Interrupt(void)
     SPARK_Actual_Duration = MCD5412_Get_Actual_Duration(MPTAC_TPU_INDEX, SPARK_Mptac[SPARK_CONTROL_0]);
 
     // Calculate the next EST channel, and output the
+    cs = Enter_Critical_Section();
+    SPARK_Cylinder_Event_ID       = CRANK_Get_Cylinder_ID();
+    SPARK_Angle_At_Cylinder_Event = CRANK_Get_Parameter( CRANK_PARAMETER_ANGLE_AT_CYLINDER_EVENT, 0, 0 );
+    Leave_Critical_Section( cs );
+	
     // EST control signals and the SEL1/0 signals:
     if( SPARK_Enable ) {
-        SPARK_Cylinder_Event_ID       = CRANK_Get_Cylinder_ID();
         // For the diagnostic routine
         cylinder = CRANK_Increment_Cylinder_ID(SPARK_Cylinder_Event_ID, 1);
 
