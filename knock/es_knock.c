@@ -62,6 +62,7 @@ RPM_Hi_Res_W                  EscOldMultiplierRPM ;         /* 32.25 ms old RPM 
 Every_2nd_Loop_Sec_B          MAD_Mult_TPS_Timer ;          /* Timer for TPS delta */
 Every_4th_Loop_Sec_B          MAD_Mult_RPM_Timer ;          /* Timer for RPM delta */
 
+Volt0to5Volts_W       ADESC_DSPKnock_Raw[MULTIKNOCK_NUM_FILTERS];
 Volt0to5Volts_W       ADESC_DSPKnock[MULTIKNOCK_NUM_FILTERS];
 Volt0to5Volts_W       ADESC_Average_Wingateoff[num_cyl] ;              /* raw knock sensor average value when wingate off */
 EscFlag_Type            EscFlag ;
@@ -70,7 +71,7 @@ bool Multiplier_Delta_TPS;
 bool MAD_Transient_Detected;
 bool MAD_Filtering_Enabled;
 static bool ESC_Enabled_State;
-
+Multiplier_0_to_4      ADESC_mult ;
 
 /* ============================================================================ *\
  * Local INLINE functions and #define function-like macros.
@@ -342,15 +343,22 @@ void ESCEvent( void )
 
 	/* Knock AD buffer sum is the summary of 20 knock AD value*/
 	/*keep the same of number as xgate part*/
-	GetIO_MultiKnock_Intensity_Value(MULTIKNOCK_WINDOW_2, ADESC_DSPKnock );
+	GetIO_MultiKnock_Intensity_Value(MULTIKNOCK_WINDOW_2, ADESC_DSPKnock_Raw );
 
 	/*limit the AD Raw value to a min threshold*/
-	if (ADESC_DSPKnock[0] < K_ADESC_Min_Threshold) {
-		ADESC_DSPKnock[0] = K_ADESC_Min_Threshold;
+	if (ADESC_DSPKnock_Raw[0] < K_ADESC_Min_Threshold) {
+		ADESC_DSPKnock_Raw[0] = K_ADESC_Min_Threshold;
 	}
 
 	/*multi a scl to the AD Raw value*/
-	ADESC_DSPKnock[0] = FixMultiplyHighLimit(ADESC_DSPKnock[0], Volt0to5Volts_W, K_ADESC_Scl_Multi, Multiplier_0_to_2, Volt0to5Volts_W);
+	ADESC_DSPKnock_Raw[0] = FixMultiplyHighLimit(ADESC_DSPKnock_Raw[0], Volt0to5Volts_W, K_ADESC_Scl_Multi, Multiplier_0_to_2, Volt0to5Volts_W);
+
+	/*---------------------------------------*/
+	/*  Calculate ADES Multiplier       */
+	/*---------------------------------------*/
+	CalculateADESCMult();
+	
+	ADESC_DSPKnock[0] = FixMultiplyHighLimit(ADESC_DSPKnock_Raw[0], Volt0to5Volts_W, ADESC_mult, Multiplier_0_to_4, Volt0to5Volts_W);
 
 	/* give the AD value to different cylinder*/
 	ADESC[EscCylinder] = ADESC_DSPKnock[0] ;
@@ -419,7 +427,17 @@ void ESCEvent( void )
 	}
 } /* End of ESCEvent */
 
-
+/*===========================================================*\
+ * calculate the multiplier of the AD Raw value*
+ * as a compensation for 3cyl engine*
+\*===========================================================*/
+void CalculateADESCMult(void)
+{
+	ADESC_mult = ( Multiplier_0_to_4 )Lookup_3D_B( Manifold_Air_Pressure(), Prec_kPa_B, Min_kPa_B, 20.0, 100.0, 20.0,
+	                HAL_Eng_Get_Engine_Speed(), Prec_RPM_W, 0.0, 0.0, 6400.0, 400.0,
+	                RPM_0to6400by400_Steps,
+	                &F_ADESCMultLoadComp[0][0] ) ;
+}
 
 /*===========================================================*\
  * ScheduleKnockFastBckgLogic

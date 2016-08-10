@@ -1078,3 +1078,120 @@ const Multiplier_0_to_64 F_MADMultRPMOffset[RPM_0to6400by400_Steps] =
 *|    }
 *| }
 */
+
+const Multiplier_0_to_4 F_ADESCMultLoadComp[kPa_20to100by20_Steps][RPM_0to6400by400_Steps] =
+/*  ADESC multiplier compensation when for engine load */
+/*  N = E*64  */
+{
+{/*--- kPa_20  ---*/
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /*  000 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /*  400 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /*  800 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /* 1200 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /* 1600 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /* 2000 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /* 2400 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /* 2800 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /* 3200 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /* 3600 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /* 4000 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /* 4400 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /* 4800 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /* 5200 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /* 5600 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /* 6000 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 )   /* 6400 RPM */
+    },
+    {/*--- kPa_40  ---*/
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /*  000 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /*  400 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /*  800 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /* 1200 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /* 1600 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /* 2000 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /* 2400 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /* 2800 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /* 3200 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /* 3600 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /* 4000 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /* 4400 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /* 4800 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /* 5200 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /* 5600 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /* 6000 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 )   /* 6400 RPM */
+    },
+    {/*--- kPa_60  ---*/
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /*  000 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /*  400 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /*  800 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /* 1200 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /* 1600 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /* 2000 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /* 2400 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /* 2800 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /* 3200 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /* 3600 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /* 4000 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /* 4400 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /* 4800 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /* 5200 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /* 5600 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /* 6000 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 )   /* 6400 RPM */
+    },
+    {/*--- kPa_80  ---*/
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /*  000 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /*  400 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /*  800 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /* 1200 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /* 1600 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /* 2000 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /* 2400 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /* 2800 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /* 3200 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /* 3600 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /* 4000 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /* 4400 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /* 4800 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /* 5200 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /* 5600 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /* 6000 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 )   /* 6400 RPM */
+    },
+    {/*--- kPa_100  ---*/
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /*  000 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /*  400 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /*  800 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /* 1200 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /* 1600 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /* 2000 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /* 2400 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /* 2800 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /* 3200 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /* 3600 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /* 4000 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /* 4400 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /* 4800 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /* 5200 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /* 5600 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 ),  /* 6000 RPM */
+        FixDefConst( 1.0, Multiplier_0_to_4 )   /* 6400 RPM */
+    }
+};
+/*
+*| esc_cal.{
+*|    F_ADESCMultLoadComp
+*|    {
+*|         # --- 3D table --- #
+*|       :is_calconst;
+*|       :description = "ADESC multiplier compensation when for engine load";
+*|       :elements:elements:units = "";
+*|       :elements:elements:type = types.Multiplier_0_to_4;
+*|       :annotation = types.kPa_20to100by20_Steps;
+*|       :elements:annotation = types.RPM_0to6400by400_Steps;
+*|    }
+*| }
+*/
+
+

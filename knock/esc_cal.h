@@ -98,6 +98,7 @@ extern const RPM_Hi_Res_W                  K_MADMultiplierDeltaRPM;
 extern const Every_4th_Loop_Sec_B          K_MADMultRPMTimer;
 extern const Multiplier_0_to_64            F_MADMultiplier[NUMBER_OF_CYLINDERS][RPM_0to6400by400_Steps];
 extern const Multiplier_0_to_4             F_MADMultLoadComp[kPa_20to100by20_Steps][RPM_0to6400by400_Steps];
+extern const Multiplier_0_to_4             F_ADESCMultLoadComp[kPa_20to100by20_Steps][RPM_0to6400by400_Steps];
 extern const Multiplier_0_to_4             F_MADMultPEComp[RPM_0to6400by400_Steps];
 extern const Multiplier_0_to_64            F_MADMultTPSOffset[RPM_0to6400by400_Steps];
 extern const Multiplier_0_to_64            F_MADMultRPMOffset[RPM_0to6400by400_Steps];
