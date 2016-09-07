@@ -40,11 +40,11 @@ typedef enum {
 	CeINJD_InjCircuit4_FaultTimer,
 	CeINJD_125msNmbrOfTimers
 };
-#if CcSYST_NUM_OF_CYLINDERS == 3
-#define CcSYST_NUM_OF_INJECTORS 3
-#elif CcSYST_NUM_OF_CYLINDERS==4
+//#if CcSYST_NUM_OF_CYLINDERS == 3
+//#define CcSYST_NUM_OF_INJECTORS 3
+//#elif CcSYST_NUM_OF_CYLINDERS==4
 #define CcSYST_NUM_OF_INJECTORS 4
-#endif
+//#endif
 //#define CcSYST_NUM_OF_CYLINDERS 3
 
 /*****************************************************************************
