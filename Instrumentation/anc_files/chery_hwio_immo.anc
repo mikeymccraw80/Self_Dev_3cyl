@@ -40,10 +40,10 @@
 *-  description              = "immo R_Line trigger enable flag";
 *-}
 
-*-immo_exec.SySiemens_RLineTimerCntr{
+*-Siemens_immomsrv.SySiemens_RLineTimerCntr{
 *-  OBJECTS_CLASS: parameter_es_class;
 *-  label                    = "IMMORLTMR";
-*-  variable_location.symbol = immo_exec.SySiemens_RLineTimerCntr;
+*-  variable_location.symbol = Siemens_immomsrv.SySiemens_RLineTimerCntr;
 *-  ds_scaling_unit          = "count";
 *-  ds_precision             = "4.0";
 *-  ds_scaling_mode          = "Ax + B";

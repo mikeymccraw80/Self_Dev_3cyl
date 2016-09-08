@@ -48,16 +48,6 @@
 *-  ds_const_b               = "0.000000000000";
 *-}
 
-*-_VeEPSD_CamNoSigTestStatReported{
-*-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "CAMNSTSR";
-*-  variable_location.symbol = _VeEPSD_CamNoSigTestStatReported;
-*-  ds_precision             = "4.0";
-*-  ds_scaling_mode          = "Ax + B";
-*-  ds_const_a               = "1.000000000000";
-*-  ds_const_b               = "0.000000000000";
-*-}
-
 *-epsdmcam.ScEPSD_Cam1RatnlyFailCntr{
 *-  OBJECTS_CLASS: parameter_es_class;
 *-  label                    = "CAM1RYFC";
@@ -92,16 +82,6 @@
 *-  OBJECTS_CLASS: parameter_es_class;
 *-  label                    = "CAM2RYPC";
 *-  variable_location.symbol = epsdmcam.ScEPSD_Cam2RatnlyPassCntr;
-*-  ds_precision             = "4.0";
-*-  ds_scaling_mode          = "Ax + B";
-*-  ds_const_a               = "1.000000000000";
-*-  ds_const_b               = "0.000000000000";
-*-}
-
-*-epsdmcam._SeEPSD_CamRatnlyTestStatReport{
-*-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "CAMRYTSR";
-*-  variable_location.symbol = epsdmcam._SeEPSD_CamRatnlyTestStatReport;
 *-  ds_precision             = "4.0";
 *-  ds_scaling_mode          = "Ax + B";
 *-  ds_const_a               = "1.000000000000";
@@ -148,16 +128,6 @@
 *-  ds_const_b               = "0.000000000000";
 *-}
 
-*-epsdmcnk._SeEPSD_CrankNoSigTestStatRepor{
-*-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "CRKNOTSR";
-*-  variable_location.symbol = epsdmcnk._SeEPSD_CrankNoSigTestStatRepor;
-*-  ds_precision             = "4.0";
-*-  ds_scaling_mode          = "Ax + B";
-*-  ds_const_a               = "1.000000000000";
-*-  ds_const_b               = "0.000000000000";
-*-}
-
 *-epsdmcnk._ScEPSD_CrankNoisySigFailCntr{
 *-  OBJECTS_CLASS: parameter_es_class;
 *-  label                    = "CRKNSFC";
@@ -168,30 +138,10 @@
 *-  ds_const_b               = "0.000000000000";
 *-}
 
-*-epsdmcnk._ScEPSD_CrankNoisySigRevCntr{
-*-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "CRKNSREV";
-*-  variable_location.symbol = epsdmcnk._ScEPSD_CrankNoisySigRevCntr;
-*-  ds_precision             = "4.0";
-*-  ds_scaling_mode          = "Ax + B";
-*-  ds_const_a               = "1.000000000000";
-*-  ds_const_b               = "0.000000000000";
-*-}
-
 *-epsdmcnk._ScEPSD_CrankNoisySigSampleCntr{
 *-  OBJECTS_CLASS: parameter_es_class;
 *-  label                    = "CRKNSSC";
 *-  variable_location.symbol = epsdmcnk._ScEPSD_CrankNoisySigSampleCntr;
-*-  ds_precision             = "4.0";
-*-  ds_scaling_mode          = "Ax + B";
-*-  ds_const_a               = "1.000000000000";
-*-  ds_const_b               = "0.000000000000";
-*-}
-
-*-epsdmcnk._SeEPSD_CrankNoisySigTestStatRe{
-*-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "CRKNSTSR";
-*-  variable_location.symbol = epsdmcnk._SeEPSD_CrankNoisySigTestStatRe;
 *-  ds_precision             = "4.0";
 *-  ds_scaling_mode          = "Ax + B";
 *-  ds_const_a               = "1.000000000000";
@@ -215,16 +165,6 @@
 *-  ds_precision             = "4.2";
 *-  ds_scaling_mode          = "Ax + B";
 *-  ds_const_a               = "0.007812500000";
-*-  ds_const_b               = "0.000000000000";
-*-}
-
-*-epsdmcnk._SfEPSD_IgnVoltageAtKeyOn{
-*-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "CRKVKEY";
-*-  variable_location.symbol = epsdmcnk._SfEPSD_IgnVoltageAtKeyOn;
-*-  ds_precision             = "4.1";
-*-  ds_scaling_mode          = "Ax + B";
-*-  ds_const_a               = "0.000488281250";
 *-  ds_const_b               = "0.000000000000";
 *-}
 

@@ -208,30 +208,6 @@
 *-  description              = "Knock diag sensor test fail";
 *-}
 
-*-knodmall.SeKNKD_SensorTestStatusReported{
-*-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "KNKSORRP";
-*-  variable_location.symbol = knodmall.SeKNKD_SensorTestStatusReported;
-*-  ds_scaling_unit          = "count";
-*-  ds_precision             = "4.0";
-*-  ds_scaling_mode          = "Ax + B";
-*-  ds_const_a               = "1.000000000000";
-*-  ds_const_b               = "0.000000000000";
-*-  description              = "Knock diag sensor test status report";
-*-} 
-
-*-knodmall.SeKNKD_SystemTestStatusReported{
-*-  OBJECTS_CLASS: parameter_es_class;
-*-  label                    = "KNKSTURP";
-*-  variable_location.symbol = knodmall.SeKNKD_SystemTestStatusReported;
-*-  ds_scaling_unit          = "count";
-*-  ds_precision             = "4.0";
-*-  ds_scaling_mode          = "Ax + B";
-*-  ds_const_a               = "1.000000000000";
-*-  ds_const_b               = "0.000000000000";
-*-  description              = "Knock diag system test status report";
-*-}
-
 *-knodmall.SfKNKD_Pct_ADESC_Delta{
 *-  OBJECTS_CLASS: parameter_es_class;
 *-  label                    = "KNKADESC";

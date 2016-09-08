@@ -56,7 +56,7 @@
 *-etcdmall.SbETCD_TestComplete{
 *-  OBJECTS_CLASS: parameter_es_class;
 *-  label                    = "ETCTSTCMPL";
-*-  variable_location.symbol = etcdmall.SbETCD_ETC_TestComplete;
+*-  variable_location.symbol = etcdmall.SbETCD_TestComplete;
 *-  ds_scaling_unit          = "Boolean";
 *-  ds_precision             = "2.0";
 *-  ds_scaling_mode          = "Ax + B";

@@ -37,7 +37,7 @@
 *-j1939_pgn_64971.J1939_PGN_64971_Message_Lost_Ind_Flag{
 *-  OBJECTS_CLASS: parameter_es_class;
 *-  label                    = "MLFID64971";
-*-  variable_location.symbol = j1939_pgn_65265.J1939_PGN_64971_Message_Lost_Ind_Flag;
+*-  variable_location.symbol = j1939_pgn_64971.J1939_PGN_64971_Message_Lost_Ind_Flag;
 *-  ds_precision             = "1.0";
 *-  ds_scaling_mode          = "Ax + B";
 *-  ds_const_a               = "1.000000000000";

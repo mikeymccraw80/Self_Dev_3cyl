@@ -44,7 +44,7 @@
 *-candmall.SbCAND_GCU_CommTestComplete{
 *-  OBJECTS_CLASS: parameter_es_class;
 *-  label                    = "CANTSTCMPL";
-*-  variable_location.symbol = candmall.SbCAND_GCU_CommCAN_TestComplete;
+*-  variable_location.symbol = candmall.SbCAND_GCU_CommTestComplete;
 *-  ds_scaling_unit          = "Boolean";
 *-  ds_precision             = "2.0";
 *-  ds_scaling_mode          = "Ax + B";
