@@ -130,7 +130,9 @@ void FlexCAN_RX_CallBack (uint32_t in_message_id, uint8_t *in_data_buffer, uint8
 	   
 	FlexCAN_RX_MSG_DLC = in_data_length;
        //if(PDU1), in_message_id=in_message_id|KfHWIO_J193973_SA;
-       in_message_id&=0xFFFF0000;
+       if(in_message_id>0xFFF){
+          in_message_id&=0xFFFF0000;
+       }
 
 	for (ccp_message = 0; FlexCAN_RX_Message_Parameter_Table[ccp_message].Message_ID!=0; ccp_message ++) {
 		if ( FlexCAN_RX_Message_Parameter_Table[ccp_message].Message_ID == in_message_id) {
