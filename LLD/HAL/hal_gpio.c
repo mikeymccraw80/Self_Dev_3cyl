@@ -283,6 +283,7 @@ bool HAL_GPIO_GET_IMMOREQ_Status(void)
  void HAL_GPIO_SET_SMR_Enable(bool in_enable) 
  {
      VSEP_PWM_DISCRETE_Set_State(VSEP_PO_SMR_CH,in_enable);
+     SMR_Enable_State = in_enable;
  }
 
 //=============================================================================
@@ -299,7 +300,6 @@ bool HAL_GPIO_GET_IMMOREQ_Status(void)
 void HAL_GPIO_SET_CRUISI_Enable(bool in_enable) 
 {
    VSEP_DiscreteSet(VSEP_PO_CRUISI_CH,in_enable);
-   SMR_Enable_State = in_enable;
 }
 
 //=============================================================================

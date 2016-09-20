@@ -239,7 +239,7 @@
 #define VSEP_0_PCH8_INIT MTSA_CONFIG_VSEP_PCH_08
 
 #define VSEP_DO_FAN2_CH  MTSA_CONFIG_VSEP_PCH_08
-
+#define VSEP_PO_SMR_CH  MTSA_CONFIG_VSEP_PCH_08
 //=============================================================================
 // PCH_09 - INJ1
 //=============================================================================
@@ -490,7 +490,7 @@
 
 #define VSEP_0_PWM_7_INIT  MTSA_CONFIG_VSEP_PCH_28
 #define VSEP_0_PWM_7_PWM_INIT VSEP_PWM_Set_Initial_Frequency_Duty_Cycle( VSEP_PWM_CDIV_32, 400, 0 )
-#define VSEP_PO_SMR_CH  MTSA_CONFIG_VSEP_PCH_28
+
 //=============================================================================
 // PCH_29 - PWM_8
 //=============================================================================
