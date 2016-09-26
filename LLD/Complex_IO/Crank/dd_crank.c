@@ -230,7 +230,8 @@ void CRANK_Initialize(
 
    CRANK_Parameters.F.time_base                                = TPU_TIMER_Get_Base_Frequency( EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT );
    CRANK_Parameters.F.max_timer_value                          = (uint32_t)( ( (1 << TPU_TIMER_Get_Size( ) ) -1 ) );
-   CRANK_Parameters.F.filter_value = 200;
+   //Set filter_value when engine state = Crank. 2000 means the rpm<1000
+   CRANK_Parameters.F.filter_value = 2000;
    CRANK_Parameters.F.initial_virtual_teeth_per_cylinder_event = CRANK_VIRTUAL_TEETH_PER_REVOLUTION / CRANK_Initialization_Parameters->number_of_cylinders;
    CRANK_Parameters.F.angle_from_cylinder_event_to_tdc         = CRANK_Initialization_Parameters->degrees_top_dead_center;
    Sync_error_counter =0;
@@ -1639,3 +1640,29 @@ void CRANK_Set_Diag58x_Error_Cnt(uint8_t cnt)
     CRANK_Error_Count = cnt;
 }
 
+//=============================================================================
+// Re set the etpu filter at crank engine state 
+//=============================================================================
+ void  InitHWIO_RunToCrank(void)
+ {
+
+    //Set filter_value when engine state = Run. 200 means the rpm<10000
+   CRANK_Parameters.F.filter_value = 2000;
+	
+   // Re-Initialize Crank filter time
+   MCD5408_Set_Filter_Time( EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT,
+		  CRANK_Parameters.F.filter_value ); // timer counts
+ }
+//=============================================================================
+// Re set the etpu filter at run engine state 
+//=============================================================================
+ void  InitHWIO_CrankToRun(void)
+ {
+
+    //Set filter_value when engine state = Run. 200 means the rpm<10000
+   CRANK_Parameters.F.filter_value = 200;
+	
+   // Re-Initialize Crank filter time
+   MCD5408_Set_Filter_Time( EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT,
+		  CRANK_Parameters.F.filter_value ); // timer counts
+ }
