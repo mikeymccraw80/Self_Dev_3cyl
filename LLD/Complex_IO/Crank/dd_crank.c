@@ -12,6 +12,8 @@
 #include "io_config_siu.h"
 #include "dd_siu_interface.h"
 #include "v_ignit.h"
+#include "dd_vsep.h"
+#include "vsepcald.h"
 
 uint8_t crank_b_syn;
 uint16_t crank_rpm;
@@ -230,8 +232,7 @@ void CRANK_Initialize(
 
    CRANK_Parameters.F.time_base                                = TPU_TIMER_Get_Base_Frequency( EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT );
    CRANK_Parameters.F.max_timer_value                          = (uint32_t)( ( (1 << TPU_TIMER_Get_Size( ) ) -1 ) );
-   //Set filter_value when engine state = Crank. 2000 means the rpm<1000
-   CRANK_Parameters.F.filter_value = 2000;
+   CRANK_Parameters.F.filter_value = 200;
    CRANK_Parameters.F.initial_virtual_teeth_per_cylinder_event = CRANK_VIRTUAL_TEETH_PER_REVOLUTION / CRANK_Initialization_Parameters->number_of_cylinders;
    CRANK_Parameters.F.angle_from_cylinder_event_to_tdc         = CRANK_Initialization_Parameters->degrees_top_dead_center;
    Sync_error_counter =0;
@@ -1641,28 +1642,41 @@ void CRANK_Set_Diag58x_Error_Cnt(uint8_t cnt)
 }
 
 //=============================================================================
-// Re set the etpu filter at crank engine state 
+// SetHWIO_58X_SignlFilt, for crank filter at run state 
 //=============================================================================
- void  InitHWIO_RunToCrank(void)
- {
+void SetHWIO_58X_SignlFilt(void)
+{
+   VSEP_TIMER_VR_Set_Value_Immediate((VSEP_Set_Device_Index(0, VSEP_INDEX_0) | VSEP_Set_Channel(0, VSEP_CHANNEL_VR1)),
+                                     (uint32_t)(KsVSEP_VR1_Setting_Initial.KeVSEP_VR1_DLY) << VSEP_TXD_VR_DLY_FIXED_BITS);
+}
+//=============================================================================
+// SetHWIO_58X_SignlFilt_Heavy, for crank filter at crank state 
+//=============================================================================
+void SetHWIO_58X_SignlFilt_Heavy(void)
+{
+   VSEP_TIMER_VR_Set_Value_Immediate((VSEP_Set_Device_Index(0, VSEP_INDEX_0) | VSEP_Set_Channel(0, VSEP_CHANNEL_VR1)),
+                                     (uint32_t)KsVSEP_VR1_Setting_Initial_Crank.KeVSEP_VR1_DLY << VSEP_TXD_VR_DLY_FIXED_BITS);
+}
 
-    //Set filter_value when engine state = Run. 200 means the rpm<10000
-   CRANK_Parameters.F.filter_value = 2000;
-	
-   // Re-Initialize Crank filter time
-   MCD5408_Set_Filter_Time( EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT,
-		  CRANK_Parameters.F.filter_value ); // timer counts
- }
 //=============================================================================
-// Re set the etpu filter at run engine state 
+// wzdmdc: 09Jul2007
+//  New interface functions for Crank Signal Filtering
 //=============================================================================
- void  InitHWIO_CrankToRun(void)
- {
+void InitHWIO_CrankToRun(void)
+{
+    SetHWIO_58X_SignlFilt();
+}
+                              
+void InitHWIO_RunToCrank(void)
+{
+    SetHWIO_58X_SignlFilt_Heavy();
+}                              
 
-    //Set filter_value when engine state = Run. 200 means the rpm<10000
-   CRANK_Parameters.F.filter_value = 200;
-	
-   // Re-Initialize Crank filter time
-   MCD5408_Set_Filter_Time( EPPWMT_TPU_INDEX,TPU_CONFIG_IC_EPPWMT,
-		  CRANK_Parameters.F.filter_value ); // timer counts
- }
+void InitHWIO_ZeroEngSpd(void)
+{
+    SetHWIO_58X_SignlFilt_Heavy();
+}
+void InitHWIO_KeyonToCrank(void)
+{
+    SetHWIO_58X_SignlFilt_Heavy();
+}

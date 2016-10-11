@@ -190,7 +190,7 @@ const   KsVSEP_VR1_Setting_Cals  KsVSEP_VR1_Setting_Initial= {
 */
 
 const   KsVSEP_VR1_HeavyDelay_T  KsVSEP_VR1_Setting_Initial_Crank= {
-                4, 0
+                32, 0
  };
 
 

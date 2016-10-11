@@ -79,13 +79,21 @@ uint8_t CRANK_Get_Diag_Tooth_Cnt(void);
 void CRANK_Set_Diag_Tooth_Cnt(uint8_t cnt);
 
 //=============================================================================
-// Re set the etpu filter at crank engine state 
+// Re set the VR1 filter at run engine state 
 //=============================================================================
  void  InitHWIO_CrankToRun(void);
 //=============================================================================
-// Re set the etpu filter at run engine state 
+//  Re set the VR1 filter at crank engine state 
 //=============================================================================
  void  InitHWIO_RunToCrank(void);
+//=============================================================================
+//  Re set the VR1 filter at crank engine state 
+//=============================================================================
+void InitHWIO_ZeroEngSpd(void);
+//=============================================================================
+//  Re set the VR1 filter at crank engine state 
+//=============================================================================
+void InitHWIO_KeyonToCrank(void);
 //=============================================================================
 // CRANK_Get_Tooth_Period
 //=============================================================================
