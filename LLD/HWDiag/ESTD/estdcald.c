@@ -94,7 +94,20 @@ const T_VOLTb KfESTD_U_OpenIgnVoltResetThrsh = V_VOLTb(11);
 */
 const TwTIME_t_R7p8125ms KfESTD_t_EnableDelayTime = C_R7p8125ms16(0);
 
-
+/*
+*| estdcald.{
+*|   KfESTD_n_ShortRPMThrsh {
+*|     : is_calconst;
+*|     : description ="This calibration determines the ESTD Enable Criteria threshold. "
+*| "The engine speed must be greater than this calibration before the Criteria Enable. "
+*| "Value To Calibrate Out: N/A "
+*| "Enginerring Range: 0 to 8192 rpm  Resolution: 0.125 rpm / Count ";
+*|     : type = types.t_rpma;
+*|     : units = "RPM";
+*|   }
+*| }
+*/
+const T_RPMa       KfESTD_n_ShortRPMThrsh = V_RPMa(5800);
 
 /*****************************************************************************
 *

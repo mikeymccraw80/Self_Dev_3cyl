@@ -412,7 +412,8 @@ static void UpdateESTD_FaultCounters (void)
 
 		SaESTD_ShortFaultSampleCounter[ScESTD_EST_OutputNumber]++;
 		
-		if (VaESTD_ShortFailCriteriaMet[ScESTD_EST_OutputNumber] != CbFALSE)
+		if ((VaESTD_ShortFailCriteriaMet[ScESTD_EST_OutputNumber] != CbFALSE)
+		&&(GetVIOS_n_EngSpd() < KfESTD_n_ShortRPMThrsh))
 		{
 			SaESTD_ShortFaultFailureCounter[ScESTD_EST_OutputNumber]++;
 		}
