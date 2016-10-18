@@ -107,7 +107,7 @@ const TwTIME_t_R7p8125ms KfESTD_t_EnableDelayTime = C_R7p8125ms16(0);
 *|   }
 *| }
 */
-const T_RPMa       KfESTD_n_ShortRPMThrsh = V_RPMa(5800);
+const T_RPMa       KfESTD_n_ShortRPMThrsh = V_RPMa(5900);
 
 /*****************************************************************************
 *
