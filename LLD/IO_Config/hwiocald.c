@@ -690,7 +690,7 @@ const T_DEG_Ca      KfVIOS_T_RunCoolLo = V_DEG_Ca(10);
 *|   }
 *| }
 */
-const T_COUNT_BYTE  KcVIOS_RunRefCold = V_COUNT_BYTE(12);
+const T_COUNT_BYTE  KcVIOS_RunRefCold = V_COUNT_BYTE(8);
 
 /*
 *| hwiocald.{
@@ -707,7 +707,7 @@ const T_COUNT_BYTE  KcVIOS_RunRefCold = V_COUNT_BYTE(12);
 *|   }
 *| }
 */
-const T_COUNT_BYTE  KcVIOS_RunRefWarm = V_COUNT_BYTE(9);
+const T_COUNT_BYTE  KcVIOS_RunRefWarm = V_COUNT_BYTE(6);
 
 /*
 *| hwiocald.{
@@ -724,7 +724,7 @@ const T_COUNT_BYTE  KcVIOS_RunRefWarm = V_COUNT_BYTE(9);
 *|   }
 *| }
 */
-const T_COUNT_BYTE  KcVIOS_RunRefHot = V_COUNT_BYTE(6);
+const T_COUNT_BYTE  KcVIOS_RunRefHot = V_COUNT_BYTE(5);
 
 /*
 *| hwiocald.{
