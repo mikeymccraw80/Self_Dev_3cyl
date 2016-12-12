@@ -1678,5 +1678,6 @@ void InitHWIO_ZeroEngSpd(void)
 }
 void InitHWIO_KeyonToCrank(void)
 {
-    SetHWIO_58X_SignlFilt_Heavy();
+    //If the fast keyoff->Keyon, the 58X VRflt need to be same as running state, to prevent the engine stall.
+    //SetHWIO_58X_SignlFilt_Heavy();
 }
