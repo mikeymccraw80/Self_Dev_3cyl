@@ -44,7 +44,27 @@
       /begin MEMORY_SEGMENT Ram "External Ram Space"
         VARIABLES RAM EXTERN 0x40000000 0x00016FFF -1 -1 -1 -1 -1
       /end MEMORY_SEGMENT
-
+	  
+	  /begin MEMORY_SEGMENT Code "External Flash eCalibration Space Pattern and Sum"
+        RESERVED FLASH INTERN 0x00010000 0x00000004 -1 -1 -1 -1 -1
+      /end MEMORY_SEGMENT
+	  
+      /begin MEMORY_SEGMENT OFFLINE_DATA  "External Flash eCalibration Space"
+        OFFLINE_DATA FLASH INTERN 0x00010004 0x00007FF8 -1 -1 -1 -1 -1
+      /end MEMORY_SEGMENT
+	  
+	  /begin MEMORY_SEGMENT Code "External Flash eCalibration Space - CAL form ID and Pattern"
+        RESERVED FLASH INTERN 0x00017FFC 0x00000004 -1 -1 -1 -1 -1
+      /end MEMORY_SEGMENT 
+	  	  
+	  /begin MEMORY_SEGMENT Code "External Flash eCalibration Space Pattern and Sum"
+        RESERVED FLASH INTERN 0x00010000 0x00000004 -1 -1 -1 -1 -1
+      /end MEMORY_SEGMENT
+	  
+      /begin MEMORY_SEGMENT Code "External Flash eCalibration Space - CAL form ID and Pattern"
+        RESERVED FLASH INTERN 0x00010004 0x00007FFC -1 -1 -1 -1 -1
+      /end MEMORY_SEGMENT  
+	  
     /end MOD_PAR
 
     /begin MOD_COMMON         ""
