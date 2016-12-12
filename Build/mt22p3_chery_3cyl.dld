@@ -20,7 +20,15 @@ MEMORY
 
 SECTIONS
 {
-
+  .ecal :
+  {
+      start_of_ecalrom = .;
+      STORE(0xAAAA,2)
+	  
+      . = start_of_ecalrom + 32766;
+	  STORE(0x3223,2)
+      end_of_ecalrom = .;
+  } > reserved
   .calibration :
   {
       start_of_calrom = .;
@@ -147,7 +155,7 @@ SECTIONS
         dd_intc_Exception_Machine_Check.o (.text_vle)
         dd_intc_Exception_Data_Storage.o (.text_vle)
         dd_intc_Exception_Instruction_Storage.o (.text_vle)
-        dd_intc_expection_external.o (.text_vle)
+        dd_intc_exception_external.o (.text_vle)
         dd_intc_Exception_Alignment.o (.text_vle)
         dd_intc_Exception_Program.o (.text_vle)
         dd_intc_Exception_Fp_Unavailable.o (.text_vle)
