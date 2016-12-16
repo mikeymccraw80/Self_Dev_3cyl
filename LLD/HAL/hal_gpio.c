@@ -267,7 +267,7 @@ bool HAL_GPIO_GET_IMMOREQ_Status(void)
 //=============================================================================
  void HAL_GPIO_SET_FAN1_Enable(bool in_enable) 
  {
-     VSEP_PWM_DISCRETE_Set_State(VSEP_PO_FAN1_CH,in_enable);
+     VSEP_DiscreteSet(VSEP_PO_FAN1_CH,in_enable);
  }
 
  //=============================================================================
@@ -275,14 +275,14 @@ bool HAL_GPIO_GET_IMMOREQ_Status(void)
 //=============================================================================			
    bool HAL_GPIO_GET_FAN1_Status(void) 
  {
-  return VSEP_PWM_DISCRETE_Get_State(VSEP_PO_FAN1_CH);
+  return VSEP_DiscreteGet(VSEP_PO_FAN1_CH);
  }   
 //=============================================================================
 // HAL_GPIO_SET_SMR_Enable
 //=============================================================================
  void HAL_GPIO_SET_SMR_Enable(bool in_enable) 
  {
-     VSEP_PWM_DISCRETE_Set_State(VSEP_PO_SMR_CH,in_enable);
+     VSEP_DiscreteSet(VSEP_PO_SMR_CH,in_enable);
      SMR_Enable_State = in_enable;
  }
 
@@ -291,7 +291,7 @@ bool HAL_GPIO_GET_IMMOREQ_Status(void)
 //=============================================================================		
    bool HAL_GPIO_GET_SMR_Status(void) 
  {
-   return VSEP_PWM_DISCRETE_Get_State(VSEP_PO_SMR_CH);
+   return VSEP_DiscreteGet(VSEP_PO_SMR_CH);
  }
 
 //=============================================================================
