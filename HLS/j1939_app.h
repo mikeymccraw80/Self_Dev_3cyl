@@ -37,7 +37,7 @@ typedef struct {
 }J1939_DATA_T;
 
 /* j1939 pgn TSC1 (0x000000) parameters structure define */
-typedef struct {
+typedef __packed__ (1,1) struct {
 	struct {
 		uint8_t spn_res		:2;
 		uint8_t spn_897		:2;
@@ -70,7 +70,7 @@ extern J1939_PGN_TSC1_00000_T pgn_tsc1_00000;
 
 
 /* j1939 pgn CM1 (0x00E000) parameters structure define */
-typedef struct {
+typedef __packed__ (1,1) struct {
 	struct {
 		uint8_t spn_986 	:8;
 	}byte1;
@@ -107,7 +107,7 @@ typedef struct {
 extern J1939_PGN_CM1_57344_T pgn_cm1_57344;
 
 /* j1939 pgn CCVS1 (0x00FEF1) parameters structure define */
-typedef struct {
+typedef __packed__ (1,1) struct {
 	struct {
 		uint8_t spn_3807	:2;
 		uint8_t spn_1633	:2;
@@ -146,7 +146,7 @@ typedef struct {
 extern J1939_PGN_CCVS_65265_T pgn_ccvs_65265;
 
 /* j1939 pgn OHECS (0x00FDCB) parameters structure define */
-typedef struct {
+typedef __packed__ (1,1) struct {
 	struct {
 		uint8_t spn_res 	:2;
 		uint8_t spn_2883	:2;
@@ -171,7 +171,7 @@ typedef struct {
 extern J1939_PGN_OHECS_64971_T pgn_ohecs_64971;
 
 /* j1939 pgn EEC1 (0x00F004) parameters structure define */
-typedef struct {
+typedef __packed__ (1,1) struct {
 	struct {
 		uint8_t spn_res     :4;
 		uint8_t spn_899     :4;
@@ -199,7 +199,7 @@ typedef struct {
 extern J1939_PGN_ECC1_61444_T pgn_ecc1_61444;
 
 /* j1939 pgn EEC2 (0x00F003) parameters structure define */
-typedef struct {
+typedef __packed__ (1,1) struct {
 	struct {
 		uint8_t spn_2970    :2;
 		uint8_t spn_1437    :2;
@@ -234,7 +234,7 @@ typedef struct {
 extern J1939_PGN_ECC2_61443_T pgn_ecc2_61443;
 
 /* j1939 pgn MVS (0x00FDE5) parameters structure define */
-typedef struct {
+typedef __packed__ (1,1) struct {
 	struct {
 		uint8_t spn_2588    :8;
 	}byte1;
@@ -263,7 +263,7 @@ typedef struct {
 extern J1939_PGN_MVS_64997_T pgn_mvs_64997;
 
 /* j1939 pgn Engine Cylinder #1 Ignition Timing (0x00FE82) parameters structure define */
-typedef struct {
+typedef __packed__ (1,1) struct {
 	struct {
 		uint16_t spn_1413   :16;
 	}byte12;
@@ -283,7 +283,7 @@ typedef struct {
 extern J1939_PGN_IT1_65154_T pgn_IT1_65154;
 
 /* j1939 pgn LFE (0x00FEF2) parameters structure define */
-typedef struct {
+typedef __packed__ (1,1) struct {
 	struct {
 		uint16_t spn_183	:16;
 	}byte12;
@@ -303,7 +303,7 @@ typedef struct {
 extern J1939_PGN_LFE_65266_T pgn_lfe_65266;
 
 /* j1939 pgn ET1 (0x00FEEE) parameters structure define */
-typedef struct {
+typedef __packed__ (1,1) struct {
 	struct {
 		uint8_t spn_110		:8;
 	}byte1;
@@ -326,7 +326,7 @@ typedef struct {
 extern J1939_PGN_ET1_65262_T pgn_et1_65262;
 
 /* j1939 pgn EFL/P1 (0x00FEEF) parameters structure define */
-typedef struct {
+typedef __packed__ (1,1) struct {
 	struct {
 		uint8_t spn_94		:8;
 	}byte1;
@@ -352,7 +352,7 @@ typedef struct {
 extern J1939_PGN_EFL_P1_65263_T pgn_efl_p1_65263;
 
 /* j1939 pgn IC1 (0x00FEF6) parameters structure define */
-typedef struct {
+typedef __packed__ (1,1) struct {
 	struct {
 		uint8_t spn_81      :8;
 	}byte1;
@@ -378,7 +378,7 @@ typedef struct {
 extern J1939_PGN_IC1_65270_T pgn_ic1_65270;
 
 /* j1939 pgn VEP1 (0x00FEF7) parameters structure define */
-typedef struct {
+typedef __packed__ (1,1) struct {
 	struct {
 		uint8_t spn_114     :8;
 	}byte1;
@@ -398,7 +398,7 @@ typedef struct {
 extern J1939_PGN_VEP1_65271_T pgn_vep1_65271;
 
 /* j1939 pgn FD (0x00FEBD) parameters structure define */
-typedef struct {
+typedef __packed__ (1,1) struct {
 	struct {
 		uint8_t spn_975     :8;
 	}byte1;
@@ -423,11 +423,11 @@ extern J1939_PGN_FD_65213_T pgn_fd_65213;
 
 /* j1939 pgn HOURS (0x00FEE5) parameters structure define */
 typedef union {
-	struct {
+       __packed__ (1,1) struct {
 		uint32_t spn_247       :32;
 		uint32_t spn_249       :32;
     }udword;
-	struct{
+	__packed__ (1,1) struct {
 		uint16_t spn_247_H     :16;
 		uint16_t spn_247_L     :16;
 		uint16_t spn_249_H     :16;
@@ -437,7 +437,7 @@ typedef union {
 extern J1939_PGN_HOURS_65253_T pgn_hours_65253;
 
 /* j1939 PGN 65289 (0x00FF09) parameters structure define */
-typedef struct {
+typedef __packed__ (1,1) struct {
 	struct {
 		uint8_t TLA1    :8;
 	}byte1;
@@ -461,7 +461,7 @@ extern J1939_pgn_65289_T     J1939_pgn_65289;
 
 /* j1939 73 dm4 (0x00FECD) parameters structures define */ 
 #define Max_Freeze_Frame_Num   3
-typedef struct{
+typedef __packed__ (1,1) struct {
 	uint8_t spn_1217         :8; //freeze frame length
 	uint8_t spn_1214_l       :8; //low 8 bits of spn1214
 	uint8_t spn_1214_m       :8; //middle 8 bits of spn1214
@@ -513,7 +513,7 @@ extern J1939_73_DM4_T J1939_73_dm4;
 /* j1939 73 dm7 (0x00E300) parameters structure define */
 typedef union {
 	uint8_t Buffer[8];
-	struct {
+	__packed__ (1,1) struct {
 		uint8_t spn_1224     :8;
 		uint8_t spn_4148_l   :8;
 		uint8_t spn_4148_m   :8;
@@ -526,7 +526,7 @@ typedef union {
 extern J1939_73_dm7_58112_T     J1939_73_dm7;
 
 /* j1939 73 dm5 (0x00FECE) parameters structure define */
-typedef struct {
+typedef __packed__ (1,1) struct {
 
 	uint8_t spn_1218             :8;
 	uint8_t spn_1219             :8;
@@ -596,7 +596,7 @@ typedef struct {
 extern J1939_73_dm5_65230_T     J1939_73_dm5;
 
 /* j1939 73 dm8 (0x00FED0) parameters structure define */
-typedef struct {
+typedef __packed__ (1,1) struct {
 
 	uint8_t spn_1224    :8;
 
@@ -611,7 +611,7 @@ typedef struct {
 extern J1939_73_dm8_65232_T     J1939_73_dm8;
 
 /* j1939 pgn HOURS (0x00FEE5) parameters structure define */
-typedef struct {
+typedef __packed__ (1,1) struct {
 	struct {
 		uint8_t spn_1213     :2;
 		uint8_t spn_623      :2;
@@ -628,7 +628,7 @@ typedef struct {
 
 typedef union {
 	uint32_t dtc;
-	struct {
+	__packed__ (1,1) struct {
 		uint8_t spn_1214_l   :8; //low 8 bits of spn1214
 		uint8_t spn_1214_m   :8; //middle 8 bits of spn1214
 		uint8_t spn_1214_h   :3; //high 3 bits of spn1214
@@ -639,7 +639,7 @@ typedef union {
 }J1939_DM1_DTC_T;
 
 #define MAX_SIZE_OF_J1939_DTC 5
-typedef struct {
+typedef __packed__ (1,1) struct {
 	J1939_DM1_Header_T header;
 	J1939_DM1_DTC_T    dtc[MAX_SIZE_OF_J1939_DTC];
 } J1939_PGN_DM1_T;
@@ -648,7 +648,7 @@ extern J1939_PGN_DM1_T   pgn_dm1, pgn_dm2;
 /* j1939 73 dm13 (0x00DFD0) parameters structure define */
 typedef union {
     uint8_t Data[8];
-	struct{
+	__packed__ (1,1) struct {
 		struct {
 			uint8_t spn_1230     :2;
 			uint8_t spn_608      :2;
