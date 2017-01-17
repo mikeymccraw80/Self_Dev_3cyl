@@ -49,6 +49,7 @@
 #define J1939_73_dm13_SUPPORTED                 1
 #define J1939_PGN_65265_SUPPORTED             1   //jd rx pgn
 #define J1939_PGN_64971_SUPPORTED             1   //jd rx pgn
+#define J1939_PGN_61442_SUPPORTED             1   //jd rx pgn
 #define J1939_PGN_65276_SUPPORTED             0
 #define J1939_PGN_65277_SUPPORTED             0
 #define J1939_PGN_65278_SUPPORTED             0
@@ -98,6 +99,7 @@
 														J1939_PGN_00000_SUPPORTED	+\
 														J1939_PGN_65265_SUPPORTED	+\
 														J1939_PGN_64971_SUPPORTED	+\
+														J1939_PGN_61442_SUPPORTED	+\
 														J1939_PGN_65276_SUPPORTED	+\
 														J1939_PGN_65277_SUPPORTED	+\
 														J1939_PGN_65278_SUPPORTED	+\
