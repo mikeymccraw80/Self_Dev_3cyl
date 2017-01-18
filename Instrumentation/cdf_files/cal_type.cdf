@@ -208,7 +208,7 @@ types
     .t_millisecondsb
     {
            : kind = fixed;
-           : precision = ( 1.000000 );
+           : precision = ( 1.000000/64 );
            : range = ( 0.000000 ) TO ( 65535.000000/64.0 );
     }
 
