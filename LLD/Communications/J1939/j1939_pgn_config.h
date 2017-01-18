@@ -50,6 +50,7 @@
 #define J1939_PGN_65265_SUPPORTED             1   //jd rx pgn
 #define J1939_PGN_64971_SUPPORTED             1   //jd rx pgn
 #define J1939_PGN_61442_SUPPORTED             1   //jd rx pgn
+#define J1939_PGN_61445_SUPPORTED             1   //jd rx pgn
 #define J1939_PGN_65276_SUPPORTED             0
 #define J1939_PGN_65277_SUPPORTED             0
 #define J1939_PGN_65278_SUPPORTED             0
@@ -100,6 +101,7 @@
 														J1939_PGN_65265_SUPPORTED	+\
 														J1939_PGN_64971_SUPPORTED	+\
 														J1939_PGN_61442_SUPPORTED	+\
+														J1939_PGN_61445_SUPPORTED	+\
 														J1939_PGN_65276_SUPPORTED	+\
 														J1939_PGN_65277_SUPPORTED	+\
 														J1939_PGN_65278_SUPPORTED	+\
@@ -334,6 +336,12 @@ extern void J1939_Receive_Initialize_PGN_64971(J1939_Receive_Message_Control_T *
 #define J1939_PGN_61442_FREQ                  (KfHWIO_J1939_PGN_61442_FREQ/J1939_BASE_LOOP)
 #define J1939_PGN_61442_TIMEOUT               (KfHWIO_J1939_PGN_61442_FREQ*10/J1939_BASE_LOOP)
 extern void J1939_Receive_Initialize_PGN_61442(J1939_Receive_Message_Control_T *rx_msg_ctrl_ptr);
+
+#define J1939_PGN_61445_BASE_ID               0x18F00517
+#define J1939_PGN_61445_LENGTH                8
+#define J1939_PGN_61445_FREQ                  (KfHWIO_J1939_PGN_61445_FREQ/J1939_BASE_LOOP)
+#define J1939_PGN_61445_TIMEOUT               (KfHWIO_J1939_PGN_61445_FREQ*10/J1939_BASE_LOOP)
+extern void J1939_Receive_Initialize_PGN_61445(J1939_Receive_Message_Control_T *rx_msg_ctrl_ptr);
 
 #define J1939_PGN_65272_BASE_ID               0x18FEF8D5
 #define J1939_PGN_65272_LENGTH                8

@@ -151,6 +151,9 @@ const void (*const J1939_Receive_Initialize_Channel_0[]) (J1939_Receive_Message_
 #if J1939_PGN_61442_SUPPORTED
    J1939_Receive_Initialize_PGN_61442,
 #endif
+#if J1939_PGN_61445_SUPPORTED
+   J1939_Receive_Initialize_PGN_61445,
+#endif
 #if J1939_PGN_65276_SUPPORTED
    J1939_Receive_Initialize_PGN_65276,
 #endif
@@ -203,6 +206,9 @@ const J1939_Message_Table_T  J1939_Message_Table[J1939_MESSAGES_NUMBER] =
 #endif
 #if J1939_PGN_61442_SUPPORTED
    , { J1939_PGN_61442_BASE_ID,    J1939_PGN_61442_LENGTH }
+#endif
+#if J1939_PGN_61445_SUPPORTED
+   , { J1939_PGN_61445_BASE_ID,    J1939_PGN_61445_LENGTH }
 #endif
 #if J1939_PGN_65276_SUPPORTED
    , { J1939_PGN_65276_BASE_ID,    J1939_PGN_65276_LENGTH }
