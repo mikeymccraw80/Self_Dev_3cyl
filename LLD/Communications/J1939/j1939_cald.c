@@ -212,6 +212,16 @@ const uint16_t  KfHWIO_J1939_PGN_61442_FREQ = V_COUNT_WORD(500);
 *|   }
 */
 const uint16_t  KfHWIO_J1939_PGN_61445_FREQ = V_COUNT_WORD(500);
+
+/*
+*|   KfHWIO_J1939_PGN_65298_FREQ{
+*|     : is_calconst;
+*|     : description ="This calibration determines the rx period of J1939_PGN_65298 ";
+*|     : type = types.uint16_t;
+*|     : units = "ms";
+*|   }
+*/
+const uint16_t  KfHWIO_J1939_PGN_65298_FREQ = V_COUNT_WORD(500);
 /*
 *|   }
 */

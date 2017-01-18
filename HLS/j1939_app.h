@@ -218,6 +218,38 @@ typedef __packed__ (1,1) struct {
 }J1939_PGN_ETC2_61445_T;
 extern J1939_PGN_ETC2_61445_T pgn_etc2_61445;
 
+/* j1939 pgn TSC2 (0x00FF12) parameters structure define */
+typedef __packed__ (1,1) struct {
+	struct {
+		uint8_t spn_res		:2;
+		uint8_t spn_897		:2;
+		uint8_t spn_696		:2;
+		uint8_t spn_695		:2;
+	}byte1;
+	struct {
+		uint16_t spn_898	:16;
+	}byte23;
+	struct {
+		uint8_t spn_518 	:8;
+	}byte4;
+	struct {
+		uint8_t spn_3350	:4;
+		uint8_t spn_3349	:4;
+	}byte5;
+	struct {
+		uint8_t spn_res 	:4;
+		uint8_t spn_4191	:4;
+	}byte6;
+	struct {
+		uint8_t spn_res		:8;
+	}byte7;
+	struct {
+		uint8_t spn_4207	:4;
+		uint8_t spn_4206	:4;
+	}byte8;
+}J1939_PGN_TSC2_65298_T;
+extern J1939_PGN_TSC2_65298_T  pgn_tsc2_65298;  
+
 /* j1939 pgn EEC1 (0x00F004) parameters structure define */
 typedef __packed__ (1,1) struct {
 	struct {
