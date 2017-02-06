@@ -71,11 +71,12 @@
 #define J193973_PGN_65235_SUPPORTED           1
 #define J193973_PGN_65236_SUPPORTED           0
 #define J193973_PGN_65249_SUPPORTED           0
-#define J193973_PGN_65251_SUPPORTED           0
+#define J193973_PGN_65251_SUPPORTED           1
 #define J1939_PGN_64965_SUPPORTED             1
 #define J1939_PGN_65242_SUPPORTED             1
 #define J1939_PGN_61444_SUPPORTED             1
 #define J1939_PGN_61443_SUPPORTED             1
+#define J1939_PGN_65247_SUPPORTED             1
 #define J1939_PGN_64997_SUPPORTED             1
 #define J1939_PGN_65154_SUPPORTED             1
 #define J1939_PGN_65266_SUPPORTED             1
@@ -128,6 +129,7 @@
 															  J1939_PGN_65242_SUPPORTED		+\
 															  J1939_PGN_61444_SUPPORTED		+\
 															  J1939_PGN_61443_SUPPORTED		+\
+															  J1939_PGN_65247_SUPPORTED		+\
 															  J1939_PGN_64997_SUPPORTED		+\
 															  J1939_PGN_65154_SUPPORTED		+\
 															  J1939_PGN_65266_SUPPORTED		+\
@@ -226,6 +228,9 @@ typedef enum {
 #endif
 #if J1939_PGN_61443_SUPPORTED
   J1939_TX_PGN_61443_INDEX,
+#endif
+#if J1939_PGN_65247_SUPPORTED
+  J1939_TX_PGN_65247_INDEX,
 #endif
 #if J1939_PGN_64997_SUPPORTED
   J1939_TX_PGN_64997_INDEX,
@@ -543,6 +548,24 @@ extern void J1939_Transmit_Initialize_PGN_61444(J1939_Transmit_Message_Control_T
 #define J1939_PGN_61443_FREQ                  (KfHWIO_J1939_PGN_61443_FREQ/J1939_BASE_LOOP)
 #define J1939_PGN_61443_TIMEOUT               (KfHWIO_J1939_PGN_61443_FREQ*10/J1939_BASE_LOOP)
 extern void J1939_Transmit_Initialize_PGN_61443(J1939_Transmit_Message_Control_T * tx_msg_ctrl_ptr);
+
+/***********************************************************************/
+/* 61443 EEC3                                                          */
+/* Always 0                                                            */
+/*  |  Priority = 6                                                    */
+/*  |  |   R1 = 0                                                      */
+/*  |  |   | Data Page = 0 (PGN = 61443)                               */
+/*  |  |   | | PGN (PF = F0, PS= 03 )                                  */
+/*  |  |   | | |                   src address (ie 00 master 01 slave) */
+/*  |  |   | | |                   |                                   */
+/* 000,110,0,0,1110 1000 yyyy yyyy,xxxx xxxx y = DA = 255              */
+/* 0001/1000/1110/1000/yyyy/yyyy/xxxx/xxxx                             */
+/***********************************************************************/
+#define J1939_PGN_65247_BASE_ID               0x18FEDFD5
+#define J1939_PGN_65247_LENGTH                8
+#define J1939_PGN_65247_FREQ                  (KfHWIO_J1939_PGN_65247_FREQ/J1939_BASE_LOOP)
+#define J1939_PGN_65247_TIMEOUT               (KfHWIO_J1939_PGN_65247_FREQ*10/J1939_BASE_LOOP)
+extern void J1939_Transmit_Initialize_PGN_65247(J1939_Transmit_Message_Control_T * tx_msg_ctrl_ptr);
 
 /***********************************************************************/
 /* 64997 mvs                                                           */

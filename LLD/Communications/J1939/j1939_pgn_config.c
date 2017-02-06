@@ -67,6 +67,9 @@ const void (*const J1939_Transmit_Initialize[]) (J1939_Transmit_Message_Control_
 #if J1939_PGN_61443_SUPPORTED
    J1939_Transmit_Initialize_PGN_61443, /* john deere EEC2 */
 #endif
+#if J1939_PGN_65247_SUPPORTED
+   J1939_Transmit_Initialize_PGN_65247, /* john deere EEC3 */
+#endif
 #if J1939_PGN_64997_SUPPORTED
    J1939_Transmit_Initialize_PGN_64997, /* john deere MVS */
 #endif
@@ -287,6 +290,9 @@ const J1939_Message_Table_T  J1939_Message_Table[J1939_MESSAGES_NUMBER] =
 #endif
 #if J1939_PGN_61443_SUPPORTED
    , {J1939_PGN_61443_BASE_ID,         J1939_PGN_61443_LENGTH}
+#endif
+#if J1939_PGN_65247_SUPPORTED
+   , {J1939_PGN_65247_BASE_ID,         J1939_PGN_65247_LENGTH}
 #endif
 #if J1939_PGN_64997_SUPPORTED
    , {J1939_PGN_64997_BASE_ID,         J1939_PGN_64997_LENGTH}
