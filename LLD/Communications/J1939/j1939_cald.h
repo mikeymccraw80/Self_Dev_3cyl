@@ -35,6 +35,7 @@ extern const  uint8_t  KbHWIO_J1939_Event_Trigger;
 extern const uint16_t  KfHWIO_J193973_PGN_65226_FREQ;
 extern const uint16_t  KfHWIO_J1939_PGN_61444_FREQ;
 extern const uint16_t  KfHWIO_J1939_PGN_61443_FREQ;
+extern const uint16_t  KfHWIO_J1939_PGN_65247_FREQ;
 extern const uint16_t  KfHWIO_J1939_PGN_64997_FREQ;
 extern const uint16_t  KfHWIO_J1939_PGN_65266_FREQ;
 extern const uint16_t  KfHWIO_J1939_PGN_65262_FREQ;

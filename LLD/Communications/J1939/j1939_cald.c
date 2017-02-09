@@ -83,6 +83,16 @@ const uint16_t  KfHWIO_J1939_PGN_61444_FREQ = V_COUNT_WORD(20);
 const uint16_t  KfHWIO_J1939_PGN_61443_FREQ = V_COUNT_WORD(50);
 
 /*
+*|   KfHWIO_J1939_PGN_65247_FREQ{
+*|     : is_calconst;
+*|     : description ="This calibration determines the tx period of J1939_PGN_65247 ";
+*|     : type = types.uint16_t;
+*|     : units = "ms";
+*|   }
+*/
+const uint16_t  KfHWIO_J1939_PGN_65247_FREQ = V_COUNT_WORD(250);
+
+/*
 *|   KfHWIO_J1939_PGN_64997_FREQ{
 *|     : is_calconst;
 *|     : description ="This calibration determines the tx period of J1939_PGN_64997 ";

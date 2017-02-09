@@ -52,6 +52,7 @@ J1939_PGN_EFL_P1_65263_T pgn_efl_p1_65263;  //broadcast
 J1939_PGN_LFE_65266_T    pgn_lfe_65266;     //broadcast
 J1939_PGN_ECC1_61444_T   pgn_ecc1_61444;    //broadcast
 J1939_PGN_ECC2_61443_T   pgn_ecc2_61443;    //broadcast
+J1939_PGN_ECC3_65247_T   pgn_ecc3_65247;    //broadcast
 J1939_PGN_MVS_64997_T    pgn_mvs_64997;     //boradcast
 J1939_PGN_IT1_65154_T    pgn_IT1_65154;     //request
 J1939_PGN_FD_65213_T     pgn_fd_65213;      //broadcast
