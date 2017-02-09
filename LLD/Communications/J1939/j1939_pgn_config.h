@@ -941,7 +941,7 @@ extern void J1939_TxInit_SendUnmanagedAcknowledgement(J1939_Transmit_Message_Con
 #define J1939_DM12_BUFFER_SIZE (14)
 
 #define J1939_PGN_65249_BUFFER_SIZE (19)
-#define J1939_PGN_65251_BUFFER_SIZE (34)
+#define J1939_PGN_65251_BUFFER_SIZE (39)
 
 #endif
 /*-------------------------------------------------------------------*/
