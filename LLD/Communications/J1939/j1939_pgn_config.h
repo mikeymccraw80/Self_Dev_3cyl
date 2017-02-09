@@ -24,7 +24,8 @@
 ******************************************************************************/
 #define J1939_GLOBAL_DEST_ADDR            (0xFF)
 //#define J1939_THIS_ADDR                 (0x00)
-#define J1939_BASE_LOOP                   (5)
+//J1939_Handler_Periodic_Task was scheduled in 10ms periodic task.
+#define J1939_BASE_LOOP                   (10)
 
 /******************************************************************************
 *                                          CONFIGURATION FOR J1939 Channels
