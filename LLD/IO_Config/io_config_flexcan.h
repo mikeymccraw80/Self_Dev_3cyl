@@ -81,7 +81,7 @@
 #ifndef FLEXCAN_A_DEVICE_BITRATE_INIT 
 #define FLEXCAN_A_DEVICE_BITRATE_INIT\
    (         FlexCAN_Set_Index( 0, FLEXCAN_DEVICE_A    ) |\
-              FlexCAN_Set_Baud( 0, FLEXCAN_BAUD_500KBPS) |\
+              FlexCAN_Set_Baud( 0, FLEXCAN_BAUD_250KBPS) |\
     FlexCAN_Set_Phase_Segment1( 0, 0                   ) |\
     FlexCAN_Set_Phase_Segment2( 0, 0                   ) |\
       FlexCAN_Set_Prop_Segment( 0, 0                   ) |\
@@ -92,7 +92,7 @@
 #ifndef FLEXCAN_C_DEVICE_BITRATE_INIT 
 #define FLEXCAN_C_DEVICE_BITRATE_INIT\
    (         FlexCAN_Set_Index( 0, FLEXCAN_DEVICE_C    ) |\
-              FlexCAN_Set_Baud( 0, FLEXCAN_BAUD_500KBPS) |\
+              FlexCAN_Set_Baud( 0, FLEXCAN_BAUD_250KBPS) |\
     FlexCAN_Set_Phase_Segment1( 0, 0                   ) |\
     FlexCAN_Set_Phase_Segment2( 0, 0                   ) |\
       FlexCAN_Set_Prop_Segment( 0, 0                   ) |\
