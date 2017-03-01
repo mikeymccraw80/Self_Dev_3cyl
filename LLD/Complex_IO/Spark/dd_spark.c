@@ -833,7 +833,6 @@ void SPARK_Process_Interrupt(void)
 //=============================================================================
 // SPARK_Process_Cylinder_Event
 //=============================================================================
-bool Isr_status;
 void SPARK_Process_Cylinder_Event( void )
 {
     uint32_t          cs;
@@ -870,18 +869,19 @@ void SPARK_Process_Cylinder_Event( void )
                     /* set est1 gpio outopen as OD type, so there is no pulse output */
                     SIU_GPIO_OpenDrain_Confige(HAL_GPIO_EST1_CHANNEL, true);
                 }
-               if (MCD5412_Get_Host_Interrupt_Status(MPTAC_TPU_INDEX, &TPU, SPARK_Mptac[0], false))
+				
+               SPARK_Update_Duration_Values(SPARK_CONTROL_0, SPARK_Cylinder_Event_ID);
+               end_angle = SPARK_Calculate_End_Angle_In_Counts( SPARK_Cylinder_Event_ID, (uint8_t)0, SPARK_CALC_POSITION_Ref );
+
+               //If the EST falls before the end of the cylinder event tasks, the EST interrupt wont be able to work before the cylinder event ends.
+               //As a rusult, this function will calculate a past time as the next EST output, which was false and should be abandoned.
+		 if (MCD5412_Get_Host_Interrupt_Status(MPTAC_TPU_INDEX, &TPU, SPARK_Mptac[0], false))
                {
                     SIU_GPIO_OpenDrain_Confige(HAL_GPIO_EST1_CHANNEL, true);
-              Isr_status=1;
                }else{
-
-              Isr_status=0;
-			   }
-                SPARK_Update_Duration_Values(SPARK_CONTROL_0, SPARK_Cylinder_Event_ID);
-                end_angle = SPARK_Calculate_End_Angle_In_Counts( SPARK_Cylinder_Event_ID, (uint8_t)0, SPARK_CALC_POSITION_Ref );
-                SPARK_Schedule_Next_Event(SPARK_Cylinder_Event_ID, end_angle);
-
+	             SPARK_Schedule_Next_Event(SPARK_Cylinder_Event_ID, end_angle);
+	        }
+			   
                 /* check the est load fault status */
                 VSEP_EST_Fault_SYNC_Interface(SPARK_Cylinder_Event_ID);
 
