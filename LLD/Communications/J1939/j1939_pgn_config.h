@@ -351,7 +351,7 @@ extern void J1939_Receive_Initialize_PGN_61442(J1939_Receive_Message_Control_T *
 #define J1939_PGN_61445_TIMEOUT               (KfHWIO_J1939_PGN_61445_FREQ*10/J1939_BASE_LOOP)
 extern void J1939_Receive_Initialize_PGN_61445(J1939_Receive_Message_Control_T *rx_msg_ctrl_ptr);
 
-#define J1939_PGN_65298_BASE_ID               0x18FF1217
+#define J1939_PGN_65298_BASE_ID               0x0CFF1217
 #define J1939_PGN_65298_LENGTH                8
 #define J1939_PGN_65298_FREQ                  (KfHWIO_J1939_PGN_65298_FREQ/J1939_BASE_LOOP)
 #define J1939_PGN_65298_TIMEOUT               (KfHWIO_J1939_PGN_65298_FREQ*10/J1939_BASE_LOOP)
@@ -941,7 +941,8 @@ extern void J1939_TxInit_SendUnmanagedAcknowledgement(J1939_Transmit_Message_Con
 #define J1939_DM12_BUFFER_SIZE (14)
 
 #define J1939_PGN_65249_BUFFER_SIZE (19)
-#define J1939_PGN_65251_BUFFER_SIZE (39)
+//the latest protocol defined this PGN a 40-byte message, according to JD, by hongfei
+#define J1939_PGN_65251_BUFFER_SIZE (40) 
 
 #endif
 /*-------------------------------------------------------------------*/
