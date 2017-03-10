@@ -61,6 +61,7 @@ J1939_PGN_IC1_65270_T    pgn_ic1_65270;     //broadcast
 J1939_PGN_HOURS_65253_T  pgn_hours_65253;   //broadcast
 J1939_pgn_65289_T        J1939_pgn_65289;   //TLA
 J1939_73_dm13_57088_T    J1939_73_dm13;
+J1939_PGN_65299_T  J1939_pgn_65299;  //jd defined
 
 J1939_PGN_DM1_T          pgn_dm1, pgn_dm2;
 J1939_73_dm7_58112_T     J1939_73_dm7;

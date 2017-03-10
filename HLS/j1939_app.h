@@ -563,6 +563,30 @@ typedef __packed__ (1,1) struct {
 }J1939_pgn_65289_T;
 extern J1939_pgn_65289_T     J1939_pgn_65289;
 
+/* j1939 PGN 65299 (0x00FF13) parameters structure define */
+/*John Deere defined*/
+typedef __packed__ (1,1) struct {
+	struct {
+		uint8_t byte_1    :8;
+	}byte1;
+	struct {
+		uint8_t byte_2    :8;
+	}byte2;
+	struct {
+		uint8_t byte_3    :8;
+	}byte3;
+	struct {
+		uint8_t byte_4    :8;
+	}byte4;
+	struct {
+		uint16_t RES1   :16;
+	}byte56;
+	struct {
+		uint16_t RES2   :16;
+	}byte78;
+}J1939_PGN_65299_T;
+extern J1939_PGN_65299_T     J1939_pgn_65299;
+
 /* j1939 73 dm4 (0x00FECD) parameters structures define */ 
 #define Max_Freeze_Frame_Num   3
 typedef __packed__ (1,1) struct {
