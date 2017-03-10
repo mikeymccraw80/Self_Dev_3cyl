@@ -827,8 +827,8 @@ extern const J1939_Message_Table_T   J1939_Message_Table[];
 #define J193973_PGN_65249_BASE_ID              (0x18FEE100UL) /*FFCA=65249,Prio=6,src=0*/
 #define J193973_PGN_65249_LENGTH               (8)
 #define J193973_PGN_65249                      (0x0000FEE1UL)
-#define J193973_PGN_65249_FREQ                 (5000/ J1939_BASE_LOOP)
-#define J1939_PGN_65249_TIMEOUT                (15000/ J1939_BASE_LOOP) 
+#define J193973_PGN_65249_FREQ                 (KfHWIO_J1939_PGN_65249_FREQ/ J1939_BASE_LOOP)
+#define J1939_PGN_65249_TIMEOUT                (KfHWIO_J1939_PGN_65249_FREQ*10/ J1939_BASE_LOOP) 
 
 /******************************************************************************/
 /* PGN: 65154                                                             */
