@@ -880,8 +880,8 @@ extern void J1939_Transmit_Initialize_PGN_65280(J1939_Transmit_Message_Control_T
 #define J1939_PGN_65299_BASE_ID               0x18FF1300
 #define J1939_PGN_65299_LENGTH                8
 #define J1939_PGN_65299                      (0x0000FF13UL)
-#define J1939_PGN_65299_FREQ                  (0)
-#define J1939_PGN_65299_TIMEOUT               (0)
+#define J1939_PGN_65299_FREQ                  (KfHWIO_J1939_PGN_65299_FREQ / J1939_BASE_LOOP)
+#define J1939_PGN_65299_TIMEOUT               (KfHWIO_J1939_PGN_65299_FREQ * 10 / J1939_BASE_LOOP)
 /******************************************************************************/
 /* PGN: 59392                                                               */
 /******************************************************************************/
