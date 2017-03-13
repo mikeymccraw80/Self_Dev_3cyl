@@ -108,4 +108,5 @@ extern const T_COUNT_BYTE           KySYST_BrainDeadBOOT_RecovEnbld;
 //J1939
 extern const uint8_t             KfHWIO_J193973_SA; 
 extern const uint16_t            KfHWIO_J193973_PGN_65251_FREQ; 
+extern const uint16_t           KfHWIO_J1939_PGN_65299_FREQ;
 #endif
