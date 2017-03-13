@@ -735,8 +735,8 @@ extern void J1939_TxInit_PGN_65242(J1939_Transmit_Message_Control_T * tx_msg_ctr
 #define J193973_PGN_65226_BASE_ID              (0x18FECA00UL) /*FFCA=65226,Prio=6,src=0*/
 #define J193973_PGN_65226_LENGTH               (8)
 #define J193973_PGN_65226                      (0x0000FECAUL)
-#define J193973_PGN_65226_FREQ                 (1000 / J1939_BASE_LOOP)
-#define J1939_PGN_65226_TIMEOUT                (1500 / J1939_BASE_LOOP) // Timeout set to 1.5s
+#define J193973_PGN_65226_FREQ                 (KfHWIO_J1939_PGN_65226_FREQ / J1939_BASE_LOOP)
+#define J1939_PGN_65226_TIMEOUT                (KfHWIO_J1939_PGN_65226_FREQ * 1.5 / J1939_BASE_LOOP) // Timeout set to 1.5s
 
 /******************************************************************************/
 /* PGN: 65227 DM2                                                             */

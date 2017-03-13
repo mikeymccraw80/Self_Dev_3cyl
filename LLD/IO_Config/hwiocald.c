@@ -1110,27 +1110,5 @@ const T_COUNT_BYTE KySYST_BrainDeadBOOT_RecovEnbld = 0xAA;
 #pragma section
 
 const uint8_t KfHWIO_J193973_SA = 0;
-/*
-*| hwiocald.{
-*|   KfHWIO_J193973_PGN_65251_FREQ {
-*|     : is_calconst;
-*|     : description = "J1939 PGN 65251 transmit frequency.";
-*|     : type = hwiocald.t_J1939_PGN_FREQ;
-*|     : units = "ms";
-*|   }
-*| }
-*/
-const uint16_t KfHWIO_J193973_PGN_65251_FREQ = 5000;
-/*
-*| hwiocald.{
-*|   KfHWIO_J193973_PGN_65299_FREQ {
-*|     : is_calconst;
-*|     : description = "J1939 PGN 65299 transmit frequency.";
-*|     : type = hwiocald.t_J1939_PGN_FREQ;
-*|     : units = "ms";
-*|   }
-*| }
-*/
-const uint16_t KfHWIO_J1939_PGN_65299_FREQ = 20;
 
 

@@ -242,5 +242,35 @@ const uint16_t  KfHWIO_J1939_PGN_61445_FREQ = V_COUNT_WORD(500);
 */
 const uint16_t  KfHWIO_J1939_PGN_65298_FREQ = V_COUNT_WORD(500);
 /*
+*|   KfHWIO_J193973_PGN_65251_FREQ {
+*|     : is_calconst;
+*|     : description ="This calibration determines the tx period of J193973_PGN_65251 ";
+*|     : type = types.uint16_t;
+*|     : units = "ms";
+*|   }
+*/
+const uint16_t KfHWIO_J193973_PGN_65251_FREQ = 5000;
+/*
+*|   KfHWIO_J1939_PGN_65299_FREQ {
+*|     : is_calconst;
+*|     : description ="This calibration determines the tx period of J193973_PGN_65299 ";
+*|     : type = types.uint16_t;
+*|     : units = "ms";
+*|   }
+*/
+const uint16_t KfHWIO_J1939_PGN_65299_FREQ = 20;
+/*
+*| hwiocald.{
+*|   KfHWIO_J1939_PGN_65226_FREQ {
+*|     : is_calconst;
+*|     : description ="This calibration determines the tx period of J193973_PGN_65226 ";
+*|     : type = types.uint16_t;
+*|     : units = "ms";
+*|   }
+*| }
+*/
+const uint16_t KfHWIO_J1939_PGN_65226_FREQ = 1000;
+
+/*
 *|   }
 */
