@@ -51,6 +51,7 @@ SECTIONS
       obdlcald.o(.text_vle)
       candcald.o(.text_vle)
       soh_cald.o(.text_vle)
+	  j1939_cald.o(.text_vle)
       CalVariable.o (.text_vle)
       end_of_calrom = .;
   } > cal

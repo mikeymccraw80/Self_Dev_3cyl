@@ -31,3 +31,4 @@
 ..\LLD\HWDiag\KNOD\knodcald.c
 ..\LLD\SOH\soh_cald.c
 ..\LLD\Communications\OBD\OBDLIB\obdlcald.c
+..\LLD\Communications\J1939\j1939_cald.c
