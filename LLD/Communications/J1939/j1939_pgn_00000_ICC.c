@@ -1,7 +1,7 @@
 /******************************************************************************
 *  Project       : J1939 - PGN Specific Configuration
 *  Module        : Message Configurations
-*  File          : j1939_pgn_00000.c
+*  File          : j1939_pgn_00000_ICC.c
 *  Creation date :
 *-----------------------------------------------------------------------------
 *  Description   :Vehicle Electrical Power 1 Implementation
@@ -11,76 +11,76 @@
 * Copyright 2010 Delphi Technologies, Inc., All rights reserved
 ******************************************************************************/
 
-#include "j1939_pgn_00000.h"
+#include "j1939_pgn_00000_ICC.h"
 #include "j1939_app.h"
 
 /******************************************************************************
-* Function : J1939_PGN_00000
+* Function : J1939_PGN_00000_ICC
 * Description : TSC1
 * Start Posn      Length in bits      Parameter Name
 ******************************************************************************/
-static bool J1939_PGN_00000_Message_Ind_Flag;
-static bool J1939_PGN_00000_Message_Lost_Ind_Flag;
+static bool J1939_PGN_00000_Message_Ind_Flag_ICC;
+static bool J1939_PGN_00000_Message_Lost_Ind_Flag_ICC;
 // static uint8_t J1939_PGN_00000_Message[8];
-static void J1939_Message_Lost_Routine_PGN_00000(void);
-static void J1939_Parse_PGN_00000(J1939_Receive_Message_Info_T *rx_msg_ptr);
+static void J1939_Message_Lost_Routine_PGN_00000_ICC(void);
+static void J1939_Parse_PGN_00000_ICC(J1939_Receive_Message_Info_T *rx_msg_ptr);
  
 
 /******************************************************************************
-* Function : J1939_Message_Lost_Routine_PGN_00000
+* Function : J1939_Message_Lost_Routine_PGN_00000_ICC
 * Description : Reset
 ******************************************************************************/
-static void J1939_Message_Lost_Routine_PGN_00000(void)
+static void J1939_Message_Lost_Routine_PGN_00000_ICC(void)
 {
-   J1939_PGN_00000_Message_Lost_Ind_Flag = true;
+   J1939_PGN_00000_Message_Lost_Ind_Flag_ICC = true;
 }
 
 /******************************************************************************
-* Function : J1939_Parse_PGN_00000
+* Function : J1939_Parse_PGN_00000_ICC
 * Description : Parse Data From Engine. If Raw data equals Enginnering data,
 *               copy the data to application signal buffer without any change
 ******************************************************************************/
-static void J1939_Parse_PGN_00000(J1939_Receive_Message_Info_T *rx_msg_ptr)
+static void J1939_Parse_PGN_00000_ICC(J1939_Receive_Message_Info_T *rx_msg_ptr)
 {
    uint8_t index;
-   J1939_DATA_T *jd = (J1939_DATA_T *)&pgn_tsc1_00000;
+   J1939_DATA_T *jd = (J1939_DATA_T *)&pgn_tsc1_00000_ICC;
    for( index =0; index<8; index++ )
    {
         jd->data[index] = rx_msg_ptr->Data[index];  //Copy to Application Signal Buffer
    }
-   J1939_PGN_00000_Message_Ind_Flag = true;
-   J1939_PGN_00000_Message_Lost_Ind_Flag = false;
+   J1939_PGN_00000_Message_Ind_Flag_ICC = true;
+   J1939_PGN_00000_Message_Lost_Ind_Flag_ICC = false;
 }
 
-bool J1939_Get_PGN_00000_Message_Indicator(void)
+bool J1939_Get_PGN_00000_Message_Indicator_ICC(void)
 {
-   return J1939_PGN_00000_Message_Ind_Flag;
+   return J1939_PGN_00000_Message_Ind_Flag_ICC;
 }
 
-bool J1939_Get_PGN_00000_Message_Lost_Indicator(void)
+bool J1939_Get_PGN_00000_Message_Lost_Indicator_ICC(void)
 {
-   return J1939_PGN_00000_Message_Lost_Ind_Flag;
+   return J1939_PGN_00000_Message_Lost_Ind_Flag_ICC;
 }
 
-void J1939_Clear_PGN_00000_Message_Indicator(void)
+void J1939_Clear_PGN_00000_Message_Indicator_ICC(void)
 {
-   J1939_PGN_00000_Message_Ind_Flag = false;
+   J1939_PGN_00000_Message_Ind_Flag_ICC = false;
 }
 
 /******************************************************************************
-* Function : J1939_Receive_Initialize_PGN_00000
+* Function : J1939_Receive_Initialize_PGN_00000_ICC
 * Description : Initialize hooks to can manager
 ******************************************************************************/
-void J1939_Receive_Initialize_PGN_00000(J1939_Receive_Message_Control_T * rx_msg_ctrl_ptr)
+void J1939_Receive_Initialize_PGN_00000_ICC(J1939_Receive_Message_Control_T * rx_msg_ctrl_ptr)
 {
-   rx_msg_ctrl_ptr->Parse_Routine             = J1939_Parse_PGN_00000;
-   rx_msg_ctrl_ptr->Message_Lost_Timeout_W    = J1939_PGN_00000_TIMEOUT; //Message loss timeout setting
+   rx_msg_ctrl_ptr->Parse_Routine             = J1939_Parse_PGN_00000_ICC;
+   rx_msg_ctrl_ptr->Message_Lost_Timeout_W    = J1939_PGN_00000_TIMEOUT_ICC; //Message loss timeout setting
    rx_msg_ctrl_ptr->Message_Lost_Timer_W      = rx_msg_ctrl_ptr->Message_Lost_Timeout_W; // software timer for monitoring Message loss
-   rx_msg_ctrl_ptr->Message_Lost_Routine      = J1939_Message_Lost_Routine_PGN_00000;
+   rx_msg_ctrl_ptr->Message_Lost_Routine      = J1939_Message_Lost_Routine_PGN_00000_ICC;
    rx_msg_ctrl_ptr->Message_Lost              = 0x00;
    rx_msg_ctrl_ptr->Message_Lost_Action_Taken = 0x00;
-   J1939_PGN_00000_Message_Ind_Flag = false;
-   J1939_PGN_00000_Message_Lost_Ind_Flag = false;
+   J1939_PGN_00000_Message_Ind_Flag_ICC = false;
+   J1939_PGN_00000_Message_Lost_Ind_Flag_ICC = false;
 }
 
 /******************************************************************************

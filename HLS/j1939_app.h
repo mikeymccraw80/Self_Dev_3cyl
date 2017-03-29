@@ -66,8 +66,8 @@ typedef __packed__ (1,1) struct {
 		uint8_t spn_4206	:4;
 	}byte8;
 }J1939_PGN_TSC1_00000_T;
-extern J1939_PGN_TSC1_00000_T pgn_tsc1_00000;
-
+extern J1939_PGN_TSC1_00000_T pgn_tsc1_00000_ICC;
+extern J1939_PGN_TSC1_00000_T pgn_tsc1_00000_TCU;
 
 /* j1939 pgn CM1 (0x00E000) parameters structure define */
 typedef __packed__ (1,1) struct {

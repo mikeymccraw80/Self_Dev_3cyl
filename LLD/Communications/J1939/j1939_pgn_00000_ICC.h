@@ -11,17 +11,17 @@
 /*-------------------------------------------------------------------
 * to avoid multiple definition if the file is included several times
 *-------------------------------------------------------------------*/
-#ifndef J1939_PGN_00000_DEF
-#define J1939_PGN_00000_DEF
+#ifndef J1939_PGN_00000_ICC_DEF
+#define J1939_PGN_00000_ICC_DEF
 
 #include "j1939_pgn_config.h"
 #include "j1939_bit_fields.h"
 
 
 
-extern bool J1939_Get_PGN_00000_Message_Indicator(void);
-extern bool J1939_Get_PGN_00000_Message_Lost_Indicator(void);
-extern void J1939_Clear_PGN_00000_Message_Indicator(void);
+extern bool J1939_Get_PGN_00000_Message_Indicator_ICC(void);
+extern bool J1939_Get_PGN_00000_Message_Lost_Indicator_ICC(void);
+extern void J1939_Clear_PGN_00000_Message_Indicator_ICC(void);
 
 
 #endif
