@@ -195,7 +195,7 @@ const FLEXCAN_MSK_T  FLEXCAN_A_RXIMR_INIT [FLEXCAN_MSG_OBJ_MAX]=
       {0x7FF, 0x3FF00}, //MB19, MASK
       {0x7FF, 0x3FF00}, //MB20, MASK
       {0x7FF, 0x3FF00}, //MB21, MASK
-      {0x7FF, 0x3FF00}, //MB22, MASK
+      {0x7FF, 0x3FFFF}, //MB22, MASK, only for PGN0000_ICC, 0x0C000017
       {0x7FF, 0x3FF00}, //MB23
       {0x7FF, 0x3FF00}, //MB24
       {0x7FF, 0x3FF00}, //MB25, MASK
@@ -203,7 +203,7 @@ const FLEXCAN_MSK_T  FLEXCAN_A_RXIMR_INIT [FLEXCAN_MSG_OBJ_MAX]=
       {0x7FF, 0x3FF00}, //MB27
       {0x7FF, 0x3FF00}, //MB28
       {0x7FF, 0x3FF00}, //MB29
-      {0x7FF, 0x3FF00}, //MB30
+      {0x7FF, 0x3FFFF}, //MB30, MASK, only for PGN0000_TCU, 0x0C000003
       {0x7FF, 0x3FF00}, //MB31
       {0x7FF, 0x3FFFF}, //MB32
       {0x7FF, 0x3FFFF}, //MB33

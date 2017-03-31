@@ -8,7 +8,8 @@
 #include "j1939_stub.h"
 #include "j1939_app.h"
 #include "j1939_pgn_57344.h"
-#include "j1939_pgn_00000.h"
+#include "j1939_pgn_00000_ICC.h"
+#include "j1939_pgn_00000_TCU.h"
 #include "j1939_pgn_64971.h"
 #include "j1939_pgn_65265.h"
 #include "j1939_pgn_65276.h"
@@ -56,11 +57,19 @@ static void Rx_PGN_57344(void)
  }
 }
 
-static void Rx_PGN_00000(void)
+static void Rx_PGN_00000_ICC(void)
 {
- if(true == J1939_Get_PGN_00000_Message_Indicator())
+ if(true == J1939_Get_PGN_00000_Message_Indicator_ICC())
  {
-   J1939_Clear_PGN_00000_Message_Indicator();
+   J1939_Clear_PGN_00000_Message_Indicator_ICC();
+ }
+}
+
+static void Rx_PGN_00000_TCU(void)
+{
+ if(true == J1939_Get_PGN_00000_Message_Indicator_TCU())
+ {
+   J1939_Clear_PGN_00000_Message_Indicator_TCU();
  }
 }
 
@@ -142,7 +151,8 @@ void J1939_Receive_Test_Task(void)
 {
    VfJ1939_BusError = J1939_Get_BusOffState();
    Rx_PGN_57344();
-   Rx_PGN_00000();
+   Rx_PGN_00000_ICC();
+   Rx_PGN_00000_TCU();
    Rx_PGN_65265();
    Rx_PGN_64971();
    Rx_PGN_65276();

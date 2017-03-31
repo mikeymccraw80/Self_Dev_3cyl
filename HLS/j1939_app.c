@@ -38,7 +38,8 @@
 #include "j1939_app.h"
 #include "j1939_pgn_config.h"
 /* j1939 receive pgn variables define */
-J1939_PGN_TSC1_00000_T  pgn_tsc1_00000;    //peer-to-peer mode
+J1939_PGN_TSC1_00000_T  pgn_tsc1_00000_ICC;    //peer-to-peer mode,only for 0x0C000017
+J1939_PGN_TSC1_00000_T  pgn_tsc1_00000_TCU;    //peer-to-peer mode,only for 0x0C000003
 J1939_PGN_CM1_57344_T   pgn_cm1_57344;
 J1939_PGN_CCVS_65265_T  pgn_ccvs_65265;
 J1939_PGN_OHECS_64971_T pgn_ohecs_64971;
