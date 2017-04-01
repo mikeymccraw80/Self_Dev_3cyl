@@ -44,6 +44,7 @@ extern const uint16_t  KfHWIO_J1939_PGN_65270_FREQ;
 extern const uint16_t  KfHWIO_J1939_PGN_65271_FREQ;
 extern const uint16_t  KfHWIO_J1939_PGN_65213_FREQ;
 extern const uint16_t  KfHWIO_J1939_PGN_65249_FREQ;
+extern const uint16_t  KfHWIO_J1939_PGN_61677_FREQ;
 
 extern const uint16_t  KfHWIO_J1939_PGN_57344_FREQ;
 extern const uint16_t  KfHWIO_J1939_PGN_00000_FREQ;

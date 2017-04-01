@@ -221,6 +221,28 @@ extern J1939_PGN_ETC2_61445_T pgn_etc2_61445;
 /* j1939 pgn TSC2 (0x00FF12) parameters structure define */
 typedef __packed__ (1,1) struct {
 	struct {
+		uint8_t spn_res567		:3;
+		uint8_t EngineStartControl		:3;
+		uint8_t spn_res01		:2;
+	}byte1;
+	struct {
+		uint16_t spn_res	:8;
+	}byte2;
+	struct {
+		uint16_t spn_res	:16;
+	}byte34;
+	struct {
+		uint16_t spn_res	:16;
+	}byte56;
+	struct {
+		uint16_t spn_res	:16;
+	}byte78;
+}J1939_PGN_T1_61677_T;
+extern J1939_PGN_T1_61677_T  pgn_t1_61677;  
+
+/* j1939 pgn TSC2 (0x00FF12) parameters structure define */
+typedef __packed__ (1,1) struct {
+	struct {
 		uint8_t spn_res		:2;
 		uint8_t spn_897		:2;
 		uint8_t spn_696		:2;
