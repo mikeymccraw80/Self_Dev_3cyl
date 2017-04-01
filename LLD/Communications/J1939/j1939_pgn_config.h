@@ -60,6 +60,7 @@
 #define J1939_PGN_65296_SUPPORTED             0
 #define J1939_PGN_55808_SUPPORTED             0
 #define J1939_PGN_00000_SUPPORTED_TCU             1   //jd rx pgn, from TCU, ID 0x0C000003
+#define J1939_PGN_61677_SUPPORTED             1   //jd rx pgn, ID 0x10F0ED00
 
 
 
@@ -116,7 +117,8 @@
 														J1939_73_dm7_SUPPORTED	+\
 														J1939_73_dm13_SUPPORTED    +\
 														J1939_PGN_55808_SUPPORTED	+\
-														J1939_PGN_00000_SUPPORTED_TCU)
+														J1939_PGN_00000_SUPPORTED_TCU	+\
+														J1939_PGN_61677_SUPPORTED)
 #define J1939_RECEIVE_MESSAGES_NUMBER_CHANNEL_1     ( 0 )
 
 #define  J1939_TRANSMIT_MESSAGES_NUMBER_CHANNEL_0 (6 + J1939_DENY_REQUEST_SUPPORTED	+\
@@ -444,6 +446,12 @@ extern const J1939_Message_Table_T   J1939_Message_Table[J1939_MESSAGES_NUMBER];
 #define J1939_PGN_55808_TIMEOUT               (0)
 extern void J1939_RxInit_PGN_55808(J1939_Receive_Message_Control_T *rx_msg_ctrl_ptr);
 extern void J1939_TxInit_PGN_55808(J1939_Transmit_Message_Control_T *tx_msg_ctrl_ptr);
+
+#define J1939_PGN_61677_BASE_ID           0x10F0ED00
+#define J1939_PGN_61677_LENGTH            8
+#define J1939_PGN_61677_FREQ              (KfHWIO_J1939_PGN_61677_FREQ/J1939_BASE_LOOP)
+#define J1939_PGN_61677_TIMEOUT           (KfHWIO_J1939_PGN_61677_FREQ*10/J1939_BASE_LOOP)
+extern void J1939_Receive_Initialize_PGN_61677(J1939_Receive_Message_Control_T *rx_msg_ctrl_ptr);
 
 /******************************************************************************/
 /* PGN: Transmit                                                              */
