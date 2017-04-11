@@ -21,6 +21,7 @@
  *
  *****************************************************************************/
 #include "reuse.h"
+#include "j1939_pgn_config.h"
 
 extern  bool B_Ign0Req;
 extern  bool B_Ign1Req;
@@ -610,7 +611,6 @@ typedef __packed__ (1,1) struct {
 extern J1939_PGN_65299_T     J1939_pgn_65299;
 
 /* j1939 73 dm4 (0x00FECD) parameters structures define */ 
-#define Max_Freeze_Frame_Num   3
 typedef __packed__ (1,1) struct {
 	uint8_t spn_1217         :8; //freeze frame length
 	uint8_t spn_1214_l       :8; //low 8 bits of spn1214
@@ -759,41 +759,6 @@ typedef __packed__ (1,1) struct {
 	uint16_t spn_1228   :16;
 }J1939_73_dm8_65232_T;
 extern J1939_73_dm8_65232_T     J1939_73_dm8;
-
-/* j1939 pgn HOURS (0x00FEE5) parameters structure define */
-typedef __packed__ (1,1) struct {
-	struct {
-		uint8_t spn_1213     :2;
-		uint8_t spn_623      :2;
-		uint8_t spn_624      :2;
-		uint8_t spn_987      :2;
-	}byte1;
-	struct {
-		uint8_t spn_3038     :2;
-		uint8_t spn_3039     :2;
-		uint8_t spn_3040     :2;
-		uint8_t spn_3041     :2;
-	}byte2;
-}J1939_DM1_Header_T;
-
-typedef union {
-	uint32_t dtc;
-	__packed__ (1,1) struct {
-		uint8_t spn_1214_l   :8; //low 8 bits of spn1214
-		uint8_t spn_1214_m   :8; //middle 8 bits of spn1214
-		uint8_t spn_1214_h   :3; //high 3 bits of spn1214
-		uint8_t spn_1215     :5;
-		uint8_t spn_1706     :1;
-		uint8_t spn_1216     :7;
-	}byte1234;
-}J1939_DM1_DTC_T;
-
-#define MAX_SIZE_OF_J1939_DTC 5
-typedef __packed__ (1,1) struct {
-	J1939_DM1_Header_T header;
-	J1939_DM1_DTC_T    dtc[MAX_SIZE_OF_J1939_DTC];
-} J1939_PGN_DM1_T;
-extern J1939_PGN_DM1_T   pgn_dm1, pgn_dm2;
 
 /* j1939 73 dm13 (0x00DFD0) parameters structure define */
 typedef union {

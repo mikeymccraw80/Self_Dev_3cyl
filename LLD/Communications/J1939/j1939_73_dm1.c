@@ -143,7 +143,7 @@ static can_boolean_t Service_PGN_65226 (J1939_Transmit_Message_Info_T *TxMsg)
    }
    else
    {
-      NumOfDTCs = GetJ1939_DM1_ActiveDTC_NUMBER();
+      NumOfDTCs = (GetJ1939_DM1_ActiveDTC_NUMBER()<Max_DTC_NUM) ? GetJ1939_DM1_ActiveDTC_NUMBER() : Max_DTC_NUM;
       NumOfDTCBytes = NumOfDTCs * 4 + 2;
       J1939_Message_SnapShot (GetJ1939_DM1_MsgPtr(), J1939_DM1_Msg_Snapshot, NumOfDTCBytes);
 
