@@ -942,19 +942,28 @@ extern void J1939_TxInit_SendUnmanagedAcknowledgement(J1939_Transmit_Message_Con
 /* Description: TImeout after receiving a hold (CTS 0) (T4)             */
 /************************************************************************/
 #define J1939_TP_HOLD_TIMEOUT    (30 / J1939_BASE_LOOP) // 30ms
-
+/************************************************************************/
+/* DEFINE: Max_DTC_NUM                                        */
+/* Description: Customer requested Max number of DTCs */
+/************************************************************************/
+#define Max_DTC_NUM (8)
+/************************************************************************/
+/* DEFINE: Max_Freeze_Frame_Num                                        */
+/* Description: Customer requested Max number of freeze frames */
+/************************************************************************/
+#define Max_Freeze_Frame_Num   Max_DTC_NUM
 /************************************************************************/
 /* DEFINE: J1939_DM1_BUFFER_SIZE                                        */
 /* Description: Buffer size to store the lamp staus and the active DTCs */
 /************************************************************************/
-#define J1939_DM1_BUFFER_SIZE  (14)
+#define J1939_DM1_BUFFER_SIZE  (Max_DTC_NUM*4 + 2)
 
 /************************************************************************/
 /* DEFINE: J1939_DM2_BUFFER_SIZE                                        */
 /* Description: Buffer size to store the lamp staus and the previously  */
 /*              active DTCs                                             */
 /************************************************************************/
-#define J1939_DM2_BUFFER_SIZE  (14)
+#define J1939_DM2_BUFFER_SIZE  (Max_DTC_NUM*4 + 2)
 
 /************************************************************************/
 /* DEFINE: J1939_DM4_BUFFER_SIZE                                        */
@@ -967,7 +976,7 @@ extern void J1939_TxInit_SendUnmanagedAcknowledgement(J1939_Transmit_Message_Con
 /* Description: Buffer size to store the lamp staus and the             */
 /*              emissions-related  active DTCs                          */
 /************************************************************************/
-#define J1939_DM12_BUFFER_SIZE (14)
+#define J1939_DM12_BUFFER_SIZE (Max_DTC_NUM*4 + 2)
 
 #define J1939_PGN_65249_BUFFER_SIZE (19)
 //the latest protocol defined this PGN a 40-byte message, according to JD, by hongfei

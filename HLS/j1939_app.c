@@ -65,11 +65,8 @@ J1939_pgn_65289_T        J1939_pgn_65289;   //TLA
 J1939_73_dm13_57088_T    J1939_73_dm13;
 J1939_PGN_65299_T  J1939_pgn_65299;  //jd defined
 
-J1939_PGN_DM1_T          pgn_dm1, pgn_dm2;
 J1939_73_dm7_58112_T     J1939_73_dm7;
 J1939_73_dm8_65232_T     J1939_73_dm8;
-uint8_t                  DTC_Number_DM1;
-uint8_t                  DTC_Number_DM2;
 uint8_t                  DTC_Number_DM4;
 J1939_73_DM4_T           J1939_73_dm4;
 J1939_73_dm5_65230_T     J1939_73_dm5;
