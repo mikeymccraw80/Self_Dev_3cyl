@@ -8,6 +8,7 @@
 
 //=============================================================================
 // PIT Scaling
+//=============================================================================
 #define PIT_INTERNAL_VALUE_10MS  10000
 #define RTI_INTERNAL_VALUE_1MS    1000
 #define PIT_INTERNAL_VALUE_20US    20
@@ -22,4 +23,3 @@
 #define PIT_LOAD_VALUE_5US                 (PIT_INTERNAL_VALUE_5US/ ( 1000000.0/PIT_CLOCK_FREQUENCY_HZ  ) )      
 
 #endif //IO_CONFIG_PIT_H
-//=============================================================================
