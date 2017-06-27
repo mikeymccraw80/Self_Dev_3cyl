@@ -57,6 +57,10 @@ void OS_Startup_Hook(void)
 	PIT_INTERRUPT_Clear_Pending(PIT_CHANNEL_RTI);
 	// PIT_TIMER_Set_Value( PIT_CHANNEL_RTI, RTI_LOAD_VALUE_1MS);
 	PIT_INTERRUPT_Set_Enable(PIT_CHANNEL_RTI, true);
+
+	// set up J1939 10ms scheduler
+	PIT_INTERRUPT_Clear_Pending(PIT_CHANNEL_2);
+	PIT_INTERRUPT_Set_Enable(PIT_CHANNEL_2, true);
 }
 //=============================================================================
 //MngOSTK_1msTasks
@@ -135,8 +139,6 @@ void MngOSTK_10msTasks(void)
 
 	MngDCAN_TasksExecutive();
 
-       J1939_Handler_Periodic_Task();
-	
 }
 
 //=============================================================================
@@ -203,6 +205,14 @@ void OS_TimeBasedTask5ms(void)
 void OS_TimeBasedTask10ms(void)
 {
 
+}
+
+//=============================================================================
+//OS_PIT2_TimeBasedTask10ms
+//=============================================================================
+void OS_PIT2_TimeBasedTask10ms(void)
+{
+    J1939_Handler_Periodic_Task();
 }
 
 //=============================================================================
