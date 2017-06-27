@@ -259,7 +259,7 @@ const uint16_t  KfHWIO_J1939_PGN_65298_FREQ = V_COUNT_WORD(500);
 *|     : units = "ms";
 *|   }
 */
-const uint16_t KfHWIO_J193973_PGN_65251_FREQ = 5000;
+const uint16_t KfHWIO_J193973_PGN_65251_FREQ = 0;
 /*
 *|   KfHWIO_J1939_PGN_65299_FREQ {
 *|     : is_calconst;
