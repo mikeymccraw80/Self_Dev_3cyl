@@ -226,17 +226,18 @@ void HAL_CAN_TX_B07_INT(void)
 }
 
 
-void HAL_CAN_Transmit_Message(uint32_t id, uint8_t len, uint8_t *pdata)
+bool HAL_CAN_Transmit_Message(uint32_t id, uint8_t len, uint8_t *pdata)
 {
 	bool result;
-	static int can_obj_num = FLEXCAN_MSG_OBJ_16;
-	can_obj_num = can_obj_num >= FLEXCAN_MSG_OBJ_31?FLEXCAN_MSG_OBJ_16:can_obj_num++;
+	static int can_obj_num = FLEXCAN_MSG_OBJ_32;
+	can_obj_num = can_obj_num >= FLEXCAN_MSG_OBJ_63?FLEXCAN_MSG_OBJ_32:can_obj_num++;
 	result = FlexCAN_Transmit_Message(
 					 &FlexCAN_A,
 					 can_obj_num,
 					 id,
 					 pdata,
 					 len);
+	return ( result );
 }
 
 

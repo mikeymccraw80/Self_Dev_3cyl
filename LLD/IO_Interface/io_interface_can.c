@@ -54,40 +54,20 @@ uint8_t  VsCAN_CHERY_ID51A[8];
 
 void MngChery_Can_10ms(void)
 {
-	if (KbHwio_CheryCanID0FA_Enable)
-		HAL_CAN_Transmit_Message(CHERY_CANT_0FA_ID, 8, VsCAN_CHERY_ID0FA);
-	if (KbHwio_CheryCanID101_Enable)
-		HAL_CAN_Transmit_Message(CHERY_CANT_101_ID, 8, VsCAN_CHERY_ID101);
-	if (KbHwio_CheryCanID270_Enable)
-		HAL_CAN_Transmit_Message(CHERY_CANT_270_ID, 8, VsCAN_CHERY_ID270);
-	if (KbHwio_CheryCanID2C1_Enable)
-		HAL_CAN_Transmit_Message(CHERY_CANT_2C1_ID, 8, VsCAN_CHERY_ID2C1);
-	if (KbHwio_CheryCanID370_Enable)
-		HAL_CAN_Transmit_Message(CHERY_CANT_370_ID, 8, VsCAN_CHERY_ID370);
-	if (KbHwio_CheryCanID378_Enable)
-		HAL_CAN_Transmit_Message(CHERY_CANT_378_ID, 8, VsCAN_CHERY_ID378);
 }
 void MngChery_Can_50ms(void)
 {
-    if (KbHwio_CheryCanID278_Enable)
-		HAL_CAN_Transmit_Message(CHERY_CANT_278_ID, 8, VsCAN_CHERY_ID278);
 }
 void MngChery_Can_100ms(void)
 {
-	if (KbHwio_CheryCanID501_Enable)
-		HAL_CAN_Transmit_Message(CHERY_CANT_501_ID, 8, VsCAN_CHERY_ID501);
 }
 
 void MngChery_Can_1000ms(void)
 {
-	if (KbHwio_CheryCanID623_Enable)
-		HAL_CAN_Transmit_Message(CHERY_CANT_623_ID, 8, VsCAN_CHERY_ID623);
 }
 
 void MngChery_Can_2000ms(void)
 {
-	if (KbHwio_CheryCanID7C1_Enable)
-		HAL_CAN_Transmit_Message( CHERY_CANT_7C1_ID, 8, VsCAN_CHERY_ID7C1);
 }
 
 

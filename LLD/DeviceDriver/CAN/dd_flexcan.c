@@ -193,7 +193,6 @@ bool FlexCAN_Transmit_Message(
       in_pFlexCAN->MSGBUF[msg_obj].F.CTRSTS.F.CODE = FLEXCAN_MSGOBJ_TX_INACTIVE;
 
       //Write ID
-      //tempoary for Standard ID only
       if(in_message_id<0xFFF)
       {
         in_pFlexCAN->MSGBUF[msg_obj].F.CTRSTS.F.IDE  = FLEXCAN_MSGOBJ_ID_STD;
@@ -201,7 +200,6 @@ bool FlexCAN_Transmit_Message(
       else
       {
         in_pFlexCAN->MSGBUF[msg_obj].F.CTRSTS.F.IDE  = FLEXCAN_MSGOBJ_ID_EXT;
-        in_message_id = Tx_PGN_55808_ID;
       }
 
       FLEXCAN_Set_Msg_ID(in_pFlexCAN, msg_obj, in_message_id);
