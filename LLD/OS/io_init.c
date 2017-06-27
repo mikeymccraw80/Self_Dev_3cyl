@@ -293,6 +293,7 @@ void InitializeHardwareLast(void)
 	PIT_TIMER_Set_Value(PIT_CHANNEL_1, PIT_LOAD_VALUE_20US);
 	PIT_TIMER_Set_Value(PIT_CHANNEL_0, PIT_LOAD_VALUE_5US);
 	PIT_TIMER_Set_Value( PIT_CHANNEL_RTI, RTI_LOAD_VALUE_1MS);
+	PIT_TIMER_Set_Value( PIT_CHANNEL_2, PIT_LOAD_VALUE_10MS);
 	STM_Timer_UDelay(1000);
 
 	/* init tpu device, this part must placed behind nvram erase */
