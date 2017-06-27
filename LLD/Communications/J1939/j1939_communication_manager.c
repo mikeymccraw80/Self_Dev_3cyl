@@ -383,7 +383,7 @@ static void J1939_Schedule_Transmit_Messages (J1939_Channel_T  channel_num)
          }
 
          //if TX fail then service again next loop, else update service time
-         if (false == tx_msg_status)
+         if (true == tx_msg_status)
          {
             //Update time to next service/transmit of this message
             tx_msg_ctrl_ptr->Tx_Timeout_Timer_W     = tx_msg_info.Callback_Timeout_W;
