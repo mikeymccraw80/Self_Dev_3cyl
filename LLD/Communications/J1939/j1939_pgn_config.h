@@ -734,7 +734,7 @@ extern void J1939_TxInit_PGN_65242(J1939_Transmit_Message_Control_T * tx_msg_ctr
 #define J1939_PGN_59392_LENGTH                 (8)
 #define J1939_PGN_59392                        (0x0000E800UL)
 #define J1939_PGN_59392_FREQ                   (CAN_NO_PERIODIC_SERVICE)
-#define J1939_PGN_59392_TIMEOUT                (20 / J1939_BASE_LOOP) // 20ms
+#define J1939_PGN_59392_TIMEOUT                (CAN_NO_PERIODIC_SERVICE / J1939_BASE_LOOP) // 20ms
 
 /***********************************************************************/
 /* 65226 J1939/73 DM1 - Active DTC's and lamp status                   */

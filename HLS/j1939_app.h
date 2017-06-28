@@ -227,7 +227,7 @@ typedef __packed__ (1,1) struct {
 		uint8_t spn_res01		:2;
 	}byte1;
 	struct {
-		uint16_t spn_res	:8;
+		uint8_t spn_res	:8;
 	}byte2;
 	struct {
 		uint16_t spn_res	:16;
