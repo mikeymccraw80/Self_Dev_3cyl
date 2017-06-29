@@ -61,7 +61,7 @@
 #define J1939_PGN_55808_SUPPORTED             0
 #define J1939_PGN_00000_SUPPORTED_TCU             1   //jd rx pgn, from TCU, ID 0x0C000003
 #define J1939_PGN_61677_SUPPORTED             1   //jd rx pgn, ID 0x10F0ED00
-
+#define J1939_PGN_65298_SUPPORTED_TCU     1   //jd rx pgn
 
 
 //for tx pgns
@@ -118,7 +118,8 @@
 														J1939_73_dm13_SUPPORTED    +\
 														J1939_PGN_55808_SUPPORTED	+\
 														J1939_PGN_00000_SUPPORTED_TCU	+\
-														J1939_PGN_61677_SUPPORTED)
+														J1939_PGN_61677_SUPPORTED	+\
+														J1939_PGN_65298_SUPPORTED_TCU)
 #define J1939_RECEIVE_MESSAGES_NUMBER_CHANNEL_1     ( 0 )
 
 #define  J1939_TRANSMIT_MESSAGES_NUMBER_CHANNEL_0 (6 + J1939_DENY_REQUEST_SUPPORTED	+\
@@ -371,6 +372,12 @@ extern void J1939_Receive_Initialize_PGN_61445(J1939_Receive_Message_Control_T *
 #define J1939_PGN_65298_FREQ_ICC                  (KfHWIO_J1939_PGN_65298_FREQ/J1939_BASE_LOOP)
 #define J1939_PGN_65298_TIMEOUT_ICC               (KfHWIO_J1939_PGN_65298_FREQ*10/J1939_BASE_LOOP)
 extern void J1939_Receive_Initialize_PGN_65298_ICC(J1939_Receive_Message_Control_T *rx_msg_ctrl_ptr);
+
+#define J1939_PGN_65298_BASE_ID_TCU               0x0CFF1203
+#define J1939_PGN_65298_LENGTH_TCU                8
+#define J1939_PGN_65298_FREQ_TCU                  (KfHWIO_J1939_PGN_65298_FREQ/J1939_BASE_LOOP)
+#define J1939_PGN_65298_TIMEOUT_TCU               (KfHWIO_J1939_PGN_65298_FREQ*10/J1939_BASE_LOOP)
+extern void J1939_Receive_Initialize_PGN_65298_TCU(J1939_Receive_Message_Control_T *rx_msg_ctrl_ptr);
 
 #define J1939_PGN_65272_BASE_ID               0x18FEF8D5
 #define J1939_PGN_65272_LENGTH                8

@@ -187,6 +187,9 @@ const void (*const J1939_Receive_Initialize_Channel_0[]) (J1939_Receive_Message_
 #if J1939_PGN_61677_SUPPORTED
    J1939_Receive_Initialize_PGN_61677
 #endif
+#if J1939_PGN_65298_SUPPORTED_TCU
+   J1939_Receive_Initialize_PGN_65298_TCU,
+#endif
 };
 
 const J1939_Message_Table_T  J1939_Message_Table[J1939_MESSAGES_NUMBER] =
@@ -252,6 +255,10 @@ const J1939_Message_Table_T  J1939_Message_Table[J1939_MESSAGES_NUMBER] =
 #if J1939_PGN_61677_SUPPORTED
    , { J1939_PGN_61677_BASE_ID,    J1939_PGN_61677_LENGTH }
 #endif
+#if J1939_PGN_65298_SUPPORTED_TCU
+   , { J1939_PGN_65298_BASE_ID_TCU,    J1939_PGN_65298_LENGTH_TCU }
+#endif
+
 
 // TRANSMIT_MESSAGE
 #if J1939_DENY_REQUEST_SUPPORTED

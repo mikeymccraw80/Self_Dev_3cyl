@@ -272,6 +272,8 @@ typedef __packed__ (1,1) struct {
 	}byte8;
 }J1939_PGN_TSC2_65298_T;
 extern J1939_PGN_TSC2_65298_T  pgn_tsc2_65298_ICC;  
+extern J1939_PGN_TSC2_65298_T  pgn_tsc2_65298_TCU;  
+
 
 /* j1939 pgn EEC1 (0x00F004) parameters structure define */
 typedef __packed__ (1,1) struct {
