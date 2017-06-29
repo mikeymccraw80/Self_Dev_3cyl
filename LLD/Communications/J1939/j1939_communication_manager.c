@@ -47,7 +47,6 @@ static J1939_Receive_Message_Control_T *J1939_Receive_Message_Control[2] =
 
 
 uint8_t  J1939_MESSAGE_RX_OFFSET;
-uint8_t  J1939_MESSAGE_TX_OFFSET;
 uint32_t J1939_Update_Timer;
 
 static void J1939_Initialize_Receive_Manager (J1939_Channel_T  channel_num);
@@ -692,8 +691,8 @@ void J1939_Handler_Cold_Init (void)
    int16_t                            msg_call_back;
    uint8_t                        msg_obj_offset;
 
-   J1939_MESSAGE_RX_OFFSET = 18; //Rx obj was scheduled from MB18
-   J1939_MESSAGE_TX_OFFSET = (32 - J1939_NO_OF_RECEIVE_MESSAGES_CHANNEL_0);
+   //Rx obj was scheduled from MB32 to MB63
+   J1939_MESSAGE_RX_OFFSET = 32; 
 
    for (msg_obj = 0; msg_obj < J1939_NO_OF_RECEIVE_MESSAGES; msg_obj++)
    {
