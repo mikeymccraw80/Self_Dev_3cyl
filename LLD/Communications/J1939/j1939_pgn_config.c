@@ -185,10 +185,10 @@ const void (*const J1939_Receive_Initialize_Channel_0[]) (J1939_Receive_Message_
    J1939_Receive_Initialize_PGN_00000_TCU,
 #endif
 #if J1939_PGN_61677_SUPPORTED
-   J1939_Receive_Initialize_PGN_61677
+   J1939_Receive_Initialize_PGN_61677,
 #endif
 #if J1939_PGN_65298_SUPPORTED_TCU
-   J1939_Receive_Initialize_PGN_65298_TCU,
+   J1939_Receive_Initialize_PGN_65298_TCU
 #endif
 };
 
