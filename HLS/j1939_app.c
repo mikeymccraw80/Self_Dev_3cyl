@@ -48,6 +48,7 @@ J1939_PGN_ETC2_61445_T pgn_etc2_61445;
 J1939_PGN_TSC2_65298_T  pgn_tsc2_65298_ICC;  
 J1939_PGN_T1_61677_T  pgn_t1_61677;  
 J1939_PGN_TSC2_65298_T  pgn_tsc2_65298_TCU;  
+J1939_PGN_TSC2_65272_T pgn_trf1_65272;
 
 /* j1939 transmit pgn variables define */
 J1939_PGN_ET1_65262_T    pgn_et1_65262;     //broadcast

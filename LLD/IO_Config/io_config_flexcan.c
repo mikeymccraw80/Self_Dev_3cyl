@@ -220,7 +220,7 @@ const FLEXCAN_MSK_T  FLEXCAN_A_RXIMR_INIT [FLEXCAN_MSG_OBJ_MAX]=
       {0x7FF, 0x3FFFF}, //MB44, MASK, only for PGN0000_TCU, 0x0C000003
       {0x7FF, 0x3FF00}, //MB45
       {0x7FF, 0x3FFFF}, //MB46, MASK, only for PGN0000_ICC, 0x0CFF1203
-      {0x7FF, 0x3FFFF}, //MB47
+      {0x7FF, 0x3FF00}, //MB47
       {0x7FF, 0x3FFFF}, //MB48
       {0x7FF, 0x3FFFF}, //MB49
       {0x7FF, 0x3FFFF}, //MB50
