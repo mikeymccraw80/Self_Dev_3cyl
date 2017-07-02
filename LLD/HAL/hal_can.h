@@ -160,7 +160,7 @@ extern CAN_RECEIVE_ERR_TYPE VsCAN_Receive_Err;
 extern CAN_Port_Error_T HAL_CAN_Err_Status[4];
 
 void HAL_CAN_Initialize(void);
-void HAL_CAN_Transmit_Message(uint32_t id, uint8_t len, uint8_t *pdata);
+bool HAL_CAN_Transmit_Message(uint32_t id, uint8_t len, uint8_t *pdata);
 void HAL_CAN_Diag_Network_10ms(void);
 
 #endif

@@ -226,7 +226,7 @@ void HAL_CAN_TX_B07_INT(void)
 }
 
 
-void HAL_CAN_Transmit_Message(uint32_t id, uint8_t len, uint8_t *pdata)
+bool HAL_CAN_Transmit_Message(uint32_t id, uint8_t len, uint8_t *pdata)
 {
 	bool result;
 	static int can_obj_num = FLEXCAN_MSG_OBJ_16;
@@ -237,6 +237,7 @@ void HAL_CAN_Transmit_Message(uint32_t id, uint8_t len, uint8_t *pdata)
 					 id,
 					 pdata,
 					 len);
+	return ( result );
 }
 
 

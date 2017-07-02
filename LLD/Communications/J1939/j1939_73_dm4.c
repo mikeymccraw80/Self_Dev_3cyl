@@ -100,7 +100,8 @@ static can_boolean_t Service_PGN_65229 (J1939_Transmit_Message_Info_T *TxMsg)
    if (! J1939_CkPgnCurrentlyInTransportOut (J193973_PGN_65229))
    {
       DM4_Msg = (uint8_t *)GetJ1939_DM4_MsgPtr();
-      NumofDtcs = GetJ1939_DM4_ActiveDTC_NUMBER(); 
+      NumofDtcs = (GetJ1939_DM4_ActiveDTC_NUMBER() <Max_Freeze_Frame_Num) ? \
+	  	GetJ1939_DM4_ActiveDTC_NUMBER() : Max_Freeze_Frame_Num; 
 	  NumOfFreezeFrameBytes = NumofDtcs*sizeof(J1939_DM4_FreezeFrame_T);
 	  if(NumOfFreezeFrameBytes	> J1939_DM4_BUFFER_SIZE)
 	  	 NumOfFreezeFrameBytes =J1939_DM4_BUFFER_SIZE;	  

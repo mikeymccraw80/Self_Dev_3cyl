@@ -45,8 +45,10 @@ J1939_PGN_CCVS_65265_T  pgn_ccvs_65265;
 J1939_PGN_OHECS_64971_T pgn_ohecs_64971;
 J1939_PGN_ETC1_61442_T pgn_etc1_61442; 
 J1939_PGN_ETC2_61445_T pgn_etc2_61445;
-J1939_PGN_TSC2_65298_T  pgn_tsc2_65298;  
+J1939_PGN_TSC2_65298_T  pgn_tsc2_65298_ICC;  
 J1939_PGN_T1_61677_T  pgn_t1_61677;  
+J1939_PGN_TSC2_65298_T  pgn_tsc2_65298_TCU;  
+J1939_PGN_TSC2_65272_T pgn_trf1_65272;
 
 /* j1939 transmit pgn variables define */
 J1939_PGN_ET1_65262_T    pgn_et1_65262;     //broadcast
@@ -65,11 +67,8 @@ J1939_pgn_65289_T        J1939_pgn_65289;   //TLA
 J1939_73_dm13_57088_T    J1939_73_dm13;
 J1939_PGN_65299_T  J1939_pgn_65299;  //jd defined
 
-J1939_PGN_DM1_T          pgn_dm1, pgn_dm2;
 J1939_73_dm7_58112_T     J1939_73_dm7;
 J1939_73_dm8_65232_T     J1939_73_dm8;
-uint8_t                  DTC_Number_DM1;
-uint8_t                  DTC_Number_DM2;
 uint8_t                  DTC_Number_DM4;
 J1939_73_DM4_T           J1939_73_dm4;
 J1939_73_dm5_65230_T     J1939_73_dm5;

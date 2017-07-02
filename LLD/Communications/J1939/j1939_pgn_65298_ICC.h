@@ -1,7 +1,7 @@
 /******************************************************************************
 *  Project       : J1939 - PGN Specific Configuration
 *  Module        : Message Configurations
-*  File          : j1939_pgn_65298.h
+*  File          : j1939_pgn_65298_ICC.h
 *  Creation date :
 *  Description   :Vehicle Electrical Power 1 Implementation
 *  History       :
@@ -19,9 +19,9 @@
 
 
 
-extern bool J1939_Get_PGN_65298_Message_Indicator(void);
-extern bool J1939_Get_PGN_65298_Message_Lost_Indicator(void);
-extern void J1939_Clear_PGN_65298_Message_Indicator(void);
+extern bool J1939_Get_PGN_65298_Message_Indicator_ICC(void);
+extern bool J1939_Get_PGN_65298_Message_Lost_Indicator_ICC(void);
+extern void J1939_Clear_PGN_65298_Message_Indicator_ICC(void);
 
 
 #endif

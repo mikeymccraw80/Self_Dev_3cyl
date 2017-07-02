@@ -704,7 +704,7 @@ static void hwi_handle_msg_type (uint8_t can,
                                  uint32_t p_l_can_msg_timestamp,
                                  uint8_t  p_l_can_msg_dlc)
 {
-    if((can_msg_number>P_L_CAN_MSG15)&&(can_msg_number<=P_L_CAN_MSG32))
+    if((can_msg_number>P_L_CAN_MSG32)&&(can_msg_number<=P_L_CAN_MSG63))
     {
       J1939_Message_Receive_Callback((uint8_t)can_msg_number, p_l_can_msg_id, p_l_can_data_ptr, 8);
     }

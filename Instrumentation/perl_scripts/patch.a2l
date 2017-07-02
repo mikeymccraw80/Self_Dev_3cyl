@@ -229,7 +229,7 @@
         0x0000  /* Logical CCP-Address of the (station address)               */ 
         1       /* Byte order of Multiple-byte-items 
                            1 = high Byte first, 2 = low byte first            */ 
-        BAUDRATE 250000  
+        BAUDRATE 500000  
         SAMPLE_POINT 70 
         SAMPLE_RATE  1 
         BTL_CYCLES   16 

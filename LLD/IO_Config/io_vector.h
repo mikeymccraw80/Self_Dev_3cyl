@@ -3,6 +3,7 @@
 
 
 void OS_RTI_1ms_INT(void);
+void OS_PIT_2_10ms_INT(void);
 void OS_SW_INTC_Control(void);
 void SWI_Knock_INT( void );
 void CRANK_Process_Crank_Event(void);
@@ -352,7 +353,7 @@ void Service_ECSM_Error(void);
    #define   INTC_CHANNEL_RESERVED_300  UNUSED_IRQ
    #define   INTC_CHANNEL_PIT_0  UNUSED_IRQ   
    #define   INTC_CHANNEL_PIT_1  UNUSED_IRQ
-   #define   INTC_CHANNEL_PIT_2  UNUSED_IRQ
+   #define   INTC_CHANNEL_PIT_2  USED_IRQ  // Enable PIT_2 to trigger 10ms based J1939 tasks
    #define   INTC_CHANNEL_PIT_3  UNUSED_IRQ
    #define   INTC_CHANNEL_RTI      USED_IRQ   // Enable PIT_RTI
    #define   INTC_CHANNEL_PMC  UNUSED_IRQ
@@ -422,6 +423,11 @@ void Service_ECSM_Error(void);
 #define INTC_CHANNEL_RTI_PRIORITY      INTC_PRIORITY_7
 #endif
 
+
+#if  INTC_CHANNEL_PIT_2 == USED_IRQ
+#define INTC_CHANNEL_PIT_2_HANDLER      OS_PIT_2_10ms_INT
+#define INTC_CHANNEL_PIT_2_PRIORITY      INTC_PRIORITY_7
+#endif
 
 #if INTC_CHANNEL_TPU_A_CH0 == USED_IRQ
 #define INTC_CHANNEL_TPU_A_CH0_HANDLER      CRANK_Process_Crank_Event

@@ -131,7 +131,8 @@ static can_boolean_t Service_PGN_65227 (J1939_Transmit_Message_Info_T *TxMsg)
    /* If previous DM2 still being transported then ignore this req */
    if (! J1939_CkPgnCurrentlyInTransportOut (J193973_PGN_65227))
    {
-      NumOfPreActiveDTCs = GetJ1939_DM2_PreActiveDTC_NUMBER();
+      NumOfPreActiveDTCs = (GetJ1939_DM2_PreActiveDTC_NUMBER()<Max_DTC_NUM) ? \
+	  	GetJ1939_DM2_PreActiveDTC_NUMBER() : Max_DTC_NUM ;
       /* NumOfPreActiveDTCBytes = 2 for lamp status + 4 for each code */
       NumOfPreActiveDTCBytes = (uint16_t) (2 + (NumOfPreActiveDTCs * 4));
       J1939_Message_SnapShot (GetJ1939_DM2_MsgPtr(), J1939_DM2_Msg_Snapshot, NumOfPreActiveDTCBytes);

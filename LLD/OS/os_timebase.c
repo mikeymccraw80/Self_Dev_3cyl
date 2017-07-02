@@ -4,7 +4,7 @@
 #include "dd_pit_interface.h"
 #include "os_type.h"
 #include "dd_stm.h"
-
+#include "dd_siu_interface.h"
 //=============================================================================
 // local variables
 //=============================================================================
@@ -25,6 +25,7 @@ static bool VbOSTK_ThruPutData_FirstTime[NUMBER_OF_CeOSTK_SEG];
  void OS_TimeBasedTask2ms(void) ;
  void OS_TimeBasedTask5ms(void) ;
  void OS_TimeBasedTask10ms(void);
+ void OS_PIT2_TimeBasedTask10ms(void);
 
 
 //=============================================================================
@@ -70,7 +71,23 @@ void OS_RTI_1ms_INT(void)
 	}
 	Leave_Critical_Section(cs);
 }
+//=============================================================================
+// OS_PIT_2_10ms_INT, this the time schedule reference
+//=============================================================================
+void OS_PIT_2_10ms_INT(void)
+{
+//test code
+	uint32_t  cs;
 
+	cs = Enter_Critical_Section();
+	PIT_INTERRUPT_Clear_Pending(PIT_CHANNEL_2);
+
+	//SIU_GPIO_DISCRETE_Set_State( SIU_GPIO_CHANNEL_189, true ); //test code, start of J1939 task
+	OS_PIT2_TimeBasedTask10ms();
+	//SIU_GPIO_DISCRETE_Set_State( SIU_GPIO_CHANNEL_189, false );//test code, endo of J1939 task
+	Leave_Critical_Section(cs);
+
+}
 /*===========================================================================*\
  * Inline Functions
 \*===========================================================================*/
@@ -127,6 +144,7 @@ void Leave_OSThroughputMeasure(OSTK_SEG_T index)
 			(VaOSTK_ThruPutData[index].t_AvgExecTime-VaOSTK_ThruPutData[index].t_CurrExecTime) >> TIMEMEASURE_PARAMETER ;
 	}
 }
+
 
 
 

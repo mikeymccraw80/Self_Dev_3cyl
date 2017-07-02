@@ -47,7 +47,6 @@ static J1939_Receive_Message_Control_T *J1939_Receive_Message_Control[2] =
 
 
 uint8_t  J1939_MESSAGE_RX_OFFSET;
-uint8_t  J1939_MESSAGE_TX_OFFSET;
 uint32_t J1939_Update_Timer;
 
 static void J1939_Initialize_Receive_Manager (J1939_Channel_T  channel_num);
@@ -383,13 +382,13 @@ static void J1939_Schedule_Transmit_Messages (J1939_Channel_T  channel_num)
          }
 
          //if TX fail then service again next loop, else update service time
-         if (false == tx_msg_status)
-         {
+ //        if (true == tx_msg_status)
+//         {
             //Update time to next service/transmit of this message
             tx_msg_ctrl_ptr->Tx_Timeout_Timer_W     = tx_msg_info.Callback_Timeout_W;
             tx_msg_ctrl_ptr->Time_To_Service        = false;
             tx_msg_ctrl_ptr->Requested              = false;
-         }
+//         }
       }
 
       if ( (true == tx_msg_ctrl_ptr->Tx_Timeout) && (false == tx_msg_status))
@@ -692,35 +691,25 @@ void J1939_Handler_Cold_Init (void)
    int16_t                            msg_call_back;
    uint8_t                        msg_obj_offset;
 
-   J1939_MESSAGE_RX_OFFSET = 18;
-   J1939_MESSAGE_TX_OFFSET = (32 - J1939_NO_OF_RECEIVE_MESSAGES_CHANNEL_0);
+   //Rx obj was scheduled from MB32 to MB63
+   J1939_MESSAGE_RX_OFFSET = 32; 
 
-   for (msg_obj = 0; msg_obj < J1939_NO_OF_MESSAGES; msg_obj++)
+   for (msg_obj = 0; msg_obj < J1939_NO_OF_RECEIVE_MESSAGES; msg_obj++)
    {
-      if (msg_obj < J1939_NO_OF_RECEIVE_MESSAGES)
-      {
-         msg_length = J1939_Message_Table[msg_obj].message_length;
-         //The address of message data @ message buffer is stored in a temp pointer
-         data_ptr   = (uint8_t *) &J1939_Receive_Message_Buffer[msg_obj].msg_data[0];
-         J1939_Receive_Message_Buffer[msg_obj].new_msg = J1939_NEW_MESSAGE_UNAVAILABLE;
+      msg_length = J1939_Message_Table[msg_obj].message_length;
+      //The address of message data @ message buffer is stored in a temp pointer
+      data_ptr   = (uint8_t *) &J1939_Receive_Message_Buffer[msg_obj].msg_data[0];
+      J1939_Receive_Message_Buffer[msg_obj].new_msg = J1939_NEW_MESSAGE_UNAVAILABLE;
 
-         for (counter = 0; counter < msg_length; counter++)
-         {
-            //Data buffer of receive messages in the table is cleared
-            *data_ptr++ = 0;
-         }
-
-         message_dir = CAN_PORT_MSG_DIR_RECEIVE;
-         msg_call_back = TRUE;
-         msg_obj_offset = J1939_MESSAGE_RX_OFFSET;
-      }
-      else
+      for (counter = 0; counter < msg_length; counter++)
       {
-         msg_length = J1939_Message_Table[msg_obj].message_length;
-         message_dir = CAN_PORT_MSG_DIR_TRANSMIT;
-         msg_call_back = FALSE;
-         msg_obj_offset = J1939_MESSAGE_TX_OFFSET;
+         //Data buffer of receive messages in the table is cleared
+         *data_ptr++ = 0;
       }
+
+      message_dir = CAN_PORT_MSG_DIR_RECEIVE;
+      msg_call_back = TRUE;
+      msg_obj_offset = J1939_MESSAGE_RX_OFFSET;
 
       msg_obj_cmd.P_L_CAN_DEVICE_NUMBER = FLEXCAN_DEVICE_A;
       msg_obj_cmd.P_L_CAN_MSG_NUMBER = msg_obj + msg_obj_offset;
@@ -762,21 +751,10 @@ bool J1939_Transmit_Message (
    J1939_Transmit_Message_Info_T     *tx_msg)
 {
    bool    tx_status;
-   //J1939 TX messages start after RX messages in the table, therefore offset is added
-   uint8_t j1939_msg_obj = in_msg_obj + J1939_NO_OF_RECEIVE_MESSAGES;
-   //J1939 messages start after the offset in CAN HW message objects allocation
-   uint8_t io_msg_obj    = j1939_msg_obj + J1939_MESSAGE_TX_OFFSET;
-   P_L_CAN_OBJECT_TYPE            msg_obj_cmd;
-   msg_obj_cmd.P_L_CAN_DEVICE_NUMBER = P_L_CAN0;
-   msg_obj_cmd.P_L_CAN_MSG_NUMBER = io_msg_obj;
-   msg_obj_cmd.P_L_CAN_MSG_ID = tx_msg->ID; //   J1939_Message_Table[j1939_msg_obj].message_ID;
-   msg_obj_cmd.P_L_CAN_MSG_MASK = 0xFFFFUL;
-   msg_obj_cmd.P_L_CAN_LENGTH = J1939_Message_Table[j1939_msg_obj].message_length;
-   msg_obj_cmd.P_L_CAN_TYPE = P_L_CAN_XTD;
-   msg_obj_cmd.P_L_CAN_DIRECTION = P_L_CAN_TX;
-   msg_obj_cmd.P_L_CAN_CALLBACK_ENABLED = FALSE;
-   tx_status = (hwi_can_send_message (&msg_obj_cmd, &tx_msg->Data[0]) != HWI_NO_ERROR);
-   if(tx_status == HWI_NO_ERROR)
+
+   tx_status = HAL_CAN_Transmit_Message(tx_msg->ID, tx_msg->Length, &tx_msg->Data[0]);	
+
+   if(tx_status == true)
    {
       HAL_CAN_Err_Status[0] = CAN_PORT_ERROR_NONE;
    }

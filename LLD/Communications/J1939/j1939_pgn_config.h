@@ -52,7 +52,7 @@
 #define J1939_PGN_64971_SUPPORTED             1   //jd rx pgn
 #define J1939_PGN_61442_SUPPORTED             1   //jd rx pgn
 #define J1939_PGN_61445_SUPPORTED             1   //jd rx pgn
-#define J1939_PGN_65298_SUPPORTED             1   //jd rx pgn
+#define J1939_PGN_65298_SUPPORTED_ICC             1   //jd rx pgn
 #define J1939_PGN_65276_SUPPORTED             0
 #define J1939_PGN_65277_SUPPORTED             0
 #define J1939_PGN_65278_SUPPORTED             0
@@ -61,8 +61,8 @@
 #define J1939_PGN_55808_SUPPORTED             0
 #define J1939_PGN_00000_SUPPORTED_TCU             1   //jd rx pgn, from TCU, ID 0x0C000003
 #define J1939_PGN_61677_SUPPORTED             1   //jd rx pgn, ID 0x10F0ED00
-
-
+#define J1939_PGN_65298_SUPPORTED_TCU     1   //jd rx pgn
+#define J1939_PGN_65272_SUPPORTED     1   //jd rx pgn
 
 //for tx pgns
 #define J1939_DENY_REQUEST_SUPPORTED          1
@@ -108,7 +108,7 @@
 														J1939_PGN_64971_SUPPORTED	+\
 														J1939_PGN_61442_SUPPORTED	+\
 														J1939_PGN_61445_SUPPORTED	+\
-														J1939_PGN_65298_SUPPORTED	+\
+														J1939_PGN_65298_SUPPORTED_ICC+\
 														J1939_PGN_65276_SUPPORTED	+\
 														J1939_PGN_65277_SUPPORTED	+\
 														J1939_PGN_65278_SUPPORTED	+\
@@ -118,7 +118,9 @@
 														J1939_73_dm13_SUPPORTED    +\
 														J1939_PGN_55808_SUPPORTED	+\
 														J1939_PGN_00000_SUPPORTED_TCU	+\
-														J1939_PGN_61677_SUPPORTED)
+														J1939_PGN_61677_SUPPORTED	+\
+														J1939_PGN_65298_SUPPORTED_TCU	+\
+														J1939_PGN_65272_SUPPORTED)
 #define J1939_RECEIVE_MESSAGES_NUMBER_CHANNEL_1     ( 0 )
 
 #define  J1939_TRANSMIT_MESSAGES_NUMBER_CHANNEL_0 (6 + J1939_DENY_REQUEST_SUPPORTED	+\
@@ -366,16 +368,22 @@ extern void J1939_Receive_Initialize_PGN_61442(J1939_Receive_Message_Control_T *
 #define J1939_PGN_61445_TIMEOUT               (KfHWIO_J1939_PGN_61445_FREQ*10/J1939_BASE_LOOP)
 extern void J1939_Receive_Initialize_PGN_61445(J1939_Receive_Message_Control_T *rx_msg_ctrl_ptr);
 
-#define J1939_PGN_65298_BASE_ID               0x0CFF1217
-#define J1939_PGN_65298_LENGTH                8
-#define J1939_PGN_65298_FREQ                  (KfHWIO_J1939_PGN_65298_FREQ/J1939_BASE_LOOP)
-#define J1939_PGN_65298_TIMEOUT               (KfHWIO_J1939_PGN_65298_FREQ*10/J1939_BASE_LOOP)
-extern void J1939_Receive_Initialize_PGN_65298(J1939_Receive_Message_Control_T *rx_msg_ctrl_ptr);
+#define J1939_PGN_65298_BASE_ID_ICC               0x0CFF1217
+#define J1939_PGN_65298_LENGTH_ICC                8
+#define J1939_PGN_65298_FREQ_ICC                  (KfHWIO_J1939_PGN_65298_FREQ/J1939_BASE_LOOP)
+#define J1939_PGN_65298_TIMEOUT_ICC               (KfHWIO_J1939_PGN_65298_FREQ*10/J1939_BASE_LOOP)
+extern void J1939_Receive_Initialize_PGN_65298_ICC(J1939_Receive_Message_Control_T *rx_msg_ctrl_ptr);
+
+#define J1939_PGN_65298_BASE_ID_TCU               0x0CFF1203
+#define J1939_PGN_65298_LENGTH_TCU                8
+#define J1939_PGN_65298_FREQ_TCU                  (KfHWIO_J1939_PGN_65298_FREQ/J1939_BASE_LOOP)
+#define J1939_PGN_65298_TIMEOUT_TCU               (KfHWIO_J1939_PGN_65298_FREQ*10/J1939_BASE_LOOP)
+extern void J1939_Receive_Initialize_PGN_65298_TCU(J1939_Receive_Message_Control_T *rx_msg_ctrl_ptr);
 
 #define J1939_PGN_65272_BASE_ID               0x18FEF8D5
 #define J1939_PGN_65272_LENGTH                8
-#define J1939_PGN_65272_FREQ                  (10/J1939_BASE_LOOP)
-#define J1939_PGN_65272_TIMEOUT               (30/J1939_BASE_LOOP)
+#define J1939_PGN_65272_FREQ                  (1000/J1939_BASE_LOOP)
+#define J1939_PGN_65272_TIMEOUT               (1500/J1939_BASE_LOOP)
 extern void J1939_Receive_Initialize_PGN_65272(J1939_Receive_Message_Control_T *rx_msg_ctrl_ptr);
 
 #define J1939_PGN_65273_BASE_ID               0x18FEF9D5
@@ -734,7 +742,7 @@ extern void J1939_TxInit_PGN_65242(J1939_Transmit_Message_Control_T * tx_msg_ctr
 #define J1939_PGN_59392_LENGTH                 (8)
 #define J1939_PGN_59392                        (0x0000E800UL)
 #define J1939_PGN_59392_FREQ                   (CAN_NO_PERIODIC_SERVICE)
-#define J1939_PGN_59392_TIMEOUT                (20 / J1939_BASE_LOOP) // 20ms
+#define J1939_PGN_59392_TIMEOUT                (CAN_NO_PERIODIC_SERVICE / J1939_BASE_LOOP) // 20ms
 
 /***********************************************************************/
 /* 65226 J1939/73 DM1 - Active DTC's and lamp status                   */
@@ -942,19 +950,28 @@ extern void J1939_TxInit_SendUnmanagedAcknowledgement(J1939_Transmit_Message_Con
 /* Description: TImeout after receiving a hold (CTS 0) (T4)             */
 /************************************************************************/
 #define J1939_TP_HOLD_TIMEOUT    (30 / J1939_BASE_LOOP) // 30ms
-
+/************************************************************************/
+/* DEFINE: Max_DTC_NUM                                        */
+/* Description: Customer requested Max number of DTCs */
+/************************************************************************/
+#define Max_DTC_NUM (8)
+/************************************************************************/
+/* DEFINE: Max_Freeze_Frame_Num                                        */
+/* Description: Customer requested Max number of freeze frames */
+/************************************************************************/
+#define Max_Freeze_Frame_Num   Max_DTC_NUM
 /************************************************************************/
 /* DEFINE: J1939_DM1_BUFFER_SIZE                                        */
 /* Description: Buffer size to store the lamp staus and the active DTCs */
 /************************************************************************/
-#define J1939_DM1_BUFFER_SIZE  (14)
+#define J1939_DM1_BUFFER_SIZE  (Max_DTC_NUM*4 + 2)
 
 /************************************************************************/
 /* DEFINE: J1939_DM2_BUFFER_SIZE                                        */
 /* Description: Buffer size to store the lamp staus and the previously  */
 /*              active DTCs                                             */
 /************************************************************************/
-#define J1939_DM2_BUFFER_SIZE  (14)
+#define J1939_DM2_BUFFER_SIZE  (Max_DTC_NUM*4 + 2)
 
 /************************************************************************/
 /* DEFINE: J1939_DM4_BUFFER_SIZE                                        */
@@ -967,7 +984,7 @@ extern void J1939_TxInit_SendUnmanagedAcknowledgement(J1939_Transmit_Message_Con
 /* Description: Buffer size to store the lamp staus and the             */
 /*              emissions-related  active DTCs                          */
 /************************************************************************/
-#define J1939_DM12_BUFFER_SIZE (14)
+#define J1939_DM12_BUFFER_SIZE (Max_DTC_NUM*4 + 2)
 
 #define J1939_PGN_65249_BUFFER_SIZE (19)
 //the latest protocol defined this PGN a 40-byte message, according to JD, by hongfei
