@@ -1104,7 +1104,7 @@ const SIU_PCR_T SIU_INITIAL_PCR_188 =
 //eMIOS[10:11] are connected to pins.
 const SIU_PCR_T SIU_INITIAL_PCR_189 = 
 {
-      SIU_GPIO_PIN_ASSIGNMENT_GPIO,  //PA Pin assignment 
+      SIU_GPIO_PIN_ASSIGNMENT_PRIMARY_0,  //PA Pin assignment 
       SIU_GPIO_BUFFER_OUT_ENABLED, //OBE  Output buffer enable
       SIU_GPIO_BUFFER_IN_DISABLED,   //IBE    Input buffer enable
       SIU_GPIO_DRIVE_STRENGTH_10pF, //DSC  Drive strength control

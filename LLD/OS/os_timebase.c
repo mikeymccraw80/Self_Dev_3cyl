@@ -82,9 +82,9 @@ void OS_PIT_2_10ms_INT(void)
 	cs = Enter_Critical_Section();
 	PIT_INTERRUPT_Clear_Pending(PIT_CHANNEL_2);
 
-SIU_GPIO_DISCRETE_Set_State( SIU_GPIO_CHANNEL_189, true );
+	//SIU_GPIO_DISCRETE_Set_State( SIU_GPIO_CHANNEL_189, true ); //test code, start of J1939 task
 	OS_PIT2_TimeBasedTask10ms();
-SIU_GPIO_DISCRETE_Set_State( SIU_GPIO_CHANNEL_189, false );
+	//SIU_GPIO_DISCRETE_Set_State( SIU_GPIO_CHANNEL_189, false );//test code, endo of J1939 task
 	Leave_Critical_Section(cs);
 
 }
