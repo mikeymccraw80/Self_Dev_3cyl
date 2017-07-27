@@ -30,7 +30,7 @@
  *  Global Variables
  *****************************************************************************/
 uint8_t           canobd_tx_rx_buffer[MESSAGE_NUM_OF_CANOBD][8];
-VioCanRxBufferStructType VioCanRxBuffer[RX_MESSAGE_NUM_OF_CANOBD];
+VioCanRxBufferStructType VioCanRxBuffer[RX_MSG_BUFFER_NUMBER];
 /******************************************************************************
  *  Global Variable Declarations
  *****************************************************************************/
@@ -59,9 +59,6 @@ CAN_Message_Parameter_T   CANOBD_Message_Parameter_Table[MESSAGE_NUM_OF_CANOBD] 
   ,{CanIdCAL,   8, 1, &canobd_tx_rx_buffer[4][0], Notify_Application_CANOBD, HAL_CAN_DEVICE_A,HAL_CAN_MESSAGE_DIRECTION_RECEIVE}
   ,{MCAMOS_CANID_7EF,   8, 1, &canobd_tx_rx_buffer[5][0], Notify_Application_CANTSW, HAL_CAN_DEVICE_A,HAL_CAN_MESSAGE_DIRECTION_RECEIVE}
   ,{MCAMOS_CANID_7EE,   8, 1, &canobd_tx_rx_buffer[6][0], Notify_Application_CANTSW, HAL_CAN_DEVICE_A,HAL_CAN_MESSAGE_DIRECTION_RECEIVE}
-//test code, build a extened frame
-  ,{PGNDA00,   8, 1, &canobd_tx_rx_buffer[7][0], Notify_Application_CANOBD, HAL_CAN_DEVICE_A,HAL_CAN_MESSAGE_DIRECTION_RECEIVE}
-  ,{PGNDA00,   8, 1, &canobd_tx_rx_buffer[8][0], Callback_Application_CANOBD,HAL_CAN_DEVICE_A,HAL_CAN_MESSAGE_DIRECTION_TRANSMIT }
 };
 
 /****************************************************************/
@@ -82,13 +79,6 @@ CanRxMessageControlType CanRxMesgControlTable [] = {
   CanIdCAL,
   BufferCanIdCAL,
   CanIdCALRcvdEvent
-
-   ,
-   /* PGN DA00 Information Usdt */
-  PGNDA00,
-  BufferCanPGNDA00,
-  PGNDA00RcvdEvent
-
 };
 
 #define RxMsgNbWithRxTimingsControlled (sizeof (CanRxMesgControlTable) / sizeof (CanRxMessageControlType))

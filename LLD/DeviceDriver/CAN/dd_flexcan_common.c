@@ -174,9 +174,6 @@ uint32_t FLEXCAN_Get_Msg_ID(
    else
    {
       msg_id = in_pFlexCAN->MSGBUF[in_msgobj].F.ID.U32;
-	  Rx_PGN_55808_ID = msg_id;
-	  msg_id = msg_id&0xFFFFFF00;
-	  Tx_PGN_55808_ID = (Rx_PGN_55808_ID&0xFFFF0000)|((Rx_PGN_55808_ID&0xFF)<<8)|((Rx_PGN_55808_ID&0xFF00)>>8);
    }
    return(msg_id);
 }

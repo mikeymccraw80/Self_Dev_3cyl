@@ -106,14 +106,6 @@ void CAN_Reset_Init( void )
                           FlexCAN_MSGOBJ_Set_SRR( 0, false) |
                           FlexCAN_MSGOBJ_Set_RTR( 0, false) |
                           FlexCAN_MSGOBJ_Set_Interrupt( 0, true);
-	  
-      if(CANOBD_Message_Parameter_Table[message_objet].CAN_message_ID>0xFFF)
-      {
-         in_configuration |= FlexCAN_Set_Index( 0, FLEXCAN_DEVICE_A)| FlexCAN_MSGOBJ_Set_ID_Length( 0, FLEXCAN_MSGOBJ_ID_EXT)|
-                             FlexCAN_MSGOBJ_Set_SRR( 0, true) |
-                             FlexCAN_MSGOBJ_Set_RTR( 0, false) |
-                             FlexCAN_MSGOBJ_Set_Interrupt( 0, true);
-      }
 
       if (CANH_MESSAGE_DIRECTION_RECEIVE == (CAN_Message_Parameter_Table_Ptr+message_objet)->message_dir) 
       {
@@ -156,7 +148,7 @@ void CAN_Reset_Init( void )
 // Return Value: message_number
 //
 //=============================================================================
-uint8_t Get_Transmit_Message_Number_From_Message_ID( uint32_t Message_ID )
+uint8_t Get_Transmit_Message_Number_From_Message_ID( uint16_t Message_ID )
 {
 
    uint8_t CAN_transmit_message_number;
@@ -196,7 +188,7 @@ uint8_t Get_Transmit_Message_Number_From_Message_ID( uint32_t Message_ID )
 //
 //
 //=============================================================================
-uint8_t Get_Receive_Message_Number_From_Message_ID( uint32_t Message_ID )
+uint8_t Get_Receive_Message_Number_From_Message_ID( uint16_t Message_ID )
 {
    uint8_t CAN_receive_message_number;
    uint8_t message_number = MESSAGE_ID_NOT_IN_TABLE;
@@ -211,7 +203,7 @@ uint8_t Get_Receive_Message_Number_From_Message_ID( uint32_t Message_ID )
       }
    }
 
-   return( message_number + FLEXCAN_MSG_OBJ_8); /*UDS Rx MB was scheduled from MSG_OBJ_8*/
+   return( message_number + FLEXCAN_MSG_OBJ_32);
 }
 
 //=============================================================================
@@ -238,12 +230,11 @@ bool Get_OBD_Message( uint8_t CAN_receive_message_number, uint8_t *message_addre
    uint8_t      *temp_buffer_ptr;
    CAN_Message_Parameter_T temp_message;
    uint32_t     istate;
-   /*UDS Rx MB was scheduled from MSG_OBJ_8*/
-   if(FLEXCAN_MSG_OBJ_8 <= CAN_receive_message_number)
+
+   if(FLEXCAN_MSG_OBJ_32 <= CAN_receive_message_number)
    {
       istate = Enter_Critical_Section();
-      /*UDS Rx MB was scheduled from MSG_OBJ_8*/
-      temp_message = Get_CANOBD_Message_Parameter_Table(CAN_receive_message_number - FLEXCAN_MSG_OBJ_8);
+      temp_message = Get_CANOBD_Message_Parameter_Table(CAN_receive_message_number - FLEXCAN_MSG_OBJ_32);
       temp_buffer_ptr = temp_message.CAN_buffer_ptr;
       temp_length = temp_message.CAN_message_length;
       for (loop_counter = 0; loop_counter < temp_length; loop_counter++)
@@ -277,7 +268,7 @@ bool Get_OBD_Message( uint8_t CAN_receive_message_number, uint8_t *message_addre
 // Return Value: TRUE if the request could be honored, else FALSE.
 //
 //=============================================================================
-bool Transmit_Message( uint32_t can_id, uint8_t *message_address )
+bool Transmit_Message( uint16_t can_id, uint8_t *message_address )
 {
    uint8_t CAN_transmit_message_number;
    uint8_t *transmit_message_buffer;
@@ -308,4 +299,5 @@ bool Transmit_Message( uint32_t can_id, uint8_t *message_address )
 * Rev.  YYMMDD Who RSM# Changes
 * ----- ------ --- ---- -------------------------------------------------------
 ******************************************************************************/
+
 
