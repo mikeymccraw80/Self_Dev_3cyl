@@ -45,7 +45,7 @@ typedef enum
 
 typedef struct CAN_Message_Parameter_Tag
 {
-    uint32_t                      CAN_message_ID;
+    uint16_t                      CAN_message_ID;
     uint8_t                       CAN_message_length;
     uint8_t                       CAN_buffer_depth;
     uint8_t                       *CAN_buffer_ptr;
@@ -69,10 +69,10 @@ typedef struct J1939_Message_Parameter_Tag
 
 extern void    CAN_Reset_Init( void );
 extern void J1939_Handler_Cold_Init(void);
-extern uint8_t Get_Receive_Message_Number_From_Message_ID( uint32_t Message_ID );
+extern uint8_t Get_Receive_Message_Number_From_Message_ID( uint16_t Message_ID );
 extern bool    Get_OBD_Message( uint8_t CAN_receive_message_number, uint8_t *message_address );
-extern bool    Transmit_Message( uint32_t can_id, uint8_t *message_address );
-extern uint8_t Get_Transmit_Message_Number_From_Message_ID(uint32_t Message_ID );
+extern bool    Transmit_Message( uint16_t can_id, uint8_t *message_address );
+extern uint8_t Get_Transmit_Message_Number_From_Message_ID(uint16_t Message_ID );
 
 extern CAN_Message_Parameter_T *CAN_Message_Parameter_Table_Ptr;
 extern J1939_Message_Parameter_T *J1939_Message_Parameter_Table_Ptr;
@@ -95,3 +95,4 @@ uint8_t CN_IO_Find_Message_idx(uint32_t message_id);
 * Rev.  YYMMDD Who RSM# Changes
 * ----- ------ --- ---- -------------------------------------------------------
 ******************************************************************************/
+

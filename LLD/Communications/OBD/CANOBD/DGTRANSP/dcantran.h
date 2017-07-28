@@ -85,7 +85,7 @@
 /*********************************/
 /* GENERIC CAN TYPES DEFINITION  */
 /*********************************/
-typedef uint32_t  CanIdType;
+typedef uint16_t  CanIdType;
 typedef uint8_t Can8DataBytesArrayType [8];
 typedef uint8_t LnTrspTimeOutErrorType;
 
@@ -184,7 +184,7 @@ VioCanRxBufferStructType;
 #define CanIdCAL                  (0x000)
 #define CanId7e0                  (0x7e0)
 #define CanId7e8                  (0x7e8) /*--- Transmitted but must also be Received ---*/
-#define PGNDA00                  (0x18DA0000) /*--- PGN DA00 was built for regramming ---*/
+
 
 #define TXIndxCanIdCAL   (2)
 #define IndxCanIdCAL     (4)
@@ -296,7 +296,6 @@ void LnGoToWaitingForRxFirstOrSingleFrame (void);
 void CanId5e8RcvdEvent (Can8DataBytesArrayType *Can8DataBytesArrayPtr);
 void CanId7dfRcvdEvent (Can8DataBytesArrayType *Can8DataBytesArrayPtr);
 void CanId7e0RcvdEvent (Can8DataBytesArrayType *Can8DataBytesArrayPtr);
-void PGNDA00RcvdEvent (Can8DataBytesArrayType *Can8DataBytesArrayPtr);
 void CanIdCALRcvdEvent (Can8DataBytesArrayType *Can8DataBytesArrayPtr);
 void CanId7e8RcvdEvent (Can8DataBytesArrayType *Can8DataBytesArrayPtr);
 void RequestCanToTransmit (CanIdType CanId,
@@ -405,3 +404,4 @@ INLINE void WrtDCAN_ServiceData( BYTE in_data, BYTE in_location )
 * 6     121022 xll  modified the value of CanIdCAL from 0x600 to 0x000.
 * 7     130509 xll  Change N_Cr from 1000ms to 150ms
 ******************************************************************************/
+

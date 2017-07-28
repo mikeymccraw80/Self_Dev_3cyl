@@ -58,7 +58,7 @@
 #define J1939_PGN_65278_SUPPORTED             0
 #define J1939_PGN_65279_SUPPORTED             0
 #define J1939_PGN_65296_SUPPORTED             0
-#define J1939_PGN_55808_SUPPORTED             0
+#define J1939_PGN_55808_SUPPORTED             1
 #define J1939_PGN_00000_SUPPORTED_TCU             1   //jd rx pgn, from TCU, ID 0x0C000003
 #define J1939_PGN_61677_SUPPORTED             1   //jd rx pgn, ID 0x10F0ED00
 #define J1939_PGN_65298_SUPPORTED_TCU     1   //jd rx pgn

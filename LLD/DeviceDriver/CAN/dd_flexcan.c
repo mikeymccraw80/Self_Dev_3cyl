@@ -284,8 +284,7 @@ void FlexCAN_Receive_Configure(
 //// Constants
 #define THIRTYONE (31)
 #define THIRTYTWO (32)
-uint32_t Rx_PGN_55808_ID;
-uint32_t Tx_PGN_55808_ID;
+
 void FlexCAN_Receive_Interrupt(FlexCAN_Index_T in_FlexCAN, uint8_t *in_data_buffer)
 {
 	FLEXCAN_T *pFlexCAN;

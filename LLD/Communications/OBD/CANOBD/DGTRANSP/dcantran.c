@@ -1200,16 +1200,6 @@ void CanId7e0RcvdEvent (Can8DataBytesArrayType *Can8DataBytesArrayPtr)
 } /*** End of CanId7e0RcvdEvent ***/
 
 /*********************/
-/* CanId7e0RcvdEvent */
-/*********************/
-void PGNDA00RcvdEvent (Can8DataBytesArrayType *Can8DataBytesArrayPtr)
-{
-   LnServiceDataFrame.SourceCanId = PGNDA00;
-   LnTranspRespUsdtFrameCanId = PGNDA00;
-   LnTrspUsdtRcvdFromDistantEvent (*Can8DataBytesArrayPtr);   
-} /*** End of CanId7e0RcvdEvent ***/
-
-/*********************/
 /*CanIdCALRcvdEvent */
 void CanIdCALRcvdEvent (Can8DataBytesArrayType *Can8DataBytesArrayPtr)
 {
@@ -1382,5 +1372,6 @@ void UpdateLnTransportLayer (void)
 * 16     130509 xll  Added the logic that terminate the current reception when SF or FF N_PDU arrives
 *                    Added the logic when the data length wrong ECM  don't response in CF.
 ******************************************************************************/
+
 
 
